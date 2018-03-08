@@ -1,4 +1,4 @@
-const migrator = require('./migrator')
+import migrator from './migrator'
 
 migrator.up().catch(err => {
   console.error(err);

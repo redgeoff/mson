@@ -1,8 +1,8 @@
-const Sequelize = require('sequelize');
-const { resolver } = require('graphql-sequelize')
+import Sequelize from 'sequelize'
+import { resolver } from 'graphql-sequelize'
 
 const url = 'mysql://root:secret@localhost:3306';
-const dbName = 'tmp';
+const dbName = 'company';
 
 const sequelize = new Sequelize(url + '/' + dbName)
 
@@ -51,4 +51,4 @@ resolver(Employee)
 resolver(Email)
 resolver(Department)
 
-module.exports = { sequelize, User, Employee, Email, Department }
+export { sequelize, User, Employee, Email, Department }

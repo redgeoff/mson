@@ -1,5 +1,5 @@
-const SequelizeExtras = require('./sequelize-extras');
-const { sequelize, User, Employee, Email, Department } = require('./connectors')
+import SequelizeExtras from './sequelize-extras'
+import { sequelize, User, Employee, Email, Department } from './connectors'
 
 const url = 'mysql://root:secret@localhost:3306';
 const db = new SequelizeExtras(url);
@@ -76,4 +76,4 @@ class Migrator {
   }
 }
 
-module.exports = new Migrator();
+export default new Migrator();

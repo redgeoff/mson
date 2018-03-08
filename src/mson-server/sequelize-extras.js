@@ -5,10 +5,10 @@
 // 1. Add support for other adapters, especially postgres
 // 2. Release as open source
 
-const mysql = require('mysql2/promise');
-const { URL } = require('url');
+import mysql from 'mysql2/promise'
+import { URL } from 'url'
 
-class Omni {
+export default class SequelizeExtras {
   constructor(url) {
     this._url = url;
     this._parsedURL(url);
@@ -46,5 +46,3 @@ class Omni {
     await this._connection.end();
   }
 }
-
-module.exports = Omni;

@@ -17,7 +17,11 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "server-up": "node ./src/mson-server/up.js",
-    "server-down": "node ./src/mson-server/down.js"
+    "server-up": "./node_modules/babel-cli/bin/babel-node.js ./src/mson-server/up.js",
+    "server-down": "./node_modules/babel-cli/bin/babel-node.js ./src/mson-server/down.js"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1"
   }
 }
