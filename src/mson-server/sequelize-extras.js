@@ -5,8 +5,8 @@
 // 1. Add support for other adapters, especially postgres
 // 2. Release as open source
 
-import mysql from 'mysql2/promise'
-import { URL } from 'url'
+import mysql from 'mysql2/promise';
+import { URL } from 'url';
 
 export default class SequelizeExtras {
   constructor(url) {
@@ -27,19 +27,19 @@ export default class SequelizeExtras {
         host: this._parsedURL.hostname,
         port: this._parsedURL.port,
         user: this._parsedURL.username,
-        password: this._parsedURL.password,
-      })
+        password: this._parsedURL.password
+      });
     }
   }
 
   async create(dbName) {
-    await this._ensureConnection()
-    await this._connection.query('CREATE DATABASE ' + dbName)
+    await this._ensureConnection();
+    await this._connection.query('CREATE DATABASE ' + dbName);
   }
 
   async destroy(dbName) {
-    await this._ensureConnection()
-    await this._connection.query('DROP DATABASE ' + dbName)
+    await this._ensureConnection();
+    await this._connection.query('DROP DATABASE ' + dbName);
   }
 
   async close() {

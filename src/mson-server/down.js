@@ -1,4 +1,4 @@
-import migrator from './migrator'
+import migrator from './migrator';
 
 migrator.down().catch(err => {
   console.error(err);
