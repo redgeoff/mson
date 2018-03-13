@@ -27,6 +27,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "compile": "export NODE_ENV=production && babel src/mson -d lib/mson",
     "touch": "find src -exec touch {} \\;"
   }
 }
