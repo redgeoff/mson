@@ -1,0 +1,167 @@
+{
+  "component": "Form",
+  "baseForm": "{{baseForm}}",
+  "form": {
+    "component": "{{baseForm}}",
+    "fields": [
+      {
+        "component": "ButtonField",
+        "name": "edit",
+        "label": "Edit",
+        "icon": "ModeEdit",
+        "hidden": true
+      },
+      {
+        "component": "ButtonField",
+        "type": "submit",
+        "name": "save",
+        "label": "Save",
+        "icon": "Save"
+      },
+      {
+        "component": "ButtonField",
+        "name": "cancel",
+        "label": "Cancel",
+        "icon": "Cancel"
+      }
+    ]
+  },
+  "listeners": [
+    {
+      "event": "load",
+      "actions": [
+        {
+          "component": "Set",
+          "name": "editable",
+          "value": false
+        },
+        {
+          "component": "APIGet",
+          "url": "{{url}}",
+          "object": "{{object}}",
+          "id": "{{id}}"
+        },
+        {
+          "component": "Set",
+          "name": "pristine",
+          "value": true
+        },
+        {
+          "component": "Set",
+          "name": "fields.save.disabled",
+          "value": true
+        },
+        {
+          "component": "Set",
+          "name": "fields.save.hidden",
+          "value": true
+        },
+        {
+          "component": "Set",
+          "name": "fields.edit.hidden",
+          "value": false
+        },
+        {
+          "component": "Set",
+          "name": "fields.cancel.hidden",
+          "value": true
+        }
+      ]
+    },
+    {
+      "event": "edit",
+      "actions": [
+        {
+          "component": "Set",
+          "name": "editable",
+          "value": true
+        },
+        {
+          "component": "Set",
+          "name": "fields.edit.hidden",
+          "value": true
+        },
+        {
+          "component": "Set",
+          "name": "fields.save.hidden",
+          "value": false
+        },
+        {
+          "component": "Set",
+          "name": "fields.cancel.hidden",
+          "value": false
+        }
+      ]
+    },
+    {
+      "event": "canSubmit",
+      "actions": [
+        {
+          "component": "Set",
+          "name": "fields.save.disabled",
+          "value": false
+        }
+      ]
+    },
+    {
+      "event": "cannotSubmit",
+      "actions": [
+        {
+          "component": "Set",
+          "name": "fields.save.disabled",
+          "value": true
+        }
+      ]
+    },
+    {
+      "event": "save",
+      "actions": [
+        {
+          "component": "APISet",
+          "url": "{{url}}",
+          "object": "{{object}}",
+          "id": "{{id}}"
+        },
+        {
+          "//": "Needed or else will be prompted for save",
+          "component": "Set",
+          "name": "pristine",
+          "value": true
+        },
+        {
+          "component": "Set",
+          "name": "editable",
+          "value": false
+        },
+        {
+          "component": "Set",
+          "name": "fields.save.hidden",
+          "value": true
+        },
+        {
+          "component": "Set",
+          "name": "fields.edit.hidden",
+          "value": false
+        },
+        {
+          "component": "Set",
+          "name": "fields.cancel.hidden",
+          "value": true
+        },
+        {
+          "component": "Snackbar",
+          "message": "{{label}} saved"
+        }
+      ]
+    },
+    {
+      "event": "cancel",
+      "actions": [
+        {
+          "component": "Emit",
+          "event": "load"
+        }
+      ]
+    }
+  ]
+}
