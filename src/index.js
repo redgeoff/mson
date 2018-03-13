@@ -1,1 +1,1 @@
-import './lab'
+import './lab';

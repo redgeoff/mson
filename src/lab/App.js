@@ -2,11 +2,7 @@ import React, { Component } from 'react';
 
 class App extends Component {
   render() {
-    return (
-      <div>
-        mson lab
-      </div>
-    );
+    return <div>mson lab</div>;
   }
 }
 
