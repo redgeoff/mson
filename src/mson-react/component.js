@@ -18,13 +18,9 @@ export default class Component extends React.Component {
 
     // TODO: standardize so that all MSON React components have a prop named component
     if (component instanceof Form) {
-      return (
-        <Component form={component} />
-      );
+      return <Component form={component} />;
     } else {
-      return (
-        <Component component={component} />
-      );
+      return <Component component={component} />;
     }
   }
 }

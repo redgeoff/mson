@@ -25,12 +25,12 @@ class ListItemField extends React.Component {
       return (
         <span>
           <Field field={field} block={false} />
-          { allowDelete && !isBlank && !disabled && editable ?
+          {allowDelete && !isBlank && !disabled && editable ? (
             <IconButton aria-label="Delete">
               <DeleteIcon onClick={this.handleDelete} />
-            </IconButton> : null
-          }
-          { help && editable ? <HelpToolTip help={help} /> : '' }
+            </IconButton>
+          ) : null}
+          {help && editable ? <HelpToolTip help={help} /> : ''}
           {block ? <FlexBreak /> : null}
         </span>
       );
@@ -39,7 +39,7 @@ class ListItemField extends React.Component {
       return null;
     }
   }
-};
+}
 
 // We want the component to update when the value changes as blank fields should not display a
 // delete button

@@ -29,7 +29,6 @@ export default class Mapa {
   }
 
   _insert(key, value, beforeKey) {
-
     let prevKey = this._lastKey;
 
     if (beforeKey !== undefined && beforeKey !== null) {
@@ -44,7 +43,6 @@ export default class Mapa {
 
     // Are we appending?
     if (beforeKey === null) {
-
       // Is there a last item?
       if (this._lastKey !== null) {
         // Link the last item forward to out new item
@@ -53,9 +51,7 @@ export default class Mapa {
 
       // Update the _lastKey
       this._lastKey = key;
-
     } else {
-
       // Link the next item backwards to our new item
       this._items[beforeKey].prevKey = key;
 
@@ -63,7 +59,6 @@ export default class Mapa {
       if (prevKey !== null) {
         this._items[prevKey].nextKey = key;
       }
-
     }
 
     // Add the new item
@@ -80,28 +75,18 @@ export default class Mapa {
 
   set(key, value, beforeKey) {
     if (key === null || key === undefined) {
-
       throw new Error('key cannot be null or undefined');
-
     } else if (this.has(key)) {
-
       // Is the item moving?
       if (beforeKey !== undefined && this._items[key].nextKey !== beforeKey) {
-
         this.delete(key);
         this.set(key, value, beforeKey);
-
       } else {
-
         // Update
         this._items[key].value = value;
-
       }
-
     } else {
-
       this._insert(key, value, beforeKey);
-
     }
   }
 
@@ -116,7 +101,7 @@ export default class Mapa {
     return this._items[key].value;
   }
 
-  * walkForward(key, fullEntry) {
+  *walkForward(key, fullEntry) {
     if (this.has(key)) {
       const item = this._items[key];
       if (fullEntry) {
@@ -127,17 +112,17 @@ export default class Mapa {
 
       // Is there another item?
       if (item.nextKey !== null) {
-        yield * this.walkForward(item.nextKey, fullEntry);
+        yield* this.walkForward(item.nextKey, fullEntry);
       }
     }
   }
 
-  * values(startKey) {
-    yield * this.walkForward(startKey ? startKey : this._firstKey);
+  *values(startKey) {
+    yield* this.walkForward(startKey ? startKey : this._firstKey);
   }
 
-  * entries(startKey) {
-    yield * this.walkForward(startKey ? startKey : this._firstKey, true);
+  *entries(startKey) {
+    yield* this.walkForward(startKey ? startKey : this._firstKey, true);
   }
 
   forEach(onValue) {
@@ -178,7 +163,6 @@ export default class Mapa {
       prevItem.nextKey = item.nextKey;
       nextItem.prevKey = item.prevKey;
     } else {
-
       // Are we deleting the 1st item?
       if (item.prevKey === null) {
         // Is there a next item?
@@ -194,7 +178,6 @@ export default class Mapa {
 
       // Are we deleting the last item?
       if (item.nextKey === null) {
-
         // Is there a previous item?
         if (item.prevKey !== null) {
           // The prevItem no longer has a next item
@@ -205,7 +188,6 @@ export default class Mapa {
         // Pick the previous item as the last item
         this._lastKey = item.prevKey;
       }
-
     }
 
     // Decrement the length

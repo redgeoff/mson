@@ -18,7 +18,7 @@ const createAction = () => {
 
 it('should act', async () => {
   const action = createAction();
-  const field = new TextField({ name: 'firstName '});
+  const field = new TextField({ name: 'firstName ' });
   await action.run({
     component: field
   });

@@ -25,7 +25,7 @@ export default class Set extends Action {
       }
       component.set({
         [names[names.length - 1]]: this.get('value')
-      })
+      });
     }
   }
 

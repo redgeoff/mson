@@ -19,18 +19,11 @@ it('should validate max size', () => {
     maxSize: 2
   });
 
-  field.setValue([
-    'red',
-    'green'
-  ]);
+  field.setValue(['red', 'green']);
   field.validate();
   expect(field.get('err')).toEqual(null);
 
-  field.setValue([
-    'red',
-    'green',
-    'blue'
-  ]);
+  field.setValue(['red', 'green', 'blue']);
   field.validate();
   expect(field.get('err')).toEqual('2 or less');
 });
@@ -40,16 +33,11 @@ it('should validate min size', () => {
     minSize: 2
   });
 
-  field.setValue([
-    'red',
-    'green'
-  ]);
+  field.setValue(['red', 'green']);
   field.validate();
   expect(field.get('err')).toEqual(null);
 
-  field.setValue([
-    'red'
-  ]);
+  field.setValue(['red']);
   field.validate();
   expect(field.get('err')).toEqual('2 or more');
 });

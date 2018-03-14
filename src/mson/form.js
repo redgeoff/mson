@@ -100,13 +100,13 @@ export default class Form extends Component {
       this.validate();
     });
 
-    field.on('err', (err) => {
+    field.on('err', err => {
       if (err) {
         this.set({ err: true });
       }
     });
 
-    field.on('dirty', (dirty) => {
+    field.on('dirty', dirty => {
       if (dirty) {
         this.set({ dirty: true });
       }
@@ -114,7 +114,7 @@ export default class Form extends Component {
 
     field.on('click', () => {
       this._emitChange(field.get('name'));
-    })
+    });
   }
 
   getOne(name) {
@@ -122,7 +122,15 @@ export default class Form extends Component {
       return this.getValues();
     }
 
-    const value = this._getIfAllowed(name, 'fields', 'validators', 'touched', 'err', 'dirty', 'pristine');
+    const value = this._getIfAllowed(
+      name,
+      'fields',
+      'validators',
+      'touched',
+      'err',
+      'dirty',
+      'pristine'
+    );
     return value === undefined ? super.getOne(name) : value;
   }
 
@@ -141,7 +149,7 @@ export default class Form extends Component {
       if (field.get('out')) {
         values[field.get('name')] = field.get('value');
       }
-    })
+    });
     return values;
   }
 
@@ -240,7 +248,7 @@ export default class Form extends Component {
     const clonedForm = _.cloneDeep(this);
 
     // We need to use addField() and not _setField() as we need the listeners to be recreated
-    clonedForm._fields.each(field => clonedForm.addField(field.clone()))
+    clonedForm._fields.each(field => clonedForm.addField(field.clone()));
 
     return clonedForm;
   }
@@ -253,7 +261,7 @@ export default class Form extends Component {
         errs.push({
           field: field.get('name'),
           error: err
-        })
+        });
       }
     });
     return errs;

@@ -27,7 +27,7 @@ export default class ChainedSelectListField extends ListField {
     field.set({ options: this.get('options') });
   }
 
-  _onFieldCreated(field, /* onDelete */) {
+  _onFieldCreated(field /* onDelete */) {
     field.on('value', value => {
       // Create last field if the last field is not blank and we are allowed to add more fields
       if (!this._isLastFieldBlank() && this.canAddMoreFields(value)) {

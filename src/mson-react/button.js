@@ -23,7 +23,7 @@ class Button extends React.Component {
     if (this.props.onClick) {
       this.props.onClick();
     }
-  }
+  };
 
   render() {
     const { classes, type, disabled, label, iconComponent, icon } = this.props;
@@ -38,11 +38,17 @@ class Button extends React.Component {
     }
 
     return (
-      <ButtonMui className={classes.button} type={type} color="primary" disabled={disabled} onClick={this.handleClick}>
-        { Icon ? <Icon className={classes.leftIcon} /> :  null }
+      <ButtonMui
+        className={classes.button}
+        type={type}
+        color="primary"
+        disabled={disabled}
+        onClick={this.handleClick}
+      >
+        {Icon ? <Icon className={classes.leftIcon} /> : null}
         {label}
       </ButtonMui>
-    )
+    );
   }
 }
 

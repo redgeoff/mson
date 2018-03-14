@@ -1,18 +1,18 @@
 import Hierarchy from './hierarchy';
 
 const countries = [
-  { id: 1, obj: "Germany" },
-  { id: 2, parentId: null, obj: "USA" }
+  { id: 1, obj: 'Germany' },
+  { id: 2, parentId: null, obj: 'USA' }
 ];
 
 const germany = [
-  { id: 3, parentId: 1, obj: "BMW" },
-  { id: 4, parentId: 1, obj: "Mercedes" }
+  { id: 3, parentId: 1, obj: 'BMW' },
+  { id: 4, parentId: 1, obj: 'Mercedes' }
 ];
 
 const bmw = [
-  { id: 6, parentId: 3, obj: "i3" },
-  { id: 7, parentId: 3, obj: "i8" }
+  { id: 6, parentId: 3, obj: 'i3' },
+  { id: 7, parentId: 3, obj: 'i8' }
 ];
 
 const hierarchy = new Hierarchy([
@@ -20,13 +20,13 @@ const hierarchy = new Hierarchy([
 
   ...germany,
 
-  { id: 5, parentId: 2, obj: "Tesla" },
+  { id: 5, parentId: 2, obj: 'Tesla' },
 
   ...bmw,
 
-  { id: 8, parentId: 4, obj: "S-Class" },
+  { id: 8, parentId: 4, obj: 'S-Class' },
 
-  { id: 9, parentId: 5, obj: "Model S" }
+  { id: 9, parentId: 5, obj: 'Model S' }
 ]);
 
 const eachByParentToArray = parentId => {

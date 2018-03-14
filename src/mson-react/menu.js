@@ -23,7 +23,7 @@ const styles = theme => ({
       // https://stackoverflow.com/a/48506883/2831606
       position: 'fixed',
       height: '100vh'
-    },
+    }
   }
 });
 
@@ -34,20 +34,17 @@ class Menu extends React.Component {
     }
   };
 
-  handleNavigate = (menuItem) => {
+  handleNavigate = menuItem => {
     if (this.props.onNavigate) {
       this.props.onNavigate(menuItem);
     }
-  }
+  };
 
   items() {
     const { menu } = this.props;
     const items = menu.get('items');
     return items.map((item, index) => (
-      <Submenu
-        item={item}
-        key={index}
-        onNavigate={this.handleNavigate} />
+      <Submenu item={item} key={index} onNavigate={this.handleNavigate} />
     ));
   }
 
@@ -70,11 +67,11 @@ class Menu extends React.Component {
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
             open={mobileOpen}
             classes={{
-              paper: classes.drawerPaper,
+              paper: classes.drawerPaper
             }}
             onClose={this.handleDrawerToggle}
             ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
+              keepMounted: true // Better open performance on mobile.
             }}
           >
             {drawer}
@@ -85,7 +82,7 @@ class Menu extends React.Component {
             variant="permanent"
             open
             classes={{
-              paper: classes.drawerPaper,
+              paper: classes.drawerPaper
             }}
           >
             {drawer}

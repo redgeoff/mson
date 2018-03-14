@@ -3,16 +3,16 @@ import _ from 'lodash';
 class Utils {
   async sequential(items, onItem) {
     await items.reduce(async (promise, item) => {
-      await promise
+      await promise;
       await onItem(item);
-    }, Promise.resolve())
+    }, Promise.resolve());
   }
 
   _mergeCustomizer = (objValue, srcValue) => {
     if (_.isArray(objValue)) {
       return objValue.concat(srcValue);
     }
-  }
+  };
 
   // A recursive merge that also concats arrays
   merge(object, sources) {

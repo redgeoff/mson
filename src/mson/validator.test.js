@@ -36,7 +36,9 @@ it('should fill props', () => {
 
   expect(validator._fillProps('{{foo}} {{yar}}')).toEqual('bar nar');
   expect(validator._fillProps('{{year}}')).toEqual(2018);
-  expect(validator._fillProps('{{value.firstName}} {{value.lastName}}')).toEqual('Jane Doe');
+  expect(
+    validator._fillProps('{{value.firstName}} {{value.lastName}}')
+  ).toEqual('Jane Doe');
   expect(validator._fillProps('{{value.firstName}}')).toEqual('Jane');
 });
 
@@ -123,9 +125,11 @@ it('should validate with rules', () => {
         error: '{{length}} is too many'
       }
     }
-  ]
+  ];
 
-  expect(validator._validateWithRule(rules[0])).toEqual('10 characters or less');
+  expect(validator._validateWithRule(rules[0])).toEqual(
+    '10 characters or less'
+  );
 
   expect(validator.validate(rules)).toEqual(['10 characters or less']);
 
@@ -143,7 +147,7 @@ it('should validate with rules', () => {
 });
 
 it('should validate with escaped regex', () => {
-// console.log(/\d/.test('secret1'))
+  // console.log(/\d/.test('secret1'))
 
   let validator = new Validator({
     password: 'secret'
@@ -160,7 +164,7 @@ it('should validate with escaped regex', () => {
       },
       error: 'must contain a number'
     }
-  ]
+  ];
 
   expect(validator.validate(rules)).toEqual(['must contain a number']);
 

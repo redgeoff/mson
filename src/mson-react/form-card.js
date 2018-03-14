@@ -35,7 +35,7 @@ class FormCard extends React.Component {
   //   this.setState({ anchorEl: null });
   // };
 
-  handleClick = (event) => {
+  handleClick = event => {
     if (this.props.onClick) {
       this.props.onClick(event, this.props.form);
     }
@@ -48,7 +48,7 @@ class FormCard extends React.Component {
     // this.handleMoreClose();
   };
 
-  handleDelete = (event) => {
+  handleDelete = event => {
     // this.handleMoreClose();
     if (this.props.onDelete) {
       this.props.onDelete(this.props.form);
@@ -56,25 +56,34 @@ class FormCard extends React.Component {
   };
 
   render() {
-    const { classes, form, forbidUpdate, forbidDelete, editable, disabled } = this.props;
+    const {
+      classes,
+      form,
+      forbidUpdate,
+      forbidDelete,
+      editable,
+      disabled
+    } = this.props;
     // const { anchorEl } = this.state;
 
     let buttons = null;
     if (editable && !disabled && (!forbidUpdate || !forbidDelete)) {
       buttons = (
         <Grid item>
-          { forbidUpdate ? '' :
-            <IconButton
-              onClick={event => this.handleEdit(event)}
-            >
+          {forbidUpdate ? (
+            ''
+          ) : (
+            <IconButton onClick={event => this.handleEdit(event)}>
               <ModeEdit />
-            </IconButton> }
-          { forbidDelete ? '' :
-            <IconButton
-              onClick={event => this.handleDelete(event)}
-            >
+            </IconButton>
+          )}
+          {forbidDelete ? (
+            ''
+          ) : (
+            <IconButton onClick={event => this.handleDelete(event)}>
               <Delete />
-            </IconButton> }
+            </IconButton>
+          )}
           {/* TODO: make the more menu optional
           <Menu
             id="simple-menu"

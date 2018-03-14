@@ -4,7 +4,7 @@ import Dialog, {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
+  DialogTitle
 } from 'material-ui/Dialog';
 
 export default class ConfirmationDialog extends React.Component {
@@ -17,7 +17,7 @@ export default class ConfirmationDialog extends React.Component {
     if (this.props.onClose) {
       this.props.onClose(yes);
     }
-  }
+  };
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.open !== this.state.open) {
@@ -45,7 +45,11 @@ export default class ConfirmationDialog extends React.Component {
             <Button onClick={() => this.handleClose(false)} color="primary">
               No
             </Button>
-            <Button onClick={() => this.handleClose(true)} color="primary" autoFocus>
+            <Button
+              onClick={() => this.handleClose(true)}
+              color="primary"
+              autoFocus
+            >
               Yes
             </Button>
           </DialogActions>

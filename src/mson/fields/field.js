@@ -13,19 +13,53 @@ export default class Field extends Component {
   set(props) {
     super.set(props);
 
-    if (props.value !== undefined && !this.get('dirty') && props.value !== this.get('value')) {
+    if (
+      props.value !== undefined &&
+      !this.get('dirty') &&
+      props.value !== this.get('value')
+    ) {
       this.set({ dirty: true });
     }
 
     // Use err instead of error as event of 'error' can cause issues
-    this._setIfUndefined(props, 'label', 'value', 'err', 'required', 'fullWidth', 'touched',
-      'validators', 'hidden', 'block', 'disabled', 'editable', 'dirty', 'help', 'out');
+    this._setIfUndefined(
+      props,
+      'label',
+      'value',
+      'err',
+      'required',
+      'fullWidth',
+      'touched',
+      'validators',
+      'hidden',
+      'block',
+      'disabled',
+      'editable',
+      'dirty',
+      'help',
+      'out'
+    );
   }
 
   getOne(name) {
     // Use err instead of error as event of 'error' can cause issues
-    const value = this._getIfAllowed(name, 'label', 'value', 'err', 'required', 'fullWidth',
-      'touched', 'validators', 'hidden', 'block', 'disabled', 'editable', 'dirty', 'help', 'out');
+    const value = this._getIfAllowed(
+      name,
+      'label',
+      'value',
+      'err',
+      'required',
+      'fullWidth',
+      'touched',
+      'validators',
+      'hidden',
+      'block',
+      'disabled',
+      'editable',
+      'dirty',
+      'help',
+      'out'
+    );
     return value === undefined ? super.getOne(name) : value;
   }
 

@@ -27,12 +27,19 @@ class ListField extends React.Component {
       }
 
       // We have to pass allowDelete as it is the allowDelete of the parent
-      fields.push(<ListItemField field={field} key={index} allowDelete={allowDelete} help={itemHelp} />);
+      fields.push(
+        <ListItemField
+          field={field}
+          key={index}
+          allowDelete={allowDelete}
+          help={itemHelp}
+        />
+      );
     });
 
     return fields;
   }
-};
+}
 
 // We want the component to update when we receive new fields
 export default attach(['fields', 'help'])(ListField);

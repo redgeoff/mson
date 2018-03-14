@@ -20,7 +20,9 @@ export default class Action extends Component {
     let shouldRun = true;
 
     if (selector) {
-      const selectorProps = this.get('ifData') ? this.get('ifData') : props.ifData;
+      const selectorProps = this.get('ifData')
+        ? this.get('ifData')
+        : props.ifData;
       let sifted = sift(selector, [selectorProps]);
       if (sifted.length === 0) {
         shouldRun = false;

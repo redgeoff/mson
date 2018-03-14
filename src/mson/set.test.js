@@ -12,7 +12,7 @@ const createFields = () => {
     }),
     new ButtonField({ name: 'save' })
   ];
-}
+};
 
 const createForm = () => {
   return new Form({
@@ -34,21 +34,26 @@ const createForm = () => {
       }
     ]
   });
-}
+};
 
 it('should set', async () => {
   const form = createForm();
   form.getField('save').emitClick();
   await testUtils.waitFor(() => {
-    return form.getField('name').get('lastName').getValue() === 'Jackson' ? true : undefined;
-  })
+    return form
+      .getField('name')
+      .get('lastName')
+      .getValue() === 'Jackson'
+      ? true
+      : undefined;
+  });
   expect(form.getValues()).toEqual({
     id: null,
     name: {
       firstName: 'Michael',
       lastName: 'Jackson'
     }
-  })
+  });
 });
 
 const createFormNestedSet = () => {
@@ -66,18 +71,23 @@ const createFormNestedSet = () => {
       }
     ]
   });
-}
+};
 
 it('should set nested components', async () => {
   const form = createFormNestedSet();
   form.getField('save').emitClick();
   await testUtils.waitFor(() => {
-    return form.getField('name').get('lastName').getValue() === 'Jackson' ? true : undefined;
-  })
+    return form
+      .getField('name')
+      .get('lastName')
+      .getValue() === 'Jackson'
+      ? true
+      : undefined;
+  });
   expect(form.getValues()).toEqual({
     id: null,
     name: {
       lastName: 'Jackson'
     }
-  })
+  });
 });

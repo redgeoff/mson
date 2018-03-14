@@ -7,7 +7,11 @@ const colors = [
   { value: 'blue', label: 'Blue' }
 ];
 
-fieldTester.shouldAll({ Field: SelectField, props: { options: colors }, exampleValue: 'red'});
+fieldTester.shouldAll({
+  Field: SelectField,
+  props: { options: colors },
+  exampleValue: 'red'
+});
 
 const createField = () => {
   return new SelectField({ options: colors });

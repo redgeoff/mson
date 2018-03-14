@@ -34,7 +34,7 @@ class FormsField extends React.Component {
 
   handleClose = () => {
     this.setState({ open: false });
-  }
+  };
 
   prepareForm(form) {
     form.setTouched(false);
@@ -42,7 +42,7 @@ class FormsField extends React.Component {
     form.setDirty(false);
   }
 
-  handleClick = (form) => {
+  handleClick = form => {
     const { currentForm } = this.state;
     currentForm.clearValues();
     currentForm.setValues(form.getValues());
@@ -51,7 +51,7 @@ class FormsField extends React.Component {
     this.setState({ open: true, mode: 'view' });
   };
 
-  handleEdit = (form) => {
+  handleEdit = form => {
     const { currentForm } = this.state;
 
     // The forms will be the same if the user clicks edit from view form dialog
@@ -72,7 +72,7 @@ class FormsField extends React.Component {
     currentForm.setEditable(true);
     this.prepareForm(currentForm);
     this.setState({ open: true, mode: 'new' });
-  }
+  };
 
   handleSave = async () => {
     const { field } = this.props;
@@ -85,7 +85,7 @@ class FormsField extends React.Component {
       await field.save(currentForm);
       this.handleClose();
     }
-  }
+  };
 
   handleDelete = form => {
     // Set the id so that it can be deleted after the confirmation
@@ -99,17 +99,23 @@ class FormsField extends React.Component {
       confirmationOpen: true,
       confirmationTitle: `Are you sure you want to delete this ${singularLabel}?`
     });
-  }
+  };
 
-  handleConfirmationClose = async (yes) => {
+  handleConfirmationClose = async yes => {
     if (yes) {
       await this.props.field.delete(this.state.currentForm);
     }
     this.setState({ confirmationOpen: false });
-  }
+  };
 
   cards() {
-    const { field, forbidUpdate, forbidDelete, editable, disabled } = this.props;
+    const {
+      field,
+      forbidUpdate,
+      forbidDelete,
+      editable,
+      disabled
+    } = this.props;
 
     let cards = [];
     let index = 0;
@@ -137,8 +143,21 @@ class FormsField extends React.Component {
   }
 
   render() {
-    const { forbidCreate, forbidUpdate, forbidDelete, editable, disabled, field } = this.props;
-    const { open, mode, currentForm, confirmationOpen, confirmationTitle } = this.state;
+    const {
+      forbidCreate,
+      forbidUpdate,
+      forbidDelete,
+      editable,
+      disabled,
+      field
+    } = this.props;
+    const {
+      open,
+      mode,
+      currentForm,
+      confirmationOpen,
+      confirmationTitle
+    } = this.state;
     const reachedMax = field.reachedMax();
 
     const singularLabel = field.getSingularLabel();
@@ -149,16 +168,19 @@ class FormsField extends React.Component {
           {this.cards()}
         </Grid>
 
-        { !editable || disabled || forbidCreate || reachedMax ? '' :
+        {!editable || disabled || forbidCreate || reachedMax ? (
+          ''
+        ) : (
           <Button color="primary" aria-label="new" onClick={this.handleNew}>
             <AddIcon />
             New {singularLabel}
-          </Button> }
+          </Button>
+        )}
 
         {/* TODO: would it be better to have a single, global FormDialog instance? Or, is it better
         to have multiple instances so that you can have different memory spaces. Currenly we have a
         hybrid where we have a dialog per form. There is almost certainly more overhead in having an
-        instance per record, right? */ }
+        instance per record, right? */}
         <FormDialog
           open={open}
           mode={mode}
@@ -183,5 +205,13 @@ class FormsField extends React.Component {
   }
 }
 
-export default attach(['change', 'label', 'singularLabel', 'forbidCreate', 'forbidUpdate',
-  'forbidDelete', 'editable', 'disabled'])(FormsField);
+export default attach([
+  'change',
+  'label',
+  'singularLabel',
+  'forbidCreate',
+  'forbidUpdate',
+  'forbidDelete',
+  'editable',
+  'disabled'
+])(FormsField);

@@ -18,7 +18,7 @@ const attach = (_watchProps, componentOrName) => {
           // componentOrName is a component
           return componentOrName;
         }
-      }
+      };
 
       constructor(props) {
         super(props);
@@ -39,7 +39,7 @@ const attach = (_watchProps, componentOrName) => {
             this.setState({ [name]: value });
           }
         }
-      }
+      };
 
       componentDidMount() {
         // Note: we have to use componentDidMount and not componentWillMount as handleFieldChange
@@ -59,7 +59,7 @@ const attach = (_watchProps, componentOrName) => {
       }
 
       render() {
-        return <Component {...this.state} {...this.props} />
+        return <Component {...this.state} {...this.props} />;
       }
     };
   };

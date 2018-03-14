@@ -4,7 +4,7 @@
 import Component from './component';
 
 class Globals extends Component {
-  _onNavigate = null
+  _onNavigate = null;
 
   set(props) {
     super.set(props);
@@ -37,7 +37,7 @@ class Globals extends Component {
   onNavigate(message, callback) {
     if (this._onNavigate) {
       // We don't care about message as we populate is elsewhere
-      this._onNavigate(callback)
+      this._onNavigate(callback);
     }
   }
 }

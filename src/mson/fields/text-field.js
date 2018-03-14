@@ -3,11 +3,25 @@ import Field from './field';
 export default class TextField extends Field {
   set(props) {
     super.set(props);
-    this._setIfUndefined(props, 'minLength', 'maxLength', 'minWords', 'maxWords', 'type');
+    this._setIfUndefined(
+      props,
+      'minLength',
+      'maxLength',
+      'minWords',
+      'maxWords',
+      'type'
+    );
   }
 
   getOne(name) {
-    const value = this._getIfAllowed(name, 'minLength', 'maxLength', 'minWords', 'maxWords', 'type');
+    const value = this._getIfAllowed(
+      name,
+      'minLength',
+      'maxLength',
+      'minWords',
+      'maxWords',
+      'type'
+    );
     return value === undefined ? super.getOne(name) : value;
   }
 

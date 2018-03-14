@@ -9,8 +9,8 @@ import CloseIcon from 'material-ui-icons/Close';
 const styles = theme => ({
   close: {
     width: theme.spacing.unit * 4,
-    height: theme.spacing.unit * 4,
-  },
+    height: theme.spacing.unit * 4
+  }
 });
 
 class Snackbar extends React.Component {
@@ -30,13 +30,13 @@ class Snackbar extends React.Component {
       <SnackbarMUI
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'left',
+          horizontal: 'left'
         }}
         open={open}
         autoHideDuration={6000}
         onClose={this.handleClose}
         SnackbarContentProps={{
-          'aria-describedby': 'message-id',
+          'aria-describedby': 'message-id'
         }}
         message={<span id="message-id">{message}</span>}
         action={[
@@ -51,7 +51,7 @@ class Snackbar extends React.Component {
             onClick={this.handleClose}
           >
             <CloseIcon />
-          </IconButton>,
+          </IconButton>
         ]}
       />
     );
@@ -59,7 +59,7 @@ class Snackbar extends React.Component {
 }
 
 Snackbar.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(Snackbar);

@@ -10,10 +10,19 @@ class TextField extends React.Component {
 
   handleBlur = () => {
     this.props.field.setTouched(true);
-  }
+  };
 
   render() {
-    const { value, err, maxLength, touched, disabled, field, fullWidth, type } = this.props;
+    const {
+      value,
+      err,
+      maxLength,
+      touched,
+      disabled,
+      field,
+      fullWidth,
+      type
+    } = this.props;
 
     return (
       <CommonField field={field}>
@@ -32,6 +41,14 @@ class TextField extends React.Component {
       </CommonField>
     );
   }
-};
+}
 
-export default attach(['value', 'err', 'maxLength', 'touched', 'disabled', 'fullWidth', 'type'])(TextField);
+export default attach([
+  'value',
+  'err',
+  'maxLength',
+  'touched',
+  'disabled',
+  'fullWidth',
+  'type'
+])(TextField);

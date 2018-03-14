@@ -1,7 +1,7 @@
 import ChainedSelectField from './chained-select-field';
 
 const createCarField = () => {
-  return new ChainedSelectField(  {
+  return new ChainedSelectField({
     name: 'car',
     label: 'Car',
     required: true,
@@ -79,7 +79,7 @@ it('should clear subsequent fields', () => {
   expect(car._getField(3).get('hidden')).toEqual(true);
 });
 
-const numNonHiddenFields = (fields) => {
+const numNonHiddenFields = fields => {
   let num = 0;
   fields.each(item => {
     if (!item.get('hidden')) {

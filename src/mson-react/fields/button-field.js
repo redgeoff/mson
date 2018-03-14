@@ -11,13 +11,19 @@ class ButtonField extends React.Component {
     if (type !== 'submit') {
       this.props.field.emitClick();
     }
-  }
+  };
 
   render() {
     const { label, type, disabled, icon } = this.props;
     return (
-      <Button type={type} label={label} disabled={disabled} onClick={this.handleClick} icon={icon} />
-    )
+      <Button
+        type={type}
+        label={label}
+        disabled={disabled}
+        onClick={this.handleClick}
+        icon={icon}
+      />
+    );
   }
 }
 

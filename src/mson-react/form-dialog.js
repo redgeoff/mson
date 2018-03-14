@@ -18,7 +18,7 @@ class FormDialog extends React.Component {
     this.setState({ open: true });
   };
 
-  handleClose = (withCancelButton) => {
+  handleClose = withCancelButton => {
     // Prevent the user from losing data when pressing esc or clicking outside dialog
     if (withCancelButton || this.props.mode !== 'edit') {
       this.setState({ open: false });
@@ -35,14 +35,14 @@ class FormDialog extends React.Component {
     }
   };
 
-  handleSave = (event) => {
+  handleSave = event => {
     // Stop the form from refreshing the page
     event.preventDefault();
 
     if (this.props.onSave) {
       this.props.onSave();
     }
-  }
+  };
 
   handleDelete = () => {
     if (this.props.onDelete) {
@@ -57,7 +57,14 @@ class FormDialog extends React.Component {
   }
 
   render() {
-    const { mode, form, forbidUpdate, forbidDelete, editable, disabled } = this.props;
+    const {
+      mode,
+      form,
+      forbidUpdate,
+      forbidDelete,
+      editable,
+      disabled
+    } = this.props;
 
     const disableSave = form.hasErrorForTouchedField() || !form.get('dirty');
 
@@ -67,17 +74,40 @@ class FormDialog extends React.Component {
       buttons = (
         <div>
           {/* We use type=submit so that the form is submitted when the user presses enter */}
-          <Button type="submit" label="Save" iconComponent={Save} disabled={disableSave} />
-          <Button label="Cancel" iconComponent={Cancel} onClick={() => this.handleClose(true)} />
+          <Button
+            type="submit"
+            label="Save"
+            iconComponent={Save}
+            disabled={disableSave}
+          />
+          <Button
+            label="Cancel"
+            iconComponent={Cancel}
+            onClick={() => this.handleClose(true)}
+          />
         </div>
       );
     } else if (editable && !disabled && (!forbidUpdate || !forbidDelete)) {
       buttons = (
         <div>
-          { forbidUpdate ? '' :
-            <Button label="Edit" iconComponent={ModeEdit} onClick={this.handleEdit} /> }
-          { forbidDelete ? '' :
-            <Button label="Delete" iconComponent={Delete} onClick={this.handleDelete} /> }
+          {forbidUpdate ? (
+            ''
+          ) : (
+            <Button
+              label="Edit"
+              iconComponent={ModeEdit}
+              onClick={this.handleEdit}
+            />
+          )}
+          {forbidDelete ? (
+            ''
+          ) : (
+            <Button
+              label="Delete"
+              iconComponent={Delete}
+              onClick={this.handleDelete}
+            />
+          )}
         </div>
       );
     }
@@ -93,8 +123,7 @@ class FormDialog extends React.Component {
           <DialogContent>
             <Form form={form} formTag={false} />
           </DialogContent>
-          { buttons ?
-            <DialogActions>{buttons}</DialogActions> : '' }
+          {buttons ? <DialogActions>{buttons}</DialogActions> : ''}
         </form>
       </Dialog>
     );

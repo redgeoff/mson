@@ -92,7 +92,13 @@ export default class CompositeField extends Field {
 
   _setValue(props) {
     if (props.value !== undefined) {
-      this.eachField(field => field.setValue(props.value && props.value[field.get('name')] ? props.value[field.get('name')] : null));
+      this.eachField(field =>
+        field.setValue(
+          props.value && props.value[field.get('name')]
+            ? props.value[field.get('name')]
+            : null
+        )
+      );
     }
   }
 
@@ -161,7 +167,9 @@ export default class CompositeField extends Field {
 
   validate() {
     super.validate();
-    this.eachField((field, name, last) => this._validateField(field, name, last));
+    this.eachField((field, name, last) =>
+      this._validateField(field, name, last)
+    );
   }
 
   getDisplayValue() {

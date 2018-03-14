@@ -41,22 +41,21 @@ export default class ChainedSelectField extends ListField {
 
   _onFieldCreated(field, onDelete) {
     field.on('value', value => {
+      const index = field.get('name');
 
-    const index = field.get('name');
+      if (value) {
+        // Set options for next field
+        this._setFieldOptions(field.getValue(), index + 1);
 
-    if (value) {
-      // Set options for next field
-      this._setFieldOptions(field.getValue(), index + 1);
+        // Clear the next field
+        this._clearFieldIfExists(index + 1);
 
-      // Clear the next field
-      this._clearFieldIfExists(index + 1);
-
-      // Clear any fields after the next field
-      this._clearAndHideNextFieldsIfExist(index + 2);
-    } else {
-      // Clear any fields after this field
-      this._clearAndHideNextFieldsIfExist(index + 1);
-    }
+        // Clear any fields after the next field
+        this._clearAndHideNextFieldsIfExist(index + 2);
+      } else {
+        // Clear any fields after this field
+        this._clearAndHideNextFieldsIfExist(index + 1);
+      }
 
       this._calcValue();
     });
@@ -68,8 +67,9 @@ export default class ChainedSelectField extends ListField {
     if (value !== null || index === 0) {
       return this._options.mapByParent(value, option => {
         return {
-          value: option.id, label: option.label
-        }
+          value: option.id,
+          label: option.label
+        };
       });
     } else {
       return [];
@@ -109,7 +109,11 @@ export default class ChainedSelectField extends ListField {
   _indexOptions(options) {
     this._options = new Hierarchy();
     options.forEach(option => {
-      this._options.add({ id: option.value, parentId: option.parentValue, label: option.label });
+      this._options.add({
+        id: option.value,
+        parentId: option.parentValue,
+        label: option.label
+      });
     });
   }
 

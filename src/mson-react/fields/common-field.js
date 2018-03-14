@@ -8,7 +8,17 @@ import HelpToolTip from './help-tool-tip';
 
 class CommonField extends React.Component {
   render() {
-    const { field, children, label, required, fullWidth, err, editable, touched, help } = this.props;
+    const {
+      field,
+      children,
+      label,
+      required,
+      fullWidth,
+      err,
+      editable,
+      touched,
+      help
+    } = this.props;
 
     let fld = null;
 
@@ -19,27 +29,28 @@ class CommonField extends React.Component {
             {label}
           </InputLabel>
           {children}
-          { help && editable ? <HelpToolTip help={help} /> : '' }
-          {touched && err ? (
-            <FormHelperText error>{err}</FormHelperText>
-          ) : null}
+          {help && editable ? <HelpToolTip help={help} /> : ''}
+          {touched && err ? <FormHelperText error>{err}</FormHelperText> : null}
         </span>
       );
     } else {
       fld = (
-        <Typography variant="subheading">
-          {field.getDisplayValue()}
-        </Typography>
+        <Typography variant="subheading">{field.getDisplayValue()}</Typography>
       );
     }
 
-    return (
-      <FormControl fullWidth={fullWidth}>
-        { fld }
-      </FormControl>
-    );
+    return <FormControl fullWidth={fullWidth}>{fld}</FormControl>;
   }
-};
+}
 
 // 'value' is needed in the event we are showing the display value
-export default attach(['label', 'required', 'fullWidth', 'value', 'err', 'editable', 'touched', 'help'])(CommonField);
+export default attach([
+  'label',
+  'required',
+  'fullWidth',
+  'value',
+  'err',
+  'editable',
+  'touched',
+  'help'
+])(CommonField);

@@ -55,7 +55,7 @@ beforeAll(() => {
           component: 'ButtonField',
           name: 'edit',
           label: 'Edit'
-        },
+        }
       ]
     }
   });

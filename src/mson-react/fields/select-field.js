@@ -11,7 +11,7 @@ class SelectField extends React.Component {
 
   handleBlur = () => {
     this.props.field.setTouched(true);
-  }
+  };
 
   renderOptions() {
     const { options, blankString } = this.props;
@@ -58,6 +58,14 @@ class SelectField extends React.Component {
       </CommonField>
     );
   }
-};
+}
 
-export default attach(['value', 'err', 'options', 'touched', 'blankString', 'disabled', 'fullWidth'])(SelectField);
+export default attach([
+  'value',
+  'err',
+  'options',
+  'touched',
+  'blankString',
+  'disabled',
+  'fullWidth'
+])(SelectField);

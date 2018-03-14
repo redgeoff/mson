@@ -57,13 +57,12 @@ class Submenu extends React.Component {
         this.props.onNavigate(item);
       }
     }
-  }
+  };
 
   items() {
     const { classes, item, location } = this.props;
 
     return item.items.map((item, index) => {
-
       const isSelected = location.pathname === item.path;
       let classNames = [classes.secondary];
       if (isSelected) {
@@ -71,14 +70,22 @@ class Submenu extends React.Component {
       }
 
       return (
-        <ListItem button className={classes.nested} key={index}
-          onClick={() => this.handleClick(item)}>
+        <ListItem
+          button
+          className={classes.nested}
+          key={index}
+          onClick={() => this.handleClick(item)}
+        >
           <ListItemText
             disableTypography
-            primary={<Typography variant="body1" className={classNames.join(' ')}>{item.label}</Typography>}
+            primary={
+              <Typography variant="body1" className={classNames.join(' ')}>
+                {item.label}
+              </Typography>
+            }
           />
         </ListItem>
-      )
+      );
     });
   }
 
@@ -95,14 +102,8 @@ class Submenu extends React.Component {
     let listItems = null;
     if (items) {
       listItems = (
-        <Collapse
-          in={this.state.open}
-          timeout="auto"
-          unmountOnExit
-        >
-          <List disablePadding>
-            {this.items()}
-          </List>
+        <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+          <List disablePadding>{this.items()}</List>
         </Collapse>
       );
     }
@@ -112,15 +113,17 @@ class Submenu extends React.Component {
         <ListItem button onClick={() => this.handleClick(item)}>
           <ListItemText
             disableTypography
-            primary={<Typography variant="subheading" className={classNames.join(' ')}>{item.label}</Typography>}
+            primary={
+              <Typography variant="subheading" className={classNames.join(' ')}>
+                {item.label}
+              </Typography>
+            }
           />
-          { items ?
-            (this.state.open ? <ExpandLess /> : <ExpandMore />) : null
-          }
+          {items ? this.state.open ? <ExpandLess /> : <ExpandMore /> : null}
         </ListItem>
         {listItems}
       </div>
-    )
+    );
   }
 }
 

@@ -27,7 +27,8 @@ export default class OrderedObject {
   }
 
   _get(key, index) {
-    const item = key === undefined ? this._orderedItems[index] : this._items[key];
+    const item =
+      key === undefined ? this._orderedItems[index] : this._items[key];
     return item ? item : undefined;
   }
 

@@ -20,7 +20,7 @@ const theme = createMuiTheme({
 class App extends Component {
   onNavigate = (message, callback) => {
     globals.onNavigate(message, callback);
-  }
+  };
 
   render() {
     return (

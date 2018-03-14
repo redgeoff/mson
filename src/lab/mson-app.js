@@ -140,7 +140,7 @@ builder.registerComponent('org.proj.Account', {
 // });
 
 // TODO: should be able to inline in ChangePassword
-builder.registerComponent('org.proj.ChangePasswordForm',  {
+builder.registerComponent('org.proj.ChangePasswordForm', {
   component: 'Form',
   fields: [
     {
@@ -359,9 +359,13 @@ const app = builder.newComponent({
 // TODO: just temporary until we have a proper way to wire up to backend
 // const account = app.get('menu').getItem('/account/edit').content.getStore();
 // account.set({ id: '1', name: 'Nina Simone', email: 'nina@example.com' })
-const employees = app.get('menu').getItem('/employees').content.getField('employees').getStore();
-employees.set({ id: '1', name: 'Ella Fitzgerald', email: 'ella@example.com' })
-employees.set({ id: '2', name: 'Frank Sinatra', email: 'frank@example.com' })
-employees.set({ id: '3', name: 'Ray Charles', email: 'ray@example.com' })
+const employees = app
+  .get('menu')
+  .getItem('/employees')
+  .content.getField('employees')
+  .getStore();
+employees.set({ id: '1', name: 'Ella Fitzgerald', email: 'ella@example.com' });
+employees.set({ id: '2', name: 'Frank Sinatra', email: 'frank@example.com' });
+employees.set({ id: '3', name: 'Ray Charles', email: 'ray@example.com' });
 
 export default app;

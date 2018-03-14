@@ -6,7 +6,11 @@ const createForm = () => {
   return new Form({
     fields: [
       new TextField({ name: 'firstName', label: 'First Name', required: true }),
-      new TextField({ name: 'middleName', label: 'First Name', required: true }),
+      new TextField({
+        name: 'middleName',
+        label: 'First Name',
+        required: true
+      }),
       new TextField({ name: 'lastName', label: 'Last Name', required: true })
     ],
     validators: [
@@ -65,7 +69,7 @@ it('should validate', () => {
       field: 'firstName',
       error: 'cannot be Jim'
     }
-  ])
+  ]);
 
   form.setValues({
     firstName: 'Jimmy',
@@ -78,7 +82,7 @@ it('should validate', () => {
       field: 'lastName',
       error: 'cannot be Jones'
     }
-  ])
+  ]);
 
   form.setValues({
     firstName: 'Jimmy',
@@ -91,5 +95,5 @@ it('should validate', () => {
       field: 'middleName',
       error: 'cannot be same as Jimmy'
     }
-  ])
-})
+  ]);
+});

@@ -42,7 +42,9 @@ export default class ListField extends CompositeField {
     // Are we removing the first field?
     if (name === firstName) {
       // Set the label and required for the new first field
-      this._fields.first().set({ label: field.get('label'), required: field.get('required') });
+      this._fields
+        .first()
+        .set({ label: field.get('label'), required: field.get('required') });
     }
 
     // Create a new field if we have reached the max size and delete a field
@@ -171,7 +173,10 @@ export default class ListField extends CompositeField {
   }
 
   _cleanUpNextFields(afterName) {
-    const nextName = afterName === null ? this._fields.firstKey() : this._fields.nextKey(afterName);
+    const nextName =
+      afterName === null
+        ? this._fields.firstKey()
+        : this._fields.nextKey(afterName);
     if (nextName !== null) {
       let first = true;
       for (let field of this._fields.values(nextName)) {
@@ -210,7 +215,14 @@ export default class ListField extends CompositeField {
 
     // This needs to come first as we need to set the options and blankString before creating any
     // fields
-    this._setIfUndefined(props, 'block', 'fullWidth', 'allowDelete', 'minSize', 'maxSize');
+    this._setIfUndefined(
+      props,
+      'block',
+      'fullWidth',
+      'allowDelete',
+      'minSize',
+      'maxSize'
+    );
 
     if (props.label !== undefined) {
       if (this._fields.hasFirst()) {
@@ -234,7 +246,14 @@ export default class ListField extends CompositeField {
   }
 
   getOne(name) {
-    const value = this._getIfAllowed(name, 'block', 'fullWidth', 'allowDelete', 'minSize', 'maxSize');
+    const value = this._getIfAllowed(
+      name,
+      'block',
+      'fullWidth',
+      'allowDelete',
+      'minSize',
+      'maxSize'
+    );
     return value === undefined ? super.getOne(name) : value;
   }
 
@@ -276,4 +295,4 @@ export default class ListField extends CompositeField {
       return true;
     }
   }
-};
+}

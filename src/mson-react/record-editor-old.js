@@ -7,7 +7,7 @@ import { Save, Cancel } from 'material-ui-icons';
 import attach from './attach';
 
 class RecordEditor extends React.Component {
-  handleSave = (event) => {
+  handleSave = event => {
     // Stop the form from refreshing the page
     event.preventDefault();
 
@@ -20,12 +20,12 @@ class RecordEditor extends React.Component {
     if (form.getErrs().length === 0) {
       component.save();
     }
-  }
+  };
 
   handleCancel = () => {
     const { component } = this.props;
     component.cancel();
-  }
+  };
 
   render() {
     const { component } = this.props;
@@ -39,11 +39,20 @@ class RecordEditor extends React.Component {
         <Form form={form} formTag={false} />
 
         {/* We use type=submit so that the form is submitted when the user presses enter */}
-        <Button type="submit" label="Save" iconComponent={Save} disabled={disableSave} />
-        <Button label="Cancel" iconComponent={Cancel} onClick={this.handleCancel} />
+        <Button
+          type="submit"
+          label="Save"
+          iconComponent={Save}
+          disabled={disableSave}
+        />
+        <Button
+          label="Cancel"
+          iconComponent={Cancel}
+          onClick={this.handleCancel}
+        />
       </form>
-    )
+    );
   }
 }
 
-export default attach(['err', 'dirty'], 'component')(RecordEditor)
+export default attach(['err', 'dirty'], 'component')(RecordEditor);

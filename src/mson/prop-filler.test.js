@@ -19,15 +19,17 @@ it('should fill props', () => {
   expect(filler.fill('{{missing}}')).toEqual('{{missing}}');
   expect(filler.fill('{{missing}} here')).toEqual('{{missing}} here');
 
-  expect(filler.fillAll({
-    one: '{{foo}}',
-    two: '{{nar}}',
-    three: '{{nar.sar}}',
-    four: props.nar,
-    five: {
-      a: '{{foo}}'
-    }
-  })).toEqual({
+  expect(
+    filler.fillAll({
+      one: '{{foo}}',
+      two: '{{nar}}',
+      three: '{{nar.sar}}',
+      four: props.nar,
+      five: {
+        a: '{{foo}}'
+      }
+    })
+  ).toEqual({
     one: 'bar',
     two: props.nar,
     three: 1,

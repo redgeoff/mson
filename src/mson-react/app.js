@@ -28,25 +28,25 @@ const styles = theme => ({
     height: 430,
     // marginTop: theme.spacing.unit * 3,
     zIndex: 1,
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   appFrame: {
     position: 'relative',
     display: 'flex',
     width: '100%',
-    height: '100%',
+    height: '100%'
   },
   appBar: {
     position: 'absolute',
     marginLeft: drawerWidth,
     [theme.breakpoints.up('md')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-    },
+      width: `calc(100% - ${drawerWidth}px)`
+    }
   },
   navIconHide: {
     [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
   content: {
     backgroundColor: theme.palette.background.default,
@@ -56,7 +56,7 @@ const styles = theme => ({
     marginTop: 56,
     [theme.breakpoints.up('sm')]: {
       height: 'calc(100% - 64px)',
-      marginTop: 64,
+      marginTop: 64
     },
 
     // Also needed to extend menu vertically
@@ -105,7 +105,10 @@ class App extends React.Component {
         // Is the path is changing? This check is needed as otherwise a re-rendering of the
         // RouteListener during some UI operation, e.g. a button click, could result in us
         // redirecting to an outdated path.
-        if (this.lastPath === null || this.lastPath !== props.location.pathname) {
+        if (
+          this.lastPath === null ||
+          this.lastPath !== props.location.pathname
+        ) {
           this.lastPath = props.location.pathname;
           self.navigateTo(props.location.pathname);
         }
@@ -134,15 +137,15 @@ class App extends React.Component {
         confirmationTitle: 'Discard changes?',
         confirmationText: '',
         confirmationCallback: callback
-      })
+      });
     } else {
       // Nothing is dirty so allow the navigation to continue
       callback(true);
     }
-  }
+  };
 
   setGlobalOnNavigate() {
-    globals.setOnNavigate(this.onNavigate)
+    globals.setOnNavigate(this.onNavigate);
   }
 
   handleDrawerToggle = () => {
@@ -170,15 +173,15 @@ class App extends React.Component {
 
   handleNavigate = (menuItem, force) => {
     this.props.history.push(menuItem.path);
-  }
+  };
 
-  handleConfirmationClose = async (yes) => {
+  handleConfirmationClose = async yes => {
     if (yes) {
       // Allow/prohibit the route change
       this.state.confirmationCallback(yes);
     }
     this.setState({ confirmationOpen: false });
-  }
+  };
 
   switchContent = menuItem => {
     // Prevent inifinite recursion when menuItem is null by making sure that the menuItem is
@@ -221,14 +224,24 @@ class App extends React.Component {
 
   handleSnackbarClose = () => {
     this.setState({ snackbarOpen: false });
-  }
+  };
 
   render() {
     const { classes, app } = this.props;
-    const { mobileOpen, menuItem, snackbarOpen, snackbarMessage, confirmationOpen, confirmationTitle, confirmationText } = this.state;
+    const {
+      mobileOpen,
+      menuItem,
+      snackbarOpen,
+      snackbarMessage,
+      confirmationOpen,
+      confirmationTitle,
+      confirmationText
+    } = this.state;
     const menu = app.get('menu');
 
-    const component = this.component ? <Component component={this.component} /> : null;
+    const component = this.component ? (
+      <Component component={this.component} />
+    ) : null;
 
     const RouteListener = this.routeListener;
 
@@ -260,7 +273,6 @@ class App extends React.Component {
             onNavigate={this.handleNavigate}
           />
           <main className={classes.content}>
-
             <Switch>
               {/* Omitting path so that all paths are matched */}
               {/* We cannot use the render property as render functions must be pure functions
@@ -271,7 +283,11 @@ class App extends React.Component {
 
             {component}
 
-            <Snackbar open={snackbarOpen} message={snackbarMessage} onClose={this.handleSnackbarClose} />
+            <Snackbar
+              open={snackbarOpen}
+              message={snackbarMessage}
+              onClose={this.handleSnackbarClose}
+            />
             <ConfirmationDialog
               open={confirmationOpen}
               onClose={this.handleConfirmationClose}

@@ -19,13 +19,29 @@ export default class FormsField extends Field {
 
   set(props) {
     super.set(props);
-    this._setIfUndefined(props, 'form', 'forbidCreate', 'forbidUpdate', 'forbidDelete', 'minSize',
-      'maxSize', 'singularLabel');
+    this._setIfUndefined(
+      props,
+      'form',
+      'forbidCreate',
+      'forbidUpdate',
+      'forbidDelete',
+      'minSize',
+      'maxSize',
+      'singularLabel'
+    );
   }
 
   getOne(name) {
-    const value = this._getIfAllowed(name, 'form', 'forbidCreate', 'forbidUpdate', 'forbidDelete',
-      'minSize', 'maxSize', 'singularLabel');
+    const value = this._getIfAllowed(
+      name,
+      'form',
+      'forbidCreate',
+      'forbidUpdate',
+      'forbidDelete',
+      'minSize',
+      'maxSize',
+      'singularLabel'
+    );
     return value === undefined ? super.getOne(name) : value;
   }
 
@@ -33,7 +49,7 @@ export default class FormsField extends Field {
     return this._docs;
   }
 
-  * getForms() {
+  *getForms() {
     for (const doc of this._docs.all()) {
       // We need to clone the form so that each item has its own memory space
       const clonedForm = this.get('form').clone();

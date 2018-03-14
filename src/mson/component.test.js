@@ -17,17 +17,17 @@ class Song extends Component {
     const value = this._getIfAllowed(name, 'song', 'artist');
     return value === undefined ? super.getOne(name) : value;
   }
-};
+}
 
 class SongAction extends Action {
-  acts = []
+  acts = [];
 
   async act(props) {
     // Wait until next tick
     await testUtils.timeout();
     this.acts.push({
       event: props.event
-    })
+    });
   }
 }
 
@@ -50,28 +50,27 @@ it('should execute listeners', async () => {
   const action1 = new SongAction();
   const action2 = new SongAction();
 
-  const song = new Song({ listeners: [
-    {
-      event: 'song',
-      actions: [
-        action1,
-        action2
-      ]
-    },
-    {
-      event: 'artist',
-      actions: [
-        action1
-      ]
-    }
-  ]});
+  const song = new Song({
+    listeners: [
+      {
+        event: 'song',
+        actions: [action1, action2]
+      },
+      {
+        event: 'artist',
+        actions: [action1]
+      }
+    ]
+  });
 
   song.set({ song: "It Don't Mean a Thing", artist: 'Ella Fitzgerald' });
 
   await testUtils.waitFor(() => {
-    return action1.acts.length === 2 && action2.acts.length === 1 ? true : undefined
-  })
+    return action1.acts.length === 2 && action2.acts.length === 1
+      ? true
+      : undefined;
+  });
 
-  expect(action1.acts).toEqual([ { event: 'song' }, { event: 'artist' } ]);
-  expect(action2.acts).toEqual([ { event: 'song' } ]);
+  expect(action1.acts).toEqual([{ event: 'song' }, { event: 'artist' }]);
+  expect(action2.acts).toEqual([{ event: 'song' }]);
 });

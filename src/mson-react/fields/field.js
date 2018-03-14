@@ -30,6 +30,6 @@ class Field extends React.Component {
       );
     }
   }
-};
+}
 
 export default attach(['hidden', 'block'])(Field);

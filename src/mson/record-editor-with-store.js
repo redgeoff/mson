@@ -17,7 +17,10 @@ export default class RecordEditor extends Component {
       // changes with the updates
 
       const id = this.get('id');
-      if ((change.event === 'create' || change.event === 'update') && change.doc.id === id) {
+      if (
+        (change.event === 'create' || change.event === 'update') &&
+        change.doc.id === id
+      ) {
         this.get('form').setValues(change.doc);
       }
     });

@@ -6,7 +6,7 @@ const options = [
   { label: 'Blue', value: 'blue' }
 ];
 
-const createColors = (props) => {
+const createColors = props => {
   return new SelectListField({
     label: 'Colors',
     required: true,

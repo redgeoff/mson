@@ -1,7 +1,7 @@
 import ChainedSelectListField from './chained-select-list-field';
 
-const createCarsField = (props) => {
-  return new ChainedSelectListField(  {
+const createCarsField = props => {
+  return new ChainedSelectListField({
     name: 'cars',
     label: 'Cars',
     required: true,
@@ -38,14 +38,8 @@ it('should set and get', () => {
 
   // USA - Telsa - Model S - Red
   // Germany - BMW - i3
-  cars.setValue([
-    [2, 5, 9, 10],
-    [1, 3, 6]
-  ]);
-  expect(cars.getValue()).toEqual([
-    [2, 5, 9, 10],
-    [1, 3, 6]
-  ]);
+  cars.setValue([[2, 5, 9, 10], [1, 3, 6]]);
+  expect(cars.getValue()).toEqual([[2, 5, 9, 10], [1, 3, 6]]);
 
   // Germany - BMW - i8
   cars.setValue([[1, 3, 7]]);
@@ -61,10 +55,7 @@ it('should remove fields when clearing', () => {
   cars.clearValue();
   expect(cars._fields.length()).toEqual(1);
 
-  cars.setValue([
-    [2, 5, 9, 10],
-    [1, 3, 6]
-  ]);
+  cars.setValue([[2, 5, 9, 10], [1, 3, 6]]);
 
   cars.clearValue();
   expect(cars._fields.length()).toEqual(1);
@@ -79,7 +70,10 @@ it('should add field when option selected', () => {
   cars.clearValue();
 
   // Simulate user selecting 1st option -- this exposed a bug at one point
-  cars._getField(0)._getField(0).setValue(2);
+  cars
+    ._getField(0)
+    ._getField(0)
+    .setValue(2);
 
   expect(cars._fields.length()).toEqual(2);
 });
@@ -93,10 +87,7 @@ it('should not create more than max size fields', () => {
 
 it('should not add a field when a field is deleted and not reached max size', () => {
   const cars = createCarsField();
-  cars.setValue([
-    [2, 5, 9, 10],
-    [1, 3, 6]
-  ]);
+  cars.setValue([[2, 5, 9, 10], [1, 3, 6]]);
   expect(cars._fields.length()).toEqual(3);
   cars._getField(0).emit('delete');
   expect(cars._fields.length()).toEqual(2);
@@ -104,10 +95,7 @@ it('should not add a field when a field is deleted and not reached max size', ()
 
 it('should add a field when a field is deleted and reached max size', () => {
   const cars = createCarsField({ maxSize: 2 });
-  cars.setValue([
-    [2, 5, 9, 10],
-    [1, 3, 6]
-  ]);
+  cars.setValue([[2, 5, 9, 10], [1, 3, 6]]);
   expect(cars._fields.length()).toEqual(2);
   cars._getField(0).emit('delete');
   expect(cars._fields.length()).toEqual(2);
@@ -118,14 +106,17 @@ it('should add a field when a field is deleted and reached max size', () => {
 it('should allow last field to be deleted if reached max size', () => {
   const cars = createCarsField({ maxSize: 2 });
 
-  cars.setValue([
-    [2, 5, 9, 10],
-    [1, 3, 6]
-  ]);
+  cars.setValue([[2, 5, 9, 10], [1, 3, 6]]);
   expect(cars._getField(1).isBlank()).toEqual(false);
 
   cars.clearValue();
-  cars._getField(0)._getField(0).setValue(2); // select 1st option
-  cars._getField(3)._getField(0).setValue(1); // select 2nd option
+  cars
+    ._getField(0)
+    ._getField(0)
+    .setValue(2); // select 1st option
+  cars
+    ._getField(3)
+    ._getField(0)
+    .setValue(1); // select 2nd option
   expect(cars._getField(3).isBlank()).toEqual(false);
 });

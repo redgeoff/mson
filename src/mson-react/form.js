@@ -3,7 +3,7 @@ import Field from './fields/field';
 // import FlexBreak from './flex-break'; // TODO: remove
 
 export default class Form extends React.Component {
-  handleSave = (event) => {
+  handleSave = event => {
     // Stop the form from refreshing the page. We can't rely on the default functionality as there
     // may be form errors that need to stop the form from submitting.
     event.preventDefault();
@@ -15,7 +15,7 @@ export default class Form extends React.Component {
     if (form.getErrs().length === 0) {
       this.props.form.submit();
     }
-  }
+  };
 
   render() {
     const { form, formTag } = this.props;
@@ -31,19 +31,15 @@ export default class Form extends React.Component {
       return (
         <span key={key + '_' + index}>
           <Field field={field} />
-{/* TODO: remove
+          {/* TODO: remove
           <FlexBreak />
 */}
         </span>
       );
-    })
+    });
 
     if (formTag !== false) {
-      return (
-        <form onSubmit={this.handleSave}>
-          {flds}
-        </form>
-      )
+      return <form onSubmit={this.handleSave}>{flds}</form>;
     } else {
       return flds;
     }

@@ -6,7 +6,11 @@ const createForm = () => {
   return new Form({
     fields: [
       new TextField({ name: 'firstName', label: 'First Name', required: true }),
-      new TextField({ name: 'middleName', label: 'First Name', required: true }),
+      new TextField({
+        name: 'middleName',
+        label: 'First Name',
+        required: true
+      }),
       new TextField({ name: 'lastName', label: 'Last Name', required: true })
     ]
   });
@@ -114,7 +118,9 @@ it('should clone', () => {
   clonedForm.validate();
   expect(clonedForm.getField('middleName').getErr()).toBeNull();
 
-  form.addField(new TextField({ name: 'suffix', label: 'Suffix', required: true }));
+  form.addField(
+    new TextField({ name: 'suffix', label: 'Suffix', required: true })
+  );
   expect(form._fields.length()).toEqual(5);
   expect(clonedForm._fields.length()).toEqual(4);
 
@@ -142,4 +148,4 @@ it('should clone listeners', async () => {
   });
   await receivedValues;
   expect(receivedNonClonedValues).toEqual(false);
-})
+});

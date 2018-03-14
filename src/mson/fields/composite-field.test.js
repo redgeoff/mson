@@ -60,7 +60,7 @@ it('should set via sub fields', () => {
   expect(field.getValue()).toEqual({
     firstName: 'Nina',
     lastName: 'Simone'
-  })
+  });
 });
 
 it('should toggle disable', () => {

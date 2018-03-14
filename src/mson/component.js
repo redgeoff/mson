@@ -5,7 +5,7 @@ import utils from './utils';
 let nextKey = 0;
 const getNextKey = () => {
   return nextKey++;
-}
+};
 
 // NOTE:
 // - Get and set designed so that easy to add functionality later on set and get, including via
@@ -46,7 +46,10 @@ export default class Component extends events.EventEmitter {
     // Is the value changing? Preventing emitting when the value doesn't change. We don't currently
     // initialize the props to null so we ignore any changes where the prop would switch from
     // undefined to null.
-    if (this['_' + name] !== value && (this['_' + name] !== undefined || value !== null)) {
+    if (
+      this['_' + name] !== value &&
+      (this['_' + name] !== undefined || value !== null)
+    ) {
       this['_' + name] = value;
       this._emitChange(name, value);
     }
@@ -82,11 +85,15 @@ export default class Component extends events.EventEmitter {
       this._setIfUndefinedProp(props, 'listeners');
       this._listeners.forEach(listener => {
         this.on(listener.event, async () => {
-          await utils.sequential(listener.actions, async (action) => await action.run({
-            event: listener.event,
-            component: this,
-            ifData
-          }));
+          await utils.sequential(
+            listener.actions,
+            async action =>
+              await action.run({
+                event: listener.event,
+                component: this,
+                ifData
+              })
+          );
         });
       });
     }
@@ -167,8 +174,8 @@ export default class Component extends events.EventEmitter {
     events.forEach(event => {
       component.on(event, value => {
         this._emitChange(event, value);
-      })
-    })
+      });
+    });
   }
 
   getKey() {
