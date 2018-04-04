@@ -29,7 +29,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "copy-json": "rsync -avm --include='*.json' -f 'hide,! */' src/mson lib",
+    "copy-json-rsync": "rsync -avm --include='*.json' -f 'hide,! */' src/mson lib",
+    "copy-json": "cd src && cp --parents -R mson/**/*.json ../lib",
     "compile": "export NODE_ENV=production && babel src/mson -d lib/mson && npm run copy-json",
     "touch": "find src -exec touch {} \\;"
   }
