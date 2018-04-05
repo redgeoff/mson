@@ -72,7 +72,14 @@ export default class Form extends Component {
       this.setDirty(!props.pristine);
     }
 
-    this._setIfUndefined(props, 'touched', 'err', 'dirty', 'pristine');
+    this._setIfUndefined(
+      props,
+      'touched',
+      'err',
+      'dirty',
+      'pristine',
+      'access'
+    );
   }
 
   _setField(field) {
@@ -129,7 +136,8 @@ export default class Form extends Component {
       'touched',
       'err',
       'dirty',
-      'pristine'
+      'pristine',
+      'access'
     );
     return value === undefined ? super.getOne(name) : value;
   }
