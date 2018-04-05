@@ -98,8 +98,22 @@ it('should validate', () => {
   ]);
 });
 
-it('should validate when fields removed', async () => {
-  const form = createForm();
+it('validate should adjust when fields removed', async () => {
+  const form1 = createForm();
+  form1.removeField('middleName');
+  form1.setValues({
+    firstName: 'First',
+    lastName: 'Last'
+  });
+  form1.validate();
+  expect(form1.getErrs()).toEqual([]);
 
-  // form.remove
+  const form2 = createForm();
+  form2.removeField('firstName');
+  form2.setValues({
+    middleName: 'Middle',
+    lastName: 'Last'
+  });
+  form2.validate();
+  expect(form2.getErrs()).toEqual([]);
 });

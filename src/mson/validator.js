@@ -20,7 +20,12 @@ export default class Validator {
     } else {
       let value = this._props[names[0]];
       for (let i = 1; i < names.length; i++) {
-        value = value[names[i]];
+        // Value can be falsy if the field was removed and a validator still references the field.
+        // TODO: is this durability the best way of handling broken validators when fields are
+        // removed?
+        if (value) {
+          value = value[names[i]];
+        }
       }
       return value;
     }
