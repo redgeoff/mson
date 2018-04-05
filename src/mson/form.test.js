@@ -8,7 +8,7 @@ const createForm = () => {
       new TextField({ name: 'firstName', label: 'First Name', required: true }),
       new TextField({
         name: 'middleName',
-        label: 'First Name',
+        label: 'Middle Name',
         required: true
       }),
       new TextField({ name: 'lastName', label: 'Last Name', required: true })
@@ -148,4 +148,25 @@ it('should clone listeners', async () => {
   });
   await receivedValues;
   expect(receivedNonClonedValues).toEqual(false);
+});
+
+it('should remove fields', async () => {
+  const form = createForm();
+  form.setValues({
+    id: null,
+    firstName: 'First',
+    middleName: 'Middle',
+    lastName: 'Last'
+  });
+  form.removeField('middleName');
+  expect(form.getValues()).toEqual({
+    id: null,
+    firstName: 'First',
+    lastName: 'Last'
+  });
+
+  form.removeFieldsExcept(['firstName']);
+  expect(form.getValues()).toEqual({
+    firstName: 'First'
+  });
 });

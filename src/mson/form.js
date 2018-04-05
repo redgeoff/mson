@@ -124,6 +124,23 @@ export default class Form extends Component {
     });
   }
 
+  removeField(name) {
+    const field = this.getField(name);
+
+    this._fields.delete(name);
+
+    // Prevent a listener leak
+    field.removeAllListeners();
+  }
+
+  removeFieldsExcept(names) {
+    this._fields.each((field, name) => {
+      if (names.indexOf(name) === -1) {
+        this.removeField(name);
+      }
+    });
+  }
+
   getOne(name) {
     if (name === 'value') {
       return this.getValues();

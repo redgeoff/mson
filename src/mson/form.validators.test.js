@@ -8,7 +8,7 @@ const createForm = () => {
       new TextField({ name: 'firstName', label: 'First Name', required: true }),
       new TextField({
         name: 'middleName',
-        label: 'First Name',
+        label: 'Middle Name',
         required: true
       }),
       new TextField({ name: 'lastName', label: 'Last Name', required: true })
@@ -96,4 +96,10 @@ it('should validate', () => {
       error: 'cannot be same as Jimmy'
     }
   ]);
+});
+
+it('should validate when fields removed', async () => {
+  const form = createForm();
+
+  // form.remove
 });
