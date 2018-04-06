@@ -8,7 +8,7 @@ const createForm = () => {
       new TextField({ name: 'firstName', label: 'First Name', required: true }),
       new TextField({
         name: 'middleName',
-        label: 'First Name',
+        label: 'Middle Name',
         required: true
       }),
       new TextField({ name: 'lastName', label: 'Last Name', required: true })
@@ -96,4 +96,24 @@ it('should validate', () => {
       error: 'cannot be same as Jimmy'
     }
   ]);
+});
+
+it('validate should adjust when fields removed', async () => {
+  const form1 = createForm();
+  form1.removeField('middleName');
+  form1.setValues({
+    firstName: 'First',
+    lastName: 'Last'
+  });
+  form1.validate();
+  expect(form1.getErrs()).toEqual([]);
+
+  const form2 = createForm();
+  form2.removeField('firstName');
+  form2.setValues({
+    middleName: 'Middle',
+    lastName: 'Last'
+  });
+  form2.validate();
+  expect(form2.getErrs()).toEqual([]);
 });

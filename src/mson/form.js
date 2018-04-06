@@ -72,7 +72,14 @@ export default class Form extends Component {
       this.setDirty(!props.pristine);
     }
 
-    this._setIfUndefined(props, 'touched', 'err', 'dirty', 'pristine');
+    this._setIfUndefined(
+      props,
+      'touched',
+      'err',
+      'dirty',
+      'pristine',
+      'access'
+    );
   }
 
   _setField(field) {
@@ -117,6 +124,23 @@ export default class Form extends Component {
     });
   }
 
+  removeField(name) {
+    const field = this.getField(name);
+
+    this._fields.delete(name);
+
+    // Prevent a listener leak
+    field.removeAllListeners();
+  }
+
+  removeFieldsExcept(names) {
+    this._fields.each((field, name) => {
+      if (names.indexOf(name) === -1) {
+        this.removeField(name);
+      }
+    });
+  }
+
   getOne(name) {
     if (name === 'value') {
       return this.getValues();
@@ -129,7 +153,8 @@ export default class Form extends Component {
       'touched',
       'err',
       'dirty',
-      'pristine'
+      'pristine',
+      'access'
     );
     return value === undefined ? super.getOne(name) : value;
   }
