@@ -293,15 +293,7 @@ export default class Form extends Component {
   }
 
   hasErr() {
-    let hasErr = false;
-    this._fields.each(field => {
-      const err = field.getErr();
-      if (err) {
-        hasErr = true;
-        return false;
-      }
-    });
-    return hasErr;
+    return this.get('err');
   }
 
   // TODO: make this more efficient by using a prop that is set by the field listeners. This way the
