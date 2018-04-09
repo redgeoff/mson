@@ -2,10 +2,19 @@ import _ from 'lodash';
 
 class Utils {
   async sequential(items, onItem) {
-    await items.reduce(async (promise, item) => {
-      await promise;
-      await onItem(item);
-    }, Promise.resolve());
+    const values = [];
+    await _.reduce(
+      items,
+      async (promise, item, key) => {
+        await promise;
+        const value = await onItem(item, key);
+        if (value !== undefined) {
+          values.push(value);
+        }
+      },
+      Promise.resolve()
+    );
+    return values;
   }
 
   _mergeCustomizer = (objValue, srcValue) => {
