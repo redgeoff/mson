@@ -293,7 +293,7 @@ export default class Form extends Component {
   }
 
   hasErr() {
-    return this.get('err');
+    return this.get('err') ? true : false;
   }
 
   // TODO: make this more efficient by using a prop that is set by the field listeners. This way the
@@ -310,7 +310,7 @@ export default class Form extends Component {
   }
 
   submit() {
-    // Simulat a click on the first ButtonField of type=submit
+    // Simulate a click on the first ButtonField of type=submit
     this._fields.each(field => {
       if (field instanceof ButtonField) {
         if (field.get('type') === 'submit') {
