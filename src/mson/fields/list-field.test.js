@@ -41,3 +41,21 @@ it('should validate min size', () => {
   field.validate();
   expect(field.get('err')).toEqual('2 or more');
 });
+
+it('should allow for field property', () => {
+  const field = new ListField({
+    field: new TextField({
+      name: 'color',
+      label: 'Color'
+    }),
+    minSize: 2
+  });
+
+  field.setValue(['red', 'green']);
+  field.validate();
+  expect(field.get('err')).toEqual(null);
+
+  field.setValue(['red']);
+  field.validate();
+  expect(field.get('err')).toEqual('2 or more');
+});

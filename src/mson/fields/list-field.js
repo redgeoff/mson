@@ -221,7 +221,8 @@ export default class ListField extends CompositeField {
       'fullWidth',
       'allowDelete',
       'minSize',
-      'maxSize'
+      'maxSize',
+      'field'
     );
 
     if (props.label !== undefined) {
@@ -252,7 +253,8 @@ export default class ListField extends CompositeField {
       'fullWidth',
       'allowDelete',
       'minSize',
-      'maxSize'
+      'maxSize',
+      'field'
     );
     return value === undefined ? super.getOne(name) : value;
   }
@@ -294,5 +296,26 @@ export default class ListField extends CompositeField {
     } else {
       return true;
     }
+  }
+
+  _newField(index) {
+    const field = this.get('field');
+
+    if (!field) {
+      throw new Error('must define a field');
+    }
+
+    const clonedField = field.clone();
+
+    clonedField.set({
+      name: index,
+      label: index === 0 ? this.get('label') : undefined,
+      required: false,
+      block: this.get('block') === undefined ? true : this.get('block'),
+      fullWidth: this.get('fullWidth'),
+      options: this.get('options')
+    });
+
+    return clonedField;
   }
 }

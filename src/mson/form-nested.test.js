@@ -1,6 +1,7 @@
 import Form from './form';
 import TextField from './fields/text-field';
 import FormsField from './fields/forms-field';
+import ListField from './fields/list-field';
 
 const nameForm = new Form({
   fields: [
@@ -48,13 +49,33 @@ const form = new Form({
       label: 'Emails',
       form: emailForm,
       maxSize: 2
+    }),
+
+    new ListField({
+      name: 'phoneNumbers',
+      label: 'Phone Numbers',
+      field: new TextField({
+        name: 'phone',
+        label: 'Phone',
+        required: true
+      }),
+      maxSize: 2
     })
   ]
 });
 
 it('should validate nested values', () => {
   form.setValues({
-    title: 'Founder'
+    title: 'Founder',
+    emails: [
+      {
+        email: 'ella1@example.com'
+      },
+      {
+        email: 'ella2@example.com'
+      }
+    ],
+    phoneNumbers: ['(206) 111-1111', '(206) 222-2222']
   });
   // TODO: check values
   console.log('values=', form.getValues());
@@ -66,4 +87,5 @@ it('should validate nested values', () => {
   // });
   // form.validate();
   // expect(form.hasErr()).toBe(true);
+  // TODO: actually check errors
 });
