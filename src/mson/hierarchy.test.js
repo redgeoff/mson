@@ -47,5 +47,5 @@ it('should map by parent', () => {
 });
 
 it('should create a hierarchy without items', () => {
-  const hierarchy = new Hierarchy();
+  new Hierarchy();
 });

@@ -1,6 +1,5 @@
 import Form from './form';
 import TextField from './fields/text-field';
-import testUtils from './test-utils';
 
 const createForm = () => {
   return new Form({
