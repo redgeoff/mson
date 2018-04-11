@@ -302,11 +302,13 @@ it('should get entries', () => {
 
 it('should work with 0 key', () => {
   const m = new Mapa();
-  m.set(0, 'a'), m.set(1, 'b');
+  m.set(0, 'a');
+  m.set(1, 'b');
   expect(m.map(value => value)).toEqual(['a', 'b']);
 
   m.clear();
-  m.set(-1, 'a'), m.set(0, 'b');
+  m.set(-1, 'a');
+  m.set(0, 'b');
   expect(m.map(value => value)).toEqual(['a', 'b']);
 });
 
