@@ -1,5 +1,6 @@
 import Form from './form';
 import TextField from './fields/text-field';
+import FormsField from './fields/forms-field';
 
 const nameForm = new Form({
   fields: [
@@ -40,27 +41,29 @@ const form = new Form({
       name: 'title',
       label: 'Title',
       maxLength: 10
-    })
+    }),
 
-    // new FormsField({
-    //   name: 'emails',
-    //   label: 'Emails',
-    //   form: emailForm,
-    //   maxSize: 2
-    // })
+    new FormsField({
+      name: 'emails',
+      label: 'Emails',
+      form: emailForm,
+      maxSize: 2
+    })
   ]
 });
 
-it('should validate schema', () => {
+it('should validate nested values', () => {
   form.setValues({
     title: 'Founder'
   });
+  // TODO: check values
+  console.log('values=', form.getValues());
   form.validate();
   expect(form.hasErr()).toBe(false);
 
-  form.setValues({
-    title: 'Founder of Things'
-  });
-  form.validate();
-  expect(form.hasErr()).toBe(true);
+  // form.setValues({
+  //   'title': 'Founder of Things'
+  // });
+  // form.validate();
+  // expect(form.hasErr()).toBe(true);
 });
