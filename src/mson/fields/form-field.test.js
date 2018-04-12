@@ -1,6 +1,7 @@
 import FormField from './form-field';
 import Form from '../form';
 import TextField from './text-field';
+import _ from 'lodash';
 
 const createField = () => {
   return new FormField({
@@ -22,10 +23,73 @@ const createField = () => {
 };
 
 it('should set and pass through properties', async () => {
-  const field = createField();
-  const properties = ['disabled'];
+  const properties = {
+    value: {
+      id: null,
+      firstName: null,
+      lastName: null
+    },
+    dirty: true,
+    err: true,
+    disabled: true,
+    editable: true,
+    touched: true,
+    pristine: true
+  };
 
-  properties.forEach(prop => {
-    field.set({ [prop]: true });
+  const field = createField();
+  const setSpy = jest.spyOn(field._form, 'set');
+  const getSpy = jest.spyOn(field._form, 'get');
+
+  _.each(properties, (value, prop) => {
+    const props = { [prop]: value };
+    field.set(props);
+
+    // May be called multiple times via cascade
+    // expect(setSpy).toHaveBeenCalledTimes(1);
+    expect(setSpy).toHaveBeenCalledWith(props);
+
+    expect(field.get(prop)).toEqual(value);
+
+    // May be called multiple times via cascade
+    // expect(getSpy).toHaveBeenCalledTimes(1);
+    expect(getSpy).toHaveBeenCalledWith(prop);
+
+    setSpy.mockClear();
+    getSpy.mockClear();
   });
 });
+
+// it('should bubble up events', async () => {
+//   // TODO: add missing properties
+//   const properties = ['disabled'];
+//
+//   const field = createField();
+//   const setSpy = jest.spyOn(field._form, 'set');
+//   const getSpy = jest.spyOn(field._form, 'get');
+//   const eventSpy = jest.fn();
+//
+//   properties.forEach(prop => {
+//     const props = { [prop]: true };
+//     field.set(props);
+//
+//     expect(setSpy).toHaveBeenCalledTimes(1);
+//     expect(setSpy).toHaveBeenCalledWith(props);
+//
+//     expect(field.get(prop)).toEqual(true);
+//
+//     expect(getSpy).toHaveBeenCalledTimes(1);
+//     expect(getSpy).toHaveBeenCalledWith(prop);
+//
+//     field.once(prop, eventSpy);
+//
+//     field.getField('firstName').set({ [prop]: false })
+//
+//     expect(eventSpy).toHaveBeenCalledTimes(1);
+//     expect(eventSpy).toHaveBeenCalledWith(false);
+//
+//     setSpy.mockClear();
+//     getSpy.mockClear();
+//     eventSpy.mockClear();
+//   });
+// });

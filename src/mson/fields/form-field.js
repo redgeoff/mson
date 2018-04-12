@@ -22,17 +22,8 @@ export default class FormField extends Field {
     this.setValues(value);
   }
 
-  // TODO: actually, probably need to just all pass through on all these props via set and get.
-  // Create helper function in Component for this
   _listenToForm(form) {
-    this._bubbleUpEvents(form, [
-      'dirty',
-      'err',
-      'disabled',
-      'editable',
-      'touched',
-      'pristine'
-    ]);
+    this._bubbleUpEvents(form, ['dirty', 'err', 'touched']);
   }
 
   _setForm(form) {
@@ -51,12 +42,22 @@ export default class FormField extends Field {
   set(props) {
     super.set(props);
 
-    if (props.value !== undefined) {
-      this._setValue(props.value);
-    }
-
     if (props.form !== undefined) {
       this._setForm(props.form);
+    }
+
+    // Was the form set? It may not have been set yet
+    if (this._form) {
+      // Set properties on form
+      this._setOn(this._form, props, [
+        'value',
+        'dirty',
+        'err',
+        'disabled',
+        'editable',
+        'touched',
+        'pristine'
+      ]);
     }
   }
 
@@ -65,11 +66,20 @@ export default class FormField extends Field {
   }
 
   getOne(name) {
-    if (name === 'value') {
-      return this._getValue();
+    let value = this._getFrom(this._form, name, [
+      'value',
+      'dirty',
+      'err',
+      'disabled',
+      'editable',
+      'touched',
+      'pristine'
+    ]);
+    if (value !== undefined) {
+      return value;
     }
 
-    const value = this._getIfAllowed(name, 'form');
+    value = this._getIfAllowed(name, 'form');
     return value === undefined ? super.getOne(name) : value;
   }
 
@@ -83,6 +93,10 @@ export default class FormField extends Field {
 
   validate() {
     this.get('form').validate();
+  }
+
+  getForm() {
+    return this.get('form');
   }
 
   getValues() {

@@ -320,4 +320,8 @@ export default class Form extends Component {
       }
     });
   }
+
+  *getFields() {
+    yield* this._fields.values();
+  }
 }
