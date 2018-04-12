@@ -84,8 +84,10 @@ it('should set and get nested values', () => {
   // TODO: check values
   console.log('values=', form.getValues());
 
-  // TODO: need to implement getForm() and probably even need to change FormsField so that creates array of forms--or is this too resource intensive?
-  // form.getField('emails').getForm(0).setValues({ email: 'ella3@example.com' });
+  form
+    .getField('emails')
+    .getForm(0)
+    .setValues({ email: 'ella3@example.com' });
 
   // TODO: need to implement
   // form.getField('fullName').setValues({ lastName: 'Fitz' });

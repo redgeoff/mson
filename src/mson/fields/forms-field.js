@@ -29,6 +29,16 @@ export default class FormsField extends Field {
     // this._bubbleUpChanges();
   }
 
+  _listenForChanges(form) {
+    form.on('value', () => {
+      // TODO: does it cause problems that we are just emitting the even and not a value? If we can
+      // get away with this then our logic can remain simple and performant for when there is a lot
+      // of data. If not, we'll need to do something like add the concept of getIndex() to Mapa so
+      // that we can do directly replace the array item in this field's value.
+      this._emitChange('value');
+    });
+  }
+
   addForm(values) {
     const clonedForm = this.get('form').clone();
     clonedForm.setValues(values);
@@ -57,6 +67,8 @@ export default class FormsField extends Field {
   }
 
   removeForm(id) {
+    const form = this._forms.get(id);
+    form.removeAllListeners();
     this._forms.delete(id);
   }
 
@@ -83,7 +95,17 @@ export default class FormsField extends Field {
     );
   }
 
+  _getValue() {
+    return this._forms.map(form => {
+      return form.getValues();
+    });
+  }
+
   getOne(name) {
+    if (name === 'value') {
+      return this._getValue();
+    }
+
     const value = this._getIfAllowed(
       name,
       'form',

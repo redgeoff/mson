@@ -43,3 +43,23 @@ it('should get forms', async () => {
     lastName: 'Sinatra'
   });
 });
+
+it('should set and get value', async () => {
+  const field = createField();
+
+  const value = [
+    {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Legend'
+    },
+    {
+      id: 2,
+      firstName: 'John',
+      lastName: 'Lennon'
+    }
+  ];
+
+  field.setValue(value);
+  expect(field.getValue()).toEqual(value);
+});
