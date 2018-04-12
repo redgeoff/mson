@@ -60,36 +60,20 @@ it('should set and pass through properties', async () => {
   });
 });
 
-// it('should bubble up events', async () => {
-//   // TODO: add missing properties
-//   const properties = ['disabled'];
-//
-//   const field = createField();
-//   const setSpy = jest.spyOn(field._form, 'set');
-//   const getSpy = jest.spyOn(field._form, 'get');
-//   const eventSpy = jest.fn();
-//
-//   properties.forEach(prop => {
-//     const props = { [prop]: true };
-//     field.set(props);
-//
-//     expect(setSpy).toHaveBeenCalledTimes(1);
-//     expect(setSpy).toHaveBeenCalledWith(props);
-//
-//     expect(field.get(prop)).toEqual(true);
-//
-//     expect(getSpy).toHaveBeenCalledTimes(1);
-//     expect(getSpy).toHaveBeenCalledWith(prop);
-//
-//     field.once(prop, eventSpy);
-//
-//     field.getField('firstName').set({ [prop]: false })
-//
-//     expect(eventSpy).toHaveBeenCalledTimes(1);
-//     expect(eventSpy).toHaveBeenCalledWith(false);
-//
-//     setSpy.mockClear();
-//     getSpy.mockClear();
-//     eventSpy.mockClear();
-//   });
-// });
+it('should bubble up events', async () => {
+  const properties = ['dirty', 'err', 'touched'];
+
+  const field = createField();
+  const eventSpy = jest.fn();
+
+  properties.forEach(prop => {
+    field.once(prop, eventSpy);
+
+    field.getField('firstName').set({ [prop]: true });
+
+    expect(eventSpy).toHaveBeenCalledTimes(1);
+    expect(eventSpy).toHaveBeenCalledWith(true);
+
+    eventSpy.mockClear();
+  });
+});
