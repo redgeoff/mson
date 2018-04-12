@@ -34,7 +34,9 @@ export default class FormsField extends Field {
       // TODO: does it cause problems that we are just emitting the even and not a value? If we can
       // get away with this then our logic can remain simple and performant for when there is a lot
       // of data. If not, we'll need to do something like add the concept of getIndex() to Mapa so
-      // that we can do directly replace the array item in this field's value.
+      // that we can do directly replace the array item in this field's value. Another option is to
+      // pass a reference to the particular value in values down to the form and allow the form to
+      // directly mutate this value, i.e. something like a syncedValue property.
       this._emitChange('value');
     });
   }
