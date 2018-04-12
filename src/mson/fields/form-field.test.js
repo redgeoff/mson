@@ -30,7 +30,6 @@ it('should set and pass through properties', async () => {
       lastName: null
     },
     dirty: true,
-    err: true,
     disabled: true,
     editable: true,
     touched: true,
@@ -61,7 +60,7 @@ it('should set and pass through properties', async () => {
 });
 
 it('should bubble up events', async () => {
-  const properties = ['dirty', 'err', 'touched'];
+  const properties = ['dirty', 'touched'];
 
   const field = createField();
   const eventSpy = jest.fn();

@@ -127,4 +127,8 @@ export default class Field extends Component {
   getDisplayValue() {
     return this.get('value');
   }
+
+  hasErr() {
+    return this.get('err') ? true : false;
+  }
 }

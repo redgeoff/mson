@@ -25,7 +25,7 @@ it('should validate max size', () => {
 
   field.setValue(['red', 'green', 'blue']);
   field.validate();
-  expect(field.get('err')).toEqual('2 or less');
+  expect(field.get('err')).toEqual([{ error: '2 or less' }]);
 });
 
 it('should validate min size', () => {
@@ -39,7 +39,7 @@ it('should validate min size', () => {
 
   field.setValue(['red']);
   field.validate();
-  expect(field.get('err')).toEqual('2 or more');
+  expect(field.get('err')).toEqual([{ error: '2 or more' }]);
 });
 
 it('should allow for field property', () => {
@@ -57,5 +57,5 @@ it('should allow for field property', () => {
 
   field.setValue(['red']);
   field.validate();
-  expect(field.get('err')).toEqual('2 or more');
+  expect(field.get('err')).toEqual([{ error: '2 or more' }]);
 });

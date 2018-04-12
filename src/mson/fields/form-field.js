@@ -23,7 +23,11 @@ export default class FormField extends Field {
   }
 
   _listenToForm(form) {
-    this._bubbleUpEvents(form, ['dirty', 'err', 'touched']);
+    this._bubbleUpEvents(form, ['dirty', 'touched']);
+
+    form.on('err', err => {
+      this.setErr(form.getErrs());
+    });
   }
 
   _setForm(form) {
@@ -39,6 +43,14 @@ export default class FormField extends Field {
     this._listenToForm(clonedForm);
   }
 
+  _setErr(err) {
+    // We clear all the errs if err is null. We don't pass down other values as we don't want to
+    // create a circular loop.
+    if (err === null) {
+      this._form.clearErrs();
+    }
+  }
+
   set(props) {
     super.set(props);
 
@@ -52,12 +64,15 @@ export default class FormField extends Field {
       this._setOn(this._form, props, [
         'value',
         'dirty',
-        'err',
         'disabled',
         'editable',
         'touched',
         'pristine'
       ]);
+
+      if (props.err === 'err') {
+        this._setErr(props.err);
+      }
     }
   }
 
@@ -69,7 +84,6 @@ export default class FormField extends Field {
     let value = this._getFrom(this._form, name, [
       'value',
       'dirty',
-      'err',
       'disabled',
       'editable',
       'touched',

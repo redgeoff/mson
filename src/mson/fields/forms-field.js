@@ -60,10 +60,9 @@ export default class FormsField extends Field {
     // TODO: what's the best way to set? e.g. if we set the same values over and over then we end up
     // recreating the forms each time. Would it be better to just use index to set and if there are
     // indexes that are in the current forms, but not in values then just delete?
+    this._forms.clear();
     if (value && value.length > 0) {
       value.forEach(values => this.addForm(values));
-    } else {
-      this._forms.clear();
     }
   }
 
@@ -164,7 +163,10 @@ export default class FormsField extends Field {
     for (const form of this._forms.values()) {
       form.validate();
       if (form.hasErr()) {
-        errors = errors.concat(form.getErrs());
+        errors.push({
+          id: form.getField('id').getValue(),
+          error: form.getErrs()
+        });
       }
     }
 
@@ -174,11 +176,17 @@ export default class FormsField extends Field {
     const maxSize = this.get('maxSize');
 
     if (minSize !== null && numForms < minSize) {
-      this.setErr(`${minSize} or more`);
+      errors.push({
+        error: `${minSize} or more`
+      });
     } else if (maxSize !== null && numForms > maxSize) {
-      this.setErr(`${maxSize} or less`);
-    } else if (errors.length > 0) {
-      this.setErr('form error ' + errors.join(', '));
+      errors.push({
+        error: `${maxSize} or less`
+      });
+    }
+
+    if (errors.length > 0) {
+      this.setErr(errors);
     }
   }
 

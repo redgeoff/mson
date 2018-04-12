@@ -14,6 +14,10 @@ export default class Form extends Component {
     this._fields = new Mapa();
     this._validators = [];
     this._createDefaultFields();
+
+    // TODO: default to false and enable a good way for this to be toggled by UI to allow for
+    // real-time validation.
+    this._set('autoValidate', true);
   }
 
   _createDefaultFields() {
@@ -78,7 +82,8 @@ export default class Form extends Component {
       'err',
       'dirty',
       'pristine',
-      'access'
+      'access',
+      'autoValidate'
     );
   }
 
@@ -97,14 +102,18 @@ export default class Form extends Component {
       // We don't emit a value as we don't want to calculate the form value each time a field value
       // changes. Instead, you can simply call form.getValues();
       this._emitChange('values');
-      this.validate();
+      if (this.get('autoValidate')) {
+        this.validate();
+      }
     });
 
     field.on('touched', touched => {
       if (touched) {
         this.set({ touched: true });
       }
-      this.validate();
+      if (this.get('autoValidate')) {
+        this.validate();
+      }
     });
 
     field.on('err', err => {
@@ -154,7 +163,8 @@ export default class Form extends Component {
       'err',
       'dirty',
       'pristine',
-      'access'
+      'access',
+      'autoValidate'
     );
     return value === undefined ? super.getOne(name) : value;
   }
