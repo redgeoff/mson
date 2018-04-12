@@ -32,11 +32,11 @@ const emailForm = new Form({
 const form = new Form({
   fields: [
     // TODO: use FormField instead
-    // new FormsField({
-    //   name: 'fullName',
-    //   label: 'Full Name',
-    //   form: nameForm
-    // }),
+    new FormsField({
+      name: 'fullName',
+      label: 'Full Name',
+      form: nameForm
+    }),
 
     new TextField({
       name: 'title',
@@ -64,8 +64,12 @@ const form = new Form({
   ]
 });
 
-it('should validate nested values', () => {
+it('should set and get nested values', () => {
   form.setValues({
+    fullName: {
+      firstName: 'Ella',
+      lastName: 'Fitzgerald'
+    },
     title: 'Founder',
     emails: [
       {
@@ -79,13 +83,48 @@ it('should validate nested values', () => {
   });
   // TODO: check values
   console.log('values=', form.getValues());
-  form.validate();
-  expect(form.hasErr()).toBe(false);
 
-  // form.setValues({
-  //   'title': 'Founder of Things'
-  // });
-  // form.validate();
-  // expect(form.hasErr()).toBe(true);
-  // TODO: actually check errors
+  // TODO: need to implement getForm() and probably even need to change FormsField so that creates array of forms--or is this too resource intensive?
+  // form.getField('emails').getForm(0).setValues({ email: 'ella3@example.com' });
+
+  // TODO: need to implement
+  // form.getField('fullName').setValues({ lastName: 'Fitz' });
+
+  form
+    .getField('phoneNumbers')
+    .getField(0)
+    .setValue('(206) 333-3333');
+
+  console.log('values=', form.getValues());
+
+  // TODO: modify values via form.getField()... and then check with getValues()
 });
+
+// it('should validate nested values', () => {
+//   form.setValues({
+//     fullName: {
+//       firstName: 'Ella',
+//       lastName: 'Fitzgerald'
+//     },
+//     title: 'Founder',
+//     emails: [
+//       {
+//         email: 'ella1@example.com'
+//       },
+//       {
+//         email: 'ella2@example.com'
+//       }
+//     ],
+//     phoneNumbers: ['(206) 111-1111', '(206) 222-2222']
+//   });
+//   console.log('values=', form.getValues());
+//   form.validate();
+//   expect(form.hasErr()).toBe(false);
+//
+//   // form.setValues({
+//   //   'title': 'Founder of Things'
+//   // });
+//   // form.validate();
+//   // expect(form.hasErr()).toBe(true);
+//   // TODO: actually check errors
+// });

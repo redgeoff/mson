@@ -17,19 +17,15 @@ const createField = () => {
   });
 };
 
-const fillDocs = async field => {
-  await field
-    .getStore()
-    .set({ id: 1, firstName: 'Ella', lastName: 'Fitzgerald' });
-  await field
-    .getStore()
-    .set({ id: 2, firstName: 'Frank', lastName: 'Sinatra' });
+const fillDocs = field => {
+  field.addForm({ id: 1, firstName: 'Ella', lastName: 'Fitzgerald' });
+  field.addForm({ id: 2, firstName: 'Frank', lastName: 'Sinatra' });
 };
 
 it('should get forms', async () => {
   const field = createField();
 
-  await fillDocs(field);
+  fillDocs(field);
 
   let forms = [];
   for (const form of field.getForms()) {

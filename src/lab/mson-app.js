@@ -359,13 +359,28 @@ const app = builder.newComponent({
 // TODO: just temporary until we have a proper way to wire up to backend
 // const account = app.get('menu').getItem('/account/edit').content.getStore();
 // account.set({ id: '1', name: 'Nina Simone', email: 'nina@example.com' })
+// const employees = app
+//   .get('menu')
+//   .getItem('/employees')
+//   .content.getField('employees')
+//   .getStore();
+// employees.set({ id: '1', name: 'Ella Fitzgerald', email: 'ella@example.com' });
+// employees.set({ id: '2', name: 'Frank Sinatra', email: 'frank@example.com' });
+// employees.set({ id: '3', name: 'Ray Charles', email: 'ray@example.com' });
 const employees = app
   .get('menu')
   .getItem('/employees')
-  .content.getField('employees')
-  .getStore();
-employees.set({ id: '1', name: 'Ella Fitzgerald', email: 'ella@example.com' });
-employees.set({ id: '2', name: 'Frank Sinatra', email: 'frank@example.com' });
-employees.set({ id: '3', name: 'Ray Charles', email: 'ray@example.com' });
+  .content.getField('employees');
+employees.addForm({
+  id: '1',
+  name: 'Ella Fitzgerald',
+  email: 'ella@example.com'
+});
+employees.addForm({
+  id: '2',
+  name: 'Frank Sinatra',
+  email: 'frank@example.com'
+});
+employees.addForm({ id: '3', name: 'Ray Charles', email: 'ray@example.com' });
 
 export default app;
