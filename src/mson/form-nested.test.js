@@ -1,6 +1,7 @@
 import Form from './form';
 import TextField from './fields/text-field';
 import FormsField from './fields/forms-field';
+import FormField from './fields/form-field';
 import ListField from './fields/list-field';
 
 const nameForm = new Form({
@@ -31,8 +32,7 @@ const emailForm = new Form({
 
 const form = new Form({
   fields: [
-    // TODO: use FormField instead
-    new FormsField({
+    new FormField({
       name: 'fullName',
       label: 'Full Name',
       form: nameForm
@@ -81,25 +81,60 @@ it('should set and get nested values', () => {
     ],
     phoneNumbers: ['(206) 111-1111', '(206) 222-2222']
   });
-  // TODO: check values
-  console.log('values=', form.getValues());
+
+  expect(form.getValues()).toEqual({
+    id: null,
+    fullName: {
+      id: null,
+      firstName: 'Ella',
+      lastName: 'Fitzgerald'
+    },
+    title: 'Founder',
+    emails: [
+      {
+        id: null,
+        email: 'ella1@example.com'
+      },
+      {
+        id: null,
+        email: 'ella2@example.com'
+      }
+    ],
+    phoneNumbers: ['(206) 111-1111', '(206) 222-2222']
+  });
 
   form
     .getField('emails')
     .getForm(0)
     .setValues({ email: 'ella3@example.com' });
 
-  // TODO: need to implement
-  // form.getField('fullName').setValues({ lastName: 'Fitz' });
+  form.getField('fullName').setValues({ lastName: 'Fitz' });
 
   form
     .getField('phoneNumbers')
     .getField(0)
     .setValue('(206) 333-3333');
 
-  console.log('values=', form.getValues());
-
-  // TODO: modify values via form.getField()... and then check with getValues()
+  expect(form.getValues()).toEqual({
+    id: null,
+    fullName: {
+      id: null,
+      firstName: 'Ella',
+      lastName: 'Fitz'
+    },
+    title: 'Founder',
+    emails: [
+      {
+        id: null,
+        email: 'ella3@example.com'
+      },
+      {
+        id: null,
+        email: 'ella2@example.com'
+      }
+    ],
+    phoneNumbers: ['(206) 333-3333', '(206) 222-2222']
+  });
 });
 
 // it('should validate nested values', () => {
