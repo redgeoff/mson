@@ -81,7 +81,7 @@ export default class FormsField extends Field {
   }
 
   eachForm(onForm) {
-    this._forms.each((form, id, last) => onForm(field, id, last));
+    this._forms.each((form, id, last) => onForm(form, id, last));
   }
 
   _setForAllForms(props) {
