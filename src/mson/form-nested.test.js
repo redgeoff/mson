@@ -283,7 +283,19 @@ it('should require nested values', () => {
     error: 'required'
   });
 
-  // TODO: set required states of 1st layer of fields to false and test
+  // Set required states of 1st layer of fields to false and test
+  form.getField('fullName').set({ required: false });
+  form
+    .getField('fullName')
+    .getForm()
+    .setRequired(false);
+  form.getField('emails').set({ required: false });
+  form.getField('phoneNumbers').set({ required: false });
+  form.setValues({
+    title: 'Founder'
+  });
+  form.validate();
+  expect(form.hasErr()).toBe(false);
 });
 
 // TODO: it('should validate nested form validators', () => {})
