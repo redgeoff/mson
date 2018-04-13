@@ -298,6 +298,111 @@ it('should require nested values', () => {
   expect(form.hasErr()).toBe(false);
 });
 
-// TODO: it('should validate nested form validators', () => {})
+it('should validate nested form validators', () => {
+  const form = createForm();
+
+  form
+    .getField('fullName')
+    .getForm()
+    .set({
+      validators: [
+        {
+          selector: {
+            firstName: {
+              value: 'F. Scott'
+            }
+          },
+          error: {
+            field: 'firstName',
+            error: 'cannot be {{firstName.value}}'
+          }
+        }
+      ]
+    });
+
+  form
+    .getField('emails')
+    .get('form')
+    .set({
+      validators: [
+        {
+          selector: {
+            email: {
+              value: 'scott@example.com'
+            }
+          },
+          error: {
+            field: 'email',
+            error: 'cannot be {{email.value}}'
+          }
+        }
+      ]
+    });
+
+  // No errors
+  form.setValues({
+    fullName: {
+      firstName: 'Ella',
+      lastName: 'Fitzgerald'
+    },
+    title: 'Founder',
+    emails: [
+      {
+        id: '1',
+        email: 'ella1@example.com'
+      }
+    ],
+    phoneNumbers: ['(206) 111-1111']
+  });
+  form.validate();
+  expect(form.hasErr()).toBe(false);
+
+  // Trigger nested validator errors
+  form.setValues({
+    fullName: {
+      firstName: 'F. Scott',
+      lastName: 'Fitzgerald'
+    },
+    title: 'Founder',
+    emails: [
+      {
+        id: '1',
+        email: 'scott@example.com'
+      }
+    ],
+    phoneNumbers: ['(206) 111-1111']
+  });
+  form.validate();
+  expect(form.hasErr()).toBe(true);
+
+  const errs = form.getErrs();
+
+  // firstName error
+  expect(errs[0]).toEqual({
+    field: 'fullName',
+    error: [
+      {
+        field: 'firstName',
+        error: 'cannot be F. Scott'
+      }
+    ]
+  });
+
+  // email error
+  expect(errs[1]).toEqual({
+    field: 'emails',
+    error: [
+      {
+        id: '1',
+        error: [
+          {
+            field: 'email',
+            error: 'cannot be scott@example.com'
+          }
+        ]
+      }
+    ]
+  });
+});
 
 // TODO: it('should clear errors, etc... for nested forms')
