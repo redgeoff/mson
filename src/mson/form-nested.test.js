@@ -404,5 +404,3 @@ it('should validate nested form validators', () => {
     ]
   });
 });
-
-// TODO: it('should clear errors, etc... for nested forms')

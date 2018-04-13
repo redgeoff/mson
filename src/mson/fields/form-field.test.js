@@ -11,11 +11,13 @@ const createField = () => {
       fields: [
         new TextField({
           name: 'firstName',
-          label: 'First Name'
+          label: 'First Name',
+          required: true
         }),
         new TextField({
           name: 'lastName',
-          label: 'Last Name'
+          label: 'Last Name',
+          required: true
         })
       ]
     })
@@ -75,4 +77,17 @@ it('should bubble up events', async () => {
 
     eventSpy.mockClear();
   });
+});
+
+it('should clear errors for nested form', () => {
+  const field = createField();
+  field.setValue({
+    firstName: null,
+    lastName: null
+  });
+  field.validate();
+  expect(field.hasErr()).toBe(true);
+
+  field.clearErr();
+  expect(field.hasErr()).toBe(false);
 });

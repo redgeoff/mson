@@ -16,18 +16,22 @@ export default class FormsField extends Field {
   //   });
   // }
 
-  constructor(props) {
-    super(props);
-
-    // // TODO: should _docs be a reference that is passed in so that the store can be swapped out?
-    // this._docs = new DocStore();
-
+  _create(props) {
     // We use a Mapa instead of an array as it allows us to index the forms by id. We use a Mapa
     // instead of a Map as we may want to iterate through the forms beginning at any single form.
     this._forms = new Mapa();
 
-    // this._bubbleUpChanges();
+    super._create(props);
   }
+
+  // constructor(props) {
+  //   super(props);
+  //
+  //   // // TODO: should _docs be a reference that is passed in so that the store can be swapped out?
+  //   // this._docs = new DocStore();
+  //
+  //   // this._bubbleUpChanges();
+  // }
 
   _listenForChanges(form) {
     form.on('value', () => {
@@ -76,12 +80,49 @@ export default class FormsField extends Field {
     return this._forms.get(id);
   }
 
+  eachForm(onForm) {
+    this._forms.each((form, id, last) => onForm(field, id, last));
+  }
+
+  _setForAllForms(props) {
+    this.eachForm(form => form.set(props));
+  }
+
+  _setErr(err) {
+    // We clear all the errs if err is null. We don't pass down other values as not all errors at
+    // the parent level should be passed down to the children.
+    if (err === null) {
+      this._setForAllForms({ err: null });
+    }
+  }
+
+  _setOnAllForms(props, propNames) {
+    propNames.forEach(name => {
+      if (props[name] !== undefined) {
+        this._setForAllForms({ [name]: props[name] });
+      }
+    });
+  }
+
   set(props) {
     super.set(props);
 
     if (props.value !== undefined) {
       this._setValue(props.value);
     }
+
+    if (props.err === 'err') {
+      this._setErr(props.err);
+    }
+
+    // Set properties on all forms
+    this._setOnAllForms(props, [
+      'dirty',
+      'disabled',
+      'editable',
+      'touched',
+      'pristine'
+    ]);
 
     this._setIfUndefined(
       props,

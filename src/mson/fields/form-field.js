@@ -36,8 +36,8 @@ export default class FormField extends Field {
   }
 
   _setErr(err) {
-    // We clear all the errs if err is null. We don't pass down other values as we don't want to
-    // create a circular loop.
+    // We clear all the errs if err is null. We don't pass down other values as not all errors at
+    // the parent level should be passed down to the children.
     if (err === null) {
       this._form.clearErrs();
     }

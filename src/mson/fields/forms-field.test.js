@@ -1,6 +1,7 @@
 import FormsField from './forms-field';
 import TextField from './text-field';
 import Form from '../form';
+import _ from 'lodash';
 
 const createForm = () => {
   return new Form({
@@ -63,3 +64,49 @@ it('should set and get value', async () => {
   field.setValue(value);
   expect(field.getValue()).toEqual(value);
 });
+
+it('should clear errors for nested forms', () => {
+  const field = createField();
+  field.setValue([
+    {
+      firstName: null,
+      lastName: null
+    },
+    {
+      firstName: null,
+      lastName: null
+    }
+  ]);
+  field.validate();
+  expect(field.hasErr()).toBe(true);
+
+  field.clearErr();
+  expect(field.hasErr()).toBe(false);
+});
+
+it('should set properties for nested forms', () => {
+  const properties = {
+    dirty: true,
+    disabled: true,
+    editable: true,
+    touched: true,
+    pristine: true
+  };
+
+  const field = createField();
+  const setSpy = jest.spyOn(field, '_setForAllForms');
+
+  _.each(properties, (value, prop) => {
+    const props = { [prop]: value };
+    field.set(props);
+
+    expect(setSpy).toHaveBeenCalledTimes(1);
+    expect(setSpy).toHaveBeenCalledWith(props);
+
+    setSpy.mockClear();
+  });
+});
+
+// TODO: should get properties for nested forms
+
+// TODO: should bubble up events
