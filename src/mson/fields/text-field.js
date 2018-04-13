@@ -39,14 +39,18 @@ export default class TextField extends Field {
     super.validate();
 
     if (!this.isBlank()) {
-      const minLength = this.get('minLength');
-      const maxLength = this.get('maxLength');
       const value = this.getValue();
+      if (typeof value === 'string') {
+        const minLength = this.get('minLength');
+        const maxLength = this.get('maxLength');
 
-      if (minLength !== null && value.length < minLength) {
-        this.setErr(`${minLength} characters or more`);
-      } else if (maxLength !== null && value.length > maxLength) {
-        this.setErr(`${maxLength} characters or less`);
+        if (minLength !== null && value.length < minLength) {
+          this.setErr(`${minLength} characters or more`);
+        } else if (maxLength !== null && value.length > maxLength) {
+          this.setErr(`${maxLength} characters or less`);
+        }
+      } else {
+        this.setErr(`must be a string`);
       }
     }
 

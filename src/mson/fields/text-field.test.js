@@ -30,3 +30,28 @@ it('should validate min length', () => {
   field.validate();
   expect(field.get('err')).toEqual('5 characters or more');
 });
+
+it('should report bad types', () => {
+  const field = new TextField();
+
+  field.setValue('valid text');
+  field.validate();
+  expect(field.hasErr()).toEqual(false);
+
+  const invalidValues = [
+    {
+      foo: 'must not be object'
+    },
+    ['must not be array'],
+    false,
+    1,
+    1.0
+  ];
+
+  invalidValues.forEach(value => {
+    field.setValue(value);
+    field.validate();
+    expect(field.hasErr()).toEqual(true);
+    expect(field.getErr()).toEqual('must be a string');
+  });
+});
