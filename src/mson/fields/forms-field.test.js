@@ -2,6 +2,8 @@ import FormsField from './forms-field';
 import TextField from './text-field';
 import Form from '../form';
 import _ from 'lodash';
+import testUtils from '../test-utils';
+import utils from '../utils';
 
 const createForm = () => {
   return new Form({
@@ -86,10 +88,10 @@ it('should clear errors for nested forms', () => {
 
 it('should set properties for nested forms', () => {
   const properties = {
-    dirty: true,
+    dirty: false,
     disabled: true,
     editable: true,
-    touched: true,
+    touched: false,
     pristine: true
   };
 
@@ -107,6 +109,38 @@ it('should set properties for nested forms', () => {
   });
 });
 
-// TODO: should get properties for nested forms
+it('should bubble up properties', async () => {
+  const properties = {
+    dirty: true,
+    touched: true
+  };
 
-// TODO: should bubble up events
+  const field = createField();
+
+  fillDocs(field);
+
+  const setSpy = jest.spyOn(field, 'set');
+
+  await utils.sequential(properties, async (value, prop) => {
+    // Initialize at field layer which cascades down to form and then fields
+    field.set({ [prop]: !value });
+
+    const firstName = field.getForm(1).getField('firstName');
+
+    // Initialize
+    firstName.set({ [prop]: !value });
+
+    const afterEvent = testUtils.once(firstName, prop);
+
+    const props = { [prop]: value };
+    firstName.set(props);
+
+    await afterEvent;
+
+    // Called twice first time for initialization
+    expect(setSpy).toHaveBeenCalledTimes(2);
+    expect(setSpy).toHaveBeenCalledWith(props);
+
+    setSpy.mockClear();
+  });
+});

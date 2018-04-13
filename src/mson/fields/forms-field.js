@@ -44,6 +44,18 @@ export default class FormsField extends Field {
     });
   }
 
+  _listenToForm(form) {
+    const props = ['dirty', 'touched'];
+    props.forEach(prop => {
+      form.on(prop, value => {
+        if (value === true) {
+          // We only set the parent value when it is true as want to avoid infinite recursion
+          this.set({ [prop]: value });
+        }
+      });
+    });
+  }
+
   addForm(values) {
     const clonedForm = this.get('form').clone();
     clonedForm.setValues(values);
@@ -58,12 +70,19 @@ export default class FormsField extends Field {
     }
 
     this._forms.set(key, clonedForm);
+
+    this._listenToForm(clonedForm);
+  }
+
+  _clearAllFormListeners() {
+    this.eachForm(form => form.removeAllListeners());
   }
 
   _setValue(value) {
     // TODO: what's the best way to set? e.g. if we set the same values over and over then we end up
     // recreating the forms each time. Would it be better to just use index to set and if there are
     // indexes that are in the current forms, but not in values then just delete?
+    this._clearAllFormListeners(); // prevent listener leaks
     this._forms.clear();
     if (value && value.length > 0) {
       value.forEach(values => this.addForm(values));
@@ -88,17 +107,12 @@ export default class FormsField extends Field {
     this.eachForm(form => form.set(props));
   }
 
-  _setErr(err) {
-    // We clear all the errs if err is null. We don't pass down other values as not all errors at
-    // the parent level should be passed down to the children.
-    if (err === null) {
-      this._setForAllForms({ err: null });
-    }
-  }
-
-  _setOnAllForms(props, propNames) {
+  _setOnAllForms(props, propNames, expValue) {
     propNames.forEach(name => {
-      if (props[name] !== undefined) {
+      if (
+        props[name] !== undefined &&
+        (expValue === undefined || props[name] === expValue)
+      ) {
         this._setForAllForms({ [name]: props[name] });
       }
     });
@@ -111,18 +125,14 @@ export default class FormsField extends Field {
       this._setValue(props.value);
     }
 
-    if (props.err === 'err') {
-      this._setErr(props.err);
-    }
-
     // Set properties on all forms
-    this._setOnAllForms(props, [
-      'dirty',
-      'disabled',
-      'editable',
-      'touched',
-      'pristine'
-    ]);
+    this._setOnAllForms(props, ['disabled', 'editable', 'pristine']);
+
+    // Only set properties of forms if property is false
+    this._setOnAllForms(props, ['dirty', 'touched'], false);
+
+    // Only set properties of forms if property is null
+    this._setOnAllForms(props, ['err'], null);
 
     this._setIfUndefined(
       props,
