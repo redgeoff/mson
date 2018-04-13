@@ -199,4 +199,15 @@ export default class FormsField extends Field {
       return label.substr(0, label.length - 1);
     }
   }
+
+  isBlank() {
+    let isBlank = true;
+    for (const form of this.getForms()) {
+      if (!form.isBlank()) {
+        isBlank = false;
+        break;
+      }
+    }
+    return isBlank;
+  }
 }

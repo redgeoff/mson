@@ -334,4 +334,15 @@ export default class Form extends Component {
   *getFields() {
     yield* this._fields.values();
   }
+
+  isBlank() {
+    let isBlank = true;
+    this._fields.each(field => {
+      if (!field.isBlank()) {
+        isBlank = false;
+        return false; // exit loop
+      }
+    });
+    return isBlank;
+  }
 }

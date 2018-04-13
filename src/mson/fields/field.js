@@ -108,7 +108,7 @@ export default class Field extends Component {
 
   // TODO: also support _validators being function like at form layer?
   validate() {
-    if (this._required && !this.get('value')) {
+    if (this._required && this.isBlank()) {
       this.setErr('required');
     } else if (this._validators && this._validators.length > 0) {
       const validator = new Validator(this._toValidatorProps());

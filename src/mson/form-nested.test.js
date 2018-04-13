@@ -4,71 +4,77 @@ import FormsField from './fields/forms-field';
 import FormField from './fields/form-field';
 import ListField from './fields/list-field';
 
-const nameForm = new Form({
-  fields: [
-    new TextField({
-      name: 'firstName',
-      label: 'First Name',
-      required: true,
-      maxLength: 10
-    }),
-    new TextField({
-      name: 'lastName',
-      label: 'Last Name',
-      required: true
-    })
-  ]
-});
-
-const emailForm = new Form({
-  fields: [
-    new TextField({
-      name: 'email',
-      label: 'Email',
-      required: true
-    })
-  ]
-});
-
-const form = new Form({
-  fields: [
-    new FormField({
-      name: 'fullName',
-      label: 'Full Name',
-      required: true,
-      form: nameForm
-    }),
-
-    new TextField({
-      name: 'title',
-      label: 'Title',
-      maxLength: 10
-    }),
-
-    new FormsField({
-      name: 'emails',
-      label: 'Emails',
-      form: emailForm,
-      required: true,
-      maxSize: 2
-    }),
-
-    new ListField({
-      name: 'phoneNumbers',
-      label: 'Phone Numbers',
-      required: true,
-      field: new TextField({
-        name: 'phone',
-        label: 'Phone',
+const createForm = () => {
+  const nameForm = new Form({
+    fields: [
+      new TextField({
+        name: 'firstName',
+        label: 'First Name',
         required: true,
-        maxLength: 14
+        maxLength: 10
       }),
-      maxSize: 2
-    })
-  ]
-});
+      new TextField({
+        name: 'lastName',
+        label: 'Last Name',
+        required: true
+      })
+    ]
+  });
+
+  const emailForm = new Form({
+    fields: [
+      new TextField({
+        name: 'email',
+        label: 'Email',
+        required: true
+      })
+    ]
+  });
+
+  const form = new Form({
+    fields: [
+      new FormField({
+        name: 'fullName',
+        label: 'Full Name',
+        required: true,
+        form: nameForm
+      }),
+
+      new TextField({
+        name: 'title',
+        label: 'Title',
+        maxLength: 10
+      }),
+
+      new FormsField({
+        name: 'emails',
+        label: 'Emails',
+        form: emailForm,
+        required: true,
+        maxSize: 2
+      }),
+
+      new ListField({
+        name: 'phoneNumbers',
+        label: 'Phone Numbers',
+        required: true,
+        field: new TextField({
+          name: 'phone',
+          label: 'Phone',
+          required: true,
+          maxLength: 14
+        }),
+        maxSize: 2
+      })
+    ]
+  });
+
+  return form;
+};
 
 it('should set and get nested values', () => {
+  const form = createForm();
+
   form.setValues({
     fullName: {
       firstName: 'Ella',
@@ -142,6 +148,8 @@ it('should set and get nested values', () => {
 });
 
 it('should validate nested values', () => {
+  const form = createForm();
+
   // No errors
   form.setValues({
     fullName: {
@@ -243,8 +251,41 @@ it('should validate nested values', () => {
       }
     ]
   });
+});
 
-  // TODO: make sure first layer of fields are required
+it('should require nested values', () => {
+  const form = createForm();
+
+  // Missing required fields
+  form.setValues({
+    title: 'Founder'
+  });
+  form.validate();
+  expect(form.hasErr()).toBe(true);
+
+  const errs = form.getErrs();
+
+  // Missing fullName
+  expect(errs[0]).toEqual({
+    field: 'fullName',
+    error: 'required'
+  });
+
+  // Missing emails
+  expect(errs[1]).toEqual({
+    field: 'emails',
+    error: 'required'
+  });
+
+  // Missing phone numbers
+  expect(errs[2]).toEqual({
+    field: 'phoneNumbers',
+    error: 'required'
+  });
 
   // TODO: set required states of 1st layer of fields to false and test
 });
+
+// TODO: it('should validate nested form validators', () => {})
+
+// TODO: it('should clear errors, etc... for nested forms')

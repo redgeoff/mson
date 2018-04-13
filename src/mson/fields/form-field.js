@@ -18,16 +18,8 @@ export default class FormField extends Field {
     this._forms.set(key, clonedForm);
   }
 
-  _setValue(value) {
-    this.setValues(value);
-  }
-
   _listenToForm(form) {
     this._bubbleUpEvents(form, ['dirty', 'touched']);
-
-    form.on('err', err => {
-      this.setErr(form.getErrs());
-    });
   }
 
   _setForm(form) {
@@ -76,13 +68,8 @@ export default class FormField extends Field {
     }
   }
 
-  _getValue() {
-    return this.getValues();
-  }
-
   getOne(name) {
     let value = this._getFrom(this._form, name, [
-      'value',
       'dirty',
       'disabled',
       'editable',
@@ -91,6 +78,10 @@ export default class FormField extends Field {
     ]);
     if (value !== undefined) {
       return value;
+    }
+
+    if (name === 'value') {
+      return this.getValues();
     }
 
     value = this._getIfAllowed(name, 'form');
@@ -106,7 +97,16 @@ export default class FormField extends Field {
   // }
 
   validate() {
-    this.get('form').validate();
+    super.validate();
+
+    // Only proceed if there are no other errors, e.g. required error
+    if (!this.hasErr()) {
+      const form = this.get('form');
+      form.validate();
+      if (form.hasErr()) {
+        this.setErr(form.getErrs());
+      }
+    }
   }
 
   getForm() {
@@ -114,7 +114,7 @@ export default class FormField extends Field {
   }
 
   getValues() {
-    return this.get('form').getValues();
+    return this.get('form').get('value');
   }
 
   setValues(values) {
@@ -123,5 +123,9 @@ export default class FormField extends Field {
 
   getField(name) {
     return this.get('form').getField(name);
+  }
+
+  isBlank() {
+    return this.get('form').isBlank();
   }
 }
