@@ -108,7 +108,7 @@ export default class Field extends Component {
 
   // TODO: also support _validators being function like at form layer?
   validate() {
-    if (this._required && !this.get('value')) {
+    if (this._required && this.isBlank()) {
       this.setErr('required');
     } else if (this._validators && this._validators.length > 0) {
       const validator = new Validator(this._toValidatorProps());
@@ -126,5 +126,9 @@ export default class Field extends Component {
   // TODO: introduce concept of icons for display values, e.g. edit event in Google Calendar
   getDisplayValue() {
     return this.get('value');
+  }
+
+  hasErr() {
+    return this.get('err') ? true : false;
   }
 }

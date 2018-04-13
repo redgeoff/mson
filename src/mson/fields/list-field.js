@@ -221,7 +221,8 @@ export default class ListField extends CompositeField {
       'fullWidth',
       'allowDelete',
       'minSize',
-      'maxSize'
+      'maxSize',
+      'field'
     );
 
     if (props.label !== undefined) {
@@ -252,13 +253,25 @@ export default class ListField extends CompositeField {
       'fullWidth',
       'allowDelete',
       'minSize',
-      'maxSize'
+      'maxSize',
+      'field'
     );
     return value === undefined ? super.getOne(name) : value;
   }
 
   validate() {
     super.validate();
+
+    let errors = [];
+    for (const field of this._fields.values()) {
+      field.validate();
+      if (field.hasErr()) {
+        errors.push({
+          field: field.get('name'),
+          error: field.getErr()
+        });
+      }
+    }
 
     const value = this.getValue();
 
@@ -268,13 +281,21 @@ export default class ListField extends CompositeField {
       const maxSize = this.get('maxSize');
 
       if (minSize !== null && value.length < minSize) {
-        this.setErr(`${minSize} or more`);
+        errors.push({
+          error: `${minSize} or more`
+        });
       } else if (maxSize !== null && value.length > maxSize) {
-        this.setErr(`${maxSize} or less`);
+        errors.push({
+          error: `${maxSize} or less`
+        });
       }
     }
 
     // TODO: allowDuplicates
+
+    if (errors.length > 0) {
+      this.setErr(errors);
+    }
   }
 
   canAddMoreFields(fieldValue) {
@@ -294,5 +315,26 @@ export default class ListField extends CompositeField {
     } else {
       return true;
     }
+  }
+
+  _newField(index) {
+    const field = this.get('field');
+
+    if (!field) {
+      throw new Error('must define a field');
+    }
+
+    const clonedField = field.clone();
+
+    clonedField.set({
+      name: index,
+      label: index === 0 ? this.get('label') : undefined,
+      required: false,
+      block: this.get('block') === undefined ? true : this.get('block'),
+      fullWidth: this.get('fullWidth'),
+      options: this.get('options')
+    });
+
+    return clonedField;
   }
 }

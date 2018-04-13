@@ -181,4 +181,20 @@ export default class Component extends events.EventEmitter {
   getKey() {
     return this._key;
   }
+
+  // Set properties on another component. Useful for nested components
+  _setOn(component, props, propNames) {
+    propNames.forEach(name => {
+      if (props[name] !== undefined) {
+        component.set({ [name]: props[name] });
+      }
+    });
+  }
+
+  // Get properties from another component. Useful for nested components
+  _getFrom(component, name, propNames) {
+    if (propNames.indexOf(name) !== -1) {
+      return component.get(name);
+    }
+  }
 }

@@ -46,7 +46,10 @@ export default class CompositeField extends Field {
   _listenForChanges() {
     // Show any errors via the first field
     this.on('err', err => {
-      this._fields.first().setErr(err);
+      // Is there a 1st field? There won't be one if there aren't any values
+      if (this._fields.hasFirst()) {
+        this._fields.first().setErr(err);
+      }
     });
   }
 
