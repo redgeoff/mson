@@ -76,6 +76,10 @@ export default class Form extends Component {
       this.setDirty(!props.pristine);
     }
 
+    if (props.err !== undefined && props.err === null) {
+      this._hasTypeError = false;
+    }
+
     this._setIfUndefined(
       props,
       'touched',
@@ -188,8 +192,26 @@ export default class Form extends Component {
     return values;
   }
 
+  _validateValuesType(values) {
+    let hasError = false;
+
+    if (
+      values === null ||
+      (typeof values === 'object' && !Array.isArray(values))
+    ) {
+      // No error
+    } else {
+      hasError = true;
+    }
+
+    this._hasTypeError = hasError;
+  }
+
   setValues(values) {
-    _.each(values, (value, name) => this.getField(name).setValue(value));
+    this._validateValuesType(values);
+    if (!this._hasTypeError) {
+      _.each(values, (value, name) => this.getField(name).setValue(value));
+    }
   }
 
   clearValues() {
@@ -235,7 +257,10 @@ export default class Form extends Component {
   }
 
   validate() {
+    // Backup and restore hasTypeError as we need to preserve this value when validating
+    const hasTypeError = this._hasTypeError;
     this.clearErrs();
+    this._hasTypeError = hasTypeError;
 
     this._fields.each(field => field.validate());
 
@@ -246,6 +271,10 @@ export default class Form extends Component {
 
     // Emit a canSubmit or cannotSubmit event so that we can adjust buttons, etc...
     this._emitChange(this.canSubmit() ? 'canSubmit' : 'cannotSubmit');
+
+    if (this._hasTypeError) {
+      this.set({ err: true });
+    }
   }
 
   addValidator(validator) {
@@ -290,6 +319,7 @@ export default class Form extends Component {
 
   getErrs() {
     let errs = [];
+
     this._fields.each(field => {
       const err = field.getErr();
       if (err) {
@@ -299,6 +329,11 @@ export default class Form extends Component {
         });
       }
     });
+
+    if (this._hasTypeError) {
+      errs.push({ error: 'must be an object' });
+    }
+
     return errs;
   }
 

@@ -170,3 +170,38 @@ it('should remove fields', async () => {
     firstName: 'First'
   });
 });
+
+it('should report bad types', () => {
+  const form = createForm();
+
+  const validValues = [
+    {
+      firstName: 'Stevie',
+      middleName: 'Hardaway',
+      lastName: 'Wonder'
+    },
+    {},
+    null
+  ];
+
+  validValues.forEach(value => {
+    form.setValues(value);
+    form.validate();
+    expect(form.hasErr()).toEqual(false);
+  });
+
+  const invalidValues = [
+    ['must not be array'],
+    false,
+    1,
+    1.0,
+    'must not be string'
+  ];
+
+  invalidValues.forEach(value => {
+    form.setValues(value);
+    form.validate();
+    expect(form.hasErr()).toEqual(true);
+    expect(form.getErrs()).toEqual([{ error: 'must be an object' }]);
+  });
+});

@@ -172,7 +172,8 @@ it('should report bad types', () => {
     ['must not be array'],
     false,
     1,
-    1.0
+    1.0,
+    'must not be string'
   ];
 
   invalidValues.forEach(value => {
