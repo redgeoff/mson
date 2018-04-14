@@ -1,3 +1,5 @@
+// TODO: should we care strings pass for say IntegerField, FloatField, etc...?
+
 import Form from './form';
 import TextField from './fields/text-field';
 import FormsField from './fields/forms-field';
@@ -404,3 +406,7 @@ it('should validate nested form validators', () => {
     ]
   });
 });
+
+// TODO: should report bad types
+
+// TODO: should report extra fields

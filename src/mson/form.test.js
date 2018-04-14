@@ -205,3 +205,21 @@ it('should report bad types', () => {
     expect(form.getErrs()).toEqual([{ error: 'must be an object' }]);
   });
 });
+
+it('should report bad types', () => {
+  const form = createForm();
+
+  form.setValues({
+    prefix: 'Mr',
+    firstName: 'Stevie',
+    middleName: 'Hardaway',
+    lastName: 'Wonder',
+    suffix: 'Maestro'
+  });
+  form.validate();
+  expect(form.hasErr()).toEqual(true);
+  expect(form.getErrs()).toEqual([
+    { field: 'prefix', error: 'undefined field' },
+    { field: 'suffix', error: 'undefined field' }
+  ]);
+});

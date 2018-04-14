@@ -13,6 +13,7 @@ export default class Form extends Component {
     super._create(props);
     this._fields = new Mapa();
     this._validators = [];
+    this._clearExtraErrors();
     this._createDefaultFields();
 
     // TODO: default to false and enable a good way for this to be toggled by UI to allow for
@@ -30,6 +31,10 @@ export default class Form extends Component {
       this.addField(field);
     });
     this._emitChange('fields');
+  }
+
+  _clearExtraErrors() {
+    this._extraErrors = [];
   }
 
   set(props) {
@@ -78,6 +83,7 @@ export default class Form extends Component {
 
     if (props.err !== undefined && props.err === null) {
       this._hasTypeError = false;
+      this._clearExtraErrors();
     }
 
     this._setIfUndefined(
@@ -182,6 +188,10 @@ export default class Form extends Component {
     }
   }
 
+  hasField(name) {
+    return this._fields.has(name);
+  }
+
   getValues() {
     let values = {};
     this._fields.each(field => {
@@ -209,8 +219,18 @@ export default class Form extends Component {
 
   setValues(values) {
     this._validateValuesType(values);
+    this._clearExtraErrors();
     if (!this._hasTypeError) {
-      _.each(values, (value, name) => this.getField(name).setValue(value));
+      _.each(values, (value, name) => {
+        if (this.hasField(name)) {
+          this.getField(name).setValue(value);
+        } else {
+          this._extraErrors.push({
+            field: name,
+            error: 'undefined field'
+          });
+        }
+      });
     }
   }
 
@@ -257,10 +277,13 @@ export default class Form extends Component {
   }
 
   validate() {
-    // Backup and restore hasTypeError as we need to preserve this value when validating
+    // Backup and restore hasTypeError & extraErrors as we need to preserve these values when
+    // validating as they are set in setValues()
     const hasTypeError = this._hasTypeError;
+    const extraErrors = this._extraErrors;
     this.clearErrs();
     this._hasTypeError = hasTypeError;
+    this._extraErrors = extraErrors;
 
     this._fields.each(field => field.validate());
 
@@ -272,7 +295,7 @@ export default class Form extends Component {
     // Emit a canSubmit or cannotSubmit event so that we can adjust buttons, etc...
     this._emitChange(this.canSubmit() ? 'canSubmit' : 'cannotSubmit');
 
-    if (this._hasTypeError) {
+    if (this._hasTypeError || this._extraErrors.length > 0) {
       this.set({ err: true });
     }
   }
@@ -332,6 +355,10 @@ export default class Form extends Component {
 
     if (this._hasTypeError) {
       errs.push({ error: 'must be an object' });
+    }
+
+    if (this._extraErrors.length > 0) {
+      errs = errs.concat(this._extraErrors);
     }
 
     return errs;
