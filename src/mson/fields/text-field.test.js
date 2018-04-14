@@ -34,9 +34,13 @@ it('should validate min length', () => {
 it('should report bad types', () => {
   const field = new TextField();
 
-  field.setValue('valid text');
-  field.validate();
-  expect(field.hasErr()).toEqual(false);
+  const validValues = ['Valid string', null];
+
+  validValues.forEach(value => {
+    field.setValue(value);
+    field.validate();
+    expect(field.hasErr()).toEqual(false);
+  });
 
   const invalidValues = [
     {
