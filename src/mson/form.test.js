@@ -206,7 +206,7 @@ it('should report bad types', () => {
   });
 });
 
-it('should report bad types', () => {
+it('should report extra fields', () => {
   const form = createForm();
 
   form.setValues({

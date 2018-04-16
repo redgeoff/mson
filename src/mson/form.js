@@ -338,9 +338,11 @@ export default class Form extends Component {
 
     if (this._hasTypeError) {
       errs.push({ error: 'must be an object' });
-    } else if (this._extraErrors.length > 0) {
-      errs = errs.concat(this._extraErrors);
     } else {
+      if (this._extraErrors.length > 0) {
+        errs = errs.concat(this._extraErrors);
+      }
+
       // Only if there we haven't encountered errors during the last set do we want to calculate the
       // field errors as these set errors can often cause field errors and we want to focus on the
       // root cause.

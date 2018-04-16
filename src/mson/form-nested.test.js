@@ -443,4 +443,58 @@ it('should report bad types', () => {
   });
 });
 
-// TODO: should report extra fields
+it('should report extra fields', () => {
+  const form = createForm();
+
+  form.setValues({
+    fullName: {
+      firstName: 'Ella',
+      middleName: 'Jane',
+      lastName: 'Fitzgerald'
+    },
+    title: 'Founder',
+    emails: [
+      {
+        id: '1',
+        email: 'ella1@example.com',
+        url: 'ella.com'
+      }
+    ],
+    phoneNumbers: ['(206) 111-1111'],
+    label: 'Universal'
+  });
+  form.validate();
+  expect(form.hasErr()).toBe(true);
+
+  const errs = form.getErrs();
+
+  expect(errs).toEqual([
+    {
+      field: 'label',
+      error: 'undefined field'
+    },
+    {
+      field: 'fullName',
+      error: [
+        {
+          field: 'middleName',
+          error: 'undefined field'
+        }
+      ]
+    },
+    {
+      field: 'emails',
+      error: [
+        {
+          id: '1',
+          error: [
+            {
+              field: 'url',
+              error: 'undefined field'
+            }
+          ]
+        }
+      ]
+    }
+  ]);
+});
