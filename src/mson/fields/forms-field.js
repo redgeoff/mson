@@ -154,9 +154,6 @@ export default class FormsField extends Field {
 
     // Only set properties of forms if property is null
     this._setOnAllForms(props, ['err'], null);
-    if (props.err !== undefined) {
-      this._hasTypeError = false;
-    }
 
     this._setIfUndefined(
       props,

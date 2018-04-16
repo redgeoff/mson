@@ -190,11 +190,25 @@ export default class ListField extends CompositeField {
     }
   }
 
+  _validateValueType(value) {
+    let hasError = false;
+
+    if (value === null || Array.isArray(value)) {
+      // No error
+    } else {
+      hasError = true;
+    }
+
+    this._hasTypeError = hasError;
+  }
+
   _setValue(props) {
     if (props.value !== undefined) {
+      this._validateValueType(props.value);
+
       let name = null;
 
-      if (props.value) {
+      if (!this._hasTypeError && Array.isArray(props.value)) {
         const fields = this._fields.values();
         props.value.forEach(value => {
           let field = fields.next().value;
@@ -263,35 +277,42 @@ export default class ListField extends CompositeField {
     super.validate();
 
     let errors = [];
-    for (const field of this._fields.values()) {
-      field.validate();
-      if (field.hasErr()) {
-        errors.push({
-          field: field.get('name'),
-          error: field.getErr()
-        });
+
+    if (this._hasTypeError) {
+      errors.push({ error: 'must be an array' });
+    } else {
+      // We only want to proceed to validate the fields after we know there is no type error as type
+      // errors can result in field errors and we want to report the root issue.
+      for (const field of this._fields.values()) {
+        field.validate();
+        if (field.hasErr()) {
+          errors.push({
+            field: field.get('name'),
+            error: field.getErr()
+          });
+        }
       }
-    }
 
-    const value = this.getValue();
+      const value = this.getValue();
 
-    // We use value and not isBlank() as the values can be out of sync
-    if (value) {
-      const minSize = this.get('minSize');
-      const maxSize = this.get('maxSize');
+      // We use value and not isBlank() as the values can be out of sync
+      if (value) {
+        const minSize = this.get('minSize');
+        const maxSize = this.get('maxSize');
 
-      if (minSize !== null && value.length < minSize) {
-        errors.push({
-          error: `${minSize} or more`
-        });
-      } else if (maxSize !== null && value.length > maxSize) {
-        errors.push({
-          error: `${maxSize} or less`
-        });
+        if (minSize !== null && value.length < minSize) {
+          errors.push({
+            error: `${minSize} or more`
+          });
+        } else if (maxSize !== null && value.length > maxSize) {
+          errors.push({
+            error: `${maxSize} or less`
+          });
+        }
       }
-    }
 
-    // TODO: allowDuplicates
+      // TODO: allowDuplicates
+    }
 
     if (errors.length > 0) {
       this.setErr(errors);

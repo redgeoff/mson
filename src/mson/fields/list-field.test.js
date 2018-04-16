@@ -59,3 +59,30 @@ it('should allow for field property', () => {
   field.validate();
   expect(field.get('err')).toEqual([{ error: '2 or more' }]);
 });
+
+it('should report bad types', () => {
+  const field = new TextListField();
+
+  const validValues = [['one'], [], null];
+
+  validValues.forEach(value => {
+    field.setValue(value);
+    field.validate();
+    expect(field.hasErr()).toEqual(false);
+  });
+
+  const invalidValues = [
+    { foo: 'must not be object' },
+    false,
+    1,
+    1.0,
+    'must not be string'
+  ];
+
+  invalidValues.forEach(value => {
+    field.setValue(value);
+    field.validate();
+    expect(field.hasErr()).toEqual(true);
+    expect(field.getErr()).toEqual([{ error: 'must be an array' }]);
+  });
+});

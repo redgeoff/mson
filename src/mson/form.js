@@ -81,11 +81,6 @@ export default class Form extends Component {
       this.setDirty(!props.pristine);
     }
 
-    if (props.err !== undefined && props.err === null) {
-      this._hasTypeError = false;
-      this._clearExtraErrors();
-    }
-
     this._setIfUndefined(
       props,
       'touched',
@@ -277,13 +272,7 @@ export default class Form extends Component {
   }
 
   validate() {
-    // Backup and restore hasTypeError & extraErrors as we need to preserve these values when
-    // validating as they are set in setValues()
-    const hasTypeError = this._hasTypeError;
-    const extraErrors = this._extraErrors;
     this.clearErrs();
-    this._hasTypeError = hasTypeError;
-    this._extraErrors = extraErrors;
 
     this._fields.each(field => field.validate());
 
@@ -340,25 +329,30 @@ export default class Form extends Component {
     return clonedForm;
   }
 
+  hasSetErrors() {
+    return this._hasTypeError || this._extraErrors.length > 0;
+  }
+
   getErrs() {
     let errs = [];
 
-    this._fields.each(field => {
-      const err = field.getErr();
-      if (err) {
-        errs.push({
-          field: field.get('name'),
-          error: err
-        });
-      }
-    });
-
     if (this._hasTypeError) {
       errs.push({ error: 'must be an object' });
-    }
-
-    if (this._extraErrors.length > 0) {
+    } else if (this._extraErrors.length > 0) {
       errs = errs.concat(this._extraErrors);
+    } else {
+      // Only if there we haven't encountered errors during the last set do we want to calculate the
+      // field errors as these set errors can often cause field errors and we want to focus on the
+      // root cause.
+      this._fields.each(field => {
+        const err = field.getErr();
+        if (err) {
+          errs.push({
+            field: field.get('name'),
+            error: err
+          });
+        }
+      });
     }
 
     return errs;

@@ -407,6 +407,40 @@ it('should validate nested form validators', () => {
   });
 });
 
-// TODO: should report bad types
+it('should report bad types', () => {
+  const form = createForm();
+
+  form.setValues({
+    fullName: 'Bad name',
+    title: 'Founder',
+    emails: {
+      id: '1',
+      email: 'ella1@example.com'
+    },
+    phoneNumbers: '(206) 111-1111'
+  });
+  form.validate();
+  expect(form.hasErr()).toBe(true);
+
+  const errs = form.getErrs();
+
+  // Invalid fullName
+  expect(errs[0]).toEqual({
+    field: 'fullName',
+    error: [{ error: 'must be an object' }]
+  });
+
+  // Invalid emails
+  expect(errs[1]).toEqual({
+    field: 'emails',
+    error: [{ error: 'must be an array of objects' }]
+  });
+
+  // Invalid phoneNumbers
+  expect(errs[2]).toEqual({
+    field: 'phoneNumbers',
+    error: [{ error: 'must be an array' }]
+  });
+});
 
 // TODO: should report extra fields
