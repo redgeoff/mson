@@ -14,11 +14,17 @@ export default class Form extends Component {
     this._fields = new Mapa();
     this._validators = [];
     this._clearExtraErrors();
-    this._createDefaultFields();
+
+    if (!props || !props.omitDefaultFields) {
+      this._createDefaultFields();
+    }
 
     // TODO: default to false and enable a good way for this to be toggled by UI to allow for
     // real-time validation.
     this._set('autoValidate', true);
+
+    // Whether or not to report errors when an undefined (extra) field is specified
+    this._set('reportUndefined', true);
   }
 
   _createDefaultFields() {
@@ -88,7 +94,8 @@ export default class Form extends Component {
       'dirty',
       'pristine',
       'access',
-      'autoValidate'
+      'autoValidate',
+      'reportUndefined'
     );
   }
 
@@ -169,7 +176,8 @@ export default class Form extends Component {
       'dirty',
       'pristine',
       'access',
-      'autoValidate'
+      'autoValidate',
+      'reportUndefined'
     );
     return value === undefined ? super.getOne(name) : value;
   }
@@ -219,7 +227,7 @@ export default class Form extends Component {
       _.each(values, (value, name) => {
         if (this.hasField(name)) {
           this.getField(name).setValue(value);
-        } else {
+        } else if (this.get('reportUndefined')) {
           this._extraErrors.push({
             field: name,
             error: 'undefined field'
