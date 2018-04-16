@@ -91,3 +91,37 @@ it('should clear errors for nested form', () => {
   field.clearErr();
   expect(field.hasErr()).toBe(false);
 });
+
+it('should report bad types', () => {
+  const field = createField();
+
+  const validValues = [
+    {
+      firstName: 'Stevie',
+      lastName: 'Wonder'
+    },
+    {},
+    null
+  ];
+
+  validValues.forEach(value => {
+    field.setValue(value);
+    field.validate();
+    expect(field.hasErr()).toEqual(false);
+  });
+
+  const invalidValues = [
+    ['must not be array'],
+    false,
+    1,
+    1.0,
+    'must not be string'
+  ];
+
+  invalidValues.forEach(value => {
+    field.setValue(value);
+    field.validate();
+    expect(field.hasErr()).toEqual(true);
+    expect(field.getErr()).toEqual([{ error: 'must be an object' }]);
+  });
+});

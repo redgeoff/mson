@@ -13,6 +13,7 @@ export default class Form extends Component {
     super._create(props);
     this._fields = new Mapa();
     this._validators = [];
+    this._clearExtraErrors();
     this._createDefaultFields();
 
     // TODO: default to false and enable a good way for this to be toggled by UI to allow for
@@ -30,6 +31,10 @@ export default class Form extends Component {
       this.addField(field);
     });
     this._emitChange('fields');
+  }
+
+  _clearExtraErrors() {
+    this._extraErrors = [];
   }
 
   set(props) {
@@ -178,6 +183,10 @@ export default class Form extends Component {
     }
   }
 
+  hasField(name) {
+    return this._fields.has(name);
+  }
+
   getValues() {
     let values = {};
     this._fields.each(field => {
@@ -188,8 +197,36 @@ export default class Form extends Component {
     return values;
   }
 
+  _validateValuesType(values) {
+    let hasError = false;
+
+    if (
+      values === null ||
+      (typeof values === 'object' && !Array.isArray(values))
+    ) {
+      // No error
+    } else {
+      hasError = true;
+    }
+
+    this._hasTypeError = hasError;
+  }
+
   setValues(values) {
-    _.each(values, (value, name) => this.getField(name).setValue(value));
+    this._validateValuesType(values);
+    this._clearExtraErrors();
+    if (!this._hasTypeError) {
+      _.each(values, (value, name) => {
+        if (this.hasField(name)) {
+          this.getField(name).setValue(value);
+        } else {
+          this._extraErrors.push({
+            field: name,
+            error: 'undefined field'
+          });
+        }
+      });
+    }
   }
 
   clearValues() {
@@ -246,6 +283,10 @@ export default class Form extends Component {
 
     // Emit a canSubmit or cannotSubmit event so that we can adjust buttons, etc...
     this._emitChange(this.canSubmit() ? 'canSubmit' : 'cannotSubmit');
+
+    if (this._hasTypeError || this._extraErrors.length > 0) {
+      this.set({ err: true });
+    }
   }
 
   addValidator(validator) {
@@ -288,17 +329,34 @@ export default class Form extends Component {
     return clonedForm;
   }
 
+  hasSetErrors() {
+    return this._hasTypeError || this._extraErrors.length > 0;
+  }
+
   getErrs() {
     let errs = [];
-    this._fields.each(field => {
-      const err = field.getErr();
-      if (err) {
-        errs.push({
-          field: field.get('name'),
-          error: err
-        });
+
+    if (this._hasTypeError) {
+      errs.push({ error: 'must be an object' });
+    } else {
+      if (this._extraErrors.length > 0) {
+        errs = errs.concat(this._extraErrors);
       }
-    });
+
+      // Only if there we haven't encountered errors during the last set do we want to calculate the
+      // field errors as these set errors can often cause field errors and we want to focus on the
+      // root cause.
+      this._fields.each(field => {
+        const err = field.getErr();
+        if (err) {
+          errs.push({
+            field: field.get('name'),
+            error: err
+          });
+        }
+      });
+    }
+
     return errs;
   }
 

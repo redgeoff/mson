@@ -78,14 +78,35 @@ export default class FormsField extends Field {
     this.eachForm(form => form.removeAllListeners());
   }
 
+  _validateValueType(value) {
+    let hasError = false;
+
+    if (value === null) {
+      // No error
+    } else if (Array.isArray(value)) {
+      if (value.length > 0 && typeof value[0] !== 'object') {
+        hasError = true;
+      } else {
+        // No error
+      }
+    } else {
+      hasError = true;
+    }
+
+    this._hasTypeError = hasError;
+  }
+
   _setValue(value) {
-    // TODO: what's the best way to set? e.g. if we set the same values over and over then we end up
-    // recreating the forms each time. Would it be better to just use index to set and if there are
-    // indexes that are in the current forms, but not in values then just delete?
-    this._clearAllFormListeners(); // prevent listener leaks
-    this._forms.clear();
-    if (value && value.length > 0) {
-      value.forEach(values => this.addForm(values));
+    this._validateValueType(value);
+    if (!this._hasTypeError) {
+      // TODO: what's the best way to set? e.g. if we set the same values over and over then we end
+      // up recreating the forms each time. Would it be better to just use index to set and if there
+      // are indexes that are in the current forms, but not in values then just delete?
+      this._clearAllFormListeners(); // prevent listener leaks
+      this._forms.clear();
+      if (value && value.length > 0) {
+        value.forEach(values => this.addForm(values));
+      }
     }
   }
 
@@ -234,6 +255,10 @@ export default class FormsField extends Field {
       errors.push({
         error: `${maxSize} or less`
       });
+    }
+
+    if (this._hasTypeError) {
+      errors.push({ error: 'must be an array of objects' });
     }
 
     if (errors.length > 0) {

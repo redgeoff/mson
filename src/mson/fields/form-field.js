@@ -97,13 +97,15 @@ export default class FormField extends Field {
   // }
 
   validate() {
-    super.validate();
-
-    // Only proceed if there are no other errors, e.g. required error
-    if (!this.hasErr()) {
-      const form = this.get('form');
-      form.validate();
-      if (form.hasErr()) {
+    const form = this.get('form');
+    form.validate();
+    if (form.hasSetErrors()) {
+      // If the form has errors from the last set, e.g. "not an object," then we want only these
+      // errors as they are often the root of sub-errors.
+      this.setErr(form.getErrs());
+    } else {
+      super.validate();
+      if (!this.hasErr() && form.hasErr()) {
         this.setErr(form.getErrs());
       }
     }

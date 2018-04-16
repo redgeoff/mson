@@ -1,3 +1,5 @@
+// TODO: should we care strings pass for say IntegerField, FloatField, etc...?
+
 import Form from './form';
 import TextField from './fields/text-field';
 import FormsField from './fields/forms-field';
@@ -403,4 +405,96 @@ it('should validate nested form validators', () => {
       }
     ]
   });
+});
+
+it('should report bad types', () => {
+  const form = createForm();
+
+  form.setValues({
+    fullName: 'Bad name',
+    title: 'Founder',
+    emails: {
+      id: '1',
+      email: 'ella1@example.com'
+    },
+    phoneNumbers: '(206) 111-1111'
+  });
+  form.validate();
+  expect(form.hasErr()).toBe(true);
+
+  const errs = form.getErrs();
+
+  // Invalid fullName
+  expect(errs[0]).toEqual({
+    field: 'fullName',
+    error: [{ error: 'must be an object' }]
+  });
+
+  // Invalid emails
+  expect(errs[1]).toEqual({
+    field: 'emails',
+    error: [{ error: 'must be an array of objects' }]
+  });
+
+  // Invalid phoneNumbers
+  expect(errs[2]).toEqual({
+    field: 'phoneNumbers',
+    error: [{ error: 'must be an array' }]
+  });
+});
+
+it('should report extra fields', () => {
+  const form = createForm();
+
+  form.setValues({
+    fullName: {
+      firstName: 'Ella',
+      middleName: 'Jane',
+      lastName: 'Fitzgerald'
+    },
+    title: 'Founder',
+    emails: [
+      {
+        id: '1',
+        email: 'ella1@example.com',
+        url: 'ella.com'
+      }
+    ],
+    phoneNumbers: ['(206) 111-1111'],
+    label: 'Universal'
+  });
+  form.validate();
+  expect(form.hasErr()).toBe(true);
+
+  const errs = form.getErrs();
+
+  expect(errs).toEqual([
+    {
+      field: 'label',
+      error: 'undefined field'
+    },
+    {
+      field: 'fullName',
+      error: [
+        {
+          field: 'middleName',
+          error: 'undefined field'
+        }
+      ]
+    },
+    {
+      field: 'emails',
+      error: [
+        {
+          id: '1',
+          error: [
+            {
+              field: 'url',
+              error: 'undefined field'
+            }
+          ]
+        }
+      ]
+    }
+  ]);
 });
