@@ -193,7 +193,7 @@ export default class ListField extends CompositeField {
   _validateValueType(value) {
     let hasError = false;
 
-    if (value === null || Array.isArray(value)) {
+    if (value === null || Array.isArray(value) || this.get('allowScalar')) {
       // No error
     } else {
       hasError = true;
@@ -208,16 +208,26 @@ export default class ListField extends CompositeField {
 
       let name = null;
 
-      if (!this._hasTypeError && Array.isArray(props.value)) {
+      if (!this._hasTypeError) {
         const fields = this._fields.values();
-        props.value.forEach(value => {
-          let field = fields.next().value;
-          if (!field) {
-            field = this._createField();
-          }
-          field.setValue(value);
-          name = field.get('name');
-        });
+        let values = null;
+
+        if (Array.isArray(props.value)) {
+          values = props.value;
+        } else if (this.get('allowScalar')) {
+          values = [props.value];
+        }
+
+        if (values !== null) {
+          values.forEach(value => {
+            let field = fields.next().value;
+            if (!field) {
+              field = this._createField();
+            }
+            field.setValue(value);
+            name = field.get('name');
+          });
+        }
       }
 
       this._cleanUpNextFields(name);
@@ -236,7 +246,8 @@ export default class ListField extends CompositeField {
       'allowDelete',
       'minSize',
       'maxSize',
-      'field'
+      'field',
+      'allowScalar'
     );
 
     if (props.label !== undefined) {
@@ -268,12 +279,15 @@ export default class ListField extends CompositeField {
       'allowDelete',
       'minSize',
       'maxSize',
-      'field'
+      'field',
+      'allowScalar'
     );
     return value === undefined ? super.getOne(name) : value;
   }
 
   validate() {
+    this.clearErr();
+
     super.validate();
 
     let errors = [];
