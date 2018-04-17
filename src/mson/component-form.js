@@ -3,8 +3,9 @@
 
 import Form from './form';
 import { TextField, FormsField } from './fields';
+// import ObjectForm from './object-form';
 
-// class ActionForm extends Form {
+// class ActionForm extends ObjectForm {
 //
 // }
 

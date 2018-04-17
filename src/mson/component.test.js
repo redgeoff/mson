@@ -74,3 +74,12 @@ it('should execute listeners', async () => {
   expect(action1.acts).toEqual([{ event: 'song' }, { event: 'artist' }]);
   expect(action2.acts).toEqual([{ event: 'song' }]);
 });
+
+it('should concat schemas', () => {
+  const c = new Component({
+    schema: 'one'
+  });
+  c.set({ schema: 'two' });
+  c.set({ schema: 'three' });
+  expect(c.get('schema')).toEqual(['one', 'two', 'three']);
+});

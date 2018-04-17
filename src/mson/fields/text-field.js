@@ -1,6 +1,23 @@
 import Field from './field';
 
 export default class TextField extends Field {
+  _create(props) {
+    super._create(props);
+
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'minLength',
+            component: 'IntegerField'
+          }
+          // ...
+        ]
+      }
+    });
+  }
+
   set(props) {
     super.set(props);
     this._setIfUndefined(

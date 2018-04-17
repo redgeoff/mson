@@ -55,6 +55,15 @@ export default class Component extends events.EventEmitter {
     }
   }
 
+  _push(name, value) {
+    let values = this._get(name);
+    if (!Array.isArray(values)) {
+      values = [];
+    }
+    values.push(value);
+    this._set(name, values);
+  }
+
   _setIfUndefinedProp(props, name) {
     if (props[name] !== undefined) {
       this._set(name, props[name]);
@@ -106,6 +115,11 @@ export default class Component extends events.EventEmitter {
     this._setName(props);
     this._setListeners(props);
     this._setPassed(props);
+
+    if (props.schema !== undefined) {
+      // Schemas are pushed that they can accumulate through the layers of inheritance
+      this._push('schema', props.schema);
+    }
   }
 
   _get(name) {
@@ -113,7 +127,6 @@ export default class Component extends events.EventEmitter {
     return this['_' + name] === undefined ? null : this['_' + name];
   }
 
-  // TODO: remove clone construct
   _getIfAllowed(name, ...allowedNames) {
     if (allowedNames.indexOf(name) !== -1) {
       return this._get(name);
@@ -121,7 +134,7 @@ export default class Component extends events.EventEmitter {
   }
 
   getOne(name) {
-    return this._getIfAllowed(name, 'name', 'listeners', 'passed');
+    return this._getIfAllowed(name, 'name', 'listeners', 'passed', 'schema');
   }
 
   get(names) {
