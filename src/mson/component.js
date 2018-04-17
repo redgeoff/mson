@@ -15,6 +15,27 @@ const getNextKey = () => {
 // - We attempted to require all access to all props via get() and set(), but this can cause
 //   infinite recursion, e.g. when a get() calls itself either directly or via some inherited logic.
 export default class Component extends events.EventEmitter {
+  _getComponentMSONSchema() {
+    return {
+      component: 'Form',
+      fields: [
+        {
+          name: 'name',
+          component: 'TextField'
+        }
+        // TODO: listeners
+        // {
+        //   name: 'schema',
+        //   component: 'FormField',
+        //   form: {
+        //     // TODO: should there be a SchemaForm?
+        //     component: 'ObjectForm'
+        //   }
+        // }
+      ]
+    };
+  }
+
   constructor(props) {
     super(props);
 
@@ -35,7 +56,9 @@ export default class Component extends events.EventEmitter {
     this._key = getNextKey();
   }
 
-  _create(/* props */) {}
+  _create(/* props */) {
+    this.set({ schema: this._getComponentMSONSchema() });
+  }
 
   _emitChange(name, value) {
     this.emit(name, value);

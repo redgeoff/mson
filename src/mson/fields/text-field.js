@@ -3,16 +3,31 @@ import Field from './field';
 export default class TextField extends Field {
   _create(props) {
     super._create(props);
-
-    this.set({
+    this._set({
       schema: {
         component: 'Form',
         fields: [
           {
             name: 'minLength',
             component: 'IntegerField'
+          },
+          {
+            name: 'maxLength',
+            component: 'IntegerField'
+          },
+          {
+            name: 'minWords',
+            component: 'IntegerField'
+          },
+          {
+            name: 'maxWords',
+            component: 'IntegerField'
+          },
+          {
+            // TODO: define list of acceptable values
+            name: 'type',
+            component: 'TextField'
           }
-          // ...
         ]
       }
     });

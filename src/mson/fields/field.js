@@ -8,6 +8,64 @@ export default class Field extends Component {
   _create(props) {
     super._create(props);
     this.set({ editable: true, block: true, out: true });
+
+    this._set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'label',
+            component: 'TextField'
+          },
+          {
+            name: 'required',
+            // TODO: create a BooleanField and use
+            // component: 'BooleanField'
+            component: 'TextField'
+          },
+          {
+            name: 'fullWidth',
+            component: 'TextField'
+            // component: 'BooleanField'
+          },
+          // TODO: validators
+          {
+            name: 'hidden',
+            component: 'TextField'
+            // component: 'BooleanField'
+          },
+          {
+            name: 'block',
+            component: 'TextField'
+            // component: 'BooleanField'
+          },
+          {
+            name: 'disabled',
+            component: 'TextField'
+            // component: 'BooleanField'
+          },
+          {
+            name: 'editable',
+            component: 'TextField'
+            // component: 'BooleanField'
+          },
+          {
+            name: 'dirty',
+            component: 'TextField'
+            // component: 'BooleanField'
+          },
+          {
+            name: 'help',
+            component: 'TextField'
+          },
+          {
+            name: 'out',
+            component: 'TextField'
+            // component: 'BooleanField'
+          }
+        ]
+      }
+    });
   }
 
   set(props) {

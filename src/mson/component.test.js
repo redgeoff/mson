@@ -1,6 +1,7 @@
 import Component from './component';
 import Action from './action';
 import testUtils from './test-utils';
+import ComponentSchema from './component-schema';
 
 class Song extends Component {
   _create(props) {
@@ -38,7 +39,9 @@ it('should get', () => {
   expect(song.get('song')).toEqual("It Don't Mean a Thing");
   expect(song.get(['song'])).toEqual({ song: "It Don't Mean a Thing" });
   expect(song.get(['song', 'artist'])).toEqual(obj);
-  expect(song.get()).toEqual(obj);
+  expect(song.get()).toEqual(
+    Object.assign(obj, { schema: song.get('schema') })
+  );
 });
 
 it('should set name before creating', () => {
@@ -81,5 +84,14 @@ it('should concat schemas', () => {
   });
   c.set({ schema: 'two' });
   c.set({ schema: 'three' });
-  expect(c.get('schema')).toEqual(['one', 'two', 'three']);
+  expect(c.get('schema')).toEqual([
+    c._getComponentMSONSchema(),
+    'one',
+    'two',
+    'three'
+  ]);
+});
+
+it('should get schema form', () => {
+  // TODO
 });
