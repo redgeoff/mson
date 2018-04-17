@@ -131,4 +131,13 @@ export default class Field extends Component {
   hasErr() {
     return this.get('err') ? true : false;
   }
+
+  _validateWithRegExp(regExp, err) {
+    if (!this.isBlank()) {
+      const value = this.getValue();
+      if (!regExp.test(value)) {
+        this.setErr(err);
+      }
+    }
+  }
 }
