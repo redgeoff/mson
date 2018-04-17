@@ -58,6 +58,10 @@ export default class Component extends events.EventEmitter {
   }
 
   _create(/* props */) {
+    // TODO: would it be better if the schema was loaded dynamically and on demand instead of
+    // whenever the component is created? In some ways we already have this the schema exists as
+    // simple objects until it instantiated. The problem with a lazy setting of the schema is how we
+    // would allow schemas to be defined via MSON.
     this.set({ schema: this._getComponentMSONSchema() });
   }
 
