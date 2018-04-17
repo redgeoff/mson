@@ -238,4 +238,14 @@ export default class Component extends events.EventEmitter {
       return component.get(name);
     }
   }
+
+  buildSchemaForm(form, builder) {
+    const schemas = this.get('schema');
+    if (schemas) {
+      schemas.forEach(schema => {
+        const schemaForm = builder.newComponent(schema);
+        form.copyFields(schemaForm);
+      });
+    }
+  }
 }

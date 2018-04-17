@@ -1,7 +1,8 @@
 import Component from './component';
 import Action from './action';
 import testUtils from './test-utils';
-import ComponentSchema from './component-schema';
+import Form from './form';
+import builder from './builder';
 
 class Song extends Component {
   _create(props) {
@@ -93,8 +94,8 @@ it('should concat schemas', () => {
 });
 
 it('should get schema form', () => {
-  const componentSchema = new ComponentSchema();
   const component = new Component();
-  const schemaForm = componentSchema.getSchemaForm(component);
+  const schemaForm = new Form();
+  component.buildSchemaForm(schemaForm, builder);
   expect(schemaForm.hasField('name')).toEqual(true);
 });

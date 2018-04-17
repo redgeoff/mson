@@ -9,6 +9,28 @@ import IdField from './fields/id-field';
 import ButtonField from './fields/button-field';
 
 export default class Form extends Component {
+  _formSetMSONSchema() {
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'name',
+            component: 'TextField',
+            required: true
+          }
+          // {
+          //   name: 'fields',
+          //   component: 'FormsField',
+          //   // required: true,
+          //   form: 'SchemaValidatorForm'
+          // }
+          // TODO: access
+        ]
+      }
+    });
+  }
+
   _create(props) {
     super._create(props);
     this._fields = new Mapa();
@@ -25,6 +47,8 @@ export default class Form extends Component {
 
     // Whether or not to report errors when an undefined (extra) field is specified
     this._set('reportUndefined', true);
+
+    this._formSetMSONSchema();
   }
 
   _createDefaultFields() {
@@ -418,5 +442,10 @@ export default class Form extends Component {
 
   mapFields(onField) {
     return this._fields.map((field, name, last) => onField(field, name, last));
+  }
+
+  buildSchemaForm(form, builder) {
+    super.buildSchemaForm(form, builder);
+    form.getField('fields').set({ sourceForm: this });
   }
 }

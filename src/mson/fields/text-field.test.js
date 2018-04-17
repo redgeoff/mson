@@ -1,6 +1,7 @@
 import TextField from './text-field';
 import fieldTester from './field-tester';
-import ComponentSchema from '../component-schema';
+import Form from '../form';
+import builder from '../builder';
 
 fieldTester.shouldAll({ Field: TextField, exampleValue: 'foo' });
 
@@ -63,8 +64,8 @@ it('should report bad types', () => {
 
 it('should get schema form', () => {
   const field = new TextField();
-  const componentSchema = new ComponentSchema();
-  const schemaForm = componentSchema.getSchemaForm(field);
+  const schemaForm = new Form();
+  field.buildSchemaForm(schemaForm, builder);
 
   schemaForm.setValues({
     name: 'myField',
