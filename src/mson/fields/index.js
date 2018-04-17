@@ -1,3 +1,4 @@
+import Field from './field';
 import FormField from './form-field';
 import FormsField from './forms-field';
 import ListField from './list-field';
@@ -6,6 +7,7 @@ import SelectField from './select-field';
 import TextField from './text-field';
 
 export {
+  Field,
   FormField,
   FormsField,
   ListField,
