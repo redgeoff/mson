@@ -1,6 +1,7 @@
 import Form from './form';
 import TextField from './fields/text-field';
 import testUtils from './test-utils';
+import builder from './builder';
 
 const createForm = () => {
   return new Form({
@@ -221,5 +222,66 @@ it('should report extra fields', () => {
   expect(form.getErrs()).toEqual([
     { field: 'prefix', error: 'undefined field' },
     { field: 'suffix', error: 'undefined field' }
+  ]);
+});
+
+it('should validate schema', () => {
+  const form = new Form();
+  const schemaForm = new Form();
+  form.buildSchemaForm(schemaForm, builder);
+
+  schemaForm.setValues({
+    name: 'org.proj.Form',
+    component: 'Form',
+    fields: [
+      {
+        component: 'TextField',
+        name: 'name',
+        label: 'Name',
+        required: true,
+        help: 'Enter a full name'
+      },
+      {
+        component: 'EmailField',
+        name: 'lastName',
+        label: 'Last Name',
+        required: true
+      }
+    ]
+  });
+
+  schemaForm.validate();
+  expect(schemaForm.hasErr()).toEqual(false);
+
+  schemaForm.setValues({
+    fields: [
+      {
+        component: 'TextField',
+        badProperty: 'name'
+      }
+    ]
+  });
+
+  schemaForm.validate();
+  expect(schemaForm.hasErr()).toEqual(true);
+  expect(schemaForm.getErrs()).toEqual([
+    {
+      field: 'fields',
+      error: [
+        {
+          id: null,
+          error: [
+            {
+              field: 'badProperty',
+              error: 'undefined field'
+            },
+            {
+              field: 'name',
+              error: 'required'
+            }
+          ]
+        }
+      ]
+    }
   ]);
 });

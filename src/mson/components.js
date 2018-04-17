@@ -26,6 +26,7 @@ import RecordEditor from './record-editor.json';
 import RecordEditorOld from './record-editor-old';
 import RecordEditorWithPreview from './record-editor-with-preview.json';
 import Redirect from './redirect';
+import SchemaValidatorForm from './schema-validator-form';
 import SelectField from './fields/select-field';
 import SelectListField from './fields/select-list-field';
 import Set from './set';
@@ -56,6 +57,7 @@ export default {
   RecordEditorOld,
   RecordEditorWithPreview,
   Redirect,
+  SchemaValidatorForm,
   SelectField,
   SelectListField,
   Set,

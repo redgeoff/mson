@@ -18,13 +18,15 @@ export default class Form extends Component {
             name: 'name',
             component: 'TextField',
             required: true
+          },
+          {
+            name: 'fields',
+            component: 'FormsField',
+            // required: true,
+            form: {
+              component: 'SchemaValidatorForm'
+            }
           }
-          // {
-          //   name: 'fields',
-          //   component: 'FormsField',
-          //   // required: true,
-          //   form: 'SchemaValidatorForm'
-          // }
           // TODO: access
         ]
       }
@@ -446,6 +448,10 @@ export default class Form extends Component {
 
   buildSchemaForm(form, builder) {
     super.buildSchemaForm(form, builder);
-    form.getField('fields').set({ sourceForm: this });
+    //    form.getField('fields').get('form').set({ sourceForm: this, builder });
+    form
+      .getField('fields')
+      .get('form')
+      .set({ builder });
   }
 }

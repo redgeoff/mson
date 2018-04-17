@@ -20,6 +20,12 @@ export default class Component extends events.EventEmitter {
       component: 'Form',
       fields: [
         {
+          // This field is just for the MSON definition
+          name: 'component',
+          component: 'TextField'
+          // required: true
+        },
+        {
           name: 'name',
           component: 'TextField',
           required: true
