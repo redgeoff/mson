@@ -40,8 +40,13 @@ it('should get schema form', () => {
   component.set({ schema: schemas[2] });
   const form = componentSchema.getSchemaForm(component);
   expect(form.mapFields(field => field.get('name'))).toEqual([
-    'id', // from Form
-    'name', // from Component
+    // From Form
+    'id',
+
+    // From Component
+    'name',
+    'schema',
+
     'thing1',
     'thing2',
     'thing3'

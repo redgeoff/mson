@@ -22,16 +22,16 @@ export default class Component extends events.EventEmitter {
         {
           name: 'name',
           component: 'TextField'
-        }
+        },
         // TODO: listeners
-        // {
-        //   name: 'schema',
-        //   component: 'FormField',
-        //   form: {
-        //     // TODO: should there be a SchemaForm?
-        //     component: 'ObjectForm'
-        //   }
-        // }
+        {
+          name: 'schema',
+          component: 'FormField',
+          form: {
+            // TODO: should there be a SchemaForm?
+            component: 'ObjectForm'
+          }
+        }
       ]
     };
   }

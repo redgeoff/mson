@@ -93,5 +93,8 @@ it('should concat schemas', () => {
 });
 
 it('should get schema form', () => {
-  // TODO
+  const componentSchema = new ComponentSchema();
+  const component = new Component();
+  const schemaForm = componentSchema.getSchemaForm(component);
+  expect(schemaForm.hasField('name')).toEqual(true);
 });

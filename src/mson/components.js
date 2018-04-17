@@ -14,9 +14,11 @@ import EmailField from './fields/email-field.json';
 import Emit from './emit';
 import Field from './fields/field';
 import Form from './form';
+import FormField from './fields/form-field';
 import FormsField from './fields/forms-field';
 import ListField from './fields/list-field';
 import Menu from './menu';
+import ObjectForm from './object-form';
 import PasswordField from './fields/password-field.json';
 import PersonNameField from './fields/person-name-field.json';
 import RecordEditor from './record-editor.json';
@@ -41,9 +43,11 @@ export default {
   Emit,
   Field,
   Form,
+  FormField,
   FormsField,
   ListField,
   Menu,
+  ObjectForm,
   PasswordField,
   PersonNameField,
   RecordEditor,
