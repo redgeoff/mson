@@ -9,7 +9,7 @@ export default class Field extends Component {
     super._create(props);
     this.set({ editable: true, block: true, out: true });
 
-    this._set({
+    this.set({
       schema: {
         component: 'Form',
         fields: [

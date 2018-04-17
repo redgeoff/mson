@@ -1,5 +1,6 @@
 import TextField from './text-field';
 import fieldTester from './field-tester';
+import ComponentSchema from '../component-schema';
 
 fieldTester.shouldAll({ Field: TextField, exampleValue: 'foo' });
 
@@ -58,4 +59,30 @@ it('should report bad types', () => {
     expect(field.hasErr()).toEqual(true);
     expect(field.getErr()).toEqual('must be a string');
   });
+});
+
+it('should get schema form', () => {
+  const field = new TextField();
+  const componentSchema = new ComponentSchema();
+  const schemaForm = componentSchema.getSchemaForm(field);
+
+  schemaForm.setValues({
+    name: 'myField',
+    maxLength: 10
+  });
+  schemaForm.validate();
+  expect(schemaForm.hasErr()).toEqual(false);
+
+  schemaForm.setValues({
+    name: 'myField',
+    badParam: 10
+  });
+  schemaForm.validate();
+  expect(schemaForm.hasErr()).toEqual(true);
+  expect(schemaForm.getErrs()).toEqual([
+    {
+      field: 'badParam',
+      error: 'undefined field'
+    }
+  ]);
 });

@@ -16,6 +16,7 @@ import Field from './fields/field';
 import Form from './form';
 import FormField from './fields/form-field';
 import FormsField from './fields/forms-field';
+import IntegerField from './fields/integer-field';
 import ListField from './fields/list-field';
 import Menu from './menu';
 import ObjectForm from './object-form';
@@ -45,6 +46,7 @@ export default {
   Form,
   FormField,
   FormsField,
+  IntegerField,
   ListField,
   Menu,
   ObjectForm,

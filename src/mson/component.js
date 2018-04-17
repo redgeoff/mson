@@ -21,7 +21,8 @@ export default class Component extends events.EventEmitter {
       fields: [
         {
           name: 'name',
-          component: 'TextField'
+          component: 'TextField',
+          required: true
         },
         // TODO: listeners
         {
