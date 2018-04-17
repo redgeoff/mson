@@ -411,4 +411,12 @@ export default class Form extends Component {
     });
     return isBlank;
   }
+
+  eachField(onField) {
+    this._fields.each((field, name, last) => onField(field, name, last));
+  }
+
+  mapFields(onField) {
+    return this._fields.map((field, name, last) => onField(field, name, last));
+  }
 }
