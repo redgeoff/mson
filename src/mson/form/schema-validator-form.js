@@ -10,7 +10,7 @@ export default class SchemaValidatorForm extends Form {
     field.buildSchemaForm(this, builder);
 
     // We assign the name to the id so that errors are more descriptive
-    super.setValues(Object.assign(values, { id: values.name }));
+    super.setValues(Object.assign({}, values, { id: values.name }));
   }
 
   set(props) {
