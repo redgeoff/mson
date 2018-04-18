@@ -1,7 +1,7 @@
 // TODO: keep the store implementation or better to have listeners?
 
-import Component from './component';
-import DocStore from './doc-store';
+import Component from '../component';
+import DocStore from '../doc-store';
 
 export default class RecordEditor extends Component {
   constructor(props) {

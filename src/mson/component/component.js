@@ -1,6 +1,6 @@
 import events from 'events';
 import _ from 'lodash';
-import utils from './utils';
+import utils from '../utils';
 
 let nextKey = 0;
 const getNextKey = () => {

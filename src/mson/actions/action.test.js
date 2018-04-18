@@ -1,5 +1,5 @@
 import Set from './set';
-import TextField from './fields/text-field';
+import TextField from '../fields/text-field';
 
 const createAction = () => {
   return new Set({

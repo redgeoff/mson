@@ -1,8 +1,8 @@
 import Set from './set';
-import Form from './form';
-import ButtonField from './fields/button-field';
-import testUtils from './test-utils';
-import builder from './builder';
+import Form from '../form';
+import ButtonField from '../fields/button-field';
+import testUtils from '../test-utils';
+import builder from '../builder';
 
 const createFields = () => {
   return [

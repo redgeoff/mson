@@ -2,7 +2,7 @@
 // setter, getter logic
 
 import Component from '../component';
-import Validator from '../validator';
+import Validator from '../component/validator';
 
 export default class Field extends Component {
   _create(props) {

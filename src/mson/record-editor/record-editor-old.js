@@ -8,7 +8,7 @@
 //   - Pass all properties to form and back?
 //   - Also support setting validators at this layer?
 
-import Component from './component';
+import Component from '../component';
 
 export default class RecordEditor extends Component {
   set(props) {

@@ -1,5 +1,5 @@
 import Action from './action';
-import globals from './globals';
+import globals from '../globals';
 
 export default class Snackbar extends Action {
   set(props) {

@@ -1,5 +1,5 @@
 import Form from './form';
-import { FormField, Field } from './fields';
+import { FormField, Field } from '../fields';
 
 // e.g.
 // access: {

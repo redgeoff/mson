@@ -1,5 +1,5 @@
 import Form from './form';
-import TextField from './fields/text-field';
+import TextField from '../fields/text-field';
 
 const createForm = () => {
   return new Form({
