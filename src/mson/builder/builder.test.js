@@ -1,6 +1,6 @@
 import builder from './builder';
-import globals from './globals';
-import testUtils from './test-utils';
+import globals from '../globals';
+import testUtils from '../test-utils';
 
 beforeAll(() => {
   builder.registerComponent('org.proj.Account', {

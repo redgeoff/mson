@@ -11,9 +11,9 @@
 //    now have dynamic attributes. TODO: as a future optimization we can check to see if a MSON
 //    component has dynamic attributes and if it doesn't then we can cache the built component.
 
-import components from './components';
+import components from '../components';
 import _ from 'lodash';
-import utils from './utils';
+import utils from '../utils';
 import PropFiller from './prop-filler';
 
 class Builder {
