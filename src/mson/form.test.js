@@ -243,11 +243,23 @@ it('should validate schema', () => {
       },
       {
         component: 'EmailField',
-        name: 'lastName',
-        label: 'Last Name',
+        name: 'email',
+        label: 'Email',
         required: true
       }
-    ]
+    ],
+    access: {
+      form: {
+        create: 'role1'
+      },
+      fields: {
+        email: {
+          create: 'role2'
+        }
+      }
+    }
+    // TODO: validators
+    // TODO: listeners
   });
 
   schemaForm.validate();
@@ -259,7 +271,14 @@ it('should validate schema', () => {
         component: 'TextField',
         badProperty: 'name'
       }
-    ]
+    ],
+    access: {
+      fields: {
+        email: {
+          create: 'role2'
+        }
+      }
+    }
   });
 
   schemaForm.validate();
@@ -278,6 +297,20 @@ it('should validate schema', () => {
             {
               field: 'name',
               error: 'required'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      field: 'access',
+      error: [
+        {
+          field: 'fields',
+          error: [
+            {
+              field: 'email',
+              error: 'undefined field'
             }
           ]
         }

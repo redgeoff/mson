@@ -26,8 +26,21 @@ export default class Form extends Component {
             form: {
               component: 'SchemaValidatorForm'
             }
+          },
+          {
+            name: 'validators',
+            component: 'FormsField',
+            form: {
+              component: 'ValidatorForm'
+            }
+          },
+          {
+            name: 'access',
+            component: 'FormField',
+            form: {
+              component: 'AccessForm'
+            }
           }
-          // TODO: access
         ]
       }
     });
@@ -182,7 +195,7 @@ export default class Form extends Component {
 
   removeFieldsExcept(names) {
     this._fields.each((field, name) => {
-      if (names.indexOf(name) === -1) {
+      if (names === undefined || names.indexOf(name) === -1) {
         this.removeField(name);
       }
     });
@@ -448,10 +461,31 @@ export default class Form extends Component {
 
   buildSchemaForm(form, builder) {
     super.buildSchemaForm(form, builder);
-    //    form.getField('fields').get('form').set({ sourceForm: this, builder });
+
     form
       .getField('fields')
       .get('form')
       .set({ builder });
+
+    // Monkey patch setValues so that we can dynamically set the fieldNames when validating the
+    // access
+    const origSetValues = form.setValues;
+    form.setValues = function(values) {
+      let fieldNames = [];
+      if (values.fields) {
+        values.fields.forEach(field => {
+          // Was a name specified? It may not have been if there is an error in the fields def
+          if (field.name) {
+            fieldNames.push(field.name);
+          }
+        });
+      }
+      form
+        .getField('access')
+        .getForm()
+        .set({ fieldNames });
+
+      origSetValues.apply(this, arguments);
+    };
   }
 }

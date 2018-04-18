@@ -38,10 +38,10 @@ class AccessNode extends Form {
 }
 
 class AccessFields extends Form {
-  _create(props) {
-    super._create(props);
-
-    if (props.fieldNames) {
+  set(props) {
+    super.set(props);
+    if (props.fieldNames !== undefined) {
+      this.removeFieldsExcept();
       props.fieldNames.forEach(fieldName => {
         this.addField(
           new FormField({
@@ -70,10 +70,17 @@ export default class FormAccess extends Form {
       new FormField({
         name: 'fields',
         label: 'Fields',
-        form: new AccessFields({
-          fieldNames: props ? props.fieldNames : undefined
-        })
+        form: new AccessFields()
       })
     );
+  }
+
+  set(props) {
+    super.set(props);
+    if (props.fieldNames !== undefined) {
+      this.getField('fields')
+        .getForm()
+        .set({ fieldNames: props.fieldNames });
+    }
   }
 }

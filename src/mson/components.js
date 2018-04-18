@@ -14,8 +14,10 @@ import EmailField from './fields/email-field.json';
 import Emit from './emit';
 import Field from './fields/field';
 import Form from './form';
+import FormAccess from './form-access';
 import FormField from './fields/form-field';
 import FormsField from './fields/forms-field';
+import FormValidator from './form-validator';
 import IntegerField from './fields/integer-field';
 import ListField from './fields/list-field';
 import Menu from './menu';
@@ -45,6 +47,7 @@ export default {
   Emit,
   Field,
   Form,
+  AccessForm: FormAccess,
   FormField,
   FormsField,
   IntegerField,
@@ -62,5 +65,6 @@ export default {
   SelectListField,
   Set,
   Snackbar,
-  TextField
+  TextField,
+  ValidatorForm: FormValidator
 };
