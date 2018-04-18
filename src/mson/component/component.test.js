@@ -1,8 +1,8 @@
 import Component from './component';
-import Action from './action';
-import testUtils from './test-utils';
-import Form from './form';
-import builder from './builder';
+import Action from '../action';
+import testUtils from '../test-utils';
+import Form from '../form';
+import builder from '../builder';
 
 class Song extends Component {
   _create(props) {

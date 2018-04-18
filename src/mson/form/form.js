@@ -3,7 +3,7 @@
 
 import Component from '../component';
 import _ from 'lodash';
-import Validator from '../validator';
+import Validator from '../component/validator';
 import Mapa from '../mapa';
 import IdField from '../fields/id-field';
 import ButtonField from '../fields/button-field';
