@@ -257,8 +257,20 @@ it('should validate schema', () => {
           create: 'role2'
         }
       }
-    }
-    // TODO: validators
+    },
+    validators: [
+      {
+        selector: {
+          name: {
+            value: 'F. Scott Fitzgerald'
+          }
+        },
+        error: {
+          field: 'name',
+          error: 'cannot be {{firstName.value}}'
+        }
+      }
+    ]
     // TODO: listeners
   });
 
@@ -278,7 +290,15 @@ it('should validate schema', () => {
           create: 'role2'
         }
       }
-    }
+    },
+    validators: [
+      {
+        error: {
+          field: 'name',
+          error: 'cannot be {{firstName.value}}'
+        }
+      }
+    ]
   });
 
   schemaForm.validate();
@@ -299,6 +319,15 @@ it('should validate schema', () => {
               error: 'required'
             }
           ]
+        }
+      ]
+    },
+    {
+      field: 'validators',
+      error: [
+        {
+          id: null,
+          error: [{ error: 'required', field: 'selector' }]
         }
       ]
     },
