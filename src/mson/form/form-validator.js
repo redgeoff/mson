@@ -1,7 +1,7 @@
 import Form from './form';
-import { TextField, FormField } from './fields';
+import { TextField, FormField } from '../fields';
 import sift from 'sift';
-import ObjectForm from './object-form';
+import ObjectForm from '../object-form';
 
 class ValidatorSelector extends ObjectForm {
   validate() {

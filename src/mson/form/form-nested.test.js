@@ -1,10 +1,10 @@
 // TODO: should we care strings pass for say IntegerField, FloatField, etc...?
 
 import Form from './form';
-import TextField from './fields/text-field';
-import FormsField from './fields/forms-field';
-import FormField from './fields/form-field';
-import ListField from './fields/list-field';
+import TextField from '../fields/text-field';
+import FormsField from '../fields/forms-field';
+import FormField from '../fields/form-field';
+import ListField from '../fields/list-field';
 
 const createForm = () => {
   const nameForm = new Form({

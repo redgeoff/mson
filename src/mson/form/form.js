@@ -1,12 +1,12 @@
 // TODO:
 //   - Refactor out setValues(), clearValues(), etc... and use set({ value: value }), etc...?
 
-import Component from './component';
+import Component from '../component';
 import _ from 'lodash';
-import Validator from './validator';
-import Mapa from './mapa';
-import IdField from './fields/id-field';
-import ButtonField from './fields/button-field';
+import Validator from '../validator';
+import Mapa from '../mapa';
+import IdField from '../fields/id-field';
+import ButtonField from '../fields/button-field';
 
 export default class Form extends Component {
   _formSetMSONSchema() {
