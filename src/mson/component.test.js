@@ -1,6 +1,8 @@
 import Component from './component';
 import Action from './action';
 import testUtils from './test-utils';
+import Form from './form';
+import builder from './builder';
 
 class Song extends Component {
   _create(props) {
@@ -38,7 +40,9 @@ it('should get', () => {
   expect(song.get('song')).toEqual("It Don't Mean a Thing");
   expect(song.get(['song'])).toEqual({ song: "It Don't Mean a Thing" });
   expect(song.get(['song', 'artist'])).toEqual(obj);
-  expect(song.get()).toEqual(obj);
+  expect(song.get()).toEqual(
+    Object.assign(obj, { schema: song.get('schema') })
+  );
 });
 
 it('should set name before creating', () => {
@@ -73,4 +77,25 @@ it('should execute listeners', async () => {
 
   expect(action1.acts).toEqual([{ event: 'song' }, { event: 'artist' }]);
   expect(action2.acts).toEqual([{ event: 'song' }]);
+});
+
+it('should concat schemas', () => {
+  const c = new Component({
+    schema: 'one'
+  });
+  c.set({ schema: 'two' });
+  c.set({ schema: 'three' });
+  expect(c.get('schema')).toEqual([
+    c._getComponentMSONSchema(),
+    'one',
+    'two',
+    'three'
+  ]);
+});
+
+it('should get schema form', () => {
+  const component = new Component();
+  const schemaForm = new Form();
+  component.buildSchemaForm(schemaForm, builder);
+  expect(schemaForm.hasField('name')).toEqual(true);
 });

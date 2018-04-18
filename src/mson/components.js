@@ -14,15 +14,21 @@ import EmailField from './fields/email-field.json';
 import Emit from './emit';
 import Field from './fields/field';
 import Form from './form';
+import FormAccess from './form-access';
+import FormField from './fields/form-field';
 import FormsField from './fields/forms-field';
+import FormValidator from './form-validator';
+import IntegerField from './fields/integer-field';
 import ListField from './fields/list-field';
 import Menu from './menu';
+import ObjectForm from './object-form';
 import PasswordField from './fields/password-field.json';
 import PersonNameField from './fields/person-name-field.json';
 import RecordEditor from './record-editor.json';
 import RecordEditorOld from './record-editor-old';
 import RecordEditorWithPreview from './record-editor-with-preview.json';
 import Redirect from './redirect';
+import SchemaValidatorForm from './schema-validator-form';
 import SelectField from './fields/select-field';
 import SelectListField from './fields/select-list-field';
 import Set from './set';
@@ -41,18 +47,24 @@ export default {
   Emit,
   Field,
   Form,
+  AccessForm: FormAccess,
+  FormField,
   FormsField,
+  IntegerField,
   ListField,
   Menu,
+  ObjectForm,
   PasswordField,
   PersonNameField,
   RecordEditor,
   RecordEditorOld,
   RecordEditorWithPreview,
   Redirect,
+  SchemaValidatorForm,
   SelectField,
   SelectListField,
   Set,
   Snackbar,
-  TextField
+  TextField,
+  ValidatorForm: FormValidator
 };

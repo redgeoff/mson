@@ -86,3 +86,18 @@ it('should report bad types', () => {
     expect(field.getErr()).toEqual([{ error: 'must be an array' }]);
   });
 });
+
+it('should allow scalar values', () => {
+  const field = new TextListField();
+
+  field.setValue('one');
+  field.validate();
+  expect(field.hasErr()).toEqual(true);
+  expect(field.getErr()).toEqual([{ error: 'must be an array' }]);
+
+  field.set({ allowScalar: true });
+  field.setValue('one');
+  field.validate();
+  expect(field.hasErr()).toEqual(false);
+  expect(field.getValue()).toEqual(['one']); // still an array
+});

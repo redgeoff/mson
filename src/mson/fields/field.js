@@ -8,6 +8,64 @@ export default class Field extends Component {
   _create(props) {
     super._create(props);
     this.set({ editable: true, block: true, out: true });
+
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'label',
+            component: 'TextField'
+          },
+          {
+            name: 'required',
+            // TODO: create a BooleanField and use
+            // component: 'BooleanField'
+            component: 'Field'
+          },
+          {
+            name: 'fullWidth',
+            component: 'Field'
+            // component: 'BooleanField'
+          },
+          // TODO: validators
+          {
+            name: 'hidden',
+            component: 'Field'
+            // component: 'BooleanField'
+          },
+          {
+            name: 'block',
+            component: 'Field'
+            // component: 'BooleanField'
+          },
+          {
+            name: 'disabled',
+            component: 'Field'
+            // component: 'BooleanField'
+          },
+          {
+            name: 'editable',
+            component: 'Field'
+            // component: 'BooleanField'
+          },
+          // {
+          //   name: 'dirty',
+          //   component: 'Field'
+          //   // component: 'BooleanField'
+          // },
+          {
+            name: 'help',
+            component: 'Field'
+          },
+          {
+            name: 'out',
+            component: 'Field'
+            // component: 'BooleanField'
+          }
+        ]
+      }
+    });
   }
 
   set(props) {
@@ -130,5 +188,14 @@ export default class Field extends Component {
 
   hasErr() {
     return this.get('err') ? true : false;
+  }
+
+  _validateWithRegExp(regExp, err) {
+    if (!this.isBlank()) {
+      const value = this.getValue();
+      if (!regExp.test(value)) {
+        this.setErr(err);
+      }
+    }
   }
 }

@@ -15,6 +15,34 @@ const getNextKey = () => {
 // - We attempted to require all access to all props via get() and set(), but this can cause
 //   infinite recursion, e.g. when a get() calls itself either directly or via some inherited logic.
 export default class Component extends events.EventEmitter {
+  _getComponentMSONSchema() {
+    return {
+      component: 'Form',
+      fields: [
+        {
+          // This field is just for the MSON definition
+          name: 'component',
+          component: 'TextField'
+          // required: true
+        },
+        {
+          name: 'name',
+          component: 'TextField',
+          required: true
+        },
+        // TODO: listeners
+        {
+          name: 'schema',
+          component: 'FormField',
+          form: {
+            // TODO: should there be a SchemaForm?
+            component: 'ObjectForm'
+          }
+        }
+      ]
+    };
+  }
+
   constructor(props) {
     super(props);
 
@@ -35,7 +63,13 @@ export default class Component extends events.EventEmitter {
     this._key = getNextKey();
   }
 
-  _create(/* props */) {}
+  _create(/* props */) {
+    // TODO: would it be better if the schema was loaded dynamically and on demand instead of
+    // whenever the component is created? In some ways we already have this the schema exists as
+    // simple objects until it instantiated. The problem with a lazy setting of the schema is how we
+    // would allow schemas to be defined via MSON.
+    this.set({ schema: this._getComponentMSONSchema() });
+  }
 
   _emitChange(name, value) {
     this.emit(name, value);
@@ -53,6 +87,15 @@ export default class Component extends events.EventEmitter {
       this['_' + name] = value;
       this._emitChange(name, value);
     }
+  }
+
+  _push(name, value) {
+    let values = this._get(name);
+    if (!Array.isArray(values)) {
+      values = [];
+    }
+    values.push(value);
+    this._set(name, values);
   }
 
   _setIfUndefinedProp(props, name) {
@@ -106,6 +149,11 @@ export default class Component extends events.EventEmitter {
     this._setName(props);
     this._setListeners(props);
     this._setPassed(props);
+
+    if (props.schema !== undefined) {
+      // Schemas are pushed that they can accumulate through the layers of inheritance
+      this._push('schema', props.schema);
+    }
   }
 
   _get(name) {
@@ -113,7 +161,6 @@ export default class Component extends events.EventEmitter {
     return this['_' + name] === undefined ? null : this['_' + name];
   }
 
-  // TODO: remove clone construct
   _getIfAllowed(name, ...allowedNames) {
     if (allowedNames.indexOf(name) !== -1) {
       return this._get(name);
@@ -121,7 +168,7 @@ export default class Component extends events.EventEmitter {
   }
 
   getOne(name) {
-    return this._getIfAllowed(name, 'name', 'listeners', 'passed');
+    return this._getIfAllowed(name, 'name', 'listeners', 'passed', 'schema');
   }
 
   get(names) {
@@ -195,6 +242,16 @@ export default class Component extends events.EventEmitter {
   _getFrom(component, name, propNames) {
     if (propNames.indexOf(name) !== -1) {
       return component.get(name);
+    }
+  }
+
+  buildSchemaForm(form, builder) {
+    const schemas = this.get('schema');
+    if (schemas) {
+      schemas.forEach(schema => {
+        const schemaForm = builder.newComponent(schema);
+        form.copyFields(schemaForm);
+      });
     }
   }
 }

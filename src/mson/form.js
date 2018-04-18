@@ -9,16 +9,61 @@ import IdField from './fields/id-field';
 import ButtonField from './fields/button-field';
 
 export default class Form extends Component {
+  _formSetMSONSchema() {
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'name',
+            component: 'TextField',
+            required: true
+          },
+          {
+            name: 'fields',
+            component: 'FormsField',
+            // required: true,
+            form: {
+              component: 'SchemaValidatorForm'
+            }
+          },
+          {
+            name: 'validators',
+            component: 'FormsField',
+            form: {
+              component: 'ValidatorForm'
+            }
+          },
+          {
+            name: 'access',
+            component: 'FormField',
+            form: {
+              component: 'AccessForm'
+            }
+          }
+        ]
+      }
+    });
+  }
+
   _create(props) {
     super._create(props);
     this._fields = new Mapa();
     this._validators = [];
     this._clearExtraErrors();
-    this._createDefaultFields();
+
+    if (!props || !props.omitDefaultFields) {
+      this._createDefaultFields();
+    }
 
     // TODO: default to false and enable a good way for this to be toggled by UI to allow for
     // real-time validation.
     this._set('autoValidate', true);
+
+    // Whether or not to report errors when an undefined (extra) field is specified
+    this._set('reportUndefined', true);
+
+    this._formSetMSONSchema();
   }
 
   _createDefaultFields() {
@@ -88,7 +133,8 @@ export default class Form extends Component {
       'dirty',
       'pristine',
       'access',
-      'autoValidate'
+      'autoValidate',
+      'reportUndefined'
     );
   }
 
@@ -149,7 +195,7 @@ export default class Form extends Component {
 
   removeFieldsExcept(names) {
     this._fields.each((field, name) => {
-      if (names.indexOf(name) === -1) {
+      if (names === undefined || names.indexOf(name) === -1) {
         this.removeField(name);
       }
     });
@@ -169,7 +215,8 @@ export default class Form extends Component {
       'dirty',
       'pristine',
       'access',
-      'autoValidate'
+      'autoValidate',
+      'reportUndefined'
     );
     return value === undefined ? super.getOne(name) : value;
   }
@@ -219,7 +266,7 @@ export default class Form extends Component {
       _.each(values, (value, name) => {
         if (this.hasField(name)) {
           this.getField(name).setValue(value);
-        } else {
+        } else if (this.get('reportUndefined')) {
           this._extraErrors.push({
             field: name,
             error: 'undefined field'
@@ -402,5 +449,43 @@ export default class Form extends Component {
       }
     });
     return isBlank;
+  }
+
+  eachField(onField) {
+    this._fields.each((field, name, last) => onField(field, name, last));
+  }
+
+  mapFields(onField) {
+    return this._fields.map((field, name, last) => onField(field, name, last));
+  }
+
+  buildSchemaForm(form, builder) {
+    super.buildSchemaForm(form, builder);
+
+    form
+      .getField('fields')
+      .get('form')
+      .set({ builder });
+
+    // Monkey patch setValues so that we can dynamically set the fieldNames when validating the
+    // access
+    const origSetValues = form.setValues;
+    form.setValues = function(values) {
+      let fieldNames = [];
+      if (values.fields) {
+        values.fields.forEach(field => {
+          // Was a name specified? It may not have been if there is an error in the fields def
+          if (field.name) {
+            fieldNames.push(field.name);
+          }
+        });
+      }
+      form
+        .getField('access')
+        .getForm()
+        .set({ fieldNames });
+
+      origSetValues.apply(this, arguments);
+    };
   }
 }

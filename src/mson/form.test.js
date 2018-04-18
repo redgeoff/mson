@@ -1,6 +1,7 @@
 import Form from './form';
 import TextField from './fields/text-field';
 import testUtils from './test-utils';
+import builder from './builder';
 
 const createForm = () => {
   return new Form({
@@ -221,5 +222,128 @@ it('should report extra fields', () => {
   expect(form.getErrs()).toEqual([
     { field: 'prefix', error: 'undefined field' },
     { field: 'suffix', error: 'undefined field' }
+  ]);
+});
+
+it('should validate schema', () => {
+  const form = new Form();
+  const schemaForm = new Form();
+  form.buildSchemaForm(schemaForm, builder);
+
+  schemaForm.setValues({
+    name: 'org.proj.Form',
+    component: 'Form',
+    fields: [
+      {
+        component: 'TextField',
+        name: 'name',
+        label: 'Name',
+        required: true,
+        help: 'Enter a full name'
+      },
+      {
+        component: 'EmailField',
+        name: 'email',
+        label: 'Email',
+        required: true
+      }
+    ],
+    access: {
+      form: {
+        create: 'role1'
+      },
+      fields: {
+        email: {
+          create: 'role2'
+        }
+      }
+    },
+    validators: [
+      {
+        selector: {
+          name: {
+            value: 'F. Scott Fitzgerald'
+          }
+        },
+        error: {
+          field: 'name',
+          error: 'cannot be {{firstName.value}}'
+        }
+      }
+    ]
+    // TODO: listeners
+  });
+
+  schemaForm.validate();
+  expect(schemaForm.hasErr()).toEqual(false);
+
+  schemaForm.setValues({
+    fields: [
+      {
+        component: 'TextField',
+        badProperty: 'name'
+      }
+    ],
+    access: {
+      fields: {
+        email: {
+          create: 'role2'
+        }
+      }
+    },
+    validators: [
+      {
+        error: {
+          field: 'name',
+          error: 'cannot be {{firstName.value}}'
+        }
+      }
+    ]
+  });
+
+  schemaForm.validate();
+  expect(schemaForm.hasErr()).toEqual(true);
+  expect(schemaForm.getErrs()).toEqual([
+    {
+      field: 'fields',
+      error: [
+        {
+          id: null,
+          error: [
+            {
+              field: 'badProperty',
+              error: 'undefined field'
+            },
+            {
+              field: 'name',
+              error: 'required'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      field: 'validators',
+      error: [
+        {
+          id: null,
+          error: [{ error: 'required', field: 'selector' }]
+        }
+      ]
+    },
+    {
+      field: 'access',
+      error: [
+        {
+          field: 'fields',
+          error: [
+            {
+              field: 'email',
+              error: 'undefined field'
+            }
+          ]
+        }
+      ]
+    }
   ]);
 });
