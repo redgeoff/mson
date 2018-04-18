@@ -3,15 +3,15 @@
 // - Names of user-defined fields should be in the form org.proj.ComponentName. They should not
 //   appear in this file though!
 
-import APIGet from './api-get';
-import APISet from './api-set';
+import APIGet from './actions/api-get';
+import APISet from './actions/api-set';
 import App from './app';
 import ButtonField from './fields/button-field';
 import ChainedSelectField from './fields/chained-select-field';
 import ChainedSelectListField from './fields/chained-select-list-field';
 import CompositeField from './fields/composite-field';
 import EmailField from './fields/email-field.json';
-import Emit from './emit';
+import Emit from './actions/emit';
 import Field from './fields/field';
 import Form from './form';
 import FormAccess from './form/form-access';
@@ -27,12 +27,12 @@ import PersonNameField from './fields/person-name-field.json';
 import RecordEditor from './record-editor.json';
 import RecordEditorOld from './record-editor-old';
 import RecordEditorWithPreview from './record-editor-with-preview.json';
-import Redirect from './redirect';
+import Redirect from './actions/redirect';
 import SchemaValidatorForm from './form/schema-validator-form';
 import SelectField from './fields/select-field';
 import SelectListField from './fields/select-list-field';
-import Set from './set';
-import Snackbar from './snackbar';
+import Set from './actions/set';
+import Snackbar from './actions/snackbar';
 import TextField from './fields/text-field';
 
 export default {

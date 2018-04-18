@@ -1,4 +1,4 @@
-import Component from './component';
+import Component from '../component';
 import sift from 'sift';
 
 export default class Action extends Component {

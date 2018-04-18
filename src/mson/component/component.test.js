@@ -1,5 +1,5 @@
 import Component from './component';
-import Action from '../action';
+import Action from '../actions/action';
 import testUtils from '../test-utils';
 import Form from '../form';
 import builder from '../builder';
