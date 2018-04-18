@@ -1,8 +1,24 @@
 import React from 'react';
 import Field from './fields/field';
-// import FlexBreak from './flex-break'; // TODO: remove
 
 export default class Form extends React.Component {
+  // Enable automatic validation whenever a user changes data. This feature allows the user to see
+  // errors in real-time.
+  turnOnAutoValidate(form) {
+    form.set({ autoValidate: true });
+  }
+
+  constructor(props) {
+    super(props);
+    this.turnOnAutoValidate(props.form);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.form) {
+      this.turnOnAutoValidate(nextProps.form);
+    }
+  }
+
   handleSave = event => {
     // Stop the form from refreshing the page. We can't rely on the default functionality as there
     // may be form errors that need to stop the form from submitting.
@@ -26,14 +42,9 @@ export default class Form extends React.Component {
     const key = form.getKey();
 
     const flds = fields.map((field, index) => {
-      // Append with FlexBreak after field for newline. In the future we may want this to be
-      // configurable
       return (
         <span key={key + '_' + index}>
           <Field field={field} />
-          {/* TODO: remove
-          <FlexBreak />
-*/}
         </span>
       );
     });

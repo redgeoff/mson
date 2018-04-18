@@ -347,3 +347,27 @@ it('should validate schema', () => {
     }
   ]);
 });
+
+it('should auto validate', () => {
+  const form = createForm();
+  const spy = jest.spyOn(form, 'validate');
+
+  // Auto validate should be off by default as it incurs a lot of extra overhead
+  form.setValues({
+    firstName: 'Ella'
+  });
+  form.getField('lastName').setValue('Fitzgerald');
+  expect(spy).toHaveBeenCalledTimes(0);
+  expect(form.hasErr()).toEqual(false);
+
+  // Turn on autoValidate, e.g. as would be done in the UI
+  form.set({ autoValidate: true });
+  form.getField('lastName').setValue('Fitz');
+  expect(spy).toHaveBeenCalledTimes(1);
+  expect(form.getErrs()).toEqual([
+    {
+      field: 'middleName',
+      error: 'required'
+    }
+  ]);
+});

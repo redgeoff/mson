@@ -56,9 +56,9 @@ export default class Form extends Component {
       this._createDefaultFields();
     }
 
-    // TODO: default to false and enable a good way for this to be toggled by UI to allow for
-    // real-time validation.
-    this._set('autoValidate', true);
+    // We default this to false as otherwise there is a lot of extra overhead incurred whenever we
+    // set a value-especially when setting values at the top-most component.
+    this._set('autoValidate', false);
 
     // Whether or not to report errors when an undefined (extra) field is specified
     this._set('reportUndefined', true);
