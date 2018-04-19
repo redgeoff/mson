@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "events": "^2.0.0",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.0",
@@ -24,7 +25,6 @@
       "git add"
     ]
   },
-
   "scripts": {
     "lint": "eslint src",
     "precommit": "lint-staged",
