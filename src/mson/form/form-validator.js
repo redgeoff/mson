@@ -1,5 +1,6 @@
 import Form from './form';
-import { TextField, FormField } from '../fields';
+import TextField from '../fields/text-field';
+import FormField from '../fields/form-field';
 import sift from 'sift';
 import ObjectForm from '../object-form';
 
