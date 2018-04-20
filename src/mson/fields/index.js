@@ -8,7 +8,6 @@ import ListField from './list-field';
 import PersonNameFieldJSON from './person-name-field.json';
 import SelectField from './select-field';
 import TextField from './text-field';
-import _ from 'lodash';
 
 // TODO: is this too inefficient? Does it block the loading thread to build? YUP! How much time is
 // actually wasted compiling these components? Is there a better way to compile these core JSON
