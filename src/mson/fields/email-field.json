@@ -10,7 +10,7 @@
           }
         }
       },
-      "error": "invalid"
+      "error": "invalid email"
     }
   ]
 }
