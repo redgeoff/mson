@@ -4,13 +4,11 @@ import User from './user';
 
 const user = new User(clientTestUtils.client);
 
-// it('should log in', async () => {
-const foo = async () => {
+it('should log in', async () => {
   const r = await user.logIn({
     username: config.server.superuser.username,
     password: config.server.superuser.password
   });
-  console.log('r=', JSON.stringify(r));
-};
-foo();
-// });
+  expect(r.data.logIn.token).toBeTruthy();
+  expect(r.data.logIn.user.username).toEqual(config.server.superuser.username);
+});
