@@ -1,0 +1,9 @@
+{
+  "server": {
+    "url": "http://node.dev:4000/graphql",
+    "superuser": {
+      "username": "root@example.com",
+      "password": "root"
+    }
+  }
+}
