@@ -488,4 +488,8 @@ export default class Form extends Component {
       origSetValues.apply(this, arguments);
     };
   }
+
+  getValue(fieldName) {
+    return this.getField(fieldName).getValue();
+  }
 }
