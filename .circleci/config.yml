@@ -15,6 +15,8 @@ jobs:
           MYSQL_ROOT_HOST: '%'
       - image: redis
     steps:
+      - run: echo 127.0.0.1 node.dev | sudo tee -a /etc/hosts
+
       - checkout
       - restore_cache:
           keys:
