@@ -10,6 +10,7 @@ jobs:
         environment:
           MYSQL_ROOT_PASSWORD: secret
           MYSQL_ROOT_HOST: '%'
+      - image: redis
     steps:
       - checkout
       - restore_cache:
