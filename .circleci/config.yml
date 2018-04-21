@@ -2,19 +2,43 @@ version: 2
 
 jobs:
   build:
+    # Change working directory so that mson-server scripts have reference back to mson
+    working_directory: ~/mson
+
     docker:
       - image: circleci/node:8.9.4-stretch-browsers
+
+      # Fix MySQL at version 5.7 so that it is compatible with AWS Aurora
+      - image: circleci/mysql:5.7
+        environment:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_ROOT_HOST: '%'
+      - image: redis
     steps:
+      - run: echo 127.0.0.1 node.dev | sudo tee -a /etc/hosts
+
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
+          - dependencies-{{ checksum "package.json" }}
+          - dependencies-
       - run: yarn install
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: dependencies-{{ checksum "package.json" }}
+
+      # Download private dependencies
+      - run: git clone ssh://git@bitbucket.org/redgeoff/mson-server ../mson-server
+      - restore_cache:
+          keys:
+          - mson-server-dependencies-{{ checksum "package.json" }}
+          - mson-server-dependencies-
+      - run: cd ../mson-server && yarn install
+      - save_cache:
+          paths:
+            - ../mson-server/node_modules
+          key: mson-server-dependencies-{{ checksum "package.json" }}
 
       # TODO: require 100% coverage
       - run: CI=true && yarn test
