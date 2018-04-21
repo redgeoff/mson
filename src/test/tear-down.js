@@ -1,6 +1,6 @@
 // TODO: use jest's globalSetup and globalTeardown when it is included in react-scripts
 
-import clientTestUtils from '../mson/client/test-utils';
+import clientTestUtils from '../../../mson-server/src/client/test-utils';
 
 const tearDown = async () => {
   await clientTestUtils.tearDown();
