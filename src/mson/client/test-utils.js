@@ -21,7 +21,6 @@ class Utils {
       cache: new InMemoryCache()
     });
 
-    // TODO: specify prefix and url in config
     this._server = new Server({
       prefix: config.server.prefix,
       url: config.server.sql.url,
