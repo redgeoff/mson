@@ -15,6 +15,7 @@ import TextField from './text-field';
 // build EmailField/PersonNameField so maybe the delay is insignificant.
 const EmailField = builder.getComponent('EmailField');
 const PersonNameField = builder.getComponent('PersonNameField');
+const PasswordField = builder.getComponent('PasswordField');
 
 // let fields = {
 export {
@@ -24,6 +25,7 @@ export {
   FormsField,
   IntegerField,
   ListField,
+  PasswordField,
   PersonNameField,
   SelectField,
   TextField
