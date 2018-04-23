@@ -27,6 +27,10 @@ class Utils {
   merge(object, sources) {
     return _.mergeWith(object, sources, this._mergeCustomizer);
   }
+
+  inBrowser() {
+    return !!global.window;
+  }
 }
 
 export default new Utils();
