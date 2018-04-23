@@ -2,6 +2,7 @@ import builder from '../builder';
 import Field from './field';
 import FormField from './form-field';
 import FormsField from './forms-field';
+import IdField from './id-field';
 import IntegerField from './integer-field';
 import ListField from './list-field';
 import SelectField from './select-field';
@@ -23,6 +24,7 @@ export {
   Field,
   FormField,
   FormsField,
+  IdField,
   IntegerField,
   ListField,
   PasswordField,
