@@ -1,5 +1,6 @@
 import ListField from './list-field';
 import TextField from './text-field';
+import testUtils from '../test-utils';
 
 class TextListField extends ListField {
   _newField(index) {
@@ -63,28 +64,13 @@ it('should allow for field property', () => {
 it('should report bad types', () => {
   const field = new TextListField();
 
-  const validValues = [['one'], [], null];
+  testUtils.expectValuesToBeValid(field, [['one'], [], null]);
 
-  validValues.forEach(value => {
-    field.setValue(value);
-    field.validate();
-    expect(field.hasErr()).toEqual(false);
-  });
-
-  const invalidValues = [
-    { foo: 'must not be object' },
-    false,
-    1,
-    1.0,
-    'must not be string'
-  ];
-
-  invalidValues.forEach(value => {
-    field.setValue(value);
-    field.validate();
-    expect(field.hasErr()).toEqual(true);
-    expect(field.getErr()).toEqual([{ error: 'must be an array' }]);
-  });
+  testUtils.expectValuesToBeInvalid(
+    field,
+    [{ foo: 'must not be object' }, false, 1, 1.0, 'must not be string'],
+    [{ error: 'must be an array' }]
+  );
 });
 
 it('should allow scalar values', () => {

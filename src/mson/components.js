@@ -21,6 +21,7 @@ import FormValidator from './form/form-validator';
 import IntegerField from './fields/integer-field';
 import ListField from './fields/list-field';
 import Menu from './menu';
+import NumberField from './fields/number-field';
 import ObjectForm from './object-form';
 import PasswordField from './fields/password-field.json';
 import PersonNameField from './fields/person-name-field.json';
@@ -53,6 +54,7 @@ export default {
   IntegerField,
   ListField,
   Menu,
+  NumberField,
   ObjectForm,
   PasswordField,
   PersonNameField,

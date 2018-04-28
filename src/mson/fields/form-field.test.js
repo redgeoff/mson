@@ -2,6 +2,7 @@ import FormField from './form-field';
 import Form from '../form';
 import TextField from './text-field';
 import _ from 'lodash';
+import testUtils from '../test-utils';
 
 const createField = () => {
   return new FormField({
@@ -95,33 +96,18 @@ it('should clear errors for nested form', () => {
 it('should report bad types', () => {
   const field = createField();
 
-  const validValues = [
+  testUtils.expectValuesToBeValid(field, [
     {
       firstName: 'Stevie',
       lastName: 'Wonder'
     },
     {},
     null
-  ];
+  ]);
 
-  validValues.forEach(value => {
-    field.setValue(value);
-    field.validate();
-    expect(field.hasErr()).toEqual(false);
-  });
-
-  const invalidValues = [
-    ['must not be array'],
-    false,
-    1,
-    1.0,
-    'must not be string'
-  ];
-
-  invalidValues.forEach(value => {
-    field.setValue(value);
-    field.validate();
-    expect(field.hasErr()).toEqual(true);
-    expect(field.getErr()).toEqual([{ error: 'must be an object' }]);
-  });
+  testUtils.expectValuesToBeInvalid(
+    field,
+    [['must not be array'], false, 1, 1.0, 'must not be string'],
+    [{ error: 'must be an object' }]
+  );
 });

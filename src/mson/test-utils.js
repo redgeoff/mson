@@ -1,3 +1,5 @@
+// TODO: move to ../test and rename to just utils.js
+
 class TestUtils {
   once(emitter, evnt) {
     return new Promise(function(resolve) {
@@ -43,6 +45,35 @@ class TestUtils {
 
       waitFor();
     });
+  }
+
+  _expectValuesToHaveErr(field, values, haveErr, err) {
+    values.forEach(value => {
+      field.clearErr();
+      field.setValue(value);
+      field.validate();
+
+      // Use object in expect so that errors are easy to immediately see
+      expect({
+        value,
+        hasErr: field.hasErr()
+      }).toEqual({
+        value,
+        hasErr: haveErr
+      });
+
+      if (err) {
+        expect(field.getErr()).toEqual(err);
+      }
+    });
+  }
+
+  expectValuesToBeValid(field, validValues) {
+    this._expectValuesToHaveErr(field, validValues, false);
+  }
+
+  expectValuesToBeInvalid(field, invalidValues, err) {
+    this._expectValuesToHaveErr(field, invalidValues, true, err);
   }
 }
 

@@ -148,7 +148,7 @@ it('should bubble up properties', async () => {
 it('should report bad types', () => {
   const field = createField();
 
-  const validValues = [
+  testUtils.expectValuesToBeValid(field, [
     [
       {
         firstName: 'Stevie',
@@ -157,29 +157,20 @@ it('should report bad types', () => {
     ],
     [],
     null
-  ];
+  ]);
 
-  validValues.forEach(value => {
-    field.setValue(value);
-    field.validate();
-    expect(field.hasErr()).toEqual(false);
-  });
-
-  const invalidValues = [
-    {
-      foo: 'must not be object'
-    },
-    ['must not be array'],
-    false,
-    1,
-    1.0,
-    'must not be string'
-  ];
-
-  invalidValues.forEach(value => {
-    field.setValue(value);
-    field.validate();
-    expect(field.hasErr()).toEqual(true);
-    expect(field.getErr()).toEqual([{ error: 'must be an array of objects' }]);
-  });
+  testUtils.expectValuesToBeInvalid(
+    field,
+    [
+      {
+        foo: 'must not be object'
+      },
+      ['must not be array'],
+      false,
+      1,
+      1.0,
+      'must not be string'
+    ],
+    [{ error: 'must be an array of objects' }]
+  );
 });

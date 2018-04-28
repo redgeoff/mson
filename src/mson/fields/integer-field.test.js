@@ -1,18 +1,12 @@
 import IntegerField from './integer-field';
+import testUtils from '../test-utils';
 
 it('should validate', () => {
   const field = new IntegerField();
 
-  const validValues = ['111', '-111', '+111', '0'];
+  testUtils.expectValuesToBeValid(field, ['111', '-111', '+111', '0']);
 
-  validValues.forEach(value => {
-    field.clearErr();
-    field.setValue(value);
-    field.validate();
-    expect(field.hasErr()).toEqual(false);
-  });
-
-  const invalidValues = [
+  testUtils.expectValuesToBeInvalid(field, [
     'aaa111',
     '111aaa',
     '123-',
@@ -20,12 +14,5 @@ it('should validate', () => {
     '1.1',
     '+',
     '0123'
-  ];
-
-  invalidValues.forEach(value => {
-    field.clearErr();
-    field.setValue(value);
-    field.validate();
-    expect(field.hasErr()).toEqual(true);
-  });
+  ]);
 });
