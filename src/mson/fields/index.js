@@ -5,6 +5,7 @@ import FormsField from './forms-field';
 import IdField from './id-field';
 import IntegerField from './integer-field';
 import ListField from './list-field';
+import NumberField from './number-field';
 import SelectField from './select-field';
 import TextField from './text-field';
 
@@ -27,6 +28,7 @@ export {
   IdField,
   IntegerField,
   ListField,
+  NumberField,
   PasswordField,
   PersonNameField,
   SelectField,

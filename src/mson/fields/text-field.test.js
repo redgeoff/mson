@@ -2,6 +2,7 @@ import TextField from './text-field';
 import fieldTester from './field-tester';
 import Form from '../form';
 import builder from '../builder';
+import testUtils from '../test-utils';
 
 fieldTester.shouldAll({ Field: TextField, exampleValue: 'foo' });
 
@@ -36,30 +37,21 @@ it('should validate min length', () => {
 it('should report bad types', () => {
   const field = new TextField();
 
-  const validValues = ['Valid string', null];
+  testUtils.expectValuesToBeValid(field, ['Valid string', null]);
 
-  validValues.forEach(value => {
-    field.setValue(value);
-    field.validate();
-    expect(field.hasErr()).toEqual(false);
-  });
-
-  const invalidValues = [
-    {
-      foo: 'must not be object'
-    },
-    ['must not be array'],
-    false,
-    1,
-    1.0
-  ];
-
-  invalidValues.forEach(value => {
-    field.setValue(value);
-    field.validate();
-    expect(field.hasErr()).toEqual(true);
-    expect(field.getErr()).toEqual('must be a string');
-  });
+  testUtils.expectValuesToBeInvalid(
+    field,
+    [
+      {
+        foo: 'must not be object'
+      },
+      ['must not be array'],
+      false,
+      1,
+      1.0
+    ],
+    'must be a string'
+  );
 });
 
 it('should get schema form', () => {
