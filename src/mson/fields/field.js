@@ -168,7 +168,11 @@ export default class Field extends Component {
   validate() {
     if (this._required && this.isBlank()) {
       this.setErr('required');
-    } else if (this._validators && this._validators.length > 0) {
+    } else if (
+      !this.isBlank() &&
+      this._validators &&
+      this._validators.length > 0
+    ) {
       const validator = new Validator(this._toValidatorProps());
       const errors = validator.validate(this._validators);
       if (errors.length !== 0) {
