@@ -459,13 +459,13 @@ export default class Form extends Component {
     return this._fields.map((field, name, last) => onField(field, name, last));
   }
 
-  buildSchemaForm(form, builder) {
-    super.buildSchemaForm(form, builder);
+  buildSchemaForm(form, compiler) {
+    super.buildSchemaForm(form, compiler);
 
     form
       .getField('fields')
       .get('form')
-      .set({ builder });
+      .set({ compiler });
 
     // Monkey patch setValues so that we can dynamically set the fieldNames when validating the
     // access

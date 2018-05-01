@@ -245,11 +245,11 @@ export default class Component extends events.EventEmitter {
     }
   }
 
-  buildSchemaForm(form, builder) {
+  buildSchemaForm(form, compiler) {
     const schemas = this.get('schema');
     if (schemas) {
       schemas.forEach(schema => {
-        const schemaForm = builder.newComponent(schema);
+        const schemaForm = compiler.newComponent(schema);
         form.copyFields(schemaForm);
       });
     }

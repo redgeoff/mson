@@ -16,7 +16,7 @@ import _ from 'lodash';
 import utils from '../utils';
 import PropFiller from './prop-filler';
 
-class Builder {
+class compiler {
   // // We keep this separate from components so that we have a way of referencing MSON components
   // // after the components have been built. Moreover, this construct doesn't require any special
   // // organization in the components object.
@@ -202,4 +202,4 @@ class Builder {
   }
 }
 
-export default new Builder();
+export default new compiler();

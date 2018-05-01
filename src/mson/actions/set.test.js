@@ -2,11 +2,11 @@ import Set from './set';
 import Form from '../form';
 import ButtonField from '../fields/button-field';
 import testUtils from '../test-utils';
-import builder from '../builder';
+import compiler from '../compiler';
 
 const createFields = () => {
   return [
-    builder.newComponent({
+    compiler.newComponent({
       component: 'PersonNameField',
       name: 'name'
     }),

@@ -1,6 +1,6 @@
 import React from 'react';
 import components from '../components';
-import builder from '../../mson/builder';
+import compiler from '../../mson/compiler';
 import attach from '../attach';
 import FlexBreak from '../flex-break';
 
@@ -18,7 +18,7 @@ class Field extends React.Component {
       if (!Field) {
         // The React component wasn't found so check the MSON layer to see if we can automatically
         // determine the component from any MSON.
-        let ext = builder.getOldestNonMSONAncestor(name);
+        let ext = compiler.getOldestNonMSONAncestor(name);
         Field = components[ext];
       }
 

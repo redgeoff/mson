@@ -1,7 +1,7 @@
 import Form from './form';
 import TextField from '../fields/text-field';
 import testUtils from '../test-utils';
-import builder from '../builder';
+import compiler from '../compiler';
 
 const createForm = () => {
   return new Form({
@@ -228,7 +228,7 @@ it('should report extra fields', () => {
 it('should validate schema', () => {
   const form = new Form();
   const schemaForm = new Form();
-  form.buildSchemaForm(schemaForm, builder);
+  form.buildSchemaForm(schemaForm, compiler);
 
   schemaForm.setValues({
     name: 'org.proj.Form',

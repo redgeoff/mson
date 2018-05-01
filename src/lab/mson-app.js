@@ -1,6 +1,6 @@
-import builder from '../mson/builder';
+import compiler from '../mson/compiler';
 
-builder.registerComponent('org.proj.Employee', {
+compiler.registerComponent('org.proj.Employee', {
   component: 'Form',
   fields: [
     {
@@ -19,7 +19,7 @@ builder.registerComponent('org.proj.Employee', {
   ]
 });
 
-builder.registerComponent('org.proj.Account', {
+compiler.registerComponent('org.proj.Account', {
   component: 'Form',
   fields: [
     {
@@ -49,7 +49,7 @@ builder.registerComponent('org.proj.Account', {
   ]
 });
 
-// builder.registerComponent('org.proj.ChangePassword', {
+// compiler.registerComponent('org.proj.ChangePassword', {
 //   component: 'RecordEditorOld',
 //   form: {
 //     component: 'Form',
@@ -140,7 +140,7 @@ builder.registerComponent('org.proj.Account', {
 // });
 
 // TODO: should be able to inline in ChangePassword
-builder.registerComponent('org.proj.ChangePasswordForm', {
+compiler.registerComponent('org.proj.ChangePasswordForm', {
   component: 'Form',
   fields: [
     {
@@ -173,7 +173,7 @@ builder.registerComponent('org.proj.ChangePasswordForm', {
   ]
 });
 
-builder.registerComponent('org.proj.ChangePassword', {
+compiler.registerComponent('org.proj.ChangePassword', {
   component: 'RecordEditor',
   baseForm: 'org.proj.ChangePasswordForm',
   label: 'Password',
@@ -185,7 +185,7 @@ builder.registerComponent('org.proj.ChangePassword', {
 });
 
 // TODO: should be able to define this in ViewAccount if wanted
-builder.registerComponent('org.proj.ViewAccountForm', {
+compiler.registerComponent('org.proj.ViewAccountForm', {
   name: 'org.proj.ViewAccountForm',
   component: 'org.proj.Account',
   fields: [
@@ -204,7 +204,7 @@ builder.registerComponent('org.proj.ViewAccountForm', {
   ]
 });
 
-builder.registerComponent('org.proj.ViewAccount', {
+compiler.registerComponent('org.proj.ViewAccount', {
   component: 'org.proj.ViewAccountForm',
   listeners: [
     {
@@ -254,7 +254,7 @@ builder.registerComponent('org.proj.ViewAccount', {
   ]
 });
 
-builder.registerComponent('org.proj.EditAccount', {
+compiler.registerComponent('org.proj.EditAccount', {
   component: 'RecordEditor',
   baseForm: 'org.proj.Account',
   label: 'Account',
@@ -265,7 +265,7 @@ builder.registerComponent('org.proj.EditAccount', {
   cancelURL: '/account/view'
 });
 
-builder.registerComponent('org.proj.ViewAndEditAccount', {
+compiler.registerComponent('org.proj.ViewAndEditAccount', {
   component: 'RecordEditorWithPreview',
   baseForm: 'org.proj.Account',
   label: 'Account',
@@ -348,7 +348,7 @@ const menuItems = [
   }
 ];
 
-const app = builder.newComponent({
+const app = compiler.newComponent({
   component: 'App',
   menu: {
     component: 'Menu',

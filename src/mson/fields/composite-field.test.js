@@ -1,6 +1,6 @@
 import CompositeField from './composite-field';
 import TextField from './text-field';
-import builder from '../builder';
+import compiler from '../compiler';
 import fieldTester from './field-tester';
 
 const createField = () => {
@@ -14,7 +14,7 @@ const createField = () => {
 };
 
 // Yes, PersonNameField exists but we recreate it to test more functionality
-builder.registerComponent('org.proj.PersonNameField', {
+compiler.registerComponent('org.proj.PersonNameField', {
   component: 'CompositeField',
   fields: [
     {
@@ -33,7 +33,7 @@ builder.registerComponent('org.proj.PersonNameField', {
 });
 
 fieldTester.shouldAll({
-  Field: builder.getComponent('org.proj.PersonNameField'),
+  Field: compiler.getComponent('org.proj.PersonNameField'),
   exampleValue: {
     firstName: 'Frank',
     lastName: 'Sinatra'

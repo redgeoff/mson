@@ -1,4 +1,4 @@
-import builder from '../builder';
+import compiler from '../compiler';
 import Field from './field';
 import FormField from './form-field';
 import FormsField from './forms-field';
@@ -15,9 +15,9 @@ import TextField from './text-field';
 // can't really do this for the core components. **Is there a way to build the component in the
 // _create() of the component so that it is done on demand**? Benchmarking: took 0-1 milliseconds to
 // build EmailField/PersonNameField so maybe the delay is insignificant.
-const EmailField = builder.getComponent('EmailField');
-const PersonNameField = builder.getComponent('PersonNameField');
-const PasswordField = builder.getComponent('PasswordField');
+const EmailField = compiler.getComponent('EmailField');
+const PersonNameField = compiler.getComponent('PersonNameField');
+const PasswordField = compiler.getComponent('PasswordField');
 
 // let fields = {
 export {
