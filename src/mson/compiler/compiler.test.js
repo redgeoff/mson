@@ -1,9 +1,9 @@
-import builder from './builder';
+import compiler from './compiler';
 import globals from '../globals';
 import testUtils from '../test-utils';
 
 beforeAll(() => {
-  builder.registerComponent('org.proj.Account', {
+  compiler.registerComponent('org.proj.Account', {
     component: 'Form',
     fields: [
       {
@@ -23,7 +23,7 @@ beforeAll(() => {
   });
 
   // Inheritance
-  builder.registerComponent('org.proj.EditAccount', {
+  compiler.registerComponent('org.proj.EditAccount', {
     component: 'org.proj.Account',
     fields: [
       {
@@ -40,12 +40,12 @@ beforeAll(() => {
   });
 
   // Dynamic inheritance
-  builder.registerComponent('org.proj.EditThing', {
+  compiler.registerComponent('org.proj.EditThing', {
     component: '{{thing}}'
   });
 
   // Dynamic nested inheritance
-  builder.registerComponent('org.proj.EditNestedThing', {
+  compiler.registerComponent('org.proj.EditNestedThing', {
     component: 'Form',
     thing: '{{thing}}', // Passes thing to form
     form: {
@@ -61,21 +61,21 @@ beforeAll(() => {
   });
 
   // Dynamic nested inheritance in registration
-  builder.registerComponent('org.proj.EditNestedRegistrationThing', {
+  compiler.registerComponent('org.proj.EditNestedRegistrationThing', {
     thing: 'org.proj.EditAccount',
     component: 'org.proj.EditNestedThing'
   });
 
-  builder.registerComponent('org.proj.EditAccount1', {
+  compiler.registerComponent('org.proj.EditAccount1', {
     component: 'org.proj.EditAccount'
   });
 
-  builder.registerComponent('org.proj.EditAccount2', {
+  compiler.registerComponent('org.proj.EditAccount2', {
     component: 'org.proj.EditAccount'
   });
 
   // Template parameters in listeners
-  builder.registerComponent('org.proj.TemplatedListeners', {
+  compiler.registerComponent('org.proj.TemplatedListeners', {
     component: 'Form',
     listeners: [
       {
@@ -95,32 +95,32 @@ beforeAll(() => {
 });
 
 afterAll(() => {
-  builder.deregisterComponent('org.proj.EditAccount');
-  builder.deregisterComponent('org.proj.Account');
-  builder.deregisterComponent('org.proj.EditThing');
-  builder.deregisterComponent('org.proj.EditNestedThing');
-  builder.deregisterComponent('org.proj.EditNestedRegistrationThing');
-  builder.deregisterComponent('org.proj.EditAccount1');
-  builder.deregisterComponent('org.proj.EditAccount2');
-  builder.deregisterComponent('org.proj.TemplatedListeners');
+  compiler.deregisterComponent('org.proj.EditAccount');
+  compiler.deregisterComponent('org.proj.Account');
+  compiler.deregisterComponent('org.proj.EditThing');
+  compiler.deregisterComponent('org.proj.EditNestedThing');
+  compiler.deregisterComponent('org.proj.EditNestedRegistrationThing');
+  compiler.deregisterComponent('org.proj.EditAccount1');
+  compiler.deregisterComponent('org.proj.EditAccount2');
+  compiler.deregisterComponent('org.proj.TemplatedListeners');
 });
 
 it('should build & destroy', () => {
-  const account = builder.newComponent({
+  const account = compiler.newComponent({
     component: 'org.proj.Account'
   });
   expect(account._fields.length()).toEqual(3);
 });
 
 it('should implement inheritance', () => {
-  const account = builder.newComponent({
+  const account = compiler.newComponent({
     component: 'org.proj.EditAccount'
   });
   expect(account._fields.length()).toEqual(5);
 });
 
 it('should implement dynamic inheritance', () => {
-  const thing1 = builder.newComponent({
+  const thing1 = compiler.newComponent({
     thing: 'org.proj.EditAccount',
     component: 'org.proj.EditThing'
   });
@@ -128,7 +128,7 @@ it('should implement dynamic inheritance', () => {
 
   // We test with 2 dynamic inheritance back to back to make sure that we haven't cached any
   // previous component building.
-  const thing2 = builder.newComponent({
+  const thing2 = compiler.newComponent({
     thing: 'org.proj.Account',
     component: 'org.proj.EditThing'
   });
@@ -136,7 +136,7 @@ it('should implement dynamic inheritance', () => {
 });
 
 it('should implement dynamic nested inheritance', () => {
-  const thing = builder.newComponent({
+  const thing = compiler.newComponent({
     thing: 'org.proj.EditAccount',
     component: 'org.proj.EditNestedThing'
   });
@@ -144,18 +144,18 @@ it('should implement dynamic nested inheritance', () => {
 });
 
 it('should implement dynamic nested inheritance in registration', () => {
-  const thing = builder.newComponent({
+  const thing = compiler.newComponent({
     component: 'org.proj.EditNestedRegistrationThing'
   });
   expect(thing._fields.length()).toEqual(6);
 });
 
 it('should not share components', () => {
-  const account1 = builder.newComponent({
+  const account1 = compiler.newComponent({
     component: 'org.proj.EditAccount1'
   });
 
-  const account2 = builder.newComponent({
+  const account2 = compiler.newComponent({
     component: 'org.proj.EditAccount2'
   });
 
@@ -168,7 +168,7 @@ it('should not share components', () => {
 
 it('should support template parameters in listeners', async () => {
   const snackbarDisplayed = testUtils.once(globals, 'displaySnackbar');
-  builder.newComponent({
+  compiler.newComponent({
     component: 'org.proj.TemplatedListeners',
     foo: 'bar'
   });

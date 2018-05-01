@@ -1,10 +1,10 @@
 import SchemaValidatorForm from './schema-validator-form';
-import builder from '../builder';
+import compiler from '../compiler';
 import _ from 'lodash';
 
 it('should not mutate values when setting', () => {
   const form = new SchemaValidatorForm();
-  form.set({ builder });
+  form.set({ compiler });
 
   const values = {
     name: 'firstName',

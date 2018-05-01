@@ -1,6 +1,6 @@
 import React from 'react';
 import components from './components';
-import builder from '../mson/builder';
+import compiler from '../mson/compiler';
 import Form from '../mson/form';
 
 export default class Component extends React.Component {
@@ -12,7 +12,7 @@ export default class Component extends React.Component {
     if (!Component) {
       // The React component wasn't found so check the MSON layer to see if we can automatically
       // determine the component from any MSON.
-      let ext = builder.getOldestNonMSONAncestor(name);
+      let ext = compiler.getOldestNonMSONAncestor(name);
       Component = components[ext];
     }
 

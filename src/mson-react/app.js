@@ -13,7 +13,7 @@ import Menu from './menu';
 import SearchBar from './search-bar';
 import { Switch, Route } from 'react-router-dom';
 import Component from './component';
-// import builder from '../mson/builder';
+// import compiler from '../mson/compiler';
 import { withRouter } from 'react-router';
 import attach from './attach';
 import globals from '../mson/globals';
@@ -189,7 +189,7 @@ class App extends React.Component {
     if (menuItem !== this.state.menuItem) {
       if (menuItem && menuItem.content) {
         // Instantiate form
-        // this.component = builder.newComponent(menuItem.content.component);
+        // this.component = compiler.newComponent(menuItem.content.component);
         this.component = menuItem.content;
 
         // Emit a load event so that the component can load any initial data, etc...
