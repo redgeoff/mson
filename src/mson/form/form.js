@@ -201,6 +201,14 @@ export default class Form extends Component {
     });
   }
 
+  removeBlankFields() {
+    this._fields.each((field, name) => {
+      if (field.isBlank()) {
+        this.removeField(name);
+      }
+    });
+  }
+
   getOne(name) {
     if (name === 'value') {
       return this.getValues();
