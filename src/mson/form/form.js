@@ -242,10 +242,11 @@ export default class Form extends Component {
     return this._fields.has(name);
   }
 
-  getValues() {
+  getValues(props) {
     let values = {};
+    props = props ? props : {};
     this._fields.each(field => {
-      if (field.get('out')) {
+      if (field.get('out') && (!props.excludeBlanks || !field.isBlank())) {
         values[field.get('name')] = field.get('value');
       }
     });
