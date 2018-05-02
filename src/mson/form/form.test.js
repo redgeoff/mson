@@ -371,3 +371,38 @@ it('should auto validate', () => {
     }
   ]);
 });
+
+it('should remove blank fields', () => {
+  const name = {
+    firstName: 'First',
+    middleName: 'Middle',
+    lastName: 'Last'
+  };
+
+  const form = createForm();
+
+  form.setValues(name);
+
+  form.removeBlankFields();
+
+  expect(form.getValues()).toEqual(name);
+
+  form.getField('middleName').clearValue();
+  form.getField('lastName').clearValue();
+
+  expect(form.getValues()).toEqual({
+    firstName: 'First',
+    middleName: null,
+    lastName: null
+  });
+
+  expect(form.getValues({ excludeBlanks: true })).toEqual({
+    firstName: 'First'
+  });
+
+  form.removeBlankFields();
+
+  expect(form.getValues()).toEqual({
+    firstName: 'First'
+  });
+});
