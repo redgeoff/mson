@@ -40,5 +40,8 @@
     "copy-json": "cd src && find . -name '*.json' -exec cp --parents \\{\\} ../lib \\;",
     "compile": "export NODE_ENV=production && babel src/mson -d lib/mson && npm run copy-json",
     "touch": "find src -exec touch {} \\;"
+  },
+  "devDependencies": {
+    "wait-on": "^2.1.0"
   }
 }
