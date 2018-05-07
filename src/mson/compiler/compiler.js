@@ -15,8 +15,9 @@ import components from '../components';
 import _ from 'lodash';
 import utils from '../utils';
 import PropFiller from './prop-filler';
+import registrar from './registrar';
 
-class compiler {
+class Compiler {
   // // We keep this separate from components so that we have a way of referencing MSON components
   // // after the components have been built. Moreover, this construct doesn't require any special
   // // organization in the components object.
@@ -202,4 +203,10 @@ class compiler {
   }
 }
 
-export default new compiler();
+const compiler = new Compiler();
+
+// Register compiler so that components have access to the compiler at run-time without causing a
+// circular dependency
+registrar.compiler = compiler;
+
+export default compiler;
