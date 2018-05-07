@@ -260,7 +260,7 @@ it('should validate schema', () => {
     },
     validators: [
       {
-        selector: {
+        where: {
           name: {
             value: 'F. Scott Fitzgerald'
           }
@@ -327,7 +327,7 @@ it('should validate schema', () => {
       error: [
         {
           id: null,
-          error: [{ error: 'required', field: 'selector' }]
+          error: [{ error: 'required', field: 'where' }]
         }
       ]
     },

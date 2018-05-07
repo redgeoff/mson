@@ -4,13 +4,13 @@ import FormField from '../fields/form-field';
 import sift from 'sift';
 import ObjectForm from '../object-form';
 
-class ValidatorSelector extends ObjectForm {
+class ValidatorWhere extends ObjectForm {
   validate() {
     super.validate();
 
     if (this._valueSet) {
       try {
-        // Use sift to validate the selector
+        // Use sift to validate the where
         sift(this._valueSet);
       } catch (err) {
         this._errorFromSet = err.message;
@@ -48,9 +48,9 @@ export default class FormValidator extends Form {
 
     this.addField(
       new FormField({
-        name: 'selector',
-        label: 'Selector',
-        form: new ValidatorSelector(),
+        name: 'where',
+        label: 'Where',
+        form: new ValidatorWhere(),
         required: true
       })
     );

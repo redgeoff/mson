@@ -16,14 +16,12 @@ export default class Action extends Component {
   async act(/* props */) {}
 
   async run(props) {
-    const selector = this.get('if');
+    const where = this.get('if');
     let shouldRun = true;
 
-    if (selector) {
-      const selectorProps = this.get('ifData')
-        ? this.get('ifData')
-        : props.ifData;
-      let sifted = sift(selector, [selectorProps]);
+    if (where) {
+      const whereProps = this.get('ifData') ? this.get('ifData') : props.ifData;
+      let sifted = sift(where, [whereProps]);
       if (sifted.length === 0) {
         shouldRun = false;
       }

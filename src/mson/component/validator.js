@@ -45,14 +45,14 @@ export default class Validator {
   }
 
   // Performs in place fill to prepare for sift query
-  _fillSelector(selector) {
-    _.each(selector, (node, name) => {
+  _fillWhere(where) {
+    _.each(where, (node, name) => {
       // Leaf node?
       if (typeof node === 'string') {
-        selector[name] = this._fillProps(node);
+        where[name] = this._fillProps(node);
       } else {
         // Recursively process node
-        this._fillSelector(node);
+        this._fillWhere(node);
       }
     });
   }
@@ -67,14 +67,14 @@ export default class Validator {
   }
 
   _validateWithRule(rule) {
-    // Clone selector as we will be modifying the leaf nodes
-    let selector = _.cloneDeep(rule.selector);
+    // Clone where as we will be modifying the leaf nodes
+    let where = _.cloneDeep(rule.where);
 
     // Fill the props
-    this._fillSelector(selector);
+    this._fillWhere(where);
 
     // Validation failed?
-    let sifted = sift(selector, [this._props]);
+    let sifted = sift(where, [this._props]);
     if (sifted.length > 0) {
       return this._fillErrorProps(rule.error);
     }

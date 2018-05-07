@@ -42,40 +42,40 @@ it('should fill props', () => {
   expect(validator._fillProps('{{value.firstName}}')).toEqual('Jane');
 });
 
-it('should fill selector', () => {
+it('should fill where', () => {
   let validator = new Validator({
     length: 20,
     maxLength: 10,
     value: 'foo'
   });
 
-  let selector1 = {
+  let where1 = {
     length: {
       $gt: '{{maxLength}}'
     }
   };
 
-  validator._fillSelector(selector1);
-  expect(selector1).toEqual({
+  validator._fillWhere(where1);
+  expect(where1).toEqual({
     length: {
       $gt: 10
     }
   });
 
-  let selector2 = {
+  let where2 = {
     value: {
       $eq: '{{value}}'
     }
   };
 
-  validator._fillSelector(selector2);
-  expect(selector2).toEqual({
+  validator._fillWhere(where2);
+  expect(where2).toEqual({
     value: {
       $eq: 'foo'
     }
   });
 
-  let selector3 = {
+  let where3 = {
     $or: {
       length: {
         $gt: '{{maxLength}}'
@@ -86,8 +86,8 @@ it('should fill selector', () => {
     }
   };
 
-  validator._fillSelector(selector3);
-  expect(selector3).toEqual({
+  validator._fillWhere(where3);
+  expect(where3).toEqual({
     $or: {
       length: {
         $gt: 10
@@ -107,7 +107,7 @@ it('should validate with rules', () => {
 
   let rules = [
     {
-      selector: {
+      where: {
         length: {
           $gt: '{{maxLength}}'
         }
@@ -115,7 +115,7 @@ it('should validate with rules', () => {
       error: '{{maxLength}} characters or less'
     },
     {
-      selector: {
+      where: {
         length: {
           $gt: '{{maxLength}}'
         }
@@ -155,7 +155,7 @@ it('should validate with escaped regex', () => {
 
   let rules = [
     {
-      selector: {
+      where: {
         password: {
           $not: {
             $regex: '\\d'

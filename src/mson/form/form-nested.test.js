@@ -309,7 +309,7 @@ it('should validate nested form validators', () => {
     .set({
       validators: [
         {
-          selector: {
+          where: {
             firstName: {
               value: 'F. Scott'
             }
@@ -328,7 +328,7 @@ it('should validate nested form validators', () => {
     .set({
       validators: [
         {
-          selector: {
+          where: {
             email: {
               value: 'scott@example.com'
             }
