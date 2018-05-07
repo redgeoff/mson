@@ -9,7 +9,7 @@ it('should validate', () => {
   expect(validator.hasErr()).toEqual(true);
   expect(validator.getErrs()).toEqual([
     {
-      field: 'selector',
+      field: 'where',
       error: 'required'
     },
     {
@@ -19,7 +19,7 @@ it('should validate', () => {
   ]);
 
   validator.setValues({
-    selector: {
+    where: {
       retypePassword: {
         value: {
           $ne: '{{password.value}}'
@@ -36,7 +36,7 @@ it('should validate', () => {
   expect(validator.hasErr()).toEqual(false);
 
   validator.setValues({
-    selector: {
+    where: {
       retypePassword: {
         value: {
           $invalidOp: '{{password.value}}'
@@ -53,7 +53,7 @@ it('should validate', () => {
   expect(validator.hasErr()).toEqual(true);
   expect(validator.getErrs()).toEqual([
     {
-      field: 'selector',
+      field: 'where',
       error: [
         {
           error: 'Unknown operation $invalidOp'

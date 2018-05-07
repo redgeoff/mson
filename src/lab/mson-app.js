@@ -69,7 +69,7 @@ compiler.registerComponent('org.proj.Account', {
 //     ],
 //     validators: [
 //       {
-//         selector: {
+//         where: {
 //           retypePassword: {
 //             value: {
 //               $ne: '{{password.value}}'
@@ -158,7 +158,7 @@ compiler.registerComponent('org.proj.ChangePasswordForm', {
   ],
   validators: [
     {
-      selector: {
+      where: {
         retypePassword: {
           value: {
             $ne: '{{password.value}}'

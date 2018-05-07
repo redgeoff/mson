@@ -14,7 +14,7 @@ const createForm = () => {
     ],
     validators: [
       {
-        selector: {
+        where: {
           firstName: {
             value: 'Jim'
           }
@@ -25,7 +25,7 @@ const createForm = () => {
         }
       },
       {
-        selector: {
+        where: {
           lastName: {
             value: {
               $eq: 'Jones'
@@ -38,7 +38,7 @@ const createForm = () => {
         }
       },
       {
-        selector: {
+        where: {
           middleName: {
             value: {
               $eq: '{{firstName.value}}'
