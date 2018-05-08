@@ -17,7 +17,11 @@ import utils from '../utils';
 import PropFiller from './prop-filler';
 import registrar from './registrar';
 
-class Compiler {
+export class Compiler {
+  constructor(props) {
+    this._components = props.components;
+  }
+
   // // We keep this separate from components so that we have a way of referencing MSON components
   // // after the components have been built. Moreover, this construct doesn't require any special
   // // organization in the components object.
@@ -28,8 +32,8 @@ class Compiler {
   }
 
   _getComponent(name) {
-    if (components[name]) {
-      return components[name];
+    if (this._components[name]) {
+      return this._components[name];
     } else {
       throw new Error('missing component ' + name);
     }
@@ -213,19 +217,19 @@ class Compiler {
   }
 
   registerComponent(name, component) {
-    if (components[name]) {
+    if (this._components[name]) {
       throw new Error(`component ${name} already exists`);
     } else {
-      components[name] = component;
+      this._components[name] = component;
     }
   }
 
   deregisterComponent(name) {
-    delete components[name];
+    delete this._components[name];
   }
 }
 
-const compiler = new Compiler();
+const compiler = new Compiler({ components });
 
 // Register compiler so that components have access to the compiler at run-time without causing a
 // circular dependency
