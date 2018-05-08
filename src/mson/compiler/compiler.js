@@ -160,6 +160,10 @@ class Compiler {
     const Component = this.getComponent(props.component, props);
 
     let clonedProps = _.cloneDeep(props);
+
+    // TODO: maybe 'component' should be renamed to something like 'builtComponent' so that we still
+    // have a reference to original hierarchy. Alternatively, maybe we can track this hierarchy via
+    // something like a prototype chain in the actual JS object.
     delete clonedProps.component;
 
     this._buildChildComponents(clonedProps);
@@ -170,6 +174,24 @@ class Compiler {
   // TODO: still needed?
   getExtends(name) {
     return this._getMSONComponent(name).component;
+  }
+
+  instanceOf(componentName, instanceOfName) {
+    if (instanceOfName === componentName) {
+      return true;
+    } else {
+      const Component = this._getComponent(componentName);
+      if (this.isMSONComponent(Component)) {
+        // TODO: this doesn't work if the component derives a MSON component as newComponent()
+        // deletes the component property. Instead we will probably want to improve this so that we
+        // store the complete hierarchy when building the component.
+        return this.instanceOf(Component.component, instanceOfName);
+      } else {
+        const InstanceOfComponent = this._getComponent(instanceOfName);
+        const c = new Component();
+        return c instanceof InstanceOfComponent;
+      }
+    }
   }
 
   getOldestNonMSONAncestor(name) {
