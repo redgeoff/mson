@@ -8,7 +8,7 @@ import Mapa from '../mapa';
 import IdField from '../fields/id-field';
 import ButtonField from '../fields/button-field';
 
-export default class Form extends Component {
+class Form extends Component {
   _formSetMSONSchema() {
     this.set({
       schema: {
@@ -502,3 +502,7 @@ export default class Form extends Component {
     return this.getField(fieldName).getValue();
   }
 }
+
+Form.DEFAULT_FIELD_NAMES = ['id'];
+
+export default Form;
