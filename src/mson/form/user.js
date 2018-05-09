@@ -2,29 +2,31 @@ import Form from './form';
 import MSONComponent from '../component/mson-component';
 
 export default class User extends Form {
-  _addDefaultFields() {
-    super._addDefaultFields();
+  _create(props) {
+    super._create(props);
 
-    this._defaultFields.set(
-      'username',
+    this.addField(
       new MSONComponent({
         definition: {
           component: 'EmailField',
           name: 'username',
           label: 'Username',
-          required: true
+          required: true,
+          in: false,
+          out: false
         }
       })
     );
 
-    this._defaultFields.set(
-      'password',
+    this.addField(
       new MSONComponent({
         definition: {
           component: 'PasswordField',
           name: 'password',
           label: 'Password',
-          required: true
+          required: true,
+          in: false,
+          out: false
         }
       })
     );

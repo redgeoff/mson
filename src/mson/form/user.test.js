@@ -25,6 +25,11 @@ it('should sanity check', () => {
 
   expect(user.getValues()).toEqual({
     id: null,
+    name: 'Full Name'
+  });
+
+  expect(user.getValues({ includeOuts: true })).toEqual({
+    id: null,
     ...values
   });
 });

@@ -259,7 +259,10 @@ export default class Form extends Component {
     let values = {};
     props = props ? props : {};
     this._fields.each(field => {
-      if (field.get('out') && (!props.excludeBlanks || !field.isBlank())) {
+      if (
+        (props.includeOuts || field.get('out')) &&
+        (!props.excludeBlanks || !field.isBlank())
+      ) {
         values[field.get('name')] = field.get('value');
       }
     });
