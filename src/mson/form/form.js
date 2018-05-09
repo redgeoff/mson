@@ -8,7 +8,7 @@ import Mapa from '../mapa';
 import IdField from '../fields/id-field';
 import ButtonField from '../fields/button-field';
 
-class Form extends Component {
+export default class Form extends Component {
   _formSetMSONSchema() {
     this.set({
       schema: {
@@ -49,10 +49,12 @@ class Form extends Component {
   _create(props) {
     super._create(props);
     this._fields = new Mapa();
+    this._defaultFields = new Mapa();
     this._validators = [];
     this._clearExtraErrors();
 
     if (!props || !props.omitDefaultFields) {
+      this._addDefaultFields();
       this._createDefaultFields();
     }
 
@@ -66,9 +68,20 @@ class Form extends Component {
     this._formSetMSONSchema();
   }
 
-  _createDefaultFields() {
-    this.addField(new IdField({ name: 'id', label: 'Id', hidden: true }));
+  isDefaultField(fieldName) {
+    return this._defaultFields.has(fieldName);
+  }
+
+  _addDefaultFields() {
+    this._defaultFields.set(
+      'id',
+      new IdField({ name: 'id', label: 'Id', hidden: true })
+    );
     // TODO: createdAt, updatedAt
+  }
+
+  _createDefaultFields() {
+    this._defaultFields.each(field => this.addField(field));
   }
 
   copyFields(form) {
@@ -502,7 +515,3 @@ class Form extends Component {
     return this.getField(fieldName).getValue();
   }
 }
-
-Form.DEFAULT_FIELD_NAMES = ['id'];
-
-export default Form;
