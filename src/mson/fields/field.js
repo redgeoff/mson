@@ -7,7 +7,7 @@ import Validator from '../component/validator';
 export default class Field extends Component {
   _create(props) {
     super._create(props);
-    this.set({ editable: true, block: true, out: true });
+    this.set({ editable: true, block: true, out: true, in: true });
 
     this.set({
       schema: {

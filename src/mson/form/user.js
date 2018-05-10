@@ -30,6 +30,19 @@ export default class User extends Form {
         }
       })
     );
+
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'roles',
+            component: 'Field'
+            // component: 'SelectListField' // TODO: why isn't this working?
+          }
+        ]
+      }
+    });
   }
 
   set(props) {
