@@ -15,8 +15,13 @@ import components from '../components';
 import _ from 'lodash';
 import utils from '../utils';
 import PropFiller from './prop-filler';
+import registrar from './registrar';
 
-class compiler {
+export class Compiler {
+  constructor(props) {
+    this._components = props.components;
+  }
+
   // // We keep this separate from components so that we have a way of referencing MSON components
   // // after the components have been built. Moreover, this construct doesn't require any special
   // // organization in the components object.
@@ -27,8 +32,8 @@ class compiler {
   }
 
   _getComponent(name) {
-    if (components[name]) {
-      return components[name];
+    if (this._components[name]) {
+      return this._components[name];
     } else {
       throw new Error('missing component ' + name);
     }
@@ -159,6 +164,10 @@ class compiler {
     const Component = this.getComponent(props.component, props);
 
     let clonedProps = _.cloneDeep(props);
+
+    // TODO: maybe 'component' should be renamed to something like 'builtComponent' so that we still
+    // have a reference to original hierarchy. Alternatively, maybe we can track this hierarchy via
+    // something like a prototype chain in the actual JS object.
     delete clonedProps.component;
 
     this._buildChildComponents(clonedProps);
@@ -169,6 +178,24 @@ class compiler {
   // TODO: still needed?
   getExtends(name) {
     return this._getMSONComponent(name).component;
+  }
+
+  instanceOf(componentName, instanceOfName) {
+    if (instanceOfName === componentName) {
+      return true;
+    } else {
+      const Component = this._getComponent(componentName);
+      if (this.isMSONComponent(Component)) {
+        // TODO: this doesn't work if the component derives a MSON component as newComponent()
+        // deletes the component property. Instead we will probably want to improve this so that we
+        // store the complete hierarchy when building the component.
+        return this.instanceOf(Component.component, instanceOfName);
+      } else {
+        const InstanceOfComponent = this._getComponent(instanceOfName);
+        const c = new Component();
+        return c instanceof InstanceOfComponent;
+      }
+    }
   }
 
   getOldestNonMSONAncestor(name) {
@@ -190,16 +217,22 @@ class compiler {
   }
 
   registerComponent(name, component) {
-    if (components[name]) {
+    if (this._components[name]) {
       throw new Error(`component ${name} already exists`);
     } else {
-      components[name] = component;
+      this._components[name] = component;
     }
   }
 
   deregisterComponent(name) {
-    delete components[name];
+    delete this._components[name];
   }
 }
 
-export default new compiler();
+const compiler = new Compiler({ components });
+
+// Register compiler so that components have access to the compiler at run-time without causing a
+// circular dependency
+registrar.compiler = compiler;
+
+export default compiler;

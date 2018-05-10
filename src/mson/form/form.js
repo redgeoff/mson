@@ -49,10 +49,12 @@ export default class Form extends Component {
   _create(props) {
     super._create(props);
     this._fields = new Mapa();
+    this._defaultFields = new Mapa();
     this._validators = [];
     this._clearExtraErrors();
 
     if (!props || !props.omitDefaultFields) {
+      this._addDefaultFields();
       this._createDefaultFields();
     }
 
@@ -66,9 +68,20 @@ export default class Form extends Component {
     this._formSetMSONSchema();
   }
 
-  _createDefaultFields() {
-    this.addField(new IdField({ name: 'id', label: 'Id', hidden: true }));
+  isDefaultField(fieldName) {
+    return this._defaultFields.has(fieldName);
+  }
+
+  _addDefaultFields() {
+    this._defaultFields.set(
+      'id',
+      new IdField({ name: 'id', label: 'Id', hidden: true })
+    );
     // TODO: createdAt, updatedAt
+  }
+
+  _createDefaultFields() {
+    this._defaultFields.each(field => this.addField(field));
   }
 
   copyFields(form) {
@@ -246,7 +259,10 @@ export default class Form extends Component {
     let values = {};
     props = props ? props : {};
     this._fields.each(field => {
-      if (field.get('out') && (!props.excludeBlanks || !field.isBlank())) {
+      if (
+        (props.includeOuts || field.get('out')) &&
+        (!props.excludeBlanks || !field.isBlank())
+      ) {
         values[field.get('name')] = field.get('value');
       }
     });

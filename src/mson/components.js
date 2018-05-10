@@ -21,6 +21,7 @@ import FormValidator from './form/form-validator';
 import IntegerField from './fields/integer-field';
 import ListField from './fields/list-field';
 import Menu from './menu';
+import MSONComponent from './component/mson-component';
 import NumberField from './fields/number-field';
 import ObjectForm from './object-form';
 import PasswordField from './fields/password-field.json';
@@ -35,6 +36,7 @@ import SelectListField from './fields/select-list-field';
 import Set from './actions/set';
 import Snackbar from './actions/snackbar';
 import TextField from './fields/text-field';
+import User from './form/user';
 
 export default {
   APIGet,
@@ -54,6 +56,7 @@ export default {
   IntegerField,
   ListField,
   Menu,
+  MSONComponent,
   NumberField,
   ObjectForm,
   PasswordField,
@@ -68,5 +71,6 @@ export default {
   Set,
   Snackbar,
   TextField,
-  ValidatorForm: FormValidator
+  ValidatorForm: FormValidator,
+  User
 };

@@ -31,6 +31,16 @@ class Utils {
   inBrowser() {
     return !!global.window;
   }
+
+  // Source: https://stackoverflow.com/a/40577337/2831606
+  getAllMethodNames(obj) {
+    let methods = new Set();
+    while ((obj = Reflect.getPrototypeOf(obj))) {
+      let keys = Reflect.ownKeys(obj);
+      keys.forEach(k => methods.add(k));
+    }
+    return methods;
+  }
 }
 
 export default new Utils();

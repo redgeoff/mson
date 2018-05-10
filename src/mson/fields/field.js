@@ -7,7 +7,7 @@ import Validator from '../component/validator';
 export default class Field extends Component {
   _create(props) {
     super._create(props);
-    this.set({ editable: true, block: true, out: true });
+    this.set({ editable: true, block: true, out: true, in: true });
 
     this.set({
       schema: {
@@ -59,6 +59,11 @@ export default class Field extends Component {
             component: 'Field'
           },
           {
+            name: 'in',
+            component: 'Field'
+            // component: 'BooleanField'
+          },
+          {
             name: 'out',
             component: 'Field'
             // component: 'BooleanField'
@@ -95,6 +100,7 @@ export default class Field extends Component {
       'editable',
       'dirty',
       'help',
+      'in',
       'out'
     );
   }
@@ -116,6 +122,7 @@ export default class Field extends Component {
       'editable',
       'dirty',
       'help',
+      'in',
       'out'
     );
     return value === undefined ? super.getOne(name) : value;

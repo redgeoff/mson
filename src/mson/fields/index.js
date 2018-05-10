@@ -19,7 +19,6 @@ const EmailField = compiler.getComponent('EmailField');
 const PersonNameField = compiler.getComponent('PersonNameField');
 const PasswordField = compiler.getComponent('PasswordField');
 
-// let fields = {
 export {
   EmailField,
   Field,
