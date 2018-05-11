@@ -36,6 +36,7 @@ import SelectListField from './fields/select-list-field';
 import Set from './actions/set';
 import Snackbar from './actions/snackbar';
 import TextField from './fields/text-field';
+import TextListField from './fields/text-list-field';
 import User from './form/user';
 
 export default {
@@ -71,6 +72,7 @@ export default {
   Set,
   Snackbar,
   TextField,
+  TextListField,
   ValidatorForm: FormValidator,
   User
 };

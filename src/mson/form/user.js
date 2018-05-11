@@ -37,8 +37,8 @@ export default class User extends Form {
         fields: [
           {
             name: 'roles',
-            component: 'Field'
-            // component: 'SelectListField' // TODO: why isn't this working?
+            component: 'TextListField'
+            // TODO: blacklist reserved roles
           }
         ]
       }
