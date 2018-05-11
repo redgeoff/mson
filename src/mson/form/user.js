@@ -39,6 +39,8 @@ export default class User extends Form {
             name: 'roles',
             component: 'TextListField'
             // TODO: blacklist reserved roles
+            // TODO: move Roles to mson core so can reference here
+            // invalidRegExp: ''
           }
         ]
       }

@@ -9,7 +9,18 @@ export default class TextListField extends ListField {
       required: false,
       block: this.get('block') === undefined ? true : this.get('block'),
       fullWidth: this.get('fullWidth'),
-      options: this.get('options')
+      options: this.get('options'),
+      invalidRegExp: this.get('invalidRegExp')
     });
+  }
+
+  set(props) {
+    super.set(props);
+    this._setIfUndefined(props, 'invalidRegExp');
+  }
+
+  getOne(name) {
+    const value = this._getIfAllowed(name, 'invalidRegExp');
+    return value === undefined ? super.getOne(name) : value;
   }
 }
