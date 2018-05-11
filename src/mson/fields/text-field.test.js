@@ -79,3 +79,12 @@ it('should get schema form', () => {
     }
   ]);
 });
+
+it('should support an invalid reg exp', () => {
+  const field = new TextField();
+  field.set({ invalidRegExp: '^red|blue$' });
+
+  testUtils.expectValuesToBeValid(field, ['green', 'foo', '', null, 'blue1']);
+
+  testUtils.expectValuesToBeInvalid(field, ['red', 'blue'], 'invalid');
+});
