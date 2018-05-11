@@ -1,19 +1,7 @@
 import ListField from './list-field';
 import TextField from './text-field';
+import TextListField from './text-list-field';
 import testUtils from '../test-utils';
-
-class TextListField extends ListField {
-  _newField(index) {
-    return new TextField({
-      name: index,
-      label: index === 0 ? this.get('label') : undefined,
-      required: false,
-      block: this.get('block') === undefined ? true : this.get('block'),
-      fullWidth: this.get('fullWidth'),
-      options: this.get('options')
-    });
-  }
-}
 
 it('should validate max size', () => {
   const field = new TextListField({

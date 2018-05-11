@@ -41,7 +41,8 @@ export default class TextField extends Field {
       'maxLength',
       'minWords',
       'maxWords',
-      'type'
+      'type',
+      'invalidRegExp'
     );
   }
 
@@ -52,7 +53,8 @@ export default class TextField extends Field {
       'maxLength',
       'minWords',
       'maxWords',
-      'type'
+      'type',
+      'invalidRegExp'
     );
     return value === undefined ? super.getOne(name) : value;
   }
@@ -75,11 +77,14 @@ export default class TextField extends Field {
       if (typeof value === 'string') {
         const minLength = this.get('minLength');
         const maxLength = this.get('maxLength');
+        const invalidRegExp = this.get('invalidRegExp');
 
         if (minLength !== null && value.length < minLength) {
           this.setErr(`${minLength} characters or more`);
         } else if (maxLength !== null && value.length > maxLength) {
           this.setErr(`${maxLength} characters or less`);
+        } else if (invalidRegExp && new RegExp(invalidRegExp).test(value)) {
+          this.setErr(`invalid`);
         }
       } else {
         this.setErr(`must be a string`);

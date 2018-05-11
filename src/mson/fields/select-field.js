@@ -37,7 +37,7 @@ export default class SelectField extends Field {
     if (!this.isBlank()) {
       const value = this.get('value');
       if (this._getOptionLabel(value) === null) {
-        this.setErr(`{value} is not an option`);
+        this.setErr(`${value} is not an option`);
       }
     }
   }
