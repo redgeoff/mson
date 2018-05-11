@@ -8,7 +8,7 @@ import FormField from '../fields/form-field';
 //     create: 'role2',
 //     read: [ 'role1', 'role2' ],
 //     update: [ 'role1', 'role2' ],
-//     destroy: 'role2'
+//     archive: 'role2'
 //   },
 //
 //   fields: {
@@ -16,7 +16,7 @@ import FormField from '../fields/form-field';
 //       create: 'role2',
 //       read: [ 'role1', 'role2' ],
 //       update: 'role2',
-//       destroy: 'role2'
+//       archive: 'role2'
 //     }
 //   }
 // }
@@ -34,7 +34,7 @@ class AccessNode extends Form {
     this.addField(new AccessRolesField({ name: 'create', label: 'Create' }));
     this.addField(new AccessRolesField({ name: 'read', label: 'Create' }));
     this.addField(new AccessRolesField({ name: 'update', label: 'Create' }));
-    this.addField(new AccessRolesField({ name: 'destroy', label: 'Create' }));
+    this.addField(new AccessRolesField({ name: 'archive', label: 'Create' }));
   }
 }
 
