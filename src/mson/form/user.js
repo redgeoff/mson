@@ -1,5 +1,6 @@
 import Form from './form';
 import MSONComponent from '../component/mson-component';
+import Roles from '../roles';
 
 export default class User extends Form {
   _create(props) {
@@ -38,8 +39,7 @@ export default class User extends Form {
           {
             name: 'roles',
             component: 'TextListField',
-            // TODO: move Roles to mson core so can reference here
-            invalidRegExp: '^owner$'
+            invalidRegExp: '^' + Object.keys(Roles.RESERVED).join('|') + '$'
           }
         ]
       }
