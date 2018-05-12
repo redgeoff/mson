@@ -14,7 +14,7 @@ it('should validate', () => {
       create: 'role2',
       read: ['role1', 'role2'],
       update: ['role1', 'role2'],
-      destroy: 'role2'
+      archive: 'role2'
     },
 
     fields: {
@@ -22,7 +22,7 @@ it('should validate', () => {
         create: 'role2',
         read: ['role1', 'role2'],
         update: 'role2',
-        destroy: 'role2'
+        archive: 'role2'
       }
     }
   });
