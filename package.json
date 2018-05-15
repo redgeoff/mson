@@ -39,7 +39,9 @@
     "copy-json-rsync": "rsync -avm --include='*.json' -f 'hide,! */' src/mson lib",
     "copy-json": "cd src && find . -name '*.json' -exec cp --parents \\{\\} ../lib \\;",
     "compile": "export NODE_ENV=production && babel src/mson -d lib/mson && npm run copy-json",
-    "touch": "find src -exec touch {} \\;"
+    "touch": "find src -exec touch {} \\;",
+    "employees-install": "export NODE_ENV=production && ./node_modules/babel-cli/bin/babel-node.js ./src/employees/install.js",
+    "employees-uninstall": "export NODE_ENV=production && ./node_modules/babel-cli/bin/babel-node.js ./src/employees/uninstall.js"
   },
   "devDependencies": {
     "wait-on": "^2.1.0"
