@@ -23,6 +23,44 @@ import Component from './component';
 //   }
 // ]
 export default class Menu extends Component {
+  _create(props) {
+    super._create(props);
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'items',
+            component: 'FormsField',
+            form: {
+              component: 'Form',
+              fields: [
+                {
+                  name: 'path',
+                  component: 'TextField',
+                  label: 'Path',
+                  required: true
+                },
+                {
+                  name: 'label',
+                  component: 'TextField',
+                  label: 'Label',
+                  required: true
+                },
+                {
+                  name: 'content',
+                  component: 'Field',
+                  label: 'Content',
+                  required: true
+                }
+              ]
+            }
+          }
+        ]
+      }
+    });
+  }
+
   _indexItemByPath(item) {
     this._itemsByPath[item.path] = item;
     if (item.items) {
