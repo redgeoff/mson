@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import AppUI from '../mson-react/app';
 import app from './mson-app';
-import Reboot from 'material-ui/Reboot';
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import { blueGrey, cyan } from 'material-ui/colors';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { blueGrey, cyan } from '@material-ui/core/colors';
 import { BrowserRouter, Prompt } from 'react-router-dom';
 import globals from '../mson/globals';
 
@@ -25,7 +25,7 @@ class App extends Component {
   render() {
     return (
       <MuiThemeProvider theme={theme}>
-        <Reboot />
+        <CssBaseline />
         <BrowserRouter getUserConfirmation={this.onNavigate}>
           {/* Wrapping div required by BrowserRouter */}
           <div>

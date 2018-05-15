@@ -1,13 +1,13 @@
 import React from 'react';
-import ButtonMui from 'material-ui/Button';
-import { withStyles } from 'material-ui/styles';
+import ButtonMui from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
 
 // Note: this is a bit wasteful as it bundles all icons, regardless of whether they will be used.
 // TODO: is there a better way?
 // https://kamranicus.com/posts/2017-09-02-dynamic-import-material-icons-react mentions using the
 // webpack API with eager loading, but wouldn't it still require bundling all the icons as the
 // icon can be dynamic. Maybe we need a construct that bundles components based on the MSON?
-import * as Icons from 'material-ui-icons';
+import * as Icons from '@material-ui/icons';
 
 const styles = theme => ({
   leftIcon: {

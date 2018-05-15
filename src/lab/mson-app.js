@@ -1,5 +1,32 @@
 import compiler from '../mson/compiler';
 
+compiler.registerComponent('org.proj.Login', {
+  component: 'Form',
+  fields: [
+    {
+      component: 'EmailField',
+      name: 'email',
+      label: 'Email',
+      required: true,
+      fullWidth: true
+    },
+    {
+      component: 'PasswordField',
+      name: 'password',
+      label: 'Password',
+      required: true,
+      fullWidth: true
+    },
+    {
+      component: 'ButtonField',
+      name: 'submit',
+      label: 'Log In',
+      type: 'submit',
+      fullWidth: true
+    }
+  ]
+});
+
 compiler.registerComponent('org.proj.Employee', {
   component: 'Form',
   fields: [
@@ -330,6 +357,13 @@ const menuItems = [
     path: '/foo',
     label: 'Another Section',
     items: [
+      {
+        path: '/foo/login',
+        label: 'Login',
+        content: {
+          component: 'org.proj.Login'
+        }
+      },
       {
         path: '/foo/account',
         label: 'Account',

@@ -3,7 +3,7 @@
 import React from 'react';
 import Form from './form';
 import Button from './button';
-import { Save, Cancel } from 'material-ui-icons';
+import { Save, Cancel } from '@material-ui/icons';
 import attach from './attach';
 
 class RecordEditor extends React.Component {

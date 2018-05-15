@@ -1,7 +1,7 @@
 import React from 'react';
-import { InputLabel } from 'material-ui/Input';
-import { FormHelperText } from 'material-ui/Form';
-import { Typography } from 'material-ui';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Typography from '@material-ui/core/Typography';
 import FormControl from '../form-control';
 import attach from '../attach';
 import HelpToolTip from './help-tool-tip';

@@ -61,13 +61,13 @@ const main = async () => {
     password: config.superuser.password
   });
 
-  // await client.app.create({ name: 'employees' });
+  await client.app.create({ name: 'employees' });
 
-  // await client.component.create({ appId: config.appId, definition: employee });
+  await client.component.create({ appId: config.appId, definition: employee });
 
-  // await client.component.create({ appId: config.appId, definition: menu });
+  await client.component.create({ appId: config.appId, definition: menu });
 
-  // await client.component.create({ appId: config.appId, definition: app });
+  await client.component.create({ appId: config.appId, definition: app });
 };
 
 main();
