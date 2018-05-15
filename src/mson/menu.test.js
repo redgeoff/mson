@@ -39,7 +39,7 @@ it('should index by path', () => {
 
 it('should validate schema', () => {
   testUtils.expectSchemaToBeValid(new Menu(), {
-    name: 'menu',
+    name: 'app.Menu',
     component: 'Menu',
     items: [
       {

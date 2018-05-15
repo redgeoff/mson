@@ -4,7 +4,7 @@ import client from './client';
 import config from './config.json';
 
 const employee = {
-  name: '1.Employee',
+  name: 'app.Employee',
   component: 'Form',
   fields: [
     {
@@ -24,7 +24,7 @@ const employee = {
 };
 
 const menu = {
-  name: '1.Menu',
+  name: 'app.Menu',
   component: 'Menu',
   items: [
     {
@@ -38,7 +38,7 @@ const menu = {
             label: 'Employees',
             component: 'FormsField',
             form: {
-              component: '1.Employee'
+              component: 'app.Employee'
             }
           }
         ]
@@ -48,10 +48,10 @@ const menu = {
 };
 
 const app = {
-  name: '1.App',
+  name: 'app.App',
   component: 'App',
   menu: {
-    component: '1.Menu'
+    component: 'app.Menu'
   }
 };
 
