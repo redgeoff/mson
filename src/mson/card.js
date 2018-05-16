@@ -8,6 +8,11 @@ export default class Card extends Component {
         component: 'Form',
         fields: [
           {
+            name: 'title',
+            component: 'TextField',
+            label: 'Title'
+          },
+          {
             name: 'content',
             component: 'Field',
             label: 'Content',
@@ -20,11 +25,11 @@ export default class Card extends Component {
 
   set(props) {
     super.set(props);
-    this._setIfUndefined(props, 'content');
+    this._setIfUndefined(props, 'content', 'title');
   }
 
   getOne(name) {
-    const value = this._getIfAllowed(name, 'content');
+    const value = this._getIfAllowed(name, 'content', 'title');
     return value === undefined ? super.getOne(name) : value;
   }
 }

@@ -362,6 +362,7 @@ const menuItems = [
         label: 'Login',
         content: {
           component: 'Card',
+          title: 'Login',
           content: {
             component: 'org.proj.Login'
           }
