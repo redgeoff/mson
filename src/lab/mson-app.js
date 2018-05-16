@@ -34,6 +34,17 @@ compiler.registerComponent('org.proj.Login', {
       name: 'forgotPassword',
       label: 'Forgot password?'
     }
+  ],
+  listeners: [
+    {
+      event: 'createAccount',
+      actions: [
+        {
+          component: 'Redirect',
+          path: '/foo/signup'
+        }
+      ]
+    }
   ]
 });
 
