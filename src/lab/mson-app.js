@@ -22,7 +22,7 @@ compiler.registerComponent('org.proj.Login', {
       name: 'submit',
       label: 'Log In',
       type: 'submit',
-      fullWidth: true
+      variant: 'outlined'
     }
   ]
 });

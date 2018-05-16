@@ -8,11 +8,11 @@ export default class ButtonField extends Field {
 
   set(props) {
     super.set(props);
-    this._setIfUndefined(props, 'type', 'icon');
+    this._setIfUndefined(props, 'type', 'icon', 'variant');
   }
 
   getOne(name) {
-    const value = this._getIfAllowed(name, 'type', 'icon');
+    const value = this._getIfAllowed(name, 'type', 'icon', 'variant');
     return value === undefined ? super.getOne(name) : value;
   }
 

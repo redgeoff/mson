@@ -14,7 +14,7 @@ class ButtonField extends React.Component {
   };
 
   render() {
-    const { label, type, disabled, icon } = this.props;
+    const { label, type, disabled, icon, fullWidth, variant } = this.props;
     return (
       <Button
         type={type}
@@ -22,9 +22,18 @@ class ButtonField extends React.Component {
         disabled={disabled}
         onClick={this.handleClick}
         icon={icon}
+        fullWidth={fullWidth}
+        variant={variant}
       />
     );
   }
 }
 
-export default attach(['label', 'type', 'disabled', 'icon'])(ButtonField);
+export default attach([
+  'label',
+  'type',
+  'disabled',
+  'icon',
+  'fullWidth',
+  'variant'
+])(ButtonField);

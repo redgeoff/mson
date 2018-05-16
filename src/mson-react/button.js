@@ -26,7 +26,16 @@ class Button extends React.Component {
   };
 
   render() {
-    const { classes, type, disabled, label, iconComponent, icon } = this.props;
+    const {
+      classes,
+      type,
+      disabled,
+      label,
+      iconComponent,
+      icon,
+      fullWidth,
+      variant
+    } = this.props;
 
     // React component must be capitalized to render
     let Icon = null;
@@ -44,6 +53,8 @@ class Button extends React.Component {
         color="primary"
         disabled={disabled}
         onClick={this.handleClick}
+        fullWidth={fullWidth}
+        variant={variant}
       >
         {Icon ? <Icon className={classes.leftIcon} /> : null}
         {label}
