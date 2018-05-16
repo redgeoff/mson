@@ -78,7 +78,11 @@ export default class Mapa {
       throw new Error('key cannot be null or undefined');
     } else if (this.has(key)) {
       // Is the item moving?
-      if (beforeKey !== undefined && this._items[key].nextKey !== beforeKey) {
+      if (
+        beforeKey !== undefined &&
+        this._items[key].nextKey !== beforeKey &&
+        beforeKey !== key
+      ) {
         this.delete(key);
         this.set(key, value, beforeKey);
       } else {

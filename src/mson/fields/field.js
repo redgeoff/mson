@@ -67,6 +67,10 @@ export default class Field extends Component {
             name: 'out',
             component: 'Field'
             // component: 'BooleanField'
+          },
+          {
+            name: 'before',
+            component: 'TextField'
           }
         ]
       }
@@ -101,7 +105,8 @@ export default class Field extends Component {
       'dirty',
       'help',
       'in',
-      'out'
+      'out',
+      'before'
     );
   }
 
@@ -123,7 +128,8 @@ export default class Field extends Component {
       'dirty',
       'help',
       'in',
-      'out'
+      'out',
+      'before'
     );
     return value === undefined ? super.getOne(name) : value;
   }

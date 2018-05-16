@@ -116,3 +116,14 @@ it('validate should adjust when fields removed', async () => {
   form2.validate();
   expect(form2.getErrs()).toEqual([]);
 });
+
+it('should auto validate', () => {
+  const form = createForm();
+  form.set({ autoValidate: true });
+  form.getField('firstName').setValue('Jim');
+  expect(form.getErrs()).toEqual([
+    { field: 'firstName', error: 'cannot be Jim' },
+    { field: 'middleName', error: 'required' },
+    { field: 'lastName', error: 'required' }
+  ]);
+});

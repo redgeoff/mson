@@ -1,6 +1,7 @@
 // NOTE: this file should only contain the component registrations
 
 import ButtonField from './fields/button-field';
+import Card from './card';
 import CompositeField from './fields/composite-field';
 import Field from './fields/field';
 import Form from './form';
@@ -12,6 +13,7 @@ import TextField from './fields/text-field';
 
 export default {
   ButtonField,
+  Card,
   ChainedSelectField: CompositeField,
   ChainedSelectListField: ListField,
   CompositeField,
@@ -22,5 +24,6 @@ export default {
   RecordEditorOld,
   SelectField,
   SelectListField: ListField,
-  TextField
+  TextField,
+  User: Form
 };

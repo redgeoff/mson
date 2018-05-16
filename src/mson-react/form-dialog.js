@@ -1,11 +1,8 @@
 import React from 'react';
 import Button from './button';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  withMobileDialog
-} from 'material-ui/Dialog';
-import { ModeEdit, Delete, Save, Cancel } from 'material-ui-icons';
+import { Dialog, DialogActions, withMobileDialog } from '@material-ui/core';
+import DialogContent from '@material-ui/core/DialogContent';
+import { ModeEdit, Delete, Save, Cancel } from '@material-ui/icons';
 import Form from './form';
 import attach from './attach';
 

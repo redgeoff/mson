@@ -91,6 +91,16 @@ export default class Form extends Component {
     this._emitChange('fields');
   }
 
+  copyValidators(form) {
+    this.set({ validators: form.get('validators') });
+  }
+
+  copyListeners(form) {
+    if (form.get('listeners')) {
+      this.set({ listeners: form.get('listeners') });
+    }
+  }
+
   _clearExtraErrors() {
     this._extraErrors = [];
   }
@@ -107,6 +117,8 @@ export default class Form extends Component {
 
     if (props.form !== undefined) {
       this.copyFields(props.form);
+      this.copyValidators(props.form);
+      this.copyListeners(props.form);
     }
 
     if (props.validators !== undefined) {
@@ -152,10 +164,10 @@ export default class Form extends Component {
   }
 
   _setField(field) {
-    this._fields.set(field.get('name'), field);
+    const before = field.get('before');
+    this._fields.set(field.get('name'), field, before ? before : undefined);
   }
 
-  // TODO: support field.beforeName
   addField(field) {
     this._setField(field);
 

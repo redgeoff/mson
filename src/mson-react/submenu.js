@@ -1,9 +1,10 @@
 import React from 'react';
-import { withStyles } from 'material-ui/styles';
-import List, { ListItem, ListItemText } from 'material-ui/List';
-import Collapse from 'material-ui/transitions/Collapse';
-import { Typography } from 'material-ui';
-import { ExpandLess, ExpandMore } from 'material-ui-icons';
+import { withStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import { ListItem, ListItemText } from '@material-ui/core';
+import Collapse from '@material-ui/core/Collapse';
+import Typography from '@material-ui/core/Typography';
+import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { withRouter } from 'react-router';
 import _ from 'lodash';
 

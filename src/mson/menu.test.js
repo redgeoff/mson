@@ -1,4 +1,5 @@
 import Menu from './menu';
+import testUtils from './test-utils';
 
 it('should index by path', () => {
   const colors = [
@@ -34,4 +35,37 @@ it('should index by path', () => {
   expect(menu.getItem('light-red')).toEqual(colors[0].items[0]);
   expect(menu.getItem('light-light-red')).toEqual(colors[0].items[0].items[0]);
   expect(menu.getItem('green')).toEqual(colors[1]);
+});
+
+it('should validate schema', () => {
+  testUtils.expectSchemaToBeValid(new Menu(), {
+    name: 'app.Menu',
+    component: 'Menu',
+    items: [
+      {
+        path: '/people',
+        label: 'People',
+        content: {
+          component: 'Form',
+          fields: [
+            {
+              name: 'people',
+              label: 'People',
+              component: 'FormsField',
+              form: {
+                component: 'Form',
+                fields: [
+                  {
+                    name: 'firstName',
+                    component: 'TextField',
+                    label: 'First Name'
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  });
 });

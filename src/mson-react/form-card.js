@@ -1,14 +1,14 @@
 // TODO: make the more menu optional
 
 import React from 'react';
-import { withStyles } from 'material-ui/styles';
-import IconButton from 'material-ui/IconButton';
-// import MoreVertIcon from 'material-ui-icons/MoreVert';
-// import Menu, { MenuItem } from 'material-ui/Menu';
-// import { ListItemIcon, ListItemText } from 'material-ui/List';
-import { ModeEdit, Delete } from 'material-ui-icons';
-import Grid from 'material-ui/Grid';
-import Paper from 'material-ui/Paper';
+import { withStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+// import MoreVertIcon from '@material-ui/icons/MoreVert';
+// import Menu, { MenuItem } from '@material-ui/core/Menu';
+// import { ListItemIcon, ListItemText } from '@material-ui/core/List';
+import { ModeEdit, Delete } from '@material-ui/icons';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import Form from './form';
 
 const styles = theme => ({

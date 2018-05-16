@@ -1,5 +1,5 @@
 import React from 'react';
-import Input from 'material-ui/Input';
+import Input from '@material-ui/core/Input';
 import CommonField from './common-field';
 import attach from '../attach';
 

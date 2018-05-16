@@ -1,10 +1,10 @@
 import React from 'react';
-import Grid from 'material-ui/Grid';
+import Grid from '@material-ui/core/Grid';
 import FormCard from '../form-card';
 import FormDialog from '../form-dialog';
 import attach from '../attach';
-import Button from 'material-ui/Button';
-import AddIcon from 'material-ui-icons/Add';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
 import ConfirmationDialog from '../confirmation-dialog';
 
 // TODO:

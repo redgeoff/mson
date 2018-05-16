@@ -3,12 +3,12 @@
 //     hides title and allows for search string to be entered.
 
 import React from 'react';
-import { withStyles } from 'material-ui/styles';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
-import IconButton from 'material-ui/IconButton';
-import MenuIcon from 'material-ui-icons/Menu';
+import { withStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
 import Menu from './menu';
 import SearchBar from './search-bar';
 import { Switch, Route } from 'react-router-dom';
@@ -130,7 +130,12 @@ class App extends React.Component {
   }
 
   onNavigate = callback => {
-    if (this.state.menuItem && this.state.menuItem.content.get('dirty')) {
+    // We don't warn about discarding changes when fullScreen, e.g. a login page
+    if (
+      this.state.menuItem &&
+      this.state.menuItem.content.get('dirty') &&
+      !this.state.menuItem.fullScreen
+    ) {
       // Show a confirmation dialog to see if the user wants to continue
       this.setState({
         confirmationOpen: true,
@@ -245,34 +250,50 @@ class App extends React.Component {
 
     const RouteListener = this.routeListener;
 
+    const appBar = (
+      <AppBar className={classes.appBar}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={this.handleDrawerToggle}
+            className={classes.navIconHide}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="title" color="inherit" noWrap>
+            {menuItem ? menuItem.label : ''}
+          </Typography>
+
+          {/* TODO: make SearchBar configurable */}
+          <SearchBar className={classes.searchBar} />
+        </Toolbar>
+      </AppBar>
+    );
+
+    const menuSidebar = (
+      <Menu
+        menu={menu}
+        onDrawerToggle={this.handleDrawerToggle}
+        mobileOpen={mobileOpen}
+        onNavigate={this.handleNavigate}
+      />
+    );
+
+    let fullScreenStyle = null;
+    if (menuItem && menuItem.fullScreen) {
+      fullScreenStyle = {
+        marginLeft: 0,
+        marginTop: 0
+      };
+    }
+
     return (
       <div className={classes.root}>
         <div className={classes.appFrame}>
-          <AppBar className={classes.appBar}>
-            <Toolbar>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={this.handleDrawerToggle}
-                className={classes.navIconHide}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Typography variant="title" color="inherit" noWrap>
-                {menuItem ? menuItem.label : ''}
-              </Typography>
-
-              {/* TODO: make SearchBar configurable */}
-              <SearchBar className={classes.searchBar} />
-            </Toolbar>
-          </AppBar>
-          <Menu
-            menu={menu}
-            onDrawerToggle={this.handleDrawerToggle}
-            mobileOpen={mobileOpen}
-            onNavigate={this.handleNavigate}
-          />
-          <main className={classes.content}>
+          {menuItem && menuItem.fullScreen ? null : appBar}
+          {menuItem && menuItem.fullScreen ? null : menuSidebar}
+          <main className={classes.content} style={fullScreenStyle}>
             <Switch>
               {/* Omitting path so that all paths are matched */}
               {/* We cannot use the render property as render functions must be pure functions

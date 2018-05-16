@@ -11,7 +11,7 @@ export default class User extends Form {
         definition: {
           component: 'EmailField',
           name: 'username',
-          label: 'Username',
+          label: 'Email',
           required: true,
           in: false,
           out: false

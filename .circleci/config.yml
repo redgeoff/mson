@@ -39,6 +39,9 @@ jobs:
           paths:
             - ../mson-server/node_modules
           key: mson-server-dependencies-{{ checksum "package.json" }}
+      - run: cd ../mson-server && yarn compile
+
+      - run: yarn setup
 
       # TODO: require 100% coverage
       - run: CI=true yarn test

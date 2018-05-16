@@ -1,5 +1,8 @@
 // TODO: move to ../test and rename to just utils.js
 
+import compiler from './compiler';
+import Form from './form';
+
 class TestUtils {
   once(emitter, evnt) {
     return new Promise(function(resolve) {
@@ -74,6 +77,15 @@ class TestUtils {
 
   expectValuesToBeInvalid(field, invalidValues, err) {
     this._expectValuesToHaveErr(field, invalidValues, true, err);
+  }
+
+  expectSchemaToBeValid(component, values) {
+    const schemaForm = new Form();
+    component.buildSchemaForm(schemaForm, compiler);
+
+    schemaForm.setValues(values);
+    schemaForm.validate();
+    expect(schemaForm.hasErr()).toEqual(false);
   }
 }
 
