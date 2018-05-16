@@ -23,6 +23,36 @@ compiler.registerComponent('org.proj.Login', {
       label: 'Log In',
       type: 'submit',
       variant: 'outlined'
+    },
+    {
+      component: 'ButtonField',
+      name: 'createAccount',
+      label: 'Create account'
+    },
+    {
+      component: 'ButtonField',
+      name: 'forgotPassword',
+      label: 'Forgot password?'
+    }
+  ]
+});
+
+compiler.registerComponent('org.proj.User', {
+  component: 'User',
+  fields: [
+    {
+      component: 'PersonNameField',
+      name: 'name',
+      label: 'Name',
+      required: true,
+      before: 'username'
+    },
+    {
+      component: 'ButtonField',
+      name: 'submit',
+      label: 'Create account',
+      type: 'submit',
+      variant: 'raised'
     }
   ]
 });
@@ -365,6 +395,18 @@ const menuItems = [
           title: 'Login',
           content: {
             component: 'org.proj.Login'
+          }
+        },
+        fullScreen: true
+      },
+      {
+        path: '/foo/signup',
+        label: 'Signup',
+        content: {
+          component: 'Card',
+          title: 'Signup',
+          content: {
+            component: 'org.proj.User'
           }
         },
         fullScreen: true

@@ -157,10 +157,10 @@ export default class Form extends Component {
   }
 
   _setField(field) {
-    this._fields.set(field.get('name'), field);
+    const before = field.get('before');
+    this._fields.set(field.get('name'), field, before ? before : undefined);
   }
 
-  // TODO: support field.beforeName
   addField(field) {
     this._setField(field);
 

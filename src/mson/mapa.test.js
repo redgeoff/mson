@@ -537,27 +537,35 @@ it('should move', () => {
   m.set('b', 2);
   m.set('c', 3);
 
+  const expectABeforeC = () => {
+    expect(m._items['b']).toEqual({
+      key: 'b',
+      nextKey: 'a',
+      prevKey: null,
+      value: 2
+    });
+    expect(m._items['a']).toEqual({
+      key: 'a',
+      nextKey: 'c',
+      prevKey: 'b',
+      value: 1
+    });
+    expect(m._items['c']).toEqual({
+      key: 'c',
+      nextKey: null,
+      prevKey: 'a',
+      value: 3
+    });
+    expect(m._firstKey).toEqual('b');
+    expect(m._lastKey).toEqual('c');
+    expect(m._length).toEqual(3);
+  };
+
   // Move a to before c
   m.set('a', m.get('a'), 'c');
-  expect(m._items['b']).toEqual({
-    key: 'b',
-    nextKey: 'a',
-    prevKey: null,
-    value: 2
-  });
-  expect(m._items['a']).toEqual({
-    key: 'a',
-    nextKey: 'c',
-    prevKey: 'b',
-    value: 1
-  });
-  expect(m._items['c']).toEqual({
-    key: 'c',
-    nextKey: null,
-    prevKey: 'a',
-    value: 3
-  });
-  expect(m._firstKey).toEqual('b');
-  expect(m._lastKey).toEqual('c');
-  expect(m._length).toEqual(3);
+  expectABeforeC();
+
+  // Move a before a
+  m.set('a', m.get('a'), 'a');
+  expectABeforeC();
 });

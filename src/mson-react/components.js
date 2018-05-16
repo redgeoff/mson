@@ -24,5 +24,6 @@ export default {
   RecordEditorOld,
   SelectField,
   SelectListField: ListField,
-  TextField
+  TextField,
+  User: Form
 };
