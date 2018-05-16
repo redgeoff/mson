@@ -91,6 +91,10 @@ export default class Form extends Component {
     this._emitChange('fields');
   }
 
+  copyValidators(form) {
+    this.set({ validators: form.get('validators') });
+  }
+
   _clearExtraErrors() {
     this._extraErrors = [];
   }
@@ -107,6 +111,7 @@ export default class Form extends Component {
 
     if (props.form !== undefined) {
       this.copyFields(props.form);
+      this.copyValidators(props.form);
     }
 
     if (props.validators !== undefined) {
