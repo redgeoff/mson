@@ -7,6 +7,7 @@ import APIGet from './actions/api-get';
 import APISet from './actions/api-set';
 import App from './app';
 import ButtonField from './fields/button-field';
+import Card from './card';
 import ChainedSelectField from './fields/chained-select-field';
 import ChainedSelectListField from './fields/chained-select-list-field';
 import CompositeField from './fields/composite-field';
@@ -44,6 +45,7 @@ export default {
   APISet,
   App,
   ButtonField,
+  Card,
   ChainedSelectField,
   ChainedSelectListField,
   CompositeField,

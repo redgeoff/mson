@@ -361,7 +361,10 @@ const menuItems = [
         path: '/foo/login',
         label: 'Login',
         content: {
-          component: 'org.proj.Login'
+          component: 'Card',
+          content: {
+            component: 'org.proj.Login'
+          }
         },
         fullScreen: true
       },
