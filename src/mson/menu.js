@@ -52,6 +52,12 @@ export default class Menu extends Component {
                   component: 'Field',
                   label: 'Content',
                   required: true
+                },
+                {
+                  name: 'fullScreen',
+                  // component: 'BooleanField', // TODO
+                  component: 'Field',
+                  label: 'Full Screen'
                 }
               ]
             }

@@ -362,7 +362,8 @@ const menuItems = [
         label: 'Login',
         content: {
           component: 'org.proj.Login'
-        }
+        },
+        fullScreen: true
       },
       {
         path: '/foo/account',
