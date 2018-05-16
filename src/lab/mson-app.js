@@ -48,11 +48,39 @@ compiler.registerComponent('org.proj.User', {
       before: 'username'
     },
     {
+      component: 'PasswordField',
+      name: 'password',
+      label: 'Password',
+      required: true,
+      block: false
+    },
+    {
+      component: 'PasswordField',
+      name: 'retypePassword',
+      label: 'Retype Password',
+      required: true
+    },
+    {
       component: 'ButtonField',
       name: 'submit',
       label: 'Create account',
       type: 'submit',
       variant: 'raised'
+    }
+  ],
+  validators: [
+    {
+      where: {
+        retypePassword: {
+          value: {
+            $ne: '{{password.value}}'
+          }
+        }
+      },
+      error: {
+        field: 'retypePassword',
+        error: 'must match'
+      }
     }
   ]
 });
