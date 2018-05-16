@@ -1,6 +1,6 @@
 import compiler from '../mson/compiler';
 
-compiler.registerComponent('org.proj.Login', {
+compiler.registerComponent('app.Login', {
   component: 'Form',
   fields: [
     {
@@ -48,7 +48,7 @@ compiler.registerComponent('org.proj.Login', {
   ]
 });
 
-compiler.registerComponent('org.proj.User', {
+compiler.registerComponent('app.UserSignup', {
   component: 'User',
   fields: [
     {
@@ -69,14 +69,15 @@ compiler.registerComponent('org.proj.User', {
       component: 'PasswordField',
       name: 'retypePassword',
       label: 'Retype Password',
-      required: true
+      required: true,
+      out: false
     },
     {
       component: 'ButtonField',
       name: 'submit',
       label: 'Create account',
       type: 'submit',
-      variant: 'raised'
+      variant: 'outlined'
     }
   ],
   validators: [
@@ -93,10 +94,21 @@ compiler.registerComponent('org.proj.User', {
         error: 'must match'
       }
     }
+  ],
+  listeners: [
+    {
+      event: 'submit',
+      actions: [
+        {
+          component: 'CreateRecord',
+          type: 'app.User'
+        }
+      ]
+    }
   ]
 });
 
-compiler.registerComponent('org.proj.Employee', {
+compiler.registerComponent('app.Employee', {
   component: 'Form',
   fields: [
     {
@@ -115,7 +127,7 @@ compiler.registerComponent('org.proj.Employee', {
   ]
 });
 
-compiler.registerComponent('org.proj.Account', {
+compiler.registerComponent('app.Account', {
   component: 'Form',
   fields: [
     {
@@ -145,7 +157,7 @@ compiler.registerComponent('org.proj.Account', {
   ]
 });
 
-// compiler.registerComponent('org.proj.ChangePassword', {
+// compiler.registerComponent('app.ChangePassword', {
 //   component: 'RecordEditorOld',
 //   form: {
 //     component: 'Form',
@@ -236,7 +248,7 @@ compiler.registerComponent('org.proj.Account', {
 // });
 
 // TODO: should be able to inline in ChangePassword
-compiler.registerComponent('org.proj.ChangePasswordForm', {
+compiler.registerComponent('app.ChangePasswordForm', {
   component: 'Form',
   fields: [
     {
@@ -269,9 +281,9 @@ compiler.registerComponent('org.proj.ChangePasswordForm', {
   ]
 });
 
-compiler.registerComponent('org.proj.ChangePassword', {
+compiler.registerComponent('app.ChangePassword', {
   component: 'RecordEditor',
-  baseForm: 'org.proj.ChangePasswordForm',
+  baseForm: 'app.ChangePasswordForm',
   label: 'Password',
   url: 'api.mson.co',
   object: 'User',
@@ -281,9 +293,9 @@ compiler.registerComponent('org.proj.ChangePassword', {
 });
 
 // TODO: should be able to define this in ViewAccount if wanted
-compiler.registerComponent('org.proj.ViewAccountForm', {
-  name: 'org.proj.ViewAccountForm',
-  component: 'org.proj.Account',
+compiler.registerComponent('app.ViewAccountForm', {
+  name: 'app.ViewAccountForm',
+  component: 'app.Account',
   fields: [
     {
       component: 'ButtonField',
@@ -300,8 +312,8 @@ compiler.registerComponent('org.proj.ViewAccountForm', {
   ]
 });
 
-compiler.registerComponent('org.proj.ViewAccount', {
-  component: 'org.proj.ViewAccountForm',
+compiler.registerComponent('app.ViewAccount', {
+  component: 'app.ViewAccountForm',
   listeners: [
     {
       event: 'fields',
@@ -350,9 +362,9 @@ compiler.registerComponent('org.proj.ViewAccount', {
   ]
 });
 
-compiler.registerComponent('org.proj.EditAccount', {
+compiler.registerComponent('app.EditAccount', {
   component: 'RecordEditor',
-  baseForm: 'org.proj.Account',
+  baseForm: 'app.Account',
   label: 'Account',
   url: 'api.mson.co',
   object: 'User',
@@ -361,9 +373,9 @@ compiler.registerComponent('org.proj.EditAccount', {
   cancelURL: '/account/view'
 });
 
-compiler.registerComponent('org.proj.ViewAndEditAccount', {
+compiler.registerComponent('app.ViewAndEditAccount', {
   component: 'RecordEditorWithPreview',
-  baseForm: 'org.proj.Account',
+  baseForm: 'app.Account',
   label: 'Account',
   url: 'api.mson.co',
   object: 'User',
@@ -382,7 +394,7 @@ const menuItems = [
           label: 'Employees',
           component: 'FormsField',
           form: {
-            component: 'org.proj.Employee'
+            component: 'app.Employee'
           }
         }
       ]
@@ -396,28 +408,28 @@ const menuItems = [
         path: '/account',
         label: 'Account',
         content: {
-          component: 'org.proj.ViewAndEditAccount'
+          component: 'app.ViewAndEditAccount'
         }
       },
       {
         path: '/account/view',
         label: 'View Account',
         content: {
-          component: 'org.proj.ViewAccount'
+          component: 'app.ViewAccount'
         }
       },
       {
         path: '/account/edit',
         label: 'Edit Account',
         content: {
-          component: 'org.proj.EditAccount'
+          component: 'app.EditAccount'
         }
       },
       {
         path: '/account/change-password',
         label: 'Change Password',
         content: {
-          component: 'org.proj.ChangePassword'
+          component: 'app.ChangePassword'
         }
       }
     ]
@@ -433,7 +445,7 @@ const menuItems = [
           component: 'Card',
           title: 'Login',
           content: {
-            component: 'org.proj.Login'
+            component: 'app.Login'
           }
         },
         fullScreen: true
@@ -445,7 +457,7 @@ const menuItems = [
           component: 'Card',
           title: 'Signup',
           content: {
-            component: 'org.proj.User'
+            component: 'app.UserSignup'
           }
         },
         fullScreen: true
@@ -454,14 +466,14 @@ const menuItems = [
         path: '/foo/account',
         label: 'Account',
         content: {
-          component: 'org.proj.ViewAndEditAccount'
+          component: 'app.ViewAndEditAccount'
         }
       },
       {
         path: '/foo/view',
         label: 'View Account',
         content: {
-          component: 'org.proj.ViewAccount'
+          component: 'app.ViewAccount'
         }
       }
     ]
