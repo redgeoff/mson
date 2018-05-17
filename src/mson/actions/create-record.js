@@ -1,5 +1,5 @@
 import Action from './action';
-import client from '../client';
+import registrar from '../compiler/registrar';
 
 export default class CreateRecord extends Action {
   set(props) {
@@ -25,7 +25,7 @@ export default class CreateRecord extends Action {
     // TODO: how to set this? Need some config component for only storing values on server, right? FUTURE: these values should be encrypted so that they can contain API keys
     const appId = 101;
 
-    const create = await client.record.create({
+    const create = await registrar.client.record.create({
       appId: appId,
       componentName: this.get('type'),
       fieldValues: props.component.get('value')
