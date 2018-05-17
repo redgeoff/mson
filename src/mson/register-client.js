@@ -3,9 +3,10 @@ import 'babel-polyfill';
 
 import Client from 'mson-client';
 import config from './config.json';
+import registrar from './compiler/registrar';
 
 const client = new Client({
   url: config.server.url
 });
 
-export default client;
+registrar.client = client;
