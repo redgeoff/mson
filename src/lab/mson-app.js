@@ -60,13 +60,6 @@ compiler.registerComponent('app.UserSignup', {
     },
     {
       component: 'PasswordField',
-      name: 'password',
-      label: 'Password',
-      required: true,
-      block: false
-    },
-    {
-      component: 'PasswordField',
       name: 'retypePassword',
       label: 'Retype Password',
       required: true,
@@ -96,6 +89,26 @@ compiler.registerComponent('app.UserSignup', {
     }
   ],
   listeners: [
+    {
+      event: 'create',
+      actions: [
+        {
+          component: 'Set',
+          name: 'fields.username.out',
+          value: true
+        },
+        {
+          component: 'Set',
+          name: 'fields.password.out',
+          value: true
+        },
+        {
+          component: 'Set',
+          name: 'fields.password.block',
+          value: false
+        }
+      ]
+    },
     {
       event: 'submit',
       actions: [
