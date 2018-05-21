@@ -53,8 +53,16 @@ compiler.registerComponent('app.UserSignup', {
   fields: [
     {
       component: 'PersonNameField',
-      name: 'name',
-      label: 'Name',
+      name: 'firstName',
+      label: 'First Name',
+      required: true,
+      before: 'username',
+      block: false
+    },
+    {
+      component: 'PersonNameField',
+      name: 'lastName',
+      label: 'Last Name',
       required: true,
       before: 'username'
     },

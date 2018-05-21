@@ -7,7 +7,7 @@ import compiler from '../compiler';
 const createFields = () => {
   return [
     compiler.newComponent({
-      component: 'PersonNameField',
+      component: 'PersonFullNameField',
       name: 'name'
     }),
     new ButtonField({ name: 'save' })

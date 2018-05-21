@@ -27,6 +27,7 @@ import MSONComponent from './component/mson-component';
 import NumberField from './fields/number-field';
 import ObjectForm from './object-form';
 import PasswordField from './fields/password-field.json';
+import PersonFullNameField from './fields/person-full-name-field.json';
 import PersonNameField from './fields/person-name-field.json';
 import RecordEditor from './record-editor/record-editor.json';
 import RecordEditorOld from './record-editor/record-editor-old';
@@ -65,6 +66,7 @@ export default {
   NumberField,
   ObjectForm,
   PasswordField,
+  PersonFullNameField,
   PersonNameField,
   RecordEditor,
   RecordEditorOld,

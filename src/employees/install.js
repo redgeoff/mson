@@ -9,8 +9,14 @@ const user = {
   fields: [
     {
       component: 'PersonNameField',
-      name: 'name',
-      label: 'Name',
+      name: 'firstName',
+      label: 'First Name',
+      required: true
+    },
+    {
+      component: 'PersonNameField',
+      name: 'lastName',
+      label: 'Last Name',
       required: true
     }
   ]

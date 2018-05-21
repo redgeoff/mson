@@ -13,8 +13,8 @@ const createField = () => {
   });
 };
 
-// Yes, PersonNameField exists but we recreate it to test more functionality
-compiler.registerComponent('org.proj.PersonNameField', {
+// Yes, PersonFullNameField exists but we recreate it to test more functionality
+compiler.registerComponent('org.proj.PersonFullNameField', {
   component: 'CompositeField',
   fields: [
     {
@@ -33,7 +33,7 @@ compiler.registerComponent('org.proj.PersonNameField', {
 });
 
 fieldTester.shouldAll({
-  Field: compiler.getComponent('org.proj.PersonNameField'),
+  Field: compiler.getComponent('org.proj.PersonFullNameField'),
   exampleValue: {
     firstName: 'Frank',
     lastName: 'Sinatra'
