@@ -123,6 +123,10 @@ compiler.registerComponent('app.UserSignup', {
         {
           component: 'CreateRecord',
           type: 'app.User'
+        },
+        {
+          component: 'Redirect',
+          path: '/account/edit'
         }
       ]
     }
