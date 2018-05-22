@@ -1,18 +1,4 @@
 {
-  "component": "CompositeField",
-  "fields": [
-    {
-      "name": "firstName",
-      "label": "First Name",
-      "component": "TextField",
-      "maxLength": 40,
-      "block": false
-    },
-    {
-      "name": "lastName",
-      "label": "Last Name",
-      "component": "TextField",
-      "maxLength": 40
-    }
-  ]
+  "component": "TextField",
+  "maxLength": 40
 }

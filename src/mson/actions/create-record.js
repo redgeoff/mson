@@ -25,13 +25,25 @@ export default class CreateRecord extends Action {
     // TODO: how to set this? Need some config component for only storing values on server, right? FUTURE: these values should be encrypted so that they can contain API keys
     const appId = 101;
 
-    const create = await registrar.client.record.create({
-      appId: appId,
-      componentName: this.get('type'),
-      fieldValues: props.component.get('value')
-    });
+    try {
+      const create = await registrar.client.record.create({
+        appId: appId,
+        componentName: this.get('type'),
+        fieldValues: props.component.get('value')
+      });
 
-    // TODO: how to properly handle errors, report them to the user and then stop the listener chain?
-    console.log('create', create);
+      // TODO: remove. What to do with data?
+      console.log('create', create);
+    } catch (err) {
+      // TODO: this logic needs to be extracted so that it can be reused for different calls
+      const message = JSON.parse(err.graphQLErrors[0].message);
+      console.log('message=', message);
+      message.error.forEach(err => {
+        props.component.getField(err.field).setErr(err.error);
+      });
+
+      // We throw the error so that the entire listener chain is aborted
+      throw err;
+    }
   }
 }

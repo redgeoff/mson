@@ -53,17 +53,18 @@ compiler.registerComponent('app.UserSignup', {
   fields: [
     {
       component: 'PersonNameField',
-      name: 'name',
-      label: 'Name',
+      name: 'firstName',
+      label: 'First Name',
       required: true,
-      before: 'username'
+      before: 'username',
+      block: false
     },
     {
-      component: 'PasswordField',
-      name: 'password',
-      label: 'Password',
+      component: 'PersonNameField',
+      name: 'lastName',
+      label: 'Last Name',
       required: true,
-      block: false
+      before: 'username'
     },
     {
       component: 'PasswordField',
@@ -97,11 +98,35 @@ compiler.registerComponent('app.UserSignup', {
   ],
   listeners: [
     {
+      event: 'create',
+      actions: [
+        {
+          component: 'Set',
+          name: 'fields.username.out',
+          value: true
+        },
+        {
+          component: 'Set',
+          name: 'fields.password.out',
+          value: true
+        },
+        {
+          component: 'Set',
+          name: 'fields.password.block',
+          value: false
+        }
+      ]
+    },
+    {
       event: 'submit',
       actions: [
         {
           component: 'CreateRecord',
           type: 'app.User'
+        },
+        {
+          component: 'Redirect',
+          path: '/account/edit'
         }
       ]
     }

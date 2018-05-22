@@ -212,7 +212,9 @@ export default class Component extends events.EventEmitter {
     return clonedComponent;
   }
 
-  // This should be called whenever the route changes and the component is loaded
+  // This should be called whenever the route changes and the component is loaded. TODO: doesn't
+  // this need to emit the load event on all the contained components? If not, how does the content
+  // element of a Card receive this event?
   emitLoad() {
     this._emitChange('load');
   }
