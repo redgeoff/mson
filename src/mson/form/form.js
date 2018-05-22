@@ -40,6 +40,16 @@ export default class Form extends Component {
             form: {
               component: 'AccessForm'
             }
+          },
+          {
+            name: 'indexes',
+            component: 'Field'
+            // component: 'FormsField',
+            // form: {
+            //   // TODO: create and use IndexForm. Needs to verfiy that fields are present--see
+            //   // SchemaValidatorForm for something similar.
+            //   component: 'IndexForm'
+            // }
           }
         ]
       }
