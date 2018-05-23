@@ -83,6 +83,13 @@ export default class Form extends Component {
     this._listenForLoad();
   }
 
+  _setSubmitDisabled(disabled) {
+    const button = this._getSubmitButton();
+    if (button) {
+      button.set({ disabled });
+    }
+  }
+
   _listenForLoad() {
     this.on('load', () => {
       if (this.get('resetOnLoad')) {
@@ -90,11 +97,12 @@ export default class Form extends Component {
         this.reset();
       }
 
-      // Disable submit buttons by default
-      const button = this._getSubmitButton();
-      if (button) {
-        button.set({ disabled: true });
-      }
+      // Note: this is probably more trouble than its worth as when the user is first filling in the
+      // form there are no errors until a field is touched and in turn it is probably best to
+      // provide the user with something to click that will give them feedback about the error.
+      //
+      // // Disable submit buttons by default
+      // this._setSubmitDisabled(true);
     });
   }
 
@@ -395,10 +403,7 @@ export default class Form extends Component {
   _emitCanOrCannotSubmit() {
     // Emit a canSubmit or cannotSubmit event so that we can adjust buttons, etc...
     const canSubmit = this.canSubmit();
-    const button = this._getSubmitButton();
-    if (button) {
-      button.set({ disabled: !canSubmit });
-    }
+    // this._setSubmitDisabled(!canSubmit);
     this._emitChange(canSubmit ? 'canSubmit' : 'cannotSubmit');
   }
 
