@@ -75,6 +75,9 @@ export default class Form extends Component {
     // Whether or not to report errors when an undefined (extra) field is specified
     this._set('reportUndefined', true);
 
+    // If true, the form is reset on load
+    this._set('resetOnLoad', true);
+
     this._formSetMSONSchema();
 
     this._listenForLoad();
@@ -82,8 +85,10 @@ export default class Form extends Component {
 
   _listenForLoad() {
     this.on('load', () => {
-      // Clear any previous values
-      this.reset();
+      if (this.get('resetOnLoad')) {
+        // Clear any previous values
+        this.reset();
+      }
 
       // Disable submit buttons by default
       const button = this._getSubmitButton();
@@ -188,7 +193,8 @@ export default class Form extends Component {
       'pristine',
       'access',
       'autoValidate',
-      'reportUndefined'
+      'reportUndefined',
+      'resetOnLoad'
     );
   }
 
@@ -278,7 +284,8 @@ export default class Form extends Component {
       'pristine',
       'access',
       'autoValidate',
-      'reportUndefined'
+      'reportUndefined',
+      'resetOnLoad'
     );
     return value === undefined ? super.getOne(name) : value;
   }
