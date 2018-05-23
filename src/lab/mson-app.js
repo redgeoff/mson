@@ -140,7 +140,7 @@ compiler.registerComponent('app.UserSignup', {
   ]
 });
 
-compiler.registerComponent('app.Employee', {
+compiler.registerComponent('app.RemoveEmployee', {
   component: 'Form',
   fields: [
     {
@@ -416,17 +416,17 @@ compiler.registerComponent('app.ViewAndEditAccount', {
 
 const menuItems = [
   {
-    path: '/employees',
-    label: 'Employees',
+    path: '/remove-employees',
+    label: 'Remove Employees',
     content: {
       component: 'Form',
       fields: [
         {
-          name: 'employees',
-          label: 'Employees',
+          name: 'removeEmployees',
+          label: 'Remove Employees',
           component: 'FormsField',
           form: {
-            component: 'app.Employee'
+            component: 'app.RemoveEmployee'
           }
         }
       ],
@@ -527,15 +527,15 @@ const app = compiler.newComponent({
 // const employees = app
 //   .get('menu')
 //   .getItem('/employees')
-//   .content.getField('employees')
+//   .content.getField('removeEmployees')
 //   .getStore();
 // employees.set({ id: '1', name: 'Ella Fitzgerald', email: 'ella@example.com' });
 // employees.set({ id: '2', name: 'Frank Sinatra', email: 'frank@example.com' });
 // employees.set({ id: '3', name: 'Ray Charles', email: 'ray@example.com' });
 const employees = app
   .get('menu')
-  .getItem('/employees')
-  .content.getField('employees');
+  .getItem('/remove-employees')
+  .content.getField('removeEmployees');
 employees.addForm({
   id: '1',
   name: 'Ella Fitzgerald',
