@@ -372,7 +372,12 @@ export default class Form extends Component {
 
   _emitCanOrCannotSubmit() {
     // Emit a canSubmit or cannotSubmit event so that we can adjust buttons, etc...
-    this._emitChange(this.canSubmit() ? 'canSubmit' : 'cannotSubmit');
+    const canSubmit = this.canSubmit();
+    const button = this._getSubmitButton();
+    if (button) {
+      button.set({ disabled: !canSubmit });
+    }
+    this._emitChange(canSubmit ? 'canSubmit' : 'cannotSubmit');
   }
 
   validate() {
@@ -493,16 +498,22 @@ export default class Form extends Component {
     return hasErr;
   }
 
-  submit() {
-    // Simulate a click on the first ButtonField of type=submit
-    this._fields.each(field => {
-      if (field instanceof ButtonField) {
-        if (field.get('type') === 'submit') {
-          field.emitClick();
-          return false; // exit loop
-        }
+  _getSubmitButton() {
+    let button = null;
+    this.eachField(field => {
+      if (field instanceof ButtonField && field.get('type') === 'submit') {
+        button = field;
+        return false; // exit loop
       }
     });
+    return button;
+  }
+
+  submit() {
+    const button = this._getSubmitButton();
+    if (button) {
+      button.emitClick();
+    }
   }
 
   *getFields() {
