@@ -403,6 +403,9 @@ export default class Form extends Component {
   _emitCanOrCannotSubmit() {
     // Emit a canSubmit or cannotSubmit event so that we can adjust buttons, etc...
     const canSubmit = this.canSubmit();
+    if (canSubmit) {
+      this._setSubmitDisabled(false);
+    }
     // this._setSubmitDisabled(!canSubmit);
     this._emitChange(canSubmit ? 'canSubmit' : 'cannotSubmit');
   }
