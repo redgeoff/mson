@@ -103,6 +103,9 @@ export default class Form extends Component {
       //
       // // Disable submit buttons by default
       // this._setSubmitDisabled(true);
+
+      // Pass load event down to fields
+      this._fields.each(field => field._emitChange('load'));
     });
   }
 

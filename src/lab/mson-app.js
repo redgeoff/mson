@@ -414,6 +414,59 @@ compiler.registerComponent('app.ViewAndEditAccount', {
   id: '1' // TODO: '{{globals.user.id}}'
 });
 
+// TODO: is there a good way for UserSignup to share this structure? app.Employee and app.UserSignup
+// should probably inherit some shared component
+compiler.registerComponent('app.Employee', {
+  component: 'Form',
+  fields: [
+    {
+      component: 'PersonNameField',
+      name: 'firstName',
+      label: 'First Name',
+      required: true,
+      block: false
+    },
+    {
+      component: 'PersonNameField',
+      name: 'lastName',
+      label: 'Last Name',
+      required: true
+    }
+    // TODO: will probably need to include username when getting list of users
+    // {
+    //   component: 'EmailField',
+    //   name: 'email',
+    //   label: 'Email',
+    //   required: true
+    // }
+  ]
+});
+
+compiler.registerComponent('app.Employees', {
+  component: 'Form',
+  fields: [
+    {
+      name: 'employees',
+      label: 'Employees',
+      component: 'FormsField',
+      form: {
+        component: 'app.Employee'
+      },
+      listeners: [
+        {
+          event: 'load',
+          actions: [
+            {
+              component: 'GetRecords',
+              type: 'app.User'
+            }
+          ]
+        }
+      ]
+    }
+  ]
+});
+
 const menuItems = [
   {
     path: '/remove-employees',
@@ -431,6 +484,13 @@ const menuItems = [
         }
       ],
       resetOnLoad: false
+    }
+  },
+  {
+    path: '/employees',
+    label: 'Employees',
+    content: {
+      component: 'app.Employees'
     }
   },
   {

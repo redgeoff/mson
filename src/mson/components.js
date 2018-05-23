@@ -20,6 +20,7 @@ import FormAccess from './form/form-access';
 import FormField from './fields/form-field';
 import FormsField from './fields/forms-field';
 import FormValidator from './form/form-validator';
+import GetRecords from './actions/get-records';
 import IntegerField from './fields/integer-field';
 import ListField from './fields/list-field';
 import LogInToApp from './actions/log-in-to-app';
@@ -60,6 +61,7 @@ export default {
   AccessForm: FormAccess,
   FormField,
   FormsField,
+  GetRecords,
   IntegerField,
   ListField,
   LogInToApp,

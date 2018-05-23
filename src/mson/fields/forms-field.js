@@ -16,12 +16,23 @@ export default class FormsField extends Field {
   //   });
   // }
 
+  _bubbleUpLoad() {
+    this.on('load', () => {
+      const form = this.get('form');
+      if (form) {
+        form.emitLoad();
+      }
+    });
+  }
+
   _create(props) {
     // We use a Mapa instead of an array as it allows us to index the forms by id. We use a Mapa
     // instead of a Map as we may want to iterate through the forms beginning at any single form.
     this._forms = new Mapa();
 
     super._create(props);
+
+    this._bubbleUpLoad();
   }
 
   // constructor(props) {
@@ -72,6 +83,9 @@ export default class FormsField extends Field {
     this._forms.set(key, clonedForm);
 
     this._listenToForm(clonedForm);
+
+    // Emit change so that UI is notified
+    this._emitChange('change', values);
   }
 
   _clearAllFormListeners() {
