@@ -161,6 +161,10 @@ export default class Form extends Component {
       this.setDirty(!props.pristine);
     }
 
+    if (props.err !== undefined) {
+      this._emitCanOrCannotSubmit();
+    }
+
     this._setIfUndefined(
       props,
       'touched',
@@ -362,7 +366,13 @@ export default class Form extends Component {
   }
 
   canSubmit() {
-    return !this.hasErrorForTouchedField() && this.get('dirty');
+    // return !this.hasErrorForTouchedField() && this.get('dirty');
+    return !this.hasErrorForField() && this.get('dirty');
+  }
+
+  _emitCanOrCannotSubmit() {
+    // Emit a canSubmit or cannotSubmit event so that we can adjust buttons, etc...
+    this._emitChange(this.canSubmit() ? 'canSubmit' : 'cannotSubmit');
   }
 
   validate() {
@@ -375,12 +385,11 @@ export default class Form extends Component {
     // this._validators.forEach(validator => validator(this));
     this._validateWithValidators();
 
-    // Emit a canSubmit or cannotSubmit event so that we can adjust buttons, etc...
-    this._emitChange(this.canSubmit() ? 'canSubmit' : 'cannotSubmit');
-
     if (this._hasTypeError || this._extraErrors.length > 0) {
       this.set({ err: true });
     }
+
+    this._emitCanOrCannotSubmit();
   }
 
   addValidator(validator) {
@@ -464,6 +473,19 @@ export default class Form extends Component {
     let hasErr = false;
     this._fields.each(field => {
       if (field.get('touched') && field.getErr()) {
+        hasErr = true;
+        return false; // exit loop
+      }
+    });
+    return hasErr;
+  }
+
+  // TODO: make this more efficient by using a prop that is set by the field listeners. This way the
+  // value is cached.
+  hasErrorForField() {
+    let hasErr = false;
+    this._fields.each(field => {
+      if (field.getErr()) {
         hasErr = true;
         return false; // exit loop
       }

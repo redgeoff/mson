@@ -118,6 +118,16 @@ compiler.registerComponent('app.UserSignup', {
       ]
     },
     {
+      event: 'load',
+      actions: [
+        {
+          component: 'Set',
+          name: 'fields.submit.disabled',
+          value: true
+        }
+      ]
+    },
+    {
       event: 'submit',
       actions: [
         {
@@ -127,6 +137,26 @@ compiler.registerComponent('app.UserSignup', {
         {
           component: 'Redirect',
           path: '/account/edit'
+        }
+      ]
+    },
+    {
+      event: 'canSubmit',
+      actions: [
+        {
+          component: 'Set',
+          name: 'fields.submit.disabled',
+          value: false
+        }
+      ]
+    },
+    {
+      event: 'cannotSubmit',
+      actions: [
+        {
+          component: 'Set',
+          name: 'fields.submit.disabled',
+          value: true
         }
       ]
     }

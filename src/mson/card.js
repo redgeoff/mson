@@ -21,6 +21,17 @@ export default class Card extends Component {
         ]
       }
     });
+
+    this._bubbleUpLoad();
+  }
+
+  _bubbleUpLoad() {
+    this.on('load', () => {
+      const content = this.get('content');
+      if (content) {
+        content.emitLoad();
+      }
+    });
   }
 
   set(props) {
