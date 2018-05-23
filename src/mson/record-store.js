@@ -50,7 +50,16 @@ export default class RecordStore extends Component {
     });
   }
 
-  async update(props) {}
+  async update(props) {
+    return this._request(props, appId => {
+      return registrar.client.record.update({
+        appId,
+        componentName: this.get('type'),
+        id: props.id,
+        fieldValues: props.form.getValues()
+      });
+    });
+  }
 
   async archive(props) {}
 }

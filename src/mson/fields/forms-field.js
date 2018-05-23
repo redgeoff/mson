@@ -252,6 +252,7 @@ export default class FormsField extends Field {
         id.setValue(response.data.createRecord.id);
       } else {
         // Existing
+        await store.update({ form, id: id.getValue() });
       }
     } else if (id.isBlank()) {
       // TODO: use the id from this._docs.set instead of this dummy id

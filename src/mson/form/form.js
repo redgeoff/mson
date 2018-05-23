@@ -318,11 +318,13 @@ export default class Form extends Component {
     let values = {};
     props = props ? props : {};
     this._fields.each(field => {
+      const name = field.get('name');
       if (
         (props.includeOuts || field.get('out')) &&
-        (!props.excludeBlanks || !field.isBlank())
+        (!props.excludeBlanks || !field.isBlank()) &&
+        (!props.excludeDefaultFields || !this.isDefaultField(name))
       ) {
-        values[field.get('name')] = field.get('value');
+        values[name] = field.get('value');
       }
     });
     return values;
