@@ -17,14 +17,13 @@ export default class CreateRecord extends Action {
     const appId = globals.get('appId');
 
     try {
-      const create = await registrar.client.record.create({
+      await registrar.client.record.create({
         appId: appId,
         componentName: this.get('type'),
         fieldValues: props.component.get('value')
       });
 
-      // TODO: remove. What to do with data?
-      console.log('create', create);
+      // TODO: What to do with the created data?
     } catch (err) {
       // TODO: this logic needs to be extracted so that it can be reused for different calls
       const message = JSON.parse(err.graphQLErrors[0].message);
