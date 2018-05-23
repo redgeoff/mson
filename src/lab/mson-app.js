@@ -422,7 +422,8 @@ const menuItems = [
             component: 'app.Employee'
           }
         }
-      ]
+      ],
+      resetOnLoad: false
     }
   },
   {

@@ -75,7 +75,35 @@ export default class Form extends Component {
     // Whether or not to report errors when an undefined (extra) field is specified
     this._set('reportUndefined', true);
 
+    // If true, the form is reset on load
+    this._set('resetOnLoad', true);
+
     this._formSetMSONSchema();
+
+    this._listenForLoad();
+  }
+
+  _setSubmitDisabled(disabled) {
+    const button = this._getSubmitButton();
+    if (button) {
+      button.set({ disabled });
+    }
+  }
+
+  _listenForLoad() {
+    this.on('load', () => {
+      if (this.get('resetOnLoad')) {
+        // Clear any previous values
+        this.reset();
+      }
+
+      // Note: this is probably more trouble than its worth as when the user is first filling in the
+      // form there are no errors until a field is touched and in turn it is probably best to
+      // provide the user with something to click that will give them feedback about the error.
+      //
+      // // Disable submit buttons by default
+      // this._setSubmitDisabled(true);
+    });
   }
 
   isDefaultField(fieldName) {
@@ -161,6 +189,10 @@ export default class Form extends Component {
       this.setDirty(!props.pristine);
     }
 
+    if (props.err !== undefined) {
+      this._emitCanOrCannotSubmit();
+    }
+
     this._setIfUndefined(
       props,
       'touched',
@@ -169,7 +201,8 @@ export default class Form extends Component {
       'pristine',
       'access',
       'autoValidate',
-      'reportUndefined'
+      'reportUndefined',
+      'resetOnLoad'
     );
   }
 
@@ -259,7 +292,8 @@ export default class Form extends Component {
       'pristine',
       'access',
       'autoValidate',
-      'reportUndefined'
+      'reportUndefined',
+      'resetOnLoad'
     );
     return value === undefined ? super.getOne(name) : value;
   }
@@ -362,7 +396,18 @@ export default class Form extends Component {
   }
 
   canSubmit() {
-    return !this.hasErrorForTouchedField() && this.get('dirty');
+    // return !this.hasErrorForTouchedField() && this.get('dirty');
+    return !this.hasErrorForField() && this.get('dirty');
+  }
+
+  _emitCanOrCannotSubmit() {
+    // Emit a canSubmit or cannotSubmit event so that we can adjust buttons, etc...
+    const canSubmit = this.canSubmit();
+    if (canSubmit) {
+      this._setSubmitDisabled(false);
+    }
+    // this._setSubmitDisabled(!canSubmit);
+    this._emitChange(canSubmit ? 'canSubmit' : 'cannotSubmit');
   }
 
   validate() {
@@ -375,12 +420,11 @@ export default class Form extends Component {
     // this._validators.forEach(validator => validator(this));
     this._validateWithValidators();
 
-    // Emit a canSubmit or cannotSubmit event so that we can adjust buttons, etc...
-    this._emitChange(this.canSubmit() ? 'canSubmit' : 'cannotSubmit');
-
     if (this._hasTypeError || this._extraErrors.length > 0) {
       this.set({ err: true });
     }
+
+    this._emitCanOrCannotSubmit();
   }
 
   addValidator(validator) {
@@ -471,16 +515,35 @@ export default class Form extends Component {
     return hasErr;
   }
 
-  submit() {
-    // Simulate a click on the first ButtonField of type=submit
+  // TODO: make this more efficient by using a prop that is set by the field listeners. This way the
+  // value is cached.
+  hasErrorForField() {
+    let hasErr = false;
     this._fields.each(field => {
-      if (field instanceof ButtonField) {
-        if (field.get('type') === 'submit') {
-          field.emitClick();
-          return false; // exit loop
-        }
+      if (field.getErr()) {
+        hasErr = true;
+        return false; // exit loop
       }
     });
+    return hasErr;
+  }
+
+  _getSubmitButton() {
+    let button = null;
+    this.eachField(field => {
+      if (field instanceof ButtonField && field.get('type') === 'submit') {
+        button = field;
+        return false; // exit loop
+      }
+    });
+    return button;
+  }
+
+  submit() {
+    const button = this._getSubmitButton();
+    if (button) {
+      button.emitClick();
+    }
   }
 
   *getFields() {
