@@ -76,6 +76,18 @@ export default class Form extends Component {
     this._set('reportUndefined', true);
 
     this._formSetMSONSchema();
+
+    this._listenForLoad();
+  }
+
+  _listenForLoad() {
+    this.on('load', () => {
+      // Disable submit buttons by default
+      const button = this._getSubmitButton();
+      if (button) {
+        button.set({ disabled: true });
+      }
+    });
   }
 
   isDefaultField(fieldName) {

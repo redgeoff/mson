@@ -118,16 +118,6 @@ compiler.registerComponent('app.UserSignup', {
       ]
     },
     {
-      event: 'load',
-      actions: [
-        {
-          component: 'Set',
-          name: 'fields.submit.disabled',
-          value: true
-        }
-      ]
-    },
-    {
       event: 'submit',
       actions: [
         {
