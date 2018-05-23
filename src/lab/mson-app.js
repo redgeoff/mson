@@ -129,6 +129,9 @@ compiler.registerComponent('app.UserSignup', {
           type: 'app.User'
         },
         {
+          component: 'LogInToApp'
+        },
+        {
           component: 'Redirect',
           path: '/account/edit'
         }

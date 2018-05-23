@@ -18,7 +18,7 @@ export default class CreateRecord extends Action {
 
     try {
       await registrar.client.record.create({
-        appId: appId,
+        appId,
         componentName: this.get('type'),
         fieldValues: props.component.get('value')
       });
@@ -27,7 +27,6 @@ export default class CreateRecord extends Action {
     } catch (err) {
       // TODO: this logic needs to be extracted so that it can be reused for different calls
       const message = JSON.parse(err.graphQLErrors[0].message);
-      console.log('message=', message);
       message.error.forEach(err => {
         props.component.getField(err.field).setErr(err.error);
       });

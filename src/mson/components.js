@@ -22,6 +22,7 @@ import FormsField from './fields/forms-field';
 import FormValidator from './form/form-validator';
 import IntegerField from './fields/integer-field';
 import ListField from './fields/list-field';
+import LogInToApp from './actions/log-in-to-app';
 import Menu from './menu';
 import MSONComponent from './component/mson-component';
 import NumberField from './fields/number-field';
@@ -61,6 +62,7 @@ export default {
   FormsField,
   IntegerField,
   ListField,
+  LogInToApp,
   Menu,
   MSONComponent,
   NumberField,
