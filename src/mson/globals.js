@@ -8,11 +8,16 @@ class Globals extends Component {
 
   set(props) {
     super.set(props);
-    this._setIfUndefined(props, 'redirectPath', 'snackbarMessage');
+    this._setIfUndefined(props, 'redirectPath', 'snackbarMessage', 'appId');
   }
 
   getOne(name) {
-    const value = this._getIfAllowed(name, 'redirectPath', 'snackbarMessage');
+    const value = this._getIfAllowed(
+      name,
+      'redirectPath',
+      'snackbarMessage',
+      'appId'
+    );
     return value === undefined ? super.getOne(name) : value;
   }
 

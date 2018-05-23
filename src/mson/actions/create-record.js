@@ -1,5 +1,6 @@
 import Action from './action';
 import registrar from '../compiler/registrar';
+import globals from '../globals';
 
 export default class CreateRecord extends Action {
   set(props) {
@@ -13,17 +14,7 @@ export default class CreateRecord extends Action {
   }
 
   async act(props) {
-    // TODO: actually query the GraphQL API
-    console.log(
-      'saving',
-      props,
-      props.component.get('value'),
-      'type=',
-      this.get('type')
-    );
-
-    // TODO: how to set this? Need some config component for only storing values on server, right? FUTURE: these values should be encrypted so that they can contain API keys
-    const appId = 101;
+    const appId = globals.get('appId');
 
     try {
       const create = await registrar.client.record.create({

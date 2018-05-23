@@ -1,4 +1,8 @@
 import compiler from '../mson/compiler';
+import globals from '../mson/globals';
+
+// TODO: in a production app the appId should be set by the path or subdomain
+globals.set({ appId: 101 });
 
 compiler.registerComponent('app.Login', {
   component: 'Form',
