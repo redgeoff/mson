@@ -22,6 +22,19 @@ const user = {
   ]
 };
 
+const department = {
+  name: 'app.Department',
+  component: 'Form',
+  fields: [
+    {
+      component: 'PersonNameField',
+      name: 'name',
+      label: 'Name',
+      required: true
+    }
+  ]
+};
+
 // const employee = {
 //   name: 'app.Employee',
 //   component: 'Form',
@@ -82,13 +95,18 @@ const main = async () => {
 
   await client.app.create({ name: 'employees' });
 
+  await client.component.create({ appId: config.appId, definition: user });
+
+  await client.component.create({
+    appId: config.appId,
+    definition: department
+  });
+
   // await client.component.create({ appId: config.appId, definition: employee });
   //
   // await client.component.create({ appId: config.appId, definition: menu });
   //
   // await client.component.create({ appId: config.appId, definition: app });
-
-  await client.component.create({ appId: config.appId, definition: user });
 };
 
 main();

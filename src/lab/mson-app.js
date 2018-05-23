@@ -467,6 +467,44 @@ compiler.registerComponent('app.Employees', {
   ]
 });
 
+compiler.registerComponent('app.Department', {
+  name: 'app.Department',
+  component: 'Form',
+  fields: [
+    {
+      component: 'PersonNameField',
+      name: 'name',
+      label: 'Name',
+      required: true
+    }
+  ]
+});
+
+compiler.registerComponent('app.Departments', {
+  component: 'Form',
+  fields: [
+    {
+      name: 'departments',
+      label: 'Departments',
+      component: 'FormsField',
+      form: {
+        component: 'app.Department'
+      },
+      listeners: [
+        {
+          event: 'load',
+          actions: [
+            {
+              component: 'GetRecords',
+              type: 'app.Department'
+            }
+          ]
+        }
+      ]
+    }
+  ]
+});
+
 const menuItems = [
   {
     path: '/remove-employees',
@@ -491,6 +529,13 @@ const menuItems = [
     label: 'Employees',
     content: {
       component: 'app.Employees'
+    }
+  },
+  {
+    path: '/departments',
+    label: 'Departments',
+    content: {
+      component: 'app.Departments'
     }
   },
   {

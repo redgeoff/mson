@@ -22,7 +22,6 @@ export default class GetRecords extends Action {
       componentName: this.get('type'),
       asArray: true
     });
-    console.log('records', records);
 
     const form = props.component.get('form');
 
@@ -37,7 +36,6 @@ export default class GetRecords extends Action {
         }
       });
 
-      console.log('values=', values);
       props.component.addForm(values);
     });
   }
