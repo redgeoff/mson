@@ -177,7 +177,8 @@ export default class FormsField extends Field {
       'forbidDelete',
       'minSize',
       'maxSize',
-      'singularLabel'
+      'singularLabel',
+      'store'
     );
   }
 
@@ -200,7 +201,8 @@ export default class FormsField extends Field {
       'forbidDelete',
       'minSize',
       'maxSize',
-      'singularLabel'
+      'singularLabel',
+      'store'
     );
     return value === undefined ? super.getOne(name) : value;
   }

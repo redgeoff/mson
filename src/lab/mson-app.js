@@ -490,17 +490,22 @@ compiler.registerComponent('app.Departments', {
       form: {
         component: 'app.Department'
       },
-      listeners: [
-        {
-          event: 'load',
-          actions: [
-            {
-              component: 'GetRecords',
-              type: 'app.Department'
-            }
-          ]
-        }
-      ]
+      // TODO: remove
+      // listeners: [
+      //   {
+      //     event: 'load',
+      //     actions: [
+      //       {
+      //         component: 'GetRecords',
+      //         type: 'app.Department'
+      //       }
+      //     ]
+      //   }
+      // ]
+      store: {
+        component: 'RecordStore',
+        type: 'app.Department'
+      }
     }
   ]
 });

@@ -34,6 +34,7 @@ import PersonNameField from './fields/person-name-field.json';
 import RecordEditor from './record-editor/record-editor.json';
 import RecordEditorOld from './record-editor/record-editor-old';
 import RecordEditorWithPreview from './record-editor/record-editor-with-preview.json';
+import RecordStore from './record-store';
 import Redirect from './actions/redirect';
 import SchemaValidatorForm from './form/schema-validator-form';
 import SelectField from './fields/select-field';
@@ -75,6 +76,7 @@ export default {
   RecordEditor,
   RecordEditorOld,
   RecordEditorWithPreview,
+  RecordStore,
   Redirect,
   SchemaValidatorForm,
   SelectField,
