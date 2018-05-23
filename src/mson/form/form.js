@@ -82,6 +82,9 @@ export default class Form extends Component {
 
   _listenForLoad() {
     this.on('load', () => {
+      // Clear any previous values
+      this.reset();
+
       // Disable submit buttons by default
       const button = this._getSubmitButton();
       if (button) {
