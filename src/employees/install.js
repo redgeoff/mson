@@ -32,6 +32,12 @@ const department = {
       label: 'Name',
       required: true
     }
+  ],
+  indexes: [
+    {
+      unique: true,
+      fields: ['name']
+    }
   ]
 };
 

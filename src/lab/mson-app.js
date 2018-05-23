@@ -477,6 +477,12 @@ compiler.registerComponent('app.Department', {
       label: 'Name',
       required: true
     }
+  ],
+  indexes: [
+    {
+      unique: true,
+      fields: ['name']
+    }
   ]
 });
 

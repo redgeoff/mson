@@ -248,7 +248,6 @@ export default class FormsField extends Field {
     if (store) {
       // New?
       if (id.isBlank()) {
-        // TODO: what if there is an error? e.g. unique constraint
         const response = await store.create({ form });
         id.setValue(response.data.createRecord.id);
       } else {

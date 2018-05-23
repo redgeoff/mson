@@ -23,7 +23,7 @@ export default class RecordStore extends Component {
       const response = await promiseFactory(appId);
       return response;
     } catch (err) {
-      utils.setFormErrorsFromAPIError(err, props.component);
+      utils.setFormErrorsFromAPIError(err, props.form);
 
       // We throw the error so that the entire listener chain is aborted
       throw err;
