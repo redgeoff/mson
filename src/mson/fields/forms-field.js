@@ -16,12 +16,38 @@ export default class FormsField extends Field {
   //   });
   // }
 
-  _bubbleUpLoad() {
-    this.on('load', () => {
+  // TODO: pagination
+  async _getAll() {
+    const store = this.get('store');
+    if (store) {
+      const form = this.get('form');
+
+      const records = await store.getAll();
+
+      records.data.records.edges.forEach(edge => {
+        const values = { id: edge.node.id };
+
+        form.eachField(field => {
+          // Field exists in returned records?
+          const val = edge.node.fieldValues[field.get('name')];
+          if (val) {
+            values[field.get('name')] = val;
+          }
+        });
+
+        this.addForm(values);
+      });
+    }
+  }
+
+  _listenForLoad() {
+    this.on('load', async () => {
       const form = this.get('form');
       if (form) {
         form.emitLoad();
       }
+
+      await this._getAll();
     });
   }
 
@@ -32,7 +58,7 @@ export default class FormsField extends Field {
 
     super._create(props);
 
-    this._bubbleUpLoad();
+    this._listenForLoad();
   }
 
   // constructor(props) {
@@ -218,7 +244,17 @@ export default class FormsField extends Field {
   async save(form) {
     // await this._docs.set(form.getValues());
     const id = form.getField('id');
-    if (id.isBlank()) {
+    const store = this.get('store');
+    if (store) {
+      // New?
+      if (id.isBlank()) {
+        // TODO: what if there is an error? e.g. unique constraint
+        const response = await store.create({ form });
+        id.setValue(response.data.createRecord.id);
+      } else {
+        // Existing
+      }
+    } else if (id.isBlank()) {
       // TODO: use the id from this._docs.set instead of this dummy id
       id.setValue(uuid.v4());
     }

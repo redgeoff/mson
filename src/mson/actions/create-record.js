@@ -1,6 +1,7 @@
 import Action from './action';
 import registrar from '../compiler/registrar';
 import globals from '../globals';
+import utils from '../utils';
 
 export default class CreateRecord extends Action {
   set(props) {
@@ -25,11 +26,7 @@ export default class CreateRecord extends Action {
 
       // TODO: What to do with the created data?
     } catch (err) {
-      // TODO: this logic needs to be extracted so that it can be reused for different calls
-      const message = JSON.parse(err.graphQLErrors[0].message);
-      message.error.forEach(err => {
-        props.component.getField(err.field).setErr(err.error);
-      });
+      utils.setFormErrorsFromAPIError(err, props.component);
 
       // We throw the error so that the entire listener chain is aborted
       throw err;
