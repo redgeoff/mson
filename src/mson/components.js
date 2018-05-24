@@ -6,6 +6,7 @@
 import APIGet from './actions/api-get';
 import APISet from './actions/api-set';
 import App from './app';
+import BooleanField from './fields/boolean-field';
 import ButtonField from './fields/button-field';
 import Card from './card';
 import ChainedSelectField from './fields/chained-select-field';
@@ -49,6 +50,7 @@ export default {
   APIGet,
   APISet,
   App,
+  BooleanField,
   ButtonField,
   Card,
   ChainedSelectField,
