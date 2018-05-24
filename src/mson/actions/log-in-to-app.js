@@ -8,10 +8,16 @@ export default class LogInToApp extends Action {
 
     const values = props.component.get('value');
 
-    await registrar.client.user.logInToApp({
-      appId,
-      username: values.username,
-      password: values.password
-    });
+    try {
+      await registrar.client.user.logInToApp({
+        appId,
+        username: values.username,
+        password: values.password
+      });
+    } catch (err) {
+      // Assume this is an "invalid username or password"
+      props.component.getField('password').setErr('invalid email or password');
+      throw err;
+    }
   }
 }

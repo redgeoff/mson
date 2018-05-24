@@ -639,7 +639,9 @@ const menuItems = [
     content: {
       component: 'Action',
       actions: [
-        // TODO: Log out
+        {
+          component: 'LogOutOfApp'
+        },
         {
           component: 'Redirect',
           path: '/foo/login'

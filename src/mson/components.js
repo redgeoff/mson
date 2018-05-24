@@ -26,6 +26,7 @@ import GetRecords from './actions/get-records';
 import IntegerField from './fields/integer-field';
 import ListField from './fields/list-field';
 import LogInToApp from './actions/log-in-to-app';
+import LogOutOfApp from './actions/log-out-of-app';
 import Menu from './menu';
 import MSONComponent from './component/mson-component';
 import NumberField from './fields/number-field';
@@ -70,6 +71,7 @@ export default {
   IntegerField,
   ListField,
   LogInToApp,
+  LogOutOfApp,
   Menu,
   MSONComponent,
   NumberField,
