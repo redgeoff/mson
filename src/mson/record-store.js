@@ -41,16 +41,19 @@ export default class RecordStore extends Component {
   }
 
   async getAll(props) {
+    // TODO: what happens when we have where clauses defined in props? Should we also support a
+    // status prop like at the stils layer? If not, we can just generate a composite where. The
+    // components API has a status so maybe this is the best?
+
+    const where =
+      props && props.showArchived ? undefined : { archivedAt: null };
+
     return this._request(props, appId => {
       return registrar.client.record.getAll({
         appId,
         componentName: this.get('type'),
         asArray: true,
-
-        // TODO: this needs to be configurable
-        where: {
-          archivedAt: null
-        }
+        where
       });
     });
   }

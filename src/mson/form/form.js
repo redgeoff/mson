@@ -81,6 +81,7 @@ export default class Form extends Component {
     this._formSetMSONSchema();
 
     this._listenForLoad();
+    this._listenForShowArchived();
   }
 
   _setSubmitDisabled(disabled) {
@@ -106,6 +107,15 @@ export default class Form extends Component {
 
       // Pass load event down to fields
       this._fields.each(field => field._emitChange('load'));
+    });
+  }
+
+  _listenForShowArchived() {
+    this.on('showArchived', showArchived => {
+      // Pass load event down to fields
+      this._fields.each(field =>
+        field._emitChange('showArchived', showArchived)
+      );
     });
   }
 

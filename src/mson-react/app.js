@@ -234,8 +234,14 @@ class App extends React.Component {
     this.setState({ snackbarOpen: false });
   };
 
-  handleChange = event => {
+  handleArchivedChange = event => {
     this.setState({ showArchived: event.target.checked });
+
+    const { menuItem } = this.state;
+
+    if (menuItem) {
+      menuItem.content._emitChange('showArchived', event.target.checked);
+    }
   };
 
   render() {

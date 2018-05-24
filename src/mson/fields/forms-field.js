@@ -17,12 +17,12 @@ export default class FormsField extends Field {
   // }
 
   // TODO: pagination
-  async _getAll() {
+  async _getAll(props) {
     const store = this.get('store');
     if (store) {
       const form = this.get('form');
 
-      const records = await store.getAll();
+      const records = await store.getAll(props);
 
       records.data.records.edges.forEach(edge => {
         const values = { id: edge.node.id };
@@ -51,6 +51,15 @@ export default class FormsField extends Field {
     });
   }
 
+  _listenForShowArchived() {
+    this.on('showArchived', async showArchived => {
+      // Clear any existing forms
+      this._forms.clear();
+
+      await this._getAll({ showArchived });
+    });
+  }
+
   _create(props) {
     // We use a Mapa instead of an array as it allows us to index the forms by id. We use a Mapa
     // instead of a Map as we may want to iterate through the forms beginning at any single form.
@@ -59,6 +68,7 @@ export default class FormsField extends Field {
     super._create(props);
 
     this._listenForLoad();
+    this._listenForShowArchived();
   }
 
   // constructor(props) {
