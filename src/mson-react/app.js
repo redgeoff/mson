@@ -19,6 +19,9 @@ import attach from './attach';
 import globals from '../mson/globals';
 import Snackbar from './snackbar';
 import ConfirmationDialog from './confirmation-dialog';
+// import Checkbox from '@material-ui/core/Checkbox';
+// import Delete from '@material-ui/icons/Delete';
+import MUISwitch from '@material-ui/core/Switch';
 
 const drawerWidth = 240;
 
@@ -231,6 +234,10 @@ class App extends React.Component {
     this.setState({ snackbarOpen: false });
   };
 
+  handleChange = event => {
+    this.setState({ showArchived: event.target.checked });
+  };
+
   render() {
     const { classes, app } = this.props;
     const {
@@ -264,6 +271,11 @@ class App extends React.Component {
           <Typography variant="title" color="inherit" noWrap>
             {menuItem ? menuItem.label : ''}
           </Typography>
+
+          {/*
+          <Checkbox icon={<Delete />} checkedIcon={<Delete />} value="archived" />
+          */}
+          <MUISwitch onChange={this.handleArchivedChange} value="archived" />
 
           {/* TODO: make SearchBar configurable */}
           <SearchBar className={classes.searchBar} />
