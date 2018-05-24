@@ -21,7 +21,8 @@ class FormsField extends React.Component {
     open: false, // TODO: rename to openDialog
     mode: 'view',
     currentForm: null,
-    confirmationOpen: false
+    confirmationOpen: false,
+    targetForm: null
   };
 
   constructor(props) {
@@ -101,6 +102,7 @@ class FormsField extends React.Component {
       const singularLabel = this.props.field.getSingularLabel().toLowerCase();
 
       this.setState({
+        targetForm: form,
         open: false,
         confirmationOpen: true,
         confirmationTitle: `Are you sure you want to delete this ${singularLabel}?`
@@ -110,7 +112,7 @@ class FormsField extends React.Component {
 
   handleConfirmationClose = async yes => {
     if (yes) {
-      await this.props.field.archive(this.state.currentForm);
+      await this.props.field.archive(this.state.targetForm);
     }
     this.setState({ confirmationOpen: false });
   };

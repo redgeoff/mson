@@ -53,6 +53,8 @@ export default class FormsField extends Field {
 
   _listenForShowArchived() {
     this.on('showArchived', async showArchived => {
+      this.set({ showArchived });
+
       // Clear any existing forms
       this._forms.clear();
 
@@ -216,7 +218,8 @@ export default class FormsField extends Field {
       'minSize',
       'maxSize',
       'singularLabel',
-      'store'
+      'store',
+      'showArchived'
     );
   }
 
@@ -240,7 +243,8 @@ export default class FormsField extends Field {
       'minSize',
       'maxSize',
       'singularLabel',
-      'store'
+      'store',
+      'showArchived'
     );
     return value === undefined ? super.getOne(name) : value;
   }
@@ -290,7 +294,12 @@ export default class FormsField extends Field {
       form.set({ archivedAt: archive.data.archiveRecord.archivedAt });
     }
 
-    this.removeForm(form.getField('id').getValue());
+    // Not showing archived?
+    if (!this.get('showArchived')) {
+      // Remove from list
+      this.removeForm(form.getField('id').getValue());
+    }
+
     globals.displaySnackbar(this.getSingularLabel() + ' deleted');
   }
 
@@ -301,9 +310,6 @@ export default class FormsField extends Field {
     }
 
     form.set({ archivedAt: null });
-
-    // Emit change so that UI is notified
-    this._emitChange('change', form.getValues());
 
     globals.displaySnackbar(this.getSingularLabel() + ' restored');
   }
