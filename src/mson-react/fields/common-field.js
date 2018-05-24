@@ -17,17 +17,26 @@ class CommonField extends React.Component {
       err,
       editable,
       touched,
-      help
+      help,
+      hideLabel
     } = this.props;
 
     let fld = null;
 
     if (editable) {
-      fld = (
-        <span>
+      let lbl = null;
+
+      if (!hideLabel) {
+        lbl = (
           <InputLabel error={touched && err ? true : false} required={required}>
             {label}
           </InputLabel>
+        );
+      }
+
+      fld = (
+        <span>
+          {lbl}
           {children}
           {help && editable ? <HelpToolTip help={help} /> : ''}
           {touched && err ? <FormHelperText error>{err}</FormHelperText> : null}

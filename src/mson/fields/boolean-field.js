@@ -11,4 +11,11 @@ export default class BooleanField extends Field {
       }
     }
   }
+
+  getDisplayValue() {
+    const value = this.get('value');
+    if (value) {
+      return this.get('label');
+    }
+  }
 }
