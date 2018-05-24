@@ -9,7 +9,7 @@ compiler.registerComponent('app.Login', {
   fields: [
     {
       component: 'EmailField',
-      name: 'email',
+      name: 'username',
       label: 'Email',
       required: true,
       fullWidth: true
@@ -40,6 +40,19 @@ compiler.registerComponent('app.Login', {
     }
   ],
   listeners: [
+    {
+      event: 'submit',
+      actions: [
+        {
+          component: 'LogInToApp'
+        },
+        // TODO: redirect to home based on menu def
+        {
+          component: 'Redirect',
+          path: '/account/edit'
+        }
+      ]
+    },
     {
       event: 'createAccount',
       actions: [
