@@ -19,9 +19,8 @@ import attach from './attach';
 import globals from '../mson/globals';
 import Snackbar from './snackbar';
 import ConfirmationDialog from './confirmation-dialog';
-// import Checkbox from '@material-ui/core/Checkbox';
-// import Delete from '@material-ui/icons/Delete';
 import MUISwitch from '@material-ui/core/Switch';
+import UserMenu from './user-menu';
 
 const drawerWidth = 240;
 
@@ -83,7 +82,9 @@ class App extends React.Component {
     confirmationTitle: '',
     confirmationText: '',
     nextMenuItem: null,
-    confirmationCallback: null
+    confirmationCallback: null,
+    // isLoggedIn: false
+    isLoggedIn: true
   };
 
   form = null;
@@ -256,7 +257,8 @@ class App extends React.Component {
       confirmationOpen,
       confirmationTitle,
       confirmationText,
-      showArchived
+      showArchived,
+      isLoggedIn
     } = this.state;
     const menu = app.get('menu');
 
@@ -285,9 +287,6 @@ class App extends React.Component {
             {menuItem ? menuItem.label : ''}
           </Typography>
 
-          {/*
-          <Checkbox icon={<Delete />} checkedIcon={<Delete />} value="archived" />
-          */}
           <Tooltip title={showArchived ? 'Hide Archived' : 'Show Archived'}>
             <MUISwitch
               onChange={this.handleArchivedChange}
@@ -297,6 +296,7 @@ class App extends React.Component {
 
           {/* TODO: make SearchBar configurable */}
           <SearchBar className={classes.searchBar} />
+          <UserMenu isLoggedIn={isLoggedIn} />
         </Toolbar>
       </AppBar>
     );

@@ -19,7 +19,8 @@ const user = {
       label: 'Last Name',
       required: true
     }
-  ]
+  ],
+  roles: ['employee'] // Just for testing
 };
 
 const department = {

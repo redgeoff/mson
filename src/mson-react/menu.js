@@ -7,11 +7,16 @@ import Hidden from '@material-ui/core/Hidden';
 import Divider from '@material-ui/core/Divider';
 import Submenu from './submenu';
 import attach from './attach';
+import { Typography } from '@material-ui/core';
 
 const drawerWidth = 240;
 
 const styles = theme => ({
-  drawerHeader: theme.mixins.toolbar,
+  drawerHeader: {
+    ...theme.mixins.toolbar,
+    paddingLeft: theme.spacing.unit * 3,
+    paddingTop: theme.spacing.unit
+  },
   drawerPaper: {
     width: 250,
     [theme.breakpoints.up('md')]: {
@@ -53,7 +58,9 @@ class Menu extends React.Component {
 
     const drawer = (
       <div>
-        <div className={classes.drawerHeader} />
+        <div className={classes.drawerHeader}>
+          <Typography variant="display1">Logo</Typography>
+        </div>
         <Divider />
         {this.items()}
       </div>

@@ -483,7 +483,12 @@ compiler.registerComponent('app.Department', {
       unique: true,
       fields: ['name']
     }
-  ]
+  ],
+  access: {
+    form: {
+      archive: 'employee'
+    }
+  }
 });
 
 compiler.registerComponent('app.Departments', {
