@@ -205,7 +205,9 @@ class App extends React.Component {
       } else {
         this.component = null;
       }
-      this.setState({ menuItem });
+
+      // Set showArchived to false whenever we change the route
+      this.setState({ menuItem, showArchived: false });
     }
   };
 
@@ -264,6 +266,10 @@ class App extends React.Component {
 
     const RouteListener = this.routeListener;
 
+    // A component must not switch from controlled to uncontrolled so we need to avoid setting
+    // checked=undefined
+    const showArchivedChecked = showArchived ? true : false;
+
     const appBar = (
       <AppBar className={classes.appBar}>
         <Toolbar>
@@ -283,7 +289,10 @@ class App extends React.Component {
           <Checkbox icon={<Delete />} checkedIcon={<Delete />} value="archived" />
           */}
           <Tooltip title={showArchived ? 'Hide Archived' : 'Show Archived'}>
-            <MUISwitch onChange={this.handleArchivedChange} value="archived" />
+            <MUISwitch
+              onChange={this.handleArchivedChange}
+              checked={showArchivedChecked}
+            />
           </Tooltip>
 
           {/* TODO: make SearchBar configurable */}
