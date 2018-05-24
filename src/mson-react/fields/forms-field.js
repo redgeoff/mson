@@ -99,13 +99,14 @@ class FormsField extends React.Component {
     if (archivedAt) {
       await this.props.field.restore(form);
     } else {
-      const singularLabel = this.props.field.getSingularLabel().toLowerCase();
+      // const singularLabel = this.props.field.getSingularLabel().toLowerCase();
 
       this.setState({
         targetForm: form,
         open: false,
         confirmationOpen: true,
-        confirmationTitle: `Are you sure you want to delete this ${singularLabel}?`
+        // confirmationTitle: `Are you sure you want to delete this ${singularLabel}?`
+        confirmationTitle: 'Delete this?'
       });
     }
   };
