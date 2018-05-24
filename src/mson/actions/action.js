@@ -4,11 +4,11 @@ import sift from 'sift';
 export default class Action extends Component {
   set(props) {
     super.set(props);
-    this._setIfUndefined(props, 'if', 'ifData');
+    this._setIfUndefined(props, 'if', 'ifData', 'actions');
   }
 
   getOne(name) {
-    const value = this._getIfAllowed(name, 'if', 'ifData');
+    const value = this._getIfAllowed(name, 'if', 'ifData', 'actions');
     return value === undefined ? super.getOne(name) : value;
   }
 
@@ -28,7 +28,14 @@ export default class Action extends Component {
     }
 
     if (shouldRun) {
-      return this.act(props);
+      const actions = this.get('actions');
+      if (actions) {
+        for (const i in actions) {
+          await actions[i].run(props);
+        }
+      } else {
+        return this.act(props);
+      }
     }
   }
 }

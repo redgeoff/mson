@@ -619,6 +619,20 @@ const menuItems = [
         }
       }
     ]
+  },
+  {
+    path: '/logout',
+    label: 'Logout',
+    content: {
+      component: 'Action',
+      actions: [
+        // TODO: Log out
+        {
+          component: 'Redirect',
+          path: '/foo/login'
+        }
+      ]
+    }
   }
 ];
 

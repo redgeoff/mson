@@ -3,6 +3,7 @@
 // - Names of user-defined fields should be in the form org.proj.ComponentName. They should not
 //   appear in this file though!
 
+import Action from './actions/action';
 import APIGet from './actions/api-get';
 import APISet from './actions/api-set';
 import App from './app';
@@ -47,6 +48,7 @@ import TextListField from './fields/text-list-field';
 import User from './form/user';
 
 export default {
+  Action,
   APIGet,
   APISet,
   App,

@@ -20,7 +20,8 @@ import globals from '../mson/globals';
 import Snackbar from './snackbar';
 import ConfirmationDialog from './confirmation-dialog';
 import MUISwitch from '@material-ui/core/Switch';
-import UserMenu from './user-menu';
+// import UserMenu from './user-menu';
+import Action from '../mson/actions/action';
 
 const drawerWidth = 240;
 
@@ -82,9 +83,8 @@ class App extends React.Component {
     confirmationTitle: '',
     confirmationText: '',
     nextMenuItem: null,
-    confirmationCallback: null,
+    confirmationCallback: null
     // isLoggedIn: false
-    isLoggedIn: true
   };
 
   form = null;
@@ -180,8 +180,14 @@ class App extends React.Component {
     }
   }
 
-  handleNavigate = (menuItem, force) => {
-    this.props.history.push(menuItem.path);
+  handleNavigate = async (menuItem, force) => {
+    // Is the next item just an action?
+    if (menuItem.content instanceof Action) {
+      // Execute the actions
+      await menuItem.content.run();
+    } else {
+      this.props.history.push(menuItem.path);
+    }
   };
 
   handleConfirmationClose = async yes => {
@@ -257,8 +263,8 @@ class App extends React.Component {
       confirmationOpen,
       confirmationTitle,
       confirmationText,
-      showArchived,
-      isLoggedIn
+      showArchived
+      // isLoggedIn
     } = this.state;
     const menu = app.get('menu');
 
@@ -296,7 +302,10 @@ class App extends React.Component {
 
           {/* TODO: make SearchBar configurable */}
           <SearchBar className={classes.searchBar} />
+
+          {/*
           <UserMenu isLoggedIn={isLoggedIn} />
+          */}
         </Toolbar>
       </AppBar>
     );
