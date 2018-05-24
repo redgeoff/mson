@@ -19,40 +19,32 @@ export default class Field extends Component {
           },
           {
             name: 'required',
-            // TODO: create a BooleanField and use
-            // component: 'BooleanField'
-            component: 'Field'
+            component: 'BooleanField'
           },
           {
             name: 'fullWidth',
-            component: 'Field'
-            // component: 'BooleanField'
+            component: 'BooleanField'
           },
           // TODO: validators
           {
             name: 'hidden',
-            component: 'Field'
-            // component: 'BooleanField'
+            component: 'BooleanField'
           },
           {
             name: 'block',
-            component: 'Field'
-            // component: 'BooleanField'
+            component: 'BooleanField'
           },
           {
             name: 'disabled',
-            component: 'Field'
-            // component: 'BooleanField'
+            component: 'BooleanField'
           },
           {
             name: 'editable',
-            component: 'Field'
-            // component: 'BooleanField'
+            component: 'BooleanField'
           },
           // {
           //   name: 'dirty',
-          //   component: 'Field'
-          //   // component: 'BooleanField'
+          //   component: 'BooleanField'
           // },
           {
             name: 'help',
@@ -60,13 +52,11 @@ export default class Field extends Component {
           },
           {
             name: 'in',
-            component: 'Field'
-            // component: 'BooleanField'
+            component: 'BooleanField'
           },
           {
             name: 'out',
-            component: 'Field'
-            // component: 'BooleanField'
+            component: 'BooleanField'
           },
           {
             name: 'before',

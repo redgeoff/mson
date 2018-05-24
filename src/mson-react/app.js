@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
+import { AppBar, Tooltip } from '@material-ui/core';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -19,13 +19,16 @@ import attach from './attach';
 import globals from '../mson/globals';
 import Snackbar from './snackbar';
 import ConfirmationDialog from './confirmation-dialog';
+import MUISwitch from '@material-ui/core/Switch';
+// import UserMenu from './user-menu';
+import Action from '../mson/actions/action';
 
 const drawerWidth = 240;
 
 const styles = theme => ({
   root: {
     width: '100%',
-    height: 430,
+    // height: 430,
     // marginTop: theme.spacing.unit * 3,
     zIndex: 1,
     overflow: 'hidden'
@@ -81,6 +84,7 @@ class App extends React.Component {
     confirmationText: '',
     nextMenuItem: null,
     confirmationCallback: null
+    // isLoggedIn: false
   };
 
   form = null;
@@ -176,8 +180,14 @@ class App extends React.Component {
     }
   }
 
-  handleNavigate = (menuItem, force) => {
-    this.props.history.push(menuItem.path);
+  handleNavigate = async (menuItem, force) => {
+    // Is the next item just an action?
+    if (menuItem.content instanceof Action) {
+      // Execute the actions
+      await menuItem.content.run();
+    } else {
+      this.props.history.push(menuItem.path);
+    }
   };
 
   handleConfirmationClose = async yes => {
@@ -202,7 +212,9 @@ class App extends React.Component {
       } else {
         this.component = null;
       }
-      this.setState({ menuItem });
+
+      // Set showArchived to false whenever we change the route
+      this.setState({ menuItem, showArchived: false });
     }
   };
 
@@ -231,6 +243,16 @@ class App extends React.Component {
     this.setState({ snackbarOpen: false });
   };
 
+  handleArchivedChange = event => {
+    this.setState({ showArchived: event.target.checked });
+
+    const { menuItem } = this.state;
+
+    if (menuItem) {
+      menuItem.content._emitChange('showArchived', event.target.checked);
+    }
+  };
+
   render() {
     const { classes, app } = this.props;
     const {
@@ -240,7 +262,9 @@ class App extends React.Component {
       snackbarMessage,
       confirmationOpen,
       confirmationTitle,
-      confirmationText
+      confirmationText,
+      showArchived
+      // isLoggedIn
     } = this.state;
     const menu = app.get('menu');
 
@@ -249,6 +273,10 @@ class App extends React.Component {
     ) : null;
 
     const RouteListener = this.routeListener;
+
+    // A component must not switch from controlled to uncontrolled so we need to avoid setting
+    // checked=undefined
+    const showArchivedChecked = showArchived ? true : false;
 
     const appBar = (
       <AppBar className={classes.appBar}>
@@ -265,8 +293,19 @@ class App extends React.Component {
             {menuItem ? menuItem.label : ''}
           </Typography>
 
+          <Tooltip title={showArchived ? 'Hide Archived' : 'Show Archived'}>
+            <MUISwitch
+              onChange={this.handleArchivedChange}
+              checked={showArchivedChecked}
+            />
+          </Tooltip>
+
           {/* TODO: make SearchBar configurable */}
           <SearchBar className={classes.searchBar} />
+
+          {/*
+          <UserMenu isLoggedIn={isLoggedIn} />
+          */}
         </Toolbar>
       </AppBar>
     );

@@ -6,10 +6,11 @@ import IconButton from '@material-ui/core/IconButton';
 // import MoreVertIcon from '@material-ui/icons/MoreVert';
 // import Menu, { MenuItem } from '@material-ui/core/Menu';
 // import { ListItemIcon, ListItemText } from '@material-ui/core/List';
-import { ModeEdit, Delete } from '@material-ui/icons';
+import { ModeEdit, Delete, Restore } from '@material-ui/icons';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Form from './form';
+import { Tooltip } from '@material-ui/core';
 
 const styles = theme => ({
   paper: {
@@ -62,27 +63,33 @@ class FormCard extends React.Component {
       forbidUpdate,
       forbidDelete,
       editable,
-      disabled
+      disabled,
+      archivedAt
     } = this.props;
     // const { anchorEl } = this.state;
 
     let buttons = null;
+    const deleteTitle = archivedAt ? 'Restore' : 'Delete';
     if (editable && !disabled && (!forbidUpdate || !forbidDelete)) {
       buttons = (
         <Grid item>
           {forbidUpdate ? (
             ''
           ) : (
-            <IconButton onClick={event => this.handleEdit(event)}>
-              <ModeEdit />
-            </IconButton>
+            <Tooltip title="Edit">
+              <IconButton onClick={event => this.handleEdit(event)}>
+                <ModeEdit />
+              </IconButton>
+            </Tooltip>
           )}
           {forbidDelete ? (
             ''
           ) : (
-            <IconButton onClick={event => this.handleDelete(event)}>
-              <Delete />
-            </IconButton>
+            <Tooltip title={deleteTitle}>
+              <IconButton onClick={event => this.handleDelete(event)}>
+                {archivedAt ? <Restore /> : <Delete />}
+              </IconButton>
+            </Tooltip>
           )}
           {/* TODO: make the more menu optional
           <Menu

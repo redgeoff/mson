@@ -81,6 +81,7 @@ export default class Form extends Component {
     this._formSetMSONSchema();
 
     this._listenForLoad();
+    this._listenForShowArchived();
   }
 
   _setSubmitDisabled(disabled) {
@@ -103,6 +104,18 @@ export default class Form extends Component {
       //
       // // Disable submit buttons by default
       // this._setSubmitDisabled(true);
+
+      // Pass load event down to fields
+      this._fields.each(field => field._emitChange('load'));
+    });
+  }
+
+  _listenForShowArchived() {
+    this.on('showArchived', showArchived => {
+      // Pass load event down to fields
+      this._fields.each(field =>
+        field._emitChange('showArchived', showArchived)
+      );
     });
   }
 
@@ -202,7 +215,8 @@ export default class Form extends Component {
       'access',
       'autoValidate',
       'reportUndefined',
-      'resetOnLoad'
+      'resetOnLoad',
+      'archivedAt'
     );
   }
 
@@ -293,7 +307,8 @@ export default class Form extends Component {
       'access',
       'autoValidate',
       'reportUndefined',
-      'resetOnLoad'
+      'resetOnLoad',
+      'archivedAt'
     );
     return value === undefined ? super.getOne(name) : value;
   }
@@ -315,11 +330,13 @@ export default class Form extends Component {
     let values = {};
     props = props ? props : {};
     this._fields.each(field => {
+      const name = field.get('name');
       if (
         (props.includeOuts || field.get('out')) &&
-        (!props.excludeBlanks || !field.isBlank())
+        (!props.excludeBlanks || !field.isBlank()) &&
+        (!props.excludeDefaultFields || !this.isDefaultField(name))
       ) {
-        values[field.get('name')] = field.get('value');
+        values[name] = field.get('value');
       }
     });
     return values;

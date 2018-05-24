@@ -41,6 +41,13 @@ class Utils {
     }
     return methods;
   }
+
+  setFormErrorsFromAPIError(err, form) {
+    const message = JSON.parse(err.graphQLErrors[0].message);
+    message.error.forEach(err => {
+      form.getField(err.field).setErr(err.error);
+    });
+  }
 }
 
 export default new Utils();

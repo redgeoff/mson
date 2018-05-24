@@ -9,7 +9,7 @@ compiler.registerComponent('app.Login', {
   fields: [
     {
       component: 'EmailField',
-      name: 'email',
+      name: 'username',
       label: 'Email',
       required: true,
       fullWidth: true
@@ -40,6 +40,19 @@ compiler.registerComponent('app.Login', {
     }
   ],
   listeners: [
+    {
+      event: 'submit',
+      actions: [
+        {
+          component: 'LogInToApp'
+        },
+        // TODO: redirect to home based on menu def
+        {
+          component: 'Redirect',
+          path: '/account/edit'
+        }
+      ]
+    },
     {
       event: 'createAccount',
       actions: [
@@ -129,6 +142,9 @@ compiler.registerComponent('app.UserSignup', {
           type: 'app.User'
         },
         {
+          component: 'LogInToApp'
+        },
+        {
           component: 'Redirect',
           path: '/account/edit'
         }
@@ -137,7 +153,7 @@ compiler.registerComponent('app.UserSignup', {
   ]
 });
 
-compiler.registerComponent('app.Employee', {
+compiler.registerComponent('app.RemoveEmployee', {
   component: 'Form',
   fields: [
     {
@@ -411,23 +427,132 @@ compiler.registerComponent('app.ViewAndEditAccount', {
   id: '1' // TODO: '{{globals.user.id}}'
 });
 
+// TODO: is there a good way for UserSignup to share this structure? app.Employee and app.UserSignup
+// should probably inherit some shared component
+compiler.registerComponent('app.Employee', {
+  component: 'Form',
+  fields: [
+    {
+      component: 'PersonNameField',
+      name: 'firstName',
+      label: 'First Name',
+      required: true,
+      block: false
+    },
+    {
+      component: 'PersonNameField',
+      name: 'lastName',
+      label: 'Last Name',
+      required: true
+    }
+    // TODO: will probably need to include username when getting list of users
+    // {
+    //   component: 'EmailField',
+    //   name: 'email',
+    //   label: 'Email',
+    //   required: true
+    // }
+  ]
+});
+
+compiler.registerComponent('app.Employees', {
+  component: 'Form',
+  fields: [
+    {
+      name: 'employees',
+      label: 'Employees',
+      component: 'FormsField',
+      form: {
+        component: 'app.Employee'
+      },
+      listeners: [
+        {
+          event: 'load',
+          actions: [
+            {
+              component: 'GetRecords',
+              type: 'app.User'
+            }
+          ]
+        }
+      ]
+    }
+  ]
+});
+
+compiler.registerComponent('app.Department', {
+  name: 'app.Department',
+  component: 'Form',
+  fields: [
+    {
+      component: 'PersonNameField',
+      name: 'name',
+      label: 'Name',
+      required: true
+    }
+  ],
+  indexes: [
+    {
+      unique: true,
+      fields: ['name']
+    }
+  ],
+  access: {
+    form: {
+      archive: 'employee'
+    }
+  }
+});
+
+compiler.registerComponent('app.Departments', {
+  component: 'Form',
+  fields: [
+    {
+      name: 'departments',
+      label: 'Departments',
+      component: 'FormsField',
+      form: {
+        component: 'app.Department'
+      },
+      store: {
+        component: 'RecordStore',
+        type: 'app.Department'
+      }
+    }
+  ]
+});
+
 const menuItems = [
   {
-    path: '/employees',
-    label: 'Employees',
+    path: '/remove-employees',
+    label: 'Remove Employees',
     content: {
       component: 'Form',
       fields: [
         {
-          name: 'employees',
-          label: 'Employees',
+          name: 'removeEmployees',
+          label: 'Remove Employees',
           component: 'FormsField',
           form: {
-            component: 'app.Employee'
+            component: 'app.RemoveEmployee'
           }
         }
       ],
       resetOnLoad: false
+    }
+  },
+  {
+    path: '/employees',
+    label: 'Employees',
+    content: {
+      component: 'app.Employees'
+    }
+  },
+  {
+    path: '/departments',
+    label: 'Departments',
+    content: {
+      component: 'app.Departments'
     }
   },
   {
@@ -507,6 +632,22 @@ const menuItems = [
         }
       }
     ]
+  },
+  {
+    path: '/logout',
+    label: 'Logout',
+    content: {
+      component: 'Action',
+      actions: [
+        {
+          component: 'LogOutOfApp'
+        },
+        {
+          component: 'Redirect',
+          path: '/foo/login'
+        }
+      ]
+    }
   }
 ];
 
@@ -524,15 +665,15 @@ const app = compiler.newComponent({
 // const employees = app
 //   .get('menu')
 //   .getItem('/employees')
-//   .content.getField('employees')
+//   .content.getField('removeEmployees')
 //   .getStore();
 // employees.set({ id: '1', name: 'Ella Fitzgerald', email: 'ella@example.com' });
 // employees.set({ id: '2', name: 'Frank Sinatra', email: 'frank@example.com' });
 // employees.set({ id: '3', name: 'Ray Charles', email: 'ray@example.com' });
 const employees = app
   .get('menu')
-  .getItem('/employees')
-  .content.getField('employees');
+  .getItem('/remove-employees')
+  .content.getField('removeEmployees');
 employees.addForm({
   id: '1',
   name: 'Ella Fitzgerald',

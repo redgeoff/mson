@@ -16,12 +16,61 @@ export default class FormsField extends Field {
   //   });
   // }
 
+  // TODO: pagination
+  async _getAll(props) {
+    const store = this.get('store');
+    if (store) {
+      const form = this.get('form');
+
+      const records = await store.getAll(props);
+
+      records.data.records.edges.forEach(edge => {
+        const values = { id: edge.node.id };
+
+        form.eachField(field => {
+          // Field exists in returned records?
+          const val = edge.node.fieldValues[field.get('name')];
+          if (val) {
+            values[field.get('name')] = val;
+          }
+        });
+
+        this.addForm(values, edge.node.archivedAt);
+      });
+    }
+  }
+
+  _listenForLoad() {
+    this.on('load', async () => {
+      const form = this.get('form');
+      if (form) {
+        form.emitLoad();
+      }
+
+      await this._getAll();
+    });
+  }
+
+  _listenForShowArchived() {
+    this.on('showArchived', async showArchived => {
+      this.set({ showArchived });
+
+      // Clear any existing forms
+      this._forms.clear();
+
+      await this._getAll({ showArchived });
+    });
+  }
+
   _create(props) {
     // We use a Mapa instead of an array as it allows us to index the forms by id. We use a Mapa
     // instead of a Map as we may want to iterate through the forms beginning at any single form.
     this._forms = new Mapa();
 
     super._create(props);
+
+    this._listenForLoad();
+    this._listenForShowArchived();
   }
 
   // constructor(props) {
@@ -56,7 +105,7 @@ export default class FormsField extends Field {
     });
   }
 
-  addForm(values) {
+  addForm(values, archivedAt) {
     const clonedForm = this.get('form').clone();
     clonedForm.setValues(values);
 
@@ -69,9 +118,14 @@ export default class FormsField extends Field {
       key = id.getValue();
     }
 
+    clonedForm.set({ archivedAt });
+
     this._forms.set(key, clonedForm);
 
     this._listenToForm(clonedForm);
+
+    // Emit change so that UI is notified
+    this._emitChange('change', values);
   }
 
   _clearAllFormListeners() {
@@ -163,7 +217,9 @@ export default class FormsField extends Field {
       'forbidDelete',
       'minSize',
       'maxSize',
-      'singularLabel'
+      'singularLabel',
+      'store',
+      'showArchived'
     );
   }
 
@@ -186,7 +242,9 @@ export default class FormsField extends Field {
       'forbidDelete',
       'minSize',
       'maxSize',
-      'singularLabel'
+      'singularLabel',
+      'store',
+      'showArchived'
     );
     return value === undefined ? super.getOne(name) : value;
   }
@@ -202,7 +260,17 @@ export default class FormsField extends Field {
   async save(form) {
     // await this._docs.set(form.getValues());
     const id = form.getField('id');
-    if (id.isBlank()) {
+    const store = this.get('store');
+    if (store) {
+      // New?
+      if (id.isBlank()) {
+        const response = await store.create({ form });
+        id.setValue(response.data.createRecord.id);
+      } else {
+        // Existing
+        await store.update({ form, id: id.getValue() });
+      }
+    } else if (id.isBlank()) {
       // TODO: use the id from this._docs.set instead of this dummy id
       id.setValue(uuid.v4());
     }
@@ -217,10 +285,33 @@ export default class FormsField extends Field {
     globals.displaySnackbar(this.getSingularLabel() + ' saved');
   }
 
-  async delete(form) {
+  async archive(form) {
     // await this._docs.delete(form.getField('id').getValue());
-    this.removeForm(form.getField('id').getValue());
+
+    const store = this.get('store');
+    if (store) {
+      const archive = await store.archive({ form, id: form.getValue('id') });
+      form.set({ archivedAt: archive.data.archiveRecord.archivedAt });
+    }
+
+    // Not showing archived?
+    if (!this.get('showArchived')) {
+      // Remove from list
+      this.removeForm(form.getField('id').getValue());
+    }
+
     globals.displaySnackbar(this.getSingularLabel() + ' deleted');
+  }
+
+  async restore(form) {
+    const store = this.get('store');
+    if (store) {
+      await store.restore({ form, id: form.getValue('id') });
+    }
+
+    form.set({ archivedAt: null });
+
+    globals.displaySnackbar(this.getSingularLabel() + ' restored');
   }
 
   reachedMax() {

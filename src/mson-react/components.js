@@ -1,6 +1,7 @@
 // NOTE: this file should only contain the component registrations
 
 import ButtonField from './fields/button-field';
+import BooleanField from './fields/boolean-field';
 import Card from './card';
 import CompositeField from './fields/composite-field';
 import Field from './fields/field';
@@ -13,6 +14,7 @@ import TextField from './fields/text-field';
 
 export default {
   ButtonField,
+  BooleanField,
   Card,
   ChainedSelectField: CompositeField,
   ChainedSelectListField: ListField,
