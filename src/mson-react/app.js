@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
+import { AppBar, Tooltip } from '@material-ui/core';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -253,7 +253,8 @@ class App extends React.Component {
       snackbarMessage,
       confirmationOpen,
       confirmationTitle,
-      confirmationText
+      confirmationText,
+      showArchived
     } = this.state;
     const menu = app.get('menu');
 
@@ -281,7 +282,9 @@ class App extends React.Component {
           {/*
           <Checkbox icon={<Delete />} checkedIcon={<Delete />} value="archived" />
           */}
-          <MUISwitch onChange={this.handleArchivedChange} value="archived" />
+          <Tooltip title={showArchived ? 'Hide Archived' : 'Show Archived'}>
+            <MUISwitch onChange={this.handleArchivedChange} value="archived" />
+          </Tooltip>
 
           {/* TODO: make SearchBar configurable */}
           <SearchBar className={classes.searchBar} />
