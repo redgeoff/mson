@@ -87,23 +87,30 @@ class FormsField extends React.Component {
     }
   };
 
-  handleDelete = form => {
+  handleDelete = async form => {
     // Set the id so that it can be deleted after the confirmation
     const { currentForm } = this.state;
     currentForm.getField('id').setValue(form.getField('id').getValue());
 
-    const singularLabel = this.props.field.getSingularLabel().toLowerCase();
+    const archivedAt = form.get('archivedAt');
 
-    this.setState({
-      open: false,
-      confirmationOpen: true,
-      confirmationTitle: `Are you sure you want to delete this ${singularLabel}?`
-    });
+    // Are we restoring?
+    if (archivedAt) {
+      await this.props.field.restore(form);
+    } else {
+      const singularLabel = this.props.field.getSingularLabel().toLowerCase();
+
+      this.setState({
+        open: false,
+        confirmationOpen: true,
+        confirmationTitle: `Are you sure you want to delete this ${singularLabel}?`
+      });
+    }
   };
 
   handleConfirmationClose = async yes => {
     if (yes) {
-      await this.props.field.delete(this.state.currentForm);
+      await this.props.field.archive(this.state.currentForm);
     }
     this.setState({ confirmationOpen: false });
   };
@@ -122,6 +129,7 @@ class FormsField extends React.Component {
 
     for (const f of field.getForms()) {
       f.setEditable(false);
+      const archivedAt = f.get('archivedAt');
       cards.push(
         <Grid item xs={12} sm={6} lg={4} key={index}>
           <FormCard
@@ -133,6 +141,7 @@ class FormsField extends React.Component {
             forbidDelete={forbidDelete}
             editable={editable}
             disabled={disabled}
+            archivedAt={archivedAt}
           />
         </Grid>
       );

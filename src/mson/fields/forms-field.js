@@ -35,7 +35,7 @@ export default class FormsField extends Field {
           }
         });
 
-        this.addForm(values);
+        this.addForm(values, edge.node.archivedAt);
       });
     }
   }
@@ -103,7 +103,7 @@ export default class FormsField extends Field {
     });
   }
 
-  addForm(values) {
+  addForm(values, archivedAt) {
     const clonedForm = this.get('form').clone();
     clonedForm.setValues(values);
 
@@ -115,6 +115,8 @@ export default class FormsField extends Field {
     } else {
       key = id.getValue();
     }
+
+    clonedForm.set({ archivedAt });
 
     this._forms.set(key, clonedForm);
 
@@ -279,7 +281,7 @@ export default class FormsField extends Field {
     globals.displaySnackbar(this.getSingularLabel() + ' saved');
   }
 
-  async delete(form) {
+  async archive(form) {
     // await this._docs.delete(form.getField('id').getValue());
 
     const store = this.get('store');
@@ -289,6 +291,20 @@ export default class FormsField extends Field {
 
     this.removeForm(form.getField('id').getValue());
     globals.displaySnackbar(this.getSingularLabel() + ' deleted');
+  }
+
+  async restore(form) {
+    const store = this.get('store');
+    if (store) {
+      await store.restore({ form, id: form.getValue('id') });
+    }
+
+    form.set({ archivedAt: null });
+
+    // Emit change so that UI is notified
+    this._emitChange('change', form.getValues());
+
+    globals.displaySnackbar(this.getSingularLabel() + ' restored');
   }
 
   reachedMax() {

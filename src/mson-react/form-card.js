@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 // import MoreVertIcon from '@material-ui/icons/MoreVert';
 // import Menu, { MenuItem } from '@material-ui/core/Menu';
 // import { ListItemIcon, ListItemText } from '@material-ui/core/List';
-import { ModeEdit, Delete } from '@material-ui/icons';
+import { ModeEdit, Delete, Restore } from '@material-ui/icons';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Form from './form';
@@ -62,7 +62,8 @@ class FormCard extends React.Component {
       forbidUpdate,
       forbidDelete,
       editable,
-      disabled
+      disabled,
+      archivedAt
     } = this.props;
     // const { anchorEl } = this.state;
 
@@ -81,7 +82,7 @@ class FormCard extends React.Component {
             ''
           ) : (
             <IconButton onClick={event => this.handleDelete(event)}>
-              <Delete />
+              {archivedAt ? <Restore /> : <Delete />}
             </IconButton>
           )}
           {/* TODO: make the more menu optional

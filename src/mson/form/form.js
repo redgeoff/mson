@@ -215,7 +215,8 @@ export default class Form extends Component {
       'access',
       'autoValidate',
       'reportUndefined',
-      'resetOnLoad'
+      'resetOnLoad',
+      'archivedAt'
     );
   }
 
@@ -306,7 +307,8 @@ export default class Form extends Component {
       'access',
       'autoValidate',
       'reportUndefined',
-      'resetOnLoad'
+      'resetOnLoad',
+      'archivedAt'
     );
     return value === undefined ? super.getOne(name) : value;
   }
