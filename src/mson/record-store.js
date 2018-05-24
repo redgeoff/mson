@@ -9,6 +9,7 @@ export default class RecordStore extends Component {
   set(props) {
     super.set(props);
     this._setIfUndefined(props, 'type');
+    this._clearCache();
   }
 
   getOne(name) {
@@ -31,6 +32,7 @@ export default class RecordStore extends Component {
   }
 
   async create(props) {
+    this._clearCache();
     return this._request(props, appId => {
       return registrar.client.record.create({
         appId,
@@ -38,6 +40,18 @@ export default class RecordStore extends Component {
         fieldValues: props.form.get('value')
       });
     });
+  }
+
+  _clearCache() {
+    this._cachedQueries = {};
+  }
+
+  _inCache(opts) {
+    return this._cachedQueries[JSON.stringify(opts)] ? true : false;
+  }
+
+  _addToCache(opts) {
+    this._cachedQueries[JSON.stringify(opts)] = true;
   }
 
   async getAll(props) {
@@ -49,12 +63,23 @@ export default class RecordStore extends Component {
       props && props.showArchived ? undefined : { archivedAt: null };
 
     return this._request(props, appId => {
-      return registrar.client.record.getAll({
+      const opts = {
         appId,
         componentName: this.get('type'),
         asArray: true,
         where
-      });
+      };
+
+      // The built-in apollo client cache cannot automatically accomodate the mutations so we use a
+      // thin layer on top to clear the cache (invalidate it) when it needs to be rebuilt. In
+      // particular this is needed when archiving/restoring and then toggling showArchived. TODO: is
+      // there a better way?
+      if (!this._inCache(opts)) {
+        this._addToCache(opts);
+        opts.bypassCache = true;
+      }
+
+      return registrar.client.record.getAll(opts);
     });
   }
 
@@ -70,6 +95,7 @@ export default class RecordStore extends Component {
   }
 
   async archive(props) {
+    this._clearCache();
     return this._request(props, appId => {
       return registrar.client.record.archive({
         appId,
@@ -80,6 +106,7 @@ export default class RecordStore extends Component {
   }
 
   async restore(props) {
+    this._clearCache();
     return this._request(props, appId => {
       return registrar.client.record.restore({
         appId,

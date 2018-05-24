@@ -286,7 +286,8 @@ export default class FormsField extends Field {
 
     const store = this.get('store');
     if (store) {
-      await store.archive({ form, id: form.getValue('id') });
+      const archive = await store.archive({ form, id: form.getValue('id') });
+      form.set({ archivedAt: archive.data.archiveRecord.archivedAt });
     }
 
     this.removeForm(form.getField('id').getValue());
