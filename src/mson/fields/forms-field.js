@@ -271,6 +271,12 @@ export default class FormsField extends Field {
 
   async delete(form) {
     // await this._docs.delete(form.getField('id').getValue());
+
+    const store = this.get('store');
+    if (store) {
+      await store.archive({ form, id: form.getValue('id') });
+    }
+
     this.removeForm(form.getField('id').getValue());
     globals.displaySnackbar(this.getSingularLabel() + ' deleted');
   }

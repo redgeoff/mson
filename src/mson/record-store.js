@@ -45,7 +45,12 @@ export default class RecordStore extends Component {
       return registrar.client.record.getAll({
         appId,
         componentName: this.get('type'),
-        asArray: true
+        asArray: true,
+
+        // TODO: this needs to be configurable
+        where: {
+          archivedAt: null
+        }
       });
     });
   }
@@ -61,5 +66,23 @@ export default class RecordStore extends Component {
     });
   }
 
-  async archive(props) {}
+  async archive(props) {
+    return this._request(props, appId => {
+      return registrar.client.record.archive({
+        appId,
+        componentName: this.get('type'),
+        id: props.id
+      });
+    });
+  }
+
+  async restore(props) {
+    return this._request(props, appId => {
+      return registrar.client.record.restore({
+        appId,
+        componentName: this.get('type'),
+        id: props.id
+      });
+    });
+  }
 }
