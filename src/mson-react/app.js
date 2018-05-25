@@ -203,7 +203,7 @@ class App extends React.Component {
   };
 
   // TODO: move to some util class outside of the React code
-  async canArchive() {
+  canArchive() {
     let canArchive = false;
     if (this.component && this.component instanceof Form) {
       for (const field of this.component.getFields()) {
@@ -213,7 +213,7 @@ class App extends React.Component {
             const roles = Array.isArray(access.form.archive)
               ? access.form.archive
               : [access.form.archive];
-            canArchive = await registrar.client.user.hasRole(roles);
+            canArchive = registrar.client.user.hasRole(roles);
           } else {
             // No roles specified so can archive
             canArchive = true;
@@ -224,7 +224,7 @@ class App extends React.Component {
     return canArchive;
   }
 
-  switchContent = async menuItem => {
+  switchContent = menuItem => {
     // Prevent inifinite recursion when menuItem is null by making sure that the menuItem is
     // changing before changing anything, especially the state
     if (menuItem !== this.state.menuItem) {
@@ -239,7 +239,7 @@ class App extends React.Component {
         this.component = null;
       }
 
-      const canArchive = await this.canArchive();
+      const canArchive = this.canArchive();
 
       // Set showArchived to false whenever we change the route
       this.setState({
