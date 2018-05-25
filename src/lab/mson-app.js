@@ -499,11 +499,14 @@ compiler.registerComponent('app.Department', {
   ],
   access: {
     form: {
+      create: 'employee',
+      update: 'employee',
       archive: 'employee'
     }
   }
 });
 
+// TODO: should we also be able just specify the FormsField without the wrapping Form?
 compiler.registerComponent('app.Departments', {
   component: 'Form',
   fields: [
