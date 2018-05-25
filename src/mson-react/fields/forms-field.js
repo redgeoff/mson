@@ -123,7 +123,15 @@ class FormsField extends React.Component {
     return access.canCreate(this.props.field.get('form'));
   }
 
-  cards() {
+  canUpdate() {
+    return access.canUpdate(this.props.field.get('form'));
+  }
+
+  canArchive() {
+    return access.canArchive(this.props.field.get('form'));
+  }
+
+  cards(canUpdate, canArchive) {
     const {
       field,
       forbidUpdate,
@@ -145,8 +153,8 @@ class FormsField extends React.Component {
             onEdit={() => this.handleEdit(f)}
             onDelete={this.handleDelete}
             form={f}
-            forbidUpdate={forbidUpdate}
-            forbidDelete={forbidDelete}
+            forbidUpdate={forbidUpdate || !canUpdate}
+            forbidDelete={forbidDelete || !canArchive}
             editable={editable}
             disabled={disabled}
             archivedAt={archivedAt}
@@ -180,11 +188,13 @@ class FormsField extends React.Component {
     const singularLabel = field.getSingularLabel();
 
     const canCreate = this.canCreate();
+    const canUpdate = this.canUpdate();
+    const canArchive = this.canArchive();
 
     return (
       <div>
         <Grid container spacing={0}>
-          {this.cards()}
+          {this.cards(canUpdate, canArchive)}
         </Grid>
 
         {!editable || disabled || forbidCreate || reachedMax || !canCreate ? (
@@ -208,8 +218,8 @@ class FormsField extends React.Component {
           onSave={this.handleSave}
           onEdit={this.handleEdit}
           onDelete={this.handleDelete}
-          forbidUpdate={forbidUpdate}
-          forbidDelete={forbidDelete}
+          forbidUpdate={forbidUpdate || !canUpdate}
+          forbidDelete={forbidDelete || !canArchive}
           editable={editable}
           disabled={disabled}
         />
