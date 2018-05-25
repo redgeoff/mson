@@ -24,7 +24,7 @@ import MUISwitch from '@material-ui/core/Switch';
 import Action from '../mson/actions/action';
 import FormsField from '../mson/fields/forms-field';
 import Form from '../mson/form';
-import registrar from '../mson/compiler/registrar';
+import access from '../mson/access';
 
 const drawerWidth = 240;
 
@@ -202,22 +202,12 @@ class App extends React.Component {
     this.setState({ confirmationOpen: false });
   };
 
-  // TODO: move to some util class outside of the React code
   canArchive() {
     let canArchive = false;
     if (this.component && this.component instanceof Form) {
       for (const field of this.component.getFields()) {
         if (field instanceof FormsField) {
-          const access = field.get('form').get('access');
-          if (access && access.form && access.form.archive) {
-            const roles = Array.isArray(access.form.archive)
-              ? access.form.archive
-              : [access.form.archive];
-            canArchive = registrar.client.user.hasRole(roles);
-          } else {
-            // No roles specified so can archive
-            canArchive = true;
-          }
+          canArchive = access.canArchive(field.get('form'));
         }
       }
     }
