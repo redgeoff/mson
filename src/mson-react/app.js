@@ -22,6 +22,9 @@ import ConfirmationDialog from './confirmation-dialog';
 import MUISwitch from '@material-ui/core/Switch';
 // import UserMenu from './user-menu';
 import Action from '../mson/actions/action';
+import FormsField from '../mson/fields/forms-field';
+import Form from '../mson/form';
+import registrar from '../mson/compiler/registrar';
 
 const drawerWidth = 240;
 
@@ -83,7 +86,8 @@ class App extends React.Component {
     confirmationTitle: '',
     confirmationText: '',
     nextMenuItem: null,
-    confirmationCallback: null
+    confirmationCallback: null,
+    showArchivedToggle: false
     // isLoggedIn: false
   };
 
@@ -198,7 +202,29 @@ class App extends React.Component {
     this.setState({ confirmationOpen: false });
   };
 
-  switchContent = menuItem => {
+  // TODO: move to some util class outside of the React code
+  async canArchive() {
+    let canArchive = false;
+    if (this.component && this.component instanceof Form) {
+      for (const field of this.component.getFields()) {
+        if (field instanceof FormsField) {
+          const access = field.get('form').get('access');
+          if (access.form && access.form.archive) {
+            const roles = Array.isArray(access.form.archive)
+              ? access.form.archive
+              : [access.form.archive];
+            canArchive = await registrar.client.user.hasRole(roles);
+          } else {
+            // No roles specified so can archive
+            canArchive = true;
+          }
+        }
+      }
+    }
+    return canArchive;
+  }
+
+  switchContent = async menuItem => {
     // Prevent inifinite recursion when menuItem is null by making sure that the menuItem is
     // changing before changing anything, especially the state
     if (menuItem !== this.state.menuItem) {
@@ -213,8 +239,14 @@ class App extends React.Component {
         this.component = null;
       }
 
+      const canArchive = await this.canArchive();
+
       // Set showArchived to false whenever we change the route
-      this.setState({ menuItem, showArchived: false });
+      this.setState({
+        menuItem,
+        showArchived: false,
+        showArchivedToggle: canArchive
+      });
     }
   };
 
@@ -263,7 +295,8 @@ class App extends React.Component {
       confirmationOpen,
       confirmationTitle,
       confirmationText,
-      showArchived
+      showArchived,
+      showArchivedToggle
       // isLoggedIn
     } = this.state;
     const menu = app.get('menu');
@@ -277,6 +310,18 @@ class App extends React.Component {
     // A component must not switch from controlled to uncontrolled so we need to avoid setting
     // checked=undefined
     const showArchivedChecked = showArchived ? true : false;
+
+    let archivedToggle = null;
+    if (showArchivedToggle) {
+      archivedToggle = (
+        <Tooltip title={showArchived ? 'Hide Archived' : 'Show Archived'}>
+          <MUISwitch
+            onChange={this.handleArchivedChange}
+            checked={showArchivedChecked}
+          />
+        </Tooltip>
+      );
+    }
 
     const appBar = (
       <AppBar className={classes.appBar}>
@@ -293,12 +338,7 @@ class App extends React.Component {
             {menuItem ? menuItem.label : ''}
           </Typography>
 
-          <Tooltip title={showArchived ? 'Hide Archived' : 'Show Archived'}>
-            <MUISwitch
-              onChange={this.handleArchivedChange}
-              checked={showArchivedChecked}
-            />
-          </Tooltip>
+          {archivedToggle}
 
           {/* TODO: make SearchBar configurable */}
           <SearchBar className={classes.searchBar} />

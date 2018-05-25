@@ -504,6 +504,7 @@ compiler.registerComponent('app.Department', {
   }
 });
 
+// TODO: should we also be able just specify the FormsField without the wrapping Form?
 compiler.registerComponent('app.Departments', {
   component: 'Form',
   fields: [
