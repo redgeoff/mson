@@ -2,6 +2,7 @@
 
 import client from './client';
 import config from './config.json';
+import { department } from './components';
 
 const user = {
   name: 'app.User',
@@ -21,32 +22,6 @@ const user = {
     }
   ],
   roles: ['employee'] // Just for testing
-};
-
-const department = {
-  name: 'app.Department',
-  component: 'Form',
-  fields: [
-    {
-      component: 'PersonNameField',
-      name: 'name',
-      label: 'Name',
-      required: true
-    }
-  ],
-  indexes: [
-    {
-      unique: true,
-      fields: ['name']
-    }
-  ],
-  access: {
-    form: {
-      create: 'employee',
-      update: 'employee',
-      archive: 'employee'
-    }
-  }
 };
 
 // const employee = {
