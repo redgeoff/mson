@@ -6,7 +6,7 @@ import attach from '../attach';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import ConfirmationDialog from '../confirmation-dialog';
-import registrar from '../../mson/compiler/registrar';
+import access from '../../mson/access';
 
 // TODO:
 //   - Currently, when a form is edited it results in changing this component's state and
@@ -119,21 +119,8 @@ class FormsField extends React.Component {
     this.setState({ confirmationOpen: false });
   };
 
-  // TODO: move to some util class outside of the React code
   canCreate() {
-    let canCreate = false;
-    const form = this.props.field.get('form');
-    const access = form.get('access');
-    if (access.form && access.form.create) {
-      const roles = Array.isArray(access.form.create)
-        ? access.form.create
-        : [access.form.create];
-      canCreate = registrar.client.user.hasRole(roles);
-    } else {
-      // No roles specified so can create
-      canCreate = true;
-    }
-    return canCreate;
+    return access.canCreate(this.props.field.get('form'));
   }
 
   cards() {

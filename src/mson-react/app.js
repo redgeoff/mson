@@ -209,7 +209,7 @@ class App extends React.Component {
       for (const field of this.component.getFields()) {
         if (field instanceof FormsField) {
           const access = field.get('form').get('access');
-          if (access.form && access.form.archive) {
+          if (access && access.form && access.form.archive) {
             const roles = Array.isArray(access.form.archive)
               ? access.form.archive
               : [access.form.archive];
