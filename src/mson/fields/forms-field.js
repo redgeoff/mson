@@ -218,8 +218,7 @@ export default class FormsField extends Field {
       'minSize',
       'maxSize',
       'singularLabel',
-      'store',
-      'showArchived'
+      'store'
     );
   }
 
@@ -243,8 +242,7 @@ export default class FormsField extends Field {
       'minSize',
       'maxSize',
       'singularLabel',
-      'store',
-      'showArchived'
+      'store'
     );
     return value === undefined ? super.getOne(name) : value;
   }

@@ -113,9 +113,7 @@ export default class Form extends Component {
   _listenForShowArchived() {
     this.on('showArchived', showArchived => {
       // Pass load event down to fields
-      this._fields.each(field =>
-        field._emitChange('showArchived', showArchived)
-      );
+      this._fields.each(field => field.set({ showArchived }));
     });
   }
 
@@ -216,7 +214,8 @@ export default class Form extends Component {
       'autoValidate',
       'reportUndefined',
       'resetOnLoad',
-      'archivedAt'
+      'archivedAt',
+      'showArchived'
     );
   }
 
@@ -308,7 +307,8 @@ export default class Form extends Component {
       'autoValidate',
       'reportUndefined',
       'resetOnLoad',
-      'archivedAt'
+      'archivedAt',
+      'showArchived'
     );
     return value === undefined ? super.getOne(name) : value;
   }

@@ -271,7 +271,7 @@ class App extends React.Component {
     const { menuItem } = this.state;
 
     if (menuItem) {
-      menuItem.content._emitChange('showArchived', event.target.checked);
+      menuItem.content.set({ showArchived: event.target.checked });
     }
   };
 

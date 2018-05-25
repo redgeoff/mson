@@ -96,7 +96,8 @@ export default class Field extends Component {
       'help',
       'in',
       'out',
-      'before'
+      'before',
+      'showArchived'
     );
   }
 
@@ -119,7 +120,8 @@ export default class Field extends Component {
       'help',
       'in',
       'out',
-      'before'
+      'before',
+      'showArchived'
     );
     return value === undefined ? super.getOne(name) : value;
   }
