@@ -39,7 +39,14 @@ const department = {
       unique: true,
       fields: ['name']
     }
-  ]
+  ],
+  access: {
+    form: {
+      create: 'employee',
+      update: 'employee',
+      archive: 'employee'
+    }
+  }
 };
 
 // const employee = {

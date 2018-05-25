@@ -499,6 +499,8 @@ compiler.registerComponent('app.Department', {
   ],
   access: {
     form: {
+      create: 'employee',
+      update: 'employee',
       archive: 'employee'
     }
   }
