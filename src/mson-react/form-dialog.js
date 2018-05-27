@@ -118,7 +118,7 @@ class FormDialog extends React.Component {
         {/* We use a form element so that we can submit the form on enter */}
         <form onSubmit={this.handleSave}>
           <DialogContent>
-            <Form form={form} formTag={false} />
+            <Form form={form} formTag={false} mode={mode} />
           </DialogContent>
           {buttons ? <DialogActions>{buttons}</DialogActions> : ''}
         </form>

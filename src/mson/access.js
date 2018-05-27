@@ -1,6 +1,13 @@
-import registrar from '../mson/compiler/registrar';
+import registrar from './compiler/registrar';
+import AccessControl from './access-control';
+import _ from 'lodash';
 
+// Note: this function contains client-specific access control logic
 class Access {
+  constructor() {
+    this._accessControl = new AccessControl();
+  }
+
   canAccess(operation, form) {
     let canAccess = false;
     const access = form.get('access');
@@ -29,6 +36,40 @@ class Access {
 
   canArchive(form) {
     return this.canAccess('archive', form);
+  }
+
+  fieldsCanAccess(operation, form) {
+    const access = form.get('access');
+    const session = registrar.client.user.getSession();
+    let indexedRoles = {};
+    if (session && session.user.roles) {
+      _.each(session.user.roles, (role, id) => {
+        // The client uses the role name to check access
+        indexedRoles[role.name] = true;
+      });
+    }
+    const fieldValues = form.getValues();
+    // TODO: need to make userId a property on form like archivedAt so that can determine isOwner?
+    const isOwner = false;
+    return this._accessControl.fieldsCanAccess(
+      operation,
+      access,
+      indexedRoles,
+      fieldValues,
+      isOwner
+    );
+  }
+
+  fieldsCanCreate(form) {
+    return this.fieldsCanAccess('create', form);
+  }
+
+  fieldsCanRead(form) {
+    return this.fieldsCanAccess('read', form);
+  }
+
+  fieldsCanUpdate(form) {
+    return this.fieldsCanAccess('update', form);
   }
 }
 

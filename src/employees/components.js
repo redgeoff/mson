@@ -17,8 +17,8 @@ export const department = {
     {
       component: 'TextField',
       name: 'adminNotes',
-      label: 'Admin Notes',
-      required: true
+      label: 'Admin Notes'
+      // required: true // TODO: uncomment after implement ignoreErrs
     }
   ],
   indexes: [
