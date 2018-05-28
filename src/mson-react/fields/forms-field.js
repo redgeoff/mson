@@ -46,10 +46,15 @@ class FormsField extends React.Component {
     form.setDirty(false);
   }
 
+  copyValues(currentForm, form) {
+    currentForm.setValues(form.getValues());
+    currentForm.set({ userId: form.get('userId') });
+  }
+
   handleClick = form => {
     const { currentForm } = this.state;
     currentForm.clearValues();
-    currentForm.setValues(form.getValues());
+    this.copyValues(currentForm, form);
     currentForm.setEditable(false);
     this.prepareForm(currentForm);
     this.setState({ open: true, mode: 'view', targetForm: form });
@@ -61,7 +66,7 @@ class FormsField extends React.Component {
     // The forms will be the same if the user clicks edit from view form dialog
     if (form !== currentForm) {
       currentForm.clearValues();
-      currentForm.setValues(form.getValues());
+      this.copyValues(currentForm, form);
     }
 
     currentForm.setEditable(true);
