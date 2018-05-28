@@ -264,6 +264,7 @@ export default class FormsField extends Field {
       if (id.isBlank()) {
         const response = await store.create({ form });
         id.setValue(response.data.createRecord.id);
+        form.set({ userId: response.data.createRecord.userId });
       } else {
         // Existing
         await store.update({ form, id: id.getValue() });
@@ -276,8 +277,12 @@ export default class FormsField extends Field {
     if (this._forms.has(id.getValue())) {
       const fieldForm = this._forms.get(id.getValue());
       fieldForm.setValues(form.getValues());
+      fieldForm.set({
+        archivedAt: form.get('archivedAt'),
+        userId: form.get('userId')
+      });
     } else {
-      this.addForm(form.getValues());
+      this.addForm(form.getValues(), null, form.get('userId'));
     }
 
     globals.displaySnackbar(this.getSingularLabel() + ' saved');
