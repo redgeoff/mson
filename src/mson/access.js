@@ -41,16 +41,20 @@ class Access {
   fieldsCanAccess(operation, form) {
     const access = form.get('access');
     const session = registrar.client.user.getSession();
+
     let indexedRoles = {};
+    let isOwner = false;
+
     if (session && session.user.roles) {
       _.each(session.user.roles, (role, id) => {
         // The client uses the role name to check access
         indexedRoles[role.name] = true;
       });
+
+      isOwner = session.user.id === form.get('userId');
     }
     const fieldValues = form.getValues();
-    // TODO: need to make userId a property on form like archivedAt so that can determine isOwner?
-    const isOwner = false;
+
     return this._accessControl.fieldsCanAccess(
       operation,
       access,

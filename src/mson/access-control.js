@@ -29,7 +29,10 @@ export default class AccessControl {
     let has = false;
 
     _.each(access, role => {
-      if (indexedRoles[role] || (isOwner && role === Roles.ID_OWNER)) {
+      if (
+        indexedRoles[role] ||
+        (isOwner && (role === Roles.ID_OWNER || role === Roles.OWNER))
+      ) {
         has = true;
         return false;
       }

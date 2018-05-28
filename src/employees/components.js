@@ -19,6 +19,11 @@ export const department = {
       name: 'adminNotes',
       label: 'Admin Notes',
       required: true
+    },
+    {
+      component: 'TextField',
+      name: 'ownerNotes',
+      label: 'Owner Notes'
     }
   ],
   indexes: [
@@ -43,6 +48,10 @@ export const department = {
         create: 'admin',
         read: 'admin',
         update: 'admin'
+      },
+      ownerNotes: {
+        create: 'employee',
+        update: 'owner'
       }
     }
   }

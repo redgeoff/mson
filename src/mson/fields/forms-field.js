@@ -35,7 +35,7 @@ export default class FormsField extends Field {
           }
         });
 
-        this.addForm(values, edge.node.archivedAt);
+        this.addForm(values, edge.node.archivedAt, edge.node.userId);
       });
     }
   }
@@ -105,7 +105,7 @@ export default class FormsField extends Field {
     });
   }
 
-  addForm(values, archivedAt) {
+  addForm(values, archivedAt, userId) {
     const clonedForm = this.get('form').clone();
     clonedForm.setValues(values);
 
@@ -118,7 +118,7 @@ export default class FormsField extends Field {
       key = id.getValue();
     }
 
-    clonedForm.set({ archivedAt });
+    clonedForm.set({ archivedAt, userId });
 
     this._forms.set(key, clonedForm);
 
