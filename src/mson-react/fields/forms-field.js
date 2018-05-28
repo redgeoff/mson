@@ -9,6 +9,7 @@ import ConfirmationDialog from '../confirmation-dialog';
 import access from '../../mson/access';
 
 // TODO:
+//   - Do we really need currentForm and targetForm? Should we refactor out currentForm?
 //   - Currently, when a form is edited it results in changing this component's state and
 //     rerendering all the forms. Is this ok? Will this scale?
 //   - Support drag to order
@@ -50,7 +51,7 @@ class FormsField extends React.Component {
     currentForm.setValues(form.getValues());
     currentForm.setEditable(false);
     this.prepareForm(currentForm);
-    this.setState({ open: true, mode: 'view' });
+    this.setState({ open: true, mode: 'view', targetForm: form });
   };
 
   handleEdit = form => {
@@ -91,7 +92,7 @@ class FormsField extends React.Component {
 
   handleDelete = async form => {
     // Set the id so that it can be deleted after the confirmation
-    const { currentForm } = this.state;
+    const { currentForm, open } = this.state;
     currentForm.getField('id').setValue(form.getField('id').getValue());
 
     const archivedAt = form.get('archivedAt');
@@ -99,6 +100,12 @@ class FormsField extends React.Component {
     // Are we restoring?
     if (archivedAt) {
       await this.props.field.restore(form);
+
+      // Is the dialog open?
+      if (open) {
+        // Close it
+        this.setState({ open: false });
+      }
     } else {
       // const singularLabel = this.props.field.getSingularLabel().toLowerCase();
 
@@ -181,7 +188,8 @@ class FormsField extends React.Component {
       mode,
       currentForm,
       confirmationOpen,
-      confirmationTitle
+      confirmationTitle,
+      targetForm
     } = this.state;
     const reachedMax = field.reachedMax();
 
@@ -190,6 +198,11 @@ class FormsField extends React.Component {
     const canCreate = this.canCreate();
     const canUpdate = this.canUpdate();
     const canArchive = this.canArchive();
+
+    const archivedAt = targetForm ? targetForm.get('archivedAt') : null;
+
+    // If the targetForm when a item has been clicked
+    const formDialogForm = targetForm ? targetForm : currentForm;
 
     return (
       <div>
@@ -213,7 +226,7 @@ class FormsField extends React.Component {
         <FormDialog
           open={open}
           mode={mode}
-          form={currentForm}
+          form={formDialogForm}
           onClose={this.handleClose}
           onSave={this.handleSave}
           onEdit={this.handleEdit}
@@ -222,6 +235,7 @@ class FormsField extends React.Component {
           forbidDelete={forbidDelete || !canArchive}
           editable={editable}
           disabled={disabled}
+          archivedAt={archivedAt}
         />
 
         <ConfirmationDialog

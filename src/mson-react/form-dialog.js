@@ -2,7 +2,7 @@ import React from 'react';
 import Button from './button';
 import { Dialog, DialogActions, withMobileDialog } from '@material-ui/core';
 import DialogContent from '@material-ui/core/DialogContent';
-import { ModeEdit, Delete, Save, Cancel } from '@material-ui/icons';
+import { ModeEdit, Delete, Save, Cancel, Restore } from '@material-ui/icons';
 import Form from './form';
 import attach from './attach';
 
@@ -60,7 +60,8 @@ class FormDialog extends React.Component {
       forbidUpdate,
       forbidDelete,
       editable,
-      disabled
+      disabled,
+      archivedAt
     } = this.props;
 
     const disableSave = form.hasErrorForTouchedField() || !form.get('dirty');
@@ -100,8 +101,8 @@ class FormDialog extends React.Component {
             ''
           ) : (
             <Button
-              label="Delete"
-              iconComponent={Delete}
+              label={archivedAt ? 'Restore' : 'Delete'}
+              iconComponent={archivedAt ? Restore : Delete}
               onClick={this.handleDelete}
             />
           )}
