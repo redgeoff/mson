@@ -157,12 +157,16 @@ class FormsField extends React.PureComponent {
     } = this.props;
 
     let cards = [];
-    let index = 0;
 
     for (const f of field.getForms()) {
       f.setEditable(false);
+
+      // We need to use the id for the key as we use the same list of cards when toggling
+      // showArchive
+      const key = f.getValue('id');
+
       cards.push(
-        <Grid item xs={12} sm={6} lg={4} key={index}>
+        <Grid item xs={12} sm={6} lg={4} key={key}>
           <FormCard
             onClick={() => this.handleClick(f)}
             onEdit={() => this.handleEdit(f)}
@@ -175,7 +179,6 @@ class FormsField extends React.PureComponent {
           />
         </Grid>
       );
-      index++;
     }
 
     return cards;
