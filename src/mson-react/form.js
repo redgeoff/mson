@@ -48,20 +48,18 @@ class Form extends React.PureComponent {
     }
   }
 
-  // TODO: use componentDidUpdate instead?
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.form !== this.props.form) {
-      this.turnOnAutoValidate(nextProps.form);
+  componentDidUpdate(prevProps, prevState) {
+    // Did the form change?
+    if (prevProps.form !== this.props.form) {
+      this.turnOnAutoValidate(this.props.form);
     }
 
-    // Is the access changing?
-    if (nextProps.access && nextProps.access !== this.props.access) {
-      this.adjustAccess(nextProps.access, this.props.mode);
-    }
-
-    // Is the mode changing and an access was specified?
-    if (nextProps.mode !== this.props.mode && this.props.access) {
-      this.adjustAccess(this.props.access, nextProps.mode);
+    // Did the access change? Is the mode changing and an access was specified?
+    if (
+      prevProps.access !== this.props.access ||
+      (prevProps.mode !== this.props.mode && this.props.access)
+    ) {
+      this.adjustAccess(this.props.access, this.props.mode);
     }
   }
 
