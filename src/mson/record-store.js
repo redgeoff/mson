@@ -4,6 +4,7 @@ import Component from './component';
 import utils from './utils';
 import registrar from './compiler/registrar';
 import globals from './globals';
+import access from './access';
 
 export default class RecordStore extends Component {
   set(props) {
@@ -24,7 +25,9 @@ export default class RecordStore extends Component {
       const response = await promiseFactory(appId);
       return response;
     } catch (err) {
-      utils.setFormErrorsFromAPIError(err, props.form);
+      if (props && props.form) {
+        utils.setFormErrorsFromAPIError(err, props.form);
+      }
 
       // We throw the error so that the entire listener chain is aborted
       throw err;
@@ -33,11 +36,15 @@ export default class RecordStore extends Component {
 
   async create(props) {
     this._clearCache();
+
+    // Omit values based on access
+    const fieldValues = access.fieldsCanCreate(props.form);
+
     return this._request(props, appId => {
       return registrar.client.record.create({
         appId,
         componentName: this.get('type'),
-        fieldValues: props.form.get('value')
+        fieldValues
       });
     });
   }
@@ -84,12 +91,15 @@ export default class RecordStore extends Component {
   }
 
   async update(props) {
+    // Omit values based on access
+    const fieldValues = access.fieldsCanUpdate(props.form);
+
     return this._request(props, appId => {
       return registrar.client.record.update({
         appId,
         componentName: this.get('type'),
         id: props.id,
-        fieldValues: props.form.getValues()
+        fieldValues
       });
     });
   }

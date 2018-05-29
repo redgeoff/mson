@@ -1,21 +1,65 @@
 import React from 'react';
 import Field from './fields/field';
+import attach from './attach';
+import access from '../mson/access';
 
-export default class Form extends React.Component {
+class Form extends React.Component {
+  fieldsCanAccess = null;
+
   // Enable automatic validation whenever a user changes data. This feature allows the user to see
   // errors in real-time.
   turnOnAutoValidate(form) {
     form.set({ autoValidate: true });
   }
 
+  // TODO: use access operation names instead of modes like new, edit, etc...?
+  modeToOperation(mode) {
+    switch (mode) {
+      case 'new':
+        return 'create';
+      case 'edit':
+        return 'update';
+      default:
+        // case 'read':
+        return 'read';
+    }
+  }
+
+  adjustAccess(formAccess, mode) {
+    const op = this.modeToOperation(mode);
+    const form = this.props.form;
+    this.fieldsCanAccess = access.fieldsCanAccess(op, form);
+
+    // We need to set the ignoreErrs state as there may be a field that is not accessible that is
+    // generating an error.
+    for (const field of form.getFields()) {
+      const ignoreErrs = this.fieldsCanAccess[field.get('name')] === undefined;
+      field.set({ ignoreErrs });
+    }
+  }
+
   constructor(props) {
     super(props);
     this.turnOnAutoValidate(props.form);
+
+    if (props.access) {
+      this.adjustAccess(props.access, props.mode);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.form) {
       this.turnOnAutoValidate(nextProps.form);
+    }
+
+    // Is the access changing?
+    if (nextProps.access && nextProps.access !== this.props.access) {
+      this.adjustAccess(nextProps.access, this.props.mode);
+    }
+
+    // Is the mode changing and an access was specified?
+    if (nextProps.mode !== this.props.mode && this.props.access) {
+      this.adjustAccess(this.props.access, nextProps.mode);
     }
   }
 
@@ -42,11 +86,14 @@ export default class Form extends React.Component {
     const key = form.getKey();
 
     const flds = fields.map((field, index) => {
-      return (
-        <span key={key + '_' + index}>
-          <Field field={field} />
-        </span>
-      );
+      if (
+        this.fieldsCanAccess === null ||
+        this.fieldsCanAccess[field.get('name')] !== undefined
+      ) {
+        return <Field key={key + '_' + index} field={field} />;
+      } else {
+        return null;
+      }
     });
 
     if (formTag !== false) {
@@ -56,3 +103,5 @@ export default class Form extends React.Component {
     }
   }
 }
+
+export default attach(['access'], 'form')(Form);

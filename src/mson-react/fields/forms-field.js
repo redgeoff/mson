@@ -9,6 +9,8 @@ import ConfirmationDialog from '../confirmation-dialog';
 import access from '../../mson/access';
 
 // TODO:
+//   - Do we really need currentForm and targetForm? Should we refactor out currentForm? May still
+//     need currentForm as need to be able to toggle editable attributes?
 //   - Currently, when a form is edited it results in changing this component's state and
 //     rerendering all the forms. Is this ok? Will this scale?
 //   - Support drag to order
@@ -44,13 +46,18 @@ class FormsField extends React.Component {
     form.setDirty(false);
   }
 
+  copyValues(currentForm, form) {
+    currentForm.setValues(form.getValues());
+    currentForm.set({ userId: form.get('userId') });
+  }
+
   handleClick = form => {
     const { currentForm } = this.state;
     currentForm.clearValues();
-    currentForm.setValues(form.getValues());
+    this.copyValues(currentForm, form);
     currentForm.setEditable(false);
     this.prepareForm(currentForm);
-    this.setState({ open: true, mode: 'view' });
+    this.setState({ open: true, mode: 'view', targetForm: form });
   };
 
   handleEdit = form => {
@@ -59,7 +66,7 @@ class FormsField extends React.Component {
     // The forms will be the same if the user clicks edit from view form dialog
     if (form !== currentForm) {
       currentForm.clearValues();
-      currentForm.setValues(form.getValues());
+      this.copyValues(currentForm, form);
     }
 
     currentForm.setEditable(true);
@@ -91,19 +98,28 @@ class FormsField extends React.Component {
 
   handleDelete = async form => {
     // Set the id so that it can be deleted after the confirmation
-    const { currentForm } = this.state;
+    const { currentForm, open, targetForm } = this.state;
     currentForm.getField('id').setValue(form.getField('id').getValue());
 
-    const archivedAt = form.get('archivedAt');
+    // Use the targetForm when specified
+    const formToDelete = targetForm ? targetForm : form;
+
+    const archivedAt = formToDelete.get('archivedAt');
 
     // Are we restoring?
     if (archivedAt) {
-      await this.props.field.restore(form);
+      await this.props.field.restore(formToDelete);
+
+      // Is the dialog open?
+      if (open) {
+        // Close it
+        this.setState({ open: false, targetForm: null });
+      }
     } else {
       // const singularLabel = this.props.field.getSingularLabel().toLowerCase();
 
       this.setState({
-        targetForm: form,
+        targetForm: formToDelete,
         open: false,
         confirmationOpen: true,
         // confirmationTitle: `Are you sure you want to delete this ${singularLabel}?`
@@ -116,7 +132,7 @@ class FormsField extends React.Component {
     if (yes) {
       await this.props.field.archive(this.state.targetForm);
     }
-    this.setState({ confirmationOpen: false });
+    this.setState({ confirmationOpen: false, targetForm: null });
   };
 
   canCreate() {
@@ -181,7 +197,8 @@ class FormsField extends React.Component {
       mode,
       currentForm,
       confirmationOpen,
-      confirmationTitle
+      confirmationTitle,
+      targetForm
     } = this.state;
     const reachedMax = field.reachedMax();
 
@@ -191,12 +208,10 @@ class FormsField extends React.Component {
     const canUpdate = this.canUpdate();
     const canArchive = this.canArchive();
 
+    const archivedAt = targetForm ? targetForm.get('archivedAt') : null;
+
     return (
       <div>
-        <Grid container spacing={0}>
-          {this.cards(canUpdate, canArchive)}
-        </Grid>
-
         {!editable || disabled || forbidCreate || reachedMax || !canCreate ? (
           ''
         ) : (
@@ -205,6 +220,10 @@ class FormsField extends React.Component {
             New {singularLabel}
           </Button>
         )}
+
+        <Grid container spacing={0}>
+          {this.cards(canUpdate, canArchive)}
+        </Grid>
 
         {/* TODO: would it be better to have a single, global FormDialog instance? Or, is it better
         to have multiple instances so that you can have different memory spaces. Currenly we have a
@@ -222,6 +241,7 @@ class FormsField extends React.Component {
           forbidDelete={forbidDelete || !canArchive}
           editable={editable}
           disabled={disabled}
+          archivedAt={archivedAt}
         />
 
         <ConfirmationDialog

@@ -1,5 +1,6 @@
 import compiler from '../mson/compiler';
 import globals from '../mson/globals';
+import { department } from '../employees/components';
 
 // TODO: in a production app the appId should be set by the path or subdomain
 globals.set({ appId: 101 });
@@ -480,31 +481,7 @@ compiler.registerComponent('app.Employees', {
   ]
 });
 
-compiler.registerComponent('app.Department', {
-  name: 'app.Department',
-  component: 'Form',
-  fields: [
-    {
-      component: 'PersonNameField',
-      name: 'name',
-      label: 'Name',
-      required: true
-    }
-  ],
-  indexes: [
-    {
-      unique: true,
-      fields: ['name']
-    }
-  ],
-  access: {
-    form: {
-      create: 'employee',
-      update: 'employee',
-      archive: 'employee'
-    }
-  }
-});
+compiler.registerComponent('app.Department', department);
 
 // TODO: should we also be able just specify the FormsField without the wrapping Form?
 compiler.registerComponent('app.Departments', {

@@ -97,7 +97,8 @@ export default class Field extends Component {
       'in',
       'out',
       'before',
-      'showArchived'
+      'showArchived',
+      'ignoreErrs'
     );
   }
 
@@ -121,7 +122,8 @@ export default class Field extends Component {
       'in',
       'out',
       'before',
-      'showArchived'
+      'showArchived',
+      'ignoreErrs'
     );
     return value === undefined ? super.getOne(name) : value;
   }
@@ -171,17 +173,19 @@ export default class Field extends Component {
 
   // TODO: also support _validators being function like at form layer?
   validate() {
-    if (this._required && this.isBlank()) {
-      this.setErr('required');
-    } else if (
-      !this.isBlank() &&
-      this._validators &&
-      this._validators.length > 0
-    ) {
-      const validator = new Validator(this._toValidatorProps());
-      const errors = validator.validate(this._validators);
-      if (errors.length !== 0) {
-        this.setErr(errors[0]);
+    if (!this.get('ignoreErrs')) {
+      if (this._required && this.isBlank()) {
+        this.setErr('required');
+      } else if (
+        !this.isBlank() &&
+        this._validators &&
+        this._validators.length > 0
+      ) {
+        const validator = new Validator(this._toValidatorProps());
+        const errors = validator.validate(this._validators);
+        if (errors.length !== 0) {
+          this.setErr(errors[0]);
+        }
       }
     }
   }

@@ -139,7 +139,7 @@ class FormCard extends React.Component {
               className={classes.content}
               onClick={event => this.handleClick(event)}
             >
-              <Form form={form} formTag={false} />
+              <Form form={form} formTag={false} mode="read" />
             </Grid>
             {buttons}
           </Grid>

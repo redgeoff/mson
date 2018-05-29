@@ -215,6 +215,7 @@ export default class Form extends Component {
       'reportUndefined',
       'resetOnLoad',
       'archivedAt',
+      'userId',
       'showArchived'
     );
   }
@@ -308,6 +309,7 @@ export default class Form extends Component {
       'reportUndefined',
       'resetOnLoad',
       'archivedAt',
+      'userId',
       'showArchived'
     );
     return value === undefined ? super.getOne(name) : value;
