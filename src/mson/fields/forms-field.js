@@ -55,7 +55,9 @@ export default class FormsField extends Field {
     this.on('showArchived', async showArchived => {
       this.set({ showArchived });
 
-      // Clear any existing forms
+      // Clear any existing forms. TODO: it would be more efficient to just record ids of all
+      // existing items and then use getAll() result to determine if item needs to be inserted or
+      // removed (if current id missing)
       this._forms.clear();
 
       await this._getAll({ showArchived });

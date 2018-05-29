@@ -212,10 +212,6 @@ class FormsField extends React.Component {
 
     return (
       <div>
-        <Grid container spacing={0}>
-          {this.cards(canUpdate, canArchive)}
-        </Grid>
-
         {!editable || disabled || forbidCreate || reachedMax || !canCreate ? (
           ''
         ) : (
@@ -224,6 +220,10 @@ class FormsField extends React.Component {
             New {singularLabel}
           </Button>
         )}
+
+        <Grid container spacing={0}>
+          {this.cards(canUpdate, canArchive)}
+        </Grid>
 
         {/* TODO: would it be better to have a single, global FormDialog instance? Or, is it better
         to have multiple instances so that you can have different memory spaces. Currenly we have a
