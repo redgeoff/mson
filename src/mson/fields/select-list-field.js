@@ -38,6 +38,23 @@ export default class SelectListField extends ListField {
   _create(props) {
     super._create(props);
 
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'options',
+            // TODO: define and use a proper field
+            component: 'Field'
+          },
+          {
+            name: 'blankString',
+            component: 'TextField'
+          }
+        ]
+      }
+    });
+
     // Create the first field
     this._createNewField();
   }

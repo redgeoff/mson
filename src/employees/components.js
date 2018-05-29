@@ -74,6 +74,36 @@ export const tmpEmployee = {
       name: 'lastName',
       label: 'Last Name',
       required: true
+    },
+    // {
+    //   name: 'departments',
+    //   label: 'Departments',
+    //   component: 'FormsField',
+    //   form: {
+    //     component: 'app.Department'
+    //   },
+    //   store: {
+    //     component: 'RecordStore',
+    //     type: 'app.Department'
+    //   }
+    // }
+    {
+      name: 'departments',
+      label: 'Departments',
+      component: 'SelectListField',
+      options: [
+        { value: 'red', label: 'Red' },
+        { value: 'green', label: 'Green' },
+        { value: 'blue', label: 'Blue' }
+      ]
     }
-  ]
+  ],
+  access: {
+    form: {
+      create: 'employee',
+      // read: 'employee',
+      update: 'employee',
+      archive: 'employee'
+    }
+  }
 };

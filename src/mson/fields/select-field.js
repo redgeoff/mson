@@ -1,6 +1,26 @@
 import Field from './field';
 
 export default class SelectField extends Field {
+  _create(props) {
+    super._create(props);
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'options',
+            // TODO: define and use a proper field
+            component: 'Field'
+          },
+          {
+            name: 'blankString',
+            component: 'TextField'
+          }
+        ]
+      }
+    });
+  }
+
   set(props) {
     super.set(props);
     this._setIfUndefined(props, 'options', 'blankString');
