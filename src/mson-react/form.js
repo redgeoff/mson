@@ -25,8 +25,8 @@ class Form extends React.Component {
     }
   }
 
-  adjustAccess(formAccess) {
-    const op = this.modeToOperation(this.props.mode);
+  adjustAccess(formAccess, mode) {
+    const op = this.modeToOperation(mode);
     const form = this.props.form;
     this.fieldsCanAccess = access.fieldsCanAccess(op, form);
 
@@ -43,7 +43,7 @@ class Form extends React.Component {
     this.turnOnAutoValidate(props.form);
 
     if (props.access) {
-      this.adjustAccess(props.access);
+      this.adjustAccess(props.access, props.mode);
     }
   }
 
@@ -54,7 +54,12 @@ class Form extends React.Component {
 
     // Is the access changing?
     if (nextProps.access && nextProps.access !== this.props.access) {
-      this.adjustAccess(nextProps.access);
+      this.adjustAccess(nextProps.access, this.props.mode);
+    }
+
+    // Is the mode changing and an access was specified?
+    if (nextProps.mode !== this.props.mode && this.props.access) {
+      this.adjustAccess(this.props.access, nextProps.mode);
     }
   }
 
