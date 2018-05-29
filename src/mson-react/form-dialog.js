@@ -47,9 +47,9 @@ class FormDialog extends React.Component {
     }
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.open !== this.state.open) {
-      this.setState({ open: nextProps.open });
+  componentDidUpdate(prevProps) {
+    if (prevProps.open !== this.props.open) {
+      this.setState({ open: this.props.open });
     }
   }
 

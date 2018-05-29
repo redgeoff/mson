@@ -11,6 +11,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Form from './form';
 import { Tooltip } from '@material-ui/core';
+import attach from './attach';
 
 const styles = theme => ({
   paper: {
@@ -23,7 +24,8 @@ const styles = theme => ({
   }
 });
 
-class FormCard extends React.Component {
+// Use PureComponent so that we avoid unnecessary re-rendering
+class FormCard extends React.PureComponent {
   // state = {
   //   anchorEl: null
   // };
@@ -149,4 +151,5 @@ class FormCard extends React.Component {
   }
 }
 
-export default withStyles(styles)(FormCard);
+FormCard = withStyles(styles)(FormCard);
+export default attach(['archivedAt'], 'form')(FormCard);
