@@ -56,3 +56,24 @@ export const department = {
     }
   }
 };
+
+// TODO: remove after fix so that can use Employee component for this
+export const tmpEmployee = {
+  name: 'app.TmpEmployee',
+  component: 'Form',
+  fields: [
+    {
+      component: 'PersonNameField',
+      name: 'firstName',
+      label: 'First Name',
+      required: true,
+      block: false
+    },
+    {
+      component: 'PersonNameField',
+      name: 'lastName',
+      label: 'Last Name',
+      required: true
+    }
+  ]
+};

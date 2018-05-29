@@ -2,7 +2,7 @@
 
 import client from './client';
 import config from './config.json';
-import { department } from './components';
+import { department, tmpEmployee } from './components';
 
 const user = {
   name: 'app.User',
@@ -89,6 +89,11 @@ const main = async () => {
   await client.component.create({
     appId: config.appId,
     definition: department
+  });
+
+  await client.component.create({
+    appId: config.appId,
+    definition: tmpEmployee
   });
 
   // await client.component.create({ appId: config.appId, definition: employee });
