@@ -3,7 +3,8 @@ import Field from './fields/field';
 import attach from './attach';
 import access from '../mson/access';
 
-class Form extends React.Component {
+// Use a PureComponent so that the form is re-rendered when the state/props do not change
+class Form extends React.PureComponent {
   fieldsCanAccess = null;
 
   // Enable automatic validation whenever a user changes data. This feature allows the user to see
@@ -47,8 +48,9 @@ class Form extends React.Component {
     }
   }
 
+  // TODO: use componentDidUpdate instead?
   componentWillReceiveProps(nextProps) {
-    if (nextProps.form) {
+    if (nextProps.form !== this.props.form) {
       this.turnOnAutoValidate(nextProps.form);
     }
 
