@@ -48,7 +48,7 @@ const attach = (_watchProps, componentOrName) => {
 
         this.wasMounted = true;
 
-        // TODO: Also need to use componentWillReceiveProps as components can change and if change need
+        // TODO: Also need to use componentDidUpdate as components can change and if change need
         // to clean up listeners.
         this.getComponent().on('$change', this.handleFieldChange);
       }

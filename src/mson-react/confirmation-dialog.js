@@ -9,29 +9,18 @@ import {
 } from '@material-ui/core';
 
 export default class ConfirmationDialog extends React.Component {
-  state = {
-    open: false
-  };
-
   handleClose = yes => {
-    this.setState({ open: false });
     if (this.props.onClose) {
       this.props.onClose(yes);
     }
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.open !== this.state.open) {
-      this.setState({ open: nextProps.open });
-    }
-  }
-
   render() {
-    const { title, text } = this.props;
+    const { title, text, open } = this.props;
     return (
       <div>
         <Dialog
-          open={this.state.open}
+          open={open}
           onClose={() => this.handleClose(false)}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
