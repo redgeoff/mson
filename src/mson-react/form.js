@@ -17,9 +17,11 @@ class Form extends React.Component {
     switch (mode) {
       case 'new':
         return 'create';
-      default:
-        // case 'edit':
+      case 'edit':
         return 'update';
+      default:
+        // case 'read':
+        return 'read';
     }
   }
 
