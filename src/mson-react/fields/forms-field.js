@@ -19,7 +19,7 @@ import access from '../../mson/access';
 //   - We use a dialog to view/edit the forms as we want to be able to display just a few pieces
 //     of data in the list and all the data when viewing/editing.
 
-class FormsField extends React.Component {
+class FormsField extends React.PureComponent {
   state = {
     open: false, // TODO: rename to openDialog
     mode: 'view',
@@ -161,7 +161,6 @@ class FormsField extends React.Component {
 
     for (const f of field.getForms()) {
       f.setEditable(false);
-      const archivedAt = f.get('archivedAt');
       cards.push(
         <Grid item xs={12} sm={6} lg={4} key={index}>
           <FormCard
@@ -173,7 +172,6 @@ class FormsField extends React.Component {
             forbidDelete={forbidDelete || !canArchive}
             editable={editable}
             disabled={disabled}
-            archivedAt={archivedAt}
           />
         </Grid>
       );
@@ -183,6 +181,7 @@ class FormsField extends React.Component {
     return cards;
   }
 
+  // TODO: how to prevent re-rendering of all form-cards when dialog open state is changed?
   render() {
     const {
       forbidCreate,
