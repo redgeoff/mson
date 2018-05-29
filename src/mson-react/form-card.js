@@ -65,12 +65,12 @@ class FormCard extends React.PureComponent {
       forbidUpdate,
       forbidDelete,
       editable,
-      disabled
+      disabled,
+      archivedAt
     } = this.props;
     // const { anchorEl } = this.state;
 
     let buttons = null;
-    const archivedAt = form.get('archivedAt');
     const deleteTitle = archivedAt ? 'Restore' : 'Delete';
     if (editable && !disabled && (!forbidUpdate || !forbidDelete)) {
       buttons = (
