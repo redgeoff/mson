@@ -7,6 +7,34 @@ export default class ListField extends CompositeField {
   _create(props) {
     super._create(props);
     this._nextFieldName = 0;
+
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'allowDelete',
+            component: 'BooleanField'
+          },
+          {
+            name: 'minSize',
+            component: 'IntegerField'
+          },
+          {
+            name: 'maxSize',
+            component: 'IntegerField'
+          },
+          {
+            name: 'field',
+            component: 'Field'
+          },
+          {
+            name: 'allowScalar',
+            component: 'BooleanField'
+          }
+        ]
+      }
+    });
   }
 
   _getValue() {

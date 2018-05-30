@@ -1,6 +1,5 @@
 import React from 'react';
-import { MenuItem } from '@material-ui/core/Menu';
-import Select from '@material-ui/core/Select';
+import { MenuItem, Select } from '@material-ui/core';
 import CommonField from './common-field';
 import attach from '../attach';
 

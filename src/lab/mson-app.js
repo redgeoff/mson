@@ -1,6 +1,6 @@
 import compiler from '../mson/compiler';
 import globals from '../mson/globals';
-import { department } from '../employees/components';
+import { department, tmpEmployee } from '../employees/components';
 
 // TODO: in a production app the appId should be set by the path or subdomain
 globals.set({ appId: 101 });
@@ -502,6 +502,26 @@ compiler.registerComponent('app.Departments', {
   ]
 });
 
+compiler.registerComponent('app.TmpEmployee', tmpEmployee);
+
+compiler.registerComponent('app.TmpEmployees', {
+  component: 'Form',
+  fields: [
+    {
+      name: 'tmpEmployees',
+      label: 'Tmp Employees',
+      component: 'FormsField',
+      form: {
+        component: 'app.TmpEmployee'
+      },
+      store: {
+        component: 'RecordStore',
+        type: 'app.TmpEmployee'
+      }
+    }
+  ]
+});
+
 const menuItems = [
   {
     path: '/remove-employees',
@@ -533,6 +553,13 @@ const menuItems = [
     label: 'Departments',
     content: {
       component: 'app.Departments'
+    }
+  },
+  {
+    path: '/tmp-employees',
+    label: 'Tmp Employees',
+    content: {
+      component: 'app.TmpEmployees'
     }
   },
   {
