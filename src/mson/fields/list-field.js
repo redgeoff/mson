@@ -141,6 +141,13 @@ export default class ListField extends CompositeField {
 
     field.on('delete', onDelete);
 
+    field.on('dirty', dirty => {
+      // Bubble up dirty event
+      if (dirty) {
+        this.set({ dirty: true });
+      }
+    });
+
     this._onFieldCreated(field, onDelete);
 
     this._addField(field, name);
