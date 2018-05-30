@@ -91,6 +91,7 @@ export const tmpEmployee = {
       name: 'departments',
       label: 'Departments',
       component: 'SelectListField',
+      blankString: 'None',
       options: [
         { value: 'red', label: 'Red' },
         { value: 'green', label: 'Green' },

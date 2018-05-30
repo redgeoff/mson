@@ -117,6 +117,12 @@ export default class CompositeField extends Field {
     }
   }
 
+  _setDirty(props) {
+    if (props.dirty !== undefined) {
+      this.eachField(field => field.set({ dirty: props.dirty }));
+    }
+  }
+
   set(props) {
     super.set(props);
 
@@ -127,6 +133,8 @@ export default class CompositeField extends Field {
     this._setDisabled(props);
 
     this._setEditable(props);
+
+    this._setDirty(props);
 
     this.eachField(field => this._setIfUndefinedProp(props, field.get('name')));
   }
