@@ -75,3 +75,17 @@ it('should not create more than max size fields', () => {
   colors._getField(1).setValue('green');
   expect(colors._fields.length()).toEqual(2);
 });
+
+it('should clone', () => {
+  // Clone when no values and make sure a new field is created
+  const colors = createColors();
+  const clonedColors = colors.clone();
+  expect(clonedColors._fields.first()).not.toEqual(colors._fields.first());
+
+  // Make sure value is copied after the new fields have been created
+  const myColors = ['red', 'green'];
+  colors.setValue(myColors);
+  const clonedColors2 = colors.clone();
+  expect(colors.getValue()).toEqual(myColors);
+  expect(clonedColors2.getValue()).toEqual(myColors);
+});

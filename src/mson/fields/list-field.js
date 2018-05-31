@@ -407,4 +407,9 @@ export default class ListField extends CompositeField {
 
     return clonedField;
   }
+
+  _clearFields() {
+    this._fields.clear();
+    this._nextFieldName = 0;
+  }
 }

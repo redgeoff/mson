@@ -188,6 +188,17 @@ compiler.registerComponent('app.Account', {
       name: 'email',
       label: 'Email',
       required: true
+    },
+    {
+      name: 'departments',
+      label: 'Departments',
+      component: 'SelectListField',
+      blankString: 'None',
+      options: [
+        { value: 'red', label: 'Red' },
+        { value: 'green', label: 'Green' },
+        { value: 'blue', label: 'Blue' }
+      ]
     }
     // {
     //   component: 'ButtonField',
