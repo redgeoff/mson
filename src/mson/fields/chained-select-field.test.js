@@ -108,3 +108,17 @@ it('should get display value', () => {
   car.clearValue();
   expect(car.getDisplayValue()).toEqual(null);
 });
+
+it('should clone', () => {
+  // Clone when no values and make sure a new field is created
+  const car = createCarField();
+  const clonedCar = car.clone();
+  expect(clonedCar._fields.first()).not.toEqual(car._fields.first());
+
+  // Make sure value is copied after the new fields have been created
+  const myCar = [2, 5, 9, 10];
+  car.setValue(myCar);
+  const clonedCar2 = car.clone();
+  expect(car.getValue()).toEqual(myCar);
+  expect(clonedCar2.getValue()).toEqual(myCar);
+});
