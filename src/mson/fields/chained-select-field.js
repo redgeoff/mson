@@ -65,7 +65,7 @@ export default class ChainedSelectField extends ListField {
     // The parentValue can only be null if the index is 0 or else we will get the root options when
     // it is not intended.
     if (value !== null || index === 0) {
-      return this._options.mapByParent(value, option => {
+      return this._indexedOptions.mapByParent(value, option => {
         return {
           value: option.id,
           label: option.label
@@ -107,9 +107,9 @@ export default class ChainedSelectField extends ListField {
   }
 
   _indexOptions(options) {
-    this._options = new Hierarchy();
+    this._indexedOptions = new Hierarchy();
     options.forEach(option => {
-      this._options.add({
+      this._indexedOptions.add({
         id: option.value,
         parentId: option.parentValue,
         label: option.label
@@ -117,21 +117,25 @@ export default class ChainedSelectField extends ListField {
     });
   }
 
+  _setOptions(options) {
+    this._indexOptions(options);
+
+    // Set the options for the first field
+    this._setFieldOptions(null, 0);
+
+    // Clear the 2nd field
+    this._clearFieldIfExists(1);
+  }
+
   set(props) {
     super.set(props);
 
     // This needs to come first as we need to set the options and blankString before creating any
     // fields
-    this._setIfUndefined(props, 'blankString');
+    this._setIfUndefined(props, 'blankString', 'options');
 
     if (props.options !== undefined) {
-      this._indexOptions(props.options);
-
-      // Set the options for the first field
-      this._setFieldOptions(null, 0);
-
-      // Clear the 2nd field
-      this._clearFieldIfExists(1);
+      this._setOptions(props.options);
     }
 
     if (props.required !== undefined) {
@@ -142,7 +146,22 @@ export default class ChainedSelectField extends ListField {
   }
 
   getOne(name) {
-    const value = this._getIfAllowed(name, 'blankString');
+    const value = this._getIfAllowed(name, 'blankString', 'options');
     return value === undefined ? super.getOne(name) : value;
+  }
+
+  clone() {
+    const clonedField = super.clone();
+
+    // Clear the fields as the listeners now have the wrong references to the fields, etc...
+    clonedField._fields.clear();
+
+    // Create the first field
+    clonedField._setOptions(this.get('options'));
+
+    // Copy any existing value
+    clonedField.setValue(this.getValue());
+
+    return clonedField;
   }
 }

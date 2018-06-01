@@ -120,3 +120,17 @@ it('should allow last field to be deleted if reached max size', () => {
     .setValue(1); // select 2nd option
   expect(cars._getField(3).isBlank()).toEqual(false);
 });
+
+it('should clone', () => {
+  // Clone when no values and make sure a new field is created
+  const cars = createCarsField();
+  const clonedCars = cars.clone();
+  expect(clonedCars._fields.first()).not.toEqual(cars._fields.first());
+
+  // Make sure value is copied after the new fields have been created
+  const myCars = [[2, 5, 9, 10], [1, 3, 6]];
+  cars.setValue(myCars);
+  const clonedCars2 = cars.clone();
+  expect(cars.getValue()).toEqual(myCars);
+  expect(clonedCars2.getValue()).toEqual(myCars);
+});

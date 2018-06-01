@@ -85,4 +85,19 @@ export default class SelectListField extends ListField {
     // Don't remove the last field as the user needs it to enter the next value
     return !this._isLastField(field);
   }
+
+  clone() {
+    const clonedField = super.clone();
+
+    // Clear the fields as the listeners now have the wrong references to the fields, etc...
+    clonedField._clearFields();
+
+    // Create the default field
+    clonedField._createNewField();
+
+    // Copy any existing value
+    clonedField.setValue(this.getValue());
+
+    return clonedField;
+  }
 }
