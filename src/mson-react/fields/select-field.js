@@ -2,6 +2,14 @@ import React from 'react';
 import { MenuItem, Select } from '@material-ui/core';
 import CommonField from './common-field';
 import attach from '../attach';
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = theme => ({
+  formControl: {
+    // Specify a more appropriate min width so that the field is wide enough to cover most labels
+    minWidth: 120
+  }
+});
 
 class SelectField extends React.Component {
   handleChange = event => {
@@ -39,7 +47,15 @@ class SelectField extends React.Component {
   }
 
   render() {
-    const { value, err, touched, disabled, field, fullWidth } = this.props;
+    const {
+      value,
+      err,
+      touched,
+      disabled,
+      field,
+      fullWidth,
+      classes
+    } = this.props;
     const options = this.renderOptions();
 
     return (
@@ -51,6 +67,7 @@ class SelectField extends React.Component {
           value={value ? value : ''}
           disabled={disabled}
           fullWidth={fullWidth}
+          className={classes.formControl}
         >
           {options}
         </Select>
@@ -58,6 +75,8 @@ class SelectField extends React.Component {
     );
   }
 }
+
+SelectField = withStyles(styles)(SelectField);
 
 export default attach([
   'value',
