@@ -38,6 +38,14 @@ export default class ChainedSelectListField extends ListField {
     });
   }
 
+  _setOptions(options) {
+    // Set the options for the first field
+    this._setFieldOptions(0);
+
+    // Set options for all fields
+    this.eachField(field => field.set({ options }));
+  }
+
   set(props) {
     super.set(props);
 
@@ -46,16 +54,27 @@ export default class ChainedSelectListField extends ListField {
     this._setIfUndefined(props, 'options', 'blankString');
 
     if (props.options !== undefined) {
-      // Set the options for the first field
-      this._setFieldOptions(0);
-
-      // Set options for all fields
-      this.eachField(field => field.set({ options: props.options }));
+      this._setOptions(props.options);
     }
   }
 
   getOne(name) {
     const value = this._getIfAllowed(name, 'options', 'blankString');
     return value === undefined ? super.getOne(name) : value;
+  }
+
+  clone() {
+    const clonedField = super.clone();
+
+    // Clear the fields as the listeners now have the wrong references to the fields, etc...
+    clonedField._fields.clear();
+
+    // Create the first field
+    clonedField._setOptions(this.get('options'));
+
+    // Copy any existing value
+    clonedField.setValue(this.getValue());
+
+    return clonedField;
   }
 }
