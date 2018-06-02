@@ -117,6 +117,15 @@ export default class Component extends events.EventEmitter {
     this._setIfUndefinedProp(props, 'passed');
   }
 
+  // TODO: use this in _create() instead of set() for defaults
+  _setDefaults(props, values) {
+    _.each(values, (value, name) => {
+      if (props[name] === undefined) {
+        this._set(name, value);
+      }
+    });
+  }
+
   _setListeners(props) {
     if (props.listeners !== undefined) {
       // Inject ifData so that we don't have to explicitly define it in the actions

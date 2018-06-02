@@ -50,6 +50,10 @@ export default class SelectListField extends ListField {
           {
             name: 'blankString',
             component: 'TextField'
+          },
+          {
+            name: 'ensureInList',
+            component: 'BooleanField'
           }
         ]
       }
@@ -64,7 +68,7 @@ export default class SelectListField extends ListField {
 
     // This needs to come first as we need to set the options and blankString before creating any
     // fields
-    this._setIfUndefined(props, 'options', 'blankString');
+    this._setIfUndefined(props, 'options', 'blankString', 'ensureInList');
 
     if (props.options !== undefined) {
       // Set options for all fields
@@ -74,10 +78,19 @@ export default class SelectListField extends ListField {
     if (props.blankString !== undefined) {
       this.eachField(field => field.set({ blankString: props.blankString }));
     }
+
+    if (props.ensureInList !== undefined) {
+      this.eachField(field => field.set({ ensureInList: props.ensureInList }));
+    }
   }
 
   getOne(name) {
-    const value = this._getIfAllowed(name, 'options', 'blankString');
+    const value = this._getIfAllowed(
+      name,
+      'options',
+      'blankString',
+      'ensureInList'
+    );
     return value === undefined ? super.getOne(name) : value;
   }
 

@@ -525,29 +525,29 @@ compiler.registerComponent('app.TmpEmployees', {
       form: {
         component: 'app.TmpEmployee'
       },
-      // listeners: [
-      //   {
-      //     event: 'load',
-      //     actions: [
-      //       {
-      //         component: 'GetRecords',
-      //         type: 'app.Department'
-      //       },
-      //       {
-      //         component: 'Iterator',
-      //         iterator: 'arguments.edges',
-      //         return: {
-      //           value: '{{item.node.id}}',
-      //           label: '{{item.node.fieldValues.name}}'
-      //         }
-      //       },
-      //       {
-      //         component: 'Set',
-      //         name: 'form.fields.departments.options'
-      //       }
-      //     ]
-      //   }
-      // ],
+      listeners: [
+        {
+          event: 'load',
+          actions: [
+            {
+              component: 'GetRecords',
+              type: 'app.Department'
+            },
+            {
+              component: 'Iterator',
+              iterator: 'arguments.edges',
+              return: {
+                value: '{{item.node.id}}',
+                label: '{{item.node.fieldValues.name}}'
+              }
+            },
+            {
+              component: 'Set',
+              name: 'form.fields.departments.options'
+            }
+          ]
+        }
+      ],
       store: {
         component: 'RecordStore',
         type: 'app.TmpEmployee'
