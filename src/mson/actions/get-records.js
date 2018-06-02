@@ -38,5 +38,7 @@ export default class GetRecords extends Action {
 
       props.component.addForm(values);
     });
+
+    return records.data.records;
   }
 }

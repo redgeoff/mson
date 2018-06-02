@@ -14,9 +14,10 @@ export default class Set extends Action {
   _setProp(props) {
     const name = this.get('name');
     let names = name.split('.');
+    const value = this.get('value') ? this.get('value') : props.arguments;
     if (names.length === 1) {
       props.component.set({
-        [name]: this.get('value')
+        [name]: value
       });
     } else {
       let component = props.component.get(names[0]);
@@ -24,7 +25,7 @@ export default class Set extends Action {
         component = component.get(names[i]);
       }
       component.set({
-        [names[names.length - 1]]: this.get('value')
+        [names[names.length - 1]]: value
       });
     }
   }

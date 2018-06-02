@@ -24,6 +24,7 @@ import FormsField from './fields/forms-field';
 import FormValidator from './form/form-validator';
 import GetRecords from './actions/get-records';
 import IntegerField from './fields/integer-field';
+import Iterator from './actions/iterator';
 import ListField from './fields/list-field';
 import LogInToApp from './actions/log-in-to-app';
 import LogOutOfApp from './actions/log-out-of-app';
@@ -69,6 +70,7 @@ export default {
   FormsField,
   GetRecords,
   IntegerField,
+  Iterator,
   ListField,
   LogInToApp,
   LogOutOfApp,

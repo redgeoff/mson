@@ -31,9 +31,8 @@ class FormsField extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    // We clone the form once and share it among view/edit so that the UI is consistently bound to
-    // this form. TODO: what happens if the form instance changes? Do we care?
-    this.state.currentForm = props.field.get('form').clone();
+    // TODO: just use form in props intead of different item in state?
+    this.state.currentForm = props.field.get('form');
   }
 
   handleClose = () => {

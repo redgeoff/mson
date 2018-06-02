@@ -47,6 +47,7 @@ export default class FormsField extends Field {
         form.emitLoad();
       }
 
+      // TODO: probably need to make store create a load listener so that can have listener at the end of chain in case need to do something like load options before records
       await this._getAll();
     });
   }
@@ -381,5 +382,14 @@ export default class FormsField extends Field {
       }
     }
     return isBlank;
+  }
+
+  clone() {
+    const clonedField = super.clone();
+
+    // Clone form so that cloned form has a reference to a different form
+    this.set({ form: this.get('form').clone() });
+
+    return clonedField;
   }
 }

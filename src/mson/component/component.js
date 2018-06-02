@@ -1,6 +1,5 @@
 import events from 'events';
 import _ from 'lodash';
-import utils from '../utils';
 
 let nextKey = 0;
 const getNextKey = () => {
@@ -128,15 +127,18 @@ export default class Component extends events.EventEmitter {
       this._setIfUndefinedProp(props, 'listeners');
       this._listeners.forEach(listener => {
         this.on(listener.event, async () => {
-          await utils.sequential(
-            listener.actions,
-            async action =>
-              await action.run({
-                event: listener.event,
-                component: this,
-                ifData
-              })
-          );
+          let output = null;
+          for (const i in listener.actions) {
+            const action = listener.actions[i];
+
+            // Pass the previous action's output as this actions arguments
+            output = await action.run({
+              event: listener.event,
+              component: this,
+              ifData,
+              arguments: output
+            });
+          }
         });
       });
     }
