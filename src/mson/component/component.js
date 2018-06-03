@@ -126,7 +126,19 @@ export default class Component extends events.EventEmitter {
     });
   }
 
+  _emitLoadedFactory = () => {
+    this._emitChange('loaded');
+  };
+
   _setListeners(props) {
+    let hasOnLoad = false;
+
+    // Emit loaded event after all actions for the load event have been emitted so that we can
+    // guarantee that data has been loaded.
+
+    // Clear any previous listener to prevent memory leaks
+    this.removeListener('load', this._emitLoadedFactory);
+
     if (props.listeners !== undefined) {
       // Inject ifData so that we don't have to explicitly define it in the actions
       const ifData = props.passed;
@@ -134,7 +146,7 @@ export default class Component extends events.EventEmitter {
       // TODO: when the listeners change need to clean up previous listeners to prevent a listener
       // leak
       this._setIfUndefinedProp(props, 'listeners');
-      this._listeners.forEach(listener => {
+      props.listeners.forEach(listener => {
         this.on(listener.event, async () => {
           let output = null;
           for (const i in listener.actions) {
@@ -148,8 +160,17 @@ export default class Component extends events.EventEmitter {
               arguments: output
             });
           }
+
+          if (listener.event === 'load') {
+            hasOnLoad = true;
+            this._emitLoadedFactory();
+          }
         });
       });
+    }
+
+    if (!hasOnLoad) {
+      this.on('load', this._emitLoadedFactory);
     }
   }
 

@@ -46,8 +46,12 @@ export default class FormsField extends Field {
       if (form) {
         form.emitLoad();
       }
+    });
+  }
 
-      // TODO: probably need to make store create a load listener so that can have listener at the end of chain in case need to do something like load options before records
+  _listenForLoaded() {
+    this.on('loaded', async () => {
+      // Wait for loaded event so that we have had a chance to load options, etc...
       await this._getAll();
     });
   }
@@ -73,6 +77,7 @@ export default class FormsField extends Field {
     super._create(props);
 
     this._listenForLoad();
+    this._listenForLoaded();
     this._listenForShowArchived();
   }
 
