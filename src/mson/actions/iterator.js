@@ -19,18 +19,14 @@ export default class Converter extends Action {
 
   async act(props) {
     const iterator = this._getProp(props, this.get('iterator'));
-    console.log('iterator', iterator);
     const clonedProps = _.clone(props);
     const filler = new PropFiller(props);
-    const tmp = _.map(iterator, item => {
-      console.log('item', item);
+    return _.map(iterator, item => {
       // Inject item
       clonedProps.item = item;
       filler.setProps(clonedProps);
 
       return filler.fillAll(this.get('return'));
     });
-    console.log('tmp=', tmp);
-    return tmp;
   }
 }

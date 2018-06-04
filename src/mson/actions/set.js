@@ -16,7 +16,10 @@ export default class Set extends Action {
     let names = name.split('.');
     const value =
       this.get('value') === null ? props.arguments : this.get('value');
-    if (names.length === 1) {
+    if (!name) {
+      // No name was specified to so pipe to next action
+      return value;
+    } else if (names.length === 1) {
       props.component.set({
         [name]: value
       });
