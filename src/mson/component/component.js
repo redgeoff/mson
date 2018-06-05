@@ -51,8 +51,15 @@ export default class Component extends events.EventEmitter {
     }
   }
 
+  _setDebugId() {
+    // Used to identify instances when debugging
+    this._debugId = Math.random();
+  }
+
   constructor(props) {
     super(props);
+
+    this._setDebugId();
 
     // We have to set the name before we create the component as the name be needed to create the
     // component, e.g. to create sub fields using the name as a prefix.
@@ -260,6 +267,8 @@ export default class Component extends events.EventEmitter {
 
   clone() {
     const clonedComponent = _.cloneDeep(this);
+
+    clonedComponent._setDebugId();
 
     // Remove all listeners and expect new ones to be set up so that we don't have duplicate
     // listeners
