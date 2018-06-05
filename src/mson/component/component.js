@@ -142,7 +142,7 @@ export default class Component extends events.EventEmitter {
     // guarantee that data has been loaded.
 
     // Clear any previous listener to prevent memory leaks
-    this.removeListener('create', this._emitLoadedFactory);
+    this.removeListener('create', this._emitCreatedFactory);
     this.removeListener('load', this._emitLoadedFactory);
 
     if (props.listeners !== undefined) {
@@ -172,7 +172,7 @@ export default class Component extends events.EventEmitter {
               hasOnCreate = true;
               this._emitCreatedFactory();
               break;
-            case 'create':
+            case 'load':
               hasOnLoad = true;
               this._emitLoadedFactory();
               break;
@@ -183,6 +183,9 @@ export default class Component extends events.EventEmitter {
       });
     }
 
+    if (!hasOnCreate) {
+      this.on('create', this._emitCreatedFactory);
+    }
     if (!hasOnLoad) {
       this.on('load', this._emitLoadedFactory);
     }
