@@ -3,6 +3,7 @@ import Action from '../actions/action';
 import testUtils from '../test-utils';
 import Form from '../form';
 import compiler from '../compiler';
+import Set from '../actions/set';
 
 class Song extends Component {
   _create(props) {
@@ -98,4 +99,28 @@ it('should get schema form', () => {
   const schemaForm = new Form();
   component.buildSchemaForm(schemaForm, compiler);
   expect(schemaForm.hasField('name')).toEqual(true);
+});
+
+it('should chain listeners', async () => {
+  const name = 'Michael Jackson';
+
+  const song = new Song({
+    listeners: [
+      {
+        event: 'create',
+        actions: [
+          new Set({
+            value: name
+          }),
+          new Set({
+            name: 'artist'
+          })
+        ]
+      }
+    ]
+  });
+
+  await testUtils.once(song, 'created');
+
+  expect(song.get('artist'), name);
 });

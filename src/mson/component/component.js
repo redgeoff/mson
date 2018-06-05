@@ -126,17 +126,23 @@ export default class Component extends events.EventEmitter {
     });
   }
 
+  _emitCreatedFactory = () => {
+    this._emitChange('created');
+  };
+
   _emitLoadedFactory = () => {
     this._emitChange('loaded');
   };
 
   _setListeners(props) {
+    let hasOnCreate = false;
     let hasOnLoad = false;
 
     // Emit loaded event after all actions for the load event have been emitted so that we can
     // guarantee that data has been loaded.
 
     // Clear any previous listener to prevent memory leaks
+    this.removeListener('create', this._emitLoadedFactory);
     this.removeListener('load', this._emitLoadedFactory);
 
     if (props.listeners !== undefined) {
@@ -161,9 +167,17 @@ export default class Component extends events.EventEmitter {
             });
           }
 
-          if (listener.event === 'load') {
-            hasOnLoad = true;
-            this._emitLoadedFactory();
+          switch (listener.event) {
+            case 'create':
+              hasOnCreate = true;
+              this._emitCreatedFactory();
+              break;
+            case 'create':
+              hasOnLoad = true;
+              this._emitLoadedFactory();
+              break;
+            default:
+              break;
           }
         });
       });
