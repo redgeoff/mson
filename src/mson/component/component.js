@@ -158,9 +158,6 @@ export default class Component extends events.EventEmitter {
   }
 
   _setListeners(props) {
-    let hasOnCreate = false;
-    let hasOnLoad = false;
-
     // Emit loaded event after all actions for the load event have been emitted so that we can
     // guarantee that data has been loaded.
 
@@ -188,16 +185,10 @@ export default class Component extends events.EventEmitter {
 
           switch (listener.event) {
             case 'create':
-              if (!hasOnCreate) {
-                this._emitCreated();
-              }
-              hasOnCreate = true;
+              this._emitCreated();
               break;
             case 'load':
-              if (!hasOnLoad) {
-                this._emitLoaded();
-              }
-              hasOnLoad = true;
+              this._emitLoaded();
               break;
             default:
               break;
