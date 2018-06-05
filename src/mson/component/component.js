@@ -135,13 +135,13 @@ export default class Component extends events.EventEmitter {
     });
   }
 
-  _emitCreatedFactory = () => {
+  _emitCreated() {
     this._emitChange('created');
-  };
+  }
 
-  _emitLoadedFactory = () => {
+  _emitLoaded() {
     this._emitChange('loaded');
-  };
+  }
 
   _hasListenerForEvent(event) {
     const listeners = this.get('listeners');
@@ -189,13 +189,13 @@ export default class Component extends events.EventEmitter {
           switch (listener.event) {
             case 'create':
               if (!hasOnCreate) {
-                this._emitCreatedFactory();
+                this._emitCreated();
               }
               hasOnCreate = true;
               break;
             case 'load':
               if (!hasOnLoad) {
-                this._emitLoadedFactory();
+                this._emitLoaded();
               }
               hasOnLoad = true;
               break;
