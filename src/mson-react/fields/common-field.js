@@ -34,12 +34,16 @@ class CommonField extends React.Component {
         );
       }
 
+      const firstErr = Array.isArray(err) ? err[0].error : err;
+
       fld = (
         <span>
           {lbl}
           {children}
           {help && editable ? <HelpToolTip help={help} /> : ''}
-          {touched && err ? <FormHelperText error>{err}</FormHelperText> : null}
+          {touched && err ? (
+            <FormHelperText error>{firstErr}</FormHelperText>
+          ) : null}
         </span>
       );
     } else {

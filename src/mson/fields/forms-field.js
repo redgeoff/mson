@@ -46,7 +46,12 @@ export default class FormsField extends Field {
       if (form) {
         form.emitLoad();
       }
+    });
+  }
 
+  _listenForLoaded() {
+    this.on('loaded', async () => {
+      // Wait for loaded event so that we have had a chance to load options, etc...
       await this._getAll();
     });
   }
@@ -72,6 +77,7 @@ export default class FormsField extends Field {
     super._create(props);
 
     this._listenForLoad();
+    this._listenForLoaded();
     this._listenForShowArchived();
   }
 
@@ -381,5 +387,14 @@ export default class FormsField extends Field {
       }
     }
     return isBlank;
+  }
+
+  clone() {
+    const clonedField = super.clone();
+
+    // Clone form so that cloned form has a reference to a different form
+    this.set({ form: this.get('form').clone() });
+
+    return clonedField;
   }
 }

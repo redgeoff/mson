@@ -92,11 +92,16 @@ export const tmpEmployee = {
       label: 'Departments',
       component: 'SelectListField',
       blankString: 'None',
-      options: [
-        { value: 'red', label: 'Red' },
-        { value: 'green', label: 'Green' },
-        { value: 'blue', label: 'Blue' }
-      ]
+
+      // TODO: is this really the best way to handle this? A better alternative is probably to load
+      // the options in the backend as well.
+      ensureInList: false
+
+      // options: [
+      //   { value: 'red', label: 'Red' },
+      //   { value: 'green', label: 'Green' },
+      //   { value: 'blue', label: 'Blue' }
+      // ]
     }
   ],
   access: {

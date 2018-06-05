@@ -3,6 +3,9 @@ import Field from './field';
 export default class SelectField extends Field {
   _create(props) {
     super._create(props);
+
+    this._setDefaults({ ensureInList: true });
+
     this.set({
       schema: {
         component: 'Form',
@@ -15,6 +18,10 @@ export default class SelectField extends Field {
           {
             name: 'blankString',
             component: 'TextField'
+          },
+          {
+            name: 'ensureInList',
+            component: 'BooleanField'
           }
         ]
       }
@@ -23,7 +30,7 @@ export default class SelectField extends Field {
 
   set(props) {
     super.set(props);
-    this._setIfUndefined(props, 'options', 'blankString');
+    this._setIfUndefined(props, 'options', 'blankString', 'ensureInList');
   }
 
   getOne(name) {
@@ -33,7 +40,12 @@ export default class SelectField extends Field {
       return null;
     }
 
-    const value = this._getIfAllowed(name, 'options', 'blankString');
+    const value = this._getIfAllowed(
+      name,
+      'options',
+      'blankString',
+      'ensureInList'
+    );
     return value === undefined ? super.getOne(name) : value;
   }
 
@@ -54,7 +66,7 @@ export default class SelectField extends Field {
   validate() {
     super.validate();
 
-    if (!this.isBlank()) {
+    if (!this.isBlank() && this.get('ensureInList')) {
       const value = this.get('value');
       if (this._getOptionLabel(value) === null) {
         this.setErr(`${value} is not an option`);

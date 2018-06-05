@@ -1,9 +1,14 @@
 // TODO: use in validator as well?
+// TODO: move from compiler directory as used by multiple modules
 
 import _ from 'lodash';
 
 export default class PropFiller {
   constructor(props) {
+    this.setProps(props);
+  }
+
+  setProps(props) {
     this._props = props;
   }
 

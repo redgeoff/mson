@@ -13,10 +13,15 @@ export default class Set extends Action {
 
   _setProp(props) {
     const name = this.get('name');
-    let names = name.split('.');
-    if (names.length === 1) {
+    let names = name !== null ? name.split('.') : [];
+    const value =
+      this.get('value') === null ? props.arguments : this.get('value');
+    if (!name) {
+      // No name was specified to so pipe to next action
+      return value;
+    } else if (names.length === 1) {
       props.component.set({
-        [name]: this.get('value')
+        [name]: value
       });
     } else {
       let component = props.component.get(names[0]);
@@ -24,12 +29,12 @@ export default class Set extends Action {
         component = component.get(names[i]);
       }
       component.set({
-        [names[names.length - 1]]: this.get('value')
+        [names[names.length - 1]]: value
       });
     }
   }
 
   async act(props) {
-    this._setProp(props);
+    return this._setProp(props);
   }
 }

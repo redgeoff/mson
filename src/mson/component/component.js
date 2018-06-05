@@ -1,6 +1,5 @@
 import events from 'events';
 import _ from 'lodash';
-import utils from '../utils';
 
 let nextKey = 0;
 const getNextKey = () => {
@@ -118,7 +117,34 @@ export default class Component extends events.EventEmitter {
     this._setIfUndefinedProp(props, 'passed');
   }
 
+  // TODO: use this in _create() instead of set() for defaults
+  _setDefaults(props, values) {
+    _.each(values, (value, name) => {
+      if (props[name] === undefined) {
+        this._set(name, value);
+      }
+    });
+  }
+
+  _emitCreatedFactory = () => {
+    this._emitChange('created');
+  };
+
+  _emitLoadedFactory = () => {
+    this._emitChange('loaded');
+  };
+
   _setListeners(props) {
+    let hasOnCreate = false;
+    let hasOnLoad = false;
+
+    // Emit loaded event after all actions for the load event have been emitted so that we can
+    // guarantee that data has been loaded.
+
+    // Clear any previous listener to prevent memory leaks
+    this.removeListener('create', this._emitLoadedFactory);
+    this.removeListener('load', this._emitLoadedFactory);
+
     if (props.listeners !== undefined) {
       // Inject ifData so that we don't have to explicitly define it in the actions
       const ifData = props.passed;
@@ -126,19 +152,39 @@ export default class Component extends events.EventEmitter {
       // TODO: when the listeners change need to clean up previous listeners to prevent a listener
       // leak
       this._setIfUndefinedProp(props, 'listeners');
-      this._listeners.forEach(listener => {
+      props.listeners.forEach(listener => {
         this.on(listener.event, async () => {
-          await utils.sequential(
-            listener.actions,
-            async action =>
-              await action.run({
-                event: listener.event,
-                component: this,
-                ifData
-              })
-          );
+          let output = null;
+          for (const i in listener.actions) {
+            const action = listener.actions[i];
+
+            // Pass the previous action's output as this actions arguments
+            output = await action.run({
+              event: listener.event,
+              component: this,
+              ifData,
+              arguments: output
+            });
+          }
+
+          switch (listener.event) {
+            case 'create':
+              hasOnCreate = true;
+              this._emitCreatedFactory();
+              break;
+            case 'create':
+              hasOnLoad = true;
+              this._emitLoadedFactory();
+              break;
+            default:
+              break;
+          }
         });
       });
+    }
+
+    if (!hasOnLoad) {
+      this.on('load', this._emitLoadedFactory);
     }
   }
 

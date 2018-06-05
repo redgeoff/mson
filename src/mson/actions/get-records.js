@@ -36,7 +36,10 @@ export default class GetRecords extends Action {
         }
       });
 
-      props.component.addForm(values);
+      // TODO: if this is needed then probably create prop like addForm
+      // props.component.addForm(values);
     });
+
+    return records.data.records;
   }
 }
