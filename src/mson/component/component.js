@@ -42,6 +42,15 @@ export default class Component extends events.EventEmitter {
     };
   }
 
+  _emitCreate() {
+    this._emitChange('create');
+
+    if (!this._hasListenerForEvent('create')) {
+      // There are no create listeners so emit a created event
+      this._emitCreated();
+    }
+  }
+
   constructor(props) {
     super(props);
 
@@ -55,7 +64,7 @@ export default class Component extends events.EventEmitter {
     this.set(props === undefined ? {} : props);
 
     // Emit the create event after we have set up the initial listeners
-    this._emitChange('create');
+    this._emitCreate();
 
     // Used to create a separate namespace/keyspace for components so that we can do things like
     // trigger a UI update in frameworks like React.
@@ -126,24 +135,31 @@ export default class Component extends events.EventEmitter {
     });
   }
 
-  _emitCreatedFactory = () => {
+  _emitCreated() {
     this._emitChange('created');
-  };
+  }
 
-  _emitLoadedFactory = () => {
+  _emitLoaded() {
     this._emitChange('loaded');
-  };
+  }
+
+  _hasListenerForEvent(event) {
+    const listeners = this.get('listeners');
+    let has = false;
+    if (listeners) {
+      _.each(listeners, listener => {
+        if (listener.event === event) {
+          has = true;
+          return false; // exit loop
+        }
+      });
+    }
+    return has;
+  }
 
   _setListeners(props) {
-    let hasOnCreate = false;
-    let hasOnLoad = false;
-
     // Emit loaded event after all actions for the load event have been emitted so that we can
     // guarantee that data has been loaded.
-
-    // Clear any previous listener to prevent memory leaks
-    this.removeListener('create', this._emitCreatedFactory);
-    this.removeListener('load', this._emitLoadedFactory);
 
     if (props.listeners !== undefined) {
       // Inject ifData so that we don't have to explicitly define it in the actions
@@ -169,25 +185,16 @@ export default class Component extends events.EventEmitter {
 
           switch (listener.event) {
             case 'create':
-              hasOnCreate = true;
-              this._emitCreatedFactory();
+              this._emitCreated();
               break;
             case 'load':
-              hasOnLoad = true;
-              this._emitLoadedFactory();
+              this._emitLoaded();
               break;
             default:
               break;
           }
         });
       });
-    }
-
-    if (!hasOnCreate) {
-      this.on('create', this._emitCreatedFactory);
-    }
-    if (!hasOnLoad) {
-      this.on('load', this._emitLoadedFactory);
     }
   }
 
@@ -264,6 +271,11 @@ export default class Component extends events.EventEmitter {
   // This should be called whenever the route changes and the component is loaded
   emitLoad() {
     this._emitChange('load');
+
+    if (!this._hasListenerForEvent('load')) {
+      // There are no load listeners so emit a loaded event
+      this._emitLoaded();
+    }
   }
 
   _bubbleUpEvents(component, events) {
