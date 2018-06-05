@@ -47,7 +47,7 @@ export default class Component extends events.EventEmitter {
 
     if (!this._hasListenerForEvent('create')) {
       // There are no create listeners so emit a created event
-      this._emitChange('created');
+      this._emitCreated();
     }
   }
 
@@ -283,7 +283,7 @@ export default class Component extends events.EventEmitter {
 
     if (!this._hasListenerForEvent('load')) {
       // There are no load listeners so emit a loaded event
-      this._emitChange('loaded');
+      this._emitLoaded();
     }
   }
 
