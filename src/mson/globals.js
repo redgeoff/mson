@@ -25,12 +25,12 @@ class Globals extends Component {
     // We need a separate event for redirecting as we want to be able to change the path without
     // triggering the redirect event
     this.set({ redirectPath: path });
-    this._emitChange('redirect');
+    this._emitChange('redirect', path);
   }
 
   displaySnackbar(message) {
     this.set({ snackbarMessage: message });
-    this._emitChange('displaySnackbar');
+    this._emitChange('displaySnackbar', message);
   }
 
   setOnNavigate(onNavigate) {
