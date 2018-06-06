@@ -87,7 +87,7 @@ const seed = async () => {
     }
   });
 
-  const N = 10;
+  const N = 100;
   for (let i = 1; i <= N; i++) {
     await client.record.create({
       appId: config.appId,
