@@ -11,7 +11,7 @@ const styles = theme => ({
   }
 });
 
-class SelectField extends React.Component {
+class SelectField extends React.PureComponent {
   handleChange = event => {
     this.props.field.setValue(event.target.value);
   };

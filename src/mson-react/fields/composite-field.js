@@ -3,7 +3,7 @@ import Field from './field';
 import attach from '../attach';
 import HelpToolTip from './help-tool-tip';
 
-class CompositeField extends React.Component {
+class CompositeField extends React.PureComponent {
   render() {
     const { field, help, editable } = this.props;
 

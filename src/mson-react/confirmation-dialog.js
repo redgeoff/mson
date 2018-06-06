@@ -8,7 +8,7 @@ import {
   DialogTitle
 } from '@material-ui/core';
 
-export default class ConfirmationDialog extends React.Component {
+export default class ConfirmationDialog extends React.PureComponent {
   handleClose = yes => {
     if (this.props.onClose) {
       this.props.onClose(yes);

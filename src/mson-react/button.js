@@ -18,7 +18,7 @@ const styles = theme => ({
   }
 });
 
-class Button extends React.Component {
+class Button extends React.PureComponent {
   handleClick = () => {
     if (this.props.onClick) {
       this.props.onClick();

@@ -4,7 +4,7 @@ import CommonField from './common-field';
 import attach from '../attach';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-class BooleanField extends React.Component {
+class BooleanField extends React.PureComponent {
   handleChange = event => {
     this.props.field.setValue(event.target.checked);
   };

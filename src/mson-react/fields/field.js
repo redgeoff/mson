@@ -5,7 +5,7 @@ import attach from '../attach';
 import FlexBreak from '../flex-break';
 
 // Use MSON React Component instead?
-class Field extends React.Component {
+class Field extends React.PureComponent {
   render() {
     const { field, hidden, block } = this.props;
 

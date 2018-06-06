@@ -6,7 +6,7 @@ import { ModeEdit, Delete, Save, Cancel, Restore } from '@material-ui/icons';
 import Form from './form';
 import attach from './attach';
 
-class FormDialog extends React.Component {
+class FormDialog extends React.PureComponent {
   state = {
     open: false
   };

@@ -76,6 +76,31 @@ const user = {
 //   }
 // };
 
+const seed = async () => {
+  const developers = await client.record.create({
+    appId: config.appId,
+    componentName: 'app.Department',
+    fieldValues: {
+      name: 'Developers',
+      employeeNotes: 'developers',
+      adminNotes: 'developers'
+    }
+  });
+
+  const N = 100;
+  for (let i = 1; i <= N; i++) {
+    await client.record.create({
+      appId: config.appId,
+      componentName: 'app.TmpEmployee',
+      fieldValues: {
+        firstName: 'First' + i,
+        lastName: 'Last' + i,
+        departments: [developers.data.createRecord.id]
+      }
+    });
+  }
+};
+
 const main = async () => {
   await client.user.logIn({
     username: config.superuser.username,
@@ -101,6 +126,8 @@ const main = async () => {
   // await client.component.create({ appId: config.appId, definition: menu });
   //
   // await client.component.create({ appId: config.appId, definition: app });
+
+  await seed();
 };
 
 main();

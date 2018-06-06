@@ -10,7 +10,7 @@ const styles = theme => ({
   }
 });
 
-class FlexBreak extends React.Component {
+class FlexBreak extends React.PureComponent {
   render() {
     const { classes } = this.props;
     return <div className={classes.break} />;

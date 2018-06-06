@@ -35,8 +35,19 @@ export default class FormsField extends Field {
           }
         });
 
-        this.addForm(values, edge.node.archivedAt, edge.node.userId);
+        // We want to mute the changes until we are done adding all the forms or else we'll
+        // introduce a lot of latency on the UI thread.
+        const muteChange = true;
+        this.addForm(
+          values,
+          edge.node.archivedAt,
+          edge.node.userId,
+          muteChange
+        );
       });
+
+      // We emit records so that we trigger change even whenever the data changes
+      this._emitChange('change', records);
     }
   }
 
@@ -113,7 +124,7 @@ export default class FormsField extends Field {
     });
   }
 
-  addForm(values, archivedAt, userId) {
+  addForm(values, archivedAt, userId, muteChange) {
     const clonedForm = this.get('form').clone();
     clonedForm.setValues(values);
 
@@ -132,8 +143,10 @@ export default class FormsField extends Field {
 
     this._listenToForm(clonedForm);
 
-    // Emit change so that UI is notified
-    this._emitChange('change', values);
+    if (!muteChange) {
+      // Emit change so that UI is notified
+      this._emitChange('change', values);
+    }
   }
 
   _clearAllFormListeners() {

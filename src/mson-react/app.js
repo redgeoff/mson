@@ -76,7 +76,7 @@ const styles = theme => ({
   }
 });
 
-class App extends React.Component {
+class App extends React.PureComponent {
   state = {
     mobileOpen: false,
     menuItem: null,
@@ -393,5 +393,5 @@ class App extends React.Component {
 
 App = withStyles(styles, { withTheme: true })(App);
 App = withRouter(App);
-App = attach(['redirect', 'displaySnackbar'], globals)(App);
+App = attach(['redirectPath', 'snackbarMessage'], globals)(App);
 export default App;

@@ -4,7 +4,7 @@ import React from 'react';
 import { IconButton, Tooltip } from '@material-ui/core';
 import { HelpOutline } from '@material-ui/icons';
 
-export default class HelpToolTip extends React.Component {
+export default class HelpToolTip extends React.PureComponent {
   render() {
     const { help } = this.props;
     return (

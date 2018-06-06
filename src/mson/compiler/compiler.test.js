@@ -167,7 +167,7 @@ it('should not share components', () => {
 });
 
 it('should support template parameters in listeners', async () => {
-  const snackbarDisplayed = testUtils.once(globals, 'displaySnackbar');
+  const snackbarDisplayed = testUtils.once(globals, 'snackbarMessage');
   compiler.newComponent({
     component: 'org.proj.TemplatedListeners',
     foo: 'bar'

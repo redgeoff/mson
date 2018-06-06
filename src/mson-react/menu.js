@@ -32,7 +32,7 @@ const styles = theme => ({
   }
 });
 
-class Menu extends React.Component {
+class Menu extends React.PureComponent {
   handleDrawerToggle = () => {
     if (this.props.onDrawerToggle) {
       this.props.onDrawerToggle();

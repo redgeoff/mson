@@ -15,7 +15,7 @@ const styles = theme => ({
   }
 });
 
-class Card extends React.Component {
+class Card extends React.PureComponent {
   render() {
     const { classes, component } = this.props;
 

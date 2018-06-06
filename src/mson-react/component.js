@@ -3,7 +3,7 @@ import components from './components';
 import compiler from '../mson/compiler';
 import Form from '../mson/form';
 
-export default class Component extends React.Component {
+export default class Component extends React.PureComponent {
   render() {
     const { component } = this.props;
     const name = component.getClassName();
