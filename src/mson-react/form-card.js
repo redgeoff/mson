@@ -66,6 +66,8 @@ class FormCard extends React.PureComponent {
               editable={editable}
               disabled={disabled}
               archivedAt={archivedAt}
+              onEdit={event => this.handleEdit(event)}
+              onDelete={event => this.handleDelete(event)}
             />
           </Grid>
         </Paper>

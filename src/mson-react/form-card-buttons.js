@@ -14,7 +14,9 @@ export default class FormCardButtons extends React.PureComponent {
       forbidDelete,
       editable,
       disabled,
-      archivedAt
+      archivedAt,
+      onEdit,
+      onDelete
     } = this.props;
 
     // NOTE: using Tooltips below when we have 100 more items leads to a significant latency. In the
@@ -25,7 +27,7 @@ export default class FormCardButtons extends React.PureComponent {
     if (!forbidUpdate) {
       // <Tooltip title="Edit">
       updateButton = (
-        <IconButton onClick={event => this.handleEdit(event)}>
+        <IconButton onClick={onEdit}>
           <ModeEdit />
         </IconButton>
       );
@@ -35,7 +37,7 @@ export default class FormCardButtons extends React.PureComponent {
     let deleteButton = null;
     if (!forbidDelete) {
       deleteButton = (
-        <IconButton onClick={event => this.handleDelete(event)}>
+        <IconButton onClick={onDelete}>
           {archivedAt ? <Restore /> : <Delete />}
         </IconButton>
       );
