@@ -393,5 +393,5 @@ class App extends React.PureComponent {
 
 App = withStyles(styles, { withTheme: true })(App);
 App = withRouter(App);
-App = attach(['redirect', 'displaySnackbar'], globals)(App);
+App = attach(['redirectPath', 'displaySnackbar'], globals)(App);
 export default App;

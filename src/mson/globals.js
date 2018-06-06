@@ -8,13 +8,22 @@ class Globals extends Component {
 
   set(props) {
     super.set(props);
-    this._setIfUndefined(props, 'redirectPath', 'snackbarMessage', 'appId');
+    this._setIfUndefined(
+      props,
+      'redirect',
+      'redirectPath',
+      'displaySnackbar',
+      'snackbarMessage',
+      'appId'
+    );
   }
 
   getOne(name) {
     const value = this._getIfAllowed(
       name,
+      'redirect',
       'redirectPath',
+      'displaySnackbar',
       'snackbarMessage',
       'appId'
     );
@@ -24,13 +33,11 @@ class Globals extends Component {
   redirect(path) {
     // We need a separate event for redirecting as we want to be able to change the path without
     // triggering the redirect event
-    this.set({ redirectPath: path });
-    this._emitChange('redirect', path);
+    this.set({ redirectPath: path, redirect: path });
   }
 
   displaySnackbar(message) {
-    this.set({ snackbarMessage: message });
-    this._emitChange('displaySnackbar', message);
+    this.set({ snackbarMessage: message, displaySnackbar: message });
   }
 
   setOnNavigate(onNavigate) {
