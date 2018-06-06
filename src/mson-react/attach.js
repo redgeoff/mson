@@ -8,12 +8,16 @@ const attach = (_watchProps, componentOrName) => {
     return class extends React.PureComponent {
       wasMounted = false;
 
-      getComponent = () => {
+      getComponent = props => {
+        if (!props) {
+          props = this.props;
+        }
+
         // TODO: require componentOrName to always be supplied?
         if (!componentOrName) {
-          return this.props['field'];
+          return props['field'];
         } else if (typeof componentOrName === 'string') {
-          return this.props[componentOrName];
+          return props[componentOrName];
         } else {
           // componentOrName is a component
           return componentOrName;
@@ -41,6 +45,22 @@ const attach = (_watchProps, componentOrName) => {
         }
       };
 
+      componentDidUpdate(prevProps) {
+        if (this.getComponent() !== this.getComponent(prevProps)) {
+          // The component is changing so recreate the listener
+          this.removeListener();
+          this.addListener();
+        }
+      }
+
+      addListener() {
+        this.getComponent().on('$change', this.handleFieldChange);
+      }
+
+      removeListener() {
+        this.getComponent().removeListener('$change', this.handleFieldChange);
+      }
+
       componentDidMount() {
         // Note: we have to use componentDidMount and not componentWillMount as handleFieldChange
         // can change the state and we aren't allowed to change the state until the component has
@@ -48,13 +68,11 @@ const attach = (_watchProps, componentOrName) => {
 
         this.wasMounted = true;
 
-        // TODO: Also need to use componentDidUpdate as components can change and if change need
-        // to clean up listeners.
-        this.getComponent().on('$change', this.handleFieldChange);
+        this.addListener();
       }
 
       componentWillUnmount() {
-        this.getComponent().removeListener('$change', this.handleFieldChange);
+        this.removeListener();
         this.wasMounted = false;
       }
 
