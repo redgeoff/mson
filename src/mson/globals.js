@@ -12,7 +12,6 @@ class Globals extends Component {
       props,
       'redirect',
       'redirectPath',
-      'displaySnackbar',
       'snackbarMessage',
       'appId'
     );
@@ -23,7 +22,6 @@ class Globals extends Component {
       name,
       'redirect',
       'redirectPath',
-      'displaySnackbar',
       'snackbarMessage',
       'appId'
     );
@@ -37,7 +35,7 @@ class Globals extends Component {
   }
 
   displaySnackbar(message) {
-    this.set({ snackbarMessage: message, displaySnackbar: message });
+    this.set({ snackbarMessage: message });
   }
 
   setOnNavigate(onNavigate) {
