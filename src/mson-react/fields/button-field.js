@@ -2,7 +2,7 @@ import React from 'react';
 import attach from '../attach';
 import Button from '../button';
 
-class ButtonField extends React.Component {
+class ButtonField extends React.PureComponent {
   handleClick = () => {
     const { type } = this.props;
 

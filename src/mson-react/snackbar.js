@@ -13,7 +13,7 @@ const styles = theme => ({
   }
 });
 
-class Snackbar extends React.Component {
+class Snackbar extends React.PureComponent {
   handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;

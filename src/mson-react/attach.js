@@ -5,7 +5,7 @@ import _ from 'lodash';
 
 const attach = (_watchProps, componentOrName) => {
   return Component => {
-    return class extends React.Component {
+    return class extends React.PureComponent {
       wasMounted = false;
 
       getComponent = () => {

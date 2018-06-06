@@ -4,7 +4,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 
-export default class UserDropDown extends React.Component {
+export default class UserDropDown extends React.PureComponent {
   state = {
     anchorEl: null
   };

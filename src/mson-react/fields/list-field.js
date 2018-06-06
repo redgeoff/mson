@@ -4,7 +4,7 @@ import React from 'react';
 import ListItemField from './list-item-field';
 import attach from '../attach';
 
-class ListField extends React.Component {
+class ListField extends React.PureComponent {
   render() {
     const { field, help } = this.props;
     const allowDelete = field.get('allowDelete');

@@ -3,7 +3,7 @@ import Input from '@material-ui/core/Input';
 import CommonField from './common-field';
 import attach from '../attach';
 
-class TextField extends React.Component {
+class TextField extends React.PureComponent {
   handleChange = event => {
     this.props.field.setValue(event.target.value);
   };

@@ -6,7 +6,7 @@ import FlexBreak from '../flex-break';
 import attach from '../attach';
 import HelpToolTip from './help-tool-tip';
 
-class ListItemField extends React.Component {
+class ListItemField extends React.PureComponent {
   handleDelete = () => {
     this.props.field.emit('delete');
   };

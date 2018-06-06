@@ -6,7 +6,7 @@ import FormControl from '../form-control';
 import attach from '../attach';
 import HelpToolTip from './help-tool-tip';
 
-class CommonField extends React.Component {
+class CommonField extends React.PureComponent {
   render() {
     const {
       field,

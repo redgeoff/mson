@@ -14,7 +14,7 @@ const styles = theme => ({
   }
 });
 
-class FormControl extends React.Component {
+class FormControl extends React.PureComponent {
   render() {
     const { fullWidth, children, classes } = this.props;
 

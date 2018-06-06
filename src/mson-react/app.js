@@ -76,7 +76,7 @@ const styles = theme => ({
   }
 });
 
-class App extends React.Component {
+class App extends React.PureComponent {
   state = {
     mobileOpen: false,
     menuItem: null,

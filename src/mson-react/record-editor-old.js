@@ -6,7 +6,7 @@ import Button from './button';
 import { Save, Cancel } from '@material-ui/icons';
 import attach from './attach';
 
-class RecordEditor extends React.Component {
+class RecordEditor extends React.PureComponent {
   handleSave = event => {
     // Stop the form from refreshing the page
     event.preventDefault();

@@ -23,7 +23,7 @@ const styles = theme => ({
   }
 });
 
-class Submenu extends React.Component {
+class Submenu extends React.PureComponent {
   constructor(props) {
     super(props);
 
