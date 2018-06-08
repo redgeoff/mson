@@ -5,7 +5,6 @@ import { ListItem, ListItemText } from '@material-ui/core';
 import Collapse from '@material-ui/core/Collapse';
 import Typography from '@material-ui/core/Typography';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
-import { withRouter } from 'react-router';
 import _ from 'lodash';
 
 const styles = theme => ({
@@ -33,12 +32,12 @@ class Submenu extends React.PureComponent {
   }
 
   childSelected() {
-    const { item, location } = this.props;
+    const { item, path } = this.props;
 
     let childSelected = false;
 
     _.each(item.items, item => {
-      if (location.pathname === item.path) {
+      if (path === item.path) {
         childSelected = true;
         return false; // exit loop
       }
@@ -61,10 +60,10 @@ class Submenu extends React.PureComponent {
   };
 
   items() {
-    const { classes, item, location } = this.props;
+    const { classes, item, path } = this.props;
 
     return item.items.map((item, index) => {
-      const isSelected = location.pathname === item.path;
+      const isSelected = path === item.path;
       let classNames = [classes.secondary];
       if (isSelected) {
         classNames.push(classes.selected);
@@ -91,10 +90,10 @@ class Submenu extends React.PureComponent {
   }
 
   render() {
-    const { item, classes, location } = this.props;
+    const { item, classes, path } = this.props;
     const items = item.items ? this.items() : null;
 
-    const isSelected = location.pathname === item.path;
+    const isSelected = path === item.path;
     let classNames = [classes.primary];
     if (isSelected) {
       classNames.push(classes.selected);
@@ -128,4 +127,4 @@ class Submenu extends React.PureComponent {
   }
 }
 
-export default withRouter(withStyles(styles)(Submenu));
+export default withStyles(styles)(Submenu);

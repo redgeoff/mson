@@ -46,10 +46,15 @@ class Menu extends React.PureComponent {
   };
 
   items() {
-    const { menu } = this.props;
+    const { menu, path } = this.props;
     const items = menu.get('items');
     return items.map((item, index) => (
-      <Submenu item={item} key={index} onNavigate={this.handleNavigate} />
+      <Submenu
+        item={item}
+        key={index}
+        onNavigate={this.handleNavigate}
+        path={path}
+      />
     ));
   }
 
