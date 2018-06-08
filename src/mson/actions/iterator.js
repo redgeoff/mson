@@ -2,7 +2,7 @@ import Action from './action';
 import _ from 'lodash';
 import PropFiller from '../compiler/prop-filler';
 
-export default class Converter extends Action {
+export default class Iterator extends Action {
   set(props) {
     super.set(props);
     this._setIfUndefined(props, 'iterator', 'return');
