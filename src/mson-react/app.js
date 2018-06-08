@@ -97,44 +97,8 @@ class App extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    this.createRouteListener();
+    // this.createRouteListener();
     this.setGlobalOnNavigate();
-  }
-
-  // The RouteListener allows us to load the correct component even when the user hits the back
-  // button. The logic is a little ugly, but it allows us to use react-router.
-  createRouteListener() {
-    let self = this;
-
-    this.routeListener = class extends React.Component {
-      lastPath = null;
-
-      onProps(props) {
-        // Is the path is changing? This check is needed as otherwise a re-rendering of the
-        // RouteListener during some UI operation, e.g. a button click, could result in us
-        // redirecting to an outdated path.
-        if (
-          this.lastPath === null ||
-          this.lastPath !== props.location.pathname
-        ) {
-          this.lastPath = props.location.pathname;
-          self.navigateTo(props.location.pathname);
-        }
-      }
-
-      constructor(props) {
-        super(props);
-        this.onProps(props);
-      }
-
-      componentWillUpdate(props) {
-        this.onProps(props);
-      }
-
-      render() {
-        return null;
-      }
-    };
   }
 
   onNavigate = callback => {
@@ -275,6 +239,29 @@ class App extends React.PureComponent {
     }
   };
 
+  componentWillMount() {
+    const onLocation = location => {
+      // Is the path is changing? This check is needed as otherwise a re-rendering of the
+      // RouteListener during some UI operation, e.g. a button click, could result in us
+      // redirecting to an outdated path.
+      const { path } = this.state;
+      if (path === null || path !== location.pathname) {
+        this.setState({ path: location.pathname });
+        this.navigateTo(location.pathname);
+      }
+    };
+
+    // Allows us to listen to back and forward button clicks
+    this.unlisten = this.props.history.listen(onLocation);
+
+    // Load the correct component based on the initial path
+    onLocation(this.props.location);
+  }
+
+  componentWillUnmount() {
+    this.unlisten();
+  }
+
   render() {
     const { classes, app } = this.props;
     const {
@@ -286,7 +273,8 @@ class App extends React.PureComponent {
       confirmationTitle,
       confirmationText,
       showArchived,
-      showArchivedToggle
+      showArchivedToggle,
+      path
       // isLoggedIn
     } = this.state;
     const menu = app.get('menu');
@@ -294,8 +282,6 @@ class App extends React.PureComponent {
     const component = this.component ? (
       <Component component={this.component} />
     ) : null;
-
-    const RouteListener = this.routeListener;
 
     // A component must not switch from controlled to uncontrolled so we need to avoid setting
     // checked=undefined
@@ -346,6 +332,7 @@ class App extends React.PureComponent {
         onDrawerToggle={this.handleDrawerToggle}
         mobileOpen={mobileOpen}
         onNavigate={this.handleNavigate}
+        path={path}
       />
     );
 
@@ -365,10 +352,7 @@ class App extends React.PureComponent {
           <main className={classes.content} style={fullScreenStyle}>
             <Switch>
               {/* Omitting path so that all paths are matched */}
-              {/* We cannot use the render property as render functions must be pure functions
-                <Route render={this.handleRenderRoute} />
-              */}
-              <Route component={RouteListener} />
+              <Route />
             </Switch>
 
             {component}
