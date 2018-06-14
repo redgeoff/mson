@@ -7,6 +7,9 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import ConfirmationDialog from '../confirmation-dialog';
 import access from '../../mson/access';
+import { withStyles } from '@material-ui/core/styles';
+import { blueGrey } from '@material-ui/core/colors';
+import './forms-field.css';
 
 // TODO:
 //   - Do we really need currentForm and targetForm? Should we refactor out currentForm? May still
@@ -18,6 +21,23 @@ import access from '../../mson/access';
 // Note:
 //   - We use a dialog to view/edit the forms as we want to be able to display just a few pieces
 //     of data in the list and all the data when viewing/editing.
+
+const styles = theme => ({
+  spacer: {
+    backgroundColor: blueGrey[100],
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    animation: 'fadeIn 1s infinite alternate'
+  },
+  footer: {
+    // Create space at the footer so that it is more evident to the user that the next page has been
+    // loaded
+    height: 50,
+    backgroundColor: blueGrey[100],
+    margin: theme.spacing.unit,
+    animation: 'fadeIn 1s infinite alternate'
+  }
+});
 
 class FormsField extends React.PureComponent {
   state = {
@@ -146,6 +166,21 @@ class FormsField extends React.PureComponent {
     return access.canArchive(this.props.field.get('form'));
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.bufferTopId !== prevProps.bufferTopId) {
+      // Resize the spacer now that the newly prepended items have been rendered
+      this.props.field._infiniteLoader.resizeSpacer(this.props.bufferTopId);
+    }
+
+    if (this.props.spacerHeight !== prevProps.spacerHeight) {
+      this.props.field._infiniteLoader.setSpacerResizing(false);
+    }
+
+    if (this.props.change !== prevProps.change) {
+      this.props.field.set({ isLoading: false });
+    }
+  }
+
   cards(canUpdate, canArchive) {
     const {
       field,
@@ -164,8 +199,12 @@ class FormsField extends React.PureComponent {
       // showArchive
       const key = f.getValue('id');
 
+      // Note: we use an id instead of ref so that more of our logic can be reused across different
+      // frameworks.
+      const id = field.getUniqueItemId(key);
+
       cards.push(
-        <Grid item xs={12} sm={6} lg={4} key={key}>
+        <Grid item xs={12} sm={6} lg={6} key={key} id={id}>
           <FormCard
             onClick={() => this.handleClick(f)}
             onEdit={() => this.handleEdit(f)}
@@ -191,7 +230,10 @@ class FormsField extends React.PureComponent {
       forbidDelete,
       editable,
       disabled,
-      field
+      field,
+      spacerHeight,
+      classes,
+      isLoading
     } = this.props;
     const {
       open,
@@ -211,6 +253,10 @@ class FormsField extends React.PureComponent {
 
     const archivedAt = targetForm ? targetForm.get('archivedAt') : null;
 
+    const spacerStyle = { height: spacerHeight };
+
+    const spacerId = field.get('spacerId');
+
     return (
       <div>
         {!editable || disabled || forbidCreate || reachedMax || !canCreate ? (
@@ -222,9 +268,13 @@ class FormsField extends React.PureComponent {
           </Button>
         )}
 
+        <div id={spacerId} className={classes.spacer} style={spacerStyle} />
+
         <Grid container spacing={0}>
           {this.cards(canUpdate, canArchive)}
         </Grid>
+
+        {isLoading ? <div className={classes.footer} /> : null}
 
         {/* TODO: would it be better to have a single, global FormDialog instance? Or, is it better
         to have multiple instances so that you can have different memory spaces. Currenly we have a
@@ -255,7 +305,8 @@ class FormsField extends React.PureComponent {
   }
 }
 
-export default attach([
+FormsField = withStyles(styles)(FormsField);
+FormsField = attach([
   'change',
   'label',
   'singularLabel',
@@ -263,5 +314,9 @@ export default attach([
   'forbidUpdate',
   'forbidDelete',
   'editable',
-  'disabled'
+  'disabled',
+  'spacerHeight',
+  'bufferTopId',
+  'isLoading'
 ])(FormsField);
+export default FormsField;

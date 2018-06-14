@@ -82,6 +82,7 @@ export default class Form extends Component {
 
     this._listenForLoad();
     this._listenForShowArchived();
+    this._listenForScroll();
   }
 
   _setSubmitDisabled(disabled) {
@@ -114,6 +115,18 @@ export default class Form extends Component {
     this.on('showArchived', showArchived => {
       // Pass load event down to fields
       this._fields.each(field => field.set({ showArchived }));
+    });
+  }
+
+  _listenForScroll() {
+    this.on('scroll', e => {
+      // Pass scroll event down to fields
+      //
+      // TODO: why isn't the following working?
+      // this._fields.each(field => field.emit('scroll', e));
+      this._fields.each(field => {
+        field.emit('scroll', e);
+      });
     });
   }
 
@@ -216,7 +229,8 @@ export default class Form extends Component {
       'resetOnLoad',
       'archivedAt',
       'userId',
-      'showArchived'
+      'showArchived',
+      'cursor'
     );
   }
 
@@ -310,7 +324,8 @@ export default class Form extends Component {
       'resetOnLoad',
       'archivedAt',
       'userId',
-      'showArchived'
+      'showArchived',
+      'cursor'
     );
     return value === undefined ? super.getOne(name) : value;
   }
