@@ -82,7 +82,6 @@ export default class InfiniteLoader {
   }
 
   _resizeBuffer({ previous }) {
-    // console.log('resizeBuffer', previous ? 'previous' : 'next');
     if (previous) {
       // We just added to the top of the buffer so remove from the bottom of the buffer
       this._bufferBottomId = this._onRemoveItems(
