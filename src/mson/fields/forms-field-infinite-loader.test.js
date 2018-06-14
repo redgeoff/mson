@@ -1,28 +1,85 @@
+import testUtils from '../test-utils';
 import FormsField from './forms-field';
 import TextField from './text-field';
 import Form from '../form';
+import {
+  noop,
+  ray,
+  rayFlat,
+  ella,
+  ellaFlat,
+  records1,
+  stevie,
+  stevieFlat,
+  sinatra,
+  sinatraFlat,
+  records2,
+  michael,
+  michaelFlat,
+  bowie,
+  bowieFlat,
+  records3,
+  allRecords,
+  onGetAllPeople,
+  onGetItemElementMock
+} from '../infinite-loader.fixtures';
 
 const createForm = () => {
   return new Form({
-    fields: [
-      new TextField({ name: 'firstName', label: 'First Name', required: true }),
-      new TextField({ name: 'lastName', label: 'Last Name', required: true })
-    ]
+    fields: [new TextField({ name: 'name', label: 'Name', required: true })]
   });
 };
 
-const createField = () => {
-  return new FormsField({
-    form: createForm()
+const createField = props => {
+  const field = new FormsField({
+    form: createForm(),
+    ...props
   });
+
+  // Mock as we aren't actually rendering
+  field._infiniteLoader._onGetItemElement = onGetItemElementMock;
+
+  return field;
+};
+
+const createMockedStore = () => {
+  return {
+    getAll: async props => {
+      const records = await onGetAllPeople(props);
+      return {
+        data: {
+          records
+        }
+      };
+    }
+  };
+};
+
+const getItems = field => {
+  return field._forms.map(form => form.getValues());
 };
 
 it('should infinite scroll', async () => {
-  const field = createField();
+  const field = createField({
+    store: createMockedStore(),
+    itemsPerPage: 2,
+    maxBufferPages: 2,
+    scrollThreshold: 100
+  });
 
-  // Load initial page
+  // Simulate the load event emitted by the UI, which will trigger the initial load
+  let changed = testUtils.once(field, 'change');
+  field.emitLoad();
+  await changed;
+  expect(getItems(field)).toEqual([rayFlat, ellaFlat]);
 
-  // Load next page and reset buffer
+  // Similate load of next page
+  changed = testUtils.once(field, 'change');
+  await field._infiniteLoader.scroll({ scrollY: 150 });
+  await changed;
+  expect(getItems(field)).toEqual([rayFlat, ellaFlat, stevieFlat, sinatraFlat]);
 
-  // Load previous page and reset buffer
+  // TODO: Load next page and reset buffer
+
+  // TODO: Load previous page and reset buffer
 });

@@ -140,8 +140,6 @@ export default class FormsField extends Field {
             behavior: 'instant'
           });
         }
-
-        // console.log('onResizeSpacer', newHeight);
       },
       onSetBufferTopId: bufferTopId => {
         this.set({ bufferTopId });

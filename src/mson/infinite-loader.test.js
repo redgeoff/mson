@@ -8,11 +8,9 @@ import {
   stevie,
   sinatra,
   records2,
-  michael,
-  bowie,
-  records3,
   allRecords,
-  onGetAllPeople
+  onGetAllPeople,
+  onGetItemElementMock
 } from './infinite-loader.fixtures';
 
 const onGetItemMock = id => {
@@ -21,14 +19,6 @@ const onGetItemMock = id => {
 
 const onGetItemCursorMock = item => {
   return item.cursor;
-};
-
-const onGetItemElementMock = id => {
-  const i = allRecords.get(id).i;
-  return {
-    offsetTop: i * 100,
-    offsetHeight: 100
-  };
 };
 
 const onRemoveItemsMock = (id, n, reverse) => {

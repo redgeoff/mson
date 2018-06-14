@@ -5,17 +5,31 @@ export const noop = () => {};
 export const ray = {
   node: {
     id: 'ray',
-    name: 'Ray'
+    fieldValues: {
+      name: 'Ray'
+    }
   },
   cursor: 'rayCursor'
+};
+
+export const rayFlat = {
+  id: 'ray',
+  name: 'Ray'
 };
 
 export const ella = {
   node: {
     id: 'ella',
-    name: 'Ella'
+    fieldValues: {
+      name: 'Ella'
+    }
   },
   cursor: 'ellaCursor'
+};
+
+export const ellaFlat = {
+  id: 'ella',
+  name: 'Ella'
 };
 
 export const records1 = {
@@ -25,17 +39,31 @@ export const records1 = {
 export const stevie = {
   node: {
     id: 'stevie',
-    name: 'Stevie'
+    fieldValues: {
+      name: 'Stevie'
+    }
   },
   cursor: 'stevieCursor'
+};
+
+export const stevieFlat = {
+  id: 'stevie',
+  name: 'Stevie'
 };
 
 export const sinatra = {
   node: {
     id: 'sinatra',
-    name: 'Sinatra'
+    fieldValues: {
+      name: 'Sinatra'
+    }
   },
   cursor: 'sinatraCursor'
+};
+
+export const sinatraFlat = {
+  id: 'sinatra',
+  name: 'Sinatra'
 };
 
 export const records2 = {
@@ -45,17 +73,31 @@ export const records2 = {
 export const michael = {
   node: {
     id: 'michael',
-    name: 'Michael'
+    fieldValues: {
+      name: 'Michael'
+    }
   },
   cursor: 'michaelCursor'
+};
+
+export const michaelFlat = {
+  id: 'michael',
+  name: 'Michael'
 };
 
 export const bowie = {
   node: {
     id: 'bowie',
-    name: 'Bowie'
+    fieldValues: {
+      name: 'Bowie'
+    }
   },
   cursor: 'bowieCursor'
+};
+
+export const bowieFlat = {
+  id: 'bowie',
+  name: 'Bowie'
 };
 
 export const records3 = {
@@ -98,4 +140,12 @@ export const onGetAllPeople = async props => {
         return records3;
     }
   }
+};
+
+export const onGetItemElementMock = id => {
+  const i = allRecords.get(id).i;
+  return {
+    offsetTop: i * 100,
+    offsetHeight: 100
+  };
 };
