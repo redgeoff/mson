@@ -79,7 +79,20 @@ it('should infinite scroll', async () => {
   await changed;
   expect(getItems(field)).toEqual([rayFlat, ellaFlat, stevieFlat, sinatraFlat]);
 
-  // TODO: Load next page and reset buffer
+  // Load next page and reset buffer
+  changed = testUtils.once(field, 'change');
+  await field._infiniteLoader.scroll({ scrollY: 350 });
+  await changed;
+  expect(getItems(field)).toEqual([
+    stevieFlat,
+    sinatraFlat,
+    michaelFlat,
+    bowieFlat
+  ]);
 
-  // TODO: Load previous page and reset buffer
+  // Load previous page and reset buffer
+  changed = testUtils.once(field, 'change');
+  await field._infiniteLoader.scroll({ scrollY: 150 });
+  await changed;
+  expect(getItems(field)).toEqual([rayFlat, ellaFlat, stevieFlat, sinatraFlat]);
 });
