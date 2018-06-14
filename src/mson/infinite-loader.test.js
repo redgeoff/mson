@@ -1,105 +1,19 @@
 import InfiniteLoader from './infinite-loader';
-import Mapa from './mapa';
 
-const noop = () => {};
-
-const ray = {
-  node: {
-    id: 'ray',
-    name: 'Ray'
-  },
-  cursor: 'rayCursor'
-};
-
-const ella = {
-  node: {
-    id: 'ella',
-    name: 'Ella'
-  },
-  cursor: 'ellaCursor'
-};
-
-const records1 = {
-  edges: [ray, ella]
-};
-
-const stevie = {
-  node: {
-    id: 'stevie',
-    name: 'Stevie'
-  },
-  cursor: 'stevieCursor'
-};
-
-const sinatra = {
-  node: {
-    id: 'sinatra',
-    name: 'Sinatra'
-  },
-  cursor: 'sinatraCursor'
-};
-
-const records2 = {
-  edges: [stevie, sinatra]
-};
-
-const michael = {
-  node: {
-    id: 'michael',
-    name: 'Michael'
-  },
-  cursor: 'michaelCursor'
-};
-
-const bowie = {
-  node: {
-    id: 'bowie',
-    name: 'Bowie'
-  },
-  cursor: 'bowieCursor'
-};
-
-const records3 = {
-  edges: [michael, bowie]
-};
-
-const noEdges = {
-  edges: []
-};
-
-const allRecords = new Mapa();
-allRecords.set(records1.edges[0].node.id, { i: 0, ...records1.edges[0] });
-allRecords.set(records1.edges[1].node.id, { i: 1, ...records1.edges[1] });
-allRecords.set(records2.edges[0].node.id, { i: 2, ...records2.edges[0] });
-allRecords.set(records2.edges[1].node.id, { i: 3, ...records2.edges[1] });
-allRecords.set(records3.edges[0].node.id, { i: 4, ...records3.edges[0] });
-allRecords.set(records3.edges[1].node.id, { i: 5, ...records3.edges[1] });
-
-const onGetAllPeople = async props => {
-  if (!props.before) {
-    switch (props.after) {
-      case records1.edges[1].cursor:
-        return records2;
-      case records2.edges[1].cursor:
-        return records3;
-      case records3.edges[1].cursor:
-        return noEdges;
-      default:
-        return records1;
-    }
-  } else {
-    switch (props.before) {
-      case records1.edges[0].cursor:
-        return noEdges;
-      case records2.edges[0].cursor:
-        return records1;
-      case records3.edges[0].cursor:
-        return records2;
-      default:
-        return records3;
-    }
-  }
-};
+import {
+  noop,
+  ray,
+  ella,
+  records1,
+  stevie,
+  sinatra,
+  records2,
+  michael,
+  bowie,
+  records3,
+  allRecords,
+  onGetAllPeople
+} from './infinite-loader.fixtures';
 
 const onGetItemMock = id => {
   return allRecords.get(id);
