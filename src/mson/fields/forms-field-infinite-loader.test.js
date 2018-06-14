@@ -3,23 +3,12 @@ import FormsField from './forms-field';
 import TextField from './text-field';
 import Form from '../form';
 import {
-  noop,
-  ray,
   rayFlat,
-  ella,
   ellaFlat,
-  records1,
-  stevie,
   stevieFlat,
-  sinatra,
   sinatraFlat,
-  records2,
-  michael,
   michaelFlat,
-  bowie,
   bowieFlat,
-  records3,
-  allRecords,
   onGetAllPeople,
   onGetItemElementMock
 } from '../infinite-loader.fixtures';
