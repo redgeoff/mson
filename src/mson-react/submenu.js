@@ -56,6 +56,11 @@ class Submenu extends React.PureComponent {
       if (this.props.onNavigate) {
         this.props.onNavigate(item);
       }
+
+      if (this.props.onDrawerToggle) {
+        // Close the drawer
+        this.props.onDrawerToggle();
+      }
     }
   };
 
