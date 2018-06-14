@@ -74,7 +74,12 @@ export default class RecordStore extends Component {
         appId,
         componentName: this.get('type'),
         asArray: true,
-        where
+        where,
+        after: props.after,
+        first: props.first,
+        before: props.before,
+        last: props.last,
+        order: props.order
       };
 
       // The built-in apollo client cache cannot automatically accomodate the mutations so we use a
