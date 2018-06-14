@@ -88,10 +88,7 @@ class App extends React.PureComponent {
     snackbarOpen: false,
     snackbarMessage: '',
     confirmationOpen: false,
-    confirmationTitle: '',
-    confirmationText: '',
     nextMenuItem: null,
-    confirmationCallback: null,
     showArchivedToggle: false
     // isLoggedIn: false
   };
@@ -114,11 +111,9 @@ class App extends React.PureComponent {
       !this.state.menuItem.fullScreen
     ) {
       // Show a confirmation dialog to see if the user wants to continue
-      this.setState({
-        confirmationOpen: true,
-        confirmationTitle: 'Discard changes?',
-        confirmationText: '',
-        confirmationCallback: callback
+      globals.displayConfirmation({
+        title: 'Discard changes?',
+        callback
       });
     } else {
       // Nothing is dirty so allow the navigation to continue
@@ -164,9 +159,10 @@ class App extends React.PureComponent {
   };
 
   handleConfirmationClose = async yes => {
-    if (yes) {
+    const { confirmation } = this.props;
+    if (confirmation.callback && yes) {
       // Allow/prohibit the route change
-      this.state.confirmationCallback(yes);
+      confirmation.callback(yes);
     }
     this.setState({ confirmationOpen: false });
   };
@@ -209,6 +205,7 @@ class App extends React.PureComponent {
     }
   };
 
+  // TODO: move logic to componentDidUpdate?
   componentWillUpdate(props) {
     const redirectPath = globals.get('redirectPath');
     if (redirectPath) {
@@ -223,6 +220,13 @@ class App extends React.PureComponent {
     if (snackbarMessage) {
       this.displaySnackbar(snackbarMessage);
       globals.set({ snackbarMessage: null });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.confirmation !== prevProps.confirmation) {
+      // Show the popup if any of the confirmation info has changed
+      this.setState({ confirmationOpen: true });
     }
   }
 
@@ -285,15 +289,13 @@ class App extends React.PureComponent {
   }
 
   render() {
-    const { classes, app } = this.props;
+    const { classes, app, confirmation } = this.props;
     const {
       mobileOpen,
       menuItem,
       snackbarOpen,
       snackbarMessage,
       confirmationOpen,
-      confirmationTitle,
-      confirmationText,
       showArchived,
       showArchivedToggle,
       path
@@ -387,8 +389,9 @@ class App extends React.PureComponent {
             <ConfirmationDialog
               open={confirmationOpen}
               onClose={this.handleConfirmationClose}
-              title={confirmationTitle}
-              text={confirmationText}
+              title={confirmation ? confirmation.title : null}
+              text={confirmation ? confirmation.text : null}
+              alert={confirmation ? confirmation.alert : null}
             />
           </main>
         </div>
@@ -399,5 +402,5 @@ class App extends React.PureComponent {
 
 App = withStyles(styles, { withTheme: true })(App);
 App = withRouter(App);
-App = attach(['redirectPath', 'snackbarMessage'], globals)(App);
+App = attach(['redirectPath', 'snackbarMessage', 'confirmation'], globals)(App);
 export default App;

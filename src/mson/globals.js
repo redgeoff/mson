@@ -13,7 +13,8 @@ class Globals extends Component {
       'redirect',
       'redirectPath',
       'snackbarMessage',
-      'appId'
+      'appId',
+      'confirmation'
     );
   }
 
@@ -23,7 +24,8 @@ class Globals extends Component {
       'redirect',
       'redirectPath',
       'snackbarMessage',
-      'appId'
+      'appId',
+      'confirmation'
     );
     return value === undefined ? super.getOne(name) : value;
   }
@@ -49,6 +51,14 @@ class Globals extends Component {
       // We don't care about message as we populate is elsewhere
       this._onNavigate(callback);
     }
+  }
+
+  displayConfirmation({ title, text, callback, alert }) {
+    this.set({ confirmation: { title, text, callback, alert } });
+  }
+
+  displayAlert({ title, text, callback }) {
+    this.displayConfirmation({ title, text, callback, alert: true });
   }
 }
 
