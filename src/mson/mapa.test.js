@@ -266,6 +266,7 @@ it('should get first and last', () => {
 it('should get values', () => {
   const m = createMapa();
 
+  // Forward without key
   let values = [];
   for (const value of m.values()) {
     values.push(value);
@@ -277,27 +278,58 @@ it('should get values', () => {
   expect(vals.next().value).toEqual(2);
   expect(vals.next().value).toEqual(3);
 
+  // Forward with key
   values = [];
   for (const value of m.values('b')) {
     values.push(value);
   }
   expect(values).toEqual([2, 3]);
+
+  // Backward without key
+  values = [];
+  for (const value of m.values(null, true)) {
+    values.push(value);
+  }
+  expect(values).toEqual([3, 2, 1]);
+
+  // Backward with key
+  values = [];
+  for (const value of m.values('b', true)) {
+    values.push(value);
+  }
+  expect(values).toEqual([2, 1]);
 });
 
 it('should get entries', () => {
   const m = createMapa();
 
+  // Forward without key
   let entries = [];
   for (const entry of m.entries()) {
     entries.push(entry);
   }
   expect(entries).toEqual([['a', 1], ['b', 2], ['c', 3]]);
 
+  // Forward with key
   entries = [];
   for (const entry of m.entries('b')) {
     entries.push(entry);
   }
   expect(entries).toEqual([['b', 2], ['c', 3]]);
+
+  // Backward without key
+  entries = [];
+  for (const entry of m.entries(null, true)) {
+    entries.push(entry);
+  }
+  expect(entries).toEqual([['c', 3], ['b', 2], ['a', 1]]);
+
+  // Backward with key
+  entries = [];
+  for (const entry of m.entries('b', true)) {
+    entries.push(entry);
+  }
+  expect(entries).toEqual([['b', 2], ['a', 1]]);
 });
 
 it('should work with 0 key', () => {

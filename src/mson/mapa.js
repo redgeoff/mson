@@ -121,12 +121,36 @@ export default class Mapa {
     }
   }
 
-  *values(startKey) {
-    yield* this.walkForward(startKey ? startKey : this._firstKey);
+  *walkBackward(key, fullEntry) {
+    if (this.has(key)) {
+      const item = this._items[key];
+      if (fullEntry) {
+        yield [key, item.value];
+      } else {
+        yield item.value;
+      }
+
+      // Is there another item?
+      if (item.prevKey !== null) {
+        yield* this.walkBackward(item.prevKey, fullEntry);
+      }
+    }
   }
 
-  *entries(startKey) {
-    yield* this.walkForward(startKey ? startKey : this._firstKey, true);
+  *values(startKey, reverse) {
+    if (reverse) {
+      yield* this.walkBackward(startKey ? startKey : this._lastKey);
+    } else {
+      yield* this.walkForward(startKey ? startKey : this._firstKey);
+    }
+  }
+
+  *entries(startKey, reverse) {
+    if (reverse) {
+      yield* this.walkBackward(startKey ? startKey : this._lastKey, true);
+    } else {
+      yield* this.walkForward(startKey ? startKey : this._firstKey, true);
+    }
   }
 
   forEach(onValue) {
