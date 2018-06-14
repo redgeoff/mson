@@ -54,6 +54,7 @@ class Menu extends React.PureComponent {
         key={index}
         onNavigate={this.handleNavigate}
         path={path}
+        onDrawerToggle={this.handleDrawerToggle}
       />
     ));
   }
