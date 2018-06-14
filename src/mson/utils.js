@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import globals from './globals';
 
 class Utils {
   async sequential(items, onItem) {
@@ -50,9 +51,10 @@ class Utils {
       });
     } catch (_err) {
       // An error can occur if the message is not a JSON object, e.g. if we don't have access to
-      // archive, etc... We swallow the error here as the caller will still throw the main error.
-      // TODO: Is there a better way to handle this? Should all messages be JSON objects? That would
-      // probably be too limiting, right?
+      // archive, etc... The caller will still throw the main error. TODO: Is there a better way to
+      // handle this? Should all messages be JSON objects? That would probably be too limiting,
+      // right?
+      globals.displayAlert({ title: 'Unexpected Error', text: err.toString() });
     }
   }
 }

@@ -16,7 +16,7 @@ export default class ConfirmationDialog extends React.PureComponent {
   };
 
   render() {
-    const { title, text, open } = this.props;
+    const { title, text, open, alert } = this.props;
     return (
       <div>
         <Dialog
@@ -32,15 +32,17 @@ export default class ConfirmationDialog extends React.PureComponent {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => this.handleClose(false)} color="primary">
-              No
-            </Button>
+            {alert ? null : (
+              <Button onClick={() => this.handleClose(false)} color="primary">
+                No
+              </Button>
+            )}
             <Button
               onClick={() => this.handleClose(true)}
               color="primary"
               autoFocus
             >
-              Yes
+              {alert ? 'OK' : 'Yes'}
             </Button>
           </DialogActions>
         </Dialog>
