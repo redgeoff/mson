@@ -7,6 +7,8 @@ import Field from './field';
 import globals from '../globals';
 import Mapa from '../mapa';
 import uuid from 'uuid';
+import InfiniteLoader from '../infinite-loader';
+import Component from '../component';
 
 export default class FormsField extends Field {
   // // TODO: how does this get cleaned up?
@@ -16,16 +18,147 @@ export default class FormsField extends Field {
   //   });
   // }
 
-  // TODO: pagination
-  async _getAll(props) {
-    const store = this.get('store');
-    if (store) {
+  _listenForLoad() {
+    this.on('load', async () => {
       const form = this.get('form');
+      if (form) {
+        form.emitLoad();
+      }
+    });
+  }
 
-      const records = await store.getAll(props);
+  _listenForLoaded() {
+    this.on('loaded', async () => {
+      // Wait for loaded event so that we have had a chance to load options, etc...
 
-      records.data.records.edges.forEach(edge => {
+      this._resetInfiniteLoader();
+
+      await this._infiniteLoader.getAll();
+    });
+  }
+
+  _resetInfiniteLoader() {
+    this._infiniteLoader.reset();
+  }
+
+  _listenForShowArchived() {
+    this.on('showArchived', async showArchived => {
+      this.set({ showArchived });
+
+      // Clear any existing forms. TODO: it would be more efficient to just record ids of all
+      // existing items and then use getAll() result to determine if item needs to be inserted or
+      // removed (if current id missing)
+      this._forms.clear();
+
+      this._resetInfiniteLoader();
+
+      this._infiniteLoader.setShowArchived(showArchived);
+
+      await this._infiniteLoader.getAll();
+    });
+  }
+
+  _listenForScroll() {
+    this.on('scroll', () => {
+      this._infiniteLoader.scroll({ scrollY: window.scrollY });
+    });
+  }
+
+  _createInfiniteLoader() {
+    this._infiniteLoader = new InfiniteLoader({
+      onGetAll: async props => {
+        const store = this.get('store');
+        if (store) {
+          const response = await store.getAll(props);
+          return response.data.records;
+        }
+      },
+      onGetItemsPerPage: () => {
+        return this.get('itemsPerPage');
+      },
+      onGetScrollThreshold: () => {
+        return this.get('scrollThreshold');
+      },
+      onGetMaxBufferPages: () => {
+        return this.get('maxBufferPages');
+      },
+      onGetItemElement: id => {
+        return document.getElementById(this.getUniqueItemId(id));
+      },
+      onGetSpacerElement: () => {
+        return document.getElementById(this.get('spacerId'));
+      },
+      onRemoveItems: (id, n, reverse) => {
+        let i = 0;
+        let lastId = null;
+        for (const entry of this._forms.entries(id, reverse)) {
+          lastId = entry[0];
+          if (i++ === n) {
+            break;
+          }
+          this.removeForm(lastId);
+        }
+        return lastId;
+      },
+      onResizeSpacer: (dHeight, height) => {
+        let newHeight = null;
+
+        // Was an absolute height specified?
+        if (height !== undefined) {
+          newHeight = height;
+        } else {
+          // Change by a delta
+          newHeight = this.get('spacerHeight') + dHeight;
+        }
+
+        // this._infiniteLoader may not exist yet
+        const beginning = this._infiniteLoader
+          ? this._infiniteLoader.beginningLoaded()
+          : false;
+
+        let surplus = 0;
+
+        if (beginning && dHeight < 0) {
+          // When switch expanding the screen and then scrolling up, the spacer may be lager than
+          // the space needed. This is fine until we reach the top at which point we need to set the
+          // height of the spacer to 0 and then scroll to account for the offset.
+          surplus = -newHeight;
+          newHeight = 0;
+        } else if (newHeight < 0) {
+          surplus = -newHeight;
+          newHeight = 0;
+        }
+
+        this.set({ spacerHeight: newHeight });
+
+        // The spacer has no more space (probably because the screen shrinked) so we need to scroll
+        // to make sure that the user stays at the same point in the list when the new items are
+        // added at the top.
+        if (surplus !== 0) {
+          window.scrollBy({
+            top: surplus,
+            behavior: 'instant'
+          });
+        }
+
+        // console.log('onResizeSpacer', newHeight);
+      },
+      onSetBufferTopId: bufferTopId => {
+        this.set({ bufferTopId });
+      },
+      onGetItem: id => {
+        return this._forms.get(id);
+      },
+      onGetItemId: form => {
+        return form.getValue('id');
+      },
+      onGetItemCursor: form => {
+        return form.get('cursor');
+      },
+      onAddItem: (edge, beforeKey) => {
         const values = { id: edge.node.id };
+
+        const form = this.get('form');
 
         form.eachField(field => {
           // Field exists in returned records?
@@ -42,45 +175,35 @@ export default class FormsField extends Field {
           values,
           edge.node.archivedAt,
           edge.node.userId,
-          muteChange
+          muteChange,
+          edge.cursor,
+          beforeKey
         );
-      });
-
-      // We emit records so that we trigger change even whenever the data changes
-      this._emitChange('change', records);
-    }
-  }
-
-  _listenForLoad() {
-    this.on('load', async () => {
-      const form = this.get('form');
-      if (form) {
-        form.emitLoad();
+      },
+      onEmitChange: records => {
+        this._emitChange('change', records);
+      },
+      onSetIsLoading: isLoading => {
+        this.set({ isLoading });
       }
     });
   }
 
-  _listenForLoaded() {
-    this.on('loaded', async () => {
-      // Wait for loaded event so that we have had a chance to load options, etc...
-      await this._getAll();
-    });
-  }
-
-  _listenForShowArchived() {
-    this.on('showArchived', async showArchived => {
-      this.set({ showArchived });
-
-      // Clear any existing forms. TODO: it would be more efficient to just record ids of all
-      // existing items and then use getAll() result to determine if item needs to be inserted or
-      // removed (if current id missing)
-      this._forms.clear();
-
-      await this._getAll({ showArchived });
-    });
-  }
-
   _create(props) {
+    this._setDefaults(props, {
+      scrollThreshold: 1000,
+
+      // We want this to be a multiple of 4 as we may make it optional to have 4 columns in
+      // FormsField
+      itemsPerPage: 20,
+
+      maxBufferPages: 3,
+      spacerHeight: 0,
+      spacerId: Component.getNextUniqueId()
+    });
+
+    this._createInfiniteLoader();
+
     // We use a Mapa instead of an array as it allows us to index the forms by id. We use a Mapa
     // instead of a Map as we may want to iterate through the forms beginning at any single form.
     this._forms = new Mapa();
@@ -90,6 +213,7 @@ export default class FormsField extends Field {
     this._listenForLoad();
     this._listenForLoaded();
     this._listenForShowArchived();
+    this._listenForScroll();
   }
 
   // constructor(props) {
@@ -124,7 +248,8 @@ export default class FormsField extends Field {
     });
   }
 
-  addForm(values, archivedAt, userId, muteChange) {
+  // TODO: refactor to use named parameters
+  addForm(values, archivedAt, userId, muteChange, cursor, beforeKey) {
     const clonedForm = this.get('form').clone();
     clonedForm.setValues(values);
 
@@ -137,9 +262,9 @@ export default class FormsField extends Field {
       key = id.getValue();
     }
 
-    clonedForm.set({ archivedAt, userId });
+    clonedForm.set({ archivedAt, userId, cursor });
 
-    this._forms.set(key, clonedForm);
+    this._forms.set(key, clonedForm, beforeKey);
 
     this._listenToForm(clonedForm);
 
@@ -239,7 +364,14 @@ export default class FormsField extends Field {
       'minSize',
       'maxSize',
       'singularLabel',
-      'store'
+      'store',
+      'scrollThreshold',
+      'itemsPerPage',
+      'maxBufferPages',
+      'spacerHeight',
+      'spacerId',
+      'bufferTopId',
+      'isLoading'
     );
   }
 
@@ -263,7 +395,14 @@ export default class FormsField extends Field {
       'minSize',
       'maxSize',
       'singularLabel',
-      'store'
+      'store',
+      'scrollThreshold',
+      'itemsPerPage',
+      'maxBufferPages',
+      'spacerHeight',
+      'spacerId',
+      'bufferTopId',
+      'isLoading'
     );
     return value === undefined ? super.getOne(name) : value;
   }
@@ -300,10 +439,17 @@ export default class FormsField extends Field {
       fieldForm.setValues(form.getValues());
       fieldForm.set({
         archivedAt: form.get('archivedAt'),
-        userId: form.get('userId')
+        userId: form.get('userId'),
+        cursor: form.get('cursor')
       });
     } else {
-      this.addForm(form.getValues(), null, form.get('userId'));
+      this.addForm(
+        form.getValues(),
+        null,
+        form.get('userId'),
+        false,
+        form.get('cursor')
+      );
     }
 
     globals.displaySnackbar(this.getSingularLabel() + ' saved');
@@ -409,5 +555,9 @@ export default class FormsField extends Field {
     this.set({ form: this.get('form').clone() });
 
     return clonedField;
+  }
+
+  getUniqueItemId(id) {
+    return this.getUniqueId() + '-item-' + id;
   }
 }

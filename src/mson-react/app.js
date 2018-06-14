@@ -68,7 +68,12 @@ const styles = theme => ({
     // Also needed to extend menu vertically
     [theme.breakpoints.up('md')]: {
       marginLeft: drawerWidth
-    }
+    },
+
+    // Disable Chrome's Scroll Anchoring as it causes problems with inifinite scrolling when
+    // scrolling up. Specifically, the scroll location is locked after items are prepended to the
+    // top of the list before the spacer is resized.
+    overflowAnchor: 'none'
   },
   searchBar: {
     // marginLeft: theme.spacing.unit * 3, // left align
@@ -236,8 +241,25 @@ class App extends React.PureComponent {
 
     if (menuItem) {
       menuItem.content.set({ showArchived: event.target.checked });
+
+      // Scroll to the top of the page as otherwise it is confusing to the user as to why they are
+      // dumped in some random place within the newly queried data.
+      window.scrollTo({
+        top: 0
+      });
     }
   };
+
+  componentDidMount() {
+    // TODO: is this too inefficient in that it cascades a lot of unecessary events? Instead, could:
+    // 1. move more logic to app layer so that only cascade when need new window 2. use something
+    // like a global scroll listener that the component can use when it is active
+    window.addEventListener('scroll', e => {
+      if (this.state.menuItem) {
+        this.state.menuItem.content.emit('scroll', e);
+      }
+    });
+  }
 
   componentWillMount() {
     const onLocation = location => {

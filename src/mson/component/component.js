@@ -73,6 +73,10 @@ export default class Component extends events.EventEmitter {
     // Emit the create event after we have set up the initial listeners
     this._emitCreate();
 
+    this._setKey();
+  }
+
+  _setKey() {
     // Used to create a separate namespace/keyspace for components so that we can do things like
     // trigger a UI update in frameworks like React.
     this._key = getNextKey();
@@ -270,6 +274,8 @@ export default class Component extends events.EventEmitter {
 
     clonedComponent._setDebugId();
 
+    clonedComponent._setKey();
+
     // Remove all listeners and expect new ones to be set up so that we don't have duplicate
     // listeners
     clonedComponent.removeAllListeners();
@@ -323,5 +329,22 @@ export default class Component extends events.EventEmitter {
         form.copyFields(schemaForm);
       });
     }
+  }
+
+  static getNextKey() {
+    return getNextKey();
+  }
+
+  static toUniqueId(key) {
+    return 'mson-' + key;
+  }
+
+  static getNextUniqueId() {
+    const key = this.getNextKey();
+    return this.toUniqueId(key);
+  }
+
+  getUniqueId() {
+    return this.constructor.toUniqueId(this._key);
   }
 }
