@@ -57,6 +57,22 @@ class Utils {
       globals.displayAlert({ title: 'Unexpected Error', text: err.toString() });
     }
   }
+
+  combineWheres(where1, where2) {
+    // Clone so that we don't modify the original where
+    where1 = _.cloneDeep(where1);
+    where2 = _.cloneDeep(where2);
+
+    if (where1 && where2) {
+      return {
+        $and: [where1, where2]
+      };
+    } else if (where1) {
+      return where1;
+    } else {
+      return where2;
+    }
+  }
 }
 
 export default new Utils();
