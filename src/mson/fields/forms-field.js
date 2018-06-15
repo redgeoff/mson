@@ -58,6 +58,14 @@ export default class FormsField extends Field {
     });
   }
 
+  _listenForSearchString() {
+    this.on('searchString', async searchString => {
+      console.log('searchString', searchString);
+      // TODO: issue new query
+      this.set({ searchString });
+    });
+  }
+
   _listenForScroll() {
     this.on('scroll', () => {
       this._infiniteLoader.scroll({ scrollY: window.scrollY });
@@ -211,6 +219,7 @@ export default class FormsField extends Field {
     this._listenForLoad();
     this._listenForLoaded();
     this._listenForShowArchived();
+    this._listenForSearchString();
     this._listenForScroll();
   }
 

@@ -82,6 +82,7 @@ export default class Form extends Component {
 
     this._listenForLoad();
     this._listenForShowArchived();
+    this._listenForSearchString();
     this._listenForScroll();
   }
 
@@ -113,8 +114,15 @@ export default class Form extends Component {
 
   _listenForShowArchived() {
     this.on('showArchived', showArchived => {
-      // Pass load event down to fields
+      // Pass event down to fields
       this._fields.each(field => field.set({ showArchived }));
+    });
+  }
+
+  _listenForSearchString() {
+    this.on('searchString', searchString => {
+      // Pass event down to fields
+      this._fields.each(field => field.set({ searchString }));
     });
   }
 
@@ -230,6 +238,7 @@ export default class Form extends Component {
       'archivedAt',
       'userId',
       'showArchived',
+      'searchString',
       'cursor'
     );
   }
@@ -325,6 +334,7 @@ export default class Form extends Component {
       'archivedAt',
       'userId',
       'showArchived',
+      'searchString',
       'cursor'
     );
     return value === undefined ? super.getOne(name) : value;

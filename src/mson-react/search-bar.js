@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
+import globals from '../mson/globals';
 
 // TODO: see https://material-ui-next.com/style/icons/#icons and implement:
 // 1. Mouseover to change background color
@@ -24,22 +25,44 @@ const styles = theme => ({
   }
 });
 
-function SearchBar(props) {
-  const { classes, className } = props;
+class SearchBar extends React.PureComponent {
+  state = {
+    search: ''
+  };
 
-  return (
-    <div className={className}>
-      <TextField
-        InputProps={{
-          disableUnderline: true,
-          classes: {
-            input: classes.textFieldInput
-          }
-        }}
-      />
-      <SearchIcon className={classes.searchIcon} />
-    </div>
-  );
+  handleChange = event => {
+    this.setState({
+      search: event.target.value
+    });
+  };
+
+  handleKeyUp = event => {
+    // Enter pressed?
+    if (event.keyCode === 13) {
+      globals.set({ searchString: this.state.search });
+    }
+  };
+
+  render() {
+    const { classes, className } = this.props;
+
+    return (
+      <div className={className}>
+        <TextField
+          InputProps={{
+            disableUnderline: true,
+            classes: {
+              input: classes.textFieldInput
+            }
+          }}
+          value={this.state.search}
+          onKeyUp={this.handleKeyUp}
+          onChange={this.handleChange}
+        />
+        <SearchIcon className={classes.searchIcon} />
+      </div>
+    );
+  }
 }
 
 SearchBar.propTypes = {

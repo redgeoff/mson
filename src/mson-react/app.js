@@ -228,6 +228,15 @@ class App extends React.PureComponent {
       // Show the popup if any of the confirmation info has changed
       this.setState({ confirmationOpen: true });
     }
+
+    if (this.props.searchString !== prevProps.searchString) {
+      // Pass search string down to current component
+      if (this.state.menuItem) {
+        this.state.menuItem.content.set({
+          searchString: this.props.searchString
+        });
+      }
+    }
   }
 
   displaySnackbar(message) {
@@ -402,5 +411,8 @@ class App extends React.PureComponent {
 
 App = withStyles(styles, { withTheme: true })(App);
 App = withRouter(App);
-App = attach(['redirectPath', 'snackbarMessage', 'confirmation'], globals)(App);
+App = attach(
+  ['redirectPath', 'snackbarMessage', 'confirmation', 'searchString'],
+  globals
+)(App);
 export default App;
