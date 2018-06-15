@@ -73,6 +73,37 @@ class Utils {
       return where2;
     }
   }
+
+  toWhereFromSearchString(attributes, string) {
+    const trimmed = string.trim();
+
+    // Empty?
+    if (trimmed === '') {
+      return null;
+    }
+
+    const words = trimmed.split(/ +/);
+
+    const ors = [];
+
+    attributes.forEach(attr => {
+      const ands = [];
+      words.forEach(word => {
+        ands.push({
+          [attr]: {
+            $like: word + '%'
+          }
+        });
+      });
+      ors.push({
+        $and: ands
+      });
+    });
+
+    return {
+      $or: ors
+    };
+  }
 }
 
 export default new Utils();
