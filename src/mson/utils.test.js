@@ -23,41 +23,45 @@ it('should create where from search string', () => {
   expect(utils.toWhereFromSearchString(attrs, '   ')).toBeNull();
 
   expect(utils.toWhereFromSearchString(attrs, 'word1 word2   word3')).toEqual({
-    $or: [
+    $and: [
       {
-        $and: [
+        $or: [
           {
             attr1: {
-              $like: 'word1%'
+              $iLike: 'word1%'
             }
           },
           {
-            attr1: {
-              $like: 'word2%'
-            }
-          },
-          {
-            attr1: {
-              $like: 'word3%'
+            attr2: {
+              $iLike: 'word1%'
             }
           }
         ]
       },
       {
-        $and: [
+        $or: [
           {
-            attr2: {
-              $like: 'word1%'
+            attr1: {
+              $iLike: 'word2%'
             }
           },
           {
             attr2: {
-              $like: 'word2%'
+              $iLike: 'word2%'
+            }
+          }
+        ]
+      },
+      {
+        $or: [
+          {
+            attr1: {
+              $iLike: 'word3%'
             }
           },
           {
             attr2: {
-              $like: 'word3%'
+              $iLike: 'word3%'
             }
           }
         ]

@@ -84,25 +84,25 @@ class Utils {
 
     const words = trimmed.split(/ +/);
 
-    const ors = [];
+    const ands = [];
 
-    attributes.forEach(attr => {
-      const ands = [];
-      words.forEach(word => {
-        ands.push({
+    words.forEach(word => {
+      const ors = [];
+      attributes.forEach(attr => {
+        ors.push({
           [attr]: {
             // We need to use iLike as like is not case sensitive with binary (like JSON) data
             $iLike: word + '%'
           }
         });
       });
-      ors.push({
-        $and: ands
+      ands.push({
+        $or: ors
       });
     });
 
     return {
-      $or: ors
+      $and: ands
     };
   }
 }
