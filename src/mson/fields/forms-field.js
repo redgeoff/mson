@@ -9,6 +9,7 @@ import Mapa from '../mapa';
 import uuid from 'uuid';
 import InfiniteLoader from '../infinite-loader';
 import Component from '../component';
+import utils from '../utils';
 
 export default class FormsField extends Field {
   // // TODO: how does this get cleaned up?
@@ -41,28 +42,48 @@ export default class FormsField extends Field {
     this._infiniteLoader.reset();
   }
 
+  async _clearAndGetAll() {
+    // Clear any existing forms. TODO: it would be more efficient to just record ids of all
+    // existing items and then use getAll() result to determine if item needs to be inserted or
+    // removed (if current id missing)
+    this._forms.clear();
+
+    this._resetInfiniteLoader();
+
+    this._infiniteLoader.setShowArchived(this.get('showArchived'));
+    this._infiniteLoader.setWhere(this._where);
+
+    await this._infiniteLoader.getAll();
+  }
+
   _listenForShowArchived() {
     this.on('showArchived', async showArchived => {
       this.set({ showArchived });
 
-      // Clear any existing forms. TODO: it would be more efficient to just record ids of all
-      // existing items and then use getAll() result to determine if item needs to be inserted or
-      // removed (if current id missing)
-      this._forms.clear();
-
-      this._resetInfiniteLoader();
-
-      this._infiniteLoader.setShowArchived(showArchived);
-
-      await this._infiniteLoader.getAll();
+      await this._clearAndGetAll();
     });
+  }
+
+  _toWhereFromSearchString() {
+    const form = this.get('form');
+    const fieldNames = [];
+    form.eachField(field => {
+      // TODO: is it really best to filter by hidden? Better to filter by default? Or, by hidden is
+      // good and expect user to specify fields if different?
+      if (!field.get('hidden') && !form.isDefaultField(field.get('name'))) {
+        fieldNames.push('fieldValues.' + field.get('name'));
+      }
+    });
+    return utils.toWhereFromSearchString(fieldNames, this.get('searchString'));
   }
 
   _listenForSearchString() {
     this.on('searchString', async searchString => {
-      console.log('searchString', searchString);
-      // TODO: issue new query
       this.set({ searchString });
+
+      this._where = this._toWhereFromSearchString();
+
+      await this._clearAndGetAll();
     });
   }
 

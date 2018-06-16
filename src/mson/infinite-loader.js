@@ -148,6 +148,7 @@ export default class InfiniteLoader {
     props = props ? _.cloneDeep(props) : {};
 
     props.showArchived = this._showArchived;
+    props.where = this._where;
 
     if (props.before) {
       props.last = this._onGetItemsPerPage();
@@ -361,5 +362,9 @@ export default class InfiniteLoader {
 
   setShowArchived(showArchived) {
     this._showArchived = showArchived;
+  }
+
+  setWhere(where) {
+    this._where = where;
   }
 }

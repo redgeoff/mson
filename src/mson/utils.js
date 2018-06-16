@@ -91,7 +91,8 @@ class Utils {
       words.forEach(word => {
         ands.push({
           [attr]: {
-            $like: word + '%'
+            // We need to use iLike as like is not case sensitive with binary (like JSON) data
+            $iLike: word + '%'
           }
         });
       });
