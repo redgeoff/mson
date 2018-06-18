@@ -9,6 +9,7 @@ import Mapa from '../mapa';
 import uuid from 'uuid';
 import InfiniteLoader from '../infinite-loader';
 import Component from '../component';
+import utils from '../utils';
 
 export default class FormsField extends Field {
   // // TODO: how does this get cleaned up?
@@ -37,24 +38,72 @@ export default class FormsField extends Field {
     });
   }
 
+  _listenForUnload() {
+    this.on('unload', async () => {
+      const form = this.get('form');
+      if (form) {
+        form.emitUnload();
+      }
+    });
+  }
+
   _resetInfiniteLoader() {
     this._infiniteLoader.reset();
+  }
+
+  async _clearAndGetAll() {
+    // Clear any existing forms. TODO: it would be more efficient to just record ids of all
+    // existing items and then use getAll() result to determine if item needs to be inserted or
+    // removed (if current id missing)
+    this._forms.clear();
+
+    this._resetInfiniteLoader();
+
+    this._infiniteLoader.setShowArchived(this.get('showArchived'));
+    this._infiniteLoader.setWhere(this._where);
+
+    await this._infiniteLoader.getAll();
   }
 
   _listenForShowArchived() {
     this.on('showArchived', async showArchived => {
       this.set({ showArchived });
 
-      // Clear any existing forms. TODO: it would be more efficient to just record ids of all
-      // existing items and then use getAll() result to determine if item needs to be inserted or
-      // removed (if current id missing)
-      this._forms.clear();
+      await this._clearAndGetAll();
+    });
+  }
 
-      this._resetInfiniteLoader();
+  _toWhereFromSearchString() {
+    if (this.get('searchString')) {
+      const form = this.get('form');
+      const fieldNames = [];
+      form.eachField(field => {
+        // TODO: is it really best to filter by hidden? Better to filter by default? Or, by hidden is
+        // good and expect user to specify fields if different?
+        if (!field.get('hidden') && !form.isDefaultField(field.get('name'))) {
+          fieldNames.push('fieldValues.' + field.get('name'));
+        }
+      });
+      return utils.toWhereFromSearchString(
+        fieldNames,
+        this.get('searchString')
+      );
+    } else {
+      return null;
+    }
+  }
 
-      this._infiniteLoader.setShowArchived(showArchived);
+  _listenForSearchString() {
+    this.on('searchString', async searchString => {
+      this.set({ searchString });
 
-      await this._infiniteLoader.getAll();
+      // Is the component still loaded? We want to prevent issuing a new query when the searchString
+      // is cleared when we change our route.
+      if (this.isLoaded()) {
+        this._where = this._toWhereFromSearchString();
+
+        await this._clearAndGetAll();
+      }
     });
   }
 
@@ -210,7 +259,9 @@ export default class FormsField extends Field {
 
     this._listenForLoad();
     this._listenForLoaded();
+    this._listenForUnload();
     this._listenForShowArchived();
+    this._listenForSearchString();
     this._listenForScroll();
   }
 

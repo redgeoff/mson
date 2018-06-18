@@ -139,6 +139,7 @@ export default class InfiniteLoader {
     this._onSetBufferTopId(null);
     this._onSetIsLoading(false);
     this._onResizeSpacer(null, 0);
+    this.setWhere(null);
   }
 
   async getAll(props) {
@@ -148,6 +149,9 @@ export default class InfiniteLoader {
     props = props ? _.cloneDeep(props) : {};
 
     props.showArchived = this._showArchived;
+    if (this._where) {
+      props.where = this._where;
+    }
 
     if (props.before) {
       props.last = this._onGetItemsPerPage();
@@ -361,5 +365,9 @@ export default class InfiniteLoader {
 
   setShowArchived(showArchived) {
     this._showArchived = showArchived;
+  }
+
+  setWhere(where) {
+    this._where = where;
   }
 }

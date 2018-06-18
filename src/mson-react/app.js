@@ -89,7 +89,14 @@ class App extends React.PureComponent {
     snackbarMessage: '',
     confirmationOpen: false,
     nextMenuItem: null,
-    showArchivedToggle: false
+    showArchivedToggle: false,
+
+    // Note: we need both searchString and globals.searchString as searchString is the controlled
+    // value for the text input and globals.searchString is the actual string with which we are
+    // searching.
+    searchString: '',
+    showSearch: false
+
     // isLoggedIn: false
   };
 
@@ -169,20 +176,33 @@ class App extends React.PureComponent {
 
   canArchive() {
     let canArchive = false;
+    let isList = false;
     if (this.component && this.component instanceof Form) {
       for (const field of this.component.getFields()) {
         if (field instanceof FormsField) {
           canArchive = access.canArchive(field.get('form'));
+          isList = true;
         }
       }
     }
-    return canArchive;
+    return {
+      canArchive,
+      isList
+    };
   }
 
   switchContent = menuItem => {
     // Prevent inifinite recursion when menuItem is null by making sure that the menuItem is
     // changing before changing anything, especially the state
     if (menuItem !== this.state.menuItem) {
+      if (this.component) {
+        // Emit an unload event so that the component can unload any data, etc...
+        this.component.emitUnload();
+
+        // Clear the search string--this will cascade down all the components for the previous route
+        this.component.set({ searchString: null });
+      }
+
       if (menuItem && menuItem.content) {
         // Instantiate form
         // this.component = compiler.newComponent(menuItem.content.component);
@@ -194,13 +214,17 @@ class App extends React.PureComponent {
         this.component = null;
       }
 
-      const canArchive = this.canArchive();
+      const { canArchive, isList } = this.canArchive();
+
+      globals.set({ searchString: null });
 
       // Set showArchived to false whenever we change the route
       this.setState({
         menuItem,
         showArchived: false,
-        showArchivedToggle: canArchive
+        showArchivedToggle: canArchive,
+        searchString: '',
+        showSearch: isList
       });
     }
   };
@@ -228,6 +252,15 @@ class App extends React.PureComponent {
       // Show the popup if any of the confirmation info has changed
       this.setState({ confirmationOpen: true });
     }
+
+    if (this.props.searchString !== prevProps.searchString) {
+      // Pass search string down to current component
+      if (this.state.menuItem) {
+        this.state.menuItem.content.set({
+          searchString: this.props.searchString
+        });
+      }
+    }
   }
 
   displaySnackbar(message) {
@@ -252,6 +285,12 @@ class App extends React.PureComponent {
         top: 0
       });
     }
+  };
+
+  handleSearchStringChange = event => {
+    this.setState({
+      searchString: event.target.value
+    });
   };
 
   componentDidMount() {
@@ -298,7 +337,9 @@ class App extends React.PureComponent {
       confirmationOpen,
       showArchived,
       showArchivedToggle,
-      path
+      path,
+      searchString,
+      showSearch
       // isLoggedIn
     } = this.state;
     const menu = app.get('menu');
@@ -323,6 +364,17 @@ class App extends React.PureComponent {
       );
     }
 
+    let searchBox = null;
+    if (showSearch) {
+      searchBox = (
+        <SearchBar
+          className={classes.searchBar}
+          searchString={searchString}
+          onChange={this.handleSearchStringChange}
+        />
+      );
+    }
+
     const appBar = (
       <AppBar className={classes.appBar}>
         <Toolbar>
@@ -340,8 +392,7 @@ class App extends React.PureComponent {
 
           {archivedToggle}
 
-          {/* TODO: make SearchBar configurable */}
-          <SearchBar className={classes.searchBar} />
+          {searchBox}
 
           {/*
           <UserMenu isLoggedIn={isLoggedIn} />
@@ -402,5 +453,8 @@ class App extends React.PureComponent {
 
 App = withStyles(styles, { withTheme: true })(App);
 App = withRouter(App);
-App = attach(['redirectPath', 'snackbarMessage', 'confirmation'], globals)(App);
+App = attach(
+  ['redirectPath', 'snackbarMessage', 'confirmation', 'searchString'],
+  globals
+)(App);
 export default App;

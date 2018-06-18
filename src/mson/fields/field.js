@@ -98,6 +98,7 @@ export default class Field extends Component {
       'out',
       'before',
       'showArchived',
+      'searchString',
       'ignoreErrs'
     );
   }
@@ -123,6 +124,7 @@ export default class Field extends Component {
       'out',
       'before',
       'showArchived',
+      'searchString',
       'ignoreErrs'
     );
     return value === undefined ? super.getOne(name) : value;

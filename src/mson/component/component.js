@@ -152,6 +152,7 @@ export default class Component extends events.EventEmitter {
 
   _emitLoaded() {
     this._emitChange('loaded');
+    this._isLoaded = true;
   }
 
   _hasListenerForEvent(event) {
@@ -293,6 +294,15 @@ export default class Component extends events.EventEmitter {
     }
   }
 
+  // This should be called whenever the route changes and the component is unloaded
+  emitUnload() {
+    // Flag needs to be set before unload event is emitted or else listeners may not read
+    // isLoaded=false
+    this._isLoaded = false;
+
+    this._emitChange('unload');
+  }
+
   _bubbleUpEvents(component, events) {
     events.forEach(event => {
       component.on(event, value => {
@@ -346,5 +356,9 @@ export default class Component extends events.EventEmitter {
 
   getUniqueId() {
     return this.constructor.toUniqueId(this._key);
+  }
+
+  isLoaded() {
+    return this._isLoaded;
   }
 }

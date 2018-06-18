@@ -14,7 +14,8 @@ class Globals extends Component {
       'redirectPath',
       'snackbarMessage',
       'appId',
-      'confirmation'
+      'confirmation',
+      'searchString'
     );
   }
 
@@ -25,7 +26,8 @@ class Globals extends Component {
       'redirectPath',
       'snackbarMessage',
       'appId',
-      'confirmation'
+      'confirmation',
+      'searchString'
     );
     return value === undefined ? super.getOne(name) : value;
   }

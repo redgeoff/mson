@@ -73,6 +73,38 @@ class Utils {
       return where2;
     }
   }
+
+  toWhereFromSearchString(attributes, string) {
+    const trimmed = string.trim();
+
+    // Empty?
+    if (trimmed === '') {
+      return null;
+    }
+
+    const words = trimmed.split(/ +/);
+
+    const ands = [];
+
+    words.forEach(word => {
+      const ors = [];
+      attributes.forEach(attr => {
+        ors.push({
+          [attr]: {
+            // We need to use iLike as like is not case sensitive with binary (like JSON) data
+            $iLike: word + '%'
+          }
+        });
+      });
+      ands.push({
+        $or: ors
+      });
+    });
+
+    return {
+      $and: ands
+    };
+  }
 }
 
 export default new Utils();
