@@ -94,7 +94,8 @@ class App extends React.PureComponent {
     // Note: we need both searchString and globals.searchString as searchString is the controlled
     // value for the text input and globals.searchString is the actual string with which we are
     // searching.
-    searchString: ''
+    searchString: '',
+    showSearch: false
 
     // isLoggedIn: false
   };
@@ -175,14 +176,19 @@ class App extends React.PureComponent {
 
   canArchive() {
     let canArchive = false;
+    let isList = false;
     if (this.component && this.component instanceof Form) {
       for (const field of this.component.getFields()) {
         if (field instanceof FormsField) {
           canArchive = access.canArchive(field.get('form'));
+          isList = true;
         }
       }
     }
-    return canArchive;
+    return {
+      canArchive,
+      isList
+    };
   }
 
   switchContent = menuItem => {
@@ -208,7 +214,7 @@ class App extends React.PureComponent {
         this.component = null;
       }
 
-      const canArchive = this.canArchive();
+      const { canArchive, isList } = this.canArchive();
 
       globals.set({ searchString: null });
 
@@ -217,7 +223,8 @@ class App extends React.PureComponent {
         menuItem,
         showArchived: false,
         showArchivedToggle: canArchive,
-        searchString: ''
+        searchString: '',
+        showSearch: isList
       });
     }
   };
@@ -331,7 +338,8 @@ class App extends React.PureComponent {
       showArchived,
       showArchivedToggle,
       path,
-      searchString
+      searchString,
+      showSearch
       // isLoggedIn
     } = this.state;
     const menu = app.get('menu');
@@ -356,6 +364,17 @@ class App extends React.PureComponent {
       );
     }
 
+    let searchBox = null;
+    if (showSearch) {
+      searchBox = (
+        <SearchBar
+          className={classes.searchBar}
+          searchString={searchString}
+          onChange={this.handleSearchStringChange}
+        />
+      );
+    }
+
     const appBar = (
       <AppBar className={classes.appBar}>
         <Toolbar>
@@ -373,12 +392,7 @@ class App extends React.PureComponent {
 
           {archivedToggle}
 
-          {/* TODO: make SearchBar configurable */}
-          <SearchBar
-            className={classes.searchBar}
-            searchString={searchString}
-            onChange={this.handleSearchStringChange}
-          />
+          {searchBox}
 
           {/*
           <UserMenu isLoggedIn={isLoggedIn} />
