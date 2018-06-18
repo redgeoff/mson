@@ -3,8 +3,8 @@ import Grid from '@material-ui/core/Grid';
 import FormCard from '../form-card';
 import FormDialog from '../form-dialog';
 import attach from '../attach';
-import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
+import { Button, Typography } from '@material-ui/core';
+import { Add, Info } from '@material-ui/icons';
 import ConfirmationDialog from '../confirmation-dialog';
 import access from '../../mson/access';
 import { withStyles } from '@material-ui/core/styles';
@@ -222,7 +222,8 @@ class FormsField extends React.PureComponent {
     return cards;
   }
 
-  // TODO: how to prevent re-rendering of all form-cards when dialog open state is changed?
+  // TODO: how to prevent re-rendering of all form-cards when dialog open state is changed? Or, does
+  // it not really matter as we are using PureComponents?
   render() {
     const {
       forbidCreate,
@@ -235,6 +236,7 @@ class FormsField extends React.PureComponent {
       classes,
       isLoading
     } = this.props;
+
     const {
       open,
       mode,
@@ -243,8 +245,10 @@ class FormsField extends React.PureComponent {
       confirmationTitle,
       targetForm
     } = this.state;
+
     const reachedMax = field.reachedMax();
 
+    const label = field.get('label').toLowerCase();
     const singularLabel = field.getSingularLabel();
 
     const canCreate = this.canCreate();
@@ -257,21 +261,35 @@ class FormsField extends React.PureComponent {
 
     const spacerId = field.get('spacerId');
 
+    const cards = this.cards(canUpdate, canArchive);
+
+    const searchString = field.get('searchString');
+
+    const showNoRecords = searchString && !isLoading && cards.length === 0;
+
     return (
       <div>
-        {!editable || disabled || forbidCreate || reachedMax || !canCreate ? (
-          ''
-        ) : (
+        {!editable ||
+        disabled ||
+        forbidCreate ||
+        reachedMax ||
+        !canCreate ? null : (
           <Button color="primary" aria-label="new" onClick={this.handleNew}>
-            <AddIcon />
+            <Add />
             New {singularLabel}
           </Button>
         )}
 
+        {showNoRecords ? (
+          <Typography variant="display1">
+            <Info /> No {label} found
+          </Typography>
+        ) : null}
+
         <div id={spacerId} className={classes.spacer} style={spacerStyle} />
 
         <Grid container spacing={0}>
-          {this.cards(canUpdate, canArchive)}
+          {cards}
         </Grid>
 
         {isLoading ? <div className={classes.footer} /> : null}
