@@ -26,25 +26,16 @@ const styles = theme => ({
 });
 
 class SearchBar extends React.PureComponent {
-  state = {
-    search: ''
-  };
-
-  handleChange = event => {
-    this.setState({
-      search: event.target.value
-    });
-  };
-
+  // TODO: move up to App component
   handleKeyUp = event => {
     // Enter pressed?
     if (event.keyCode === 13) {
-      globals.set({ searchString: this.state.search });
+      globals.set({ searchString: this.props.searchString });
     }
   };
 
   render() {
-    const { classes, className } = this.props;
+    const { classes, className, searchString, onChange } = this.props;
 
     return (
       <div className={className}>
@@ -55,9 +46,9 @@ class SearchBar extends React.PureComponent {
               input: classes.textFieldInput
             }
           }}
-          value={this.state.search}
+          value={searchString}
           onKeyUp={this.handleKeyUp}
-          onChange={this.handleChange}
+          onChange={onChange}
         />
         <SearchIcon className={classes.searchIcon} />
       </div>

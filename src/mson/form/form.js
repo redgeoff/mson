@@ -81,6 +81,7 @@ export default class Form extends Component {
     this._formSetMSONSchema();
 
     this._listenForLoad();
+    this._listenForUnload();
     this._listenForShowArchived();
     this._listenForSearchString();
     this._listenForScroll();
@@ -109,6 +110,13 @@ export default class Form extends Component {
 
       // Pass load event down to fields
       this._fields.each(field => field.emitLoad());
+    });
+  }
+
+  _listenForUnload() {
+    this.on('unload', () => {
+      // Pass unload event down to fields
+      this._fields.each(field => field.emitUnload());
     });
   }
 

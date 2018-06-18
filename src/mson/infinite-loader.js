@@ -139,6 +139,7 @@ export default class InfiniteLoader {
     this._onSetBufferTopId(null);
     this._onSetIsLoading(false);
     this._onResizeSpacer(null, 0);
+    this.setWhere(null);
   }
 
   async getAll(props) {

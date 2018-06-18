@@ -38,6 +38,15 @@ export default class FormsField extends Field {
     });
   }
 
+  _listenForUnload() {
+    this.on('unload', async () => {
+      const form = this.get('form');
+      if (form) {
+        form.emitUnload();
+      }
+    });
+  }
+
   _resetInfiniteLoader() {
     this._infiniteLoader.reset();
   }
@@ -65,25 +74,36 @@ export default class FormsField extends Field {
   }
 
   _toWhereFromSearchString() {
-    const form = this.get('form');
-    const fieldNames = [];
-    form.eachField(field => {
-      // TODO: is it really best to filter by hidden? Better to filter by default? Or, by hidden is
-      // good and expect user to specify fields if different?
-      if (!field.get('hidden') && !form.isDefaultField(field.get('name'))) {
-        fieldNames.push('fieldValues.' + field.get('name'));
-      }
-    });
-    return utils.toWhereFromSearchString(fieldNames, this.get('searchString'));
+    if (this.get('searchString')) {
+      const form = this.get('form');
+      const fieldNames = [];
+      form.eachField(field => {
+        // TODO: is it really best to filter by hidden? Better to filter by default? Or, by hidden is
+        // good and expect user to specify fields if different?
+        if (!field.get('hidden') && !form.isDefaultField(field.get('name'))) {
+          fieldNames.push('fieldValues.' + field.get('name'));
+        }
+      });
+      return utils.toWhereFromSearchString(
+        fieldNames,
+        this.get('searchString')
+      );
+    } else {
+      return null;
+    }
   }
 
   _listenForSearchString() {
     this.on('searchString', async searchString => {
       this.set({ searchString });
 
-      this._where = this._toWhereFromSearchString();
+      // Is the component still loaded? We want to prevent issuing a new query when the searchString
+      // is cleared when we change our route.
+      if (this.isLoaded()) {
+        this._where = this._toWhereFromSearchString();
 
-      await this._clearAndGetAll();
+        await this._clearAndGetAll();
+      }
     });
   }
 
@@ -239,6 +259,7 @@ export default class FormsField extends Field {
 
     this._listenForLoad();
     this._listenForLoaded();
+    this._listenForUnload();
     this._listenForShowArchived();
     this._listenForSearchString();
     this._listenForScroll();

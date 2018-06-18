@@ -89,7 +89,13 @@ class App extends React.PureComponent {
     snackbarMessage: '',
     confirmationOpen: false,
     nextMenuItem: null,
-    showArchivedToggle: false
+    showArchivedToggle: false,
+
+    // Note: we need both searchString and globals.searchString as searchString is the controlled
+    // value for the text input and globals.searchString is the actual string with which we are
+    // searching.
+    searchString: ''
+
     // isLoggedIn: false
   };
 
@@ -183,6 +189,14 @@ class App extends React.PureComponent {
     // Prevent inifinite recursion when menuItem is null by making sure that the menuItem is
     // changing before changing anything, especially the state
     if (menuItem !== this.state.menuItem) {
+      if (this.component) {
+        // Emit an unload event so that the component can unload any data, etc...
+        this.component.emitUnload();
+
+        // Clear the search string--this will cascade down all the components for the previous route
+        this.component.set({ searchString: null });
+      }
+
       if (menuItem && menuItem.content) {
         // Instantiate form
         // this.component = compiler.newComponent(menuItem.content.component);
@@ -196,11 +210,14 @@ class App extends React.PureComponent {
 
       const canArchive = this.canArchive();
 
+      globals.set({ searchString: null });
+
       // Set showArchived to false whenever we change the route
       this.setState({
         menuItem,
         showArchived: false,
-        showArchivedToggle: canArchive
+        showArchivedToggle: canArchive,
+        searchString: ''
       });
     }
   };
@@ -263,6 +280,12 @@ class App extends React.PureComponent {
     }
   };
 
+  handleSearchStringChange = event => {
+    this.setState({
+      searchString: event.target.value
+    });
+  };
+
   componentDidMount() {
     // TODO: is this too inefficient in that it cascades a lot of unecessary events? Instead, could:
     // 1. move more logic to app layer so that only cascade when need new window 2. use something
@@ -307,7 +330,8 @@ class App extends React.PureComponent {
       confirmationOpen,
       showArchived,
       showArchivedToggle,
-      path
+      path,
+      searchString
       // isLoggedIn
     } = this.state;
     const menu = app.get('menu');
@@ -350,7 +374,11 @@ class App extends React.PureComponent {
           {archivedToggle}
 
           {/* TODO: make SearchBar configurable */}
-          <SearchBar className={classes.searchBar} />
+          <SearchBar
+            className={classes.searchBar}
+            searchString={searchString}
+            onChange={this.handleSearchStringChange}
+          />
 
           {/*
           <UserMenu isLoggedIn={isLoggedIn} />
