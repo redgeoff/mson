@@ -148,7 +148,9 @@ export default class InfiniteLoader {
     props = props ? _.cloneDeep(props) : {};
 
     props.showArchived = this._showArchived;
-    props.where = this._where;
+    if (this._where) {
+      props.where = this._where;
+    }
 
     if (props.before) {
       props.last = this._onGetItemsPerPage();

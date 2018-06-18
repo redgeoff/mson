@@ -93,7 +93,8 @@ it('should getAll', async () => {
 
   // Get 1st page
   const where = { foo: 'bar' };
-  await infiniteLoader.getAll({ where });
+  infiniteLoader.setWhere(where);
+  await infiniteLoader.getAll();
   expect(infiniteLoader._beginId).toEqual('ray');
   expect(infiniteLoader._beginCursor).toEqual('rayCursor');
   expect(infiniteLoader._endId).toEqual('ella');
@@ -118,7 +119,7 @@ it('should getAll', async () => {
   expect(onEmitChange).toHaveBeenCalledWith(records1);
 
   // Make sure duplicates are debounced
-  await infiniteLoader.getAll({ where });
+  await infiniteLoader.getAll();
   expect(onGetAll).toHaveBeenCalledTimes(1);
   expect(onEmitChange).toHaveBeenCalledTimes(1);
   expect(onAddItem).toHaveBeenCalledTimes(2);
@@ -127,6 +128,7 @@ it('should getAll', async () => {
   // onGetAll.mockReset();
   onAddItem.mockReset();
   onEmitChange.mockReset();
+  infiniteLoader.setWhere(null);
   await infiniteLoader.getAll({ after: 'ellaCursor' });
   expect(infiniteLoader._beginId).toEqual('stevie');
   expect(infiniteLoader._beginCursor).toEqual('stevieCursor');
