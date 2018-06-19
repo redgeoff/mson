@@ -1,5 +1,6 @@
 import SelectField from './select-field';
 import fieldTester from './field-tester';
+import testUtils from '../test-utils';
 
 const colors = [
   { value: 'red', label: 'Red' },
@@ -73,4 +74,27 @@ it('should validate with multiple-value-field', () => {
   field.setValue(['red', 'green']);
   field.validate();
   expect(field.getErr()).toEqual([{ error: '1 or less' }]);
+});
+
+it('should validate', () => {
+  const field = createField();
+
+  testUtils.expectValuesToBeValid(field, ['green', '', null]);
+  testUtils.expectValuesToBeInvalid(field, [[], 'orange']);
+
+  field.set({ multiple: true });
+  testUtils.expectValuesToBeValid(field, [
+    ['green'],
+    [],
+    ['red', 'green'],
+    null
+  ]);
+  testUtils.expectValuesToBeInvalid(field, [
+    [''],
+    [null],
+    ['red', null],
+    ['red', ''],
+    ['orange'],
+    ['purple', 'red']
+  ]);
 });

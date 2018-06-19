@@ -32,12 +32,17 @@ export default class SelectField extends MultipleValueField {
     });
   }
 
+  _setProperty(name, value) {
+    super._setProperty(name, value);
+
+    // Automatically set allowScalar
+    if (name === 'multiple') {
+      this.set({ allowScalar: !value });
+    }
+  }
+
   set(props) {
     super.set(props);
-
-    if (props.multiple !== undefined) {
-      this._set('allowScalar', !props.multiple);
-    }
 
     this._setIfUndefined(
       props,

@@ -95,6 +95,11 @@ export default class Component extends events.EventEmitter {
     this.emit('$change', name, value);
   }
 
+  _setProperty(name, value) {
+    this['_' + name] = value;
+    this._emitChange(name, value);
+  }
+
   _set(name, value) {
     // Is the value changing? Preventing emitting when the value doesn't change. We don't currently
     // initialize the props to null so we ignore any changes where the prop would switch from
@@ -103,8 +108,7 @@ export default class Component extends events.EventEmitter {
       this['_' + name] !== value &&
       (this['_' + name] !== undefined || value !== null)
     ) {
-      this['_' + name] = value;
-      this._emitChange(name, value);
+      this._setProperty(name, value);
     }
   }
 
