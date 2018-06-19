@@ -10,6 +10,7 @@ import access from '../../mson/access';
 import { withStyles } from '@material-ui/core/styles';
 import { blueGrey } from '@material-ui/core/colors';
 import './forms-field.css';
+import SelectOrder from './select-order';
 
 // TODO:
 //   - Do we really need currentForm and targetForm? Should we refactor out currentForm? May still
@@ -222,11 +223,42 @@ class FormsField extends React.PureComponent {
     return cards;
   }
 
+  header() {
+    const { forbidCreate, editable, disabled, field } = this.props;
+
+    const singularLabel = field.getSingularLabel();
+
+    const reachedMax = field.reachedMax();
+
+    const canCreate = this.canCreate();
+
+    const showNewButton =
+      editable && !disabled && !forbidCreate && !reachedMax && canCreate;
+
+    // TODO: make configurable via field
+    const canOrder = true;
+
+    return (
+      <Grid container spacing={0}>
+        <Grid item xs={12} sm={6} lg={6}>
+          {showNewButton ? (
+            <Button color="primary" aria-label="new" onClick={this.handleNew}>
+              <Add />
+              New {singularLabel}
+            </Button>
+          ) : null}
+        </Grid>
+        <Grid item xs={12} sm={6} lg={6} align="right">
+          {canOrder ? <SelectOrder onChange={this.handleOrdering} /> : null}
+        </Grid>
+      </Grid>
+    );
+  }
+
   // TODO: how to prevent re-rendering of all form-cards when dialog open state is changed? Or, does
   // it not really matter as we are using PureComponents?
   render() {
     const {
-      forbidCreate,
       forbidUpdate,
       forbidDelete,
       editable,
@@ -246,12 +278,8 @@ class FormsField extends React.PureComponent {
       targetForm
     } = this.state;
 
-    const reachedMax = field.reachedMax();
-
     const label = field.get('label').toLowerCase();
-    const singularLabel = field.getSingularLabel();
 
-    const canCreate = this.canCreate();
     const canUpdate = this.canUpdate();
     const canArchive = this.canArchive();
 
@@ -267,18 +295,11 @@ class FormsField extends React.PureComponent {
 
     const showNoRecords = searchString && !isLoading && cards.length === 0;
 
+    const header = this.header();
+
     return (
       <div>
-        {!editable ||
-        disabled ||
-        forbidCreate ||
-        reachedMax ||
-        !canCreate ? null : (
-          <Button color="primary" aria-label="new" onClick={this.handleNew}>
-            <Add />
-            New {singularLabel}
-          </Button>
-        )}
+        {header}
 
         {showNoRecords ? (
           <Typography variant="display1">
