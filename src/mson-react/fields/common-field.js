@@ -1,7 +1,6 @@
 import React from 'react';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import Typography from '@material-ui/core/Typography';
 import FormControl from '../form-control';
 import attach from '../attach';
 import HelpToolTip from './help-tool-tip';
@@ -9,7 +8,7 @@ import HelpToolTip from './help-tool-tip';
 class CommonField extends React.PureComponent {
   render() {
     const {
-      field,
+      // field,
       children,
       label,
       required,
@@ -23,34 +22,28 @@ class CommonField extends React.PureComponent {
 
     let fld = null;
 
-    if (editable) {
-      let lbl = null;
+    let lbl = null;
 
-      if (!hideLabel) {
-        lbl = (
-          <InputLabel error={touched && err ? true : false} required={required}>
-            {label}
-          </InputLabel>
-        );
-      }
-
-      const firstErr = Array.isArray(err) ? err[0].error : err;
-
-      fld = (
-        <span>
-          {lbl}
-          {children}
-          {help && editable ? <HelpToolTip help={help} /> : ''}
-          {touched && err ? (
-            <FormHelperText error>{firstErr}</FormHelperText>
-          ) : null}
-        </span>
-      );
-    } else {
-      fld = (
-        <Typography variant="subheading">{field.getDisplayValue()}</Typography>
+    if (editable && !hideLabel) {
+      lbl = (
+        <InputLabel error={touched && err ? true : false} required={required}>
+          {label}
+        </InputLabel>
       );
     }
+
+    const firstErr = Array.isArray(err) ? err[0].error : err;
+
+    fld = (
+      <span>
+        {lbl}
+        {children}
+        {help && editable ? <HelpToolTip help={help} /> : ''}
+        {touched && err ? (
+          <FormHelperText error>{firstErr}</FormHelperText>
+        ) : null}
+      </span>
+    );
 
     return <FormControl fullWidth={fullWidth}>{fld}</FormControl>;
   }

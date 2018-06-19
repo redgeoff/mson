@@ -30,7 +30,13 @@ export default class SelectField extends Field {
 
   set(props) {
     super.set(props);
-    this._setIfUndefined(props, 'options', 'blankString', 'ensureInList');
+    this._setIfUndefined(
+      props,
+      'options',
+      'blankString',
+      'ensureInList',
+      'multiple'
+    );
   }
 
   getOne(name) {
@@ -44,12 +50,13 @@ export default class SelectField extends Field {
       name,
       'options',
       'blankString',
-      'ensureInList'
+      'ensureInList',
+      'multiple'
     );
     return value === undefined ? super.getOne(name) : value;
   }
 
-  _getOptionLabel(value) {
+  getOptionLabel(value) {
     let label = null;
 
     if (this._options) {
@@ -68,7 +75,7 @@ export default class SelectField extends Field {
 
     if (!this.isBlank() && this.get('ensureInList')) {
       const value = this.get('value');
-      if (this._getOptionLabel(value) === null) {
+      if (this.getOptionLabel(value) === null) {
         this.setErr(`${value} is not an option`);
       }
     }
@@ -79,7 +86,7 @@ export default class SelectField extends Field {
     if (this.isBlank()) {
       return value;
     } else {
-      return this._getOptionLabel(value);
+      return this.getOptionLabel(value);
     }
   }
 }

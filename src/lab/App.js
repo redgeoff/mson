@@ -3,7 +3,7 @@ import AppUI from '../mson-react/app';
 import app from './mson-app';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { blueGrey, cyan } from '@material-ui/core/colors';
+import { blueGrey, lightBlue } from '@material-ui/core/colors';
 import { BrowserRouter, Prompt } from 'react-router-dom';
 import globals from '../mson/globals';
 
@@ -12,7 +12,8 @@ const theme = createMuiTheme({
     primary: blueGrey,
     // primary: blue,
     // type: 'dark',
-    secondary: cyan
+    // secondary: cyan
+    secondary: lightBlue
   }
 });
 

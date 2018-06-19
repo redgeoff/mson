@@ -1,13 +1,24 @@
 import React from 'react';
-import { MenuItem, Select } from '@material-ui/core';
+import {
+  MenuItem,
+  Select,
+  Checkbox,
+  ListItemText,
+  Input,
+  Chip
+} from '@material-ui/core';
 import CommonField from './common-field';
 import attach from '../attach';
 import { withStyles } from '@material-ui/core/styles';
+import DisplayValueTypography from './display-value-typography';
 
 const styles = theme => ({
   formControl: {
     // Specify a more appropriate min width so that the field is wide enough to cover most labels
     minWidth: 120
+  },
+  chip: {
+    margin: theme.spacing.unit / 4
   }
 });
 
@@ -21,12 +32,13 @@ class SelectField extends React.PureComponent {
   };
 
   renderOptions() {
-    const { options, blankString } = this.props;
+    const { options, blankString, value, multiple } = this.props;
 
     if (options) {
       let opts = [];
 
-      if (blankString) {
+      if (!multiple && blankString) {
+        // Note: the blankString doesn't make sense when we allow multiple selections
         opts.push(
           <MenuItem value="" key="">
             <em>{blankString}</em>
@@ -35,11 +47,21 @@ class SelectField extends React.PureComponent {
       }
 
       options.forEach(option => {
-        opts.push(
-          <MenuItem value={option.value} key={option.value}>
-            {option.label}
-          </MenuItem>
-        );
+        if (multiple) {
+          const checked = value ? value.indexOf(option.value) !== -1 : false;
+          opts.push(
+            <MenuItem value={option.value} key={option.value}>
+              <Checkbox checked={checked} />
+              <ListItemText primary={option.label} />
+            </MenuItem>
+          );
+        } else {
+          opts.push(
+            <MenuItem value={option.value} key={option.value}>
+              {option.label}
+            </MenuItem>
+          );
+        }
       });
 
       return opts;
@@ -54,25 +76,72 @@ class SelectField extends React.PureComponent {
       disabled,
       field,
       fullWidth,
-      classes
+      classes,
+      editable,
+      multiple
     } = this.props;
+
     const options = this.renderOptions();
 
-    return (
-      <CommonField field={field}>
+    let fieldValue = multiple ? [] : '';
+    if (value) {
+      fieldValue = value;
+    }
+
+    let input = undefined;
+    let renderValue = undefined;
+    if (multiple) {
+      input = <Input />;
+
+      // renderValue={selected => selected.join(', ')}
+      renderValue = selected => (
+        <div className={classes.chips}>
+          {selected.map(value => (
+            <Chip
+              key={value}
+              label={field.getOptionLabel(value)}
+              className={classes.chip}
+            />
+          ))}
+        </div>
+      );
+    }
+
+    let fld = null;
+    if (editable) {
+      fld = (
         <Select
+          multiple={multiple}
           error={touched && err ? true : false}
           onChange={this.handleChange}
           onBlur={this.handleBlur}
-          value={value ? value : ''}
+          input={input}
+          renderValue={renderValue}
+          value={fieldValue}
           disabled={disabled}
           fullWidth={fullWidth}
           className={classes.formControl}
         >
           {options}
         </Select>
-      </CommonField>
-    );
+      );
+    } else {
+      let displayValue = null;
+      if (multiple && value) {
+        displayValue = value.map(val => (
+          <Chip
+            key={val}
+            label={field.getOptionLabel(val)}
+            className={classes.chip}
+          />
+        ));
+      } else {
+        displayValue = field.getDisplayValue();
+      }
+      fld = <DisplayValueTypography>{displayValue}</DisplayValueTypography>;
+    }
+
+    return <CommonField field={field}>{fld}</CommonField>;
   }
 }
 
@@ -85,5 +154,7 @@ export default attach([
   'touched',
   'blankString',
   'disabled',
-  'fullWidth'
+  'fullWidth',
+  'editable',
+  'multiple'
 ])(SelectField);

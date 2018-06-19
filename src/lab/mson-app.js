@@ -192,7 +192,8 @@ compiler.registerComponent('app.Account', {
     {
       name: 'departments',
       label: 'Departments',
-      component: 'SelectListField',
+      component: 'SelectField',
+      // multiple: true,
       blankString: 'None',
       options: [
         { value: 'red', label: 'Red' },
@@ -200,6 +201,17 @@ compiler.registerComponent('app.Account', {
         { value: 'blue', label: 'Blue' }
       ]
     }
+    // {
+    //   name: 'departments',
+    //   label: 'Departments',
+    //   component: 'SelectListField',
+    //   blankString: 'None',
+    //   options: [
+    //     { value: 'red', label: 'Red' },
+    //     { value: 'green', label: 'Green' },
+    //     { value: 'blue', label: 'Blue' }
+    //   ]
+    // }
     // {
     //   component: 'ButtonField',
     //   name: 'submit',
