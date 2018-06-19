@@ -229,6 +229,16 @@ class FormsField extends React.PureComponent {
     this.setState(props);
   };
 
+  sortOptions() {
+    const { field } = this.props;
+    if (field && field.get('form')) {
+      return field.get('form').mapFields(field => ({
+        value: field.get('name'),
+        label: field.get('label')
+      }));
+    }
+  }
+
   header() {
     const { forbidCreate, editable, disabled, field } = this.props;
 
@@ -246,6 +256,8 @@ class FormsField extends React.PureComponent {
     // TODO: make configurable via field
     const canOrder = true;
 
+    const sortOptions = this.sortOptions();
+
     return (
       <Grid container spacing={0}>
         <Grid item xs={12} sm={6} lg={6}>
@@ -262,6 +274,7 @@ class FormsField extends React.PureComponent {
               onChange={this.handleOrdering}
               sortBy={sortBy}
               sortOrder={sortOrder}
+              options={sortOptions}
             />
           ) : null}
         </Grid>

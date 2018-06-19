@@ -4,6 +4,10 @@ import { Sort } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
+  formControl: {
+    // Specify a more appropriate min width so that the field is wide enough to cover most labels
+    // minWidth: 120
+  },
   flip: {
     transform: 'scaleY(-1)'
   }
@@ -20,9 +24,17 @@ class SelectOrder extends React.PureComponent {
   };
 
   render() {
-    const { classes, sortBy, sortOrder } = this.props;
+    const { classes, sortBy, sortOrder, options } = this.props;
 
     const flipped = sortOrder === 'desc';
+
+    const items = options.map(option => {
+      return (
+        <MenuItem value={option.value} key={option.value}>
+          {option.label}
+        </MenuItem>
+      );
+    });
 
     // If we wanted the icon as an adornment:
     // <TextField
@@ -43,20 +55,14 @@ class SelectOrder extends React.PureComponent {
     return (
       <div>
         <FormControl className={classes.formControl}>
-          <Select
-            value={sortBy}
-            onChange={this.handleChange}
-            // inputProps={{
-            //   name: 'age',
-            //   id: 'age-simple',
-            // }}
-          >
+          {/*
+          <InputLabel>Sort by</InputLabel>
+          */}
+          <Select value={sortBy} onChange={this.handleChange}>
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            {items}
           </Select>
         </FormControl>
         <IconButton
