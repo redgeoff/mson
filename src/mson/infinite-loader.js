@@ -41,6 +41,7 @@ export default class InfiniteLoader {
     onResizeSpacer,
     onSetBufferTopId,
     onGetItem,
+    onGetItems,
     onGetItemId,
     onGetItemCursor,
     onAddItem,
@@ -57,6 +58,7 @@ export default class InfiniteLoader {
     this._onResizeSpacer = onResizeSpacer;
     this._onSetBufferTopId = onSetBufferTopId;
     this._onGetItem = onGetItem;
+    this._onGetItems = onGetItems;
     this._onSetIsLoading = onSetIsLoading;
 
     if (onGetItemId) {
@@ -125,14 +127,18 @@ export default class InfiniteLoader {
     }
   }
 
-  reset() {
-    this._bufferTopCursor = null;
+  _resetBufferReferences() {
     this._bufferTopId = null;
-    this._bufferBottomCursor = null;
-    this._bufferBottomId = null;
+    this._bufferTopCursor = null;
     this._firstCursor = null;
-    this._lastGetAllProps = null;
+    this._bufferBottomId = null;
+    this._bufferBottomCursor = null;
     this._bufferSize = 0;
+  }
+
+  reset() {
+    this._resetBufferReferences();
+    this._lastGetAllProps = null;
     this._lastScrollY = null;
     this._spacerResizing = false;
     this._showArchived = false;
@@ -369,5 +375,40 @@ export default class InfiniteLoader {
 
   setWhere(where) {
     this._where = where;
+  }
+
+  removeItem(id) {
+    // Are we removing one of the buffer references?
+    if (id === this._bufferTopId || id === this._bufferBottomId) {
+      // Reposition the buffer references as they need to be accurate when we resize the buffer
+
+      const reverse = id === this._bufferBottomId;
+      const items = this._onGetItems(id, reverse);
+      let newId = null;
+      let newCursor = null;
+      let i = 0;
+      for (const item of items) {
+        newId = this._onGetItemId(item);
+        newCursor = this._onGetItemCursor(item);
+
+        // Exit loop as we only need the second item
+        if (i++ === 1) {
+          break;
+        }
+      }
+
+      if (newId) {
+        if (id === this._bufferTopId) {
+          this._bufferTopId = newId;
+          this._bufferTopCursor = newCursor;
+          this._firstCursor = newCursor;
+        } else if (id === this._bufferBottomId) {
+          this._bufferBottomId = newId;
+          this._bufferBottomCursor = newCursor;
+        }
+      } else {
+        this._resetBufferReferences();
+      }
+    }
   }
 }
