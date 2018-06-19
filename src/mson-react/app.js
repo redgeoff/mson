@@ -355,7 +355,7 @@ class App extends React.PureComponent {
     let archivedToggle = null;
     if (showArchivedToggle) {
       archivedToggle = (
-        <Tooltip title={showArchived ? 'Hide Deleted' : 'Show Deleted'}>
+        <Tooltip title={showArchived ? 'Show Active' : 'Show Deleted'}>
           <MUISwitch
             onChange={this.handleArchivedChange}
             checked={showArchivedChecked}

@@ -63,7 +63,9 @@ export default class RecordStore extends Component {
 
   async getAll(props) {
     const showArchivedWhere =
-      props && props.showArchived ? undefined : { archivedAt: null };
+      props && props.showArchived
+        ? { archivedAt: { $ne: null } }
+        : { archivedAt: null };
     const where = utils.combineWheres(showArchivedWhere, props.where);
 
     return this._request(props, appId => {

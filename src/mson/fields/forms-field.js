@@ -145,7 +145,10 @@ export default class FormsField extends Field {
           if (i++ === n) {
             break;
           }
-          this.removeForm(lastId);
+
+          // We want to mute the changes or else we'll introduce a lot of latency on the UI thread.
+          const muteChange = true;
+          this.removeForm(lastId, muteChange);
         }
         return lastId;
       },
@@ -359,10 +362,15 @@ export default class FormsField extends Field {
     }
   }
 
-  removeForm(id) {
+  removeForm(id, muteChange) {
     const form = this._forms.get(id);
     form.removeAllListeners();
     this._forms.delete(id);
+
+    if (!muteChange) {
+      // Emit change so that UI is notified
+      this._emitChange('change', form.getValues());
+    }
   }
 
   getForm(id) {
@@ -513,11 +521,13 @@ export default class FormsField extends Field {
       form.set({ archivedAt: archive.data.archiveRecord.archivedAt });
     }
 
-    // Not showing archived?
-    if (!this.get('showArchived')) {
-      // Remove from list
-      this.removeForm(form.getField('id').getValue());
-    }
+    // // Not showing archived?
+    // if (!this.get('showArchived')) {
+
+    // Remove from list
+    this.removeForm(form.getField('id').getValue());
+
+    // }
 
     globals.displaySnackbar(this.getSingularLabel() + ' deleted');
   }
@@ -529,6 +539,9 @@ export default class FormsField extends Field {
     }
 
     form.set({ archivedAt: null });
+
+    // Remove from list
+    this.removeForm(form.getField('id').getValue());
 
     globals.displaySnackbar(this.getSingularLabel() + ' restored');
   }
