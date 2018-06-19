@@ -46,7 +46,9 @@ class FormsField extends React.PureComponent {
     mode: 'view',
     currentForm: null,
     confirmationOpen: false,
-    targetForm: null
+    targetForm: null,
+    sortBy: '',
+    sortOrder: 'asc'
   };
 
   constructor(props) {
@@ -223,8 +225,14 @@ class FormsField extends React.PureComponent {
     return cards;
   }
 
+  handleOrdering = props => {
+    this.setState(props);
+  };
+
   header() {
     const { forbidCreate, editable, disabled, field } = this.props;
+
+    const { sortBy, sortOrder } = this.state;
 
     const singularLabel = field.getSingularLabel();
 
@@ -249,7 +257,13 @@ class FormsField extends React.PureComponent {
           ) : null}
         </Grid>
         <Grid item xs={12} sm={6} lg={6} align="right">
-          {canOrder ? <SelectOrder onChange={this.handleOrdering} /> : null}
+          {canOrder ? (
+            <SelectOrder
+              onChange={this.handleOrdering}
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+            />
+          ) : null}
         </Grid>
       </Grid>
     );
