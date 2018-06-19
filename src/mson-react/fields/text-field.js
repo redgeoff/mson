@@ -2,6 +2,7 @@ import React from 'react';
 import Input from '@material-ui/core/Input';
 import CommonField from './common-field';
 import attach from '../attach';
+import DisplayValueTypography from './display-value-typography';
 
 class TextField extends React.PureComponent {
   handleChange = event => {
@@ -30,11 +31,13 @@ class TextField extends React.PureComponent {
       disabled,
       field,
       fullWidth,
-      type
+      type,
+      editable
     } = this.props;
 
-    return (
-      <CommonField field={field}>
+    let fld = null;
+    if (editable) {
+      fld = (
         <Input
           error={touched && err ? true : false}
           inputProps={{
@@ -48,8 +51,16 @@ class TextField extends React.PureComponent {
           fullWidth={fullWidth}
           type={type}
         />
-      </CommonField>
-    );
+      );
+    } else {
+      fld = (
+        <DisplayValueTypography>
+          {field.getDisplayValue()}
+        </DisplayValueTypography>
+      );
+    }
+
+    return <CommonField field={field}>{fld}</CommonField>;
   }
 }
 
@@ -60,5 +71,6 @@ export default attach([
   'touched',
   'disabled',
   'fullWidth',
-  'type'
+  'type',
+  'editable'
 ])(TextField);
