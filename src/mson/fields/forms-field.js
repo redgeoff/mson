@@ -152,6 +152,9 @@ export default class FormsField extends Field {
         }
         return lastId;
       },
+      onGetItems: (id, reverse) => {
+        return this._forms.values(id, reverse);
+      },
       onResizeSpacer: (dHeight, height) => {
         let newHeight = null;
 
@@ -363,6 +366,12 @@ export default class FormsField extends Field {
   }
 
   removeForm(id, muteChange) {
+    if (!muteChange) {
+      // Inform the InfiniteLoader that we are removing an item so that it can adjust it's buffer,
+      // etc...
+      this._infiniteLoader.removeItem(id);
+    }
+
     const form = this._forms.get(id);
     form.removeAllListeners();
     this._forms.delete(id);
