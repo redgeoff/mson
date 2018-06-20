@@ -10,6 +10,7 @@ import access from '../../mson/access';
 import { withStyles } from '@material-ui/core/styles';
 import { blueGrey } from '@material-ui/core/colors';
 import './forms-field.css';
+import SelectOrder from './select-order';
 
 // TODO:
 //   - Do we really need currentForm and targetForm? Should we refactor out currentForm? May still
@@ -45,7 +46,9 @@ class FormsField extends React.PureComponent {
     mode: 'view',
     currentForm: null,
     confirmationOpen: false,
-    targetForm: null
+    targetForm: null,
+    sortBy: '',
+    sortOrder: 'ASC'
   };
 
   constructor(props) {
@@ -222,11 +225,86 @@ class FormsField extends React.PureComponent {
     return cards;
   }
 
+  handleOrdering = props => {
+    this.setState(props, () => {
+      this.props.field.set({
+        order: this.state.sortBy
+          ? [[this.state.sortBy, this.state.sortOrder]]
+          : null
+      });
+    });
+  };
+
+  sortOptions() {
+    const { field } = this.props;
+    if (field && field.get('form')) {
+      const form = field.get('form');
+      const fieldsCanAccess = access.fieldsCanAccess('read', form);
+      const fields = [];
+      form.eachField(field => {
+        const name = field.get('name');
+
+        // Do we have access to the field?
+        if (fieldsCanAccess[name] !== undefined) {
+          fields.push({
+            value: (form.isDefaultField(name) ? '' : 'fieldValues.') + name,
+            label: field.get('label')
+          });
+        }
+      });
+      return fields;
+    }
+  }
+
+  header(numCards) {
+    const { forbidCreate, editable, disabled, field } = this.props;
+
+    const { sortBy, sortOrder } = this.state;
+
+    const singularLabel = field.getSingularLabel();
+
+    const reachedMax = field.reachedMax();
+
+    const canCreate = this.canCreate();
+
+    const showNewButton =
+      editable && !disabled && !forbidCreate && !reachedMax && canCreate;
+
+    // TODO: make configurable via field
+    const canOrder = true;
+
+    const sortOptions = this.sortOptions();
+
+    const showOrder = numCards > 0;
+
+    return (
+      <Grid container spacing={0}>
+        <Grid item xs={12} sm={6} lg={6}>
+          {showNewButton ? (
+            <Button color="primary" aria-label="new" onClick={this.handleNew}>
+              <Add />
+              New {singularLabel}
+            </Button>
+          ) : null}
+        </Grid>
+        <Grid item xs={12} sm={6} lg={6} align="right">
+          {showOrder && canOrder ? (
+            <SelectOrder
+              onChange={this.handleOrdering}
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              options={sortOptions}
+            />
+          ) : null}
+        </Grid>
+      </Grid>
+    );
+  }
+
   // TODO: how to prevent re-rendering of all form-cards when dialog open state is changed? Or, does
   // it not really matter as we are using PureComponents?
   render() {
     const {
-      forbidCreate,
       forbidUpdate,
       forbidDelete,
       editable,
@@ -246,12 +324,8 @@ class FormsField extends React.PureComponent {
       targetForm
     } = this.state;
 
-    const reachedMax = field.reachedMax();
-
     const label = field.get('label').toLowerCase();
-    const singularLabel = field.getSingularLabel();
 
-    const canCreate = this.canCreate();
     const canUpdate = this.canUpdate();
     const canArchive = this.canArchive();
 
@@ -267,18 +341,11 @@ class FormsField extends React.PureComponent {
 
     const showNoRecords = searchString && !isLoading && cards.length === 0;
 
+    const header = this.header(cards.length);
+
     return (
       <div>
-        {!editable ||
-        disabled ||
-        forbidCreate ||
-        reachedMax ||
-        !canCreate ? null : (
-          <Button color="primary" aria-label="new" onClick={this.handleNew}>
-            <Add />
-            New {singularLabel}
-          </Button>
-        )}
+        {header}
 
         {showNoRecords ? (
           <Typography variant="display1">

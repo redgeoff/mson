@@ -34,12 +34,16 @@ export default class FormsField extends Field {
 
       this._resetInfiniteLoader();
 
+      this._updateInfiniteLoader();
+
       await this._infiniteLoader.getAll();
     });
   }
 
   _listenForUnload() {
     this.on('unload', async () => {
+      this.set({ order: null });
+
       const form = this.get('form');
       if (form) {
         form.emitUnload();
@@ -51,6 +55,12 @@ export default class FormsField extends Field {
     this._infiniteLoader.reset();
   }
 
+  _updateInfiniteLoader() {
+    this._infiniteLoader.setShowArchived(this.get('showArchived'));
+    this._infiniteLoader.setWhere(this._where);
+    this._infiniteLoader.setOrder(this.get('order'));
+  }
+
   async _clearAndGetAll() {
     // Clear any existing forms. TODO: it would be more efficient to just record ids of all
     // existing items and then use getAll() result to determine if item needs to be inserted or
@@ -59,8 +69,7 @@ export default class FormsField extends Field {
 
     this._resetInfiniteLoader();
 
-    this._infiniteLoader.setShowArchived(this.get('showArchived'));
-    this._infiniteLoader.setWhere(this._where);
+    this._updateInfiniteLoader();
 
     await this._infiniteLoader.getAll();
   }
@@ -102,6 +111,19 @@ export default class FormsField extends Field {
       if (this.isLoaded()) {
         this._where = this._toWhereFromSearchString();
 
+        await this._clearAndGetAll();
+      }
+    });
+  }
+
+  // TODO: would it be better to intercept set({ order }), etc... instead of using listeners?
+  _listenForOrder() {
+    this.on('order', async order => {
+      this.set({ order });
+
+      // Is the component still loaded? We want to prevent issuing a new query when the order
+      // is cleared when we change our route.
+      if (this.isLoaded()) {
         await this._clearAndGetAll();
       }
     });
@@ -268,6 +290,7 @@ export default class FormsField extends Field {
     this._listenForUnload();
     this._listenForShowArchived();
     this._listenForSearchString();
+    this._listenForOrder();
     this._listenForScroll();
   }
 
@@ -437,7 +460,8 @@ export default class FormsField extends Field {
       'spacerHeight',
       'spacerId',
       'bufferTopId',
-      'isLoading'
+      'isLoading',
+      'order'
     );
   }
 
@@ -468,7 +492,8 @@ export default class FormsField extends Field {
       'spacerHeight',
       'spacerId',
       'bufferTopId',
-      'isLoading'
+      'isLoading',
+      'order'
     );
     return value === undefined ? super.getOne(name) : value;
   }

@@ -155,8 +155,13 @@ export default class InfiniteLoader {
     props = props ? _.cloneDeep(props) : {};
 
     props.showArchived = this._showArchived;
+
     if (this._where) {
       props.where = this._where;
+    }
+
+    if (this._order) {
+      props.order = this._order;
     }
 
     if (props.before) {
@@ -375,6 +380,10 @@ export default class InfiniteLoader {
 
   setWhere(where) {
     this._where = where;
+  }
+
+  setOrder(order) {
+    this._order = order;
   }
 
   removeItem(id) {
