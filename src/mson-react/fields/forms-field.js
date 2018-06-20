@@ -239,12 +239,20 @@ class FormsField extends React.PureComponent {
     const { field } = this.props;
     if (field && field.get('form')) {
       const form = field.get('form');
-      return form.mapFields(field => ({
-        value:
-          (form.isDefaultField(field.get('name')) ? '' : 'fieldValues.') +
-          field.get('name'),
-        label: field.get('label')
-      }));
+      const fieldsCanAccess = access.fieldsCanAccess('read', form);
+      const fields = [];
+      form.eachField(field => {
+        const name = field.get('name');
+
+        // Do we have access to the field?
+        if (fieldsCanAccess[name] !== undefined) {
+          fields.push({
+            value: (form.isDefaultField(name) ? '' : 'fieldValues.') + name,
+            label: field.get('label')
+          });
+        }
+      });
+      return fields;
     }
   }
 
