@@ -228,7 +228,9 @@ class FormsField extends React.PureComponent {
   handleOrdering = props => {
     this.setState(props, () => {
       this.props.field.set({
-        order: [[this.state.sortBy, this.state.sortOrder]]
+        order: this.state.sortBy
+          ? [[this.state.sortBy, this.state.sortOrder]]
+          : null
       });
     });
   };
