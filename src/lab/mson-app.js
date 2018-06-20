@@ -1,6 +1,6 @@
 import compiler from '../mson/compiler';
 import globals from '../mson/globals';
-import { department, tmpEmployee } from '../employees/components';
+import { department, employee, tmpEmployee } from '../employees/components';
 
 // TODO: in a production app the appId should be set by the path or subdomain
 globals.set({ appId: 101 });
@@ -140,7 +140,8 @@ compiler.registerComponent('app.UserSignup', {
       actions: [
         {
           component: 'CreateRecord',
-          type: 'app.User'
+          // type: 'app.User'
+          type: 'app.Employee'
         },
         {
           component: 'LogInToApp'
@@ -150,25 +151,6 @@ compiler.registerComponent('app.UserSignup', {
           path: '/account/edit'
         }
       ]
-    }
-  ]
-});
-
-compiler.registerComponent('app.RemoveEmployee', {
-  component: 'Form',
-  fields: [
-    {
-      component: 'TextField',
-      name: 'name',
-      label: 'Name',
-      required: true,
-      help: 'Enter a full name'
-    },
-    {
-      component: 'EmailField',
-      name: 'email',
-      label: 'Email',
-      required: true
     }
   ]
 });
@@ -225,96 +207,6 @@ compiler.registerComponent('app.Account', {
     // }
   ]
 });
-
-// compiler.registerComponent('app.ChangePassword', {
-//   component: 'RecordEditorOld',
-//   form: {
-//     component: 'Form',
-//     fields: [
-//       {
-//         component: 'PasswordField',
-//         name: 'password',
-//         label: 'New Password',
-//         required: true
-//       },
-//       {
-//         component: 'PasswordField',
-//         name: 'retypePassword',
-//         label: 'Retype Password',
-//         required: true
-//       }
-//     ],
-//     validators: [
-//       {
-//         where: {
-//           retypePassword: {
-//             value: {
-//               $ne: '{{password.value}}'
-//             }
-//           }
-//         },
-//         error: {
-//           field: 'retypePassword',
-//           error: 'must match'
-//         }
-//       }
-//     ]
-//   },
-//   listeners: [
-//     {
-//       event: 'load',
-//       actions: [
-//         {
-//           component: 'Set',
-//           name: 'value',
-//           value: {
-//             id: '1' // TODO: '{{user.id}}'
-//           }
-//         },
-//         {
-//           component: 'Set',
-//           name: 'pristine',
-//           value: true
-//         }
-//       ]
-//     },
-//     {
-//       event: 'save',
-//       actions: [
-//         {
-//           component: 'APISet',
-//           url: 'api.mson.co',
-//           object: 'User',
-//           id: '1', // TODO: '{{user.id}}'
-//           fields: ['id', 'password']
-//         },
-//         {
-//           // Needed or else will be prompted for save
-//           component: 'Set',
-//           name: 'pristine',
-//           value: true
-//         },
-//         {
-//           component: 'Redirect',
-//           path: '/home'
-//         },
-//         {
-//           component: 'Snackbar',
-//           message: 'Password changed'
-//         }
-//       ]
-//     },
-//     {
-//       event: 'cancel',
-//       actions: [
-//         {
-//           component: 'Redirect',
-//           path: '/home'
-//         }
-//       ]
-//     }
-//   ]
-// });
 
 // TODO: should be able to inline in ChangePassword
 compiler.registerComponent('app.ChangePasswordForm', {
@@ -453,31 +345,7 @@ compiler.registerComponent('app.ViewAndEditAccount', {
 
 // TODO: is there a good way for UserSignup to share this structure? app.Employee and app.UserSignup
 // should probably inherit some shared component
-compiler.registerComponent('app.Employee', {
-  component: 'Form',
-  fields: [
-    {
-      component: 'PersonNameField',
-      name: 'firstName',
-      label: 'First Name',
-      required: true,
-      block: false
-    },
-    {
-      component: 'PersonNameField',
-      name: 'lastName',
-      label: 'Last Name',
-      required: true
-    }
-    // TODO: will probably need to include username when getting list of users
-    // {
-    //   component: 'EmailField',
-    //   name: 'email',
-    //   label: 'Email',
-    //   required: true
-    // }
-  ]
-});
+compiler.registerComponent('app.Employee', employee);
 
 compiler.registerComponent('app.Employees', {
   component: 'Form',
@@ -489,17 +357,23 @@ compiler.registerComponent('app.Employees', {
       form: {
         component: 'app.Employee'
       },
-      listeners: [
-        {
-          event: 'load',
-          actions: [
-            {
-              component: 'GetRecords',
-              type: 'app.User'
-            }
-          ]
-        }
-      ]
+      store: {
+        component: 'RecordStore',
+        type: 'app.Employee'
+      }
+
+      // TODO: remove
+      // listeners: [
+      //   {
+      //     event: 'load',
+      //     actions: [
+      //       {
+      //         component: 'GetRecords',
+      //         type: 'app.Employee'
+      //       }
+      //     ]
+      //   }
+      // ]
     }
   ]
 });
@@ -569,24 +443,6 @@ compiler.registerComponent('app.TmpEmployees', {
 });
 
 const menuItems = [
-  {
-    path: '/remove-employees',
-    label: 'Remove Employees',
-    content: {
-      component: 'Form',
-      fields: [
-        {
-          name: 'removeEmployees',
-          label: 'Remove Employees',
-          component: 'FormsField',
-          form: {
-            component: 'app.RemoveEmployee'
-          }
-        }
-      ],
-      resetOnLoad: false
-    }
-  },
   {
     path: '/employees',
     label: 'Employees',
@@ -711,32 +567,5 @@ const app = compiler.newComponent({
     items: menuItems
   }
 });
-
-// TODO: just temporary until we have a proper way to wire up to backend
-// const account = app.get('menu').getItem('/account/edit').content.getStore();
-// account.set({ id: '1', name: 'Nina Simone', email: 'nina@example.com' })
-// const employees = app
-//   .get('menu')
-//   .getItem('/employees')
-//   .content.getField('removeEmployees')
-//   .getStore();
-// employees.set({ id: '1', name: 'Ella Fitzgerald', email: 'ella@example.com' });
-// employees.set({ id: '2', name: 'Frank Sinatra', email: 'frank@example.com' });
-// employees.set({ id: '3', name: 'Ray Charles', email: 'ray@example.com' });
-const employees = app
-  .get('menu')
-  .getItem('/remove-employees')
-  .content.getField('removeEmployees');
-employees.addForm({
-  id: '1',
-  name: 'Ella Fitzgerald',
-  email: 'ella@example.com'
-});
-employees.addForm({
-  id: '2',
-  name: 'Frank Sinatra',
-  email: 'frank@example.com'
-});
-employees.addForm({ id: '3', name: 'Ray Charles', email: 'ray@example.com' });
 
 export default app;
