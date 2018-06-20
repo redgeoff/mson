@@ -48,7 +48,7 @@ class FormsField extends React.PureComponent {
     confirmationOpen: false,
     targetForm: null,
     sortBy: '',
-    sortOrder: 'asc'
+    sortOrder: 'ASC'
   };
 
   constructor(props) {
@@ -226,14 +226,21 @@ class FormsField extends React.PureComponent {
   }
 
   handleOrdering = props => {
-    this.setState(props);
+    this.setState(props, () => {
+      this.props.field.set({
+        order: [[this.state.sortBy, this.state.sortOrder]]
+      });
+    });
   };
 
   sortOptions() {
     const { field } = this.props;
     if (field && field.get('form')) {
-      return field.get('form').mapFields(field => ({
-        value: field.get('name'),
+      const form = field.get('form');
+      return form.mapFields(field => ({
+        value:
+          (form.isDefaultField(field.get('name')) ? '' : 'fieldValues.') +
+          field.get('name'),
         label: field.get('label')
       }));
     }

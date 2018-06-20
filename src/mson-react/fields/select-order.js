@@ -15,7 +15,7 @@ const styles = theme => ({
 
 class SelectOrder extends React.PureComponent {
   handleClick = () => {
-    const sortOrder = this.props.sortOrder === 'asc' ? 'desc' : 'asc';
+    const sortOrder = this.props.sortOrder === 'ASC' ? 'DESC' : 'ASC';
     this.props.onChange({ sortOrder });
   };
 
@@ -26,7 +26,7 @@ class SelectOrder extends React.PureComponent {
   render() {
     const { classes, sortBy, sortOrder, options } = this.props;
 
-    const flipped = sortOrder === 'desc';
+    const flipped = sortOrder !== 'DESC';
 
     const items = options.map(option => {
       return (
