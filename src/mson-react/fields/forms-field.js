@@ -248,7 +248,7 @@ class FormsField extends React.PureComponent {
     }
   }
 
-  header() {
+  header(numCards) {
     const { forbidCreate, editable, disabled, field } = this.props;
 
     const { sortBy, sortOrder } = this.state;
@@ -267,6 +267,8 @@ class FormsField extends React.PureComponent {
 
     const sortOptions = this.sortOptions();
 
+    const showOrder = numCards > 0;
+
     return (
       <Grid container spacing={0}>
         <Grid item xs={12} sm={6} lg={6}>
@@ -278,7 +280,7 @@ class FormsField extends React.PureComponent {
           ) : null}
         </Grid>
         <Grid item xs={12} sm={6} lg={6} align="right">
-          {canOrder ? (
+          {showOrder && canOrder ? (
             <SelectOrder
               onChange={this.handleOrdering}
               sortBy={sortBy}
@@ -331,7 +333,7 @@ class FormsField extends React.PureComponent {
 
     const showNoRecords = searchString && !isLoading && cards.length === 0;
 
-    const header = this.header();
+    const header = this.header(cards.length);
 
     return (
       <div>
