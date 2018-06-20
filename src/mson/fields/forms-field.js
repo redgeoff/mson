@@ -34,12 +34,16 @@ export default class FormsField extends Field {
 
       this._resetInfiniteLoader();
 
+      this._updateInfiniteLoader();
+
       await this._infiniteLoader.getAll();
     });
   }
 
   _listenForUnload() {
     this.on('unload', async () => {
+      this.set({ order: null });
+
       const form = this.get('form');
       if (form) {
         form.emitUnload();
@@ -51,6 +55,12 @@ export default class FormsField extends Field {
     this._infiniteLoader.reset();
   }
 
+  _updateInfiniteLoader() {
+    this._infiniteLoader.setShowArchived(this.get('showArchived'));
+    this._infiniteLoader.setWhere(this._where);
+    this._infiniteLoader.setOrder(this.get('order'));
+  }
+
   async _clearAndGetAll() {
     // Clear any existing forms. TODO: it would be more efficient to just record ids of all
     // existing items and then use getAll() result to determine if item needs to be inserted or
@@ -59,9 +69,7 @@ export default class FormsField extends Field {
 
     this._resetInfiniteLoader();
 
-    this._infiniteLoader.setShowArchived(this.get('showArchived'));
-    this._infiniteLoader.setWhere(this._where);
-    this._infiniteLoader.setOrder(this.get('order'));
+    this._updateInfiniteLoader();
 
     await this._infiniteLoader.getAll();
   }
