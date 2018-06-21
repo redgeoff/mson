@@ -12,7 +12,8 @@ export default class User extends Form {
           component: 'EmailField',
           name: 'username',
           label: 'Email',
-          required: true
+          required: true,
+          forbidSort: true // TODO: enable once can sort
           // in: false,
           // out: false
         }

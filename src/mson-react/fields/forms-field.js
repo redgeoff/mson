@@ -244,8 +244,8 @@ class FormsField extends React.PureComponent {
       form.eachField(field => {
         const name = field.get('name');
 
-        // Do we have access to the field?
-        if (fieldsCanAccess[name] !== undefined) {
+        // Do we have access to the field? We allowed to sort?
+        if (fieldsCanAccess[name] !== undefined && !field.get('forbidSort')) {
           fields.push({
             value: (form.isDefaultField(name) ? '' : 'fieldValues.') + name,
             label: field.get('label')
