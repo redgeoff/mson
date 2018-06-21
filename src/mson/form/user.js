@@ -12,9 +12,9 @@ export default class User extends Form {
           component: 'EmailField',
           name: 'username',
           label: 'Email',
-          required: true,
-          in: false,
-          out: false
+          required: true
+          // in: false,
+          // out: false
         }
       })
     );
