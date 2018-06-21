@@ -252,8 +252,11 @@ export default class Form extends Component {
   }
 
   _setField(field) {
+    // Make sure the before field is present
     const before = field.get('before');
-    this._fields.set(field.get('name'), field, before ? before : undefined);
+    const beforeName = before && this.hasField(before) ? before : undefined;
+
+    this._fields.set(field.get('name'), field, beforeName);
   }
 
   addField(field) {
@@ -513,8 +516,11 @@ export default class Form extends Component {
   clone() {
     const clonedForm = _.cloneDeep(this);
 
+    // Remove the fields as we need to re-add them below
+    clonedForm._fields.clear();
+
     // We need to use addField() and not _setField() as we need the listeners to be recreated
-    clonedForm._fields.each(field => clonedForm.addField(field.clone()));
+    this._fields.each(field => clonedForm.addField(field.clone()));
 
     return clonedForm;
   }

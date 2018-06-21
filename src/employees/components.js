@@ -7,13 +7,15 @@ export const employee = {
       name: 'firstName',
       label: 'First Name',
       required: true,
-      block: false
+      block: false,
+      before: 'username'
     },
     {
       component: 'PersonNameField',
       name: 'lastName',
       label: 'Last Name',
-      required: true
+      required: true,
+      before: 'username'
     }
   ],
   roles: ['employee']
