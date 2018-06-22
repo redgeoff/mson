@@ -26,7 +26,6 @@ it('should sanity check', () => {
   user.setValues(values);
 
   expect(user.getValues()).toEqual({
-    username: 'username',
     id: null,
     name: 'Full Name'
   });
