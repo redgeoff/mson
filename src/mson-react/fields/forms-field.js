@@ -59,7 +59,8 @@ class FormsField extends React.PureComponent {
   }
 
   emitOnClose() {
-    this.state.currentForm.emitChange('doneEditingRecord');
+    const { currentForm } = this.state;
+    currentForm.emitChange('doneEditingRecord', currentForm.getValue('id'));
   }
 
   handleClose = () => {
@@ -80,7 +81,7 @@ class FormsField extends React.PureComponent {
 
   handleClick = form => {
     const { currentForm } = this.state;
-    currentForm.emitChange('willReadRecord');
+    currentForm.emitChange('willReadRecord', form.getValue('id'));
     currentForm.clearValues();
     this.copyValues(currentForm, form);
     currentForm.setEditable(false);
@@ -90,7 +91,7 @@ class FormsField extends React.PureComponent {
 
   handleEdit = form => {
     const { currentForm } = this.state;
-    currentForm.emitChange('willUpdateRecord');
+    currentForm.emitChange('willUpdateRecord', form.getValue('id'));
 
     // The forms will be the same if the user clicks edit from view form dialog
     if (form !== currentForm) {

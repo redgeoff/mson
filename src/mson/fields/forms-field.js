@@ -544,7 +544,10 @@ export default class FormsField extends Field {
       );
     }
 
-    form.emitChange(creating ? 'didCreateRecord' : 'didUpdateRecord');
+    form.emitChange(
+      creating ? 'didCreateRecord' : 'didUpdateRecord',
+      id.getValue()
+    );
 
     globals.displaySnackbar(this.getSingularLabel() + ' saved');
   }
@@ -562,11 +565,11 @@ export default class FormsField extends Field {
     // if (!this.get('showArchived')) {
 
     // Remove from list
-    this.removeForm(form.getField('id').getValue());
+    this.removeForm(form.getValue('id'));
 
     // }
 
-    form.emitChange('didArchiveRecord');
+    form.emitChange('didArchiveRecord', form.getValue('id'));
 
     globals.displaySnackbar(this.getSingularLabel() + ' deleted');
   }
@@ -580,9 +583,9 @@ export default class FormsField extends Field {
     form.set({ archivedAt: null });
 
     // Remove from list
-    this.removeForm(form.getField('id').getValue());
+    this.removeForm(form.getValue('id'));
 
-    form.emitChange('didRestoreRecord');
+    form.emitChange('didRestoreRecord', form.getValue('id'));
 
     globals.displaySnackbar(this.getSingularLabel() + ' restored');
   }
