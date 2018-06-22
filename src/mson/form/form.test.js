@@ -396,7 +396,7 @@ it('should remove blank fields', () => {
     lastName: null
   });
 
-  expect(form.getValues({ excludeBlanks: true })).toEqual({
+  expect(form.getValues({ blank: false })).toEqual({
     firstName: 'First'
   });
 

@@ -370,9 +370,11 @@ export default class Form extends Component {
     this._fields.each(field => {
       const name = field.get('name');
       if (
-        (props.includeOuts || field.get('out')) &&
-        (!props.excludeBlanks || !field.isBlank()) &&
-        (!props.excludeDefaultFields || !this.isDefaultField(name))
+        (props.in === undefined || props.in === !!field.get('in')) &&
+        (props.out === undefined || props.out === !!field.get('out')) &&
+        (props.blank === undefined || props.blank === !!field.isBlank()) &&
+        (props.default === undefined ||
+          props.default === !!this.isDefaultField(name))
       ) {
         values[name] = field.get('value');
       }

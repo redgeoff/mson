@@ -25,12 +25,12 @@ it('should sanity check', () => {
 
   user.setValues(values);
 
-  expect(user.getValues()).toEqual({
+  expect(user.getValues({ out: true })).toEqual({
     id: null,
     name: 'Full Name'
   });
 
-  expect(user.getValues({ includeOuts: true })).toEqual({
+  expect(user.getValues()).toEqual({
     id: null,
     ...values
   });
