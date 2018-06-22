@@ -329,6 +329,10 @@ export default class FormsField extends Field {
   // TODO: refactor to use named parameters
   addForm(values, archivedAt, userId, muteChange, cursor, beforeKey) {
     const clonedForm = this.get('form').clone();
+
+    // Reset form as there may be existing data, errors, etc...
+    clonedForm.reset();
+
     clonedForm.setValues(values);
 
     const id = clonedForm.getField('id');
