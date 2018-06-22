@@ -69,7 +69,7 @@ class FormsField extends React.PureComponent {
   }
 
   copyValues(currentForm, form) {
-    currentForm.setValues(form.getValues());
+    currentForm.setValues(form.getValues({ includeOuts: true }));
     currentForm.set({ userId: form.get('userId') });
   }
 
