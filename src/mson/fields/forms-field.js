@@ -106,11 +106,11 @@ export default class FormsField extends Field {
     this.on('searchString', async searchString => {
       this.set({ searchString });
 
+      this._where = this._toWhereFromSearchString();
+
       // Is the component still loaded? We want to prevent issuing a new query when the searchString
       // is cleared when we change our route.
       if (this.isLoaded()) {
-        this._where = this._toWhereFromSearchString();
-
         await this._clearAndGetAll();
       }
     });
