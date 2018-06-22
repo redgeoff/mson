@@ -30,7 +30,8 @@ export default class User extends Form {
           label: 'Password',
           required: true,
           in: false,
-          out: false
+          out: false,
+          hidden: true
         }
       })
     );
