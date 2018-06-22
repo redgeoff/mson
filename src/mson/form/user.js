@@ -13,12 +13,8 @@ export default class User extends Form {
           component: 'EmailField',
           name: 'username',
           label: 'Email',
-          required: true,
-          forbidSort: true, // TODO: enable once can sort
+          required: true
           // in: false,
-
-          // False so that derived components don't create this field
-          out: false
         }
       })
     );
@@ -29,10 +25,11 @@ export default class User extends Form {
           component: 'PasswordField',
           name: 'password',
           label: 'Password',
-          required: true,
+          // required: true, // Required by listeners when creating
           in: false,
           out: false,
-          hidden: true
+          hidden: true,
+          forbidSort: true
         }
       })
     );
@@ -59,6 +56,10 @@ export default class User extends Form {
           new Set({
             name: 'fields.password.out',
             value: true
+          }),
+          new Set({
+            name: 'fields.password.required',
+            value: true
           })
         ]
       },
@@ -71,6 +72,10 @@ export default class User extends Form {
           }),
           new Set({
             name: 'fields.password.out',
+            value: false
+          }),
+          new Set({
+            name: 'fields.password.required',
             value: false
           })
         ]

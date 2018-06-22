@@ -38,7 +38,7 @@ class Access {
     return this.canAccess('archive', form);
   }
 
-  fieldsCanAccess(operation, form) {
+  fieldsCanAccess(operation, form, getOpts) {
     const access = form.get('access');
     const session = registrar.client.user.getSession();
 
@@ -53,7 +53,7 @@ class Access {
 
       isOwner = session.user.id === form.get('userId');
     }
-    const fieldValues = form.getValues();
+    const fieldValues = form.getValues(getOpts);
 
     return this._accessControl.fieldsCanAccess(
       operation,
@@ -65,7 +65,7 @@ class Access {
   }
 
   fieldsCanCreate(form) {
-    return this.fieldsCanAccess('create', form);
+    return this.fieldsCanAccess('create', form, { out: true });
   }
 
   fieldsCanRead(form) {
@@ -73,7 +73,7 @@ class Access {
   }
 
   fieldsCanUpdate(form) {
-    return this.fieldsCanAccess('update', form);
+    return this.fieldsCanAccess('update', form, { out: true });
   }
 }
 
