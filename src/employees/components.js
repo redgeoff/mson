@@ -1,3 +1,26 @@
+export const employee = {
+  name: 'app.Employee',
+  component: 'User',
+  fields: [
+    {
+      component: 'PersonNameField',
+      name: 'firstName',
+      label: 'First Name',
+      required: true,
+      block: false,
+      before: 'username'
+    },
+    {
+      component: 'PersonNameField',
+      name: 'lastName',
+      label: 'Last Name',
+      required: true,
+      before: 'username'
+    }
+  ],
+  roles: ['employee']
+};
+
 export const department = {
   name: 'app.Department',
   component: 'Form',

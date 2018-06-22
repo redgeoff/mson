@@ -1,6 +1,7 @@
 import Form from './form';
 import MSONComponent from '../component/mson-component';
 import Roles from '../roles';
+import Set from '../actions/set';
 
 export default class User extends Form {
   _create(props) {
@@ -12,9 +13,8 @@ export default class User extends Form {
           component: 'EmailField',
           name: 'username',
           label: 'Email',
-          required: true,
-          in: false,
-          out: false
+          required: true
+          // in: false,
         }
       })
     );
@@ -25,24 +25,66 @@ export default class User extends Form {
           component: 'PasswordField',
           name: 'password',
           label: 'Password',
-          required: true,
+          // required: true, // Required by listeners when creating
           in: false,
-          out: false
+          out: false,
+          hidden: true,
+          forbidSort: true
         }
       })
     );
 
-    this.set({
-      schema: {
-        component: 'Form',
-        fields: [
-          {
-            name: 'roles',
-            component: 'TextListField',
-            invalidRegExp: '^' + Object.keys(Roles.RESERVED).join('|') + '$'
-          }
+    const schema = {
+      component: 'Form',
+      fields: [
+        {
+          name: 'roles',
+          component: 'TextListField',
+          invalidRegExp: '^' + Object.keys(Roles.RESERVED).join('|') + '$'
+        }
+      ]
+    };
+
+    const listeners = [
+      {
+        event: 'willCreateRecord',
+        actions: [
+          new Set({
+            name: 'fields.password.hidden',
+            value: false
+          }),
+          new Set({
+            name: 'fields.password.out',
+            value: true
+          }),
+          new Set({
+            name: 'fields.password.required',
+            value: true
+          })
+        ]
+      },
+      {
+        event: 'doneEditingRecord',
+        actions: [
+          new Set({
+            name: 'fields.password.hidden',
+            value: true
+          }),
+          new Set({
+            name: 'fields.password.out',
+            value: false
+          }),
+          new Set({
+            name: 'fields.password.required',
+            value: false
+          })
         ]
       }
+    ];
+
+    this.set({
+      schema,
+      listeners
     });
   }
 

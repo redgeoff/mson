@@ -58,7 +58,13 @@ class FormsField extends React.PureComponent {
     this.state.currentForm = props.field.get('form');
   }
 
+  emitOnClose() {
+    const { currentForm } = this.state;
+    currentForm.emitChange('doneEditingRecord', currentForm.getValue('id'));
+  }
+
   handleClose = () => {
+    this.emitOnClose();
     this.setState({ open: false });
   };
 
@@ -69,12 +75,13 @@ class FormsField extends React.PureComponent {
   }
 
   copyValues(currentForm, form) {
-    currentForm.setValues(form.getValues());
+    currentForm.setValues(form.getValues({ includeOuts: true }));
     currentForm.set({ userId: form.get('userId') });
   }
 
   handleClick = form => {
     const { currentForm } = this.state;
+    currentForm.emitChange('willReadRecord', form.getValue('id'));
     currentForm.clearValues();
     this.copyValues(currentForm, form);
     currentForm.setEditable(false);
@@ -84,6 +91,7 @@ class FormsField extends React.PureComponent {
 
   handleEdit = form => {
     const { currentForm } = this.state;
+    currentForm.emitChange('willUpdateRecord', form.getValue('id'));
 
     // The forms will be the same if the user clicks edit from view form dialog
     if (form !== currentForm) {
@@ -99,6 +107,7 @@ class FormsField extends React.PureComponent {
 
   handleNew = () => {
     const { currentForm } = this.state;
+    currentForm.emitChange('willCreateRecord');
     currentForm.clearValues();
     currentForm.setEditable(true);
     this.prepareForm(currentForm);
@@ -135,11 +144,13 @@ class FormsField extends React.PureComponent {
       // Is the dialog open?
       if (open) {
         // Close it
+        this.emitOnClose();
         this.setState({ open: false, targetForm: null });
       }
     } else {
       // const singularLabel = this.props.field.getSingularLabel().toLowerCase();
 
+      this.emitOnClose();
       this.setState({
         targetForm: formToDelete,
         open: false,
@@ -244,8 +255,8 @@ class FormsField extends React.PureComponent {
       form.eachField(field => {
         const name = field.get('name');
 
-        // Do we have access to the field?
-        if (fieldsCanAccess[name] !== undefined) {
+        // Do we have access to the field? We allowed to sort?
+        if (fieldsCanAccess[name] !== undefined && !field.get('forbidSort')) {
           fields.push({
             value: (form.isDefaultField(name) ? '' : 'fieldValues.') + name,
             label: field.get('label')

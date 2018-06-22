@@ -74,6 +74,24 @@ beforeAll(() => {
     component: 'org.proj.EditAccount'
   });
 
+  compiler.registerComponent('org.proj.EditAccount3', {
+    component: 'org.proj.EditAccount',
+    fields: [
+      {
+        component: 'TextField',
+        name: 'firstName',
+        label: 'First Name',
+        before: 'save'
+      },
+      {
+        component: 'TextField',
+        name: 'lastName',
+        label: 'Last Name',
+        before: 'save'
+      }
+    ]
+  });
+
   // Template parameters in listeners
   compiler.registerComponent('org.proj.TemplatedListeners', {
     component: 'Form',
@@ -102,6 +120,7 @@ afterAll(() => {
   compiler.deregisterComponent('org.proj.EditNestedRegistrationThing');
   compiler.deregisterComponent('org.proj.EditAccount1');
   compiler.deregisterComponent('org.proj.EditAccount2');
+  compiler.deregisterComponent('org.proj.EditAccount3');
   compiler.deregisterComponent('org.proj.TemplatedListeners');
 });
 
@@ -176,4 +195,12 @@ it('should support template parameters in listeners', async () => {
 
   // Check snackbar message
   expect(globals.get('snackbarMessage')).toEqual('bar this');
+});
+
+it.only('should clone inherited component that uses before', () => {
+  const account3 = compiler.newComponent({
+    component: 'org.proj.EditAccount3'
+  });
+
+  account3.clone();
 });
