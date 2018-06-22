@@ -252,8 +252,11 @@ export default class Form extends Component {
   }
 
   _setField(field) {
+    // Make sure the before field is present
     const before = field.get('before');
-    this._fields.set(field.get('name'), field, before ? before : undefined);
+    const beforeName = before && this.hasField(before) ? before : undefined;
+
+    this._fields.set(field.get('name'), field, beforeName);
   }
 
   addField(field) {
@@ -367,9 +370,11 @@ export default class Form extends Component {
     this._fields.each(field => {
       const name = field.get('name');
       if (
-        (props.includeOuts || field.get('out')) &&
-        (!props.excludeBlanks || !field.isBlank()) &&
-        (!props.excludeDefaultFields || !this.isDefaultField(name))
+        (props.in === undefined || props.in === !!field.get('in')) &&
+        (props.out === undefined || props.out === !!field.get('out')) &&
+        (props.blank === undefined || props.blank === !!field.isBlank()) &&
+        (props.default === undefined ||
+          props.default === !!this.isDefaultField(name))
       ) {
         values[name] = field.get('value');
       }
@@ -513,8 +518,11 @@ export default class Form extends Component {
   clone() {
     const clonedForm = _.cloneDeep(this);
 
+    // Remove the fields as we need to re-add them below
+    clonedForm._fields.clear();
+
     // We need to use addField() and not _setField() as we need the listeners to be recreated
-    clonedForm._fields.each(field => clonedForm.addField(field.clone()));
+    this._fields.each(field => clonedForm.addField(field.clone()));
 
     return clonedForm;
   }
