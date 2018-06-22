@@ -90,9 +90,14 @@ export default class Component extends events.EventEmitter {
     this.set({ schema: this._getComponentMSONSchema() });
   }
 
+  // TODO: refactor out and use emitChange instead
   _emitChange(name, value) {
     this.emit(name, value);
     this.emit('$change', name, value);
+  }
+
+  emitChange(name, value) {
+    this._emitChange(name, value);
   }
 
   _setProperty(name, value) {

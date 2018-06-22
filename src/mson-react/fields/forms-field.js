@@ -58,7 +58,12 @@ class FormsField extends React.PureComponent {
     this.state.currentForm = props.field.get('form');
   }
 
+  emitOnClose() {
+    this.state.currentForm.emitChange('doneEditingRecord');
+  }
+
   handleClose = () => {
+    this.emitOnClose();
     this.setState({ open: false });
   };
 
@@ -75,6 +80,7 @@ class FormsField extends React.PureComponent {
 
   handleClick = form => {
     const { currentForm } = this.state;
+    currentForm.emitChange('willReadRecord');
     currentForm.clearValues();
     this.copyValues(currentForm, form);
     currentForm.setEditable(false);
@@ -84,6 +90,7 @@ class FormsField extends React.PureComponent {
 
   handleEdit = form => {
     const { currentForm } = this.state;
+    currentForm.emitChange('willUpdateRecord');
 
     // The forms will be the same if the user clicks edit from view form dialog
     if (form !== currentForm) {
@@ -99,6 +106,7 @@ class FormsField extends React.PureComponent {
 
   handleNew = () => {
     const { currentForm } = this.state;
+    currentForm.emitChange('willCreateRecord');
     currentForm.clearValues();
     currentForm.setEditable(true);
     this.prepareForm(currentForm);
@@ -135,11 +143,13 @@ class FormsField extends React.PureComponent {
       // Is the dialog open?
       if (open) {
         // Close it
+        this.emitOnClose();
         this.setState({ open: false, targetForm: null });
       }
     } else {
       // const singularLabel = this.props.field.getSingularLabel().toLowerCase();
 
+      this.emitOnClose();
       this.setState({
         targetForm: formToDelete,
         open: false,

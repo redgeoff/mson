@@ -510,9 +510,10 @@ export default class FormsField extends Field {
     // await this._docs.set(form.getValues());
     const id = form.getField('id');
     const store = this.get('store');
+    const creating = id.isBlank();
     if (store) {
       // New?
-      if (id.isBlank()) {
+      if (creating) {
         const response = await store.create({ form });
         id.setValue(response.data.createRecord.id);
         form.set({ userId: response.data.createRecord.userId });
@@ -520,7 +521,7 @@ export default class FormsField extends Field {
         // Existing
         await store.update({ form, id: id.getValue() });
       }
-    } else if (id.isBlank()) {
+    } else if (creating) {
       // TODO: use the id from this._docs.set instead of this dummy id
       id.setValue(uuid.v4());
     }
@@ -543,6 +544,8 @@ export default class FormsField extends Field {
       );
     }
 
+    form.emitChange(creating ? 'didCreateRecord' : 'didUpdateRecord');
+
     globals.displaySnackbar(this.getSingularLabel() + ' saved');
   }
 
@@ -563,6 +566,8 @@ export default class FormsField extends Field {
 
     // }
 
+    form.emitChange('didArchiveRecord');
+
     globals.displaySnackbar(this.getSingularLabel() + ' deleted');
   }
 
@@ -576,6 +581,8 @@ export default class FormsField extends Field {
 
     // Remove from list
     this.removeForm(form.getField('id').getValue());
+
+    form.emitChange('didRestoreRecord');
 
     globals.displaySnackbar(this.getSingularLabel() + ' restored');
   }
