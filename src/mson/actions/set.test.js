@@ -52,7 +52,8 @@ it('should set', async () => {
     name: {
       firstName: 'Michael',
       lastName: 'Jackson'
-    }
+    },
+    save: null
   });
 });
 
@@ -88,6 +89,7 @@ it('should set nested components', async () => {
     id: null,
     name: {
       lastName: 'Jackson'
-    }
+    },
+    save: null
   });
 });
