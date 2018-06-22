@@ -13,9 +13,11 @@ export default class User extends Form {
           name: 'username',
           label: 'Email',
           required: true,
-          forbidSort: true // TODO: enable once can sort
+          forbidSort: true, // TODO: enable once can sort
           // in: false,
-          // out: false
+
+          // False so that derived components don't create this field
+          out: false
         }
       })
     );
