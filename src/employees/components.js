@@ -16,6 +16,16 @@ export const employee = {
       label: 'Last Name',
       required: true,
       before: 'username'
+    },
+    {
+      component: 'SelectField',
+      name: 'roles',
+      label: 'Roles',
+      multiple: true,
+      options: [
+        { value: 'admin', label: 'Admin' },
+        { value: 'manager', label: 'Manager' }
+      ]
     }
   ],
   roles: ['employee']
