@@ -190,30 +190,35 @@ export default class Component extends events.EventEmitter {
       // leak
       this._setIfUndefinedProp(props, 'listeners');
       props.listeners.forEach(listener => {
-        this.on(listener.event, async () => {
-          let output = null;
-          for (const i in listener.actions) {
-            const action = listener.actions[i];
+        const events = Array.isArray(listener.event)
+          ? listener.event
+          : [listener.event];
+        events.forEach(event => {
+          this.on(event, async () => {
+            let output = null;
+            for (const i in listener.actions) {
+              const action = listener.actions[i];
 
-            // Pass the previous action's output as this actions arguments
-            output = await action.run({
-              event: listener.event,
-              component: this,
-              ifData,
-              arguments: output
-            });
-          }
+              // Pass the previous action's output as this actions arguments
+              output = await action.run({
+                event: event,
+                component: this,
+                ifData,
+                arguments: output
+              });
+            }
 
-          switch (listener.event) {
-            case 'create':
-              this._emitCreated();
-              break;
-            case 'load':
-              this._emitLoaded();
-              break;
-            default:
-              break;
-          }
+            switch (event) {
+              case 'create':
+                this._emitCreated();
+                break;
+              case 'load':
+                this._emitLoaded();
+                break;
+              default:
+                break;
+            }
+          });
         });
       });
     }

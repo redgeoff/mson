@@ -361,19 +361,6 @@ compiler.registerComponent('app.Employees', {
         component: 'RecordStore',
         type: 'app.Employee'
       }
-
-      // TODO: remove
-      // listeners: [
-      //   {
-      //     event: 'load',
-      //     actions: [
-      //       {
-      //         component: 'GetRecords',
-      //         type: 'app.Employee'
-      //       }
-      //     ]
-      //   }
-      // ]
     }
   ]
 });

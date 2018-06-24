@@ -47,7 +47,7 @@ export default class User extends Form {
 
     const listeners = [
       {
-        event: 'willCreateRecord',
+        event: ['willCreateRecord', 'willUpdateRecord'],
         actions: [
           new Set({
             name: 'fields.password.hidden',
