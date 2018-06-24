@@ -34,6 +34,17 @@ export default class User extends Form {
       })
     );
 
+    this.addField(
+      new MSONComponent({
+        definition: {
+          component: 'ButtonField',
+          name: 'setPassword',
+          label: 'Set Password',
+          hidden: true
+        }
+      })
+    );
+
     const schema = {
       component: 'Form',
       fields: [
@@ -47,7 +58,7 @@ export default class User extends Form {
 
     const listeners = [
       {
-        event: ['willCreateRecord', 'willUpdateRecord'],
+        event: 'willCreateRecord',
         actions: [
           new Set({
             name: 'fields.password.hidden',
@@ -60,6 +71,15 @@ export default class User extends Form {
           new Set({
             name: 'fields.password.required',
             value: true
+          })
+        ]
+      },
+      {
+        event: 'willReadRecord',
+        actions: [
+          new Set({
+            name: 'fields.setPassword.hidden',
+            value: false
           })
         ]
       },
@@ -77,6 +97,10 @@ export default class User extends Form {
           new Set({
             name: 'fields.password.required',
             value: false
+          }),
+          new Set({
+            name: 'fields.setPassword.hidden',
+            value: true
           })
         ]
       }

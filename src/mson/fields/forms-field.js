@@ -465,7 +465,8 @@ export default class FormsField extends Field {
       'spacerId',
       'bufferTopId',
       'isLoading',
-      'order'
+      'order',
+      'mode'
     );
   }
 
@@ -497,7 +498,8 @@ export default class FormsField extends Field {
       'spacerId',
       'bufferTopId',
       'isLoading',
-      'order'
+      'order',
+      'mode'
     );
     return value === undefined ? super.getOne(name) : value;
   }

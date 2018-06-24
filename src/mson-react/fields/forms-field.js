@@ -42,8 +42,6 @@ const styles = theme => ({
 
 class FormsField extends React.PureComponent {
   state = {
-    open: false, // TODO: rename to openDialog
-    mode: 'view',
     currentForm: null,
     confirmationOpen: false,
     targetForm: null,
@@ -65,7 +63,7 @@ class FormsField extends React.PureComponent {
 
   handleClose = () => {
     this.emitOnClose();
-    this.setState({ open: false });
+    this.props.field.set({ mode: null });
   };
 
   prepareForm(form) {
@@ -86,11 +84,16 @@ class FormsField extends React.PureComponent {
     this.copyValues(currentForm, form);
     currentForm.setEditable(false);
     this.prepareForm(currentForm);
-    this.setState({ open: true, mode: 'view', targetForm: form });
+    this.setState({ targetForm: form });
+    this.props.field.set({ mode: 'view' });
   };
 
   handleEdit = form => {
     const { currentForm } = this.state;
+
+    // Emit doneEditingRecord so that cleanup can be done for any previous viewing
+    currentForm.emitChange('doneEditingRecord', currentForm.getValue('id'));
+
     currentForm.emitChange('willUpdateRecord', form.getValue('id'));
 
     // The forms will be the same if the user clicks edit from view form dialog
@@ -102,7 +105,7 @@ class FormsField extends React.PureComponent {
     currentForm.setEditable(true);
     this.prepareForm(currentForm);
 
-    this.setState({ open: true, mode: 'edit' });
+    this.props.field.set({ mode: 'edit' });
   };
 
   handleNew = () => {
@@ -111,7 +114,7 @@ class FormsField extends React.PureComponent {
     currentForm.clearValues();
     currentForm.setEditable(true);
     this.prepareForm(currentForm);
-    this.setState({ open: true, mode: 'new' });
+    this.props.field.set({ mode: 'new' });
   };
 
   handleSave = async () => {
@@ -127,9 +130,15 @@ class FormsField extends React.PureComponent {
     }
   };
 
+  isOpen() {
+    return !!this.props.mode;
+  }
+
   handleDelete = async form => {
     // Set the id so that it can be deleted after the confirmation
-    const { currentForm, open, targetForm } = this.state;
+    const { currentForm, targetForm } = this.state;
+
+    const open = this.isOpen();
     currentForm.getField('id').setValue(form.getField('id').getValue());
 
     // Use the targetForm when specified
@@ -145,7 +154,8 @@ class FormsField extends React.PureComponent {
       if (open) {
         // Close it
         this.emitOnClose();
-        this.setState({ open: false, targetForm: null });
+        this.setState({ targetForm: null });
+        this.props.field.set({ mode: null });
       }
     } else {
       // const singularLabel = this.props.field.getSingularLabel().toLowerCase();
@@ -153,11 +163,11 @@ class FormsField extends React.PureComponent {
       this.emitOnClose();
       this.setState({
         targetForm: formToDelete,
-        open: false,
         confirmationOpen: true,
         // confirmationTitle: `Are you sure you want to delete this ${singularLabel}?`
         confirmationTitle: 'Delete this?'
       });
+      this.props.field.set({ mode: null });
     }
   };
 
@@ -323,12 +333,11 @@ class FormsField extends React.PureComponent {
       field,
       spacerHeight,
       classes,
-      isLoading
+      isLoading,
+      mode
     } = this.props;
 
     const {
-      open,
-      mode,
       currentForm,
       confirmationOpen,
       confirmationTitle,
@@ -353,6 +362,8 @@ class FormsField extends React.PureComponent {
     const showNoRecords = searchString && !isLoading && cards.length === 0;
 
     const header = this.header(cards.length);
+
+    const open = this.isOpen();
 
     return (
       <div>
@@ -413,6 +424,7 @@ FormsField = attach([
   'disabled',
   'spacerHeight',
   'bufferTopId',
-  'isLoading'
+  'isLoading',
+  'mode'
 ])(FormsField);
 export default FormsField;

@@ -25,7 +25,8 @@ export const employee = {
       options: [
         { value: 'admin', label: 'Admin' },
         { value: 'manager', label: 'Manager' }
-      ]
+      ],
+      before: 'setPassword'
     }
   ],
   roles: ['employee']
