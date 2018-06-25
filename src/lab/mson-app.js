@@ -361,7 +361,8 @@ compiler.registerComponent('app.Employees', {
             component: 'ButtonField',
             name: 'setPassword',
             label: 'Set Password',
-            hidden: true
+            hidden: true,
+            icon: 'VpnKey'
           }
         ],
         listeners: [
