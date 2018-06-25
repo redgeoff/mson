@@ -509,6 +509,11 @@ export default class FormsField extends Field {
         this._emitEndEvents();
       }
 
+      // Note: we set the parent here instead of in set() as otherwise we create a circular
+      // dependency that the Compiler doesn't support.
+      const form = this.get('form');
+      form.set({ parent: this });
+
       switch (props.mode) {
         case 'create':
           this._createMode();
@@ -544,11 +549,6 @@ export default class FormsField extends Field {
 
     // Only set properties of forms if property is null
     this._setOnAllForms(props, ['err'], null);
-
-    if (props.form !== undefined) {
-      // TODO: need to restore
-      // props.form.set({ parent: this });
-    }
 
     this._setIfUndefined(
       props,
