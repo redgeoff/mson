@@ -146,6 +146,10 @@ export default class Component extends events.EventEmitter {
     this._setIfUndefinedProp(props, 'passed');
   }
 
+  _setParent(props) {
+    this._setIfUndefinedProp(props, 'parent');
+  }
+
   // TODO: use this in _create() instead of set() for defaults
   _setDefaults(props, values) {
     _.each(values, (value, name) => {
@@ -231,6 +235,7 @@ export default class Component extends events.EventEmitter {
     this._setName(props);
     this._setListeners(props);
     this._setPassed(props);
+    this._setParent(props);
 
     if (props.schema !== undefined) {
       // Schemas are pushed that they can accumulate through the layers of inheritance
@@ -250,7 +255,14 @@ export default class Component extends events.EventEmitter {
   }
 
   getOne(name) {
-    return this._getIfAllowed(name, 'name', 'listeners', 'passed', 'schema');
+    return this._getIfAllowed(
+      name,
+      'name',
+      'listeners',
+      'passed',
+      'schema',
+      'parent'
+    );
   }
 
   get(names) {

@@ -84,7 +84,7 @@ export default class User extends Form {
         ]
       },
       {
-        event: 'doneEditingRecord',
+        event: ['willUpdateRecord'],
         actions: [
           new Set({
             name: 'fields.password.hidden',
@@ -101,6 +101,15 @@ export default class User extends Form {
           new Set({
             name: 'fields.setPassword.hidden',
             value: true
+          })
+        ]
+      },
+      {
+        event: 'setPassword',
+        actions: [
+          new Set({
+            name: 'parent.mode',
+            value: 'update'
           })
         ]
       }

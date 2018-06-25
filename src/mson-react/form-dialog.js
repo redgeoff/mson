@@ -7,21 +7,12 @@ import Form from './form';
 import attach from './attach';
 
 class FormDialog extends React.PureComponent {
-  state = {
-    open: false
-  };
-
-  handleClickOpen = () => {
-    this.setState({ open: true });
-  };
-
   handleClose = withCancelButton => {
     // Prevent the user from losing data when pressing esc or clicking outside dialog
-    if (withCancelButton || this.props.mode !== 'edit') {
-      this.setState({ open: false });
-
-      if (this.props.onClose) {
-        this.props.onClose();
+    const { mode, onClose } = this.props;
+    if (withCancelButton || mode !== 'update') {
+      if (onClose) {
+        onClose();
       }
     }
   };
@@ -47,28 +38,20 @@ class FormDialog extends React.PureComponent {
     }
   };
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.open !== this.props.open) {
-      this.setState({ open: this.props.open });
-    }
+  isOpen() {
+    return !!this.props.mode;
   }
 
   render() {
-    const {
-      mode,
-      form,
-      forbidUpdate,
-      forbidDelete,
-      editable,
-      disabled,
-      archivedAt
-    } = this.props;
+    const { mode, form, forbidUpdate, forbidDelete, archivedAt } = this.props;
 
     const disableSave = form.hasErrorForTouchedField() || !form.get('dirty');
 
+    const open = this.isOpen();
+
     let buttons = null;
 
-    if (mode === 'edit' || mode === 'new') {
+    if (mode === 'update' || mode === 'create') {
       buttons = (
         <div>
           {/* We use type=submit so that the form is submitted when the user presses enter */}
@@ -85,7 +68,7 @@ class FormDialog extends React.PureComponent {
           />
         </div>
       );
-    } else if (editable && !disabled && (!forbidUpdate || !forbidDelete)) {
+    } else if (!forbidUpdate || !forbidDelete) {
       buttons = (
         <div>
           {forbidUpdate ? (
@@ -112,7 +95,7 @@ class FormDialog extends React.PureComponent {
 
     return (
       <Dialog
-        open={this.state.open}
+        open={open}
         onClose={() => this.handleClose(false)}
         aria-labelledby="form-dialog-title"
       >
@@ -129,5 +112,5 @@ class FormDialog extends React.PureComponent {
 }
 
 FormDialog = withMobileDialog()(FormDialog);
-FormDialog = attach(['err', 'dirty'], 'form')(FormDialog);
+FormDialog = attach(['err', 'dirty', 'archivedAt'], 'form')(FormDialog);
 export default FormDialog;

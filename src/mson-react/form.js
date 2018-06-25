@@ -13,21 +13,8 @@ class Form extends React.PureComponent {
     form.set({ autoValidate: true });
   }
 
-  // TODO: use access operation names instead of modes like new, edit, etc...?
-  modeToOperation(mode) {
-    switch (mode) {
-      case 'new':
-        return 'create';
-      case 'edit':
-        return 'update';
-      default:
-        // case 'read':
-        return 'read';
-    }
-  }
-
   adjustAccess(formAccess, mode) {
-    const op = this.modeToOperation(mode);
+    const op = mode;
     const form = this.props.form;
     this.fieldsCanAccess = access.fieldsCanAccess(op, form);
 

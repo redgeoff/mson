@@ -335,6 +335,8 @@ export default class FormsField extends Field {
 
     clonedForm.setValues(values);
 
+    clonedForm.set({ parent: this });
+
     const id = clonedForm.getField('id');
     let key = 0;
     if (id.isBlank()) {
@@ -432,6 +434,77 @@ export default class FormsField extends Field {
     });
   }
 
+  prepareForm(form) {
+    form.setTouched(false);
+    form.clearErrs();
+    form.setDirty(false);
+  }
+
+  _setCurrentForm(props) {
+    if (
+      props.currentForm !== undefined &&
+      props.currentForm !== this._currentForm
+    ) {
+      const form = this.get('form');
+      if (props.currentForm === null) {
+        form.clearValues();
+        form.set({ userId: null });
+        this.prepareForm(form);
+      } else {
+        // We get the values and userId as currentForm may actually be form
+        const currentForm = props.currentForm;
+        const values = currentForm.getValues();
+        const userId = currentForm.get('userId');
+        const archivedAt = currentForm.get('archivedAt');
+        form.clearValues();
+        form.setValues(values);
+        form.set({ userId, archivedAt });
+        this.prepareForm(form);
+        this._set('currentForm', currentForm);
+      }
+    }
+  }
+
+  _readMode() {
+    const form = this.get('form');
+    form.emitChange('willReadRecord', form.getValue('id'));
+    form.setEditable(false);
+  }
+
+  _createMode() {
+    const form = this.get('form');
+    form.emitChange('willCreateRecord');
+    form.setEditable(true);
+  }
+
+  _updateMode() {
+    const form = this.get('form');
+    form.emitChange('willUpdateRecord', form.getValue('id'));
+    form.setEditable(true);
+  }
+
+  _setMode(props) {
+    if (props.mode !== undefined && props.mode !== this._mode) {
+      switch (props.mode) {
+        case 'create':
+          this._createMode();
+          break;
+
+        case 'update':
+          this._updateMode();
+          break;
+
+        case 'read':
+          this._readMode();
+          break;
+
+        default:
+          break;
+      }
+      this._set('mode', props.mode);
+    }
+  }
+
   set(props) {
     super.set(props);
 
@@ -447,6 +520,10 @@ export default class FormsField extends Field {
 
     // Only set properties of forms if property is null
     this._setOnAllForms(props, ['err'], null);
+
+    if (props.form !== undefined) {
+      props.form.set({ parent: this });
+    }
 
     this._setIfUndefined(
       props,
@@ -465,9 +542,12 @@ export default class FormsField extends Field {
       'spacerId',
       'bufferTopId',
       'isLoading',
-      'order',
-      'mode'
+      'order'
     );
+
+    this._setCurrentForm(props);
+
+    this._setMode(props);
   }
 
   _getValue() {
@@ -499,6 +579,7 @@ export default class FormsField extends Field {
       'bufferTopId',
       'isLoading',
       'order',
+      'currentForm',
       'mode'
     );
     return value === undefined ? super.getOne(name) : value;
@@ -512,7 +593,7 @@ export default class FormsField extends Field {
     yield* this._forms.values();
   }
 
-  async save(form) {
+  async _saveForm(form) {
     // await this._docs.set(form.getValues());
     const id = form.getField('id');
     const store = this.get('store');
@@ -556,6 +637,18 @@ export default class FormsField extends Field {
     );
 
     globals.displaySnackbar(this.getSingularLabel() + ' saved');
+  }
+
+  async save() {
+    const form = this.get('form');
+
+    // No errors?
+    form.setTouched(true);
+    form.validate();
+    if (form.getErrs().length === 0) {
+      await this._saveForm(form);
+      this.set({ mode: null });
+    }
   }
 
   async archive(form) {
