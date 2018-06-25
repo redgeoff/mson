@@ -149,3 +149,22 @@ export const onGetItemElementMock = id => {
     offsetHeight: 100
   };
 };
+
+const asyncNoop = async () => {};
+
+export const createMockedStore = () => {
+  return {
+    getAll: async props => {
+      const records = await onGetAllPeople(props);
+      return {
+        data: {
+          records
+        }
+      };
+    },
+    create: asyncNoop,
+    update: asyncNoop,
+    archive: asyncNoop,
+    restore: asyncNoop
+  };
+};

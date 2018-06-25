@@ -440,28 +440,31 @@ export default class FormsField extends Field {
     form.setDirty(false);
   }
 
-  _setCurrentForm(props) {
+  _setCurrentForm(currentForm) {
+    const form = this.get('form');
+    if (currentForm === null) {
+      form.clearValues();
+      form.set({ userId: null });
+      this.prepareForm(form);
+    } else {
+      // We get the values and userId as currentForm may actually be form
+      const values = currentForm.getValues();
+      const userId = currentForm.get('userId');
+      const archivedAt = currentForm.get('archivedAt');
+      form.clearValues();
+      form.setValues(values);
+      form.set({ userId, archivedAt });
+      this.prepareForm(form);
+      this._set('currentForm', currentForm);
+    }
+  }
+
+  _setCurrentFormFromProps(props) {
     if (
       props.currentForm !== undefined &&
       props.currentForm !== this._currentForm
     ) {
-      const form = this.get('form');
-      if (props.currentForm === null) {
-        form.clearValues();
-        form.set({ userId: null });
-        this.prepareForm(form);
-      } else {
-        // We get the values and userId as currentForm may actually be form
-        const currentForm = props.currentForm;
-        const values = currentForm.getValues();
-        const userId = currentForm.get('userId');
-        const archivedAt = currentForm.get('archivedAt');
-        form.clearValues();
-        form.setValues(values);
-        form.set({ userId, archivedAt });
-        this.prepareForm(form);
-        this._set('currentForm', currentForm);
-      }
+      this._setCurrentForm(props.currentForm);
     }
   }
 
@@ -530,6 +533,7 @@ export default class FormsField extends Field {
         default:
           break;
       }
+
       this._set('mode', props.mode);
     }
   }
@@ -570,7 +574,7 @@ export default class FormsField extends Field {
       'order'
     );
 
-    this._setCurrentForm(props);
+    this._setCurrentFormFromProps(props);
 
     this._setMode(props);
   }
@@ -762,7 +766,7 @@ export default class FormsField extends Field {
       return this.get('singularLabel');
     } else {
       // Automatically calculate singular label by removing last 's'
-      const label = this.get('label');
+      const label = this.get('label') ? this.get('label') : '';
       return label.substr(0, label.length - 1);
     }
   }
