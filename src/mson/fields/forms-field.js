@@ -672,7 +672,7 @@ export default class FormsField extends Field {
     form.validate();
     if (form.getErrs().length === 0) {
       await this._saveForm(form);
-      this.set({ mode: null });
+      this.set({ mode: 'read' });
     }
   }
 

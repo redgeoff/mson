@@ -89,6 +89,11 @@ class FormDialog extends React.PureComponent {
               onClick={this.handleDelete}
             />
           )}
+          <Button
+            label="Close"
+            iconComponent={Cancel}
+            onClick={() => this.handleClose(true)}
+          />
         </div>
       );
     }
