@@ -546,7 +546,8 @@ export default class FormsField extends Field {
     this._setOnAllForms(props, ['err'], null);
 
     if (props.form !== undefined) {
-      props.form.set({ parent: this });
+      // TODO: need to restore
+      // props.form.set({ parent: this });
     }
 
     this._setIfUndefined(

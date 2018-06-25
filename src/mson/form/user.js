@@ -1,7 +1,6 @@
 import Form from './form';
 import MSONComponent from '../component/mson-component';
 import Roles from '../roles';
-import Set from '../actions/set';
 
 export default class User extends Form {
   _create(props) {
@@ -34,17 +33,6 @@ export default class User extends Form {
       })
     );
 
-    this.addField(
-      new MSONComponent({
-        definition: {
-          component: 'ButtonField',
-          name: 'setPassword',
-          label: 'Set Password',
-          hidden: true
-        }
-      })
-    );
-
     const schema = {
       component: 'Form',
       fields: [
@@ -56,73 +44,8 @@ export default class User extends Form {
       ]
     };
 
-    const listeners = [
-      {
-        event: 'beginCreate',
-        actions: [
-          new Set({
-            name: 'fields.password.hidden',
-            value: false
-          }),
-          new Set({
-            name: 'fields.password.out',
-            value: true
-          }),
-          new Set({
-            name: 'fields.password.required',
-            value: true
-          })
-        ]
-      },
-      {
-        event: 'endCreate',
-        actions: [
-          new Set({
-            name: 'fields.password.hidden',
-            value: true
-          }),
-          new Set({
-            name: 'fields.password.out',
-            value: false
-          }),
-          new Set({
-            name: 'fields.password.required',
-            value: false
-          })
-        ]
-      },
-      {
-        event: 'beginRead',
-        actions: [
-          new Set({
-            name: 'fields.setPassword.hidden',
-            value: false
-          })
-        ]
-      },
-      {
-        event: 'endRead',
-        actions: [
-          new Set({
-            name: 'fields.setPassword.hidden',
-            value: true
-          })
-        ]
-      },
-      {
-        event: 'setPassword',
-        actions: [
-          new Set({
-            name: 'parent.mode',
-            value: 'update'
-          })
-        ]
-      }
-    ];
-
     this.set({
-      schema,
-      listeners
+      schema
     });
   }
 
