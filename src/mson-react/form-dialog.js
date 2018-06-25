@@ -9,10 +9,16 @@ import attach from './attach';
 class FormDialog extends React.PureComponent {
   handleClose = withCancelButton => {
     // Prevent the user from losing data when pressing esc or clicking outside dialog
-    const { mode, onClose } = this.props;
+    const { mode, onClose, onRead } = this.props;
     if (withCancelButton || mode !== 'update') {
-      if (onClose) {
-        onClose();
+      if (mode === 'update') {
+        if (onRead) {
+          onRead();
+        }
+      } else {
+        if (onClose) {
+          onClose();
+        }
       }
     }
   };

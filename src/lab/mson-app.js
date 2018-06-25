@@ -498,18 +498,6 @@ compiler.registerComponent('app.Employees', {
         type: 'app.Employee'
       }
     }
-  ],
-  listeners: [
-    {
-      event: 'setPassword',
-      actions: [
-        {
-          componet: 'Set',
-          name: 'mode',
-          value: 'update'
-        }
-      ]
-    }
   ]
 });
 
