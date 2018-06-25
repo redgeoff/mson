@@ -449,11 +449,6 @@ compiler.registerComponent('app.Employees', {
           {
             event: 'setPassword',
             actions: [
-              // {
-              //   component: 'Set',
-              //   name: 'snapshot',
-              //   value: 'take'
-              // },
               {
                 component: 'Set',
                 name: 'hidden',
@@ -461,29 +456,13 @@ compiler.registerComponent('app.Employees', {
               },
               {
                 component: 'Set',
-                name: 'fields.password.hidden',
-                value: false
+                name: 'fields.password',
+                value: {
+                  hidden: false,
+                  required: true,
+                  out: true
+                }
               },
-              {
-                component: 'Set',
-                name: 'fields.password.required',
-                value: true
-              },
-              {
-                component: 'Set',
-                name: 'fields.password.out',
-                value: true
-              },
-              // TODO: allow for
-              // {
-              //   component: 'Set',
-              //   name: 'fields.password',
-              //   value: {
-              //     hidden: false,
-              //     required: true,
-              //     out: true
-              //   }
-              // },
               {
                 component: 'Set',
                 name: 'parent.mode',

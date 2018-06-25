@@ -11,6 +11,14 @@ export default class Set extends Action {
     return value === undefined ? super.getOne(name) : value;
   }
 
+  _setOnComponent(component, name, value) {
+    if (typeof value === 'object') {
+      component.set(value);
+    } else {
+      component.set({ [name]: value });
+    }
+  }
+
   _setProp(props) {
     const name = this.get('name');
     let names = name !== null ? name.split('.') : [];
@@ -20,17 +28,18 @@ export default class Set extends Action {
       // No name was specified to so pipe to next action
       return value;
     } else if (names.length === 1) {
-      props.component.set({
-        [name]: value
-      });
+      this._setOnComponent(props.component, name, value);
     } else {
       let component = props.component.get(names[0]);
-      for (let i = 1; i < names.length - 1; i++) {
+
+      const length =
+        typeof value === 'object' ? names.length : names.length - 1;
+
+      for (let i = 1; i < length; i++) {
         component = component.get(names[i]);
       }
-      component.set({
-        [names[names.length - 1]]: value
-      });
+
+      this._setOnComponent(component, names[names.length - 1], value);
     }
   }
 
