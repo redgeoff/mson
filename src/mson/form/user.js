@@ -58,7 +58,7 @@ export default class User extends Form {
 
     const listeners = [
       {
-        event: 'willCreateRecord',
+        event: 'beginCreate',
         actions: [
           new Set({
             name: 'fields.password.hidden',
@@ -75,7 +75,24 @@ export default class User extends Form {
         ]
       },
       {
-        event: 'willReadRecord',
+        event: 'endCreate',
+        actions: [
+          new Set({
+            name: 'fields.password.hidden',
+            value: true
+          }),
+          new Set({
+            name: 'fields.password.out',
+            value: false
+          }),
+          new Set({
+            name: 'fields.password.required',
+            value: false
+          })
+        ]
+      },
+      {
+        event: 'beginRead',
         actions: [
           new Set({
             name: 'fields.setPassword.hidden',
@@ -84,20 +101,8 @@ export default class User extends Form {
         ]
       },
       {
-        event: ['willUpdateRecord'],
+        event: 'endRead',
         actions: [
-          new Set({
-            name: 'fields.password.hidden',
-            value: true
-          }),
-          new Set({
-            name: 'fields.password.out',
-            value: false
-          }),
-          new Set({
-            name: 'fields.password.required',
-            value: false
-          }),
           new Set({
             name: 'fields.setPassword.hidden',
             value: true
