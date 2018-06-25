@@ -380,12 +380,18 @@ compiler.registerComponent('app.Employees', {
             actions: [
               {
                 component: 'Set',
-                name: 'fields.password',
-                value: {
-                  hidden: false,
-                  required: true,
-                  out: true
-                }
+                name: 'fields.password.hidden',
+                value: false
+              },
+              {
+                component: 'Set',
+                name: 'fields.password.required',
+                value: true
+              },
+              {
+                component: 'Set',
+                name: 'fields.password.out',
+                value: true
               }
             ]
           },
@@ -439,12 +445,18 @@ compiler.registerComponent('app.Employees', {
               },
               {
                 component: 'Set',
-                name: 'fields.password',
-                value: {
-                  hidden: false,
-                  required: true,
-                  out: true
-                }
+                name: 'fields.password.hidden',
+                value: false
+              },
+              {
+                component: 'Set',
+                name: 'fields.password.required',
+                value: true
+              },
+              {
+                component: 'Set',
+                name: 'fields.password.out',
+                value: true
               },
               {
                 component: 'Set',
