@@ -25,8 +25,10 @@ const createField = props => {
   return field;
 };
 
-it('should change modes', async () => {
-  const field = createField({
+let field = null;
+
+beforeEach(async () => {
+  field = createField({
     store: createMockedStore()
   });
 
@@ -34,7 +36,9 @@ it('should change modes', async () => {
   let changed = testUtils.once(field, 'change');
   field.emitLoad();
   await changed;
+});
 
+it('should change modes', async () => {
   const form = field.get('form');
   const firstForm = field._forms.first();
   const setEditable = jest.spyOn(form, 'setEditable');
@@ -94,5 +98,46 @@ it('should change modes', async () => {
 });
 
 it('should set current form', () => {
-  // TODO: test all branches in fn
+  const form = field.get('form');
+  const firstForm = field._forms.first();
+  const clearValues = jest.spyOn(form, 'clearValues');
+  const set = jest.spyOn(form, 'set');
+  const prepareForm = jest.spyOn(field, 'prepareForm');
+
+  // Mock
+  const userId = 1;
+  const archivedAt = new Date().toISOString();
+  firstForm.set({
+    archivedAt,
+    userId
+  });
+
+  // currentForm is null
+  field._setCurrentForm(null);
+  expect(clearValues).toHaveBeenCalledTimes(1);
+  expect(set).toHaveBeenCalledWith({ userId: null });
+  expect(prepareForm).toHaveBeenCalledTimes(1);
+
+  // currentForm is not null
+  clearValues.mockClear();
+  set.mockClear();
+  prepareForm.mockClear();
+  field._setCurrentForm(firstForm);
+  expect(clearValues).toHaveBeenCalledTimes(1);
+  expect(set).toHaveBeenCalledWith({
+    userId,
+    archivedAt,
+    value: firstForm.getValues()
+  });
+  expect(prepareForm).toHaveBeenCalledTimes(1);
+
+  // currentForm is form
+  set.mockClear();
+  field.set({ currentForm: firstForm });
+  field._setCurrentForm(firstForm);
+  expect(set).toHaveBeenCalledWith({
+    userId,
+    archivedAt,
+    value: firstForm.getValues()
+  });
 });

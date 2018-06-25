@@ -452,8 +452,7 @@ export default class FormsField extends Field {
       const userId = currentForm.get('userId');
       const archivedAt = currentForm.get('archivedAt');
       form.clearValues();
-      form.setValues(values);
-      form.set({ userId, archivedAt });
+      form.set({ userId, archivedAt, value: values });
       this.prepareForm(form);
       this._set('currentForm', currentForm);
     }
