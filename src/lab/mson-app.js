@@ -380,39 +380,22 @@ compiler.registerComponent('app.Employees', {
             actions: [
               {
                 component: 'Set',
-                name: 'fields.password.hidden',
-                value: false
-              },
-              {
-                component: 'Set',
-                name: 'fields.password.out',
-                value: true
-              },
-              {
-                component: 'Set',
-                name: 'fields.password.required',
-                value: true
+                name: 'fields.password',
+                value: {
+                  hidden: false,
+                  required: true,
+                  out: true
+                }
               }
             ]
           },
           {
             event: 'endCreate',
             actions: [
-              // TODO: just use restoreSnapshot here and takeSnapshot above
               {
                 component: 'Set',
-                name: 'fields.password.hidden',
-                value: true
-              },
-              {
-                component: 'Set',
-                name: 'fields.password.out',
-                value: false
-              },
-              {
-                component: 'Set',
-                name: 'fields.password.required',
-                value: false
+                name: 'snapshot',
+                value: 'restore'
               }
             ]
           },
