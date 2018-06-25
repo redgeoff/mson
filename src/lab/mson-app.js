@@ -366,6 +366,16 @@ compiler.registerComponent('app.Employees', {
         ],
         listeners: [
           {
+            event: 'loaded',
+            actions: [
+              {
+                component: 'Set',
+                name: 'snapshot',
+                value: 'take'
+              }
+            ]
+          },
+          {
             event: 'beginCreate',
             actions: [
               {
@@ -388,6 +398,7 @@ compiler.registerComponent('app.Employees', {
           {
             event: 'endCreate',
             actions: [
+              // TODO: just use restoreSnapshot here and takeSnapshot above
               {
                 component: 'Set',
                 name: 'fields.password.hidden',
@@ -426,8 +437,53 @@ compiler.registerComponent('app.Employees', {
             ]
           },
           {
+            event: 'endUpdate',
+            actions: [
+              {
+                component: 'Set',
+                name: 'snapshot',
+                value: 'restore'
+              }
+            ]
+          },
+          {
             event: 'setPassword',
             actions: [
+              // {
+              //   component: 'Set',
+              //   name: 'snapshot',
+              //   value: 'take'
+              // },
+              {
+                component: 'Set',
+                name: 'hidden',
+                value: true
+              },
+              {
+                component: 'Set',
+                name: 'fields.password.hidden',
+                value: false
+              },
+              {
+                component: 'Set',
+                name: 'fields.password.required',
+                value: true
+              },
+              {
+                component: 'Set',
+                name: 'fields.password.out',
+                value: true
+              },
+              // TODO: allow for
+              // {
+              //   component: 'Set',
+              //   name: 'fields.password',
+              //   value: {
+              //     hidden: false,
+              //     required: true,
+              //     out: true
+              //   }
+              // },
               {
                 component: 'Set',
                 name: 'parent.mode',
