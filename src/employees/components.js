@@ -18,16 +18,6 @@ export const employee = {
       before: 'username'
     },
     {
-      component: 'SelectField',
-      name: 'roles',
-      label: 'Roles',
-      multiple: true,
-      options: [
-        { value: 'admin', label: 'Admin' },
-        { value: 'manager', label: 'Manager' }
-      ]
-    },
-    {
       name: 'departments',
       label: 'Departments',
       component: 'SelectField',
@@ -36,6 +26,16 @@ export const employee = {
       // the options in the backend as well.
       ensureInList: false,
       multiple: true
+    },
+    {
+      component: 'SelectField',
+      name: 'roles',
+      label: 'Roles',
+      multiple: true,
+      options: [
+        { value: 'admin', label: 'Admin' },
+        { value: 'manager', label: 'Manager' }
+      ]
     }
   ],
   roles: ['employee'],
