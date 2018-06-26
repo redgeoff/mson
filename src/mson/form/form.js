@@ -163,11 +163,12 @@ export default class Form extends Component {
   }
 
   copyFields(form) {
-    form._fields.each(field => {
-      // Use clone() as we don't want to copy the original listeners as they may be in use by
-      // unexpected areas in the system
-      this.addField(field.clone());
-    });
+    form._fields.each(field => this.addField(field));
+    this._emitChange('fields');
+  }
+
+  cloneFields(form) {
+    form._fields.each(field => this.addField(field.clone()));
     this._emitChange('fields');
   }
 
@@ -196,7 +197,7 @@ export default class Form extends Component {
     }
 
     if (props.form !== undefined) {
-      this.copyFields(props.form);
+      this.cloneFields(props.form);
       this.copyValidators(props.form);
       this.copyListeners(props.form);
     }
@@ -553,7 +554,26 @@ export default class Form extends Component {
     // Remove the fields as we need to re-add them below
     clonedForm._fields.clear();
 
-    clonedForm.copyFields(this);
+    // Clone the fields and recreate any listeners
+    clonedForm.cloneFields(this);
+
+    return clonedForm;
+  }
+
+  // Provides a significantly faster way of cloning the form than clone(). The tradeoff is that
+  // properties are not deep cloned and so there can be some shared data between the cloned form and
+  // the original form.
+  cloneFast() {
+    // Note: cloneDeep() is significantly slower than creating a new form and copying over the fields
+    // and properties
+    const clonedForm = new this.constructor();
+
+    // Copy over the properties
+    const props = this.get();
+    clonedForm.set(Object.assign({}, props, { fields: undefined }));
+
+    // Clone the fields and recreate any listeners
+    clonedForm.cloneFields(this);
 
     return clonedForm;
   }
