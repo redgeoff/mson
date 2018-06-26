@@ -26,6 +26,16 @@ export const employee = {
         { value: 'admin', label: 'Admin' },
         { value: 'manager', label: 'Manager' }
       ]
+    },
+    {
+      name: 'departments',
+      label: 'Departments',
+      component: 'SelectField',
+
+      // TODO: is this really the best way to handle this? A better alternative is probably to load
+      // the options in the backend as well.
+      ensureInList: false,
+      multiple: true
     }
   ],
   roles: ['employee'],

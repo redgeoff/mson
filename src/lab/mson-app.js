@@ -478,7 +478,30 @@ compiler.registerComponent('app.Employees', {
       store: {
         component: 'RecordStore',
         type: 'app.Employee'
-      }
+      },
+      listeners: [
+        {
+          event: 'load',
+          actions: [
+            {
+              component: 'GetRecords',
+              type: 'app.Department'
+            },
+            {
+              component: 'Iterator',
+              iterator: 'arguments.edges',
+              return: {
+                value: '{{item.node.id}}',
+                label: '{{item.node.fieldValues.name}}'
+              }
+            },
+            {
+              component: 'Set',
+              name: 'form.fields.departments.options'
+            }
+          ]
+        }
+      ]
     }
   ]
 });
