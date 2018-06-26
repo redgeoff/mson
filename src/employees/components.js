@@ -18,6 +18,16 @@ export const employee = {
       before: 'username'
     },
     {
+      name: 'departments',
+      label: 'Departments',
+      component: 'SelectField',
+
+      // TODO: is this really the best way to handle this? A better alternative is probably to load
+      // the options in the backend as well.
+      ensureInList: false,
+      multiple: true
+    },
+    {
       component: 'SelectField',
       name: 'roles',
       label: 'Roles',
@@ -39,6 +49,9 @@ export const employee = {
       },
       roles: {
         update: 'admin'
+      },
+      departments: {
+        update: 'manager'
       }
     }
   }
@@ -99,73 +112,6 @@ export const department = {
         create: 'employee',
         update: 'owner'
       }
-    }
-  }
-};
-
-// TODO: remove after fix so that can use Employee component for this
-export const tmpEmployee = {
-  name: 'app.TmpEmployee',
-  component: 'Form',
-  fields: [
-    {
-      component: 'PersonNameField',
-      name: 'firstName',
-      label: 'First Name',
-      required: true,
-      block: false
-    },
-    {
-      component: 'PersonNameField',
-      name: 'lastName',
-      label: 'Last Name',
-      required: true
-    },
-    // {
-    //   name: 'departments',
-    //   label: 'Departments',
-    //   component: 'FormsField',
-    //   form: {
-    //     component: 'app.Department'
-    //   },
-    //   store: {
-    //     component: 'RecordStore',
-    //     type: 'app.Department'
-    //   }
-    // }
-    // {
-    //   name: 'departments',
-    //   label: 'Departments',
-    //   component: 'SelectListField',
-    //   blankString: 'None',
-    //
-    //   // TODO: is this really the best way to handle this? A better alternative is probably to load
-    //   // the options in the backend as well.
-    //   ensureInList: false
-    //
-    //   // options: [
-    //   //   { value: 'red', label: 'Red' },
-    //   //   { value: 'green', label: 'Green' },
-    //   //   { value: 'blue', label: 'Blue' }
-    //   // ]
-    // }
-    {
-      name: 'departments',
-      label: 'Departments',
-      component: 'SelectField',
-
-      // TODO: is this really the best way to handle this? A better alternative is probably to load
-      // the options in the backend as well.
-      ensureInList: false,
-      multiple: true
-    }
-  ],
-  access: {
-    form: {
-      create: 'employee',
-      // read: 'employee',
-      update: 'employee',
-      archive: 'employee'
     }
   }
 };

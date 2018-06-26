@@ -2,7 +2,7 @@
 
 import client from './client';
 import config from './config.json';
-import { department, employee, tmpEmployee } from './components';
+import { department, employee } from './components';
 
 // const menu = {
 //   name: 'app.Menu',
@@ -37,27 +37,40 @@ import { department, employee, tmpEmployee } from './components';
 // };
 
 const seed = async () => {
-  const developers = await client.record.create({
+  const development = await client.record.create({
     appId: config.appId,
     componentName: 'app.Department',
     fieldValues: {
-      name: 'Developers',
-      employeeNotes: 'developers',
-      adminNotes: 'developers'
+      name: 'Development',
+      employeeNotes: 'development',
+      adminNotes: 'development'
+    }
+  });
+
+  const sales = await client.record.create({
+    appId: config.appId,
+    componentName: 'app.Department',
+    fieldValues: {
+      name: 'Sales',
+      employeeNotes: 'sales',
+      adminNotes: 'sales'
     }
   });
 
   const N = 100;
   for (let i = 1; i <= N; i++) {
-    await client.record.create({
-      appId: config.appId,
-      componentName: 'app.TmpEmployee',
-      fieldValues: {
-        firstName: 'First' + i,
-        lastName: 'Last' + i,
-        departments: [developers.data.createRecord.id]
-      }
-    });
+    let departments = null;
+    const r = Math.random();
+    if (r < 0.6) {
+      departments = [development.data.createRecord.id];
+    } else if (r < 0.9) {
+      departments = [sales.data.createRecord.id];
+    } else {
+      departments = [
+        development.data.createRecord.id,
+        sales.data.createRecord.id
+      ];
+    }
 
     await client.record.create({
       appId: config.appId,
@@ -66,7 +79,8 @@ const seed = async () => {
         firstName: 'First' + i,
         lastName: 'Last' + i,
         username: 'test' + i + '@example.com',
-        password: 'secret123'
+        password: 'secret123',
+        departments
       }
     });
   }
@@ -80,17 +94,12 @@ const main = async () => {
 
   await client.app.create({ name: 'employees' });
 
-  await client.component.create({ appId: config.appId, definition: employee });
-
   await client.component.create({
     appId: config.appId,
     definition: department
   });
 
-  await client.component.create({
-    appId: config.appId,
-    definition: tmpEmployee
-  });
+  await client.component.create({ appId: config.appId, definition: employee });
 
   // await client.component.create({ appId: config.appId, definition: employee });
   //
@@ -98,6 +107,7 @@ const main = async () => {
   //
   // await client.component.create({ appId: config.appId, definition: app });
 
+  // Create default admin user
   await client.record.create({
     appId: config.appId,
     componentName: 'app.Employee',

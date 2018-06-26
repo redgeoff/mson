@@ -11,6 +11,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { blueGrey } from '@material-ui/core/colors';
 import './forms-field.css';
 import SelectOrder from './select-order';
+import ButtonField from '../../mson/fields/button-field';
 
 // TODO:
 //   - Support drag to order
@@ -199,8 +200,12 @@ class FormsField extends React.PureComponent {
       form.eachField(field => {
         const name = field.get('name');
 
-        // Do we have access to the field? We allowed to sort?
-        if (fieldsCanAccess[name] !== undefined && !field.get('forbidSort')) {
+        // Do we have access to the field? We allowed to sort? Not a button?
+        if (
+          fieldsCanAccess[name] !== undefined &&
+          !field.get('forbidSort') &&
+          !(field instanceof ButtonField)
+        ) {
           fields.push({
             value: (form.isDefaultField(name) ? '' : 'fieldValues.') + name,
             label: field.get('label')

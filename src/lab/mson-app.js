@@ -1,6 +1,6 @@
 import compiler from '../mson/compiler';
 import globals from '../mson/globals';
-import { department, employee, tmpEmployee } from '../employees/components';
+import { department, employee } from '../employees/components';
 
 // TODO: in a production app the appId should be set by the path or subdomain
 globals.set({ appId: 101 });
@@ -478,7 +478,30 @@ compiler.registerComponent('app.Employees', {
       store: {
         component: 'RecordStore',
         type: 'app.Employee'
-      }
+      },
+      listeners: [
+        {
+          event: 'load',
+          actions: [
+            {
+              component: 'GetRecords',
+              type: 'app.Department'
+            },
+            {
+              component: 'Iterator',
+              iterator: 'arguments.edges',
+              return: {
+                value: '{{item.node.id}}',
+                label: '{{item.node.fieldValues.name}}'
+              }
+            },
+            {
+              component: 'Set',
+              name: 'form.fields.departments.options'
+            }
+          ]
+        }
+      ]
     }
   ]
 });
@@ -504,49 +527,6 @@ compiler.registerComponent('app.Departments', {
   ]
 });
 
-compiler.registerComponent('app.TmpEmployee', tmpEmployee);
-
-compiler.registerComponent('app.TmpEmployees', {
-  component: 'Form',
-  fields: [
-    {
-      name: 'tmpEmployees',
-      label: 'Tmp Employees',
-      component: 'FormsField',
-      form: {
-        component: 'app.TmpEmployee'
-      },
-      listeners: [
-        {
-          event: 'load',
-          actions: [
-            {
-              component: 'GetRecords',
-              type: 'app.Department'
-            },
-            {
-              component: 'Iterator',
-              iterator: 'arguments.edges',
-              return: {
-                value: '{{item.node.id}}',
-                label: '{{item.node.fieldValues.name}}'
-              }
-            },
-            {
-              component: 'Set',
-              name: 'form.fields.departments.options'
-            }
-          ]
-        }
-      ],
-      store: {
-        component: 'RecordStore',
-        type: 'app.TmpEmployee'
-      }
-    }
-  ]
-});
-
 const menuItems = [
   {
     path: '/employees',
@@ -560,13 +540,6 @@ const menuItems = [
     label: 'Departments',
     content: {
       component: 'app.Departments'
-    }
-  },
-  {
-    path: '/tmp-employees',
-    label: 'Tmp Employees',
-    content: {
-      component: 'app.TmpEmployees'
     }
   },
   {
