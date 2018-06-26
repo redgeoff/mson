@@ -680,6 +680,15 @@ export default class Form extends Component {
           }
         });
       }
+
+      if (values.component) {
+        // Get inherited fields
+        const extendedForm = compiler.newComponent({
+          component: values.component
+        });
+        extendedForm.eachField(field => fieldNames.push(field.get('name')));
+      }
+
       form
         .getField('access')
         .getForm()
