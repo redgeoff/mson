@@ -197,7 +197,7 @@ it('should support template parameters in listeners', async () => {
   expect(globals.get('snackbarMessage')).toEqual('bar this');
 });
 
-it.only('should clone inherited component that uses before', () => {
+it('should clone inherited component that uses before', () => {
   const account3 = compiler.newComponent({
     component: 'org.proj.EditAccount3'
   });
