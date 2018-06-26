@@ -2,7 +2,7 @@
 
 import client from './client';
 import config from './config.json';
-import { department, employee, tmpEmployee } from './components';
+import { department, employee } from './components';
 
 // const menu = {
 //   name: 'app.Menu',
@@ -74,16 +74,6 @@ const seed = async () => {
 
     await client.record.create({
       appId: config.appId,
-      componentName: 'app.TmpEmployee',
-      fieldValues: {
-        firstName: 'First' + i,
-        lastName: 'Last' + i,
-        departments
-      }
-    });
-
-    await client.record.create({
-      appId: config.appId,
       componentName: 'app.Employee',
       fieldValues: {
         firstName: 'First' + i,
@@ -107,11 +97,6 @@ const main = async () => {
   await client.component.create({
     appId: config.appId,
     definition: department
-  });
-
-  await client.component.create({
-    appId: config.appId,
-    definition: tmpEmployee
   });
 
   await client.component.create({ appId: config.appId, definition: employee });
