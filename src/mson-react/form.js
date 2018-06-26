@@ -5,7 +5,9 @@ import access from '../mson/access';
 
 // Use a PureComponent so that the form is re-rendered when the state/props do not change
 class Form extends React.PureComponent {
-  fieldsCanAccess = null;
+  state = {
+    fieldsCanAccess: null
+  };
 
   // Enable automatic validation whenever a user changes data. This feature allows the user to see
   // errors in real-time.
@@ -13,17 +15,24 @@ class Form extends React.PureComponent {
     form.set({ autoValidate: true });
   }
 
-  adjustAccess(formAccess, mode) {
+  calcFieldsCanAccess(formAccess, mode) {
     const op = mode;
     const form = this.props.form;
-    this.fieldsCanAccess = access.fieldsCanAccess(op, form);
+    const fieldsCanAccess = access.fieldsCanAccess(op, form);
 
     // We need to set the ignoreErrs state as there may be a field that is not accessible that is
     // generating an error.
     for (const field of form.getFields()) {
-      const ignoreErrs = this.fieldsCanAccess[field.get('name')] === undefined;
+      const ignoreErrs = fieldsCanAccess[field.get('name')] === undefined;
       field.set({ ignoreErrs });
     }
+
+    return fieldsCanAccess;
+  }
+
+  adjustAccess(formAccess, mode) {
+    const fieldsCanAccess = this.calcFieldsCanAccess(formAccess, mode);
+    this.setState({ fieldsCanAccess });
   }
 
   constructor(props) {
@@ -31,7 +40,11 @@ class Form extends React.PureComponent {
     this.turnOnAutoValidate(props.form);
 
     if (props.access) {
-      this.adjustAccess(props.access, props.mode);
+      const fieldsCanAccess = this.calcFieldsCanAccess(
+        props.access,
+        props.mode
+      );
+      this.state.fieldsCanAccess = fieldsCanAccess;
     }
   }
 
@@ -66,6 +79,7 @@ class Form extends React.PureComponent {
 
   render() {
     const { form, formTag } = this.props;
+    const { fieldsCanAccess } = this.state;
     const fields = form.get('fields');
 
     // The form key is needed or else React will not re-render all fields when the field indexes are
@@ -74,8 +88,8 @@ class Form extends React.PureComponent {
 
     const flds = fields.map((field, index) => {
       if (
-        this.fieldsCanAccess === null ||
-        this.fieldsCanAccess[field.get('name')] !== undefined
+        fieldsCanAccess === null ||
+        fieldsCanAccess[field.get('name')] !== undefined
       ) {
         return <Field key={key + '_' + index} field={field} />;
       } else {

@@ -466,7 +466,14 @@ compiler.registerComponent('app.Employees', {
               }
             ]
           }
-        ]
+        ],
+        access: {
+          fields: {
+            setPassword: {
+              read: 'admin'
+            }
+          }
+        }
       },
       store: {
         component: 'RecordStore',
