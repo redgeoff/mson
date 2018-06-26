@@ -681,11 +681,13 @@ export default class Form extends Component {
         });
       }
 
-      // Get inherited fields
-      const extendedForm = compiler.newComponent({
-        component: values.component
-      });
-      extendedForm.eachField(field => fieldNames.push(field.get('name')));
+      if (values.component) {
+        // Get inherited fields
+        const extendedForm = compiler.newComponent({
+          component: values.component
+        });
+        extendedForm.eachField(field => fieldNames.push(field.get('name')));
+      }
 
       form
         .getField('access')
