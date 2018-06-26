@@ -10,6 +10,7 @@ import uuid from 'uuid';
 import InfiniteLoader from '../infinite-loader';
 import Component from '../component';
 import utils from '../utils';
+import Form from '../form';
 
 export default class FormsField extends Field {
   // // TODO: how does this get cleaned up?
@@ -328,7 +329,10 @@ export default class FormsField extends Field {
 
   // TODO: refactor to use named parameters
   addForm(values, archivedAt, userId, muteChange, cursor, beforeKey) {
-    const clonedForm = this.get('form').clone();
+    // Note: clone() is significantly slower than creating a new form and copying over the fields
+    // const clonedForm = this.get('form').clone();
+    const clonedForm = new Form();
+    clonedForm.copyFields(this.get('form'));
 
     // Reset form as there may be existing data, errors, etc...
     clonedForm.reset();

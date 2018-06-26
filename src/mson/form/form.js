@@ -164,7 +164,9 @@ export default class Form extends Component {
 
   copyFields(form) {
     form._fields.each(field => {
-      this.addField(field);
+      // Use clone() as we don't want to copy the original listeners as they may be in use by
+      // unexpected areas in the system
+      this.addField(field.clone());
     });
     this._emitChange('fields');
   }
@@ -551,8 +553,7 @@ export default class Form extends Component {
     // Remove the fields as we need to re-add them below
     clonedForm._fields.clear();
 
-    // We need to use addField() and not _setField() as we need the listeners to be recreated
-    this._fields.each(field => clonedForm.addField(field.clone()));
+    clonedForm.copyFields(this);
 
     return clonedForm;
   }
