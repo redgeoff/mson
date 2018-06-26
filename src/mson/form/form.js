@@ -214,6 +214,14 @@ export default class Form extends Component {
       this.setEditable(props.editable);
     }
 
+    if (props.hidden !== undefined) {
+      this.setHidden(props.hidden);
+    }
+
+    if (props.snapshot !== undefined) {
+      this.setSnapshot(props.snapshot);
+    }
+
     if (props.clear === true) {
       this.clearValues();
     }
@@ -247,7 +255,8 @@ export default class Form extends Component {
       'userId',
       'showArchived',
       'searchString',
-      'cursor'
+      'cursor',
+      'snapshot'
     );
   }
 
@@ -346,7 +355,8 @@ export default class Form extends Component {
       'userId',
       'showArchived',
       'searchString',
-      'cursor'
+      'cursor',
+      'snapshot'
     );
     return value === undefined ? super.getOne(name) : value;
   }
@@ -503,6 +513,26 @@ export default class Form extends Component {
 
   setEditable(editable) {
     this._fields.each(field => field.set({ editable }));
+  }
+
+  setHidden(hidden) {
+    this._fields.each(field => field.set({ hidden }));
+  }
+
+  setSnapshot(snapshot) {
+    if (snapshot === 'restore') {
+      if (this._snapshotFields) {
+        this._snapshotFields.forEach(field => {
+          this.getField(field.name).set(field);
+        });
+      }
+    } else {
+      // Take
+      const fields = this.mapFields(field =>
+        field.get(['name', 'hidden', 'required', 'out', 'in'])
+      );
+      this._snapshotFields = fields;
+    }
   }
 
   // TODO: remove and use set({ pristine }) instead?

@@ -335,6 +335,8 @@ export default class FormsField extends Field {
 
     clonedForm.setValues(values);
 
+    clonedForm.set({ parent: this });
+
     const id = clonedForm.getField('id');
     let key = 0;
     if (id.isBlank()) {
@@ -432,6 +434,109 @@ export default class FormsField extends Field {
     });
   }
 
+  prepareForm(form) {
+    form.setTouched(false);
+    form.clearErrs();
+    form.setDirty(false);
+  }
+
+  _setCurrentForm(currentForm) {
+    const form = this.get('form');
+    if (currentForm === null) {
+      form.clearValues();
+      form.set({ userId: null });
+      this.prepareForm(form);
+    } else {
+      // We get the values and userId as currentForm may actually be form
+      const values = currentForm.getValues();
+      const userId = currentForm.get('userId');
+      const archivedAt = currentForm.get('archivedAt');
+      form.clearValues();
+      form.set({ userId, archivedAt, value: values });
+      this.prepareForm(form);
+      this._set('currentForm', currentForm);
+    }
+  }
+
+  _setCurrentFormFromProps(props) {
+    if (
+      props.currentForm !== undefined &&
+      props.currentForm !== this._currentForm
+    ) {
+      this._setCurrentForm(props.currentForm);
+    }
+  }
+
+  _readMode() {
+    const form = this.get('form');
+    form.emitChange('beginRead', form.getValue('id'));
+    form.setEditable(false);
+  }
+
+  _createMode() {
+    const form = this.get('form');
+    form.emitChange('beginCreate');
+    form.setEditable(true);
+  }
+
+  _updateMode() {
+    const form = this.get('form');
+    form.emitChange('beginUpdate', form.getValue('id'));
+    form.setEditable(true);
+  }
+
+  _emitEndEvents() {
+    const form = this.get('form');
+    const id = form.getValue('id');
+    switch (this._mode) {
+      case 'create':
+        form.emitChange('endCreate', id);
+        break;
+
+      case 'update':
+        form.emitChange('endUpdate', id);
+        break;
+
+      default:
+        // case 'read':
+        form.emitChange('endRead', id);
+        break;
+    }
+  }
+
+  _setMode(props) {
+    if (props.mode !== undefined && props.mode !== this._mode) {
+      // Has a previous mode?
+      if (this._mode) {
+        this._emitEndEvents();
+      }
+
+      // Note: we set the parent here instead of in set() as otherwise we create a circular
+      // dependency that the Compiler doesn't support.
+      const form = this.get('form');
+      form.set({ parent: this });
+
+      switch (props.mode) {
+        case 'create':
+          this._createMode();
+          break;
+
+        case 'update':
+          this._updateMode();
+          break;
+
+        case 'read':
+          this._readMode();
+          break;
+
+        default:
+          break;
+      }
+
+      this._set('mode', props.mode);
+    }
+  }
+
   set(props) {
     super.set(props);
 
@@ -467,6 +572,10 @@ export default class FormsField extends Field {
       'isLoading',
       'order'
     );
+
+    this._setCurrentFormFromProps(props);
+
+    this._setMode(props);
   }
 
   _getValue() {
@@ -497,7 +606,9 @@ export default class FormsField extends Field {
       'spacerId',
       'bufferTopId',
       'isLoading',
-      'order'
+      'order',
+      'currentForm',
+      'mode'
     );
     return value === undefined ? super.getOne(name) : value;
   }
@@ -510,7 +621,7 @@ export default class FormsField extends Field {
     yield* this._forms.values();
   }
 
-  async save(form) {
+  async _saveForm(form) {
     // await this._docs.set(form.getValues());
     const id = form.getField('id');
     const store = this.get('store');
@@ -554,6 +665,18 @@ export default class FormsField extends Field {
     );
 
     globals.displaySnackbar(this.getSingularLabel() + ' saved');
+  }
+
+  async save() {
+    const form = this.get('form');
+
+    // No errors?
+    form.setTouched(true);
+    form.validate();
+    if (form.getErrs().length === 0) {
+      await this._saveForm(form);
+      this.set({ mode: 'read' });
+    }
   }
 
   async archive(form) {
@@ -642,7 +765,7 @@ export default class FormsField extends Field {
       return this.get('singularLabel');
     } else {
       // Automatically calculate singular label by removing last 's'
-      const label = this.get('label');
+      const label = this.get('label') ? this.get('label') : '';
       return label.substr(0, label.length - 1);
     }
   }

@@ -98,6 +98,18 @@ const main = async () => {
   //
   // await client.component.create({ appId: config.appId, definition: app });
 
+  await client.record.create({
+    appId: config.appId,
+    componentName: 'app.Employee',
+    fieldValues: {
+      firstName: 'AdminFirst',
+      lastName: 'AdminLast',
+      username: 'admin@example.com',
+      password: 'admin123',
+      roles: ['admin']
+    }
+  });
+
   await seed();
 };
 

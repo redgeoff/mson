@@ -146,6 +146,10 @@ export default class Component extends events.EventEmitter {
     this._setIfUndefinedProp(props, 'passed');
   }
 
+  _setParent(props) {
+    this._setIfUndefinedProp(props, 'parent');
+  }
+
   // TODO: use this in _create() instead of set() for defaults
   _setDefaults(props, values) {
     _.each(values, (value, name) => {
@@ -190,30 +194,35 @@ export default class Component extends events.EventEmitter {
       // leak
       this._setIfUndefinedProp(props, 'listeners');
       props.listeners.forEach(listener => {
-        this.on(listener.event, async () => {
-          let output = null;
-          for (const i in listener.actions) {
-            const action = listener.actions[i];
+        const events = Array.isArray(listener.event)
+          ? listener.event
+          : [listener.event];
+        events.forEach(event => {
+          this.on(event, async () => {
+            let output = null;
+            for (const i in listener.actions) {
+              const action = listener.actions[i];
 
-            // Pass the previous action's output as this actions arguments
-            output = await action.run({
-              event: listener.event,
-              component: this,
-              ifData,
-              arguments: output
-            });
-          }
+              // Pass the previous action's output as this actions arguments
+              output = await action.run({
+                event: event,
+                component: this,
+                ifData,
+                arguments: output
+              });
+            }
 
-          switch (listener.event) {
-            case 'create':
-              this._emitCreated();
-              break;
-            case 'load':
-              this._emitLoaded();
-              break;
-            default:
-              break;
-          }
+            switch (event) {
+              case 'create':
+                this._emitCreated();
+                break;
+              case 'load':
+                this._emitLoaded();
+                break;
+              default:
+                break;
+            }
+          });
         });
       });
     }
@@ -226,6 +235,7 @@ export default class Component extends events.EventEmitter {
     this._setName(props);
     this._setListeners(props);
     this._setPassed(props);
+    this._setParent(props);
 
     if (props.schema !== undefined) {
       // Schemas are pushed that they can accumulate through the layers of inheritance
@@ -245,7 +255,14 @@ export default class Component extends events.EventEmitter {
   }
 
   getOne(name) {
-    return this._getIfAllowed(name, 'name', 'listeners', 'passed', 'schema');
+    return this._getIfAllowed(
+      name,
+      'name',
+      'listeners',
+      'passed',
+      'schema',
+      'parent'
+    );
   }
 
   get(names) {

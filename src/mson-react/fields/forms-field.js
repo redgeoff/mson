@@ -13,10 +13,6 @@ import './forms-field.css';
 import SelectOrder from './select-order';
 
 // TODO:
-//   - Do we really need currentForm and targetForm? Should we refactor out currentForm? May still
-//     need currentForm as need to be able to toggle editable attributes?
-//   - Currently, when a form is edited it results in changing this component's state and
-//     rerendering all the forms. Is this ok? Will this scale?
 //   - Support drag to order
 
 // Note:
@@ -42,130 +38,77 @@ const styles = theme => ({
 
 class FormsField extends React.PureComponent {
   state = {
-    open: false, // TODO: rename to openDialog
-    mode: 'view',
-    currentForm: null,
     confirmationOpen: false,
-    targetForm: null,
     sortBy: '',
     sortOrder: 'ASC'
   };
 
-  constructor(props) {
-    super(props);
-
-    // TODO: just use form in props intead of different item in state?
-    this.state.currentForm = props.field.get('form');
-  }
-
-  emitOnClose() {
-    const { currentForm } = this.state;
-    currentForm.emitChange('doneEditingRecord', currentForm.getValue('id'));
-  }
-
   handleClose = () => {
-    this.emitOnClose();
-    this.setState({ open: false });
+    this.props.field.set({ mode: null });
   };
 
-  prepareForm(form) {
-    form.setTouched(false);
-    form.clearErrs();
-    form.setDirty(false);
-  }
-
-  copyValues(currentForm, form) {
-    currentForm.setValues(form.getValues({ includeOuts: true }));
-    currentForm.set({ userId: form.get('userId') });
-  }
+  handleRead = () => {
+    this.props.field.set({ mode: 'read' });
+  };
 
   handleClick = form => {
-    const { currentForm } = this.state;
-    currentForm.emitChange('willReadRecord', form.getValue('id'));
-    currentForm.clearValues();
-    this.copyValues(currentForm, form);
-    currentForm.setEditable(false);
-    this.prepareForm(currentForm);
-    this.setState({ open: true, mode: 'view', targetForm: form });
+    this.props.field.set({ currentForm: form, mode: 'read' });
   };
 
   handleEdit = form => {
-    const { currentForm } = this.state;
-    currentForm.emitChange('willUpdateRecord', form.getValue('id'));
-
-    // The forms will be the same if the user clicks edit from view form dialog
-    if (form !== currentForm) {
-      currentForm.clearValues();
-      this.copyValues(currentForm, form);
-    }
-
-    currentForm.setEditable(true);
-    this.prepareForm(currentForm);
-
-    this.setState({ open: true, mode: 'edit' });
+    this.props.field.set({ currentForm: form, mode: 'update' });
   };
 
   handleNew = () => {
-    const { currentForm } = this.state;
-    currentForm.emitChange('willCreateRecord');
-    currentForm.clearValues();
-    currentForm.setEditable(true);
-    this.prepareForm(currentForm);
-    this.setState({ open: true, mode: 'new' });
+    this.props.field.set({ currentForm: null, mode: 'create' });
   };
 
   handleSave = async () => {
-    const { field } = this.props;
-    const { currentForm } = this.state;
-
-    // No errors?
-    currentForm.setTouched(true);
-    currentForm.validate();
-    if (currentForm.getErrs().length === 0) {
-      await field.save(currentForm);
-      this.handleClose();
-    }
+    await this.props.field.save();
   };
 
-  handleDelete = async form => {
-    // Set the id so that it can be deleted after the confirmation
-    const { currentForm, open, targetForm } = this.state;
-    currentForm.getField('id').setValue(form.getField('id').getValue());
+  isOpen() {
+    return !!this.props.mode;
+  }
 
-    // Use the targetForm when specified
-    const formToDelete = targetForm ? targetForm : form;
+  handleDelete = async formToDelete => {
+    const { field } = this.props;
+
+    const open = this.isOpen();
+    if (formToDelete) {
+      field.set({ currentForm: formToDelete });
+    } else {
+      // Are we already focussed on this form
+      formToDelete = field.get('form');
+    }
 
     const archivedAt = formToDelete.get('archivedAt');
 
     // Are we restoring?
     if (archivedAt) {
-      await this.props.field.restore(formToDelete);
+      await field.restore(formToDelete);
 
       // Is the dialog open?
       if (open) {
         // Close it
-        this.emitOnClose();
-        this.setState({ open: false, targetForm: null });
+        field.set({ mode: null });
       }
     } else {
-      // const singularLabel = this.props.field.getSingularLabel().toLowerCase();
-
-      this.emitOnClose();
       this.setState({
-        targetForm: formToDelete,
-        open: false,
         confirmationOpen: true,
         // confirmationTitle: `Are you sure you want to delete this ${singularLabel}?`
         confirmationTitle: 'Delete this?'
       });
+      field.set({ mode: null });
     }
   };
 
   handleConfirmationClose = async yes => {
     if (yes) {
-      await this.props.field.archive(this.state.targetForm);
+      const { field } = this.props;
+      await field.archive(field.get('form'));
     }
-    this.setState({ confirmationOpen: false, targetForm: null });
+    this.setState({ confirmationOpen: false });
   };
 
   canCreate() {
@@ -237,6 +180,7 @@ class FormsField extends React.PureComponent {
   }
 
   handleOrdering = props => {
+    // TODO: shouldn't the ordering just be in the field and not have to be in this state?
     this.setState(props, () => {
       this.props.field.set({
         order: this.state.sortBy
@@ -318,29 +262,20 @@ class FormsField extends React.PureComponent {
     const {
       forbidUpdate,
       forbidDelete,
-      editable,
-      disabled,
       field,
       spacerHeight,
       classes,
-      isLoading
+      isLoading,
+      form,
+      mode
     } = this.props;
 
-    const {
-      open,
-      mode,
-      currentForm,
-      confirmationOpen,
-      confirmationTitle,
-      targetForm
-    } = this.state;
+    const { confirmationOpen, confirmationTitle } = this.state;
 
     const label = field.get('label').toLowerCase();
 
     const canUpdate = this.canUpdate();
     const canArchive = this.canArchive();
-
-    const archivedAt = targetForm ? targetForm.get('archivedAt') : null;
 
     const spacerStyle = { height: spacerHeight };
 
@@ -377,18 +312,15 @@ class FormsField extends React.PureComponent {
         hybrid where we have a dialog per form. There is almost certainly more overhead in having an
         instance per record, right? */}
         <FormDialog
-          open={open}
           mode={mode}
-          form={currentForm}
+          form={form}
           onClose={this.handleClose}
+          onRead={this.handleRead}
           onSave={this.handleSave}
           onEdit={this.handleEdit}
           onDelete={this.handleDelete}
           forbidUpdate={forbidUpdate || !canUpdate}
           forbidDelete={forbidDelete || !canArchive}
-          editable={editable}
-          disabled={disabled}
-          archivedAt={archivedAt}
         />
 
         <ConfirmationDialog
@@ -413,6 +345,9 @@ FormsField = attach([
   'disabled',
   'spacerHeight',
   'bufferTopId',
-  'isLoading'
+  'isLoading',
+  'form',
+  'currentForm',
+  'mode'
 ])(FormsField);
 export default FormsField;

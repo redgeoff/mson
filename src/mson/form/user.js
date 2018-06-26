@@ -1,7 +1,6 @@
 import Form from './form';
 import MSONComponent from '../component/mson-component';
 import Roles from '../roles';
-import Set from '../actions/set';
 
 export default class User extends Form {
   _create(props) {
@@ -45,46 +44,8 @@ export default class User extends Form {
       ]
     };
 
-    const listeners = [
-      {
-        event: 'willCreateRecord',
-        actions: [
-          new Set({
-            name: 'fields.password.hidden',
-            value: false
-          }),
-          new Set({
-            name: 'fields.password.out',
-            value: true
-          }),
-          new Set({
-            name: 'fields.password.required',
-            value: true
-          })
-        ]
-      },
-      {
-        event: 'doneEditingRecord',
-        actions: [
-          new Set({
-            name: 'fields.password.hidden',
-            value: true
-          }),
-          new Set({
-            name: 'fields.password.out',
-            value: false
-          }),
-          new Set({
-            name: 'fields.password.required',
-            value: false
-          })
-        ]
-      }
-    ];
-
     this.set({
-      schema,
-      listeners
+      schema
     });
   }
 

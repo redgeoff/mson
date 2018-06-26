@@ -28,7 +28,20 @@ export const employee = {
       ]
     }
   ],
-  roles: ['employee']
+  roles: ['employee'],
+  access: {
+    form: {
+      create: 'admin'
+    },
+    fields: {
+      password: {
+        update: 'admin'
+      },
+      roles: {
+        update: 'admin'
+      }
+    }
+  }
 };
 
 export const department = {

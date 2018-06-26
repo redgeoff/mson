@@ -9,8 +9,8 @@ import {
   sinatraFlat,
   michaelFlat,
   bowieFlat,
-  onGetAllPeople,
-  onGetItemElementMock
+  onGetItemElementMock,
+  createMockedStore
 } from '../infinite-loader.fixtures';
 
 const createForm = () => {
@@ -29,19 +29,6 @@ const createField = props => {
   field._infiniteLoader._onGetItemElement = onGetItemElementMock;
 
   return field;
-};
-
-const createMockedStore = () => {
-  return {
-    getAll: async props => {
-      const records = await onGetAllPeople(props);
-      return {
-        data: {
-          records
-        }
-      };
-    }
-  };
 };
 
 const getItems = field => {
