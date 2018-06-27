@@ -434,7 +434,7 @@ export default class FormsField extends Field {
     });
   }
 
-  prepareForm(form) {
+  _prepareForm(form) {
     form.setTouched(false);
     form.clearErrs();
     form.setDirty(false);
@@ -454,7 +454,7 @@ export default class FormsField extends Field {
       form.set({ userId, archivedAt, value: values });
       this._set('currentForm', currentForm);
     }
-    this.prepareForm(form);
+    this._prepareForm(form);
   }
 
   _setCurrentFormFromProps(props) {
