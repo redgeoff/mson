@@ -2,6 +2,7 @@ import Action from './action';
 import registrar from '../compiler/registrar';
 import globals from '../globals';
 import utils from '../utils';
+import access from '../access';
 
 export default class UpsertRecord extends Action {
   set(props) {
@@ -18,8 +19,9 @@ export default class UpsertRecord extends Action {
     const appId = globals.get('appId');
 
     try {
-      const fieldValues = props.component.getValues({ out: true });
       if (this.get('id')) {
+        const fieldValues = access.fieldsCanUpdate(props.component);
+
         await registrar.client.record.update({
           appId,
           componentName: this.get('type'),
@@ -27,6 +29,8 @@ export default class UpsertRecord extends Action {
           fieldValues
         });
       } else {
+        const fieldValues = access.fieldsCanCreate(props.component);
+
         await registrar.client.record.create({
           appId,
           componentName: this.get('type'),
