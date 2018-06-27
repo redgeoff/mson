@@ -1,5 +1,6 @@
 import Action from './action';
 
+// TODO: refactor out and use GetRecord instead
 export default class APIGet extends Action {
   set(props) {
     super.set(props);

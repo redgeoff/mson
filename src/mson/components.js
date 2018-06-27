@@ -22,6 +22,7 @@ import FormAccess from './form/form-access';
 import FormField from './fields/form-field';
 import FormsField from './fields/forms-field';
 import FormValidator from './form/form-validator';
+import GetRecord from './actions/get-record';
 import GetRecords from './actions/get-records';
 import IntegerField from './fields/integer-field';
 import Iterator from './actions/iterator';
@@ -68,6 +69,7 @@ export default {
   AccessForm: FormAccess,
   FormField,
   FormsField,
+  GetRecord,
   GetRecords,
   IntegerField,
   Iterator,

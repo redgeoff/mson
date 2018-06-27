@@ -23,22 +23,23 @@ export default class GetRecords extends Action {
       asArray: true
     });
 
-    const form = props.component.get('form');
-
-    records.data.records.edges.forEach(edge => {
-      const values = { id: edge.node.id };
-
-      form.eachField(field => {
-        // Field exists in returned records?
-        const val = edge.node.fieldValues[field.get('name')];
-        if (val) {
-          values[field.get('name')] = val;
-        }
-      });
-
-      // TODO: if this is needed then probably create prop like addForm
-      // props.component.addForm(values);
-    });
+    // TODO: remove?
+    // const form = props.component.get('form');
+    //
+    // records.data.records.edges.forEach(edge => {
+    //   const values = { id: edge.node.id };
+    //
+    //   form.eachField(field => {
+    //     // Field exists in returned records?
+    //     const val = edge.node.fieldValues[field.get('name')];
+    //     if (val) {
+    //       values[field.get('name')] = val;
+    //     }
+    //   });
+    //
+    //   // TODO: if this is needed then probably create prop like addForm
+    //   // props.component.addForm(values);
+    // });
 
     return records.data.records;
   }
