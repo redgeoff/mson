@@ -48,6 +48,7 @@ import Set from './actions/set';
 import Snackbar from './actions/snackbar';
 import TextField from './fields/text-field';
 import TextListField from './fields/text-list-field';
+import UpsertRecord from './actions/upsert-record';
 import User from './form/user';
 
 export default {
@@ -96,5 +97,6 @@ export default {
   TextField,
   TextListField,
   ValidatorForm: FormValidator,
+  UpsertRecord,
   User
 };

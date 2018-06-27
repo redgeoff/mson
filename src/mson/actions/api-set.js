@@ -1,6 +1,7 @@
 import Action from './action';
 import _ from 'lodash';
 
+// Refactor out and use UpsertRecord instead
 export default class APISet extends Action {
   set(props) {
     super.set(props);

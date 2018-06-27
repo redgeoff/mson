@@ -121,10 +121,9 @@
       "event": "save",
       "actions": [
         {
-          "component": "APISet",
-          "url": "{{url}}",
-          "object": "{{object}}",
-          "id": "{{id}}"
+          "component": "UpsertRecord",
+          "type": "{{storeType}}",
+          "id": "{{recordId}}"
         },
         {
           "//": "Needed or else will be prompted for save",
