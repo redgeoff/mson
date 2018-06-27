@@ -445,7 +445,6 @@ export default class FormsField extends Field {
     if (currentForm === null) {
       form.clearValues();
       form.set({ userId: null });
-      this.prepareForm(form);
     } else {
       // We get the values and userId as currentForm may actually be form
       const values = currentForm.getValues();
@@ -453,16 +452,13 @@ export default class FormsField extends Field {
       const archivedAt = currentForm.get('archivedAt');
       form.clearValues();
       form.set({ userId, archivedAt, value: values });
-      this.prepareForm(form);
       this._set('currentForm', currentForm);
     }
+    this.prepareForm(form);
   }
 
   _setCurrentFormFromProps(props) {
-    if (
-      props.currentForm !== undefined &&
-      props.currentForm !== this._currentForm
-    ) {
+    if (props.currentForm !== undefined) {
       this._setCurrentForm(props.currentForm);
     }
   }
