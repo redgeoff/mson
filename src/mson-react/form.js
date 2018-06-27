@@ -105,4 +105,4 @@ class Form extends React.PureComponent {
   }
 }
 
-export default attach(['access'], 'form')(Form);
+export default attach(['access', 'mode'], 'form')(Form);

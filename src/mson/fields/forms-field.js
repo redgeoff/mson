@@ -530,6 +530,7 @@ export default class FormsField extends Field {
           break;
       }
 
+      form.set({ mode: props.mode });
       this._set('mode', props.mode);
     }
   }

@@ -32,6 +32,11 @@
       "actions": [
         {
           "component": "Set",
+          "name": "mode",
+          "value": "read"
+        },
+        {
+          "component": "Set",
           "name": "editable",
           "value": false
         },
@@ -75,6 +80,11 @@
     {
       "event": "edit",
       "actions": [
+        {
+          "component": "Set",
+          "name": "mode",
+          "value": "update"
+        },
         {
           "component": "Set",
           "name": "editable",
