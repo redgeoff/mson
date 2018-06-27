@@ -42,7 +42,8 @@ export default class FormsField extends Field {
 
   _listenForUnload() {
     this.on('unload', async () => {
-      this.set({ order: null });
+      // Clear order and mode so that we are ready for when we return
+      this.set({ order: null, mode: null });
 
       const form = this.get('form');
       if (form) {
