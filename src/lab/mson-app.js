@@ -339,7 +339,30 @@ compiler.registerComponent('app.ViewAndEditAccount', {
   baseForm: 'app.Employee',
   label: 'Account',
   recordId: '{{globals.session.user.id}}',
-  storeType: 'app.Employee'
+  storeType: 'app.Employee',
+  listeners: [
+    {
+      event: 'load',
+      actions: [
+        {
+          component: 'GetRecords',
+          type: 'app.Department'
+        },
+        {
+          component: 'Iterator',
+          iterator: 'arguments.edges',
+          return: {
+            value: '{{item.node.id}}',
+            label: '{{item.node.fieldValues.name}}'
+          }
+        },
+        {
+          component: 'Set',
+          name: 'fields.departments.options'
+        }
+      ]
+    }
+  ]
 });
 
 // TODO: is there a good way for UserSignup to share this structure? app.Employee and app.UserSignup
