@@ -13,11 +13,11 @@ class FormDialog extends React.PureComponent {
     if (withCancelButton || mode !== 'update') {
       if (mode === 'update') {
         if (onRead) {
-          onRead();
+          onRead(this.props.currentForm);
         }
       } else {
         if (onClose) {
-          onClose();
+          onClose(this.props.currentForm);
         }
       }
     }
@@ -25,7 +25,7 @@ class FormDialog extends React.PureComponent {
 
   handleEdit = () => {
     if (this.props.onEdit) {
-      this.props.onEdit(this.props.form);
+      this.props.onEdit(this.props.currentForm);
     }
   };
 
@@ -40,7 +40,7 @@ class FormDialog extends React.PureComponent {
 
   handleDelete = () => {
     if (this.props.onDelete) {
-      this.props.onDelete(this.props.form);
+      this.props.onDelete(this.props.currentForm);
     }
   };
 

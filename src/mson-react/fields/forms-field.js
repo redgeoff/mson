@@ -48,8 +48,8 @@ class FormsField extends React.PureComponent {
     this.props.field.set({ mode: null });
   };
 
-  handleRead = () => {
-    this.props.field.set({ mode: 'read' });
+  handleRead = form => {
+    this.props.field.set({ currentForm: form, mode: 'read' });
   };
 
   handleClick = form => {
@@ -272,6 +272,7 @@ class FormsField extends React.PureComponent {
       classes,
       isLoading,
       form,
+      currentForm,
       mode
     } = this.props;
 
@@ -319,6 +320,7 @@ class FormsField extends React.PureComponent {
         <FormDialog
           mode={mode}
           form={form}
+          currentForm={currentForm}
           onClose={this.handleClose}
           onRead={this.handleRead}
           onSave={this.handleSave}

@@ -102,7 +102,10 @@ it('should set current form', () => {
   const firstForm = field._forms.first();
   const clearValues = jest.spyOn(form, 'clearValues');
   const set = jest.spyOn(form, 'set');
-  const prepareForm = jest.spyOn(field, 'prepareForm');
+  const prepareForm = jest.spyOn(field, '_prepareForm');
+  const setTouched = jest.spyOn(form, 'setTouched');
+  const clearErrs = jest.spyOn(form, 'clearErrs');
+  const setDirty = jest.spyOn(form, 'setDirty');
 
   // Mock
   const userId = 1;
@@ -117,6 +120,11 @@ it('should set current form', () => {
   expect(clearValues).toHaveBeenCalledTimes(1);
   expect(set).toHaveBeenCalledWith({ userId: null });
   expect(prepareForm).toHaveBeenCalledTimes(1);
+  expect(setTouched).toHaveBeenCalledTimes(1);
+  expect(setTouched).toHaveBeenCalledWith(false);
+  expect(clearErrs).toHaveBeenCalledTimes(1);
+  expect(setDirty).toHaveBeenCalledTimes(1);
+  expect(setDirty).toHaveBeenCalledWith(false);
 
   // currentForm is not null
   clearValues.mockClear();
