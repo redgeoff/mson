@@ -155,59 +155,6 @@ compiler.registerComponent('app.UserSignup', {
   ]
 });
 
-compiler.registerComponent('app.Account', {
-  component: 'Form',
-  fields: [
-    {
-      component: 'TextField',
-      name: 'name',
-      label: 'Name',
-      required: true,
-      help: 'Enter a full name'
-    },
-    {
-      component: 'EmailField',
-      name: 'email',
-      label: 'Email',
-      required: true
-    },
-    {
-      name: 'departments',
-      label: 'Departments',
-      component: 'SelectField',
-      // multiple: true,
-      blankString: 'None',
-      options: [
-        { value: 'red', label: 'Red' },
-        { value: 'green', label: 'Green' },
-        { value: 'blue', label: 'Blue' }
-      ]
-    }
-    // {
-    //   name: 'departments',
-    //   label: 'Departments',
-    //   component: 'SelectListField',
-    //   blankString: 'None',
-    //   options: [
-    //     { value: 'red', label: 'Red' },
-    //     { value: 'green', label: 'Green' },
-    //     { value: 'blue', label: 'Blue' }
-    //   ]
-    // }
-    // {
-    //   component: 'ButtonField',
-    //   name: 'submit',
-    //   label: 'Save',
-    //   type: 'submit'
-    // },
-    // {
-    //   component: 'ButtonField',
-    //   name: 'cancel',
-    //   label: 'Cancel'
-    // }
-  ]
-});
-
 // TODO: should be able to inline in ChangePassword
 compiler.registerComponent('app.ChangePasswordForm', {
   component: 'Form',
@@ -251,87 +198,6 @@ compiler.registerComponent('app.ChangePassword', {
   inFields: [],
   outFields: ['id', 'password'],
   id: '1' // TODO: '{{globals.user.id}}'
-});
-
-// TODO: should be able to define this in ViewAccount if wanted
-compiler.registerComponent('app.ViewAccountForm', {
-  name: 'app.ViewAccountForm',
-  component: 'app.Account',
-  fields: [
-    {
-      component: 'ButtonField',
-      name: 'edit',
-      label: 'Edit',
-      icon: 'ModeEdit'
-    },
-    {
-      component: 'ButtonField',
-      name: 'cancel',
-      label: 'Cancel',
-      icon: 'Cancel'
-    }
-  ]
-});
-
-compiler.registerComponent('app.ViewAccount', {
-  component: 'app.ViewAccountForm',
-  listeners: [
-    {
-      event: 'fields',
-      actions: [
-        {
-          component: 'Set',
-          name: 'editable',
-          value: false
-        }
-      ]
-    },
-    {
-      event: 'load',
-      actions: [
-        {
-          component: 'APIGet',
-          url: 'api.mson.co',
-          object: 'User',
-          id: '1' // TODO: '{{globals.user.id}}'
-        },
-        {
-          component: 'Set',
-          name: 'pristine',
-          value: true
-        }
-      ]
-    },
-    {
-      event: 'edit',
-      actions: [
-        {
-          component: 'Redirect',
-          path: '/account/edit'
-        }
-      ]
-    },
-    {
-      event: 'cancel',
-      actions: [
-        {
-          component: 'Redirect',
-          path: '/home'
-        }
-      ]
-    }
-  ]
-});
-
-compiler.registerComponent('app.EditAccount', {
-  component: 'RecordEditor',
-  baseForm: 'app.Account',
-  label: 'Account',
-  url: 'api.mson.co',
-  object: 'User',
-  id: '1', // TODO: '{{globals.user.id}}'
-  saveURL: '/account/view',
-  cancelURL: '/account/view'
 });
 
 compiler.registerComponent('app.ViewAndEditAccount', {
@@ -576,20 +442,6 @@ const menuItems = [
         }
       },
       {
-        path: '/account/view',
-        label: 'View Account',
-        content: {
-          component: 'app.ViewAccount'
-        }
-      },
-      {
-        path: '/account/edit',
-        label: 'Edit Account',
-        content: {
-          component: 'app.EditAccount'
-        }
-      },
-      {
         path: '/account/change-password',
         label: 'Change Password',
         content: {
@@ -600,7 +452,7 @@ const menuItems = [
   },
   {
     path: '/foo',
-    label: 'Another Section',
+    label: 'Tmp',
     items: [
       {
         path: '/foo/login',
@@ -625,20 +477,6 @@ const menuItems = [
           }
         },
         fullScreen: true
-      },
-      {
-        path: '/foo/account',
-        label: 'Account',
-        content: {
-          component: 'app.ViewAndEditAccount'
-        }
-      },
-      {
-        path: '/foo/view',
-        label: 'View Account',
-        content: {
-          component: 'app.ViewAccount'
-        }
       }
     ]
   },
