@@ -169,6 +169,12 @@
         {
           "component": "Snackbar",
           "message": "{{label}} saved"
+        },
+        {
+          "//":
+            "Needed to restore read data as may be different and update access",
+          "component": "Emit",
+          "event": "load"
         }
       ]
     },
