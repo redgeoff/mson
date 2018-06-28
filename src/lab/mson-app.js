@@ -50,7 +50,7 @@ compiler.registerComponent('app.Login', {
         // TODO: redirect to home based on menu def
         {
           component: 'Redirect',
-          path: '/account/edit'
+          path: '/account'
         }
       ]
     },
@@ -214,6 +214,15 @@ compiler.registerComponent('app.ChangePasswordForm', {
           component: 'Set',
           name: 'fields.password.out',
           value: true
+        }
+      ]
+    },
+    {
+      event: 'saved',
+      actions: [
+        {
+          component: 'Redirect',
+          path: '/account'
         }
       ]
     }

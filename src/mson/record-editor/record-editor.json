@@ -197,6 +197,10 @@
             "Needed to restore read data as may be different and update access",
           "component": "Emit",
           "event": "load"
+        },
+        {
+          "component": "Emit",
+          "event": "saved"
         }
       ]
     },
