@@ -11,8 +11,8 @@ class Form extends React.PureComponent {
 
   // Enable automatic validation whenever a user changes data. This feature allows the user to see
   // errors in real-time.
-  turnOnAutoValidate(form) {
-    form.set({ autoValidate: true });
+  turnOnAutoValidate() {
+    this.props.form.set({ autoValidate: true });
   }
 
   calcFieldsCanAccess() {
@@ -39,7 +39,7 @@ class Form extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    this.turnOnAutoValidate(props.form);
+    this.turnOnAutoValidate();
 
     if (props.access) {
       const fieldsCanAccess = this.calcFieldsCanAccess();
@@ -52,7 +52,7 @@ class Form extends React.PureComponent {
 
     // Did the form change?
     if (prevProps.form !== form) {
-      this.turnOnAutoValidate(form);
+      this.turnOnAutoValidate();
     }
 
     // Did the access, more or form change?
