@@ -358,6 +358,11 @@ compiler.registerComponent('app.Employees', {
             actions: [
               {
                 component: 'Set',
+                name: 'out',
+                value: false
+              },
+              {
+                component: 'Set',
                 name: 'hidden',
                 value: true
               },
