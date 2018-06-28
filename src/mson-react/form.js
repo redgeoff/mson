@@ -15,10 +15,9 @@ class Form extends React.PureComponent {
     form.set({ autoValidate: true });
   }
 
-  calcFieldsCanAccess(formAccess, mode) {
-    const op = mode;
-    const form = this.props.form;
-    const fieldsCanAccess = access.fieldsCanAccess(op, form);
+  calcFieldsCanAccess() {
+    const { form, mode } = this.props;
+    const fieldsCanAccess = access.fieldsCanAccess(mode, form);
 
     // We need to set the ignoreErrs state as there may be a field that is not accessible that is
     // generating an error.
@@ -30,8 +29,11 @@ class Form extends React.PureComponent {
     return fieldsCanAccess;
   }
 
-  adjustAccess(formAccess, mode) {
-    const fieldsCanAccess = this.calcFieldsCanAccess(formAccess, mode);
+  adjustAccess() {
+    let fieldsCanAccess = null;
+    if (this.props.access) {
+      fieldsCanAccess = this.calcFieldsCanAccess();
+    }
     this.setState({ fieldsCanAccess });
   }
 
@@ -40,10 +42,7 @@ class Form extends React.PureComponent {
     this.turnOnAutoValidate(props.form);
 
     if (props.access) {
-      const fieldsCanAccess = this.calcFieldsCanAccess(
-        props.access,
-        props.mode
-      );
+      const fieldsCanAccess = this.calcFieldsCanAccess();
       this.state.fieldsCanAccess = fieldsCanAccess;
     }
   }
@@ -56,14 +55,13 @@ class Form extends React.PureComponent {
       this.turnOnAutoValidate(form);
     }
 
-    // Did the access change? Is the mode changing and an access was specified? Or, did the form
-    // change?
+    // Did the access, more or form change?
     if (
       prevProps.access !== access ||
-      (prevProps.mode !== mode && access) ||
+      prevProps.mode !== mode ||
       prevProps.form !== form
     ) {
-      this.adjustAccess(access, mode);
+      this.adjustAccess();
     }
   }
 
