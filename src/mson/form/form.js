@@ -226,6 +226,10 @@ export default class Form extends Component {
       this.setHidden(props.hidden);
     }
 
+    if (props.out !== undefined) {
+      this.setOut(props.out);
+    }
+
     if (props.snapshot !== undefined) {
       this.setSnapshot(props.snapshot);
     }
@@ -527,6 +531,10 @@ export default class Form extends Component {
 
   setHidden(hidden) {
     this._fields.each(field => field.set({ hidden }));
+  }
+
+  setOut(out) {
+    this._fields.each(field => field.set({ out }));
   }
 
   setSnapshot(snapshot) {

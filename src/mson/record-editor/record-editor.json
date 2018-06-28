@@ -1,9 +1,17 @@
 {
   "component": "Form",
   "baseForm": "{{baseForm}}",
+  "preview": "{{preview}}",
   "form": {
     "component": "{{baseForm}}",
     "fields": [
+      {
+        "component": "ButtonField",
+        "name": "edit",
+        "label": "Edit",
+        "icon": "ModeEdit",
+        "hidden": true
+      },
       {
         "component": "ButtonField",
         "type": "submit",
@@ -24,21 +32,19 @@
       "event": "load",
       "actions": [
         {
-          "component": "Set",
-          "name": "reset",
-          "value": true
+          "component": "GetRecord",
+          "type": "{{storeType}}",
+          "id": "{{recordId}}"
         },
         {
           "component": "Set",
-          "name": "fields.id.value",
-          "value": "{{id}}"
+          "name": "value",
+          "value": "{{arguments.fieldValues}}"
         },
         {
-          "component": "APIGet",
-          "url": "{{url}}",
-          "object": "{{object}}",
-          "id": "{{id}}",
-          "fields": "{{inFields}}"
+          "component": "Set",
+          "name": "userId",
+          "value": "{{arguments.userId}}"
         },
         {
           "component": "Set",
@@ -46,9 +52,85 @@
           "value": true
         },
         {
+          "if": {
+            "preview": {
+              "$ne": false
+            }
+          },
+          "component": "Emit",
+          "event": "read"
+        },
+        {
+          "if": {
+            "preview": false
+          },
+          "component": "Emit",
+          "event": "edit"
+        }
+      ]
+    },
+    {
+      "event": "read",
+      "actions": [
+        {
+          "component": "Set",
+          "name": "mode",
+          "value": "read"
+        },
+        {
+          "component": "Set",
+          "name": "editable",
+          "value": false
+        },
+        {
           "component": "Set",
           "name": "fields.save.disabled",
           "value": true
+        },
+        {
+          "component": "Set",
+          "name": "fields.save.hidden",
+          "value": true
+        },
+        {
+          "component": "Set",
+          "name": "fields.edit.hidden",
+          "value": false
+        },
+        {
+          "component": "Set",
+          "name": "fields.cancel.hidden",
+          "value": true
+        }
+      ]
+    },
+    {
+      "event": "edit",
+      "actions": [
+        {
+          "component": "Set",
+          "name": "mode",
+          "value": "update"
+        },
+        {
+          "component": "Set",
+          "name": "editable",
+          "value": true
+        },
+        {
+          "component": "Set",
+          "name": "fields.edit.hidden",
+          "value": true
+        },
+        {
+          "component": "Set",
+          "name": "fields.save.hidden",
+          "value": false
+        },
+        {
+          "component": "Set",
+          "name": "fields.cancel.hidden",
+          "value": false
         }
       ]
     },
@@ -76,11 +158,9 @@
       "event": "save",
       "actions": [
         {
-          "component": "APISet",
-          "url": "{{url}}",
-          "object": "{{object}}",
-          "id": "{{id}}",
-          "fields": "{{outFields}}"
+          "component": "UpsertRecord",
+          "type": "{{storeType}}",
+          "id": "{{recordId}}"
         },
         {
           "//": "Needed or else will be prompted for save",
@@ -89,24 +169,34 @@
           "value": true
         },
         {
-          "component": "Redirect",
-          "if": {
-            "saveURL": null
-          },
-          "path": "/home"
+          "component": "Set",
+          "name": "editable",
+          "value": false
         },
         {
-          "component": "Redirect",
-          "if": {
-            "saveURL": {
-              "$ne": null
-            }
-          },
-          "path": "{{saveURL}}"
+          "component": "Set",
+          "name": "fields.save.hidden",
+          "value": true
+        },
+        {
+          "component": "Set",
+          "name": "fields.edit.hidden",
+          "value": false
+        },
+        {
+          "component": "Set",
+          "name": "fields.cancel.hidden",
+          "value": true
         },
         {
           "component": "Snackbar",
           "message": "{{label}} saved"
+        },
+        {
+          "//":
+            "Needed to restore read data as may be different and update access",
+          "component": "Emit",
+          "event": "load"
         }
       ]
     },
@@ -114,20 +204,8 @@
       "event": "cancel",
       "actions": [
         {
-          "component": "Redirect",
-          "if": {
-            "cancelURL": null
-          },
-          "path": "/home"
-        },
-        {
-          "component": "Redirect",
-          "if": {
-            "cancelURL": {
-              "$ne": null
-            }
-          },
-          "path": "{{cancelURL}}"
+          "component": "Emit",
+          "event": "load"
         }
       ]
     }

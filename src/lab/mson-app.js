@@ -157,14 +157,8 @@ compiler.registerComponent('app.UserSignup', {
 
 // TODO: should be able to inline in ChangePassword
 compiler.registerComponent('app.ChangePasswordForm', {
-  component: 'Form',
+  component: 'app.Employee',
   fields: [
-    {
-      component: 'PasswordField',
-      name: 'password',
-      label: 'New Password',
-      required: true
-    },
     {
       component: 'PasswordField',
       name: 'retypePassword',
@@ -186,22 +180,57 @@ compiler.registerComponent('app.ChangePasswordForm', {
         error: 'must match'
       }
     }
+  ],
+  listeners: [
+    {
+      event: 'create',
+      actions: [
+        {
+          component: 'Set',
+          name: 'hidden',
+          value: true
+        },
+        {
+          component: 'Set',
+          name: 'out',
+          value: false
+        },
+        {
+          component: 'Set',
+          name: 'fields.password.hidden',
+          value: false
+        },
+        {
+          component: 'Set',
+          name: 'fields.retypePassword.hidden',
+          value: false
+        },
+        {
+          component: 'Set',
+          name: 'fields.password.required',
+          value: true
+        },
+        {
+          component: 'Set',
+          name: 'fields.password.out',
+          value: true
+        }
+      ]
+    }
   ]
 });
 
 compiler.registerComponent('app.ChangePassword', {
   component: 'RecordEditor',
+  preview: false,
   baseForm: 'app.ChangePasswordForm',
   label: 'Password',
-  url: 'api.mson.co',
-  object: 'User',
-  inFields: [],
-  outFields: ['id', 'password'],
-  id: '1' // TODO: '{{globals.user.id}}'
+  recordId: '{{globals.session.user.id}}',
+  storeType: 'app.Employee'
 });
 
 compiler.registerComponent('app.ViewAndEditAccount', {
-  component: 'RecordEditorWithPreview',
+  component: 'RecordEditor',
   baseForm: 'app.Employee',
   label: 'Account',
   recordId: '{{globals.session.user.id}}',
