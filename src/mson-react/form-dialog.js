@@ -123,5 +123,5 @@ class FormDialog extends React.PureComponent {
 }
 
 FormDialog = withMobileDialog()(FormDialog);
-FormDialog = attach(['err', 'dirty', 'archivedAt'], 'form')(FormDialog);
+FormDialog = attach(['err', 'dirty', 'archivedAt', 'mode'], 'form')(FormDialog);
 export default FormDialog;

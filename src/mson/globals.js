@@ -1,5 +1,5 @@
 // NOTE: we don't use redux here as we want a react-independent implementation--yes, we can use
-// redux without React, but we don't need all the overhead.
+// redux without React, but we don't need all the complexity of redux.
 
 import Component from './component';
 

@@ -11,14 +11,13 @@ class Form extends React.PureComponent {
 
   // Enable automatic validation whenever a user changes data. This feature allows the user to see
   // errors in real-time.
-  turnOnAutoValidate(form) {
-    form.set({ autoValidate: true });
+  turnOnAutoValidate() {
+    this.props.form.set({ autoValidate: true });
   }
 
-  calcFieldsCanAccess(formAccess, mode) {
-    const op = mode;
-    const form = this.props.form;
-    const fieldsCanAccess = access.fieldsCanAccess(op, form);
+  calcFieldsCanAccess() {
+    const { form, mode } = this.props;
+    const fieldsCanAccess = access.fieldsCanAccess(mode, form);
 
     // We need to set the ignoreErrs state as there may be a field that is not accessible that is
     // generating an error.
@@ -30,36 +29,39 @@ class Form extends React.PureComponent {
     return fieldsCanAccess;
   }
 
-  adjustAccess(formAccess, mode) {
-    const fieldsCanAccess = this.calcFieldsCanAccess(formAccess, mode);
+  adjustAccess() {
+    let fieldsCanAccess = null;
+    if (this.props.access) {
+      fieldsCanAccess = this.calcFieldsCanAccess();
+    }
     this.setState({ fieldsCanAccess });
   }
 
   constructor(props) {
     super(props);
-    this.turnOnAutoValidate(props.form);
+    this.turnOnAutoValidate();
 
     if (props.access) {
-      const fieldsCanAccess = this.calcFieldsCanAccess(
-        props.access,
-        props.mode
-      );
+      const fieldsCanAccess = this.calcFieldsCanAccess();
       this.state.fieldsCanAccess = fieldsCanAccess;
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { form, access, mode } = this.props;
+
     // Did the form change?
-    if (prevProps.form !== this.props.form) {
-      this.turnOnAutoValidate(this.props.form);
+    if (prevProps.form !== form) {
+      this.turnOnAutoValidate();
     }
 
-    // Did the access change? Is the mode changing and an access was specified?
+    // Did the access, more or form change?
     if (
-      prevProps.access !== this.props.access ||
-      (prevProps.mode !== this.props.mode && this.props.access)
+      prevProps.access !== access ||
+      prevProps.mode !== mode ||
+      prevProps.form !== form
     ) {
-      this.adjustAccess(this.props.access, this.props.mode);
+      this.adjustAccess();
     }
   }
 
@@ -105,4 +107,4 @@ class Form extends React.PureComponent {
   }
 }
 
-export default attach(['access'], 'form')(Form);
+export default attach(['access', 'mode'], 'form')(Form);

@@ -43,12 +43,12 @@ export const employee = {
     form: {
       create: 'admin',
       read: ['admin', 'employee'],
-      update: ['admin', 'owner'],
+      update: ['admin', 'owner', 'manager'],
       archive: ['admin']
     },
     fields: {
       password: {
-        update: 'admin'
+        update: ['admin', 'owner']
       },
       roles: {
         update: 'admin'

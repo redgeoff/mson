@@ -272,8 +272,7 @@ class FormsField extends React.PureComponent {
       classes,
       isLoading,
       form,
-      currentForm,
-      mode
+      currentForm
     } = this.props;
 
     const { confirmationOpen, confirmationTitle } = this.state;
@@ -318,7 +317,6 @@ class FormsField extends React.PureComponent {
         hybrid where we have a dialog per form. There is almost certainly more overhead in having an
         instance per record, right? */}
         <FormDialog
-          mode={mode}
           form={form}
           currentForm={currentForm}
           onClose={this.handleClose}

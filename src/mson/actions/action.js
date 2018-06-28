@@ -1,5 +1,7 @@
 import Component from '../component';
 import sift from 'sift';
+import PropFiller from '../compiler/prop-filler';
+import registrar from '../compiler/registrar';
 
 export default class Action extends Component {
   set(props) {
@@ -15,6 +17,27 @@ export default class Action extends Component {
   // Abstract method
   async act(/* props */) {}
 
+  getFilled(names, props) {
+    if (!props) {
+      props = {};
+    }
+    props.globals = {
+      session: registrar.client ? registrar.client.user.getSession() : undefined
+    };
+    let prop = super.get(names);
+    const propFiller = new PropFiller(props);
+    prop = propFiller.fill(prop);
+    return prop;
+  }
+
+  get(names) {
+    if (names && !Array.isArray(names)) {
+      return this.getFilled(names);
+    } else {
+      return super.get(names);
+    }
+  }
+
   async run(props) {
     const where = this.get('if');
     let shouldRun = true;
@@ -29,6 +52,7 @@ export default class Action extends Component {
 
     if (shouldRun) {
       const actions = this.get('actions');
+
       if (actions) {
         for (const i in actions) {
           await actions[i].run(props);

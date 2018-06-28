@@ -182,6 +182,10 @@ export default class Form extends Component {
     }
   }
 
+  copyAccess(form) {
+    this.set({ access: form.get('access') });
+  }
+
   _clearExtraErrors() {
     this._extraErrors = [];
   }
@@ -200,6 +204,7 @@ export default class Form extends Component {
       this.cloneFields(props.form);
       this.copyValidators(props.form);
       this.copyListeners(props.form);
+      this.copyAccess(props.form);
     }
 
     if (props.validators !== undefined) {
@@ -259,7 +264,8 @@ export default class Form extends Component {
       'showArchived',
       'searchString',
       'cursor',
-      'snapshot'
+      'snapshot',
+      'mode'
     );
   }
 
@@ -359,7 +365,8 @@ export default class Form extends Component {
       'showArchived',
       'searchString',
       'cursor',
-      'snapshot'
+      'snapshot',
+      'mode'
     );
     return value === undefined ? super.getOne(name) : value;
   }

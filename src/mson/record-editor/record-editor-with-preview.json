@@ -32,14 +32,28 @@
       "actions": [
         {
           "component": "Set",
+          "name": "mode",
+          "value": "read"
+        },
+        {
+          "component": "Set",
           "name": "editable",
           "value": false
         },
         {
-          "component": "APIGet",
-          "url": "{{url}}",
-          "object": "{{object}}",
-          "id": "{{id}}"
+          "component": "GetRecord",
+          "type": "{{storeType}}",
+          "id": "{{recordId}}"
+        },
+        {
+          "component": "Set",
+          "name": "value",
+          "value": "{{arguments.fieldValues}}"
+        },
+        {
+          "component": "Set",
+          "name": "userId",
+          "value": "{{arguments.userId}}"
         },
         {
           "component": "Set",
@@ -71,6 +85,11 @@
     {
       "event": "edit",
       "actions": [
+        {
+          "component": "Set",
+          "name": "mode",
+          "value": "update"
+        },
         {
           "component": "Set",
           "name": "editable",
@@ -117,10 +136,9 @@
       "event": "save",
       "actions": [
         {
-          "component": "APISet",
-          "url": "{{url}}",
-          "object": "{{object}}",
-          "id": "{{id}}"
+          "component": "UpsertRecord",
+          "type": "{{storeType}}",
+          "id": "{{recordId}}"
         },
         {
           "//": "Needed or else will be prompted for save",
@@ -151,6 +169,12 @@
         {
           "component": "Snackbar",
           "message": "{{label}} saved"
+        },
+        {
+          "//":
+            "Needed to restore read data as may be different and update access",
+          "component": "Emit",
+          "event": "load"
         }
       ]
     },

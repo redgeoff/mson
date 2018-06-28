@@ -22,6 +22,7 @@ import FormAccess from './form/form-access';
 import FormField from './fields/form-field';
 import FormsField from './fields/forms-field';
 import FormValidator from './form/form-validator';
+import GetRecord from './actions/get-record';
 import GetRecords from './actions/get-records';
 import IntegerField from './fields/integer-field';
 import Iterator from './actions/iterator';
@@ -47,6 +48,7 @@ import Set from './actions/set';
 import Snackbar from './actions/snackbar';
 import TextField from './fields/text-field';
 import TextListField from './fields/text-list-field';
+import UpsertRecord from './actions/upsert-record';
 import User from './form/user';
 
 export default {
@@ -68,6 +70,7 @@ export default {
   AccessForm: FormAccess,
   FormField,
   FormsField,
+  GetRecord,
   GetRecords,
   IntegerField,
   Iterator,
@@ -94,5 +97,6 @@ export default {
   TextField,
   TextListField,
   ValidatorForm: FormValidator,
+  UpsertRecord,
   User
 };

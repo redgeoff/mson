@@ -14,8 +14,12 @@ export default class Set extends Action {
   _setProp(props) {
     const name = this.get('name');
     let names = name !== null ? name.split('.') : [];
+
     const value =
-      this.get('value') === null ? props.arguments : this.get('value');
+      this.get('value') === null
+        ? props.arguments
+        : this.getFilled('value', props);
+
     if (!name) {
       // No name was specified to so pipe to next action
       return value;
@@ -32,6 +36,10 @@ export default class Set extends Action {
         [names[names.length - 1]]: value
       });
     }
+
+    // Pipe the arguments so that we can do things like use multiple Set actions to copy pieces of
+    // our API results
+    return props.arguments;
   }
 
   async act(props) {
