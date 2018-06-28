@@ -31,9 +31,13 @@ class Form extends React.PureComponent {
 
   adjustAccess() {
     let fieldsCanAccess = null;
-    if (this.props.access) {
+
+    // Was access specified? We check the form instead of this.props.access as this.props.access may
+    // not have been updated yet.
+    if (this.props.form.get('access')) {
       fieldsCanAccess = this.calcFieldsCanAccess();
     }
+
     this.setState({ fieldsCanAccess });
   }
 
