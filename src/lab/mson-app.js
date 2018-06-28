@@ -218,7 +218,7 @@ compiler.registerComponent('app.ChangePasswordForm', {
       ]
     },
     {
-      event: 'saved',
+      event: ['saved', 'cancel'],
       actions: [
         {
           component: 'Redirect',
