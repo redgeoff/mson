@@ -1,6 +1,7 @@
 {
   "component": "Form",
   "baseForm": "{{baseForm}}",
+  "preview": "{{preview}}",
   "form": {
     "component": "{{baseForm}}",
     "fields": [
@@ -31,16 +32,6 @@
       "event": "load",
       "actions": [
         {
-          "component": "Set",
-          "name": "mode",
-          "value": "read"
-        },
-        {
-          "component": "Set",
-          "name": "editable",
-          "value": false
-        },
-        {
           "component": "GetRecord",
           "type": "{{storeType}}",
           "id": "{{recordId}}"
@@ -59,6 +50,37 @@
           "component": "Set",
           "name": "pristine",
           "value": true
+        },
+        {
+          "if": {
+            "preview": {
+              "$ne": false
+            }
+          },
+          "component": "Emit",
+          "event": "read"
+        },
+        {
+          "if": {
+            "preview": false
+          },
+          "component": "Emit",
+          "event": "edit"
+        }
+      ]
+    },
+    {
+      "event": "read",
+      "actions": [
+        {
+          "component": "Set",
+          "name": "mode",
+          "value": "read"
+        },
+        {
+          "component": "Set",
+          "name": "editable",
+          "value": false
         },
         {
           "component": "Set",
