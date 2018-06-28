@@ -84,9 +84,14 @@ class Form extends React.PureComponent {
   };
 
   render() {
-    const { form, formTag } = this.props;
+    const { form, formTag, isLoading } = this.props;
     const { fieldsCanAccess } = this.state;
     const fields = form.get('fields');
+
+    // Hide until the data has finished loading
+    if (isLoading) {
+      return null;
+    }
 
     // The form key is needed or else React will not re-render all fields when the field indexes are
     // the same and we switch from route to another.
@@ -111,4 +116,4 @@ class Form extends React.PureComponent {
   }
 }
 
-export default attach(['access', 'mode'], 'form')(Form);
+export default attach(['access', 'mode', 'isLoading'], 'form')(Form);

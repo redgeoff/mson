@@ -32,6 +32,11 @@
       "event": "load",
       "actions": [
         {
+          "component": "Set",
+          "name": "isLoading",
+          "value": true
+        },
+        {
           "component": "GetRecord",
           "type": "{{storeType}}",
           "id": "{{recordId}}"
@@ -66,6 +71,11 @@
           },
           "component": "Emit",
           "event": "edit"
+        },
+        {
+          "component": "Set",
+          "name": "isLoading",
+          "value": false
         }
       ]
     },

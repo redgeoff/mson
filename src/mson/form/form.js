@@ -269,7 +269,8 @@ export default class Form extends Component {
       'searchString',
       'cursor',
       'snapshot',
-      'mode'
+      'mode',
+      'isLoading'
     );
   }
 
@@ -370,7 +371,8 @@ export default class Form extends Component {
       'searchString',
       'cursor',
       'snapshot',
-      'mode'
+      'mode',
+      'isLoading'
     );
     return value === undefined ? super.getOne(name) : value;
   }
