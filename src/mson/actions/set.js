@@ -36,6 +36,10 @@ export default class Set extends Action {
         [names[names.length - 1]]: value
       });
     }
+
+    // Pipe the arguments so that we can do things like use multiple Set actions to copy pieces of
+    // our API results
+    return props.arguments;
   }
 
   async act(props) {

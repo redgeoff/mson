@@ -52,6 +52,11 @@
         },
         {
           "component": "Set",
+          "name": "userId",
+          "value": "{{arguments.userId}}"
+        },
+        {
+          "component": "Set",
           "name": "pristine",
           "value": true
         },
