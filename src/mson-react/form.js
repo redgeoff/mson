@@ -49,17 +49,21 @@ class Form extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { form, access, mode } = this.props;
+
     // Did the form change?
-    if (prevProps.form !== this.props.form) {
-      this.turnOnAutoValidate(this.props.form);
+    if (prevProps.form !== form) {
+      this.turnOnAutoValidate(form);
     }
 
-    // Did the access change? Is the mode changing and an access was specified?
+    // Did the access change? Is the mode changing and an access was specified? Or, did the form
+    // change?
     if (
-      prevProps.access !== this.props.access ||
-      (prevProps.mode !== this.props.mode && this.props.access)
+      prevProps.access !== access ||
+      (prevProps.mode !== mode && access) ||
+      prevProps.form !== form
     ) {
-      this.adjustAccess(this.props.access, this.props.mode);
+      this.adjustAccess(access, mode);
     }
   }
 
