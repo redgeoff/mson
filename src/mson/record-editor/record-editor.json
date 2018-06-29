@@ -38,7 +38,7 @@
         {
           "component": "Action",
           "if": {
-            "recordId": {
+            "recordWhere": {
               "$ne": null
             }
           },
@@ -46,7 +46,7 @@
             {
               "component": "GetRecord",
               "type": "{{storeType}}",
-              "id": "{{recordId}}"
+              "where": "{{recordWhere}}"
             },
             {
               "component": "Set",
@@ -57,6 +57,11 @@
               "component": "Set",
               "name": "userId",
               "value": "{{arguments.userId}}"
+            },
+            {
+              "component": "Set",
+              "name": "fields.id.value",
+              "value": "{{arguments.id}}"
             }
           ]
         },
@@ -183,8 +188,7 @@
       "actions": [
         {
           "component": "UpsertRecord",
-          "type": "{{storeType}}",
-          "id": "{{recordId}}"
+          "type": "{{storeType}}"
         },
         {
           "//": "Needed or else will be prompted to discard changes",

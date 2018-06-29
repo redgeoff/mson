@@ -19,7 +19,7 @@ export default class UpsertRecord extends Action {
     const appId = globals.get('appId');
 
     try {
-      const id = this.get('id');
+      const id = props.component.getValue('id');
       if (id) {
         const fieldValues = access.fieldsCanUpdate(props.component);
 

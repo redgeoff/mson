@@ -229,7 +229,7 @@ compiler.registerComponent('app.EmployeeSignup', {
   label: 'Signup',
   storeType: 'app.Employee',
   hideCancel: true,
-  recordId: null
+  recordWhere: null
 });
 
 compiler.registerComponent('app.ChangePassword', {
@@ -237,7 +237,9 @@ compiler.registerComponent('app.ChangePassword', {
   preview: false,
   baseForm: 'app.ChangePasswordForm',
   label: 'Password',
-  recordId: '{{globals.session.user.id}}',
+  recordWhere: {
+    userId: '{{globals.session.user.id}}'
+  },
   storeType: 'app.Employee'
 });
 
@@ -245,7 +247,9 @@ compiler.registerComponent('app.ViewAndEditAccount', {
   component: 'RecordEditor',
   baseForm: 'app.Employee',
   label: 'Account',
-  recordId: '{{globals.session.user.id}}',
+  recordWhere: {
+    userId: '{{globals.session.user.id}}'
+  },
   storeType: 'app.Employee',
   listeners: [
     {
