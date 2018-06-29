@@ -193,11 +193,6 @@
         },
         {
           "component": "Set",
-          "name": "editable",
-          "value": false
-        },
-        {
-          "component": "Set",
           "name": "fields.save.hidden",
           "value": true
         },
@@ -218,6 +213,11 @@
         {
           "//":
             "Needed to restore read data as may be different and update access",
+          "if": {
+            "preview": {
+              "$ne": false
+            }
+          },
           "component": "Emit",
           "event": "load"
         },
