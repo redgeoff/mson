@@ -31,9 +31,13 @@ class Form extends React.PureComponent {
 
   adjustAccess() {
     let fieldsCanAccess = null;
-    if (this.props.access) {
+
+    // Was access specified? We check the form instead of this.props.access as this.props.access may
+    // not have been updated yet.
+    if (this.props.form.get('access')) {
       fieldsCanAccess = this.calcFieldsCanAccess();
     }
+
     this.setState({ fieldsCanAccess });
   }
 
@@ -80,9 +84,14 @@ class Form extends React.PureComponent {
   };
 
   render() {
-    const { form, formTag } = this.props;
+    const { form, formTag, isLoading } = this.props;
     const { fieldsCanAccess } = this.state;
     const fields = form.get('fields');
+
+    // Hide until the data has finished loading
+    if (isLoading) {
+      return null;
+    }
 
     // The form key is needed or else React will not re-render all fields when the field indexes are
     // the same and we switch from route to another.
@@ -107,4 +116,4 @@ class Form extends React.PureComponent {
   }
 }
 
-export default attach(['access', 'mode'], 'form')(Form);
+export default attach(['access', 'mode', 'isLoading'], 'form')(Form);

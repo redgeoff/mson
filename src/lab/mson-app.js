@@ -50,7 +50,7 @@ compiler.registerComponent('app.Login', {
         // TODO: redirect to home based on menu def
         {
           component: 'Redirect',
-          path: '/account/edit'
+          path: '/account'
         }
       ]
     },
@@ -66,37 +66,89 @@ compiler.registerComponent('app.Login', {
   ]
 });
 
-compiler.registerComponent('app.UserSignup', {
-  component: 'User',
+// TODO: should be able to inline in ChangePassword
+compiler.registerComponent('app.ChangePasswordForm', {
+  component: 'app.Employee',
   fields: [
     {
-      component: 'PersonNameField',
-      name: 'firstName',
-      label: 'First Name',
-      required: true,
-      before: 'username',
-      block: false
+      component: 'PasswordField',
+      name: 'retypePassword',
+      label: 'Retype Password',
+      required: true
+    }
+  ],
+  validators: [
+    {
+      where: {
+        retypePassword: {
+          value: {
+            $ne: '{{password.value}}'
+          }
+        }
+      },
+      error: {
+        field: 'retypePassword',
+        error: 'must match'
+      }
+    }
+  ],
+  listeners: [
+    {
+      event: 'create',
+      actions: [
+        {
+          component: 'Set',
+          name: 'hidden',
+          value: true
+        },
+        {
+          component: 'Set',
+          name: 'out',
+          value: false
+        },
+        {
+          component: 'Set',
+          name: 'fields.password.hidden',
+          value: false
+        },
+        {
+          component: 'Set',
+          name: 'fields.retypePassword.hidden',
+          value: false
+        },
+        {
+          component: 'Set',
+          name: 'fields.password.required',
+          value: true
+        },
+        {
+          component: 'Set',
+          name: 'fields.password.out',
+          value: true
+        }
+      ]
     },
     {
-      component: 'PersonNameField',
-      name: 'lastName',
-      label: 'Last Name',
-      required: true,
-      before: 'username'
-    },
+      event: ['saved', 'cancel'],
+      actions: [
+        {
+          component: 'Redirect',
+          path: '/account'
+        }
+      ]
+    }
+  ]
+});
+
+compiler.registerComponent('app.EmployeeSignupForm', {
+  component: 'app.Employee',
+  fields: [
     {
       component: 'PasswordField',
       name: 'retypePassword',
       label: 'Retype Password',
       required: true,
       out: false
-    },
-    {
-      component: 'ButtonField',
-      name: 'submit',
-      label: 'Create account',
-      type: 'submit',
-      variant: 'outlined'
     }
   ],
   validators: [
@@ -125,6 +177,11 @@ compiler.registerComponent('app.UserSignup', {
         },
         {
           component: 'Set',
+          name: 'fields.password.hidden',
+          value: false
+        },
+        {
+          component: 'Set',
           name: 'fields.password.out',
           value: true
         },
@@ -132,213 +189,67 @@ compiler.registerComponent('app.UserSignup', {
           component: 'Set',
           name: 'fields.password.block',
           value: false
+        },
+        {
+          component: 'Set',
+          name: 'fields.roles.hidden',
+          value: true
+        },
+        {
+          component: 'Set',
+          name: 'fields.save.label',
+          value: 'Create Account'
+        },
+        {
+          component: 'Set',
+          name: 'fields.save.icon',
+          value: 'CheckCircle'
         }
       ]
     },
     {
-      event: 'submit',
+      event: 'saved',
       actions: [
-        {
-          component: 'CreateRecord',
-          // type: 'app.User'
-          type: 'app.Employee'
-        },
         {
           component: 'LogInToApp'
         },
         {
           component: 'Redirect',
-          path: '/account/edit'
+          path: '/account'
         }
       ]
     }
   ]
 });
 
-compiler.registerComponent('app.Account', {
-  component: 'Form',
-  fields: [
-    {
-      component: 'TextField',
-      name: 'name',
-      label: 'Name',
-      required: true,
-      help: 'Enter a full name'
-    },
-    {
-      component: 'EmailField',
-      name: 'email',
-      label: 'Email',
-      required: true
-    },
-    {
-      name: 'departments',
-      label: 'Departments',
-      component: 'SelectField',
-      // multiple: true,
-      blankString: 'None',
-      options: [
-        { value: 'red', label: 'Red' },
-        { value: 'green', label: 'Green' },
-        { value: 'blue', label: 'Blue' }
-      ]
-    }
-    // {
-    //   name: 'departments',
-    //   label: 'Departments',
-    //   component: 'SelectListField',
-    //   blankString: 'None',
-    //   options: [
-    //     { value: 'red', label: 'Red' },
-    //     { value: 'green', label: 'Green' },
-    //     { value: 'blue', label: 'Blue' }
-    //   ]
-    // }
-    // {
-    //   component: 'ButtonField',
-    //   name: 'submit',
-    //   label: 'Save',
-    //   type: 'submit'
-    // },
-    // {
-    //   component: 'ButtonField',
-    //   name: 'cancel',
-    //   label: 'Cancel'
-    // }
-  ]
-});
-
-// TODO: should be able to inline in ChangePassword
-compiler.registerComponent('app.ChangePasswordForm', {
-  component: 'Form',
-  fields: [
-    {
-      component: 'PasswordField',
-      name: 'password',
-      label: 'New Password',
-      required: true
-    },
-    {
-      component: 'PasswordField',
-      name: 'retypePassword',
-      label: 'Retype Password',
-      required: true
-    }
-  ],
-  validators: [
-    {
-      where: {
-        retypePassword: {
-          value: {
-            $ne: '{{password.value}}'
-          }
-        }
-      },
-      error: {
-        field: 'retypePassword',
-        error: 'must match'
-      }
-    }
-  ]
+compiler.registerComponent('app.EmployeeSignup', {
+  component: 'RecordEditor',
+  preview: false,
+  baseForm: 'app.EmployeeSignupForm',
+  label: 'Signup',
+  storeType: 'app.Employee',
+  hideCancel: true,
+  recordWhere: null
 });
 
 compiler.registerComponent('app.ChangePassword', {
   component: 'RecordEditor',
+  preview: false,
   baseForm: 'app.ChangePasswordForm',
   label: 'Password',
-  url: 'api.mson.co',
-  object: 'User',
-  inFields: [],
-  outFields: ['id', 'password'],
-  id: '1' // TODO: '{{globals.user.id}}'
-});
-
-// TODO: should be able to define this in ViewAccount if wanted
-compiler.registerComponent('app.ViewAccountForm', {
-  name: 'app.ViewAccountForm',
-  component: 'app.Account',
-  fields: [
-    {
-      component: 'ButtonField',
-      name: 'edit',
-      label: 'Edit',
-      icon: 'ModeEdit'
-    },
-    {
-      component: 'ButtonField',
-      name: 'cancel',
-      label: 'Cancel',
-      icon: 'Cancel'
-    }
-  ]
-});
-
-compiler.registerComponent('app.ViewAccount', {
-  component: 'app.ViewAccountForm',
-  listeners: [
-    {
-      event: 'fields',
-      actions: [
-        {
-          component: 'Set',
-          name: 'editable',
-          value: false
-        }
-      ]
-    },
-    {
-      event: 'load',
-      actions: [
-        {
-          component: 'APIGet',
-          url: 'api.mson.co',
-          object: 'User',
-          id: '1' // TODO: '{{globals.user.id}}'
-        },
-        {
-          component: 'Set',
-          name: 'pristine',
-          value: true
-        }
-      ]
-    },
-    {
-      event: 'edit',
-      actions: [
-        {
-          component: 'Redirect',
-          path: '/account/edit'
-        }
-      ]
-    },
-    {
-      event: 'cancel',
-      actions: [
-        {
-          component: 'Redirect',
-          path: '/home'
-        }
-      ]
-    }
-  ]
-});
-
-compiler.registerComponent('app.EditAccount', {
-  component: 'RecordEditor',
-  baseForm: 'app.Account',
-  label: 'Account',
-  url: 'api.mson.co',
-  object: 'User',
-  id: '1', // TODO: '{{globals.user.id}}'
-  saveURL: '/account/view',
-  cancelURL: '/account/view'
+  recordWhere: {
+    userId: '{{globals.session.user.id}}'
+  },
+  storeType: 'app.Employee'
 });
 
 compiler.registerComponent('app.ViewAndEditAccount', {
-  component: 'RecordEditorWithPreview',
+  component: 'RecordEditor',
   baseForm: 'app.Employee',
   label: 'Account',
-  recordId: '{{globals.session.user.id}}',
+  recordWhere: {
+    userId: '{{globals.session.user.id}}'
+  },
   storeType: 'app.Employee',
   listeners: [
     {
@@ -365,8 +276,6 @@ compiler.registerComponent('app.ViewAndEditAccount', {
   ]
 });
 
-// TODO: is there a good way for UserSignup to share this structure? app.Employee and app.UserSignup
-// should probably inherit some shared component
 compiler.registerComponent('app.Employee', employee);
 
 compiler.registerComponent('app.Employees', {
@@ -461,6 +370,11 @@ compiler.registerComponent('app.Employees', {
           {
             event: 'setPassword',
             actions: [
+              {
+                component: 'Set',
+                name: 'out',
+                value: false
+              },
               {
                 component: 'Set',
                 name: 'hidden',
@@ -576,20 +490,6 @@ const menuItems = [
         }
       },
       {
-        path: '/account/view',
-        label: 'View Account',
-        content: {
-          component: 'app.ViewAccount'
-        }
-      },
-      {
-        path: '/account/edit',
-        label: 'Edit Account',
-        content: {
-          component: 'app.EditAccount'
-        }
-      },
-      {
         path: '/account/change-password',
         label: 'Change Password',
         content: {
@@ -600,7 +500,7 @@ const menuItems = [
   },
   {
     path: '/foo',
-    label: 'Another Section',
+    label: 'Tmp',
     items: [
       {
         path: '/foo/login',
@@ -621,24 +521,10 @@ const menuItems = [
           component: 'Card',
           title: 'Signup',
           content: {
-            component: 'app.UserSignup'
+            component: 'app.EmployeeSignup'
           }
         },
         fullScreen: true
-      },
-      {
-        path: '/foo/account',
-        label: 'Account',
-        content: {
-          component: 'app.ViewAndEditAccount'
-        }
-      },
-      {
-        path: '/foo/view',
-        label: 'View Account',
-        content: {
-          component: 'app.ViewAccount'
-        }
       }
     ]
   },

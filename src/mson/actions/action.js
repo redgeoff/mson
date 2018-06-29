@@ -17,17 +17,21 @@ export default class Action extends Component {
   // Abstract method
   async act(/* props */) {}
 
-  getFilled(names, props) {
+  _fill(prop, props) {
     if (!props) {
       props = {};
     }
     props.globals = {
       session: registrar.client ? registrar.client.user.getSession() : undefined
     };
-    let prop = super.get(names);
     const propFiller = new PropFiller(props);
     prop = propFiller.fill(prop);
     return prop;
+  }
+
+  getFilled(names, props) {
+    let prop = super.get(names);
+    return prop === null ? null : this._fill(prop, props);
   }
 
   get(names) {
@@ -43,7 +47,8 @@ export default class Action extends Component {
     let shouldRun = true;
 
     if (where) {
-      const whereProps = this.get('ifData') ? this.get('ifData') : props.ifData;
+      const ifData = this.get('ifData');
+      const whereProps = ifData ? ifData : this._fill(props.ifData);
       let sifted = sift(where, [whereProps]);
       if (sifted.length === 0) {
         shouldRun = false;
@@ -54,8 +59,12 @@ export default class Action extends Component {
       const actions = this.get('actions');
 
       if (actions) {
+        let args = null;
         for (const i in actions) {
-          await actions[i].run(props);
+          args = await actions[i].run({
+            ...props,
+            arguments: args ? args : props.args
+          });
         }
       } else {
         return this.act(props);

@@ -5,11 +5,11 @@ import globals from '../globals';
 export default class GetRecord extends Action {
   set(props) {
     super.set(props);
-    this._setIfUndefined(props, 'type', 'id');
+    this._setIfUndefined(props, 'type', 'where');
   }
 
   getOne(name) {
-    const value = this._getIfAllowed(name, 'type', 'id');
+    const value = this._getIfAllowed(name, 'type', 'where');
     return value === undefined ? super.getOne(name) : value;
   }
 
@@ -19,7 +19,7 @@ export default class GetRecord extends Action {
     const record = await registrar.client.record.get({
       appId,
       componentName: this.get('type'),
-      id: this.get('id')
+      where: this.get('where')
     });
 
     return record.data.record;
