@@ -66,95 +66,6 @@ compiler.registerComponent('app.Login', {
   ]
 });
 
-compiler.registerComponent('app.UserSignup', {
-  component: 'User',
-  fields: [
-    {
-      component: 'PersonNameField',
-      name: 'firstName',
-      label: 'First Name',
-      required: true,
-      before: 'username',
-      block: false
-    },
-    {
-      component: 'PersonNameField',
-      name: 'lastName',
-      label: 'Last Name',
-      required: true,
-      before: 'username'
-    },
-    {
-      component: 'PasswordField',
-      name: 'retypePassword',
-      label: 'Retype Password',
-      required: true,
-      out: false
-    },
-    {
-      component: 'ButtonField',
-      name: 'submit',
-      label: 'Create account',
-      type: 'submit',
-      variant: 'outlined'
-    }
-  ],
-  validators: [
-    {
-      where: {
-        retypePassword: {
-          value: {
-            $ne: '{{password.value}}'
-          }
-        }
-      },
-      error: {
-        field: 'retypePassword',
-        error: 'must match'
-      }
-    }
-  ],
-  listeners: [
-    {
-      event: 'create',
-      actions: [
-        {
-          component: 'Set',
-          name: 'fields.username.out',
-          value: true
-        },
-        {
-          component: 'Set',
-          name: 'fields.password.out',
-          value: true
-        },
-        {
-          component: 'Set',
-          name: 'fields.password.block',
-          value: false
-        }
-      ]
-    },
-    {
-      event: 'submit',
-      actions: [
-        {
-          component: 'CreateRecord',
-          // type: 'app.User'
-          type: 'app.Employee'
-        },
-        {
-          component: 'LogInToApp'
-        },
-        {
-          component: 'Redirect',
-          path: '/account/edit'
-        }
-      ]
-    }
-  ]
-});
-
 // TODO: should be able to inline in ChangePassword
 compiler.registerComponent('app.ChangePasswordForm', {
   component: 'app.Employee',
@@ -229,6 +140,103 @@ compiler.registerComponent('app.ChangePasswordForm', {
   ]
 });
 
+compiler.registerComponent('app.EmployeeSignupForm', {
+  component: 'app.Employee',
+  fields: [
+    {
+      component: 'PasswordField',
+      name: 'retypePassword',
+      label: 'Retype Password',
+      required: true,
+      out: false
+    }
+  ],
+  validators: [
+    {
+      where: {
+        retypePassword: {
+          value: {
+            $ne: '{{password.value}}'
+          }
+        }
+      },
+      error: {
+        field: 'retypePassword',
+        error: 'must match'
+      }
+    }
+  ],
+  listeners: [
+    {
+      event: 'create',
+      actions: [
+        {
+          component: 'Set',
+          name: 'fields.username.out',
+          value: true
+        },
+        {
+          component: 'Set',
+          name: 'fields.password.hidden',
+          value: false
+        },
+        {
+          component: 'Set',
+          name: 'fields.password.out',
+          value: true
+        },
+        {
+          component: 'Set',
+          name: 'fields.password.block',
+          value: false
+        },
+        {
+          component: 'Set',
+          name: 'fields.roles.hidden',
+          value: true
+        },
+        {
+          component: 'Set',
+          name: 'fields.save.label',
+          value: 'Create Account'
+        },
+        {
+          component: 'Set',
+          name: 'fields.save.icon',
+          value: 'CheckCircle'
+        },
+        {
+          component: 'Set',
+          name: 'fields.cancel.hidden',
+          value: true
+        }
+      ]
+    },
+    {
+      event: 'saved',
+      actions: [
+        {
+          component: 'LogInToApp'
+        },
+        {
+          component: 'Redirect',
+          path: '/account'
+        }
+      ]
+    }
+  ]
+});
+
+compiler.registerComponent('app.EmployeeSignup', {
+  component: 'RecordEditor',
+  preview: false,
+  baseForm: 'app.EmployeeSignupForm',
+  label: 'Signup',
+  storeType: 'app.Employee',
+  hideCancel: true,
+  recordId: null
+});
+
 compiler.registerComponent('app.ChangePassword', {
   component: 'RecordEditor',
   preview: false,
@@ -269,8 +277,6 @@ compiler.registerComponent('app.ViewAndEditAccount', {
   ]
 });
 
-// TODO: is there a good way for UserSignup to share this structure? app.Employee and app.UserSignup
-// should probably inherit some shared component
 compiler.registerComponent('app.Employee', employee);
 
 compiler.registerComponent('app.Employees', {
@@ -516,7 +522,7 @@ const menuItems = [
           component: 'Card',
           title: 'Signup',
           content: {
-            component: 'app.UserSignup'
+            component: 'app.EmployeeSignup'
           }
         },
         fullScreen: true

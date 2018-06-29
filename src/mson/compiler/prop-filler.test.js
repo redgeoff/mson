@@ -10,14 +10,14 @@ it('should fill props', () => {
   };
   const filler = new PropFiller(props);
 
-  expect(filler.fill('{{foo}}')).toEqual('bar');
-  expect(filler.fill('{{nar}}')).toEqual(props.nar);
-  expect(filler.fill('{{nar.yar}}')).toEqual('tar');
-  expect(filler.fill('{{nar.sar}}')).toEqual(1);
-  expect(filler.fill('foo')).toEqual('foo');
-  expect(filler.fill(props.nar)).toEqual(props.nar);
-  expect(filler.fill('{{missing}}')).toEqual('{{missing}}');
-  expect(filler.fill('{{missing}} here')).toEqual('{{missing}} here');
+  expect(filler.fillString('{{foo}}')).toEqual('bar');
+  expect(filler.fillString('{{nar}}')).toEqual(props.nar);
+  expect(filler.fillString('{{nar.yar}}')).toEqual('tar');
+  expect(filler.fillString('{{nar.sar}}')).toEqual(1);
+  expect(filler.fillString('foo')).toEqual('foo');
+  expect(filler.fillString(props.nar)).toEqual(props.nar);
+  expect(filler.fillString('{{missing}}')).toEqual('{{missing}}');
+  expect(filler.fillString('{{missing}} here')).toEqual('{{missing}} here');
 
   expect(
     filler.fillAll({

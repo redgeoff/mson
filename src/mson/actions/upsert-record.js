@@ -19,13 +19,14 @@ export default class UpsertRecord extends Action {
     const appId = globals.get('appId');
 
     try {
-      if (this.get('id')) {
+      const id = this.get('id');
+      if (id) {
         const fieldValues = access.fieldsCanUpdate(props.component);
 
         await registrar.client.record.update({
           appId,
           componentName: this.get('type'),
-          id: this.get('id'),
+          id,
           fieldValues
         });
       } else {

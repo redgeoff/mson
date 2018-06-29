@@ -1,7 +1,5 @@
 {
   "component": "Form",
-  "baseForm": "{{baseForm}}",
-  "preview": "{{preview}}",
   "form": {
     "component": "{{baseForm}}",
     "fields": [
@@ -37,19 +35,29 @@
           "value": true
         },
         {
-          "component": "GetRecord",
-          "type": "{{storeType}}",
-          "id": "{{recordId}}"
-        },
-        {
-          "component": "Set",
-          "name": "value",
-          "value": "{{arguments.fieldValues}}"
-        },
-        {
-          "component": "Set",
-          "name": "userId",
-          "value": "{{arguments.userId}}"
+          "component": "Action",
+          "if": {
+            "recordId": {
+              "$ne": null
+            }
+          },
+          "actions": [
+            {
+              "component": "GetRecord",
+              "type": "{{storeType}}",
+              "id": "{{recordId}}"
+            },
+            {
+              "component": "Set",
+              "name": "value",
+              "value": "{{arguments.fieldValues}}"
+            },
+            {
+              "component": "Set",
+              "name": "userId",
+              "value": "{{arguments.userId}}"
+            }
+          ]
         },
         {
           "component": "Set",
@@ -138,6 +146,11 @@
           "value": false
         },
         {
+          "if": {
+            "hideCancel": {
+              "$ne": true
+            }
+          },
           "component": "Set",
           "name": "fields.cancel.hidden",
           "value": false

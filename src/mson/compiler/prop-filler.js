@@ -47,7 +47,7 @@ export default class PropFiller {
     return value === undefined ? str : value;
   }
 
-  fill(obj) {
+  fillString(obj) {
     // Is obj a string?
     if (typeof obj === 'string') {
       // Is the string just a template string?
@@ -75,10 +75,18 @@ export default class PropFiller {
       if (typeof item === 'object') {
         items[name] = this.fillAll(item);
       } else {
-        items[name] = this.fill(item);
+        items[name] = this.fillString(item);
       }
     });
 
     return items;
+  }
+
+  fill(obj) {
+    if (typeof obj === 'string') {
+      return this.fillString(obj);
+    } else {
+      return this.fillAll(obj);
+    }
   }
 }
