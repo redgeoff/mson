@@ -21,7 +21,8 @@
         "component": "ButtonField",
         "name": "cancel",
         "label": "Cancel",
-        "icon": "Cancel"
+        "icon": "Cancel",
+        "hidden": true
       }
     ]
   },

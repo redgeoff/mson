@@ -204,11 +204,6 @@ compiler.registerComponent('app.EmployeeSignupForm', {
           component: 'Set',
           name: 'fields.save.icon',
           value: 'CheckCircle'
-        },
-        {
-          component: 'Set',
-          name: 'fields.cancel.hidden',
-          value: true
         }
       ]
     },
