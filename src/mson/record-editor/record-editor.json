@@ -187,24 +187,9 @@
           "id": "{{recordId}}"
         },
         {
-          "//": "Needed or else will be prompted for save",
+          "//": "Needed or else will be prompted to discard changes",
           "component": "Set",
           "name": "pristine",
-          "value": true
-        },
-        {
-          "component": "Set",
-          "name": "fields.save.hidden",
-          "value": true
-        },
-        {
-          "component": "Set",
-          "name": "fields.edit.hidden",
-          "value": false
-        },
-        {
-          "component": "Set",
-          "name": "fields.cancel.hidden",
           "value": true
         },
         {
