@@ -133,16 +133,17 @@ const mockActions = actions => {
   });
 };
 
-const mockRecordEditor = recordEditor => {
+const mockRecordEditor = (recordEditor, event) => {
   const listeners = recordEditor.get('listeners');
   listeners.forEach(listener => {
-    if (listener.event === 'load') {
+    if (listener.event === event) {
       mockActions(listener.actions);
     }
   });
 };
 
 const expectActsToContain = expActs => {
+  expect(acts).toHaveLength(expActs.length);
   expActs.forEach((expAct, i) => {
     const act = acts[i];
     const actualProps = {};
@@ -166,20 +167,23 @@ it('should auto validate', () => {
   ]);
 });
 
-const beforeEachLoadTest = async props => {
-  editAccount = compiler.newComponent({
-    component: 'app.EditAccount',
-    ...props
-  });
-  mockRecordEditor(editAccount);
-
+const emitLoadAndWait = async () => {
   const loaded = testUtils.once(editAccount, 'loaded');
   editAccount.emitLoad();
   await loaded;
 };
 
+const beforeEachLoadTest = async (event, props) => {
+  editAccount = compiler.newComponent({
+    component: 'app.EditAccount',
+    ...props
+  });
+  mockRecordEditor(editAccount, event);
+};
+
 it('should load with preview and recordWhere', async () => {
-  await beforeEachLoadTest();
+  await beforeEachLoadTest('load');
+  await emitLoadAndWait();
 
   expectActsToContain([
     {
@@ -250,10 +254,11 @@ it('should load with preview and recordWhere', async () => {
 });
 
 it('should load without preview and recordWhere', async () => {
-  await beforeEachLoadTest({
+  await beforeEachLoadTest('load', {
     preview: false,
     recordWhere: null
   });
+  await emitLoadAndWait();
 
   expectActsToContain([
     {
@@ -286,8 +291,58 @@ it('should load without preview and recordWhere', async () => {
   ]);
 });
 
+it('should read', async () => {
+  await beforeEachLoadTest('read');
+  const didRead = testUtils.once(editAccount, 'didRead');
+  await editAccount.emitChange('read');
+  await didRead;
+
+  expectActsToContain([
+    {
+      name: 'Set',
+      props: {
+        name: 'mode',
+        value: 'read'
+      }
+    },
+    {
+      name: 'Set',
+      props: {
+        name: 'editable',
+        value: false
+      }
+    },
+    {
+      name: 'Set',
+      props: {
+        name: 'fields.save.hidden',
+        value: true
+      }
+    },
+    {
+      name: 'Set',
+      props: {
+        name: 'fields.edit.hidden',
+        value: false
+      }
+    },
+    {
+      name: 'Set',
+      props: {
+        name: 'fields.cancel.hidden',
+        value: true
+      }
+    },
+    {
+      name: 'Emit',
+      props: {
+        event: 'didRead'
+      }
+    }
+  ]);
+});
+
 // TODO:
-// read
 // edit
 // canSubmit
 // cannotSubmit
