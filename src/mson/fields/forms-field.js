@@ -29,7 +29,7 @@ export default class FormsField extends Field {
   }
 
   _listenForLoaded() {
-    this.on('loaded', async () => {
+    this.on('didLoad', async () => {
       // Wait for loaded event so that we have had a chance to load options, etc...
 
       this._resetInfiniteLoader();

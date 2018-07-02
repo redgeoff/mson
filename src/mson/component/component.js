@@ -172,8 +172,8 @@ export default class Component extends events.EventEmitter {
     this._emitChange('created');
   }
 
-  _emitLoaded() {
-    this._emitChange('loaded');
+  _emitDidLoad() {
+    this._emitChange('didLoad');
     this._isLoaded = true;
   }
 
@@ -227,7 +227,7 @@ export default class Component extends events.EventEmitter {
                 this._emitCreated();
                 break;
               case 'load':
-                this._emitLoaded();
+                this._emitDidLoad();
                 break;
               default:
                 break;
@@ -326,7 +326,7 @@ export default class Component extends events.EventEmitter {
 
     if (!this._hasListenerForEvent('load')) {
       // There are no load listeners so emit a loaded event
-      this._emitLoaded();
+      this._emitDidLoad();
     }
   }
 

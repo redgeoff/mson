@@ -298,7 +298,7 @@ compiler.registerComponent('app.Employees', {
         ],
         listeners: [
           {
-            event: 'loaded',
+            event: 'didLoad',
             actions: [
               {
                 component: 'Set',

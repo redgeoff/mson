@@ -226,7 +226,7 @@ it('should auto validate', async () => {
 });
 
 const emitLoadAndWait = async () => {
-  const loaded = testUtils.once(editAccount, 'loaded');
+  const loaded = testUtils.once(editAccount, 'didLoad');
   editAccount.emitLoad();
   await loaded;
 };
@@ -615,7 +615,7 @@ it('should support the change password scenario', async () => {
   });
   mockRecordEditor(changePassword);
 
-  const didLoad = testUtils.once(changePassword, 'loaded');
+  const didLoad = testUtils.once(changePassword, 'didLoad');
   changePassword.emitChange('load');
   await didLoad;
 
