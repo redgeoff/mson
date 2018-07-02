@@ -559,7 +559,7 @@ const getSaveActs = preview => {
     {
       name: 'Emit',
       props: {
-        event: 'saved'
+        event: 'didSave'
       }
     }
   ]);
@@ -567,7 +567,7 @@ const getSaveActs = preview => {
 
 it('should save', async () => {
   beforeEachLoadTest('save');
-  const didSave = testUtils.once(editAccount, 'saved');
+  const didSave = testUtils.once(editAccount, 'didSave');
   await editAccount.emitChange('save');
   await didSave;
 
@@ -576,7 +576,7 @@ it('should save', async () => {
 
 it('should save without preview', async () => {
   beforeEachLoadTest('save', { preview: false });
-  const didSave = testUtils.once(editAccount, 'saved');
+  const didSave = testUtils.once(editAccount, 'didSave');
   await editAccount.emitChange('save');
   await didSave;
 
@@ -625,7 +625,7 @@ it('should support the change password scenario', async () => {
     password: 'secret12345',
     retypePassword: 'secret12345'
   });
-  const didSave = testUtils.once(changePassword, 'saved');
+  const didSave = testUtils.once(changePassword, 'didSave');
   changePassword.getField('save').emitClick();
   await didSave;
 

@@ -129,7 +129,7 @@ compiler.registerComponent('app.ChangePasswordForm', {
       ]
     },
     {
-      event: ['saved', 'cancel'],
+      event: ['didSave', 'cancel'],
       actions: [
         {
           component: 'Redirect',
@@ -208,7 +208,7 @@ compiler.registerComponent('app.EmployeeSignupForm', {
       ]
     },
     {
-      event: 'saved',
+      event: 'didSave',
       actions: [
         {
           component: 'LogInToApp'

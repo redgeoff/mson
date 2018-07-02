@@ -229,7 +229,7 @@
         },
         {
           "component": "Emit",
-          "event": "saved"
+          "event": "didSave"
         }
       ]
     },
