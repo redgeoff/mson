@@ -4,10 +4,9 @@ import GetRecord from '../actions/get-record';
 import UpsertRecord from '../actions/upsert-record';
 import _ from 'lodash';
 
-const noop = () => {};
-
 let acts = null;
 let editAccount = null;
+let recordCreateSpy = null;
 
 beforeAll(() => {
   compiler.registerComponent('app.Account', {
@@ -141,6 +140,12 @@ beforeEach(() => {
   clearActs();
 });
 
+afterEach(() => {
+  if (recordCreateSpy) {
+    recordCreateSpy.mockReset();
+  }
+});
+
 const mockActions = (actions, spyOnAct) => {
   actions.forEach(action => {
     const actions = action._actions;
@@ -175,10 +180,12 @@ const mockActions = (actions, spyOnAct) => {
           };
         };
       } else if (action instanceof UpsertRecord) {
-        action._fieldsCanCreate = noop;
-        action._recordCreate = noop;
-        action._fieldsCanUpdate = noop;
-        action._recordUpdate = noop;
+        action._fieldsCanCreate = component =>
+          component.getValues({ out: true });
+        action._recordCreate = () => {};
+        recordCreateSpy = jest.spyOn(action, '_recordCreate');
+        action._fieldsCanUpdate = () => {};
+        action._recordUpdate = () => {};
       }
     }
   });
@@ -224,7 +231,7 @@ const emitLoadAndWait = async () => {
   await loaded;
 };
 
-const beforeEachLoadTest = async (event, props) => {
+const beforeEachLoadTest = (event, props) => {
   editAccount = compiler.newComponent({
     component: 'app.EditAccount',
     ...props
@@ -233,7 +240,7 @@ const beforeEachLoadTest = async (event, props) => {
 };
 
 it('should load with preview and recordWhere', async () => {
-  await beforeEachLoadTest('load');
+  beforeEachLoadTest('load');
   await emitLoadAndWait();
 
   expectActsToContain([
@@ -305,7 +312,7 @@ it('should load with preview and recordWhere', async () => {
 });
 
 it('should load without preview and recordWhere', async () => {
-  await beforeEachLoadTest('load', {
+  beforeEachLoadTest('load', {
     preview: false,
     recordWhere: null
   });
@@ -343,7 +350,7 @@ it('should load without preview and recordWhere', async () => {
 });
 
 it('should read', async () => {
-  await beforeEachLoadTest('read');
+  beforeEachLoadTest('read');
   const didRead = testUtils.once(editAccount, 'didRead');
   await editAccount.emitChange('read');
   await didRead;
@@ -453,7 +460,7 @@ const getEditActs = hideCancel => {
 };
 
 it('should edit', async () => {
-  await beforeEachLoadTest('edit');
+  beforeEachLoadTest('edit');
   const didEdit = testUtils.once(editAccount, 'didEdit');
   await editAccount.emitChange('edit');
   await didEdit;
@@ -462,7 +469,7 @@ it('should edit', async () => {
 });
 
 it('should edit with hideCancel', async () => {
-  await beforeEachLoadTest('edit', { hideCancel: true });
+  beforeEachLoadTest('edit', { hideCancel: true });
   const didEdit = testUtils.once(editAccount, 'didEdit');
   await editAccount.emitChange('edit');
   await didEdit;
@@ -471,7 +478,7 @@ it('should edit with hideCancel', async () => {
 });
 
 it('canSubmit', async () => {
-  await beforeEachLoadTest('canSubmit');
+  beforeEachLoadTest('canSubmit');
   const didCanSubmit = testUtils.once(editAccount, 'didCanSubmit');
   await editAccount.emitChange('canSubmit');
   await didCanSubmit;
@@ -494,7 +501,7 @@ it('canSubmit', async () => {
 });
 
 it('cannotSubmit', async () => {
-  await beforeEachLoadTest('cannotSubmit');
+  beforeEachLoadTest('cannotSubmit');
   const didCannotSubmit = testUtils.once(editAccount, 'didCannotSubmit');
   await editAccount.emitChange('cannotSubmit');
   await didCannotSubmit;
@@ -559,7 +566,7 @@ const getSaveActs = preview => {
 };
 
 it('should save', async () => {
-  await beforeEachLoadTest('save');
+  beforeEachLoadTest('save');
   const didSave = testUtils.once(editAccount, 'saved');
   await editAccount.emitChange('save');
   await didSave;
@@ -568,7 +575,7 @@ it('should save', async () => {
 });
 
 it('should save without preview', async () => {
-  await beforeEachLoadTest('save', { preview: false });
+  beforeEachLoadTest('save', { preview: false });
   const didSave = testUtils.once(editAccount, 'saved');
   await editAccount.emitChange('save');
   await didSave;
@@ -577,7 +584,7 @@ it('should save without preview', async () => {
 });
 
 it('should cancel', async () => {
-  await beforeEachLoadTest('cancel');
+  beforeEachLoadTest('cancel');
   const didCancel = testUtils.once(editAccount, 'didCancel');
   await editAccount.emitChange('cancel');
   await didCancel;
@@ -598,4 +605,32 @@ it('should cancel', async () => {
   ]);
 });
 
-// TODO: edit password scenario
+it('should support the change password scenario', async () => {
+  // A form where the out, hidden and required statuses are dynamically changed
+
+  const changePassword = compiler.newComponent({
+    component: 'app.ChangePassword',
+    preview: false,
+    recordWhere: null
+  });
+  mockRecordEditor(changePassword);
+
+  const didLoad = testUtils.once(changePassword, 'loaded');
+  changePassword.emitChange('load');
+  await didLoad;
+
+  changePassword.set({ autoValidate: true });
+
+  changePassword.setValues({
+    password: 'secret12345',
+    retypePassword: 'secret12345'
+  });
+  const didSave = testUtils.once(changePassword, 'saved');
+  changePassword.getField('save').emitClick();
+  await didSave;
+
+  expect(recordCreateSpy).toHaveBeenCalledTimes(1);
+  expect(recordCreateSpy.mock.calls[0][0].fieldValues).toEqual({
+    password: 'secret12345'
+  });
+});

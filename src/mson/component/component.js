@@ -126,6 +126,15 @@ export default class Component extends events.EventEmitter {
     this._set(name, values);
   }
 
+  _concat(name, newValues) {
+    let values = this._get(name);
+    if (!Array.isArray(values)) {
+      values = [];
+    }
+    values = values.concat(newValues);
+    this._set(name, values);
+  }
+
   _setIfUndefinedProp(props, name) {
     if (props[name] !== undefined) {
       this._set(name, props[name]);
@@ -190,9 +199,10 @@ export default class Component extends events.EventEmitter {
       // Inject ifData so that we don't have to explicitly define it in the actions
       const ifData = props.passed;
 
+      // Listeners are concatentated that they can accumulate through the layers of inheritance.
       // TODO: when the listeners change need to clean up previous listeners to prevent a listener
       // leak
-      this._setIfUndefinedProp(props, 'listeners');
+      this._concat('listeners', props.listeners);
       props.listeners.forEach(listener => {
         const events = Array.isArray(listener.event)
           ? listener.event
