@@ -419,9 +419,53 @@ it('should edit with hideCancel', async () => {
   expectActsToContain(getEditActs(true));
 });
 
+it('canSubmit', async () => {
+  await beforeEachLoadTest('canSubmit');
+  const didCanSubmit = testUtils.once(editAccount, 'didCanSubmit');
+  await editAccount.emitChange('canSubmit');
+  await didCanSubmit;
+
+  expectActsToContain([
+    {
+      name: 'Set',
+      props: {
+        name: 'fields.save.disabled',
+        value: false
+      }
+    },
+    {
+      name: 'Emit',
+      props: {
+        event: 'didCanSubmit'
+      }
+    }
+  ]);
+});
+
+it('cannotSubmit', async () => {
+  await beforeEachLoadTest('cannotSubmit');
+  const didCannotSubmit = testUtils.once(editAccount, 'didCannotSubmit');
+  await editAccount.emitChange('cannotSubmit');
+  await didCannotSubmit;
+
+  expectActsToContain([
+    {
+      name: 'Set',
+      props: {
+        name: 'fields.save.disabled',
+        value: true
+      }
+    },
+    {
+      name: 'Emit',
+      props: {
+        event: 'didCannotSubmit'
+      }
+    }
+  ]);
+});
+
 // TODO:
-// canSubmit
-// cannotSubmit
 // save
 // cancel
 

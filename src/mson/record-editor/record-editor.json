@@ -178,6 +178,10 @@
           "component": "Set",
           "name": "fields.save.disabled",
           "value": false
+        },
+        {
+          "component": "Emit",
+          "event": "didCanSubmit"
         }
       ]
     },
@@ -188,6 +192,10 @@
           "component": "Set",
           "name": "fields.save.disabled",
           "value": true
+        },
+        {
+          "component": "Emit",
+          "event": "didCannotSubmit"
         }
       ]
     },
@@ -231,6 +239,10 @@
         {
           "component": "Emit",
           "event": "load"
+        },
+        {
+          "component": "Emit",
+          "event": "didCancel"
         }
       ]
     }
