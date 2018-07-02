@@ -4,8 +4,6 @@
 //   appear in this file though!
 
 import Action from './actions/action';
-import APIGet from './actions/api-get';
-import APISet from './actions/api-set';
 import App from './app';
 import BooleanField from './fields/boolean-field';
 import ButtonField from './fields/button-field';
@@ -51,8 +49,6 @@ import User from './form/user';
 
 export default {
   Action,
-  APIGet,
-  APISet,
   App,
   BooleanField,
   ButtonField,
