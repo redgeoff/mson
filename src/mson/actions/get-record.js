@@ -1,6 +1,7 @@
 import Action from './action';
 import registrar from '../compiler/registrar';
 import globals from '../globals';
+import utils from '../utils';
 
 export default class GetRecord extends Action {
   set(props) {
@@ -20,12 +21,19 @@ export default class GetRecord extends Action {
   async act(props) {
     const appId = globals.get('appId');
 
-    const record = await this._recordGet({
-      appId,
-      componentName: this.get('type'),
-      where: this.get('where')
-    });
+    try {
+      const record = await this._recordGet({
+        appId,
+        componentName: this.get('type'),
+        where: this.get('where')
+      });
 
-    return record.data.record;
+      return record.data.record;
+    } catch (err) {
+      utils.displayError(err.toString());
+
+      // We throw the error so that the entire listener chain is aborted
+      throw err;
+    }
   }
 }
