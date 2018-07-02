@@ -13,10 +13,14 @@ export default class GetRecord extends Action {
     return value === undefined ? super.getOne(name) : value;
   }
 
+  _recordGet(props) {
+    return registrar.client.record.get(props);
+  }
+
   async act(props) {
     const appId = globals.get('appId');
 
-    const record = await registrar.client.record.get({
+    const record = await this._recordGet({
       appId,
       componentName: this.get('type'),
       where: this.get('where')
