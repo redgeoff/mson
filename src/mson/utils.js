@@ -43,6 +43,10 @@ class Utils {
     return methods;
   }
 
+  displayError(text) {
+    globals.displayAlert({ title: 'Unexpected Error', text });
+  }
+
   setFormErrorsFromAPIError(err, form) {
     try {
       const message = JSON.parse(err.graphQLErrors[0].message);
@@ -54,7 +58,7 @@ class Utils {
       // archive, etc... The caller will still throw the main error. TODO: Is there a better way to
       // handle this? Should all messages be JSON objects? That would probably be too limiting,
       // right?
-      globals.displayAlert({ title: 'Unexpected Error', text: err.toString() });
+      this.displayError(err.toString());
     }
   }
 

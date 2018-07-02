@@ -27,6 +27,8 @@ export default class RecordStore extends Component {
     } catch (err) {
       if (props && props.form) {
         utils.setFormErrorsFromAPIError(err, props.form);
+      } else {
+        utils.displayError(err.toString());
       }
 
       // We throw the error so that the entire listener chain is aborted
