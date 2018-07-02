@@ -342,13 +342,8 @@ it('should read', async () => {
   ]);
 });
 
-it('should edit', async () => {
-  await beforeEachLoadTest('edit');
-  const didEdit = testUtils.once(editAccount, 'didEdit');
-  await editAccount.emitChange('edit');
-  await didEdit;
-
-  expectActsToContain([
+const getEditActs = hideCancel => {
+  let acts = [
     {
       name: 'Set',
       props: {
@@ -383,14 +378,20 @@ it('should edit', async () => {
         name: 'fields.edit.hidden',
         value: true
       }
-    },
-    {
+    }
+  ];
+
+  if (hideCancel !== true) {
+    acts.push({
       name: 'Set',
       props: {
         name: 'fields.cancel.hidden',
         value: false
       }
-    },
+    });
+  }
+
+  return acts.concat([
     {
       name: 'Emit',
       props: {
@@ -398,10 +399,27 @@ it('should edit', async () => {
       }
     }
   ]);
+};
+
+it('should edit', async () => {
+  await beforeEachLoadTest('edit');
+  const didEdit = testUtils.once(editAccount, 'didEdit');
+  await editAccount.emitChange('edit');
+  await didEdit;
+
+  expectActsToContain(getEditActs());
+});
+
+it('should edit with hideCancel', async () => {
+  await beforeEachLoadTest('edit', { hideCancel: true });
+  const didEdit = testUtils.once(editAccount, 'didEdit');
+  await editAccount.emitChange('edit');
+  await didEdit;
+
+  expectActsToContain(getEditActs(true));
 });
 
 // TODO:
-// should edit with hideCancel
 // canSubmit
 // cannotSubmit
 // save
