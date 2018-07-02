@@ -216,7 +216,7 @@ it('should auto validate', async () => {
   const changePassword = compiler.newComponent({
     component: 'app.ChangePassword'
   });
-  await testUtils.once(changePassword, 'created');
+  await testUtils.once(changePassword, 'didCreate');
   changePassword.set({ autoValidate: true });
   changePassword.getField('password').setValue('secret123');
   changePassword.getField('retypePassword').setValue('secret1234');

@@ -47,7 +47,7 @@ export default class Component extends events.EventEmitter {
 
     if (!this._hasListenerForEvent('create')) {
       // There are no create listeners so emit a created event
-      this._emitCreated();
+      this._emitDidCreate();
     }
   }
 
@@ -168,8 +168,8 @@ export default class Component extends events.EventEmitter {
     });
   }
 
-  _emitCreated() {
-    this._emitChange('created');
+  _emitDidCreate() {
+    this._emitChange('didCreate');
   }
 
   _emitDidLoad() {
@@ -224,7 +224,7 @@ export default class Component extends events.EventEmitter {
 
             switch (event) {
               case 'create':
-                this._emitCreated();
+                this._emitDidCreate();
                 break;
               case 'load':
                 this._emitDidLoad();
