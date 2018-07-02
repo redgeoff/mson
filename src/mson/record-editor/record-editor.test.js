@@ -1,7 +1,10 @@
 import compiler from '../compiler';
 import testUtils from '../test-utils';
 import GetRecord from '../actions/get-record';
+import UpsertRecord from '../actions/upsert-record';
 import _ from 'lodash';
+
+const noop = () => {};
 
 let acts = null;
 let editAccount = null;
@@ -97,20 +100,22 @@ beforeEach(() => {
   clearActs();
 });
 
-const mockActions = actions => {
+const mockActions = (actions, spyOnAct) => {
   actions.forEach(action => {
     const actions = action._actions;
     if (actions) {
-      mockActions(actions);
+      mockActions(actions, spyOnAct);
     } else {
-      const origAct = action.act;
-      action.act = (...args) => {
-        acts.push({
-          name: action.getClassName(),
-          props: action.get()
-        });
-        return origAct.apply(action, args);
-      };
+      if (spyOnAct) {
+        const origAct = action.act;
+        action.act = (...args) => {
+          acts.push({
+            name: action.getClassName(),
+            props: action.get()
+          });
+          return origAct.apply(action, args);
+        };
+      }
 
       if (action instanceof GetRecord) {
         action._recordGet = async () => {
@@ -128,6 +133,11 @@ const mockActions = actions => {
             }
           };
         };
+      } else if (action instanceof UpsertRecord) {
+        action._fieldsCanCreate = noop;
+        action._recordCreate = noop;
+        action._fieldsCanUpdate = noop;
+        action._recordUpdate = noop;
       }
     }
   });
@@ -136,9 +146,8 @@ const mockActions = actions => {
 const mockRecordEditor = (recordEditor, event) => {
   const listeners = recordEditor.get('listeners');
   listeners.forEach(listener => {
-    if (listener.event === event) {
-      mockActions(listener.actions);
-    }
+    const spyOnAct = listener.event === event;
+    mockActions(listener.actions, spyOnAct);
   });
 };
 
@@ -465,8 +474,67 @@ it('cannotSubmit', async () => {
   ]);
 });
 
+const getSaveActs = preview => {
+  let acts = [
+    {
+      name: 'UpsertRecord',
+      props: {
+        type: 'app.Account'
+      }
+    },
+    {
+      name: 'Set',
+      props: {
+        name: 'pristine',
+        value: true
+      }
+    },
+    {
+      name: 'Snackbar',
+      props: {
+        message: 'Account saved'
+      }
+    }
+  ];
+
+  if (preview !== false) {
+    acts.push({
+      name: 'Emit',
+      props: {
+        event: 'load'
+      }
+    });
+  }
+
+  return acts.concat([
+    {
+      name: 'Emit',
+      props: {
+        event: 'saved'
+      }
+    }
+  ]);
+};
+
+it('should save', async () => {
+  await beforeEachLoadTest('save');
+  const didSave = testUtils.once(editAccount, 'saved');
+  await editAccount.emitChange('save');
+  await didSave;
+
+  expectActsToContain(getSaveActs());
+});
+
+it('should save without preview', async () => {
+  await beforeEachLoadTest('save', { preview: false });
+  const didSave = testUtils.once(editAccount, 'saved');
+  await editAccount.emitChange('save');
+  await didSave;
+
+  expectActsToContain(getSaveActs(false));
+});
+
 // TODO:
-// save
 // cancel
 
 // TODO: edit password scenario
