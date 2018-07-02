@@ -342,8 +342,66 @@ it('should read', async () => {
   ]);
 });
 
+it('should edit', async () => {
+  await beforeEachLoadTest('edit');
+  const didEdit = testUtils.once(editAccount, 'didEdit');
+  await editAccount.emitChange('edit');
+  await didEdit;
+
+  expectActsToContain([
+    {
+      name: 'Set',
+      props: {
+        name: 'mode',
+        value: 'update'
+      }
+    },
+    {
+      name: 'Set',
+      props: {
+        name: 'editable',
+        value: true
+      }
+    },
+    {
+      name: 'Set',
+      props: {
+        name: 'fields.save.hidden',
+        value: false
+      }
+    },
+    {
+      name: 'Set',
+      props: {
+        name: 'fields.save.disabled',
+        value: true
+      }
+    },
+    {
+      name: 'Set',
+      props: {
+        name: 'fields.edit.hidden',
+        value: true
+      }
+    },
+    {
+      name: 'Set',
+      props: {
+        name: 'fields.cancel.hidden',
+        value: false
+      }
+    },
+    {
+      name: 'Emit',
+      props: {
+        event: 'didEdit'
+      }
+    }
+  ]);
+});
+
 // TODO:
-// edit
+// should edit with hideCancel
 // canSubmit
 // cannotSubmit
 // save
