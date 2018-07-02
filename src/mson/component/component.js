@@ -61,7 +61,7 @@ export default class Component extends events.EventEmitter {
 
     this._setDebugId();
 
-    // We have to set the name before we create the component as the name be needed to create the
+    // We have to set the name before we create the component as the name is needed to create the
     // component, e.g. to create sub fields using the name as a prefix.
     if (props) {
       this._setName(props);

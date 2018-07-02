@@ -218,6 +218,14 @@ export default class Form extends Component {
       this.setValues(props.value);
     }
 
+    if (props.required !== undefined) {
+      this.setRequired(props.required);
+    }
+
+    if (props.disabled !== undefined) {
+      this.setDisabled(props.disabled);
+    }
+
     if (props.editable !== undefined) {
       this.setEditable(props.editable);
     }

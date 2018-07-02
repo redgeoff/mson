@@ -10,45 +10,6 @@ let acts = null;
 let editAccount = null;
 
 beforeAll(() => {
-  compiler.registerComponent('app.ChangePasswordForm', {
-    component: 'Form',
-    fields: [
-      {
-        component: 'PasswordField',
-        name: 'password',
-        label: 'New Password',
-        required: true
-      },
-      {
-        component: 'PasswordField',
-        name: 'retypePassword',
-        label: 'Retype Password',
-        required: true
-      }
-    ],
-    validators: [
-      {
-        where: {
-          retypePassword: {
-            value: {
-              $ne: '{{password.value}}'
-            }
-          }
-        },
-        error: {
-          field: 'retypePassword',
-          error: 'must match'
-        }
-      }
-    ]
-  });
-
-  compiler.registerComponent('app.ChangePassword', {
-    component: 'RecordEditor',
-    baseForm: 'app.ChangePasswordForm',
-    label: 'Password'
-  });
-
   compiler.registerComponent('app.Account', {
     component: 'Form',
     fields: [
@@ -82,6 +43,86 @@ beforeAll(() => {
       id: 'foo'
     },
     storeType: 'app.Account'
+  });
+
+  compiler.registerComponent('app.ChangePasswordForm', {
+    component: 'app.Account',
+    fields: [
+      {
+        component: 'PasswordField',
+        name: 'retypePassword',
+        label: 'Retype Password',
+        required: true
+      }
+    ],
+    validators: [
+      {
+        where: {
+          retypePassword: {
+            value: {
+              $ne: '{{password.value}}'
+            }
+          }
+        },
+        error: {
+          field: 'retypePassword',
+          error: 'must match'
+        }
+      }
+    ],
+    listeners: [
+      {
+        event: 'create',
+        actions: [
+          {
+            component: 'Set',
+            name: 'hidden',
+            value: true
+          },
+          {
+            component: 'Set',
+            name: 'out',
+            value: false
+          },
+          {
+            component: 'Set',
+            name: 'required',
+            value: false
+          },
+          {
+            component: 'Set',
+            name: 'fields.password.hidden',
+            value: false
+          },
+          {
+            component: 'Set',
+            name: 'fields.password.required',
+            value: true
+          },
+          {
+            component: 'Set',
+            name: 'fields.password.out',
+            value: true
+          },
+          {
+            component: 'Set',
+            name: 'fields.retypePassword.hidden',
+            value: false
+          },
+          {
+            component: 'Set',
+            name: 'fields.retypePassword.required',
+            value: true
+          }
+        ]
+      }
+    ]
+  });
+
+  compiler.registerComponent('app.ChangePassword', {
+    component: 'RecordEditor',
+    baseForm: 'app.ChangePasswordForm',
+    label: 'Password'
   });
 });
 
@@ -164,10 +205,11 @@ const expectActsToContain = expActs => {
   });
 };
 
-it('should auto validate', () => {
+it('should auto validate', async () => {
   const changePassword = compiler.newComponent({
     component: 'app.ChangePassword'
   });
+  await testUtils.once(changePassword, 'created');
   changePassword.set({ autoValidate: true });
   changePassword.getField('password').setValue('secret123');
   changePassword.getField('retypePassword').setValue('secret1234');
