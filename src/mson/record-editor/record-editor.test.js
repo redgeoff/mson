@@ -534,7 +534,26 @@ it('should save without preview', async () => {
   expectActsToContain(getSaveActs(false));
 });
 
-// TODO:
-// cancel
+it('should cancel', async () => {
+  await beforeEachLoadTest('cancel');
+  const didCancel = testUtils.once(editAccount, 'didCancel');
+  await editAccount.emitChange('cancel');
+  await didCancel;
+
+  expectActsToContain([
+    {
+      name: 'Emit',
+      props: {
+        event: 'load'
+      }
+    },
+    {
+      name: 'Emit',
+      props: {
+        event: 'didCancel'
+      }
+    }
+  ]);
+});
 
 // TODO: edit password scenario
