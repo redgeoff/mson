@@ -108,11 +108,6 @@
         },
         {
           "component": "Set",
-          "name": "fields.save.disabled",
-          "value": true
-        },
-        {
-          "component": "Set",
           "name": "fields.save.hidden",
           "value": true
         },
@@ -125,6 +120,10 @@
           "component": "Set",
           "name": "fields.cancel.hidden",
           "value": true
+        },
+        {
+          "component": "Emit",
+          "event": "didRead"
         }
       ]
     },
@@ -143,13 +142,18 @@
         },
         {
           "component": "Set",
-          "name": "fields.edit.hidden",
+          "name": "fields.save.hidden",
+          "value": false
+        },
+        {
+          "component": "Set",
+          "name": "fields.save.disabled",
           "value": true
         },
         {
           "component": "Set",
-          "name": "fields.save.hidden",
-          "value": false
+          "name": "fields.edit.hidden",
+          "value": true
         },
         {
           "if": {
@@ -160,6 +164,10 @@
           "component": "Set",
           "name": "fields.cancel.hidden",
           "value": false
+        },
+        {
+          "component": "Emit",
+          "event": "didEdit"
         }
       ]
     },
@@ -170,6 +178,10 @@
           "component": "Set",
           "name": "fields.save.disabled",
           "value": false
+        },
+        {
+          "component": "Emit",
+          "event": "didCanSubmit"
         }
       ]
     },
@@ -180,6 +192,10 @@
           "component": "Set",
           "name": "fields.save.disabled",
           "value": true
+        },
+        {
+          "component": "Emit",
+          "event": "didCannotSubmit"
         }
       ]
     },
@@ -213,7 +229,7 @@
         },
         {
           "component": "Emit",
-          "event": "saved"
+          "event": "didSave"
         }
       ]
     },
@@ -223,6 +239,10 @@
         {
           "component": "Emit",
           "event": "load"
+        },
+        {
+          "component": "Emit",
+          "event": "didCancel"
         }
       ]
     }

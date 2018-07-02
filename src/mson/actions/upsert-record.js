@@ -15,24 +15,40 @@ export default class UpsertRecord extends Action {
     return value === undefined ? super.getOne(name) : value;
   }
 
+  _fieldsCanUpdate(component) {
+    return access.fieldsCanUpdate(component);
+  }
+
+  _recordUpdate(props) {
+    return registrar.client.record.update(props);
+  }
+
+  _fieldsCanCreate(component) {
+    return access.fieldsCanCreate(component);
+  }
+
+  _recordCreate(props) {
+    return registrar.client.record.create(props);
+  }
+
   async act(props) {
     const appId = globals.get('appId');
 
     try {
       const id = props.component.getValue('id');
       if (id) {
-        const fieldValues = access.fieldsCanUpdate(props.component);
+        const fieldValues = this._fieldsCanUpdate(props.component);
 
-        await registrar.client.record.update({
+        await this._recordUpdate({
           appId,
           componentName: this.get('type'),
           id,
           fieldValues
         });
       } else {
-        const fieldValues = access.fieldsCanCreate(props.component);
+        const fieldValues = this._fieldsCanCreate(props.component);
 
-        await registrar.client.record.create({
+        await this._recordCreate({
           appId,
           componentName: this.get('type'),
           fieldValues

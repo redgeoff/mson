@@ -47,7 +47,7 @@ export default class Component extends events.EventEmitter {
 
     if (!this._hasListenerForEvent('create')) {
       // There are no create listeners so emit a created event
-      this._emitCreated();
+      this._emitDidCreate();
     }
   }
 
@@ -61,7 +61,7 @@ export default class Component extends events.EventEmitter {
 
     this._setDebugId();
 
-    // We have to set the name before we create the component as the name be needed to create the
+    // We have to set the name before we create the component as the name is needed to create the
     // component, e.g. to create sub fields using the name as a prefix.
     if (props) {
       this._setName(props);
@@ -126,6 +126,15 @@ export default class Component extends events.EventEmitter {
     this._set(name, values);
   }
 
+  _concat(name, newValues) {
+    let values = this._get(name);
+    if (!Array.isArray(values)) {
+      values = [];
+    }
+    values = values.concat(newValues);
+    this._set(name, values);
+  }
+
   _setIfUndefinedProp(props, name) {
     if (props[name] !== undefined) {
       this._set(name, props[name]);
@@ -159,12 +168,12 @@ export default class Component extends events.EventEmitter {
     });
   }
 
-  _emitCreated() {
-    this._emitChange('created');
+  _emitDidCreate() {
+    this._emitChange('didCreate');
   }
 
-  _emitLoaded() {
-    this._emitChange('loaded');
+  _emitDidLoad() {
+    this._emitChange('didLoad');
     this._isLoaded = true;
   }
 
@@ -190,9 +199,10 @@ export default class Component extends events.EventEmitter {
       // Inject ifData so that we don't have to explicitly define it in the actions
       const ifData = props.passed;
 
+      // Listeners are concatentated that they can accumulate through the layers of inheritance.
       // TODO: when the listeners change need to clean up previous listeners to prevent a listener
       // leak
-      this._setIfUndefinedProp(props, 'listeners');
+      this._concat('listeners', props.listeners);
       props.listeners.forEach(listener => {
         const events = Array.isArray(listener.event)
           ? listener.event
@@ -214,10 +224,10 @@ export default class Component extends events.EventEmitter {
 
             switch (event) {
               case 'create':
-                this._emitCreated();
+                this._emitDidCreate();
                 break;
               case 'load':
-                this._emitLoaded();
+                this._emitDidLoad();
                 break;
               default:
                 break;
@@ -316,7 +326,7 @@ export default class Component extends events.EventEmitter {
 
     if (!this._hasListenerForEvent('load')) {
       // There are no load listeners so emit a loaded event
-      this._emitLoaded();
+      this._emitDidLoad();
     }
   }
 
