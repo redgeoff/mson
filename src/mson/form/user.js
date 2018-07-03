@@ -44,8 +44,19 @@ export default class User extends Form {
       ]
     };
 
+    // By default, lock down access
+    const access = {
+      form: {
+        create: 'admin',
+        read: 'admin',
+        update: 'admin',
+        archive: 'admin'
+      }
+    };
+
     this.set({
-      schema
+      schema,
+      access
     });
   }
 
