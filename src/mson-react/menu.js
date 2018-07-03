@@ -52,7 +52,10 @@ class Menu extends React.PureComponent {
     const submenus = [];
     items.forEach((item, index) => {
       // Has access to item?
-      if (!item.roles || registrar.client.user.hasRole(item.roles)) {
+      if (
+        !item.roles ||
+        (registrar.client && registrar.client.user.hasRole(item.roles))
+      ) {
         submenus.push(
           <Submenu
             item={item}
