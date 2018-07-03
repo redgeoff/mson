@@ -421,7 +421,10 @@ compiler.registerComponent('app.Employees', {
           actions: [
             {
               component: 'GetRecords',
-              type: 'app.Department'
+              type: 'app.Department',
+              where: {
+                archivedAt: null
+              }
             },
             {
               component: 'Iterator',
