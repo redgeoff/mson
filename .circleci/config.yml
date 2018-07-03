@@ -43,5 +43,11 @@ jobs:
 
       - run: yarn setup
 
+      # Wait for MySQL to be ready
+      - run: ./node_modules/wait-on/bin/wait-on tcp:3306
+
+      # Wait for Redis to be ready
+      - run: ./node_modules/wait-on/bin/wait-on tcp:6379
+
       # TODO: require 100% coverage
       - run: CI=true yarn test
