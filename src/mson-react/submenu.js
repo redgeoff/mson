@@ -6,6 +6,7 @@ import Collapse from '@material-ui/core/Collapse';
 import Typography from '@material-ui/core/Typography';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import _ from 'lodash';
+import registrar from '../mson/compiler/registrar';
 
 const styles = theme => ({
   nested: {
@@ -66,32 +67,38 @@ class Submenu extends React.PureComponent {
 
   items() {
     const { classes, item, path } = this.props;
-
-    return item.items.map((item, index) => {
+    const listItems = [];
+    item.items.forEach((item, index) => {
       const isSelected = path === item.path;
       let classNames = [classes.secondary];
       if (isSelected) {
         classNames.push(classes.selected);
       }
 
-      return (
-        <ListItem
-          button
-          className={classes.nested}
-          key={index}
-          onClick={() => this.handleClick(item)}
-        >
-          <ListItemText
-            disableTypography
-            primary={
-              <Typography variant="body1" className={classNames.join(' ')}>
-                {item.label}
-              </Typography>
-            }
-          />
-        </ListItem>
-      );
+      if (
+        !item.roles ||
+        (registrar.client && registrar.client.user.hasRole(item.roles))
+      ) {
+        listItems.push(
+          <ListItem
+            button
+            className={classes.nested}
+            key={index}
+            onClick={() => this.handleClick(item)}
+          >
+            <ListItemText
+              disableTypography
+              primary={
+                <Typography variant="body1" className={classNames.join(' ')}>
+                  {item.label}
+                </Typography>
+              }
+            />
+          </ListItem>
+        );
+      }
     });
+    return listItems;
   }
 
   render() {

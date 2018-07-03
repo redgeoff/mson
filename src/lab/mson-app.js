@@ -498,9 +498,7 @@ const menuItems = [
         label: 'Change Password',
         content: {
           component: 'app.ChangePassword'
-        },
-        // TODO: remove
-        roles: ['manager']
+        }
       }
     ]
   },
