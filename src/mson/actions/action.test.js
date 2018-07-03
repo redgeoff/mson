@@ -1,5 +1,6 @@
 import Set from './set';
 import Action from './action';
+import LogOutOfApp from './log-out-of-app';
 import TextField from '../fields/text-field';
 
 const createAction = () => {
@@ -49,4 +50,21 @@ it('should perform multiple actions', async () => {
   });
   expect(field.getValue()).toEqual('Jack');
   expect(field.get('hidden')).toEqual(true);
+});
+
+it('should handle undefined props', async () => {
+  // Make sure can handle props being undefined as can occur if menuItem component is an Action
+
+  const logOutOfApp = new LogOutOfApp();
+
+  // Mock client
+  logOutOfApp._logOutOfApp = () => {};
+
+  let action = logOutOfApp;
+  await action.run();
+
+  action = new Action({
+    actions: [logOutOfApp]
+  });
+  await action.run();
 });
