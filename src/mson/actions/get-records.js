@@ -6,11 +6,11 @@ import utils from '../utils';
 export default class GetRecords extends Action {
   set(props) {
     super.set(props);
-    this._setIfUndefined(props, 'type');
+    this._setIfUndefined(props, 'type', 'where');
   }
 
   getOne(name) {
-    const value = this._getIfAllowed(name, 'type');
+    const value = this._getIfAllowed(name, 'type', 'where');
     return value === undefined ? super.getOne(name) : value;
   }
 
@@ -22,7 +22,8 @@ export default class GetRecords extends Action {
       const records = await registrar.client.record.getAll({
         appId,
         componentName: this.get('type'),
-        asArray: true
+        asArray: true,
+        where: this.get('where')
       });
 
       // TODO: remove?
