@@ -40,15 +40,19 @@ export default class FormsField extends Field {
     });
   }
 
-  _listenForUnload() {
-    this.on('unload', async () => {
-      // Clear order and mode so that we are ready for when we return
-      this.set({ order: null, mode: null });
+  _onUnload() {
+    // Clear order, mode and showArchived so that we are ready for when we return
+    this.set({ order: null, mode: null, showArchived: null });
 
-      const form = this.get('form');
-      if (form) {
-        form.emitUnload();
-      }
+    const form = this.get('form');
+    if (form) {
+      form.emitUnload();
+    }
+  }
+
+  _listenForUnload() {
+    this.on('unload', () => {
+      this._onUnload();
     });
   }
 

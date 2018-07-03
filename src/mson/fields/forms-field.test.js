@@ -174,3 +174,14 @@ it('should report bad types', () => {
     [{ error: 'must be an array of objects' }]
   );
 });
+
+it('should clear props on unload', () => {
+  const field = createField();
+  const setSpy = jest.spyOn(field, 'set');
+  field._onUnload();
+  expect(setSpy).toHaveBeenCalledWith({
+    order: null,
+    mode: null,
+    showArchived: null
+  });
+});
