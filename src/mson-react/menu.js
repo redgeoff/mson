@@ -71,7 +71,12 @@ class Menu extends React.PureComponent {
   }
 
   render() {
-    const { classes, theme, mobileOpen } = this.props;
+    const { classes, theme, mobileOpen, roles } = this.props;
+
+    let items = null;
+    if (!roles || (registrar.client && registrar.client.user.hasRole(roles))) {
+      items = this.items();
+    }
 
     const drawer = (
       <div>
@@ -79,7 +84,7 @@ class Menu extends React.PureComponent {
           <Typography variant="display1">Logo</Typography>
         </div>
         <Divider />
-        {this.items()}
+        {items}
       </div>
     );
 
@@ -118,5 +123,5 @@ class Menu extends React.PureComponent {
 }
 
 Menu = withStyles(styles, { withTheme: true })(Menu);
-Menu = attach(['items'], 'menu')(Menu);
+Menu = attach(['items', 'roles'], 'menu')(Menu);
 export default Menu;

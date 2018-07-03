@@ -554,9 +554,9 @@ const app = compiler.newComponent({
   component: 'App',
   menu: {
     component: 'Menu',
-    items: menuItems
-  },
-  roles: ['admin', 'manager', 'employee']
+    items: menuItems,
+    roles: ['admin', 'manager', 'employee']
+  }
 });
 
 export default app;
