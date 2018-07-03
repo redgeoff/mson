@@ -37,6 +37,7 @@ import PersonNameField from './fields/person-name-field.json';
 import RecordEditor from './record-editor/record-editor.json';
 import RecordStore from './record-store';
 import Redirect from './actions/redirect';
+import RolesField from './fields/roles-field';
 import SchemaValidatorForm from './form/schema-validator-form';
 import SelectField from './fields/select-field';
 import SelectListField from './fields/select-list-field';
@@ -81,6 +82,7 @@ export default {
   RecordEditor,
   RecordStore,
   Redirect,
+  RolesField,
   SchemaValidatorForm,
   SelectField,
   SelectListField,

@@ -479,7 +479,8 @@ const menuItems = [
     label: 'Departments',
     content: {
       component: 'app.Departments'
-    }
+    },
+    roles: ['manager']
   },
   {
     path: '',
@@ -497,7 +498,9 @@ const menuItems = [
         label: 'Change Password',
         content: {
           component: 'app.ChangePassword'
-        }
+        },
+        // TODO: remove
+        roles: ['manager']
       }
     ]
   },
@@ -554,7 +557,8 @@ const app = compiler.newComponent({
   menu: {
     component: 'Menu',
     items: menuItems
-  }
+  },
+  roles: ['admin', 'manager', 'employee']
 });
 
 export default app;

@@ -57,6 +57,11 @@ export default class Menu extends Component {
                   name: 'fullScreen',
                   component: 'BooleanField',
                   label: 'Full Screen'
+                },
+                {
+                  name: 'roles',
+                  component: 'RolesField',
+                  label: 'Roles'
                 }
               ]
             }
