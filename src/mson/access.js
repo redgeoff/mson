@@ -38,7 +38,7 @@ class Access {
     return this.canAccess('archive', form);
   }
 
-  fieldsCanAccess(operation, form, getOpts) {
+  _fieldsOrValuesCanAccess(operation, form, getOpts, forFields, canDowngrade) {
     const access = form.get('access');
     const session = registrar.client.user.getSession();
 
@@ -55,12 +55,25 @@ class Access {
     }
     const fieldValues = form.getValues(getOpts);
 
-    return this._accessControl.fieldsCanAccess(
+    const canAccessName = forFields ? 'fieldsCanAccess' : 'valuesCanAccess';
+
+    return this._accessControl[canAccessName](
       operation,
       access,
       indexedRoles,
       fieldValues,
-      isOwner
+      isOwner,
+      canDowngrade
+    );
+  }
+
+  fieldsCanAccess(operation, form, getOpts, canDowngrade) {
+    return this._fieldsOrValuesCanAccess(
+      operation,
+      form,
+      getOpts,
+      true,
+      canDowngrade
     );
   }
 
@@ -74,6 +87,22 @@ class Access {
 
   fieldsCanUpdate(form) {
     return this.fieldsCanAccess('update', form, { out: true });
+  }
+
+  valuesCanAccess(operation, form, getOpts) {
+    return this._fieldsOrValuesCanAccess(operation, form, getOpts, false);
+  }
+
+  valuesCanCreate(form) {
+    return this.valuesCanAccess('create', form, { out: true });
+  }
+
+  valuesCanRead(form) {
+    return this.valuesCanAccess('read', form);
+  }
+
+  valuesCanUpdate(form) {
+    return this.valuesCanAccess('update', form, { out: true });
   }
 }
 

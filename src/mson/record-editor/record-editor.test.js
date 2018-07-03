@@ -180,11 +180,11 @@ const mockActions = (actions, spyOnAct) => {
           };
         };
       } else if (action instanceof UpsertRecord) {
-        action._fieldsCanCreate = component =>
+        action._valuesCanCreate = component =>
           component.getValues({ out: true });
         action._recordCreate = () => {};
         recordCreateSpy = jest.spyOn(action, '_recordCreate');
-        action._fieldsCanUpdate = () => {};
+        action._valuesCanUpdate = () => {};
         action._recordUpdate = () => {};
       }
     }

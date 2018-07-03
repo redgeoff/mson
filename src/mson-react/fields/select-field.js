@@ -78,8 +78,11 @@ class SelectField extends React.PureComponent {
       fullWidth,
       classes,
       editable,
-      multiple
+      multiple,
+      accessEditable
     } = this.props;
+
+    const dis = accessEditable === false || disabled;
 
     const options = this.renderOptions();
 
@@ -118,7 +121,7 @@ class SelectField extends React.PureComponent {
           input={input}
           renderValue={renderValue}
           value={fieldValue}
-          disabled={disabled}
+          disabled={dis}
           fullWidth={fullWidth}
           className={classes.formControl}
         >

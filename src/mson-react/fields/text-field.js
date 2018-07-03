@@ -32,8 +32,11 @@ class TextField extends React.PureComponent {
       field,
       fullWidth,
       type,
-      editable
+      editable,
+      accessEditable
     } = this.props;
+
+    const dis = accessEditable === false || disabled;
 
     let fld = null;
     if (editable) {
@@ -47,7 +50,7 @@ class TextField extends React.PureComponent {
           onBlur={this.handleBlur}
           onKeyUp={this.handleKeyUp}
           value={value ? value : ''}
-          disabled={disabled}
+          disabled={dis}
           fullWidth={fullWidth}
           type={type}
         />

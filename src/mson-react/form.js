@@ -17,7 +17,13 @@ class Form extends React.PureComponent {
 
   calcFieldsCanAccess() {
     const { form, mode } = this.props;
-    const fieldsCanAccess = access.fieldsCanAccess(mode, form);
+    const canDowngrade = true;
+    const fieldsCanAccess = access.fieldsCanAccess(
+      mode,
+      form,
+      null,
+      canDowngrade
+    );
 
     // We need to set the ignoreErrs state as there may be a field that is not accessible that is
     // generating an error.
@@ -102,7 +108,20 @@ class Form extends React.PureComponent {
         fieldsCanAccess === null ||
         fieldsCanAccess[field.get('name')] !== undefined
       ) {
-        return <Field key={key + '_' + index} field={field} />;
+        let accessEditable = null;
+        if (
+          fieldsCanAccess !== null &&
+          fieldsCanAccess[field.get('name')] === 'read'
+        ) {
+          accessEditable = false;
+        }
+        return (
+          <Field
+            key={key + '_' + index}
+            field={field}
+            accessEditable={accessEditable}
+          />
+        );
       } else {
         return null;
       }

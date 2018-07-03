@@ -37,7 +37,7 @@ it('can access field', () => {
       indexedRoles,
       'firstName'
     )
-  ).toEqual(true);
+  ).toEqual('create');
 
   // Cannot access at field layer
   expect(
@@ -70,7 +70,7 @@ it('can access field', () => {
       indexedRoles,
       'firstName'
     )
-  ).toEqual(true);
+  ).toEqual('create');
 
   // Cannot access at form layer
   expect(
@@ -89,7 +89,7 @@ it('can access field', () => {
   // Can access at global layer
   expect(
     control._canAccessField('create', {}, indexedRoles, 'firstName')
-  ).toEqual(true);
+  ).toEqual('create');
 });
 
 it('can access', () => {
