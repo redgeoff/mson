@@ -42,8 +42,7 @@ const seed = async () => {
     componentName: 'app.Department',
     fieldValues: {
       name: 'Development',
-      employeeNotes: 'development',
-      adminNotes: 'development'
+      privateNotes: 'Development notes only visible to managers'
     }
   });
 
@@ -52,8 +51,7 @@ const seed = async () => {
     componentName: 'app.Department',
     fieldValues: {
       name: 'Sales',
-      employeeNotes: 'sales',
-      adminNotes: 'sales'
+      privateNotes: 'Sales notes only visible to managers'
     }
   });
 

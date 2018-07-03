@@ -51,9 +51,11 @@ export const employee = {
         update: ['admin', 'owner']
       },
       roles: {
+        create: 'admin',
         update: 'admin'
       },
       departments: {
+        create: 'manager',
         update: 'manager'
       }
     }
@@ -72,20 +74,9 @@ export const department = {
     },
     {
       component: 'TextField',
-      name: 'employeeNotes',
-      label: 'Employee Notes',
-      required: true
-    },
-    {
-      component: 'TextField',
-      name: 'adminNotes',
-      label: 'Admin Notes',
-      required: true
-    },
-    {
-      component: 'TextField',
-      name: 'ownerNotes',
-      label: 'Owner Notes'
+      name: 'privateNotes',
+      label: 'Private Notes',
+      required: false
     }
   ],
   indexes: [
@@ -96,24 +87,16 @@ export const department = {
   ],
   access: {
     form: {
-      create: 'employee',
-      update: 'employee',
-      archive: 'employee'
+      create: 'manager',
+      read: ['manager', 'employee'],
+      update: 'manager',
+      archive: 'manager'
     },
     fields: {
-      employeeNotes: {
-        create: ['employee', 'admin'],
-        read: ['employee', 'admin'],
-        update: ['employee', 'admin']
-      },
-      adminNotes: {
-        create: 'admin',
-        read: 'admin',
-        update: 'admin'
-      },
-      ownerNotes: {
-        create: 'employee',
-        update: 'owner'
+      privateNotes: {
+        create: ['manager'],
+        read: ['manager'],
+        update: ['manager']
       }
     }
   }
