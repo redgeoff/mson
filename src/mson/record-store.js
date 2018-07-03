@@ -40,7 +40,7 @@ export default class RecordStore extends Component {
     this._clearCache();
 
     // Omit values based on access
-    const fieldValues = access.fieldsCanCreate(props.form);
+    const fieldValues = access.valuesCanCreate(props.form);
 
     return this._request(props, appId => {
       return registrar.client.record.create({
@@ -98,7 +98,7 @@ export default class RecordStore extends Component {
 
   async update(props) {
     // Omit values based on access
-    const fieldValues = access.fieldsCanUpdate(props.form);
+    const fieldValues = access.valuesCanUpdate(props.form);
 
     return this._request(props, appId => {
       return registrar.client.record.update({

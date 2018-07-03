@@ -51,7 +51,7 @@ export default class AccessControl {
     }
   }
 
-  _canAccessField(operation, access, indexedRoles, fieldName, isOwner) {
+  _canAccessFieldForOp(operation, access, indexedRoles, fieldName, isOwner) {
     // Priority given to field layer access if it exists
     const fieldAccess = _.get(access, ['fields', fieldName, operation]);
     if (fieldAccess !== undefined) {
@@ -60,6 +60,51 @@ export default class AccessControl {
 
     // We now look for access at the form layer
     return this.hasFormAccess(operation, access, indexedRoles, isOwner);
+  }
+
+  _canAccessField(
+    operation,
+    access,
+    indexedRoles,
+    fieldName,
+    isOwner,
+    canDowngrade
+  ) {
+    if (operation === 'update') {
+      const canAccess = this._canAccessFieldForOp(
+        operation,
+        access,
+        indexedRoles,
+        fieldName,
+        isOwner
+      );
+      if (canAccess) {
+        return operation;
+      } else if (canDowngrade) {
+        // Downgrade to read
+        return this._canAccessFieldForOp(
+          'read',
+          access,
+          indexedRoles,
+          fieldName,
+          isOwner
+        )
+          ? 'read'
+          : false;
+      } else {
+        return false;
+      }
+    } else {
+      return this._canAccessFieldForOp(
+        operation,
+        access,
+        indexedRoles,
+        fieldName,
+        isOwner
+      )
+        ? operation
+        : false;
+    }
   }
 
   canAccess(operation, access, indexedRoles, fieldValues, isOwner) {
@@ -74,7 +119,32 @@ export default class AccessControl {
     return errors;
   }
 
-  fieldsCanAccess(operation, access, indexedRoles, fieldValues, isOwner) {
+  fieldsCanAccess(
+    operation,
+    access,
+    indexedRoles,
+    fieldValues,
+    isOwner,
+    canDowngrade
+  ) {
+    const fields = [];
+    _.each(fieldValues, (value, name) => {
+      const canAccess = this._canAccessField(
+        operation,
+        access,
+        indexedRoles,
+        name,
+        isOwner,
+        canDowngrade
+      );
+      if (canAccess) {
+        fields[name] = canAccess;
+      }
+    });
+    return fields;
+  }
+
+  valuesCanAccess(operation, access, indexedRoles, fieldValues, isOwner) {
     // Clone so that we don't modify original data
     fieldValues = _.clone(fieldValues);
     _.each(fieldValues, (value, name) => {

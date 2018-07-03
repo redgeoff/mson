@@ -15,16 +15,16 @@ export default class UpsertRecord extends Action {
     return value === undefined ? super.getOne(name) : value;
   }
 
-  _fieldsCanUpdate(component) {
-    return access.fieldsCanUpdate(component);
+  _valuesCanUpdate(component) {
+    return access.valuesCanUpdate(component);
   }
 
   _recordUpdate(props) {
     return registrar.client.record.update(props);
   }
 
-  _fieldsCanCreate(component) {
-    return access.fieldsCanCreate(component);
+  _valuesCanCreate(component) {
+    return access.valuesCanCreate(component);
   }
 
   _recordCreate(props) {
@@ -37,7 +37,7 @@ export default class UpsertRecord extends Action {
     try {
       const id = props.component.getValue('id');
       if (id) {
-        const fieldValues = this._fieldsCanUpdate(props.component);
+        const fieldValues = this._valuesCanUpdate(props.component);
 
         await this._recordUpdate({
           appId,
@@ -46,7 +46,7 @@ export default class UpsertRecord extends Action {
           fieldValues
         });
       } else {
-        const fieldValues = this._fieldsCanCreate(props.component);
+        const fieldValues = this._valuesCanCreate(props.component);
 
         await this._recordCreate({
           appId,

@@ -7,7 +7,7 @@ import FlexBreak from '../flex-break';
 // Use MSON React Component instead?
 class Field extends React.PureComponent {
   render() {
-    const { field, hidden, block } = this.props;
+    const { field, hidden, block, accessEditable } = this.props;
 
     if (hidden) {
       return null;
@@ -24,7 +24,7 @@ class Field extends React.PureComponent {
 
       return (
         <span>
-          <Field field={field} />
+          <Field field={field} accessEditable={accessEditable} />
           {block ? <FlexBreak /> : null}
         </span>
       );
