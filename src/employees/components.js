@@ -41,7 +41,7 @@ export const employee = {
   roles: ['employee'],
   access: {
     form: {
-      create: 'admin',
+      create: ['admin', 'manager'],
       read: ['admin', 'employee'],
       update: ['admin', 'owner', 'manager'],
       archive: ['admin']
