@@ -210,7 +210,7 @@ class App extends React.PureComponent {
     return canAccess;
   }
 
-  switchContent = menuItem => {
+  switchContent = async menuItem => {
     // Prevent inifinite recursion when menuItem is null by making sure that the menuItem is
     // changing before changing anything, especially the state
     if (menuItem !== this.state.menuItem) {
@@ -222,7 +222,13 @@ class App extends React.PureComponent {
         this.component.set({ searchString: null });
       }
 
-      if (menuItem && menuItem.content) {
+      // Note: menuItem.content can be an action if the user goes directly to a route where the
+      // content is an action
+      if (
+        menuItem &&
+        menuItem.content &&
+        !(menuItem.content instanceof Action)
+      ) {
         if (this.requireAccess(menuItem.roles)) {
           // Instantiate form
           // this.component = compiler.newComponent(menuItem.content.component);
@@ -247,6 +253,11 @@ class App extends React.PureComponent {
         searchString: '',
         showSearch: isList
       });
+
+      if (menuItem.content instanceof Action) {
+        // Execute the actions
+        await menuItem.content.run();
+      }
     }
   };
 
