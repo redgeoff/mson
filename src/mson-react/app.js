@@ -140,9 +140,6 @@ class App extends React.PureComponent {
   redirect(path) {
     const { history } = this.props;
     history.push(path);
-
-    // Clear as we have initiated the redirection
-    globals.set({ redirectPath: null });
   }
 
   navigateTo(path) {
@@ -261,18 +258,8 @@ class App extends React.PureComponent {
     }
   };
 
-  redirectIfRedirectPath() {
-    const redirectPath = globals.get('redirectPath');
-    if (redirectPath) {
-      // We redirect so that the URL in the browser is updated
-      this.redirect(redirectPath);
-    }
-  }
-
-  // TODO: move logic to componentDidUpdate?
+  // TODO: move logic to componentDidUpdate
   componentWillUpdate(props) {
-    this.redirectIfRedirectPath();
-
     const snackbarMessage = globals.get('snackbarMessage');
     if (snackbarMessage) {
       this.displaySnackbar(snackbarMessage);
@@ -281,6 +268,10 @@ class App extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
+    if (this.props.redirectPath !== prevProps.redirectPath) {
+      this.redirect(this.props.redirectPath);
+    }
+
     if (this.props.confirmation !== prevProps.confirmation) {
       // Show the popup if any of the confirmation info has changed
       this.setState({ confirmationOpen: true });
@@ -294,6 +285,45 @@ class App extends React.PureComponent {
         });
       }
     }
+  }
+
+  componentDidMount() {
+    // TODO: is this too inefficient in that it cascades a lot of unecessary events? Instead, could:
+    // 1. move more logic to app layer so that only cascade when need new window 2. use something
+    // like a global scroll listener that the component can use when it is active
+    window.addEventListener('scroll', e => {
+      if (this.state.menuItem) {
+        this.state.menuItem.content.emit('scroll', e);
+      }
+    });
+
+    // Handle immediate redirects, e.g. if user is not logged in
+    if (this.props.redirectPath) {
+      this.redirect(this.props.redirectPath);
+    }
+  }
+
+  componentWillMount() {
+    const onLocation = location => {
+      // Is the path is changing? This check is needed as otherwise a re-rendering of the
+      // RouteListener during some UI operation, e.g. a button click, could result in us
+      // redirecting to an outdated path.
+      const { path } = this.state;
+      if (path === null || path !== location.pathname) {
+        this.setState({ path: location.pathname });
+        this.navigateTo(location.pathname);
+      }
+    };
+
+    // Allows us to listen to back and forward button clicks
+    this.unlisten = this.props.history.listen(onLocation);
+
+    // Load the correct component based on the initial path
+    onLocation(this.props.location);
+  }
+
+  componentWillUnmount() {
+    this.unlisten();
   }
 
   displaySnackbar(message) {
@@ -325,43 +355,6 @@ class App extends React.PureComponent {
       searchString: event.target.value
     });
   };
-
-  componentDidMount() {
-    // TODO: is this too inefficient in that it cascades a lot of unecessary events? Instead, could:
-    // 1. move more logic to app layer so that only cascade when need new window 2. use something
-    // like a global scroll listener that the component can use when it is active
-    window.addEventListener('scroll', e => {
-      if (this.state.menuItem) {
-        this.state.menuItem.content.emit('scroll', e);
-      }
-    });
-
-    // Handle immediate redirects, e.g. if user is not logged in
-    this.redirectIfRedirectPath();
-  }
-
-  componentWillMount() {
-    const onLocation = location => {
-      // Is the path is changing? This check is needed as otherwise a re-rendering of the
-      // RouteListener during some UI operation, e.g. a button click, could result in us
-      // redirecting to an outdated path.
-      const { path } = this.state;
-      if (path === null || path !== location.pathname) {
-        this.setState({ path: location.pathname });
-        this.navigateTo(location.pathname);
-      }
-    };
-
-    // Allows us to listen to back and forward button clicks
-    this.unlisten = this.props.history.listen(onLocation);
-
-    // Load the correct component based on the initial path
-    onLocation(this.props.location);
-  }
-
-  componentWillUnmount() {
-    this.unlisten();
-  }
 
   render() {
     const { classes, app, confirmation } = this.props;

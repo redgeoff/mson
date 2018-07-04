@@ -69,6 +69,10 @@ const attach = (_watchProps, componentOrName) => {
         this.wasMounted = true;
 
         this.addListener();
+
+        // Update state with any changes that have occured since construction, but before mounting
+        const initialState = this.getComponent().get(this.watchProps);
+        this.setState(initialState);
       }
 
       componentWillUnmount() {

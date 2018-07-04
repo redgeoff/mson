@@ -47,10 +47,9 @@ compiler.registerComponent('app.Login', {
         {
           component: 'LogInToApp'
         },
-        // TODO: redirect to home based on menu def
         {
           component: 'Redirect',
-          path: '/account'
+          path: '/'
         }
       ]
     },
@@ -215,7 +214,7 @@ compiler.registerComponent('app.EmployeeSignupForm', {
         },
         {
           component: 'Redirect',
-          path: '/account'
+          path: '/'
         }
       ]
     }
@@ -504,8 +503,7 @@ const menuItems = [
     roles: ['admin', 'employee']
   },
   {
-    path: '/foo',
-    label: 'Public',
+    path: '/',
     hidden: true,
     content: {
       component: 'Action',
