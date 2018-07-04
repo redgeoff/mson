@@ -59,7 +59,7 @@ compiler.registerComponent('app.Login', {
       actions: [
         {
           component: 'Redirect',
-          path: '/foo/signup'
+          path: '/signup'
         }
       ]
     }
@@ -484,7 +484,6 @@ const menuItems = [
     roles: ['manager']
   },
   {
-    path: '',
     label: 'My Account',
     items: [
       {
@@ -508,9 +507,18 @@ const menuItems = [
     path: '/foo',
     label: 'Public',
     hidden: true,
+    content: {
+      component: 'Action',
+      actions: [
+        {
+          component: 'Redirect',
+          path: '/employees'
+        }
+      ]
+    },
     items: [
       {
-        path: '/foo/login',
+        path: '/login',
         label: 'Login',
         content: {
           component: 'Card',
@@ -522,7 +530,7 @@ const menuItems = [
         fullScreen: true
       },
       {
-        path: '/foo/signup',
+        path: '/signup',
         label: 'Signup',
         content: {
           component: 'Card',
@@ -546,7 +554,7 @@ const menuItems = [
         },
         {
           component: 'Redirect',
-          path: '/foo/login'
+          path: '/login'
         }
       ]
     },
@@ -566,7 +574,7 @@ const app = compiler.newComponent({
       actions: [
         {
           component: 'Redirect',
-          path: '/foo/login'
+          path: '/login'
         }
       ]
     }
