@@ -53,8 +53,9 @@ class Menu extends React.PureComponent {
     items.forEach((item, index) => {
       // Has access to item?
       if (
-        !item.roles ||
-        (registrar.client && registrar.client.user.hasRole(item.roles))
+        (!item.roles ||
+          (registrar.client && registrar.client.user.hasRole(item.roles))) &&
+        item.hidden !== true
       ) {
         submenus.push(
           <Submenu
@@ -71,12 +72,12 @@ class Menu extends React.PureComponent {
   }
 
   render() {
-    const { classes, theme, mobileOpen, roles } = this.props;
+    const { classes, theme, mobileOpen /*, roles*/ } = this.props;
 
     let items = null;
-    if (!roles || (registrar.client && registrar.client.user.hasRole(roles))) {
-      items = this.items();
-    }
+    // if (!roles || (registrar.client && registrar.client.user.hasRole(roles))) {
+    items = this.items();
+    // }
 
     const drawer = (
       <div>
@@ -123,5 +124,5 @@ class Menu extends React.PureComponent {
 }
 
 Menu = withStyles(styles, { withTheme: true })(Menu);
-Menu = attach(['items', 'roles'], 'menu')(Menu);
+Menu = attach(['items' /*, 'roles'*/], 'menu')(Menu);
 export default Menu;

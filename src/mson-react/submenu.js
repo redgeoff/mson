@@ -76,8 +76,9 @@ class Submenu extends React.PureComponent {
       }
 
       if (
-        !item.roles ||
-        (registrar.client && registrar.client.user.hasRole(item.roles))
+        (!item.roles ||
+          (registrar.client && registrar.client.user.hasRole(item.roles))) &&
+        item.hidden !== true
       ) {
         listItems.push(
           <ListItem

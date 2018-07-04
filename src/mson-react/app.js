@@ -25,6 +25,7 @@ import Action from '../mson/actions/action';
 import FormsField from '../mson/fields/forms-field';
 import Form from '../mson/form';
 import access from '../mson/access';
+import registrar from '../mson/compiler/registrar';
 
 const drawerWidth = 240;
 
@@ -139,6 +140,9 @@ class App extends React.PureComponent {
   redirect(path) {
     const { history } = this.props;
     history.push(path);
+
+    // Clear as we have initiated the redirection
+    globals.set({ redirectPath: null });
   }
 
   navigateTo(path) {
@@ -150,8 +154,10 @@ class App extends React.PureComponent {
       // Redirect so that user sees the actual path and not /home
       history.push(menu.getFirstItem().path);
     } else if (!menuItem || path !== menuItem.path) {
+      // if (this.requireAccess(menu.get('roles'))) {
       // The route is changing
       this.switchContent(menu.getItem(path));
+      // }
     }
   }
 
@@ -191,6 +197,19 @@ class App extends React.PureComponent {
     };
   }
 
+  emitLoggedOut() {
+    this.props.app.emitLoggedOut();
+  }
+
+  requireAccess(roles) {
+    const canAccess =
+      !roles || (registrar.client && registrar.client.user.hasRole(roles));
+    if (!canAccess) {
+      this.emitLoggedOut();
+    }
+    return canAccess;
+  }
+
   switchContent = menuItem => {
     // Prevent inifinite recursion when menuItem is null by making sure that the menuItem is
     // changing before changing anything, especially the state
@@ -204,12 +223,14 @@ class App extends React.PureComponent {
       }
 
       if (menuItem && menuItem.content) {
-        // Instantiate form
-        // this.component = compiler.newComponent(menuItem.content.component);
-        this.component = menuItem.content;
+        if (this.requireAccess(menuItem.roles)) {
+          // Instantiate form
+          // this.component = compiler.newComponent(menuItem.content.component);
+          this.component = menuItem.content;
 
-        // Emit a load event so that the component can load any initial data, etc...
-        this.component.emitLoad();
+          // Emit a load event so that the component can load any initial data, etc...
+          this.component.emitLoad();
+        }
       } else {
         this.component = null;
       }
@@ -229,16 +250,17 @@ class App extends React.PureComponent {
     }
   };
 
-  // TODO: move logic to componentDidUpdate?
-  componentWillUpdate(props) {
+  redirectIfRedirectPath() {
     const redirectPath = globals.get('redirectPath');
     if (redirectPath) {
       // We redirect so that the URL in the browser is updated
       this.redirect(redirectPath);
-
-      // Clear as we have initiated the redirection
-      globals.set({ redirectPath: null });
     }
+  }
+
+  // TODO: move logic to componentDidUpdate?
+  componentWillUpdate(props) {
+    this.redirectIfRedirectPath();
 
     const snackbarMessage = globals.get('snackbarMessage');
     if (snackbarMessage) {
@@ -302,6 +324,9 @@ class App extends React.PureComponent {
         this.state.menuItem.content.emit('scroll', e);
       }
     });
+
+    // Handle immediate redirects, e.g. if user is not logged in
+    this.redirectIfRedirectPath();
   }
 
   componentWillMount() {

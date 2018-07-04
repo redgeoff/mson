@@ -472,7 +472,8 @@ const menuItems = [
     label: 'Employees',
     content: {
       component: 'app.Employees'
-    }
+    },
+    roles: ['admin', 'employee']
   },
   {
     path: '/departments',
@@ -500,11 +501,13 @@ const menuItems = [
           component: 'app.ChangePassword'
         }
       }
-    ]
+    ],
+    roles: ['admin', 'employee']
   },
   {
     path: '/foo',
-    label: 'Tmp',
+    label: 'Public',
+    hidden: true,
     items: [
       {
         path: '/foo/login',
@@ -546,7 +549,8 @@ const menuItems = [
           path: '/foo/login'
         }
       ]
-    }
+    },
+    roles: ['admin', 'employee']
   }
 ];
 
@@ -554,9 +558,19 @@ const app = compiler.newComponent({
   component: 'App',
   menu: {
     component: 'Menu',
-    items: menuItems,
-    roles: ['admin', 'manager', 'employee']
-  }
+    items: menuItems
+  },
+  listeners: [
+    {
+      event: 'loggedOut',
+      actions: [
+        {
+          component: 'Redirect',
+          path: '/foo/login'
+        }
+      ]
+    }
+  ]
 });
 
 export default app;

@@ -62,6 +62,11 @@ export default class Menu extends Component {
                   name: 'roles',
                   component: 'RolesField',
                   label: 'Roles'
+                },
+                {
+                  name: 'hidden',
+                  component: 'BooleanField',
+                  label: 'Hidden'
                 }
               ]
             }
@@ -84,7 +89,7 @@ export default class Menu extends Component {
 
   set(props) {
     super.set(props);
-    this._setIfUndefined(props, 'items', 'roles');
+    this._setIfUndefined(props, 'items' /*, 'roles' */);
 
     // Index by path so we can do a quick lookup later
     if (props.items !== undefined) {
@@ -94,7 +99,7 @@ export default class Menu extends Component {
   }
 
   getOne(name) {
-    const value = this._getIfAllowed(name, 'items', 'roles');
+    const value = this._getIfAllowed(name, 'items' /*, 'roles'*/);
     return value === undefined ? super.getOne(name) : value;
   }
 
