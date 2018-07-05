@@ -95,9 +95,9 @@ it('should set and get nested values', () => {
   });
 
   expect(form.getValues()).toEqual({
-    id: null,
+    id: undefined,
     fullName: {
-      id: null,
+      id: undefined,
       firstName: 'Ella',
       lastName: 'Fitzgerald'
     },
@@ -128,9 +128,9 @@ it('should set and get nested values', () => {
     .setValue('(206) 333-3333');
 
   expect(form.getValues()).toEqual({
-    id: null,
+    id: undefined,
     fullName: {
-      id: null,
+      id: undefined,
       firstName: 'Ella',
       lastName: 'Fitz'
     },

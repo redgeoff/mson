@@ -24,7 +24,7 @@ it('should toggle required', () => {
 
   // Ensure not required
   field.validate();
-  expect(field.getErr()).toEqual(null);
+  expect(field.getErr()).toBeUndefined();
 
   // Toggle required to true
   field.set({ required: true });

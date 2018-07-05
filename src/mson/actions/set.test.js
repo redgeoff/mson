@@ -48,12 +48,12 @@ it('should set', async () => {
       : undefined;
   });
   expect(form.getValues()).toEqual({
-    id: null,
+    id: undefined,
     name: {
       firstName: 'Michael',
       lastName: 'Jackson'
     },
-    save: null
+    save: undefined
   });
 });
 
@@ -86,11 +86,11 @@ it('should set nested components', async () => {
       : undefined;
   });
   expect(form.getValues()).toEqual({
-    id: null,
+    id: undefined,
     name: {
       lastName: 'Jackson'
     },
-    save: null
+    save: undefined
   });
 });
 

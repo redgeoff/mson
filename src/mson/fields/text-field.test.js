@@ -13,7 +13,7 @@ it('should validate max length', () => {
 
   field.setValue('12345');
   field.validate();
-  expect(field.get('err')).toEqual(null);
+  expect(field.get('err')).toBeUndefined();
 
   field.setValue('123456');
   field.validate();
@@ -27,7 +27,7 @@ it('should validate min length', () => {
 
   field.setValue('12345');
   field.validate();
-  expect(field.get('err')).toEqual(null);
+  expect(field.get('err')).toBeUndefined();
 
   field.setValue('1234');
   field.validate();
