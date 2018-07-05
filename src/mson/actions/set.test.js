@@ -93,3 +93,22 @@ it('should set nested components', async () => {
     save: null
   });
 });
+
+it('should set globals', async () => {
+  const set = new Set({
+    name: 'globals.redirectAfterLogin',
+    value: '/account'
+  });
+
+  let propsSet = null;
+
+  // Mock
+  set._globals = {
+    set: props => {
+      propsSet = props;
+    }
+  };
+
+  await set.run({ arguments: null });
+  expect(propsSet).toEqual({ redirectAfterLogin: '/account' });
+});
