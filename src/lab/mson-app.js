@@ -12,6 +12,15 @@ compiler.registerComponent('app.LogIn', {
       component: 'LogInToApp'
     },
     {
+      if: {
+        globals: {
+          redirectAfterLogin: null
+        }
+      },
+      component: 'Redirect',
+      path: '/'
+    },
+    {
       component: 'Action',
       if: {
         globals: {
@@ -31,15 +40,6 @@ compiler.registerComponent('app.LogIn', {
           value: '/' // TODO: switch to null after refactor to support null here
         }
       ]
-    },
-    {
-      if: {
-        globals: {
-          redirectAfterLogin: null
-        }
-      },
-      component: 'Redirect',
-      path: '/'
     }
   ]
 });

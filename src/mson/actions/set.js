@@ -2,12 +2,16 @@ import Action from './action';
 import globals from '../globals';
 
 export default class Set extends Action {
-  set(props) {
-    super.set(props);
-    this._setIfUndefined(props, 'name', 'value');
+  constructor(props) {
+    super(props);
 
     // For testing
     this._globals = globals;
+  }
+
+  set(props) {
+    super.set(props);
+    this._setIfUndefined(props, 'name', 'value');
   }
 
   getOne(name) {
@@ -33,7 +37,7 @@ export default class Set extends Action {
       });
     } else {
       let component =
-        names[0] === 'globals' ? this._globals : props.component.get(names[0]);
+        names[0] === 'globals' ? globals : props.component.get(names[0]);
       for (let i = 1; i < names.length - 1; i++) {
         component = component.get(names[i]);
       }
