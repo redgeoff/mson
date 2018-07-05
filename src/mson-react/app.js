@@ -25,6 +25,7 @@ import Action from '../mson/actions/action';
 import FormsField from '../mson/fields/forms-field';
 import Form from '../mson/form';
 import access from '../mson/access';
+import registrar from '../mson/compiler/registrar';
 
 const drawerWidth = 240;
 
@@ -108,6 +109,8 @@ class App extends React.PureComponent {
     super(props);
     // this.createRouteListener();
     this.setGlobalOnNavigate();
+
+    this.synchronizer = Promise.resolve();
   }
 
   onNavigate = callback => {
@@ -143,15 +146,18 @@ class App extends React.PureComponent {
 
   navigateTo(path) {
     const { menuItem } = this.state;
-    const { app, history } = this.props;
+    const { app } = this.props;
     const menu = app.get('menu');
 
-    if (path === '/home') {
-      // Redirect so that user sees the actual path and not /home
-      history.push(menu.getFirstItem().path);
-    } else if (!menuItem || path !== menuItem.path) {
+    // if (path === '/home') {
+    //   // Redirect so that user sees the actual path and not /home
+    //   history.push(menu.getFirstItem().path);
+    // } else
+    if (!menuItem || path !== menuItem.path) {
+      // if (this.requireAccess(menu.get('roles'))) {
       // The route is changing
-      this.switchContent(menu.getItem(path));
+      return this.switchContent(menu.getItem(path));
+      // }
     }
   }
 
@@ -191,7 +197,21 @@ class App extends React.PureComponent {
     };
   }
 
-  switchContent = menuItem => {
+  emitLoggedOut() {
+    globals.set({ redirectAfterLogin: this.props.location.pathname });
+    this.props.app.emitLoggedOut();
+  }
+
+  requireAccess(roles) {
+    const canAccess =
+      !roles || (registrar.client && registrar.client.user.hasRole(roles));
+    if (!canAccess) {
+      this.emitLoggedOut();
+    }
+    return canAccess;
+  }
+
+  switchContent = async menuItem => {
     // Prevent inifinite recursion when menuItem is null by making sure that the menuItem is
     // changing before changing anything, especially the state
     if (menuItem !== this.state.menuItem) {
@@ -203,13 +223,24 @@ class App extends React.PureComponent {
         this.component.set({ searchString: null });
       }
 
-      if (menuItem && menuItem.content) {
-        // Instantiate form
-        // this.component = compiler.newComponent(menuItem.content.component);
-        this.component = menuItem.content;
+      const isAction = menuItem.content instanceof Action;
 
-        // Emit a load event so that the component can load any initial data, etc...
-        this.component.emitLoad();
+      // Note: menuItem.content can be an action if the user goes directly to a route where the
+      // content is an action
+      if (menuItem && menuItem.content && !isAction) {
+        const menu = this.props.app.get('menu');
+        const parentItem = menu.getParent(menuItem.path);
+        if (
+          this.requireAccess(menuItem.roles) &&
+          (!parentItem || this.requireAccess(parentItem.roles))
+        ) {
+          // Instantiate form
+          // this.component = compiler.newComponent(menuItem.content.component);
+          this.component = menuItem.content;
+
+          // Emit a load event so that the component can load any initial data, etc...
+          this.component.emitLoad();
+        }
       } else {
         this.component = null;
       }
@@ -226,20 +257,41 @@ class App extends React.PureComponent {
         searchString: '',
         showSearch: isList
       });
+
+      if (isAction) {
+        // Execute the actions
+        await menuItem.content.run();
+      }
     }
   };
 
-  // TODO: move logic to componentDidUpdate?
-  componentWillUpdate(props) {
-    const redirectPath = globals.get('redirectPath');
-    if (redirectPath) {
-      // We redirect so that the URL in the browser is updated
-      this.redirect(redirectPath);
+  synchronize(promiseFactory) {
+    this.synchronizer = this.synchronizer.then(promiseFactory);
+  }
 
-      // Clear as we have initiated the redirection
-      globals.set({ redirectPath: null });
+  onLocationUnsynchronized(location) {
+    // Is the path changing? This check is needed as otherwise a re-rendering of the RouteListener
+    // during some UI operation, e.g. a button click, could result in us redirecting to an
+    // outdated path.
+    const { path } = this.state;
+    if (path === null || path !== location.pathname) {
+      this.setState({ path: location.pathname });
+      return this.navigateTo(location.pathname);
     }
+  }
 
+  onLocation = location => {
+    // We need to synchronize calls to onLocation as otherwise a race condition, e.g. an immediate
+    // loading of the component at /somepage and redirect to /login (as we are not logged in), can
+    // result in 2 concurrent calls to switchContent that can leave the content in an inconsistent
+    // state.
+    this.synchronize(() => {
+      return this.onLocationUnsynchronized(location);
+    });
+  };
+
+  // TODO: move logic to componentDidUpdate
+  componentWillUpdate(props) {
     const snackbarMessage = globals.get('snackbarMessage');
     if (snackbarMessage) {
       this.displaySnackbar(snackbarMessage);
@@ -248,6 +300,10 @@ class App extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
+    if (this.props.redirectPath !== prevProps.redirectPath) {
+      this.redirect(this.props.redirectPath);
+    }
+
     if (this.props.confirmation !== prevProps.confirmation) {
       // Show the popup if any of the confirmation info has changed
       this.setState({ confirmationOpen: true });
@@ -261,6 +317,40 @@ class App extends React.PureComponent {
         });
       }
     }
+  }
+
+  componentDidMount() {
+    // TODO: is this too inefficient in that it cascades a lot of unecessary events? Instead, could:
+    // 1. move more logic to app layer so that only cascade when need new window 2. use something
+    // like a global scroll listener that the component can use when it is active
+    window.addEventListener('scroll', e => {
+      if (this.state.menuItem) {
+        this.state.menuItem.content.emit('scroll', e);
+      }
+    });
+
+    // Handle immediate redirects, e.g. if user is not logged in
+    if (this.props.redirectPath) {
+      this.redirect(this.props.redirectPath);
+    }
+  }
+
+  componentWillMount() {
+    // Allows us to listen to back and forward button clicks
+    this.unlisten = this.props.history.listen(this.onLocation);
+
+    if (registrar.client) {
+      // Wait for the session to load before loading the initial component so that we can do things
+      // like route based on a user's role
+      registrar.client.user.awaitSession().then(() => {
+        // Load the correct component based on the initial path
+        this.onLocation(this.props.location);
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    this.unlisten();
   }
 
   displaySnackbar(message) {
@@ -292,40 +382,6 @@ class App extends React.PureComponent {
       searchString: event.target.value
     });
   };
-
-  componentDidMount() {
-    // TODO: is this too inefficient in that it cascades a lot of unecessary events? Instead, could:
-    // 1. move more logic to app layer so that only cascade when need new window 2. use something
-    // like a global scroll listener that the component can use when it is active
-    window.addEventListener('scroll', e => {
-      if (this.state.menuItem) {
-        this.state.menuItem.content.emit('scroll', e);
-      }
-    });
-  }
-
-  componentWillMount() {
-    const onLocation = location => {
-      // Is the path is changing? This check is needed as otherwise a re-rendering of the
-      // RouteListener during some UI operation, e.g. a button click, could result in us
-      // redirecting to an outdated path.
-      const { path } = this.state;
-      if (path === null || path !== location.pathname) {
-        this.setState({ path: location.pathname });
-        this.navigateTo(location.pathname);
-      }
-    };
-
-    // Allows us to listen to back and forward button clicks
-    this.unlisten = this.props.history.listen(onLocation);
-
-    // Load the correct component based on the initial path
-    onLocation(this.props.location);
-  }
-
-  componentWillUnmount() {
-    this.unlisten();
-  }
 
   render() {
     const { classes, app, confirmation } = this.props;

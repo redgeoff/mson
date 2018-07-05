@@ -5,6 +5,45 @@ import { department, employee } from '../employees/components';
 // TODO: in a production app the appId should be set by the path or subdomain
 globals.set({ appId: 101 });
 
+compiler.registerComponent('app.LogIn', {
+  component: 'Action',
+  actions: [
+    {
+      component: 'LogInToApp'
+    },
+    {
+      if: {
+        globals: {
+          redirectAfterLogin: null
+        }
+      },
+      component: 'Redirect',
+      path: '/'
+    },
+    {
+      component: 'Action',
+      if: {
+        globals: {
+          redirectAfterLogin: {
+            $ne: null
+          }
+        }
+      },
+      actions: [
+        {
+          component: 'Redirect',
+          path: '{{globals.redirectAfterLogin}}'
+        },
+        {
+          component: 'Set',
+          name: 'globals.redirectAfterLogin',
+          value: '/' // TODO: switch to null after refactor to support null here
+        }
+      ]
+    }
+  ]
+});
+
 compiler.registerComponent('app.Login', {
   component: 'Form',
   fields: [
@@ -45,12 +84,7 @@ compiler.registerComponent('app.Login', {
       event: 'submit',
       actions: [
         {
-          component: 'LogInToApp'
-        },
-        // TODO: redirect to home based on menu def
-        {
-          component: 'Redirect',
-          path: '/account'
+          component: 'app.LogIn'
         }
       ]
     },
@@ -59,7 +93,7 @@ compiler.registerComponent('app.Login', {
       actions: [
         {
           component: 'Redirect',
-          path: '/foo/signup'
+          path: '/signup'
         }
       ]
     }
@@ -211,11 +245,7 @@ compiler.registerComponent('app.EmployeeSignupForm', {
       event: 'didSave',
       actions: [
         {
-          component: 'LogInToApp'
-        },
-        {
-          component: 'Redirect',
-          path: '/account'
+          component: 'app.LogIn'
         }
       ]
     }
@@ -472,17 +502,18 @@ const menuItems = [
     label: 'Employees',
     content: {
       component: 'app.Employees'
-    }
+    },
+    roles: ['admin', 'employee']
   },
   {
     path: '/departments',
     label: 'Departments',
     content: {
       component: 'app.Departments'
-    }
+    },
+    roles: ['manager']
   },
   {
-    path: '',
     label: 'My Account',
     items: [
       {
@@ -499,14 +530,50 @@ const menuItems = [
           component: 'app.ChangePassword'
         }
       }
-    ]
+    ],
+    roles: ['admin', 'employee']
   },
   {
-    path: '/foo',
-    label: 'Tmp',
+    path: '/',
+    hidden: true,
+    content: {
+      component: 'Action',
+      actions: [
+        {
+          if: {
+            globals: {
+              session: {
+                user: {
+                  roleNames: {
+                    $in: ['admin', 'manager']
+                  }
+                }
+              }
+            }
+          },
+          component: 'Redirect',
+          path: '/employees'
+        },
+        {
+          if: {
+            globals: {
+              session: {
+                user: {
+                  roleNames: {
+                    $nin: ['admin', 'manager']
+                  }
+                }
+              }
+            }
+          },
+          component: 'Redirect',
+          path: '/account'
+        }
+      ]
+    },
     items: [
       {
-        path: '/foo/login',
+        path: '/login',
         label: 'Login',
         content: {
           component: 'Card',
@@ -518,7 +585,7 @@ const menuItems = [
         fullScreen: true
       },
       {
-        path: '/foo/signup',
+        path: '/signup',
         label: 'Signup',
         content: {
           component: 'Card',
@@ -542,10 +609,11 @@ const menuItems = [
         },
         {
           component: 'Redirect',
-          path: '/foo/login'
+          path: '/login'
         }
       ]
-    }
+    },
+    roles: ['admin', 'employee']
   }
 ];
 
@@ -554,7 +622,18 @@ const app = compiler.newComponent({
   menu: {
     component: 'Menu',
     items: menuItems
-  }
+  },
+  listeners: [
+    {
+      event: 'loggedOut',
+      actions: [
+        {
+          component: 'Redirect',
+          path: '/login'
+        }
+      ]
+    }
+  ]
 });
 
 export default app;

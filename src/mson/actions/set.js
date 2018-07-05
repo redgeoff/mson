@@ -1,4 +1,5 @@
 import Action from './action';
+import globals from '../globals';
 
 export default class Set extends Action {
   set(props) {
@@ -9,6 +10,11 @@ export default class Set extends Action {
   getOne(name) {
     const value = this._getIfAllowed(name, 'name', 'value');
     return value === undefined ? super.getOne(name) : value;
+  }
+
+  // For mocking. Note: _getGlobals() is already in use by Action
+  _getGlobalsComponent() {
+    return globals;
   }
 
   _setProp(props) {
@@ -28,7 +34,10 @@ export default class Set extends Action {
         [name]: value
       });
     } else {
-      let component = props.component.get(names[0]);
+      let component =
+        names[0] === 'globals'
+          ? this._getGlobalsComponent()
+          : props.component.get(names[0]);
       for (let i = 1; i < names.length - 1; i++) {
         component = component.get(names[i]);
       }

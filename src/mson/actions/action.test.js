@@ -68,3 +68,37 @@ it('should handle undefined props', async () => {
   });
   await action.run();
 });
+
+it('should filter by globals', async () => {
+  const action = new Set({
+    if: {
+      globals: {
+        session: {
+          user: {
+            roleNames: {
+              $in: ['admin']
+            }
+          }
+        }
+      }
+    },
+    name: 'value',
+    value: 'Jack'
+  });
+
+  // Mock
+  action._getSession = () => {
+    return {
+      user: {
+        roleNames: ['admin']
+      }
+    };
+  };
+
+  const field = new TextField({ name: 'firstName' });
+
+  await action.run({
+    component: field
+  });
+  expect(field.getValue()).toEqual('Jack');
+});

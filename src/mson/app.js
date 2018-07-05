@@ -10,4 +10,8 @@ export default class App extends Component {
     const value = this._getIfAllowed(name, 'menu');
     return value === undefined ? super.getOne(name) : value;
   }
+
+  emitLoggedOut() {
+    this.emitChange('loggedOut');
+  }
 }

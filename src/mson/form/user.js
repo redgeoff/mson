@@ -1,6 +1,5 @@
 import Form from './form';
 import MSONComponent from '../component/mson-component';
-import Roles from '../roles';
 
 export default class User extends Form {
   _create(props) {
@@ -38,8 +37,7 @@ export default class User extends Form {
       fields: [
         {
           name: 'roles',
-          component: 'TextListField',
-          invalidRegExp: '^' + Object.keys(Roles.RESERVED).join('|') + '$'
+          component: 'RolesField'
         }
       ]
     };
