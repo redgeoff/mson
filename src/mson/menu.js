@@ -87,14 +87,27 @@ export default class Menu extends Component {
     this._items.forEach(item => this._indexItemByPath(item));
   }
 
+  _indexParentByPath(item, parentItem) {
+    this._parentsByPath[item.path] = parentItem;
+    if (item.items) {
+      item.items.forEach(childItem => this._indexParentByPath(childItem, item));
+    }
+  }
+
+  _indexParentsByPath() {
+    this._items.forEach(item => this._indexParentByPath(item));
+  }
+
   set(props) {
     super.set(props);
     this._setIfUndefined(props, 'items' /*, 'roles' */);
 
     // Index by path so we can do a quick lookup later
     if (props.items !== undefined) {
-      this._itemsByPath = [];
+      this._itemsByPath = {};
       this._indexByPath();
+      this._parentsByPath = {};
+      this._indexParentsByPath();
     }
   }
 
@@ -105,6 +118,10 @@ export default class Menu extends Component {
 
   getItem(path) {
     return this._itemsByPath[path];
+  }
+
+  getParent(path) {
+    return this._parentsByPath[path];
   }
 
   getFirstItem() {

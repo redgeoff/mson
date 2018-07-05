@@ -109,6 +109,8 @@ class App extends React.PureComponent {
     super(props);
     // this.createRouteListener();
     this.setGlobalOnNavigate();
+
+    this.synchronizer = Promise.resolve();
   }
 
   onNavigate = callback => {
@@ -144,16 +146,17 @@ class App extends React.PureComponent {
 
   navigateTo(path) {
     const { menuItem } = this.state;
-    const { app, history } = this.props;
+    const { app } = this.props;
     const menu = app.get('menu');
 
-    if (path === '/home') {
-      // Redirect so that user sees the actual path and not /home
-      history.push(menu.getFirstItem().path);
-    } else if (!menuItem || path !== menuItem.path) {
+    // if (path === '/home') {
+    //   // Redirect so that user sees the actual path and not /home
+    //   history.push(menu.getFirstItem().path);
+    // } else
+    if (!menuItem || path !== menuItem.path) {
       // if (this.requireAccess(menu.get('roles'))) {
       // The route is changing
-      this.switchContent(menu.getItem(path));
+      return this.switchContent(menu.getItem(path));
       // }
     }
   }
@@ -219,14 +222,17 @@ class App extends React.PureComponent {
         this.component.set({ searchString: null });
       }
 
+      const isAction = menuItem.content instanceof Action;
+
       // Note: menuItem.content can be an action if the user goes directly to a route where the
       // content is an action
-      if (
-        menuItem &&
-        menuItem.content &&
-        !(menuItem.content instanceof Action)
-      ) {
-        if (this.requireAccess(menuItem.roles)) {
+      if (menuItem && menuItem.content && !isAction) {
+        const menu = this.props.app.get('menu');
+        const parentItem = menu.getParent(menuItem.path);
+        if (
+          this.requireAccess(menuItem.roles) &&
+          (!parentItem || this.requireAccess(parentItem.roles))
+        ) {
           // Instantiate form
           // this.component = compiler.newComponent(menuItem.content.component);
           this.component = menuItem.content;
@@ -251,11 +257,36 @@ class App extends React.PureComponent {
         showSearch: isList
       });
 
-      if (menuItem.content instanceof Action) {
+      if (isAction) {
         // Execute the actions
         await menuItem.content.run();
       }
     }
+  };
+
+  synchronize(promiseFactory) {
+    this.synchronizer = this.synchronizer.then(promiseFactory);
+  }
+
+  onLocationUnsynchronized(location) {
+    // Is the path changing? This check is needed as otherwise a re-rendering of the RouteListener
+    // during some UI operation, e.g. a button click, could result in us redirecting to an
+    // outdated path.
+    const { path } = this.state;
+    if (path === null || path !== location.pathname) {
+      this.setState({ path: location.pathname });
+      return this.navigateTo(location.pathname);
+    }
+  }
+
+  onLocation = location => {
+    // We need to synchronize calls to onLocation as otherwise a race condition, e.g. an immediate
+    // loading of the component at /somepage and redirect to /login (as we are not logged in), can
+    // result in 2 concurrent calls to switchContent that can leave the content in an inconsistent
+    // state.
+    this.synchronize(() => {
+      return this.onLocationUnsynchronized(location);
+    });
   };
 
   // TODO: move logic to componentDidUpdate
@@ -304,26 +335,15 @@ class App extends React.PureComponent {
   }
 
   componentWillMount() {
-    const onLocation = location => {
-      // Is the path is changing? This check is needed as otherwise a re-rendering of the
-      // RouteListener during some UI operation, e.g. a button click, could result in us
-      // redirecting to an outdated path.
-      const { path } = this.state;
-      if (path === null || path !== location.pathname) {
-        this.setState({ path: location.pathname });
-        this.navigateTo(location.pathname);
-      }
-    };
-
     // Allows us to listen to back and forward button clicks
-    this.unlisten = this.props.history.listen(onLocation);
+    this.unlisten = this.props.history.listen(this.onLocation);
 
     if (registrar.client) {
       // Wait for the session to load before loading the initial component so that we can do things
       // like route based on a user's role
       registrar.client.user.awaitSession().then(() => {
         // Load the correct component based on the initial path
-        onLocation(this.props.location);
+        this.onLocation(this.props.location);
       });
     }
   }
