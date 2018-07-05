@@ -14,6 +14,12 @@ export default class Action extends Component {
     return value === undefined ? super.getOne(name) : value;
   }
 
+  _getGlobals() {
+    return {
+      session: registrar.client ? registrar.client.user.getSession() : undefined
+    };
+  }
+
   // Abstract method
   async act(/* props */) {}
 
@@ -21,9 +27,7 @@ export default class Action extends Component {
     if (!props) {
       props = {};
     }
-    props.globals = {
-      session: registrar.client ? registrar.client.user.getSession() : undefined
-    };
+    props.globals = this._getGlobals();
     const propFiller = new PropFiller(props);
     prop = propFiller.fill(prop);
     return prop;
@@ -48,7 +52,11 @@ export default class Action extends Component {
 
     if (where) {
       const ifData = this.get('ifData');
-      const whereProps = ifData ? ifData : this._fill(props.ifData);
+      let whereProps = ifData ? ifData : this._fill(props.ifData);
+
+      // Inject globals
+      whereProps = Object.assign({ globals: this._getGlobals() }, whereProps);
+
       let sifted = sift(where, [whereProps]);
       if (sifted.length === 0) {
         shouldRun = false;

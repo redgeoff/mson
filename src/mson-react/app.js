@@ -318,8 +318,14 @@ class App extends React.PureComponent {
     // Allows us to listen to back and forward button clicks
     this.unlisten = this.props.history.listen(onLocation);
 
-    // Load the correct component based on the initial path
-    onLocation(this.props.location);
+    if (registrar.client) {
+      // Wait for the session to load before loading the initial component so that we can do things
+      // like route based on a user's role
+      registrar.client.user.awaitSession().then(() => {
+        // Load the correct component based on the initial path
+        onLocation(this.props.location);
+      });
+    }
   }
 
   componentWillUnmount() {
