@@ -14,9 +14,13 @@ export default class Action extends Component {
     return value === undefined ? super.getOne(name) : value;
   }
 
+  _getSession() {
+    return registrar.client ? registrar.client.user.getSession() : undefined;
+  }
+
   _getGlobals() {
     return {
-      session: registrar.client ? registrar.client.user.getSession() : undefined
+      session: this._getSession()
     };
   }
 
