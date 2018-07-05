@@ -198,6 +198,7 @@ class App extends React.PureComponent {
   }
 
   emitLoggedOut() {
+    globals.set({ redirectAfterLogin: this.props.location.pathname });
     this.props.app.emitLoggedOut();
   }
 

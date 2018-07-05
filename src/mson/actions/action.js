@@ -2,6 +2,7 @@ import Component from '../component';
 import sift from 'sift';
 import PropFiller from '../compiler/prop-filler';
 import registrar from '../compiler/registrar';
+import globals from '../globals';
 
 export default class Action extends Component {
   set(props) {
@@ -20,7 +21,8 @@ export default class Action extends Component {
 
   _getGlobals() {
     return {
-      session: this._getSession()
+      session: this._getSession(),
+      ...globals.get()
     };
   }
 
