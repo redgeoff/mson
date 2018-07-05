@@ -12,8 +12,8 @@ export default class Set extends Action {
     return value === undefined ? super.getOne(name) : value;
   }
 
-  // For mocking
-  _getGlobals() {
+  // For mocking. Note: _getGlobals() is already in use by Action
+  _getGlobalsComponent() {
     return globals;
   }
 
@@ -36,7 +36,7 @@ export default class Set extends Action {
     } else {
       let component =
         names[0] === 'globals'
-          ? this._getGlobals()
+          ? this._getGlobalsComponent()
           : props.component.get(names[0]);
       for (let i = 1; i < names.length - 1; i++) {
         component = component.get(names[i]);

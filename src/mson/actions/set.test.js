@@ -103,7 +103,7 @@ it('should set globals', async () => {
   let propsSet = null;
 
   // Mock
-  set._getGlobals = () => ({
+  set._getGlobalsComponent = () => ({
     set: props => {
       propsSet = props;
     }
