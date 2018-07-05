@@ -37,7 +37,7 @@ export default class Set extends Action {
       });
     } else {
       let component =
-        names[0] === 'globals' ? globals : props.component.get(names[0]);
+        names[0] === 'globals' ? this._globals : props.component.get(names[0]);
       for (let i = 1; i < names.length - 1; i++) {
         component = component.get(names[i]);
       }
