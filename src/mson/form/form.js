@@ -193,18 +193,19 @@ export default class Form extends Component {
   set(props) {
     super.set(props);
 
-    if (props.fields !== undefined) {
-      props.fields.forEach(field => {
-        this.addField(field);
-      });
-      this._emitChange('fields');
-    }
-
     if (props.form !== undefined) {
       this.cloneFields(props.form);
       this.copyValidators(props.form);
       this.copyListeners(props.form);
       this.copyAccess(props.form);
+    }
+
+    // Add the fields after any form is set so that inherited fields appear at the top of the form
+    if (props.fields !== undefined) {
+      props.fields.forEach(field => {
+        this.addField(field);
+      });
+      this._emitChange('fields');
     }
 
     if (props.validators !== undefined) {

@@ -61,68 +61,10 @@ compiler.registerComponent('app.Login', {
   ]
 });
 
-// TODO: should be able to inline in ChangePassword
 compiler.registerComponent('app.ChangePasswordForm', {
-  component: 'app.Employee',
-  fields: [
-    {
-      component: 'PasswordField',
-      name: 'retypePassword',
-      label: 'Retype Password',
-      required: true
-    }
-  ],
-  validators: [
-    {
-      where: {
-        retypePassword: {
-          value: {
-            $ne: '{{password.value}}'
-          }
-        }
-      },
-      error: {
-        field: 'retypePassword',
-        error: 'must match'
-      }
-    }
-  ],
+  component: 'UpdatePassword',
+  baseForm: 'app.Employee',
   listeners: [
-    {
-      event: 'create',
-      actions: [
-        {
-          component: 'Set',
-          name: 'hidden',
-          value: true
-        },
-        {
-          component: 'Set',
-          name: 'out',
-          value: false
-        },
-        {
-          component: 'Set',
-          name: 'fields.password.hidden',
-          value: false
-        },
-        {
-          component: 'Set',
-          name: 'fields.retypePassword.hidden',
-          value: false
-        },
-        {
-          component: 'Set',
-          name: 'fields.password.required',
-          value: true
-        },
-        {
-          component: 'Set',
-          name: 'fields.password.out',
-          value: true
-        }
-      ]
-    },
     {
       event: ['didSave', 'cancel'],
       actions: [
@@ -133,6 +75,17 @@ compiler.registerComponent('app.ChangePasswordForm', {
       ]
     }
   ]
+});
+
+compiler.registerComponent('app.ChangePassword', {
+  component: 'RecordEditor',
+  preview: false,
+  baseForm: 'app.ChangePasswordForm',
+  label: 'Password',
+  recordWhere: {
+    userId: '{{globals.session.user.id}}'
+  },
+  storeType: 'app.Employee'
 });
 
 compiler.registerComponent('app.EmployeeSignupForm', {
@@ -221,17 +174,6 @@ compiler.registerComponent('app.EmployeeSignup', {
   storeType: 'app.Employee',
   hideCancel: true,
   recordWhere: null
-});
-
-compiler.registerComponent('app.ChangePassword', {
-  component: 'RecordEditor',
-  preview: false,
-  baseForm: 'app.ChangePasswordForm',
-  label: 'Password',
-  recordWhere: {
-    userId: '{{globals.session.user.id}}'
-  },
-  storeType: 'app.Employee'
 });
 
 compiler.registerComponent('app.ViewAndEditAccount', {
