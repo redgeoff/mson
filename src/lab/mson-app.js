@@ -37,7 +37,7 @@ compiler.registerComponent('app.LogIn', {
         {
           component: 'Set',
           name: 'globals.redirectAfterLogin',
-          value: '/' // TODO: switch to null after refactor to support null here
+          value: null
         }
       ]
     }
