@@ -61,9 +61,18 @@ compiler.registerComponent('app.Login', {
   ]
 });
 
-compiler.registerComponent('app.ChangePasswordForm', {
-  component: 'UpdatePassword',
-  baseForm: 'app.Employee',
+compiler.registerComponent('app.ChangePassword', {
+  component: 'RecordEditor',
+  preview: false,
+  baseForm: {
+    component: 'UpdatePassword',
+    baseForm: 'app.Employee'
+  },
+  label: 'Password',
+  recordWhere: {
+    userId: '{{globals.session.user.id}}'
+  },
+  storeType: 'app.Employee',
   listeners: [
     {
       event: ['didSave', 'cancel'],
@@ -75,17 +84,6 @@ compiler.registerComponent('app.ChangePasswordForm', {
       ]
     }
   ]
-});
-
-compiler.registerComponent('app.ChangePassword', {
-  component: 'RecordEditor',
-  preview: false,
-  baseForm: 'app.ChangePasswordForm',
-  label: 'Password',
-  recordWhere: {
-    userId: '{{globals.session.user.id}}'
-  },
-  storeType: 'app.Employee'
 });
 
 compiler.registerComponent('app.EmployeeSignupForm', {

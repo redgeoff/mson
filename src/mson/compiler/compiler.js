@@ -112,6 +112,10 @@ export class Compiler {
   }
 
   getComponent(name, props) {
+    // // TODO: enhance properly?
+    // if (typeof name !== 'string') {
+    //   return name;
+    // }
     let component = this._getComponent(name);
 
     if (props && this.isMSONComponent(component)) {
@@ -122,7 +126,10 @@ export class Compiler {
   }
 
   buildComponent(name, defaultProps) {
-    const Component = this.getComponent(defaultProps.component);
+    const Component =
+      typeof defaultProps.component === 'string'
+        ? this.getComponent(defaultProps.component)
+        : defaultProps.component;
 
     let self = this;
 
@@ -161,8 +168,6 @@ export class Compiler {
   }
 
   newComponent(props) {
-    const Component = this.getComponent(props.component, props);
-
     let clonedProps = _.cloneDeep(props);
 
     // TODO: maybe 'component' should be renamed to something like 'builtComponent' so that we still
@@ -172,7 +177,14 @@ export class Compiler {
 
     this._buildChildComponents(clonedProps);
 
-    return new Component(clonedProps);
+    // Need to render?
+    if (typeof props.component === 'string') {
+      const Component = this.getComponent(props.component, props);
+      return new Component(clonedProps);
+    } else {
+      props.component.set(clonedProps);
+      return props.component;
+    }
   }
 
   // TODO: still needed?
