@@ -269,17 +269,28 @@ export default class FormsField extends Field {
     });
   }
 
+  static SCROLLTHRESHOLD_DEFAULT = 1000;
+
+  // We want this to be a multiple of 4 as we may make it optional to have 4 columns in
+  // FormsField
+  static ITEMS_PER_PAGE_DEFAULT = 20;
+
+  static MAX_BUFFER_PAGES_DEFAULT = 3;
+
   _create(props) {
+    const c = this.constructor;
     this._setDefaults(props, {
-      scrollThreshold: 1000,
-
-      // We want this to be a multiple of 4 as we may make it optional to have 4 columns in
-      // FormsField
-      itemsPerPage: 20,
-
-      maxBufferPages: 3,
+      scrollThreshold: c.SCROLLTHRESHOLD_DEFAULT,
+      itemsPerPage: c.ITEMS_PER_PAGE_DEFAULT,
+      maxBufferPages: c.MAX_BUFFER_PAGES_DEFAULT,
       spacerHeight: 0,
-      spacerId: Component.getNextUniqueId()
+      spacerId: Component.getNextUniqueId(),
+
+      // Needed so that unload does not trigger listeners as these props would otherwise be
+      // initialized as undefined
+      order: null,
+      mode: null,
+      showArchived: null
     });
 
     this._createInfiniteLoader();
