@@ -106,7 +106,9 @@ export default class Component extends events.EventEmitter {
   }
 
   _set(name, value) {
-    // Is the value changing? Preventing emitting when the value doesn't change
+    // Is the value changing? Prevent emitting when the value doesn't change. Note: a previous
+    // design treated undefined and null values as equals, but this had to be changed as otherwise
+    // we have no construct for detecting when properties are omitted from a MSON definition.
     if (this['_' + name] !== value) {
       this._setProperty(name, value);
     }
