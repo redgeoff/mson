@@ -112,3 +112,17 @@ it('should set globals', async () => {
   await set.run({ arguments: null });
   expect(propsSet).toEqual({ redirectAfterLogin: '/account' });
 });
+
+it('should set using arguments when value is undefined', async () => {
+  const form = createForm();
+  const set = new Set({
+    name: 'fields.name.lastName.value'
+  });
+  await set.run({ arguments: 'Fooerson', component: form });
+  expect(
+    form
+      .getField('name')
+      .get('lastName')
+      .get('value')
+  ).toEqual('Fooerson');
+});

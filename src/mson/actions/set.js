@@ -22,7 +22,7 @@ export default class Set extends Action {
     let names = name ? name.split('.') : [];
 
     const value =
-      this.get('value') === null
+      this.get('value') === undefined
         ? props.arguments
         : this.getFilled('value', props);
 
