@@ -48,6 +48,7 @@ import TextField from './fields/text-field';
 import TextListField from './fields/text-list-field';
 import UpsertRecord from './actions/upsert-record';
 import User from './form/user';
+import Users from './aggregate/users';
 
 export default {
   Action,
@@ -94,5 +95,6 @@ export default {
   TextListField,
   ValidatorForm: FormValidator,
   UpsertRecord,
-  User
+  User,
+  Users
 };
