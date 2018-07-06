@@ -24,7 +24,7 @@ it('should toggle required', () => {
 
   // Ensure not required
   field.validate();
-  expect(field.getErr()).toEqual(null);
+  expect(field.getErr()).toBeUndefined();
 
   // Toggle required to true
   field.set({ required: true });
@@ -34,4 +34,29 @@ it('should toggle required', () => {
   field.clearErr();
   field.validate();
   expect(field.getErr()).toEqual(null);
+});
+
+it('should set defaults', () => {
+  const field = new Field();
+  expect(
+    field.get([
+      'required',
+      'fullWidth',
+      'hidden',
+      'block',
+      'disabled',
+      'editable',
+      'in',
+      'out'
+    ])
+  ).toEqual({
+    required: false,
+    fullWidth: false,
+    hidden: false,
+    block: true,
+    disabled: false,
+    editable: true,
+    in: true,
+    out: true
+  });
 });

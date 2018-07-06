@@ -27,12 +27,12 @@ it('should sanity check', () => {
 
   expect(user.getValues({ out: true })).toEqual({
     username: 'username',
-    id: null,
+    id: undefined,
     name: 'Full Name'
   });
 
   expect(user.getValues()).toEqual({
-    id: null,
+    id: undefined,
     ...values
   });
 });

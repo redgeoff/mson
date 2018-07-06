@@ -68,9 +68,9 @@ it('should get null when only set some', () => {
     lastName: 'Charles'
   });
   expect(form.getValues()).toEqual({
-    id: null,
+    id: undefined,
     firstName: 'Ray',
-    middleName: null,
+    middleName: undefined,
     lastName: 'Charles'
   });
 });
@@ -87,7 +87,7 @@ it('should clone', () => {
   const clonedForm = form.clone();
 
   expect(clonedForm.getValues()).toEqual({
-    id: null,
+    id: undefined,
     firstName: 'Ray',
     middleName: null,
     lastName: 'Charles'
@@ -100,14 +100,14 @@ it('should clone', () => {
   });
 
   expect(clonedForm.getValues()).toEqual({
-    id: null,
+    id: undefined,
     firstName: 'Ray',
     middleName: 'Charles',
     lastName: 'Robinson'
   });
 
   expect(form.getValues()).toEqual({
-    id: null,
+    id: undefined,
     firstName: 'Ray',
     middleName: null,
     lastName: 'Charles'
@@ -127,11 +127,11 @@ it('should clone', () => {
 
   clonedForm.clearValues();
   expect(form.getValues()).toEqual({
-    id: null,
+    id: undefined,
     firstName: 'Ray',
     middleName: null,
     lastName: 'Charles',
-    suffix: null
+    suffix: undefined
   });
 });
 
@@ -308,7 +308,7 @@ it('should validate schema', () => {
       field: 'fields',
       error: [
         {
-          id: null,
+          id: undefined,
           error: [
             {
               field: 'badProperty',

@@ -7,7 +7,16 @@ import Validator from '../component/validator';
 export default class Field extends Component {
   _create(props) {
     super._create(props);
-    this.set({ editable: true, block: true, out: true, in: true });
+    this._setDefaults(props, {
+      editable: true,
+      block: true,
+      out: true,
+      in: true,
+      hidden: false,
+      required: false,
+      fullWidth: false,
+      disabled: false
+    });
 
     this.set({
       schema: {
@@ -158,7 +167,7 @@ export default class Field extends Component {
 
   isValueBlank(value) {
     // value can be '' for select when blankString selected. TODO: better here or in SelectField?
-    return value === null || value === '';
+    return value === null || value === '' || value === undefined;
   }
 
   isBlank() {

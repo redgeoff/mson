@@ -19,10 +19,10 @@ export default class Set extends Action {
 
   _setProp(props) {
     const name = this.get('name');
-    let names = name !== null ? name.split('.') : [];
+    let names = name ? name.split('.') : [];
 
     const value =
-      this.get('value') === null
+      this.get('value') === undefined
         ? props.arguments
         : this.getFilled('value', props);
 

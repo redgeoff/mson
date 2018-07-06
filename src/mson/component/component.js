@@ -106,13 +106,10 @@ export default class Component extends events.EventEmitter {
   }
 
   _set(name, value) {
-    // Is the value changing? Preventing emitting when the value doesn't change. We don't currently
-    // initialize the props to null so we ignore any changes where the prop would switch from
-    // undefined to null.
-    if (
-      this['_' + name] !== value &&
-      (this['_' + name] !== undefined || value !== null)
-    ) {
+    // Is the value changing? Prevent emitting when the value doesn't change. Note: a previous
+    // design treated undefined and null values as equals, but this had to be changed as otherwise
+    // we have no construct for detecting when properties are omitted from a MSON definition.
+    if (this['_' + name] !== value) {
       this._setProperty(name, value);
     }
   }
@@ -254,8 +251,7 @@ export default class Component extends events.EventEmitter {
   }
 
   _get(name) {
-    // Default to null if the prop has not yet been defined
-    return this['_' + name] === undefined ? null : this['_' + name];
+    return this['_' + name];
   }
 
   _getIfAllowed(name, ...allowedNames) {

@@ -185,3 +185,26 @@ it('should clear props on unload', () => {
     showArchived: null
   });
 });
+
+it('should set defaults', () => {
+  const field = createField();
+  expect(
+    field.get([
+      'scrollThreshold',
+      'itemsPerPage',
+      'maxBufferPages',
+      'spacerHeight',
+      'order',
+      'mode',
+      'showArchived'
+    ])
+  ).toEqual({
+    scrollThreshold: FormsField.SCROLLTHRESHOLD_DEFAULT,
+    itemsPerPage: FormsField.ITEMS_PER_PAGE_DEFAULT,
+    maxBufferPages: FormsField.MAX_BUFFER_PAGES_DEFAULT,
+    spacerHeight: 0,
+    order: null,
+    mode: null,
+    showArchived: null
+  });
+});
