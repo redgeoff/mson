@@ -50,6 +50,9 @@ const attach = (_watchProps, componentOrName) => {
           // The component is changing so recreate the listener
           this.removeListener();
           this.addListener();
+
+          // Set the initial state as the component has changed
+          this.setInitialState();
         }
       }
 
@@ -59,6 +62,11 @@ const attach = (_watchProps, componentOrName) => {
 
       removeListener() {
         this.getComponent().removeListener('$change', this.handleFieldChange);
+      }
+
+      setInitialState() {
+        const initialState = this.getComponent().get(this.watchProps);
+        this.setState(initialState);
       }
 
       componentDidMount() {
@@ -71,8 +79,7 @@ const attach = (_watchProps, componentOrName) => {
         this.addListener();
 
         // Update state with any changes that have occured since construction, but before mounting
-        const initialState = this.getComponent().get(this.watchProps);
-        this.setState(initialState);
+        this.setInitialState();
       }
 
       componentWillUnmount() {
