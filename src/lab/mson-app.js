@@ -5,45 +5,6 @@ import { department, employee } from '../employees/components';
 // TODO: in a production app the appId should be set by the path or subdomain
 globals.set({ appId: 101 });
 
-compiler.registerComponent('app.LogIn', {
-  component: 'Action',
-  actions: [
-    {
-      component: 'LogInToApp'
-    },
-    {
-      if: {
-        globals: {
-          redirectAfterLogin: null
-        }
-      },
-      component: 'Redirect',
-      path: '/'
-    },
-    {
-      component: 'Action',
-      if: {
-        globals: {
-          redirectAfterLogin: {
-            $ne: null
-          }
-        }
-      },
-      actions: [
-        {
-          component: 'Redirect',
-          path: '{{globals.redirectAfterLogin}}'
-        },
-        {
-          component: 'Set',
-          name: 'globals.redirectAfterLogin',
-          value: null
-        }
-      ]
-    }
-  ]
-});
-
 compiler.registerComponent('app.Login', {
   component: 'Form',
   fields: [
@@ -84,7 +45,7 @@ compiler.registerComponent('app.Login', {
       event: 'submit',
       actions: [
         {
-          component: 'app.LogIn'
+          component: 'LogInToAppAndRedirect'
         }
       ]
     },
@@ -245,7 +206,7 @@ compiler.registerComponent('app.EmployeeSignupForm', {
       event: 'didSave',
       actions: [
         {
-          component: 'app.LogIn'
+          component: 'LogInToAppAndRedirect'
         }
       ]
     }
