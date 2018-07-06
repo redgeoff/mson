@@ -393,12 +393,16 @@ class App extends React.PureComponent {
       confirmationOpen,
       showArchived,
       showArchivedToggle,
-      path,
+      // path,
       searchString,
       showSearch
       // isLoggedIn
     } = this.state;
+
     const menu = app.get('menu');
+
+    // Use the path from the location prop as this.state.path may not be up to date
+    const path = this.props.location.pathname;
 
     const component = this.component ? (
       <Component component={this.component} />
