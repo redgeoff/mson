@@ -1,15 +1,13 @@
 // TODO:
-//  - Is automatically building from MSON really the best or should it be done in a lazy way so
-//    that we don't have to render pieces that are not yet in use?
 //  - Would it be advantageous to allow for copying of sub components, e.g. fields, instead of
 //    using inheritance so that can mix in parts of different components. This would be like a
 //    React design pattern. Or, would this make things too complex?
 
 // Notes:
 //  - An older design did a one-time build of MSON components and then stored them in
-//    _builtComponents, unfortunately, this optimization had to be removed as MSON components can
+//    _compiledComponents, unfortunately, this optimization had to be removed as MSON components can
 //    now have dynamic attributes. TODO: as a future optimization we can check to see if a MSON
-//    component has dynamic attributes and if it doesn't then we can cache the built component.
+//    component has dynamic attributes and if it doesn't then we can cache the compiled component.
 
 import components from '../components';
 import _ from 'lodash';
@@ -22,14 +20,10 @@ export class Compiler {
     this._components = props.components;
   }
 
-  // // We keep this separate from components so that we have a way of referencing MSON components
-  // // after the components have been built. Moreover, this construct doesn't require any special
-  // // organization in the components object.
-  // _builtComponents = {};
-
-  isMSONComponent(component) {
-    return typeof component === 'object';
-  }
+  // // We keep this separate from components so that we have a way of referencing uncompiled
+  // // components after the components have been compiled. Moreover, this construct doesn't require
+  // // any special organization in the components object.
+  // _compiledComponents = {};
 
   _getComponent(name) {
     if (this._components[name]) {
@@ -39,9 +33,9 @@ export class Compiler {
     }
   }
 
-  _getMSONComponent(name) {
+  _getUncompiledComponent(name) {
     const component = this._getComponent(name);
-    if (this.isMSONComponent(component)) {
+    if (!this.isCompiled(component)) {
       return component;
     } else {
       throw new Error('missing MSON component ' + name);
@@ -78,7 +72,7 @@ export class Compiler {
   _instantiateComponent(props) {
     const Component = this.getComponent(props.component, props);
 
-    // TODO: maybe 'component' should be renamed to something like 'builtComponent' so that we
+    // TODO: maybe 'component' should be renamed to something like 'compiledComponent' so that we
     // still have a reference to original hierarchy. Alternatively, maybe we can track this
     // hierarchy via something like a prototype chain in the actual JS object.
     delete props.component;
@@ -86,7 +80,7 @@ export class Compiler {
     return new Component(props);
   }
 
-  buildComponent(name, defaultProps) {
+  _buildComponent(name, defaultProps) {
     const Component =
       typeof defaultProps.component === 'string'
         ? this.getComponent(defaultProps.component)
@@ -102,7 +96,7 @@ export class Compiler {
 
         clonedProps = self._fillProps(props, clonedProps);
 
-        self._buildChildComponents(clonedProps);
+        self._compileChildComponents(clonedProps);
 
         // Recusively merge child attributes
         super(utils.merge(clonedProps, props));
@@ -113,15 +107,15 @@ export class Compiler {
     };
   }
 
-  _buildComponent(name, component) {
-    // Is the component MSON?
-    if (this.isMSONComponent(component)) {
+  _buildComponentIfUncompiled(name, component) {
+    // Does the component need to be compiled?
+    if (!this.isCompiled(component)) {
       // Build it. This is done so that we can resolve dependencies on demand and so that we don't
-      // have to build components that we won't be using. Components are only built once and are
+      // have to build components that we won't be using. Components are only compiled once and are
       // then cached for reuse.
-      return this.buildComponent(name, component);
+      return this._buildComponent(name, component);
     } else {
-      // Already built so return the reference
+      // Already compiled so return the reference
       return component;
     }
   }
@@ -129,11 +123,11 @@ export class Compiler {
   getComponent(name, props) {
     let component = this._getComponent(name);
 
-    if (props && this.isMSONComponent(component)) {
+    if (props && !this.isCompiled(component)) {
       component = this._fillProps(props, component);
     }
 
-    return this._buildComponent(name, component);
+    return this._buildComponentIfUncompiled(name, component);
   }
 
   // Note: this function is VERY slow so we analyze obj.constructor.name instead
@@ -160,7 +154,7 @@ export class Compiler {
     }
   }
 
-  _buildChildComponents(props) {
+  _compileChildComponents(props) {
     // Has it already been compiled?
     if (this.isCompiled(props)) {
       return;
@@ -173,7 +167,7 @@ export class Compiler {
           prop = this._fillProps(props, prop);
 
           // Compile after filling so that we avoid cloning newly compiled components
-          this._buildChildComponents(prop);
+          this._compileChildComponents(prop);
 
           if (typeof prop.component === 'string') {
             props[name] = this._instantiateComponent(prop);
@@ -184,7 +178,7 @@ export class Compiler {
             props[name] = component;
           }
         } else {
-          this._buildChildComponents(prop);
+          this._compileChildComponents(prop);
         }
       }
     });
@@ -193,7 +187,7 @@ export class Compiler {
   newComponent(props) {
     let clonedProps = _.cloneDeep(props);
 
-    this._buildChildComponents(clonedProps);
+    this._compileChildComponents(clonedProps);
 
     // Need to render?
     if (typeof clonedProps.component === 'string') {
@@ -208,7 +202,7 @@ export class Compiler {
 
   // TODO: still needed?
   getExtends(name) {
-    return this._getMSONComponent(name).component;
+    return this._getUncompiledComponent(name).component;
   }
 
   instanceOf(componentName, instanceOfName) {
@@ -216,7 +210,7 @@ export class Compiler {
       return true;
     } else {
       const Component = this._getComponent(componentName);
-      if (this.isMSONComponent(Component)) {
+      if (!this.isCompiled(Component)) {
         // TODO: this doesn't work if the component derives a MSON component as newComponent()
         // deletes the component property. Instead we will probably want to improve this so that we
         // store the complete hierarchy when building the component.
@@ -229,18 +223,18 @@ export class Compiler {
     }
   }
 
-  getOldestNonMSONAncestor(name) {
+  getOldestCompiledAncestor(name) {
     const component = this._getComponent(name);
-    if (this.isMSONComponent(component)) {
-      // Ancestor is still a MSON component so go again
-      return this.getOldestNonMSONAncestor(component.component);
+    if (!this.isCompiled(component)) {
+      // Ancestor is still a uncompiled component so go again
+      return this.getOldestCompiledAncestor(component.component);
     } else {
       return name;
     }
   }
 
   ensureBuilt(component) {
-    if (this.isMSONComponent(component)) {
+    if (!this.isCompiled(component)) {
       return this.newComponent(component);
     } else {
       return component;
