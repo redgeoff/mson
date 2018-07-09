@@ -27,10 +27,6 @@ export class Compiler {
   // // organization in the components object.
   // _builtComponents = {};
 
-  isMSONComponent(component) {
-    return typeof component === 'object';
-  }
-
   _getComponent(name) {
     if (this._components[name]) {
       return this._components[name];
@@ -41,7 +37,7 @@ export class Compiler {
 
   _getMSONComponent(name) {
     const component = this._getComponent(name);
-    if (this.isMSONComponent(component)) {
+    if (!this.isCompiled(component)) {
       return component;
     } else {
       throw new Error('missing MSON component ' + name);
@@ -115,7 +111,7 @@ export class Compiler {
 
   _buildComponent(name, component) {
     // Is the component MSON?
-    if (this.isMSONComponent(component)) {
+    if (!this.isCompiled(component)) {
       // Build it. This is done so that we can resolve dependencies on demand and so that we don't
       // have to build components that we won't be using. Components are only built once and are
       // then cached for reuse.
@@ -129,7 +125,7 @@ export class Compiler {
   getComponent(name, props) {
     let component = this._getComponent(name);
 
-    if (props && this.isMSONComponent(component)) {
+    if (props && !this.isCompiled(component)) {
       component = this._fillProps(props, component);
     }
 
@@ -216,7 +212,7 @@ export class Compiler {
       return true;
     } else {
       const Component = this._getComponent(componentName);
-      if (this.isMSONComponent(Component)) {
+      if (!this.isCompiled(Component)) {
         // TODO: this doesn't work if the component derives a MSON component as newComponent()
         // deletes the component property. Instead we will probably want to improve this so that we
         // store the complete hierarchy when building the component.
@@ -231,7 +227,7 @@ export class Compiler {
 
   getOldestNonMSONAncestor(name) {
     const component = this._getComponent(name);
-    if (this.isMSONComponent(component)) {
+    if (!this.isCompiled(component)) {
       // Ancestor is still a MSON component so go again
       return this.getOldestNonMSONAncestor(component.component);
     } else {
@@ -240,7 +236,7 @@ export class Compiler {
   }
 
   ensureBuilt(component) {
-    if (this.isMSONComponent(component)) {
+    if (!this.isCompiled(component)) {
       return this.newComponent(component);
     } else {
       return component;
