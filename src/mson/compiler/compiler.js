@@ -96,7 +96,7 @@ export class Compiler {
 
         clonedProps = self._fillProps(props, clonedProps);
 
-        self._buildChildComponents(clonedProps);
+        self._compileChildComponents(clonedProps);
 
         // Recusively merge child attributes
         super(utils.merge(clonedProps, props));
@@ -154,7 +154,7 @@ export class Compiler {
     }
   }
 
-  _buildChildComponents(props) {
+  _compileChildComponents(props) {
     // Has it already been compiled?
     if (this.isCompiled(props)) {
       return;
@@ -167,7 +167,7 @@ export class Compiler {
           prop = this._fillProps(props, prop);
 
           // Compile after filling so that we avoid cloning newly compiled components
-          this._buildChildComponents(prop);
+          this._compileChildComponents(prop);
 
           if (typeof prop.component === 'string') {
             props[name] = this._instantiateComponent(prop);
@@ -178,7 +178,7 @@ export class Compiler {
             props[name] = component;
           }
         } else {
-          this._buildChildComponents(prop);
+          this._compileChildComponents(prop);
         }
       }
     });
@@ -187,7 +187,7 @@ export class Compiler {
   newComponent(props) {
     let clonedProps = _.cloneDeep(props);
 
-    this._buildChildComponents(clonedProps);
+    this._compileChildComponents(clonedProps);
 
     // Need to render?
     if (typeof clonedProps.component === 'string') {
