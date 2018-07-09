@@ -36,20 +36,24 @@ const createActions = () => {
 it('should act', async () => {
   const action = createAction();
   const field = new TextField({ name: 'firstName ' }); // Note: trailing space on purpose
-  await action.run({
+  const args = await action.run({
+    arguments: 'foo',
     component: field
   });
   expect(field.getValue()).toEqual('Jack');
+  expect(args).toEqual('foo');
 });
 
 it('should perform multiple actions', async () => {
   const actions = createActions();
   const field = new TextField({ name: 'firstName' });
-  await actions.run({
+  const args = await actions.run({
+    arguments: 'foo',
     component: field
   });
   expect(field.getValue()).toEqual('Jack');
   expect(field.get('hidden')).toEqual(true);
+  expect(args).toEqual('foo');
 });
 
 it('should handle undefined props', async () => {
