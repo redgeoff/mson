@@ -166,6 +166,27 @@ compiler.registerComponent('app.EmployeeSignup', {
   recordWhere: null
 });
 
+compiler.registerComponent('app.GetDepartments', {
+  component: 'Action',
+  actions: [
+    {
+      component: 'GetRecords',
+      type: 'app.Department',
+      where: {
+        archivedAt: null
+      }
+    },
+    {
+      component: 'Iterator',
+      iterator: 'arguments.edges',
+      return: {
+        value: '{{item.node.id}}',
+        label: '{{item.node.fieldValues.name}}'
+      }
+    }
+  ]
+});
+
 compiler.registerComponent('app.ViewAndEditAccount', {
   component: 'RecordEditor',
   baseForm: 'app.Employee',
@@ -179,16 +200,7 @@ compiler.registerComponent('app.ViewAndEditAccount', {
       event: 'load',
       actions: [
         {
-          component: 'GetRecords',
-          type: 'app.Department'
-        },
-        {
-          component: 'Iterator',
-          iterator: 'arguments.edges',
-          return: {
-            value: '{{item.node.id}}',
-            label: '{{item.node.fieldValues.name}}'
-          }
+          component: 'app.GetDepartments'
         },
         {
           component: 'Set',
@@ -215,19 +227,7 @@ compiler.registerComponent('app.Employees', {
           event: 'load',
           actions: [
             {
-              component: 'GetRecords',
-              type: 'app.Department',
-              where: {
-                archivedAt: null
-              }
-            },
-            {
-              component: 'Iterator',
-              iterator: 'arguments.edges',
-              return: {
-                value: '{{item.node.id}}',
-                label: '{{item.node.fieldValues.name}}'
-              }
+              component: 'app.GetDepartments'
             },
             {
               component: 'Set',

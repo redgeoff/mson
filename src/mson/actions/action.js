@@ -75,14 +75,15 @@ export default class Action extends Component {
       if (actions) {
         let args = null;
         for (const i in actions) {
-          if (!args && props && props.args) {
-            args = props.args;
+          if (!args && props && props.arguments) {
+            args = props.arguments;
           }
           args = await actions[i].run({
             ...props,
             arguments: args
           });
         }
+        return args;
       } else {
         return this.act(props);
       }
