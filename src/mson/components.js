@@ -36,7 +36,7 @@ import ObjectForm from './object-form';
 import PasswordField from './fields/password-field.json';
 import PersonFullNameField from './fields/person-full-name-field.json';
 import PersonNameField from './fields/person-name-field.json';
-import RecordEditor from './record-editor/record-editor.json';
+import RecordEditor from './aggregate/record-editor';
 import RecordStore from './record-store';
 import Redirect from './actions/redirect';
 import RolesField from './fields/roles-field';
