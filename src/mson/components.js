@@ -47,6 +47,7 @@ import Set from './actions/set';
 import Snackbar from './actions/snackbar';
 import TextField from './fields/text-field';
 import TextListField from './fields/text-list-field';
+import UpdatePasswordEditor from './aggregate/update-password-editor';
 import UpdatePassword from './aggregate/update-password';
 import UpsertRecord from './actions/upsert-record';
 import User from './form/user';
@@ -97,6 +98,7 @@ export default {
   TextField,
   TextListField,
   ValidatorForm: FormValidator,
+  UpdatePasswordEditor,
   UpdatePassword,
   UpsertRecord,
   User,
