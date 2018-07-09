@@ -10,6 +10,7 @@ import ButtonField from './fields/button-field';
 import Card from './card';
 import ChainedSelectField from './fields/chained-select-field';
 import ChainedSelectListField from './fields/chained-select-list-field';
+import Component from './component/component';
 import CompositeField from './fields/composite-field';
 import CreateRecord from './actions/create-record';
 import EmailField from './fields/email-field.json';
@@ -59,6 +60,7 @@ export default {
   Card,
   ChainedSelectField,
   ChainedSelectListField,
+  Component,
   CompositeField,
   CreateRecord,
   EmailField,
