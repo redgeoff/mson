@@ -48,42 +48,6 @@ export class Compiler {
     }
   }
 
-  // _buildComponent(name, component) {
-  //   // Is the component MSON?
-  //   if (this.isMSONComponent(component)) {
-  //     // Build it. This is done so that we can resolve dependencies on demand and so that we don't
-  //     // have to build components that we won't be using. Components are only built once and are
-  //     // then cached for reuse.
-  //     component = this.buildComponent(name, component);
-  //     this._builtComponents[name] = component;
-  //   } else {
-  //     // Already built so just copy the reference
-  //     this._builtComponents[name] = component;
-  //   }
-  // }
-
-  // getComponent(name) {
-  //   if (!this._builtComponents[name]) {
-  //     const component = this._getComponent(name);
-  //     this._buildComponent(name, component);
-  //   }
-  //
-  //   return this._builtComponents[name];
-  // }
-
-  _buildComponent(name, component) {
-    // Is the component MSON?
-    if (this.isMSONComponent(component)) {
-      // Build it. This is done so that we can resolve dependencies on demand and so that we don't
-      // have to build components that we won't be using. Components are only built once and are
-      // then cached for reuse.
-      return this.buildComponent(name, component);
-    } else {
-      // Already built so return the reference
-      return component;
-    }
-  }
-
   _removeComponentDefinitions(props) {
     if (typeof props === 'object' && props !== null) {
       if (props.component) {
@@ -111,18 +75,15 @@ export class Compiler {
     return component;
   }
 
-  getComponent(name, props) {
-    // // TODO: enhance properly?
-    // if (typeof name !== 'string') {
-    //   return name;
-    // }
-    let component = this._getComponent(name);
+  _instantiateComponent(props) {
+    const Component = this.getComponent(props.component, props);
 
-    if (props && this.isMSONComponent(component)) {
-      component = this._fillProps(props, component);
-    }
+    // TODO: maybe 'component' should be renamed to something like 'builtComponent' so that we
+    // still have a reference to original hierarchy. Alternatively, maybe we can track this
+    // hierarchy via something like a prototype chain in the actual JS object.
+    delete props.component;
 
-    return this._buildComponent(name, component);
+    return new Component(props);
   }
 
   buildComponent(name, defaultProps) {
@@ -138,7 +99,6 @@ export class Compiler {
         // Deep clone the props and then build any child components in the constructor so we have a
         // copy per component instance.
         let clonedProps = _.cloneDeep(defaultProps);
-        delete clonedProps.component;
 
         clonedProps = self._fillProps(props, clonedProps);
 
@@ -153,16 +113,79 @@ export class Compiler {
     };
   }
 
-  _buildChildComponents(props) {
-    // Build any child components
-    _.each(props, (prop, name) => {
-      // Is this component unbuilt?
-      if (prop && prop.component) {
-        prop = this._fillProps(props, prop);
+  _buildComponent(name, component) {
+    // Is the component MSON?
+    if (this.isMSONComponent(component)) {
+      // Build it. This is done so that we can resolve dependencies on demand and so that we don't
+      // have to build components that we won't be using. Components are only built once and are
+      // then cached for reuse.
+      return this.buildComponent(name, component);
+    } else {
+      // Already built so return the reference
+      return component;
+    }
+  }
 
-        props[name] = this.newComponent(prop);
-      } else if (Array.isArray(prop) || typeof prop === 'object') {
-        this._buildChildComponents(prop);
+  getComponent(name, props) {
+    let component = this._getComponent(name);
+
+    if (props && this.isMSONComponent(component)) {
+      component = this._fillProps(props, component);
+    }
+
+    return this._buildComponent(name, component);
+  }
+
+  // Note: this function is VERY slow so we analyze obj.constructor.name instead
+  // isCompiled(obj) {
+  //   if (typeof obj === 'object') {
+  //     let isCompiled = false;
+  //     try {
+  //       obj.constructor();
+  //     } catch (err) {
+  //       isCompiled = true;
+  //     }
+  //     return isCompiled;
+  //   } else {
+  //     return true;
+  //   }
+  // }
+  isCompiled(obj) {
+    if (typeof obj === 'object') {
+      return (
+        obj.constructor.name !== 'Object' && obj.constructor.name !== 'Array'
+      );
+    } else {
+      return true;
+    }
+  }
+
+  _buildChildComponents(props) {
+    // Has it already been compiled?
+    if (this.isCompiled(props)) {
+      return;
+    }
+
+    _.each(props, (prop, name) => {
+      // Is there something to compile?
+      if (prop !== null && !this.isCompiled(prop)) {
+        if (prop.component) {
+          prop = this._fillProps(props, prop);
+
+          // Compile after filling so that we avoid cloning newly compiled components
+          this._buildChildComponents(prop);
+
+          if (typeof prop.component === 'string') {
+            props[name] = this._instantiateComponent(prop);
+          } else {
+            const component = prop.component;
+            delete prop.component;
+            component.set(prop);
+            props[name] = component;
+          }
+        } else {
+          this._buildChildComponents(prop);
+        }
       }
     });
   }
@@ -170,20 +193,16 @@ export class Compiler {
   newComponent(props) {
     let clonedProps = _.cloneDeep(props);
 
-    // TODO: maybe 'component' should be renamed to something like 'builtComponent' so that we still
-    // have a reference to original hierarchy. Alternatively, maybe we can track this hierarchy via
-    // something like a prototype chain in the actual JS object.
-    delete clonedProps.component;
-
     this._buildChildComponents(clonedProps);
 
     // Need to render?
-    if (typeof props.component === 'string') {
-      const Component = this.getComponent(props.component, props);
-      return new Component(clonedProps);
+    if (typeof clonedProps.component === 'string') {
+      return this._instantiateComponent(clonedProps);
     } else {
-      props.component.set(clonedProps);
-      return props.component;
+      const component = clonedProps.component;
+      delete clonedProps.component;
+      component.set(clonedProps);
+      return component;
     }
   }
 
