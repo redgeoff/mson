@@ -62,16 +62,8 @@ compiler.registerComponent('app.Login', {
 });
 
 compiler.registerComponent('app.ChangePassword', {
-  component: 'RecordEditor',
-  preview: false,
-  baseForm: {
-    component: 'UpdatePassword',
-    baseForm: 'app.Employee'
-  },
-  label: 'Password',
-  recordWhere: {
-    userId: '{{globals.session.user.id}}'
-  },
+  component: 'UpdatePasswordEditor',
+  updatePasswordBaseForm: 'app.Employee',
   storeType: 'app.Employee',
   listeners: [
     {
