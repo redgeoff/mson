@@ -18,7 +18,7 @@ class Field extends React.PureComponent {
       if (!Field) {
         // The React component wasn't found so check the MSON layer to see if we can automatically
         // determine the component from any MSON.
-        let ext = compiler.getOldestNonMSONAncestor(name);
+        let ext = compiler.getOldestCompiledAncestor(name);
         Field = components[ext];
       }
 
