@@ -6,32 +6,20 @@ import Component from './component';
 class Globals extends Component {
   _onNavigate = null;
 
-  set(props) {
-    super.set(props);
-    this._setIfUndefined(
-      props,
-      'redirectPath',
-      'snackbarMessage',
-      'appId',
-      'confirmation',
-      'searchString',
-      'redirectAfterLogin',
-      'reCAPTCHASiteKey'
-    );
-  }
+  _create(props) {
+    this.set({
+      props: [
+        'redirectPath',
+        'snackbarMessage',
+        'appId',
+        'confirmation',
+        'searchString',
+        'redirectAfterLogin',
+        'reCAPTCHASiteKey'
+      ]
+    });
 
-  getOne(name) {
-    const value = this._getIfAllowed(
-      name,
-      'redirectPath',
-      'snackbarMessage',
-      'appId',
-      'confirmation',
-      'searchString',
-      'redirectAfterLogin',
-      'reCAPTCHASiteKey'
-    );
-    return value === undefined ? super.getOne(name) : value;
+    super._create(props);
   }
 
   redirect(path) {

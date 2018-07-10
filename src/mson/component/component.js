@@ -258,7 +258,7 @@ export default class Component extends events.EventEmitter {
     }
 
     if (this._props) {
-      this._setIfUndefined(props, this._props);
+      this._setIfUndefined(props, ...this._props);
     }
   }
 
