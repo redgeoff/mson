@@ -3,18 +3,16 @@ import attach from '../attach';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 class ReCAPTCHAField extends React.PureComponent {
-  handleChange = event => {
-    // TODO:
-    // this.props.field.setValue(event.target.value);
-    console.log(event.target.value);
+  handleChange = value => {
+    this.props.field.setValue(value);
   };
 
   render() {
     const { disabled, editable, accessEditable, siteKey } = this.props;
 
-    const _editable = accessEditable !== false && editable && !disabled;
+    const isEditable = accessEditable !== false && editable && !disabled;
 
-    if (_editable) {
+    if (isEditable) {
       return (
         <ReCAPTCHA
           ref="recaptcha"

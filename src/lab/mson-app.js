@@ -151,7 +151,7 @@ compiler.registerComponent('ResetPasswordEditor', {
   listeners: [
     {
       // TODO
-      event: 'submit',
+      event: 'reset',
       actions: [
         {
           component: 'Redirect',
