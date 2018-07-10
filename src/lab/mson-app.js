@@ -1,6 +1,6 @@
 import compiler from '../mson/compiler';
 import globals from '../mson/globals';
-import { department, employee, resetPassword } from '../employees/components';
+import { department, employee } from '../employees/components';
 
 // TODO: in a production app the appId should be set by the path or subdomain
 globals.set({ appId: 101 });
@@ -126,8 +126,6 @@ compiler.registerComponent('app.Departments', {
   baseForm: 'app.Department',
   storeType: 'app.Department'
 });
-
-compiler.registerComponent('ResetPassword', resetPassword);
 
 compiler.registerComponent('ResetPasswordEditor', {
   component: 'ResetPassword',
