@@ -3,6 +3,7 @@
 import client from './client';
 import config from './config.json';
 import { department, employee } from './components';
+import { reCAPTCHAProperties } from './server-properties';
 
 // const menu = {
 //   name: 'app.Menu',
@@ -91,6 +92,11 @@ const main = async () => {
   });
 
   await client.app.create({ name: 'employees' });
+
+  await client.component.create({
+    appId: config.appId,
+    definition: reCAPTCHAProperties
+  });
 
   await client.component.create({
     appId: config.appId,

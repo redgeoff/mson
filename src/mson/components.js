@@ -38,6 +38,7 @@ import PasswordField from './fields/password-field.json';
 import PersonFullNameField from './fields/person-full-name-field.json';
 import PersonNameField from './fields/person-name-field.json';
 import ReCAPTCHAField from './fields/re-captcha-field';
+import ReCAPTCHAVault from './vaults/re-captcha-vault';
 import RecordEditor from './aggregate/record-editor';
 import RecordList from './aggregate/record-list';
 import RecordStore from './record-store';
@@ -56,6 +57,7 @@ import UpdatePassword from './aggregate/update-password';
 import UpsertRecord from './actions/upsert-record';
 import User from './form/user';
 import UserList from './aggregate/user-list';
+import Vault from './vaults/vault';
 
 export default {
   Action,
@@ -92,6 +94,7 @@ export default {
   PersonFullNameField,
   PersonNameField,
   ReCAPTCHAField,
+  ReCAPTCHAVault,
   RecordEditor,
   RecordList,
   RecordStore,
@@ -110,5 +113,6 @@ export default {
   UpdatePassword,
   UpsertRecord,
   User,
-  UserList
+  UserList,
+  Vault
 };
