@@ -26,6 +26,7 @@ import GetRecords from './actions/get-records';
 import IntegerField from './fields/integer-field';
 import Iterator from './actions/iterator';
 import ListField from './fields/list-field';
+import Login from './aggregate/login';
 import LogInToApp from './actions/log-in-to-app';
 import LogInToAppAndRedirect from './actions/log-in-to-app-and-redirect';
 import LogOutOfApp from './actions/log-out-of-app';
@@ -78,6 +79,7 @@ export default {
   IntegerField,
   Iterator,
   ListField,
+  Login,
   LogInToApp,
   LogInToAppAndRedirect,
   LogOutOfApp,
