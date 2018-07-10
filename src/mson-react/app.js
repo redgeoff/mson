@@ -270,12 +270,15 @@ class App extends React.PureComponent {
   }
 
   onLocationUnsynchronized(location) {
-    // Is the path changing? This check is needed as otherwise a re-rendering of the RouteListener
-    // during some UI operation, e.g. a button click, could result in us redirecting to an
-    // outdated path.
-    const { path } = this.state;
-    if (path === null || path !== location.pathname) {
-      this.setState({ path: location.pathname });
+    const { redirectPath } = this.props;
+
+    // Did the user navigate using the back or forward buttons?
+    if (redirectPath !== location.pathname) {
+      // We need to change the redirectPath state instead of calling navigateTo directly so that we
+      // have a one-way flow of changes to location, avoiding a circular loop. Changing redirectPath
+      // will cause the location to change and will lead to executing navigateTo() below.
+      globals.redirect(location.pathname);
+    } else {
       return this.navigateTo(location.pathname);
     }
   }
