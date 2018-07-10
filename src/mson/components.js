@@ -37,6 +37,7 @@ import PasswordField from './fields/password-field.json';
 import PersonFullNameField from './fields/person-full-name-field.json';
 import PersonNameField from './fields/person-name-field.json';
 import RecordEditor from './aggregate/record-editor';
+import RecordList from './aggregate/record-list';
 import RecordStore from './record-store';
 import Redirect from './actions/redirect';
 import RolesField from './fields/roles-field';
@@ -88,6 +89,7 @@ export default {
   PersonFullNameField,
   PersonNameField,
   RecordEditor,
+  RecordList,
   RecordStore,
   Redirect,
   RolesField,
