@@ -6,49 +6,8 @@ import { department, employee } from '../employees/components';
 globals.set({ appId: 101 });
 
 compiler.registerComponent('app.Login', {
-  component: 'Form',
-  fields: [
-    {
-      component: 'EmailField',
-      name: 'username',
-      label: 'Email',
-      required: true,
-      fullWidth: true
-    },
-    {
-      component: 'PasswordField',
-      name: 'password',
-      label: 'Password',
-      required: true,
-      fullWidth: true
-    },
-    {
-      component: 'ButtonField',
-      name: 'submit',
-      label: 'Log In',
-      type: 'submit',
-      variant: 'outlined'
-    },
-    {
-      component: 'ButtonField',
-      name: 'createAccount',
-      label: 'Create account'
-    },
-    {
-      component: 'ButtonField',
-      name: 'forgotPassword',
-      label: 'Forgot password?'
-    }
-  ],
+  component: 'Login',
   listeners: [
-    {
-      event: 'submit',
-      actions: [
-        {
-          component: 'LogInToAppAndRedirect'
-        }
-      ]
-    },
     {
       event: 'createAccount',
       actions: [
