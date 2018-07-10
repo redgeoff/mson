@@ -44,6 +44,7 @@ import SchemaValidatorForm from './form/schema-validator-form';
 import SelectField from './fields/select-field';
 import SelectListField from './fields/select-list-field';
 import Set from './actions/set';
+import SignupEditor from './aggregate/signup-editor';
 import Snackbar from './actions/snackbar';
 import TextField from './fields/text-field';
 import TextListField from './fields/text-list-field';
@@ -94,6 +95,7 @@ export default {
   SelectField,
   SelectListField,
   Set,
+  SignupEditor,
   Snackbar,
   TextField,
   TextListField,
