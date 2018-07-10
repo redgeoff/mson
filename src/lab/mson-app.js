@@ -160,23 +160,12 @@ compiler.registerComponent('app.Employees', {
 
 compiler.registerComponent('app.Department', department);
 
-// TODO: should we also be able just specify the FormsField without the wrapping Form?
 compiler.registerComponent('app.Departments', {
-  component: 'Form',
-  fields: [
-    {
-      name: 'departments',
-      label: 'Departments',
-      component: 'FormsField',
-      form: {
-        component: 'app.Department'
-      },
-      store: {
-        component: 'RecordStore',
-        type: 'app.Department'
-      }
-    }
-  ]
+  component: 'RecordList',
+  name: 'departments',
+  label: 'Departments',
+  baseForm: 'app.Department',
+  storeType: 'app.Department'
 });
 
 const menuItems = [
