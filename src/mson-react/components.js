@@ -8,7 +8,7 @@ import Field from './fields/field';
 import Form from './form';
 import FormsField from './fields/forms-field';
 import ListField from './fields/list-field';
-import RecordEditorOld from './record-editor-old';
+import ReCAPTCHAField from './fields/re-captcha-field';
 import SelectField from './fields/select-field';
 import TextField from './fields/text-field';
 
@@ -23,7 +23,7 @@ export default {
   Form,
   FormsField,
   ListField,
-  RecordEditorOld,
+  ReCAPTCHAField,
   SelectField,
   SelectListField: ListField,
   TextField,

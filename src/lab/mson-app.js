@@ -133,6 +133,10 @@ compiler.registerComponent('ResetPasswordEditor', {
   component: 'ResetPassword',
   fields: [
     {
+      component: 'ReCAPTCHAField',
+      siteKey: '6LdIbGMUAAAAAJnipR9t-SnWzCbn0ZX2myXBIauh'
+    },
+    {
       component: 'ButtonField',
       type: 'submit',
       name: 'reset',
@@ -142,6 +146,18 @@ compiler.registerComponent('ResetPasswordEditor', {
       component: 'ButtonField',
       name: 'cancel',
       label: 'Cancel'
+    }
+  ],
+  listeners: [
+    {
+      // TODO
+      event: 'submit',
+      actions: [
+        {
+          component: 'Redirect',
+          path: '/'
+        }
+      ]
     }
   ]
 });

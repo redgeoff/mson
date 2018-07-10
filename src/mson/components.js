@@ -37,6 +37,7 @@ import ObjectForm from './object-form';
 import PasswordField from './fields/password-field.json';
 import PersonFullNameField from './fields/person-full-name-field.json';
 import PersonNameField from './fields/person-name-field.json';
+import ReCAPTCHAField from './fields/re-captcha-field';
 import RecordEditor from './aggregate/record-editor';
 import RecordList from './aggregate/record-list';
 import RecordStore from './record-store';
@@ -90,6 +91,7 @@ export default {
   PasswordField,
   PersonFullNameField,
   PersonNameField,
+  ReCAPTCHAField,
   RecordEditor,
   RecordList,
   RecordStore,
