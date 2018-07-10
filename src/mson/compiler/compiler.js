@@ -25,6 +25,10 @@ export class Compiler {
   // // any special organization in the components object.
   // _compiledComponents = {};
 
+  exists(name) {
+    return !!this._components[name];
+  }
+
   _getComponent(name) {
     if (this._components[name]) {
       return this._components[name];

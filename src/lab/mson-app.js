@@ -5,6 +5,9 @@ import { department, employee } from '../employees/components';
 // TODO: in a production app the appId should be set by the path or subdomain
 globals.set({ appId: 101 });
 
+// TODO: properly set
+globals.set({ reCAPTCHASiteKey: '6LdIbGMUAAAAAJnipR9t-SnWzCbn0ZX2myXBIauh' });
+
 compiler.registerComponent('app.Login', {
   component: 'Login',
   listeners: [
@@ -127,6 +130,38 @@ compiler.registerComponent('app.Departments', {
   storeType: 'app.Department'
 });
 
+compiler.registerComponent('ResetPasswordEditor', {
+  component: 'ResetPassword',
+  fields: [
+    {
+      component: 'ButtonField',
+      type: 'submit',
+      name: 'reset',
+      label: 'Reset'
+    },
+    {
+      component: 'ButtonField',
+      name: 'cancel',
+      label: 'Cancel'
+    }
+  ],
+  listeners: [
+    {
+      event: 'reset',
+      actions: [
+        {
+          component: 'UpsertRecord',
+          type: 'ResetPassword'
+        },
+        {
+          component: 'Redirect',
+          path: '/'
+        }
+      ]
+    }
+  ]
+});
+
 const menuItems = [
   {
     path: '/employees',
@@ -223,6 +258,17 @@ const menuItems = [
           title: 'Signup',
           content: {
             component: 'app.EmployeeSignup'
+          }
+        },
+        fullScreen: true
+      },
+      {
+        path: '/resetPassword',
+        content: {
+          component: 'Card',
+          title: 'Reset Password',
+          content: {
+            component: 'ResetPasswordEditor'
           }
         },
         fullScreen: true

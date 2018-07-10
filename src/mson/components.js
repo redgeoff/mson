@@ -37,10 +37,13 @@ import ObjectForm from './object-form';
 import PasswordField from './fields/password-field.json';
 import PersonFullNameField from './fields/person-full-name-field.json';
 import PersonNameField from './fields/person-name-field.json';
+import ReCAPTCHAField from './fields/re-captcha-field';
+import ReCAPTCHAVault from './vaults/re-captcha-vault';
 import RecordEditor from './aggregate/record-editor';
 import RecordList from './aggregate/record-list';
 import RecordStore from './record-store';
 import Redirect from './actions/redirect';
+import ResetPassword from './aggregate/reset-password';
 import RolesField from './fields/roles-field';
 import SchemaValidatorForm from './form/schema-validator-form';
 import SelectField from './fields/select-field';
@@ -55,6 +58,7 @@ import UpdatePassword from './aggregate/update-password';
 import UpsertRecord from './actions/upsert-record';
 import User from './form/user';
 import UserList from './aggregate/user-list';
+import Vault from './vaults/vault';
 
 export default {
   Action,
@@ -90,10 +94,13 @@ export default {
   PasswordField,
   PersonFullNameField,
   PersonNameField,
+  ReCAPTCHAField,
+  ReCAPTCHAVault,
   RecordEditor,
   RecordList,
   RecordStore,
   Redirect,
+  ResetPassword,
   RolesField,
   SchemaValidatorForm,
   SelectField,
@@ -108,5 +115,6 @@ export default {
   UpdatePassword,
   UpsertRecord,
   User,
-  UserList
+  UserList,
+  Vault
 };
