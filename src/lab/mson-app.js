@@ -152,11 +152,11 @@ compiler.registerComponent('ResetPasswordEditor', {
         {
           component: 'UpsertRecord',
           type: 'ResetPassword'
+        },
+        {
+          component: 'Redirect',
+          path: '/'
         }
-        // {
-        //   component: 'Redirect',
-        //   path: '/'
-        // }
       ]
     }
   ]
