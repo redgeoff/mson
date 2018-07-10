@@ -54,7 +54,7 @@ import UpdatePasswordEditor from './aggregate/update-password-editor';
 import UpdatePassword from './aggregate/update-password';
 import UpsertRecord from './actions/upsert-record';
 import User from './form/user';
-import Users from './aggregate/users';
+import UserList from './aggregate/user-list';
 
 export default {
   Action,
@@ -108,5 +108,5 @@ export default {
   UpdatePassword,
   UpsertRecord,
   User,
-  Users
+  UserList
 };

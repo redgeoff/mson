@@ -96,7 +96,7 @@ compiler.registerComponent('app.Employees', {
     {
       name: 'employees',
       label: 'Employees',
-      component: 'Users',
+      component: 'UserList',
       baseForm: 'app.Employee',
       storeType: 'app.Employee',
       listeners: [
