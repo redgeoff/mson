@@ -101,3 +101,17 @@ export const department = {
     }
   }
 };
+
+// TODO: should not generate store and should be moved to aggregate
+export const resetPassword = {
+  name: 'ResetPassword',
+  component: 'Form',
+  fields: [
+    {
+      component: 'EmailField',
+      name: 'email',
+      label: 'Email',
+      required: true
+    }
+  ]
+};
