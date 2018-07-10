@@ -5,6 +5,9 @@ import { department, employee } from '../employees/components';
 // TODO: in a production app the appId should be set by the path or subdomain
 globals.set({ appId: 101 });
 
+// TODO: properly set
+globals.set({ reCAPTCHASiteKey: '6LdIbGMUAAAAAJnipR9t-SnWzCbn0ZX2myXBIauh' });
+
 compiler.registerComponent('app.Login', {
   component: 'Login',
   listeners: [
@@ -131,10 +134,6 @@ compiler.registerComponent('ResetPasswordEditor', {
   component: 'ResetPassword',
   fields: [
     {
-      component: 'ReCAPTCHAField',
-      siteKey: '6LdIbGMUAAAAAJnipR9t-SnWzCbn0ZX2myXBIauh'
-    },
-    {
       component: 'ButtonField',
       type: 'submit',
       name: 'reset',
@@ -148,13 +147,16 @@ compiler.registerComponent('ResetPasswordEditor', {
   ],
   listeners: [
     {
-      // TODO
       event: 'reset',
       actions: [
         {
-          component: 'Redirect',
-          path: '/'
+          component: 'UpsertRecord',
+          type: 'ResetPassword'
         }
+        // {
+        //   component: 'Redirect',
+        //   path: '/'
+        // }
       ]
     }
   ]

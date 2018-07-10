@@ -15,7 +15,8 @@ class Globals extends Component {
       'appId',
       'confirmation',
       'searchString',
-      'redirectAfterLogin'
+      'redirectAfterLogin',
+      'reCAPTCHASiteKey'
     );
   }
 
@@ -27,7 +28,8 @@ class Globals extends Component {
       'appId',
       'confirmation',
       'searchString',
-      'redirectAfterLogin'
+      'redirectAfterLogin',
+      'reCAPTCHASiteKey'
     );
     return value === undefined ? super.getOne(name) : value;
   }

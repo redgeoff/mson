@@ -2,6 +2,7 @@ import React from 'react';
 import attach from '../attach';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { withStyles } from '@material-ui/core/styles';
+import globals from '../../mson/globals';
 
 const styles = theme => ({
   captcha: {
@@ -15,9 +16,11 @@ class ReCAPTCHAField extends React.PureComponent {
   };
 
   render() {
-    const { disabled, editable, accessEditable, siteKey, classes } = this.props;
+    const { disabled, editable, accessEditable, classes } = this.props;
 
     const isEditable = accessEditable !== false && editable && !disabled;
+
+    const siteKey = globals.get('reCAPTCHASiteKey');
 
     if (isEditable) {
       return (
@@ -37,4 +40,4 @@ class ReCAPTCHAField extends React.PureComponent {
 
 ReCAPTCHAField = withStyles(styles)(ReCAPTCHAField);
 
-export default attach(['disabled', 'editable', 'siteKey'])(ReCAPTCHAField);
+export default attach(['disabled', 'editable'])(ReCAPTCHAField);
