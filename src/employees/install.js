@@ -4,7 +4,6 @@ import client from './client';
 import config from './config.json';
 import { reCAPTCHAProperties } from './server-properties';
 import * as components from '../employees/components';
-import _ from 'lodash';
 
 const seed = async () => {
   const development = await client.record.create({
