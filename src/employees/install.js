@@ -2,40 +2,9 @@
 
 import client from './client';
 import config from './config.json';
-import { department, employee } from './components';
 import { reCAPTCHAProperties } from './server-properties';
-
-// const menu = {
-//   name: 'app.Menu',
-//   component: 'Menu',
-//   items: [
-//     {
-//       path: '/employees',
-//       label: 'Employees',
-//       content: {
-//         component: 'Form',
-//         fields: [
-//           {
-//             name: 'employees',
-//             label: 'Employees',
-//             component: 'FormsField',
-//             form: {
-//               component: 'app.Employee'
-//             }
-//           }
-//         ]
-//       }
-//     }
-//   ]
-// };
-//
-// const app = {
-//   name: 'app.App',
-//   component: 'App',
-//   menu: {
-//     component: 'app.Menu'
-//   }
-// };
+import * as components from '../employees/components';
+import _ from 'lodash';
 
 const seed = async () => {
   const development = await client.record.create({
@@ -93,23 +62,31 @@ const main = async () => {
 
   await client.app.create({ name: 'employees' });
 
+  // TODO: restore
+  // for (let i in components) {
+  //   await client.component.create({
+  //     appId: config.appId,
+  //     definition: components[i]
+  //   })
+  // }
+
+  // TODO: remove
   await client.component.create({
     appId: config.appId,
     definition: reCAPTCHAProperties
   });
-
   await client.component.create({
     appId: config.appId,
-    definition: department
+    definition: components.department
   });
-
-  await client.component.create({ appId: config.appId, definition: employee });
-
-  // await client.component.create({ appId: config.appId, definition: employee });
-  //
-  // await client.component.create({ appId: config.appId, definition: menu });
-  //
-  // await client.component.create({ appId: config.appId, definition: app });
+  await client.component.create({
+    appId: config.appId,
+    definition: components.employee
+  });
+  await client.component.create({
+    appId: config.appId,
+    definition: components.contactUs
+  });
 
   // Create default admin user
   await client.record.create({

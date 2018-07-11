@@ -1,5 +1,6 @@
 export default {
   component: 'Form',
+  props: ['baseForm', 'label', 'storeType', 'recordWhere'],
   form: {
     component: '{{baseForm}}',
     fields: [

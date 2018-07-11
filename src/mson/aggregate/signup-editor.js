@@ -1,5 +1,6 @@
 export default {
   component: 'RecordEditor',
+  props: ['signupBaseForm'],
   preview: false,
   baseForm: {
     component: '{{signupBaseForm}}',

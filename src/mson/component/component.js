@@ -29,7 +29,11 @@ export default class Component extends events.EventEmitter {
           component: 'TextField',
           required: true
         },
-        // TODO: listeners
+        {
+          name: 'listeners',
+          // TODO: proper schema
+          component: 'Field'
+        },
         {
           name: 'schema',
           component: 'FormField',
@@ -37,6 +41,10 @@ export default class Component extends events.EventEmitter {
             // TODO: should there be a SchemaForm?
             component: 'ObjectForm'
           }
+        },
+        {
+          name: 'store',
+          component: 'BooleanField'
         }
       ]
     };
@@ -162,6 +170,10 @@ export default class Component extends events.EventEmitter {
     }
   }
 
+  _setStore(props) {
+    this._setIfUndefinedProp(props, 'store');
+  }
+
   // TODO: use this in _create() instead of set() for defaults
   _setDefaults(props, values) {
     _.each(values, (value, name) => {
@@ -251,6 +263,7 @@ export default class Component extends events.EventEmitter {
     this._setPassed(props);
     this._setParent(props);
     this._setProps(props);
+    this._setStore(props);
 
     if (props.schema !== undefined) {
       // Schemas are pushed that they can accumulate through the layers of inheritance
@@ -273,7 +286,7 @@ export default class Component extends events.EventEmitter {
   }
 
   getOne(name) {
-    let names = ['name', 'listeners', 'passed', 'schema', 'parent'];
+    let names = ['name', 'listeners', 'passed', 'schema', 'parent', 'store'];
 
     if (this._props) {
       names = names.concat(this._props);
