@@ -103,3 +103,23 @@ export const department = {
     }
   }
 };
+
+export const contactUs = {
+  name: 'app.ContactUs',
+  component: 'Form',
+  fields: [
+    {
+      component: 'PersonNameField',
+      name: 'name',
+      label: 'Name',
+      required: true
+    },
+    {
+      component: 'EmailField',
+      name: 'email',
+      label: 'Email',
+      required: true
+    }
+    // TODO: complete
+  ]
+};

@@ -2,7 +2,7 @@
 
 import client from './client';
 import config from './config.json';
-import { department, employee } from './components';
+import { department, employee, contactUs } from './components';
 import { reCAPTCHAProperties } from './server-properties';
 
 // const menu = {
@@ -105,8 +105,8 @@ const main = async () => {
 
   await client.component.create({ appId: config.appId, definition: employee });
 
-  // await client.component.create({ appId: config.appId, definition: employee });
-  //
+  await client.component.create({ appId: config.appId, definition: contactUs });
+
   // await client.component.create({ appId: config.appId, definition: menu });
   //
   // await client.component.create({ appId: config.appId, definition: app });
