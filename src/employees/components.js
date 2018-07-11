@@ -123,3 +123,312 @@ export const contactUs = {
     // TODO: complete
   ]
 };
+
+export const login = {
+  name: 'app.Login',
+  component: 'Login',
+  listeners: [
+    {
+      event: 'createAccount',
+      actions: [
+        {
+          component: 'Redirect',
+          path: '/signup'
+        }
+      ]
+    }
+  ]
+};
+
+export const changePassword = {
+  name: 'app.ChangePassword',
+  component: 'UpdatePasswordEditor',
+  updatePasswordBaseForm: 'app.Employee',
+  storeType: 'app.Employee',
+  listeners: [
+    {
+      event: ['didSave', 'cancel'],
+      actions: [
+        {
+          component: 'Redirect',
+          path: '/account'
+        }
+      ]
+    }
+  ]
+};
+
+export const employeeSignup = {
+  name: 'app.EmployeeSignup',
+  component: 'SignupEditor',
+  signupBaseForm: 'app.Employee',
+  storeType: 'app.Employee'
+};
+
+export const getDepartments = {
+  name: 'app.GetDepartments',
+  component: 'Action',
+  actions: [
+    {
+      component: 'GetRecords',
+      type: 'app.Department',
+      where: {
+        archivedAt: null
+      }
+    },
+    {
+      component: 'Iterator',
+      iterator: 'arguments.edges',
+      return: {
+        value: '{{item.node.id}}',
+        label: '{{item.node.fieldValues.name}}'
+      }
+    }
+  ]
+};
+
+export const viewAndEditAccount = {
+  name: 'app.ViewAndEditAccount',
+  component: 'RecordEditor',
+  baseForm: 'app.Employee',
+  label: 'Account',
+  recordWhere: {
+    userId: '{{globals.session.user.id}}'
+  },
+  storeType: 'app.Employee',
+  listeners: [
+    {
+      event: 'load',
+      actions: [
+        {
+          component: 'app.GetDepartments'
+        },
+        {
+          component: 'Set',
+          name: 'fields.departments.options'
+        }
+      ]
+    }
+  ]
+};
+
+export const employees = {
+  name: 'app.Employees',
+  component: 'Form',
+  fields: [
+    {
+      name: 'employees',
+      label: 'Employees',
+      component: 'UserList',
+      baseForm: 'app.Employee',
+      storeType: 'app.Employee',
+      listeners: [
+        {
+          event: 'load',
+          actions: [
+            {
+              component: 'app.GetDepartments'
+            },
+            {
+              component: 'Set',
+              name: 'form.fields.departments.options'
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+export const departments = {
+  name: 'app.Departments',
+  component: 'RecordList',
+  label: 'Departments',
+  baseForm: 'app.Department',
+  storeType: 'app.Department'
+};
+
+export const resetPasswordEditor = {
+  name: 'ResetPasswordEditor',
+  component: 'ResetPassword',
+  fields: [
+    {
+      component: 'ButtonField',
+      type: 'submit',
+      name: 'reset',
+      label: 'Reset'
+    },
+    {
+      component: 'ButtonField',
+      name: 'cancel',
+      label: 'Cancel'
+    }
+  ],
+  listeners: [
+    {
+      event: 'reset',
+      actions: [
+        {
+          component: 'UpsertRecord',
+          type: 'ResetPassword'
+        },
+        {
+          component: 'Redirect',
+          path: '/'
+        }
+      ]
+    }
+  ]
+};
+
+const menuItems = [
+  {
+    path: '/employees',
+    label: 'Employees',
+    content: {
+      component: 'app.Employees'
+    },
+    roles: ['admin', 'employee']
+  },
+  {
+    path: '/departments',
+    label: 'Departments',
+    content: {
+      component: 'app.Departments'
+    },
+    roles: ['manager']
+  },
+  {
+    label: 'My Account',
+    items: [
+      {
+        path: '/account',
+        label: 'Account',
+        content: {
+          component: 'app.ViewAndEditAccount'
+        }
+      },
+      {
+        path: '/account/change-password',
+        label: 'Change Password',
+        content: {
+          component: 'app.ChangePassword'
+        }
+      }
+    ],
+    roles: ['admin', 'employee']
+  },
+  {
+    path: '/',
+    hidden: true,
+    content: {
+      component: 'Action',
+      actions: [
+        {
+          if: {
+            globals: {
+              session: {
+                user: {
+                  roleNames: {
+                    $in: ['admin', 'manager']
+                  }
+                }
+              }
+            }
+          },
+          component: 'Redirect',
+          path: '/employees'
+        },
+        {
+          if: {
+            globals: {
+              session: {
+                user: {
+                  roleNames: {
+                    $nin: ['admin', 'manager']
+                  }
+                }
+              }
+            }
+          },
+          component: 'Redirect',
+          path: '/account'
+        }
+      ]
+    },
+    items: [
+      {
+        path: '/login',
+        label: 'Login',
+        content: {
+          component: 'Card',
+          title: 'Login',
+          content: {
+            component: 'app.Login'
+          }
+        },
+        fullScreen: true
+      },
+      {
+        path: '/signup',
+        label: 'Signup',
+        content: {
+          component: 'Card',
+          title: 'Signup',
+          content: {
+            component: 'app.EmployeeSignup'
+          }
+        },
+        fullScreen: true
+      },
+      {
+        path: '/resetPassword',
+        content: {
+          component: 'Card',
+          title: 'Reset Password',
+          content: {
+            component: 'ResetPasswordEditor'
+          }
+        },
+        fullScreen: true
+      }
+    ]
+  },
+  {
+    path: '/logout',
+    label: 'Logout',
+    content: {
+      component: 'Action',
+      actions: [
+        {
+          component: 'LogOutOfApp'
+        },
+        {
+          component: 'Redirect',
+          path: '/login'
+        }
+      ]
+    },
+    roles: ['admin', 'employee']
+  }
+];
+
+export const app = {
+  name: 'app.App',
+  component: 'App',
+  menu: {
+    component: 'Menu',
+    items: menuItems
+  },
+  listeners: [
+    {
+      event: 'loggedOut',
+      actions: [
+        {
+          component: 'Redirect',
+          path: '/login'
+        }
+      ]
+    }
+  ]
+};

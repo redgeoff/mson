@@ -29,7 +29,11 @@ export default class Component extends events.EventEmitter {
           component: 'TextField',
           required: true
         },
-        // TODO: listeners
+        {
+          name: 'listeners',
+          // TODO: proper schema
+          component: 'Field'
+        },
         {
           name: 'schema',
           component: 'FormField',
