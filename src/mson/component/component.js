@@ -71,8 +71,8 @@ export default class Component extends events.EventEmitter {
 
     // We have to set the name before we create the component as the name is needed to create the
     // component, e.g. to create sub fields using the name as a prefix.
-    if (props) {
-      this._setName(props);
+    if (props && props.name !== undefined) {
+      this._setName(props.name);
     }
 
     this._create(props === undefined ? {} : props);
@@ -152,26 +152,24 @@ export default class Component extends events.EventEmitter {
     });
   }
 
-  _setName(props) {
-    this._setIfUndefinedProp(props, 'name');
+  _setName(name) {
+    this._set('name', name);
   }
 
-  _setPassed(props) {
-    this._setIfUndefinedProp(props, 'passed');
+  _setPassed(passed) {
+    this._set('passed', passed);
   }
 
-  _setParent(props) {
-    this._setIfUndefinedProp(props, 'parent');
+  _setParent(parent) {
+    this._set('parent', parent);
   }
 
   _setProps(props) {
-    if (props.props !== undefined) {
-      this._concat('props', props.props);
-    }
+    this._concat('props', props);
   }
 
-  _setStore(props) {
-    this._setIfUndefinedProp(props, 'store');
+  _setStore(store) {
+    this._set('store', store);
   }
 
   // TODO: use this in _create() instead of set() for defaults
@@ -206,51 +204,49 @@ export default class Component extends events.EventEmitter {
     return has;
   }
 
-  _setListeners(props) {
+  _setListeners(listeners, passed) {
     // Emit loaded event after all actions for the load event have been emitted so that we can
     // guarantee that data has been loaded.
 
-    if (props.listeners !== undefined) {
-      // Inject ifData so that we don't have to explicitly define it in the actions
-      const ifData = props.passed;
+    // Inject ifData so that we don't have to explicitly define it in the actions
+    const ifData = passed;
 
-      // Listeners are concatentated that they can accumulate through the layers of inheritance.
-      // TODO: when the listeners change need to clean up previous listeners to prevent a listener
-      // leak
-      this._concat('listeners', props.listeners);
-      props.listeners.forEach(listener => {
-        const events = Array.isArray(listener.event)
-          ? listener.event
-          : [listener.event];
-        events.forEach(event => {
-          this.on(event, async () => {
-            let output = null;
-            for (const i in listener.actions) {
-              const action = listener.actions[i];
+    // Listeners are concatentated that they can accumulate through the layers of inheritance.
+    // TODO: when the listeners change need to clean up previous listeners to prevent a listener
+    // leak
+    this._concat('listeners', listeners);
+    listeners.forEach(listener => {
+      const events = Array.isArray(listener.event)
+        ? listener.event
+        : [listener.event];
+      events.forEach(event => {
+        this.on(event, async () => {
+          let output = null;
+          for (const i in listener.actions) {
+            const action = listener.actions[i];
 
-              // Pass the previous action's output as this actions arguments
-              output = await action.run({
-                event: event,
-                component: this,
-                ifData,
-                arguments: output
-              });
-            }
+            // Pass the previous action's output as this actions arguments
+            output = await action.run({
+              event: event,
+              component: this,
+              ifData,
+              arguments: output
+            });
+          }
 
-            switch (event) {
-              case 'create':
-                this._emitDidCreate();
-                break;
-              case 'load':
-                this._emitDidLoad();
-                break;
-              default:
-                break;
-            }
-          });
+          switch (event) {
+            case 'create':
+              this._emitDidCreate();
+              break;
+            case 'load':
+              this._emitDidLoad();
+              break;
+            default:
+              break;
+          }
         });
       });
-    }
+    });
   }
 
   set(props) {
@@ -258,12 +254,29 @@ export default class Component extends events.EventEmitter {
       throw new Error('props must be an object');
     }
 
-    this._setName(props);
-    this._setListeners(props);
-    this._setPassed(props);
-    this._setParent(props);
-    this._setProps(props);
-    this._setStore(props);
+    if (props.name !== undefined) {
+      this._setName(props.name);
+    }
+
+    if (props.passed !== undefined) {
+      this._setPassed(props.passed);
+    }
+
+    if (props.parent !== undefined) {
+      this._setParent(props.parent);
+    }
+
+    if (props.props !== undefined) {
+      this._setProps(props.props);
+    }
+
+    if (props.store !== undefined) {
+      this._setStore(props.store);
+    }
+
+    if (props.listeners !== undefined) {
+      this._setListeners(props.listeners, props.passed);
+    }
 
     if (props.schema !== undefined) {
       // Schemas are pushed that they can accumulate through the layers of inheritance

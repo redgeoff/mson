@@ -179,11 +179,9 @@ export default class ListField extends CompositeField {
     this._bubbleUpTouches(field);
   }
 
-  _setRequired(props) {
-    if (props.required !== undefined) {
-      if (this._fields.hasFirst()) {
-        this._fields.first().set({ required: props.required });
-      }
+  _setRequired(required) {
+    if (this._fields.hasFirst()) {
+      this._fields.first().set({ required });
     }
   }
 
@@ -237,36 +235,36 @@ export default class ListField extends CompositeField {
     this._hasTypeError = hasError;
   }
 
-  _setValue(props) {
-    if (props.value !== undefined) {
-      this._validateValueType(props.value);
+  _setValue(value) {
+    super._setValue(value);
 
-      let name = null;
+    this._validateValueType(value);
 
-      if (!this._hasTypeError) {
-        const fields = this._fields.values();
-        let values = null;
+    let name = null;
 
-        if (Array.isArray(props.value)) {
-          values = props.value;
-        } else if (this.get('allowScalar')) {
-          values = [props.value];
-        }
+    if (!this._hasTypeError) {
+      const fields = this._fields.values();
+      let values = null;
 
-        if (values !== null) {
-          values.forEach(value => {
-            let field = fields.next().value;
-            if (!field) {
-              field = this._createField();
-            }
-            field.setValue(value);
-            name = field.get('name');
-          });
-        }
+      if (Array.isArray(value)) {
+        values = value;
+      } else if (this.get('allowScalar')) {
+        values = [value];
       }
 
-      this._cleanUpNextFields(name);
+      if (values !== null) {
+        values.forEach(val => {
+          let field = fields.next().value;
+          if (!field) {
+            field = this._createField();
+          }
+          field.setValue(val);
+          name = field.get('name');
+        });
+      }
     }
+
+    this._cleanUpNextFields(name);
   }
 
   set(props) {

@@ -172,6 +172,8 @@ export const getDepartments = {
     {
       component: 'GetRecords',
       type: 'app.Department',
+
+      // Hide archived departments so that the user cannot select them
       where: {
         archivedAt: null
       }
