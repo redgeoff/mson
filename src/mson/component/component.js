@@ -204,6 +204,17 @@ export default class Component extends events.EventEmitter {
     return has;
   }
 
+  // Note: the layer attribute cannot reside in Globals as Globals depends on component
+  static _layer = null;
+
+  static getLayer() {
+    return this.constructor._layer;
+  }
+
+  static setLayer(layer) {
+    this.constructor._layer = layer;
+  }
+
   _setListeners(listeners, passed) {
     // Emit loaded event after all actions for the load event have been emitted so that we can
     // guarantee that data has been loaded.
@@ -225,13 +236,20 @@ export default class Component extends events.EventEmitter {
           for (const i in listener.actions) {
             const action = listener.actions[i];
 
-            // Pass the previous action's output as this actions arguments
-            output = await action.run({
-              event: event,
-              component: this,
-              ifData,
-              arguments: output
-            });
+            const layer = action.get('layer');
+            if (
+              !this.constructor.getLayer() ||
+              !layer ||
+              layer === this.constructor.getLayer()
+            ) {
+              // Pass the previous action's output as this actions arguments
+              output = await action.run({
+                event: event,
+                component: this,
+                ifData,
+                arguments: output
+              });
+            }
           }
 
           switch (event) {

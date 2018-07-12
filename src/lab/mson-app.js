@@ -4,12 +4,15 @@ import compiler from '../mson/compiler';
 import globals from '../mson/globals';
 import * as components from '../employees/components';
 import _ from 'lodash';
+import Component from '../mson/component';
 
 // TODO: in a production app the appId should be set by the path or subdomain
 globals.set({ appId: 101 });
 
 // TODO: properly set
 globals.set({ reCAPTCHASiteKey: '6LdIbGMUAAAAAJnipR9t-SnWzCbn0ZX2myXBIauh' });
+
+Component.setLayer('frontEnd');
 
 _.forEach(components, component =>
   compiler.registerComponent(component.name, component)
