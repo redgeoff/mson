@@ -227,7 +227,37 @@ export default class Component extends events.EventEmitter {
     });
   }
 
-  // TODO: split up
+  _emitAfterListenerEvents(event) {
+    // Emit event after all actions for the following events so that we can guarantee that data has
+    // been loaded.
+    switch (event) {
+      case 'create':
+        this._emitDidCreate();
+        break;
+      case 'load':
+        this._emitDidLoad();
+        break;
+      default:
+        break;
+    }
+  }
+
+  async _runAction(listener, action, event, args) {
+    const layer = action.get('layer');
+    if (
+      !this.constructor.getLayer() ||
+      !layer ||
+      layer === this.constructor.getLayer()
+    ) {
+      return action.run({
+        event,
+        component: this,
+        ifData: listener.ifData,
+        arguments: args
+      });
+    }
+  }
+
   async runListeners(event) {
     const listeners = this.get('listeners');
     if (listeners) {
@@ -244,36 +274,13 @@ export default class Component extends events.EventEmitter {
           for (const i in listener.actions) {
             const action = listener.actions[i];
 
-            const layer = action.get('layer');
-            if (
-              !this.constructor.getLayer() ||
-              !layer ||
-              layer === this.constructor.getLayer()
-            ) {
-              // Pass the previous action's output as this actions arguments
-              output = await action.run({
-                event,
-                component: this,
-                ifData: listener.ifData,
-                arguments: output
-              });
-            }
+            // Pass the previous action's output as this actions arguments
+            output = await this._runAction(listener, action, event, output);
           }
         }
       }
 
-      // Emit event after all actions for the following events so that we can guarantee that data has
-      // been loaded.
-      switch (event) {
-        case 'create':
-          this._emitDidCreate();
-          break;
-        case 'load':
-          this._emitDidLoad();
-          break;
-        default:
-          break;
-      }
+      this._emitAfterListenerEvents(event);
     }
   }
 
