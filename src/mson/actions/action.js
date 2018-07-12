@@ -5,14 +5,13 @@ import registrar from '../compiler/registrar';
 import globals from '../globals';
 
 export default class Action extends Component {
-  set(props) {
-    super.set(props);
-    this._setIfUndefined(props, 'if', 'ifData', 'actions');
-  }
+  _create(props) {
+    super._create(props);
 
-  getOne(name) {
-    const value = this._getIfAllowed(name, 'if', 'ifData', 'actions');
-    return value === undefined ? super.getOne(name) : value;
+    this.set({
+      props: ['if', 'ifData', 'actions', 'layer']
+      // TODO: set and use schema
+    });
   }
 
   _getSession() {
