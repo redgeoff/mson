@@ -2,14 +2,14 @@ import Action from './action';
 import globals from '../globals';
 
 export default class Redirect extends Action {
-  set(props) {
-    super.set(props);
-    this._setIfUndefined(props, 'path');
-  }
+  _create(props) {
+    super._create(props);
 
-  getOne(name) {
-    const value = this._getIfAllowed(name, 'path');
-    return value === undefined ? super.getOne(name) : value;
+    this.set({
+      props: ['path']
+    });
+
+    this._setDefaults(props, { layer: 'frontEnd' });
   }
 
   async act() {

@@ -3,6 +3,7 @@ import sift from 'sift';
 import PropFiller from '../compiler/prop-filler';
 import registrar from '../compiler/registrar';
 import globals from '../globals';
+import Form from '../form';
 
 export default class Action extends Component {
   _create(props) {
@@ -28,10 +29,24 @@ export default class Action extends Component {
   // Abstract method
   async act(/* props */) {}
 
+  _formToFillerProps(component) {
+    const fields = {};
+    component.eachField(
+      field => (fields[field.get('name')] = { value: field.get('value') })
+    );
+    return fields;
+  }
+
   _fill(prop, props) {
     if (!props) {
       props = {};
     }
+
+    if (props.component && props.component instanceof Form) {
+      // Replace the component with values that can be used to fill
+      props.fields = this._formToFillerProps(props.component);
+    }
+
     props.globals = this._getGlobals();
     const propFiller = new PropFiller(props);
     prop = propFiller.fill(prop);

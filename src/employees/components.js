@@ -119,8 +119,72 @@ export const contactUs = {
       name: 'email',
       label: 'Email',
       required: true
+    },
+    {
+      component: 'TextField',
+      name: 'subject',
+      label: 'Subject',
+      required: true
+    },
+    {
+      // TODO: how to make multiline? What is available in Material UI?
+      component: 'TextField',
+      name: 'body',
+      label: 'Body',
+      required: true
+    },
+    {
+      component: 'ButtonField',
+      type: 'submit',
+      name: 'submit',
+      label: 'Send Message',
+      icon: 'Email'
+    },
+    {
+      component: 'ButtonField',
+      name: 'cancel',
+      label: 'Cancel',
+      icon: 'Cancel'
     }
-    // TODO: complete
+  ],
+  listeners: [
+    {
+      event: 'submit',
+      actions: [
+        {
+          component: 'UpsertRecord',
+          type: 'app.ContactUs'
+        },
+        {
+          component: 'Snackbar',
+          message: 'Message sent. Please expect a response shortly.'
+        },
+        {
+          component: 'Redirect',
+          path: '/'
+        }
+      ]
+    },
+    {
+      event: 'createRecord',
+      actions: [
+        {
+          component: 'Email',
+          to: '{{fields.email.value}}',
+          subject: '{{fields.subject.value}}',
+          body: '{{fields.body.value}}'
+        }
+      ]
+    },
+    {
+      event: 'cancel',
+      actions: [
+        {
+          component: 'Redirect',
+          path: '/'
+        }
+      ]
+    }
   ]
 };
 
@@ -129,11 +193,29 @@ export const login = {
   component: 'Login',
   listeners: [
     {
-      event: 'createAccount',
+      event: 'signUp',
       actions: [
         {
           component: 'Redirect',
           path: '/signup'
+        }
+      ]
+    },
+    {
+      event: 'forgotPassword',
+      actions: [
+        {
+          component: 'Redirect',
+          path: '/reset-password'
+        }
+      ]
+    },
+    {
+      event: 'contact',
+      actions: [
+        {
+          component: 'Redirect',
+          path: '/contact'
         }
       ]
     }
@@ -258,12 +340,14 @@ export const resetPasswordEditor = {
       component: 'ButtonField',
       type: 'submit',
       name: 'reset',
-      label: 'Reset'
+      label: 'Reset',
+      icon: 'LockOpen'
     },
     {
       component: 'ButtonField',
       name: 'cancel',
-      label: 'Cancel'
+      label: 'Cancel',
+      icon: 'Cancel'
     }
   ],
   listeners: [
@@ -274,6 +358,19 @@ export const resetPasswordEditor = {
           component: 'UpsertRecord',
           type: 'ResetPassword'
         },
+        {
+          component: 'Snackbar',
+          message: 'Please expect an email shortly'
+        },
+        {
+          component: 'Redirect',
+          path: '/'
+        }
+      ]
+    },
+    {
+      event: 'cancel',
+      actions: [
         {
           component: 'Redirect',
           path: '/'
@@ -384,12 +481,23 @@ const menuItems = [
         fullScreen: true
       },
       {
-        path: '/resetPassword',
+        path: '/reset-password',
         content: {
           component: 'Card',
           title: 'Reset Password',
           content: {
             component: 'ResetPasswordEditor'
+          }
+        },
+        fullScreen: true
+      },
+      {
+        path: '/contact',
+        content: {
+          component: 'Card',
+          title: 'Contact Us',
+          content: {
+            component: 'app.ContactUs'
           }
         },
         fullScreen: true
