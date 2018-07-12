@@ -176,7 +176,6 @@ export default class Component extends events.EventEmitter {
     this._set('store', store);
   }
 
-  // TODO: use this in _create() instead of set() for defaults
   _setDefaults(props, values) {
     _.each(values, (value, name) => {
       if (props[name] === undefined) {
@@ -203,6 +202,11 @@ export default class Component extends events.EventEmitter {
 
   static setLayer(layer) {
     this.constructor._layer = layer;
+  }
+
+  // For mocking
+  _getLayer() {
+    return this.constructor.getLayer();
   }
 
   _hasListenerForEvent(event) {
@@ -244,11 +248,7 @@ export default class Component extends events.EventEmitter {
 
   async _runAction(listener, action, event, args) {
     const layer = action.get('layer');
-    if (
-      !this.constructor.getLayer() ||
-      !layer ||
-      layer === this.constructor.getLayer()
-    ) {
+    if (!this._getLayer() || !layer || layer === this._getLayer()) {
       return action.run({
         event,
         component: this,
