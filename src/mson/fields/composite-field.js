@@ -87,12 +87,6 @@ export default class CompositeField extends Field {
     this.eachField(field => field.set(props));
   }
 
-  _setRequired(props) {
-    if (props.required !== undefined) {
-      this._setForAllFields({ required: props.required });
-    }
-  }
-
   _setValue(value) {
     super._setValue(value);
     this.eachField(field =>
@@ -102,35 +96,28 @@ export default class CompositeField extends Field {
     );
   }
 
-  _setDisabled(props) {
-    if (props.disabled !== undefined) {
-      this.eachField(field => field.set({ disabled: props.disabled }));
-    }
+  _setRequired(required) {
+    super._setRequired(required);
+    this._setForAllFields({ required });
   }
 
-  _setEditable(props) {
-    if (props.editable !== undefined) {
-      this.eachField(field => field.set({ editable: props.editable }));
-    }
+  _setDisabled(disabled) {
+    super._setDisabled(disabled);
+    this.eachField(field => field.set({ disabled }));
   }
 
-  _setDirty(props) {
-    if (props.dirty !== undefined) {
-      this.eachField(field => field.set({ dirty: props.dirty }));
-    }
+  _setEditable(editable) {
+    super._setEditable(editable);
+    this.eachField(field => field.set({ editable }));
+  }
+
+  _setDirty(dirty) {
+    super._setDirty(dirty);
+    this.eachField(field => field.set({ dirty }));
   }
 
   set(props) {
     super.set(props);
-
-    this._setRequired(props);
-
-    this._setDisabled(props);
-
-    this._setEditable(props);
-
-    this._setDirty(props);
-
     this.eachField(field => this._setIfUndefinedProp(props, field.get('name')));
   }
 

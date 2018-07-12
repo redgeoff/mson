@@ -179,11 +179,9 @@ export default class ListField extends CompositeField {
     this._bubbleUpTouches(field);
   }
 
-  _setRequired(props) {
-    if (props.required !== undefined) {
-      if (this._fields.hasFirst()) {
-        this._fields.first().set({ required: props.required });
-      }
+  _setRequired(required) {
+    if (this._fields.hasFirst()) {
+      this._fields.first().set({ required });
     }
   }
 
