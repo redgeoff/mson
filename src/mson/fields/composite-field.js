@@ -93,16 +93,13 @@ export default class CompositeField extends Field {
     }
   }
 
-  _compositeFieldSetValue(props) {
-    if (props.value !== undefined) {
-      this.eachField(field =>
-        field.setValue(
-          props.value && props.value[field.get('name')]
-            ? props.value[field.get('name')]
-            : null
-        )
-      );
-    }
+  _setValue(value) {
+    super._setValue(value);
+    this.eachField(field =>
+      field.setValue(
+        value && value[field.get('name')] ? value[field.get('name')] : null
+      )
+    );
   }
 
   _setDisabled(props) {
@@ -127,8 +124,6 @@ export default class CompositeField extends Field {
     super.set(props);
 
     this._setRequired(props);
-
-    this._compositeFieldSetValue(props);
 
     this._setDisabled(props);
 
