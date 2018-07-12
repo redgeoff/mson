@@ -4,6 +4,17 @@ export default class TextField extends Field {
   _create(props) {
     super._create(props);
     this.set({
+      props: [
+        'minLength',
+        'maxLength',
+        'minWords',
+        'maxWords',
+        'type',
+        'invalidRegExp',
+        'multiline',
+        'rows',
+        'rowsMax'
+      ],
       schema: {
         component: 'Form',
         fields: [
@@ -27,36 +38,22 @@ export default class TextField extends Field {
             // TODO: define list of acceptable values
             name: 'type',
             component: 'TextField'
+          },
+          {
+            name: 'multiline',
+            component: 'BooleanField'
+          },
+          {
+            name: 'rows',
+            component: 'IntegerField'
+          },
+          {
+            name: 'rowsMax',
+            component: 'IntegerField'
           }
         ]
       }
     });
-  }
-
-  set(props) {
-    super.set(props);
-    this._setIfUndefined(
-      props,
-      'minLength',
-      'maxLength',
-      'minWords',
-      'maxWords',
-      'type',
-      'invalidRegExp'
-    );
-  }
-
-  getOne(name) {
-    const value = this._getIfAllowed(
-      name,
-      'minLength',
-      'maxLength',
-      'minWords',
-      'maxWords',
-      'type',
-      'invalidRegExp'
-    );
-    return value === undefined ? super.getOne(name) : value;
   }
 
   _toValidatorProps() {

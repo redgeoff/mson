@@ -33,7 +33,10 @@ class TextField extends React.PureComponent {
       fullWidth,
       type,
       editable,
-      accessEditable
+      accessEditable,
+      multiline,
+      rows,
+      rowsMax
     } = this.props;
 
     const dis = accessEditable === false || disabled;
@@ -53,6 +56,9 @@ class TextField extends React.PureComponent {
           disabled={dis}
           fullWidth={fullWidth}
           type={type}
+          multiline={multiline}
+          rows={rows}
+          rowsMax={rowsMax}
         />
       );
     } else {
@@ -75,5 +81,8 @@ export default attach([
   'disabled',
   'fullWidth',
   'type',
-  'editable'
+  'editable',
+  'multiline',
+  'rows',
+  'rowsMax'
 ])(TextField);

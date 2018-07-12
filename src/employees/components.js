@@ -112,7 +112,8 @@ export const contactUs = {
       component: 'PersonNameField',
       name: 'name',
       label: 'Name',
-      required: true
+      required: true,
+      block: false
     },
     {
       component: 'EmailField',
@@ -124,14 +125,18 @@ export const contactUs = {
       component: 'TextField',
       name: 'subject',
       label: 'Subject',
-      required: true
+      required: true,
+      fullWidth: true
     },
     {
-      // TODO: how to make multiline? What is available in Material UI?
       component: 'TextField',
       name: 'body',
       label: 'Body',
-      required: true
+      required: true,
+      multiline: true,
+      rows: 2,
+      rowsMax: 20,
+      fullWidth: true
     },
     {
       component: 'ButtonField',
