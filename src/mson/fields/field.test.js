@@ -60,3 +60,20 @@ it('should set defaults', () => {
     out: true
   });
 });
+
+it('should set dirty when value changes', () => {
+  // Dirties as value changes
+  const field = new Field();
+  expect(field.get('dirty')).toEqual(undefined);
+  field.setValue('foo');
+  expect(field.get('dirty')).toEqual(true);
+
+  // Does not dirty as value isn't changing
+  field.set({ dirty: false });
+  field.setValue('foo');
+  expect(field.get('dirty')).toEqual(false);
+
+  // Dirties as value changes
+  field.setValue('bar');
+  expect(field.get('dirty')).toEqual(true);
+});

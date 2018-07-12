@@ -120,15 +120,11 @@ export default class Field extends Component {
   }
 
   set(props) {
-    super.set(props);
-
-    if (
-      props.value !== undefined &&
-      !this.get('dirty') &&
-      props.value !== this.get('value')
-    ) {
+    if (props.value !== undefined && props.value !== this.get('value')) {
       this.set({ dirty: true });
     }
+
+    super.set(props);
 
     if (props.value !== undefined) {
       this._setValue(props.value);
