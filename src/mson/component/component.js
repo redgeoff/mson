@@ -69,6 +69,10 @@ export default class Component extends events.EventEmitter {
 
     this._setDebugId();
 
+    this._listenerEvents = {};
+
+    this._listenToAllChanges();
+
     // We have to set the name before we create the component as the name is needed to create the
     // component, e.g. to create sub fields using the name as a prefix.
     if (props && props.name !== undefined) {
@@ -190,20 +194,6 @@ export default class Component extends events.EventEmitter {
     this._isLoaded = true;
   }
 
-  _hasListenerForEvent(event) {
-    const listeners = this.get('listeners');
-    let has = false;
-    if (listeners) {
-      _.each(listeners, listener => {
-        if (listener.event === event) {
-          has = true;
-          return false; // exit loop
-        }
-      });
-    }
-    return has;
-  }
-
   // Note: the layer attribute cannot reside in Globals as Globals depends on component
   static _layer = null;
 
@@ -215,23 +205,41 @@ export default class Component extends events.EventEmitter {
     this.constructor._layer = layer;
   }
 
+  _hasListenerForEvent(event) {
+    return !!this._listenerEvents[event];
+  }
+
   _setListeners(listeners, passed) {
-    // Emit loaded event after all actions for the load event have been emitted so that we can
-    // guarantee that data has been loaded.
-
-    // Inject ifData so that we don't have to explicitly define it in the actions
-    const ifData = passed;
-
-    // Listeners are concatentated that they can accumulate through the layers of inheritance.
-    // TODO: when the listeners change need to clean up previous listeners to prevent a listener
-    // leak
+    // Listeners are concatentated that they can accumulate through the layers of inheritance. TODO:
+    // do we need a construct to clear all previous listeners for an event?
     this._concat('listeners', listeners);
+
     listeners.forEach(listener => {
       const events = Array.isArray(listener.event)
         ? listener.event
         : [listener.event];
-      events.forEach(event => {
-        this.on(event, async () => {
+
+      // Register the event so that we can do a quick lookup later
+      events.forEach(event => (this._listenerEvents[event] = true));
+
+      // Inject ifData so that we don't have to explicitly define it in the actions
+      listener.ifData = passed;
+    });
+  }
+
+  // TODO: split up
+  async runListeners(event) {
+    const listeners = this.get('listeners');
+    if (listeners) {
+      for (let i in listeners) {
+        const listener = listeners[i];
+
+        const events = Array.isArray(listener.event)
+          ? listener.event
+          : [listener.event];
+
+        // Listener is for this event?
+        if (events.indexOf(event) !== -1) {
           let output = null;
           for (const i in listener.actions) {
             const action = listener.actions[i];
@@ -244,26 +252,36 @@ export default class Component extends events.EventEmitter {
             ) {
               // Pass the previous action's output as this actions arguments
               output = await action.run({
-                event: event,
+                event,
                 component: this,
-                ifData,
+                ifData: listener.ifData,
                 arguments: output
               });
             }
           }
+        }
+      }
 
-          switch (event) {
-            case 'create':
-              this._emitDidCreate();
-              break;
-            case 'load':
-              this._emitDidLoad();
-              break;
-            default:
-              break;
-          }
-        });
-      });
+      // Emit event after all actions for the following events so that we can guarantee that data has
+      // been loaded.
+      switch (event) {
+        case 'create':
+          this._emitDidCreate();
+          break;
+        case 'load':
+          this._emitDidLoad();
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  _listenToAllChanges() {
+    this.on('$change', async (event, value) => {
+      if (this._listenerEvents[event]) {
+        await this.runListeners(event);
+      }
     });
   }
 

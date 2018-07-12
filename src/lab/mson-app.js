@@ -12,6 +12,7 @@ globals.set({ appId: 101 });
 // TODO: properly set
 globals.set({ reCAPTCHASiteKey: '6LdIbGMUAAAAAJnipR9t-SnWzCbn0ZX2myXBIauh' });
 
+// Make sure we only process front-end actions
 Component.setLayer('frontEnd');
 
 _.forEach(components, component =>
