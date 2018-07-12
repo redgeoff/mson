@@ -237,7 +237,7 @@ export default class ListField extends CompositeField {
     this._hasTypeError = hasError;
   }
 
-  _setValue(props) {
+  _compositeFieldSetValue(props) {
     if (props.value !== undefined) {
       this._validateValueType(props.value);
 

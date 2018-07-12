@@ -93,7 +93,7 @@ export default class CompositeField extends Field {
     }
   }
 
-  _setValue(props) {
+  _compositeFieldSetValue(props) {
     if (props.value !== undefined) {
       this.eachField(field =>
         field.setValue(
@@ -128,7 +128,7 @@ export default class CompositeField extends Field {
 
     this._setRequired(props);
 
-    this._setValue(props);
+    this._compositeFieldSetValue(props);
 
     this._setDisabled(props);
 

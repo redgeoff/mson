@@ -76,6 +76,10 @@ export default class Field extends Component {
     });
   }
 
+  _setValue(value) {
+    this._set('value', value);
+  }
+
   set(props) {
     super.set(props);
 
@@ -87,11 +91,14 @@ export default class Field extends Component {
       this.set({ dirty: true });
     }
 
+    if (props.value !== undefined) {
+      this._setValue(props.value);
+    }
+
     // Use err instead of error as event of 'error' can cause issues
     this._setIfUndefined(
       props,
       'label',
-      'value',
       'err',
       'required',
       'fullWidth',
@@ -154,7 +161,7 @@ export default class Field extends Component {
   }
 
   setValue(value) {
-    this.set({ value: value });
+    this.set({ value });
   }
 
   clearValue() {

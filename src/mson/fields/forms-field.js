@@ -553,10 +553,6 @@ export default class FormsField extends Field {
   set(props) {
     super.set(props);
 
-    if (props.value !== undefined) {
-      this._setValue(props.value);
-    }
-
     // Set properties on all forms
     this._setOnAllForms(props, ['disabled', 'editable', 'pristine']);
 

@@ -14,8 +14,8 @@ fieldTester.shouldAll({
   exampleValue: 'red'
 });
 
-const createField = () => {
-  return new SelectField({ options: colors });
+const createField = props => {
+  return new SelectField({ ...props, options: colors });
 };
 
 it('should get null when blank string selected', () => {
@@ -45,7 +45,7 @@ it('should get display value', () => {
 });
 
 it('should ensure in list', () => {
-  const field = createField();
+  const field = createField({ removeIfNotInList: false });
 
   field.setValue('orange');
   field.validate();
@@ -68,6 +68,17 @@ it('should ensure in list', () => {
   ]);
 });
 
+it('should remove if not in list', () => {
+  const field = createField();
+
+  field.setValue('orange');
+  expect(field.getValue()).toEqual(null);
+
+  field.set({ multiple: true });
+  field.setValue(['yellow', 'red', 'purple', 'green']);
+  expect(field.getValue()).toEqual(['red', 'green']);
+});
+
 it('should validate with multiple-value-field', () => {
   const field = createField();
   field.set({ maxSize: 1, multiple: true });
@@ -77,7 +88,7 @@ it('should validate with multiple-value-field', () => {
 });
 
 it('should validate', () => {
-  const field = createField();
+  const field = createField({ removeIfNotInList: false });
 
   testUtils.expectValuesToBeValid(field, ['green', '', null]);
   testUtils.expectValuesToBeInvalid(field, [[], 'orange']);
