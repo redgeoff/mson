@@ -30,9 +30,11 @@ export default class Email extends Action {
     this._setDefaults(props, { layer: 'backEnd' });
   }
 
+  _sendEmail(props) {
+    return registrar.email.send(props);
+  }
+
   async act(props) {
-    return registrar.email.send(
-      this.getFilled(['to', 'subject', 'body'], props)
-    );
+    return this._sendEmail(this.getFilled(['to', 'subject', 'body'], props));
   }
 }
