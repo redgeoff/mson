@@ -139,6 +139,9 @@ export const contactUs = {
       fullWidth: true
     },
     {
+      component: 'ReCAPTCHAField'
+    },
+    {
       component: 'ButtonField',
       type: 'submit',
       name: 'submit',

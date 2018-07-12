@@ -31,7 +31,7 @@ export default {
     {
       component: 'ButtonField',
       name: 'forgotPassword',
-      label: 'Forgot password?',
+      label: 'Password?',
       icon: 'VpnKey'
     },
     {
