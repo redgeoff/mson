@@ -124,3 +124,38 @@ it('should chain listeners', async () => {
 
   expect(song.get('artist'), name);
 });
+
+it('should filter listeners based on layer', async () => {
+  const action1 = new SongAction({ layer: 'backEnd' });
+  const action2 = new SongAction();
+  const action3 = new SongAction({ layer: 'frontEnd' });
+
+  const song = new Song({
+    listeners: [
+      {
+        event: 'song',
+        actions: [action1, action2, action3]
+      }
+    ]
+  });
+
+  // Simulate no layer
+  song._getLayer = () => null;
+
+  await song.runListeners('song');
+  expect(action1.acts).toHaveLength(1);
+  expect(action2.acts).toHaveLength(1);
+  expect(action3.acts).toHaveLength(1);
+
+  action1.acts = [];
+  action2.acts = [];
+  action3.acts = [];
+
+  // Simulate frontEnd layer
+  song._getLayer = () => 'frontEnd';
+
+  await song.runListeners('song');
+  expect(action1.acts).toHaveLength(0);
+  expect(action2.acts).toHaveLength(1);
+  expect(action3.acts).toHaveLength(1);
+});
