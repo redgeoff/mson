@@ -46,6 +46,10 @@ export default class Component extends events.EventEmitter {
         {
           name: 'store',
           component: 'BooleanField'
+        },
+        {
+          name: 'props',
+          component: 'TextListField'
         }
       ]
     };
@@ -466,8 +470,10 @@ export default class Component extends events.EventEmitter {
     const schemas = this.get('schema');
     if (schemas) {
       schemas.forEach(schema => {
-        const schemaForm = compiler.newComponent(schema);
-        form.copyFields(schemaForm);
+        if (!compiler.isCompiled(schema)) {
+          schema = compiler.newComponent(schema);
+        }
+        form.copyFields(schema);
       });
     }
   }

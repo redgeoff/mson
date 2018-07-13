@@ -7,6 +7,18 @@ it('should send email', async () => {
     fields: [
       {
         component: 'EmailField',
+        name: 'from'
+      },
+      {
+        component: 'EmailField',
+        name: 'sender'
+      },
+      {
+        component: 'EmailField',
+        name: 'replyTo'
+      },
+      {
+        component: 'EmailField',
         name: 'to'
       },
       {
@@ -20,12 +32,18 @@ it('should send email', async () => {
     ]
   });
   form.setValues({
+    from: 'from@example.com',
+    sender: 'sender@example.com',
+    replyTo: 'reply-to@example.com',
     to: 'test@example.com',
     subject: 'My subject',
     body: 'My body'
   });
 
   const email = new Email({
+    from: '{{fields.from.value}}',
+    sender: '{{fields.sender.value}}',
+    replyTo: '{{fields.replyTo.value}}',
     to: '{{fields.to.value}}',
     subject: '{{fields.subject.value}}',
     body: '{{fields.body.value}}'

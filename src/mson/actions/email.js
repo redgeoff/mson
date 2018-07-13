@@ -6,10 +6,22 @@ export default class Email extends Action {
     super._create(props);
 
     this.set({
-      props: ['to', 'subject', 'body'],
+      props: ['from', 'sender', 'replyTo', 'to', 'subject', 'body'],
       schema: {
         component: 'Form',
         fields: [
+          {
+            name: 'from',
+            component: 'TextField'
+          },
+          {
+            name: 'sender',
+            component: 'TextField'
+          },
+          {
+            name: 'replyTo',
+            component: 'TextField'
+          },
           {
             name: 'to',
             // Note: TextField as want to allow for multiple recipients
@@ -35,6 +47,11 @@ export default class Email extends Action {
   }
 
   async act(props) {
-    return this._sendEmail(this.getFilled(['to', 'subject', 'body'], props));
+    return this._sendEmail(
+      this.getFilled(
+        ['from', 'sender', 'replyTo', 'to', 'subject', 'body'],
+        props
+      )
+    );
   }
 }
