@@ -88,9 +88,9 @@ export default {
       actions: [
         {
           component: 'Email',
-          sender: '{{fields.email.value}}',
-          replyTo: '{{fields.email.value}}',
-          from: '{{fields.email.value}}',
+          sender: '"{{fields.name.value}}" <{{fields.email.value}}>',
+          replyTo: '"{{fields.name.value}}" <{{fields.email.value}}>',
+          from: '"{{fields.name.value}}" <{{fields.email.value}}>',
           to: '{{to}}',
           subject: '{{fields.subject.value}}',
           body: '{{fields.body.value}}',

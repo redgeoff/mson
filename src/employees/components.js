@@ -299,7 +299,7 @@ export const resetPasswordEditor = {
 export const contactUs = {
   name: 'app.ContactUs',
   component: 'ContactUs',
-  to: 'support@example.com',
+  to: '"Support" <support@example.com>',
   storeType: 'app.ContactUs'
 };
 
