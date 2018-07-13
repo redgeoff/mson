@@ -300,6 +300,7 @@ export const contactUs = {
   name: 'app.ContactUs',
   component: 'ContactUs',
   to: '"Support" <support@example.com>',
+  // body: 'header\n{{fields.body.value}}\nfooter',
   storeType: 'app.ContactUs'
 };
 

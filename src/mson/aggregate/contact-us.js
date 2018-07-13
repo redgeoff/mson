@@ -1,14 +1,34 @@
 export default {
   name: 'ContactUs',
   component: 'Form',
-  props: ['to', 'storeType'],
+  props: ['from', 'sender', 'replyTo', 'to', 'subject', 'body', 'storeType'],
   schema: {
     component: 'Form',
     fields: [
       {
+        name: 'from',
+        component: 'TextField'
+      },
+      {
+        name: 'sender',
+        component: 'TextField'
+      },
+      {
+        name: 'replyTo',
+        component: 'TextField'
+      },
+      {
         name: 'to',
         component: 'TextField',
         required: true
+      },
+      {
+        name: 'subject',
+        component: 'TextField'
+      },
+      {
+        name: 'body',
+        component: 'TextField'
       },
       {
         name: 'storeType',
@@ -17,6 +37,11 @@ export default {
       }
     ]
   },
+  sender: '"{{fields.name.value}}" <{{fields.email.value}}>',
+  replyTo: '"{{fields.name.value}}" <{{fields.email.value}}>',
+  from: '"{{fields.name.value}}" <{{fields.email.value}}>',
+  subject: '{{fields.subject.value}}',
+  body: '{{fields.body.value}}',
   fields: [
     {
       component: 'PersonNameField',
@@ -88,12 +113,12 @@ export default {
       actions: [
         {
           component: 'Email',
-          sender: '"{{fields.name.value}}" <{{fields.email.value}}>',
-          replyTo: '"{{fields.name.value}}" <{{fields.email.value}}>',
-          from: '"{{fields.name.value}}" <{{fields.email.value}}>',
+          sender: '"{{sender}}>',
+          replyTo: '"{{replyTo}}>',
+          from: '"{{from}}>',
           to: '{{to}}',
-          subject: '{{fields.subject.value}}',
-          body: '{{fields.body.value}}',
+          subject: '{{subject}}',
+          body: '{{body}}',
 
           // Detach so that user doesn't have to wait for email to send
           detach: true

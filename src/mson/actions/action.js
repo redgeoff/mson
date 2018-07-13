@@ -37,9 +37,20 @@ export default class Action extends Component {
     return fields;
   }
 
+  _fillWithComponent(prop, props) {
+    const propFiller = new PropFiller(props.component.get());
+    return propFiller.fill(prop);
+  }
+
   _fill(prop, props) {
     if (!props) {
       props = {};
+    }
+
+    if (props.component) {
+      // Fill with props from coponent first so that we define default values in the component like
+      // {{fields.to.value}} that are then filled via the second fill.
+      prop = this._fillWithComponent(prop, props);
     }
 
     if (props.component && props.component instanceof Form) {
