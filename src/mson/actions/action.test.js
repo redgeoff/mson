@@ -2,6 +2,7 @@ import Set from './set';
 import Action from './action';
 import LogOutOfApp from './log-out-of-app';
 import TextField from '../fields/text-field';
+import compiler from '../compiler';
 
 const createAction = () => {
   return new Set({
@@ -105,4 +106,52 @@ it('should filter by globals', async () => {
     component: field
   });
   expect(field.getValue()).toEqual('Jack');
+});
+
+it('should perform two-stage filling', async () => {
+  const form = compiler.newComponent({
+    component: 'Form',
+    body: '{{fields.body.value}}',
+    props: ['body'],
+    schema: {
+      component: 'Form',
+      fields: [
+        {
+          name: 'body',
+          component: 'TextField'
+        }
+      ]
+    },
+    fields: [
+      {
+        name: 'body',
+        component: 'TextField'
+      },
+      {
+        name: 'foo',
+        component: 'TextField'
+      }
+    ]
+  });
+  form.setValues({
+    body: 'body from field'
+  });
+
+  const set = new Set({
+    name: 'fields.foo.value',
+    value: '{{body}}'
+  });
+
+  // Value is set by default, e.g. {{fields.body.value}}
+  await set.run({
+    component: form
+  });
+  expect(form.getValue('foo')).toEqual('body from field');
+
+  // Value is set by property
+  form.set({ body: 'body from override' });
+  await set.run({
+    component: form
+  });
+  expect(form.getValue('foo')).toEqual('body from override');
 });
