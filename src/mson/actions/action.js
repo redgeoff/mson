@@ -10,7 +10,7 @@ export default class Action extends Component {
     super._create(props);
 
     this.set({
-      props: ['if', 'ifData', 'actions', 'layer']
+      props: ['if', 'ifData', 'actions', 'layer', 'detach']
       // TODO: set and use schema
     });
   }

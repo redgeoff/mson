@@ -180,7 +180,10 @@ export const contactUs = {
           component: 'Email',
           to: '{{fields.email.value}}',
           subject: '{{fields.subject.value}}',
-          body: '{{fields.body.value}}'
+          body: '{{fields.body.value}}',
+
+          // Detach so that user doesn't have to wait for email to send
+          detach: true
         }
       ]
     },

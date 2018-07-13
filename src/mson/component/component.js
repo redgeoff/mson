@@ -1,5 +1,6 @@
 import events from 'events';
 import _ from 'lodash';
+import registrar from '../compiler/registrar';
 
 let nextKey = 0;
 const getNextKey = () => {
@@ -258,6 +259,15 @@ export default class Component extends events.EventEmitter {
     }
   }
 
+  _onDetachedActionError(err) {
+    if (registrar.log) {
+      registrar.log.error(err);
+
+      // Provide a way to intercept errors from detached actions
+      this.emit('actionError', err);
+    }
+  }
+
   async runListeners(event) {
     const listeners = this.get('listeners');
     if (listeners) {
@@ -274,8 +284,17 @@ export default class Component extends events.EventEmitter {
           for (const i in listener.actions) {
             const action = listener.actions[i];
 
-            // Pass the previous action's output as this actions arguments
-            output = await this._runAction(listener, action, event, output);
+            const runAction = this._runAction(listener, action, event, output);
+
+            if (action.get('detach')) {
+              // We don't wait for detached actions, but we want to log any errors
+              runAction.catch(err => {
+                return this._onDetachedActionError(err);
+              });
+            } else {
+              // Pass the previous action's output as this actions arguments
+              output = await runAction;
+            }
           }
         }
       }
