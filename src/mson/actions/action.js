@@ -3,13 +3,14 @@ import sift from 'sift';
 import PropFiller from '../compiler/prop-filler';
 import registrar from '../compiler/registrar';
 import globals from '../globals';
+import Form from '../form';
 
 export default class Action extends Component {
   _create(props) {
     super._create(props);
 
     this.set({
-      props: ['if', 'ifData', 'actions', 'layer']
+      props: ['if', 'ifData', 'actions', 'layer', 'detach']
       // TODO: set and use schema
     });
   }
@@ -28,10 +29,35 @@ export default class Action extends Component {
   // Abstract method
   async act(/* props */) {}
 
+  _formToFillerProps(component) {
+    const fields = {};
+    component.eachField(
+      field => (fields[field.get('name')] = { value: field.get('value') })
+    );
+    return fields;
+  }
+
+  _fillWithComponent(prop, props) {
+    const propFiller = new PropFiller(props.component.get());
+    return propFiller.fill(prop);
+  }
+
   _fill(prop, props) {
     if (!props) {
       props = {};
     }
+
+    if (props.component) {
+      // Fill with props from coponent first so that we define default values in the component like
+      // {{fields.to.value}} that are then filled via the second fill.
+      prop = this._fillWithComponent(prop, props);
+    }
+
+    if (props.component && props.component instanceof Form) {
+      // Replace the component with values that can be used to fill
+      props.fields = this._formToFillerProps(props.component);
+    }
+
     props.globals = this._getGlobals();
     const propFiller = new PropFiller(props);
     prop = propFiller.fill(prop);

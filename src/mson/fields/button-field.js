@@ -3,17 +3,29 @@ import Field from './field';
 export default class ButtonField extends Field {
   _create(props) {
     super._create(props);
-    this.set({ block: false, out: false });
-  }
 
-  set(props) {
-    super.set(props);
-    this._setIfUndefined(props, 'type', 'icon', 'variant');
-  }
+    this.set({
+      props: ['type', 'icon', 'variant'],
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'type',
+            component: 'TextField'
+          },
+          {
+            name: 'icon',
+            component: 'TextField'
+          },
+          {
+            name: 'variant',
+            component: 'TextField'
+          }
+        ]
+      }
+    });
 
-  getOne(name) {
-    const value = this._getIfAllowed(name, 'type', 'icon', 'variant');
-    return value === undefined ? super.getOne(name) : value;
+    this._setDefaults(props, { block: false, out: false });
   }
 
   emitClick() {

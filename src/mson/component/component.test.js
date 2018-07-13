@@ -94,11 +94,85 @@ it('should concat schemas', () => {
   ]);
 });
 
-it('should get schema form', () => {
+it('should valiate schema', () => {
   const component = new Component();
   const schemaForm = new Form();
   component.buildSchemaForm(schemaForm, compiler);
   expect(schemaForm.hasField('name')).toEqual(true);
+
+  schemaForm.setValues({
+    component: 'myComponent',
+    name: 'myName',
+    listeners: [
+      {
+        event: 'myEvent',
+        actions: [new Action()]
+      }
+    ],
+    schema: {
+      component: 'Form',
+      fields: [
+        {
+          name: 'foo',
+          component: 'TextField'
+        }
+      ]
+    },
+    store: true,
+    props: ['foo']
+  });
+  schemaForm.validate();
+  expect(schemaForm.hasErr()).toEqual(false);
+
+  schemaForm.setValues({
+    name: 'myField',
+    badParam: 10
+  });
+  schemaForm.validate();
+  expect(schemaForm.hasErr()).toEqual(true);
+  expect(schemaForm.getErrs()).toEqual([
+    {
+      field: 'badParam',
+      error: 'undefined field'
+    }
+  ]);
+});
+
+it('should valid with a compiled schema', () => {
+  const component = new Component();
+
+  // Validation fails as foo not in schema
+  let schemaForm = new Form();
+  component.buildSchemaForm(schemaForm, compiler);
+  schemaForm.setValues({
+    name: 'myName',
+    foo: 'bar'
+  });
+  schemaForm.validate();
+  expect(schemaForm.hasErr()).toEqual(true);
+
+  // Set compiled schema
+  const schema = {
+    component: 'Form',
+    fields: [
+      {
+        name: 'foo',
+        component: 'TextField'
+      }
+    ]
+  };
+  component.set({
+    props: ['foo'],
+    schema: compiler.newComponent(schema)
+  });
+  schemaForm = new Form();
+  component.buildSchemaForm(schemaForm, compiler);
+  schemaForm.setValues({
+    name: 'myName',
+    foo: 'bar'
+  });
+  schemaForm.validate();
+  expect(schemaForm.hasErr()).toEqual(false);
 });
 
 it('should chain listeners', async () => {

@@ -177,6 +177,11 @@ beforeAll(() => {
       ]
     }
   });
+
+  compiler.registerComponent('app.CustomProps', {
+    component: 'Component',
+    props: ['foo']
+  });
 });
 
 afterAll(() => {
@@ -193,6 +198,7 @@ afterAll(() => {
   compiler.deregisterComponent('app.TemplatedListeners');
   compiler.deregisterComponent('app.Login');
   compiler.deregisterComponent('app.App');
+  compiler.deregisterComponent('app.CustomProps');
 });
 
 beforeEach(() => {
@@ -443,4 +449,12 @@ it('nested actions should have the correct references', async () => {
   login.getField('submit').emitClick();
   await didSubmit;
   expect(username).toEqual('myusername');
+});
+
+it('should support custom props', () => {
+  const customProps = compiler.newComponent({
+    component: 'app.CustomProps',
+    foo: 'bar'
+  });
+  expect(customProps.get('foo')).toEqual('bar');
 });

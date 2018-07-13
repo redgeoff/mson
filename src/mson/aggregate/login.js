@@ -24,13 +24,21 @@ export default {
     },
     {
       component: 'ButtonField',
-      name: 'createAccount',
-      label: 'Create account'
+      name: 'signUp',
+      label: 'Sign Up',
+      icon: 'CheckCircle'
     },
     {
       component: 'ButtonField',
       name: 'forgotPassword',
-      label: 'Forgot password?'
+      label: 'Password?',
+      icon: 'VpnKey'
+    },
+    {
+      component: 'ButtonField',
+      name: 'contact',
+      label: 'Contact',
+      icon: 'LiveHelp'
     }
   ],
   listeners: [

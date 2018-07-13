@@ -12,7 +12,9 @@ import ChainedSelectField from './fields/chained-select-field';
 import ChainedSelectListField from './fields/chained-select-list-field';
 import Component from './component/component';
 import CompositeField from './fields/composite-field';
+import ContactUs from './aggregate/contact-us';
 import CreateRecord from './actions/create-record';
+import Email from './actions/email';
 import EmailField from './fields/email-field.json';
 import Emit from './actions/emit';
 import Field from './fields/field';
@@ -70,7 +72,9 @@ export default {
   ChainedSelectListField,
   Component,
   CompositeField,
+  ContactUs,
   CreateRecord,
+  Email,
   EmailField,
   Emit,
   Field,

@@ -104,36 +104,34 @@ export const department = {
   }
 };
 
-export const contactUs = {
-  name: 'app.ContactUs',
-  component: 'Form',
-  fields: [
-    {
-      component: 'PersonNameField',
-      name: 'name',
-      label: 'Name',
-      required: true
-    },
-    {
-      component: 'EmailField',
-      name: 'email',
-      label: 'Email',
-      required: true
-    }
-    // TODO: complete
-  ]
-};
-
 export const login = {
   name: 'app.Login',
   component: 'Login',
   listeners: [
     {
-      event: 'createAccount',
+      event: 'signUp',
       actions: [
         {
           component: 'Redirect',
           path: '/signup'
+        }
+      ]
+    },
+    {
+      event: 'forgotPassword',
+      actions: [
+        {
+          component: 'Redirect',
+          path: '/reset-password'
+        }
+      ]
+    },
+    {
+      event: 'contact',
+      actions: [
+        {
+          component: 'Redirect',
+          path: '/contact'
         }
       ]
     }
@@ -258,12 +256,14 @@ export const resetPasswordEditor = {
       component: 'ButtonField',
       type: 'submit',
       name: 'reset',
-      label: 'Reset'
+      label: 'Reset',
+      icon: 'LockOpen'
     },
     {
       component: 'ButtonField',
       name: 'cancel',
-      label: 'Cancel'
+      label: 'Cancel',
+      icon: 'Cancel'
     }
   ],
   listeners: [
@@ -275,12 +275,33 @@ export const resetPasswordEditor = {
           type: 'ResetPassword'
         },
         {
+          component: 'Snackbar',
+          message: 'Please expect an email shortly'
+        },
+        {
+          component: 'Redirect',
+          path: '/'
+        }
+      ]
+    },
+    {
+      event: 'cancel',
+      actions: [
+        {
           component: 'Redirect',
           path: '/'
         }
       ]
     }
   ]
+};
+
+export const contactUs = {
+  name: 'app.ContactUs',
+  component: 'ContactUs',
+  to: '"Support" <support@example.com>',
+  // body: 'header\n{{fields.body.value}}\nfooter',
+  storeType: 'app.ContactUs'
 };
 
 const menuItems = [
@@ -384,12 +405,23 @@ const menuItems = [
         fullScreen: true
       },
       {
-        path: '/resetPassword',
+        path: '/reset-password',
         content: {
           component: 'Card',
           title: 'Reset Password',
           content: {
             component: 'ResetPasswordEditor'
+          }
+        },
+        fullScreen: true
+      },
+      {
+        path: '/contact',
+        content: {
+          component: 'Card',
+          title: 'Contact Us',
+          content: {
+            component: 'app.ContactUs'
           }
         },
         fullScreen: true
