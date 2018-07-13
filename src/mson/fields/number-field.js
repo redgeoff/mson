@@ -4,6 +4,7 @@ export default class NumberField extends Field {
   _create(props) {
     super._create(props);
     this.set({
+      props: ['minValue', 'maxValue'],
       schema: {
         component: 'Form',
         fields: [
@@ -18,16 +19,6 @@ export default class NumberField extends Field {
         ]
       }
     });
-  }
-
-  set(props) {
-    super.set(props);
-    this._setIfUndefined(props, 'minValue', 'maxValue');
-  }
-
-  getOne(name) {
-    const value = this._getIfAllowed(name, 'minValue', 'maxValue');
-    return value === undefined ? super.getOne(name) : value;
   }
 
   _validateLengths() {

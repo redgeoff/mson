@@ -5,14 +5,12 @@ import utils from '../utils';
 import access from '../access';
 
 export default class UpsertRecord extends Action {
-  set(props) {
-    super.set(props);
-    this._setIfUndefined(props, 'type', 'id');
-  }
+  _create(props) {
+    super._create(props);
 
-  getOne(name) {
-    const value = this._getIfAllowed(name, 'type', 'id');
-    return value === undefined ? super.getOne(name) : value;
+    this.set({
+      props: ['type', 'id']
+    });
   }
 
   _valuesCanUpdate(component) {

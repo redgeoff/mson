@@ -7,15 +7,17 @@ import globals from './globals';
 import access from './access';
 
 export default class RecordStore extends Component {
-  set(props) {
-    super.set(props);
-    this._setIfUndefined(props, 'type');
-    this._clearCache();
+  _create(props) {
+    super._create(props);
+
+    this.set({
+      props: ['type']
+    });
   }
 
-  getOne(name) {
-    const value = this._getIfAllowed(name, 'type');
-    return value === undefined ? super.getOne(name) : value;
+  set(props) {
+    super.set(props);
+    this._clearCache();
   }
 
   async _request(props, promiseFactory) {

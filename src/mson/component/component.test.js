@@ -8,17 +8,12 @@ import Set from '../actions/set';
 class Song extends Component {
   _create(props) {
     super._create(props);
+
     this._nameSpy = this.get('name');
-  }
 
-  set(props) {
-    super.set(props);
-    this._setIfUndefined(props, 'song', 'artist');
-  }
-
-  getOne(name) {
-    const value = this._getIfAllowed(name, 'song', 'artist');
-    return value === undefined ? super.getOne(name) : value;
+    this.set({
+      props: ['song', 'artist']
+    });
   }
 }
 

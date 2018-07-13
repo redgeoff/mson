@@ -3,14 +3,12 @@ import _ from 'lodash';
 import PropFiller from '../compiler/prop-filler';
 
 export default class Iterator extends Action {
-  set(props) {
-    super.set(props);
-    this._setIfUndefined(props, 'iterator', 'return');
-  }
+  _create(props) {
+    super._create(props);
 
-  getOne(name) {
-    const value = this._getIfAllowed(name, 'iterator', 'return');
-    return value === undefined ? super.getOne(name) : value;
+    this.set({
+      props: ['iterator', 'return']
+    });
   }
 
   _getProp(props, path) {

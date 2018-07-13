@@ -6,9 +6,19 @@ import CompositeField from './composite-field';
 export default class ListField extends CompositeField {
   _create(props) {
     super._create(props);
+
     this._nextFieldName = 0;
 
     this.set({
+      props: [
+        'block',
+        'fullWidth',
+        'allowDelete',
+        'minSize',
+        'maxSize',
+        'field',
+        'allowScalar'
+      ],
       schema: {
         component: 'Form',
         fields: [
@@ -270,19 +280,6 @@ export default class ListField extends CompositeField {
   set(props) {
     super.set(props);
 
-    // This needs to come first as we need to set the options and blankString before creating any
-    // fields
-    this._setIfUndefined(
-      props,
-      'block',
-      'fullWidth',
-      'allowDelete',
-      'minSize',
-      'maxSize',
-      'field',
-      'allowScalar'
-    );
-
     if (props.label !== undefined) {
       if (this._fields.hasFirst()) {
         this._fields.first().set({ label: props.label });
@@ -302,20 +299,6 @@ export default class ListField extends CompositeField {
     if (props.fullWidth !== undefined) {
       this.eachField(field => field.set({ fullWidth: props.fullWidth }));
     }
-  }
-
-  getOne(name) {
-    const value = this._getIfAllowed(
-      name,
-      'block',
-      'fullWidth',
-      'allowDelete',
-      'minSize',
-      'maxSize',
-      'field',
-      'allowScalar'
-    );
-    return value === undefined ? super.getOne(name) : value;
   }
 
   validate() {

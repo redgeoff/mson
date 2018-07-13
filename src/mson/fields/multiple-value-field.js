@@ -5,6 +5,7 @@ export default class MultipleValueField extends Field {
     super._create(props);
 
     this.set({
+      props: ['minSize', 'maxSize', 'field', 'allowScalar'],
       schema: {
         component: 'Form',
         fields: [
@@ -44,23 +45,6 @@ export default class MultipleValueField extends Field {
   setValue(value) {
     this._validateValueType(value);
     super.setValue(value);
-  }
-
-  set(props) {
-    super.set(props);
-
-    this._setIfUndefined(props, 'minSize', 'maxSize', 'field', 'allowScalar');
-  }
-
-  getOne(name) {
-    const value = this._getIfAllowed(
-      name,
-      'minSize',
-      'maxSize',
-      'field',
-      'allowScalar'
-    );
-    return value === undefined ? super.getOne(name) : value;
   }
 
   validate() {

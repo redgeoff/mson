@@ -3,7 +3,6 @@
 // something like field.bind(store)
 
 import Field from './field';
-// import DocStore from '../doc-store';
 import globals from '../globals';
 import Mapa from '../mapa';
 import uuid from 'uuid';
@@ -12,12 +11,70 @@ import Component from '../component';
 import utils from '../utils';
 
 export default class FormsField extends Field {
-  // // TODO: how does this get cleaned up?
-  // _bubbleUpChanges() {
-  //   this._docs.on('change', change => {
-  //     this._emitChange('change', change);
-  //   });
-  // }
+  static SCROLLTHRESHOLD_DEFAULT = 1000;
+
+  // We want this to be a multiple of 4 as we may make it optional to have 4 columns in
+  // FormsField
+  static ITEMS_PER_PAGE_DEFAULT = 20;
+
+  static MAX_BUFFER_PAGES_DEFAULT = 3;
+
+  _create(props) {
+    const c = this.constructor;
+
+    this.set({
+      props: [
+        'form',
+        'forbidCreate',
+        'forbidUpdate',
+        'forbidDelete',
+        'minSize',
+        'maxSize',
+        'singularLabel',
+        'store',
+        'scrollThreshold',
+        'itemsPerPage',
+        'maxBufferPages',
+        'spacerHeight',
+        'spacerId',
+        'bufferTopId',
+        'isLoading',
+        'order',
+        'currentForm',
+        'mode'
+      ]
+    });
+
+    this._setDefaults(props, {
+      scrollThreshold: c.SCROLLTHRESHOLD_DEFAULT,
+      itemsPerPage: c.ITEMS_PER_PAGE_DEFAULT,
+      maxBufferPages: c.MAX_BUFFER_PAGES_DEFAULT,
+      spacerHeight: 0,
+      spacerId: Component.getNextUniqueId(),
+
+      // Needed so that unload does not trigger listeners as these props would otherwise be
+      // initialized as undefined
+      order: null,
+      mode: null,
+      showArchived: null
+    });
+
+    this._createInfiniteLoader();
+
+    // We use a Mapa instead of an array as it allows us to index the forms by id. We use a Mapa
+    // instead of a Map as we may want to iterate through the forms beginning at any single form.
+    this._forms = new Mapa();
+
+    super._create(props);
+
+    this._listenForLoad();
+    this._listenForLoaded();
+    this._listenForUnload();
+    this._listenForShowArchived();
+    this._listenForSearchString();
+    this._listenForOrder();
+    this._listenForScroll();
+  }
 
   _listenForLoad() {
     this.on('load', async () => {
@@ -269,56 +326,6 @@ export default class FormsField extends Field {
     });
   }
 
-  static SCROLLTHRESHOLD_DEFAULT = 1000;
-
-  // We want this to be a multiple of 4 as we may make it optional to have 4 columns in
-  // FormsField
-  static ITEMS_PER_PAGE_DEFAULT = 20;
-
-  static MAX_BUFFER_PAGES_DEFAULT = 3;
-
-  _create(props) {
-    const c = this.constructor;
-    this._setDefaults(props, {
-      scrollThreshold: c.SCROLLTHRESHOLD_DEFAULT,
-      itemsPerPage: c.ITEMS_PER_PAGE_DEFAULT,
-      maxBufferPages: c.MAX_BUFFER_PAGES_DEFAULT,
-      spacerHeight: 0,
-      spacerId: Component.getNextUniqueId(),
-
-      // Needed so that unload does not trigger listeners as these props would otherwise be
-      // initialized as undefined
-      order: null,
-      mode: null,
-      showArchived: null
-    });
-
-    this._createInfiniteLoader();
-
-    // We use a Mapa instead of an array as it allows us to index the forms by id. We use a Mapa
-    // instead of a Map as we may want to iterate through the forms beginning at any single form.
-    this._forms = new Mapa();
-
-    super._create(props);
-
-    this._listenForLoad();
-    this._listenForLoaded();
-    this._listenForUnload();
-    this._listenForShowArchived();
-    this._listenForSearchString();
-    this._listenForOrder();
-    this._listenForScroll();
-  }
-
-  // constructor(props) {
-  //   super(props);
-  //
-  //   // // TODO: should _docs be a reference that is passed in so that the store can be swapped out?
-  //   // this._docs = new DocStore();
-  //
-  //   // this._bubbleUpChanges();
-  // }
-
   _listenForChanges(form) {
     form.on('value', () => {
       // TODO: does it cause problems that we are just emitting the even and not a value? If we can
@@ -473,12 +480,6 @@ export default class FormsField extends Field {
     this._prepareForm(form);
   }
 
-  _setCurrentFormFromProps(props) {
-    if (props.currentForm !== undefined) {
-      this._setCurrentForm(props.currentForm);
-    }
-  }
-
   _readMode() {
     const form = this.get('form');
     form.emitChange('beginRead', form.getValue('id'));
@@ -516,42 +517,42 @@ export default class FormsField extends Field {
     }
   }
 
-  _setMode(props) {
-    if (props.mode !== undefined && props.mode !== this._mode) {
-      // Has a previous mode?
-      if (this._mode) {
-        this._emitEndEvents();
-      }
-
-      // Note: we set the parent here instead of in set() as otherwise we create a circular
-      // dependency that the Compiler doesn't support.
-      const form = this.get('form');
-      form.set({ parent: this });
-
-      switch (props.mode) {
-        case 'create':
-          this._createMode();
-          break;
-
-        case 'update':
-          this._updateMode();
-          break;
-
-        case 'read':
-          this._readMode();
-          break;
-
-        default:
-          break;
-      }
-
-      form.set({ mode: props.mode });
-      this._set('mode', props.mode);
+  _setMode(mode) {
+    // Has a previous mode?
+    if (this._mode) {
+      this._emitEndEvents();
     }
+
+    // Note: we set the parent here instead of in set() as otherwise we create a circular
+    // dependency that the Compiler doesn't support.
+    const form = this.get('form');
+    form.set({ parent: this });
+
+    switch (mode) {
+      case 'create':
+        this._createMode();
+        break;
+
+      case 'update':
+        this._updateMode();
+        break;
+
+      case 'read':
+        this._readMode();
+        break;
+
+      default:
+        break;
+    }
+
+    form.set({ mode });
+    this._set('mode', mode);
   }
 
   set(props) {
-    super.set(props);
+    super.set(
+      Object.assign({}, props, { currentForm: undefined, mode: undefined })
+    );
 
     // Set properties on all forms
     this._setOnAllForms(props, ['disabled', 'editable', 'pristine']);
@@ -562,29 +563,13 @@ export default class FormsField extends Field {
     // Only set properties of forms if property is null
     this._setOnAllForms(props, ['err'], null);
 
-    this._setIfUndefined(
-      props,
-      'form',
-      'forbidCreate',
-      'forbidUpdate',
-      'forbidDelete',
-      'minSize',
-      'maxSize',
-      'singularLabel',
-      'store',
-      'scrollThreshold',
-      'itemsPerPage',
-      'maxBufferPages',
-      'spacerHeight',
-      'spacerId',
-      'bufferTopId',
-      'isLoading',
-      'order'
-    );
+    if (props.currentForm !== undefined) {
+      this._setCurrentForm(props.currentForm);
+    }
 
-    this._setCurrentFormFromProps(props);
-
-    this._setMode(props);
+    if (props.mode !== undefined && props.mode !== this._mode) {
+      this._setMode(props.mode);
+    }
   }
 
   _getValue() {
@@ -598,40 +583,14 @@ export default class FormsField extends Field {
       return this._getValue();
     }
 
-    const value = this._getIfAllowed(
-      name,
-      'form',
-      'forbidCreate',
-      'forbidUpdate',
-      'forbidDelete',
-      'minSize',
-      'maxSize',
-      'singularLabel',
-      'store',
-      'scrollThreshold',
-      'itemsPerPage',
-      'maxBufferPages',
-      'spacerHeight',
-      'spacerId',
-      'bufferTopId',
-      'isLoading',
-      'order',
-      'currentForm',
-      'mode'
-    );
-    return value === undefined ? super.getOne(name) : value;
+    return super.getOne(name);
   }
-
-  // getStore() {
-  //   return this._docs;
-  // }
 
   *getForms() {
     yield* this._forms.values();
   }
 
   async _saveForm(form) {
-    // await this._docs.set(form.getValues());
     const id = form.getField('id');
     const store = this.get('store');
     const creating = id.isBlank();
@@ -689,8 +648,6 @@ export default class FormsField extends Field {
   }
 
   async archive(form) {
-    // await this._docs.delete(form.getField('id').getValue());
-
     const store = this.get('store');
     if (store) {
       const archive = await store.archive({ form, id: form.getValue('id') });

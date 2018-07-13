@@ -4,6 +4,7 @@ export default class Card extends Component {
   _create(props) {
     super._create(props);
     this.set({
+      props: ['content', 'title'],
       schema: {
         component: 'Form',
         fields: [
@@ -32,15 +33,5 @@ export default class Card extends Component {
         content.emitLoad();
       }
     });
-  }
-
-  set(props) {
-    super.set(props);
-    this._setIfUndefined(props, 'content', 'title');
-  }
-
-  getOne(name) {
-    const value = this._getIfAllowed(name, 'content', 'title');
-    return value === undefined ? super.getOne(name) : value;
   }
 }

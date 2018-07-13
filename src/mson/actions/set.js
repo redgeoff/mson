@@ -2,14 +2,12 @@ import Action from './action';
 import globals from '../globals';
 
 export default class Set extends Action {
-  set(props) {
-    super.set(props);
-    this._setIfUndefined(props, 'name', 'value');
-  }
+  _create(props) {
+    super._create(props);
 
-  getOne(name) {
-    const value = this._getIfAllowed(name, 'name', 'value');
-    return value === undefined ? super.getOne(name) : value;
+    this.set({
+      props: ['name', 'value']
+    });
   }
 
   // For mocking. Note: _getGlobals() is already in use by Action

@@ -53,18 +53,9 @@ export default class User extends Form {
     };
 
     this.set({
+      props: ['roles'],
       schema,
       access
     });
-  }
-
-  set(props) {
-    super.set(props);
-    this._setIfUndefined(props, 'roles');
-  }
-
-  getOne(name) {
-    const value = this._getIfAllowed(name, 'roles');
-    return value === undefined ? super.getOne(name) : value;
   }
 }

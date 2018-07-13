@@ -13,6 +13,14 @@ import SelectField from './select-field';
 //   { "value": "i3", "label": "i3", "parentValue": "bmw" }
 // ]
 export default class ChainedSelectField extends ListField {
+  _create(props) {
+    super._create(props);
+
+    this.set({
+      props: ['blankString', 'options']
+    });
+  }
+
   _getValue() {
     // Go all the way down the chain until nothing selected
     let value = [];
@@ -130,10 +138,6 @@ export default class ChainedSelectField extends ListField {
   set(props) {
     super.set(props);
 
-    // This needs to come first as we need to set the options and blankString before creating any
-    // fields
-    this._setIfUndefined(props, 'blankString', 'options');
-
     if (props.options !== undefined) {
       this._setOptions(props.options);
     }
@@ -143,11 +147,6 @@ export default class ChainedSelectField extends ListField {
         this._fields.first().set({ required: props.required });
       }
     }
-  }
-
-  getOne(name) {
-    const value = this._getIfAllowed(name, 'blankString', 'options');
-    return value === undefined ? super.getOne(name) : value;
   }
 
   clone() {

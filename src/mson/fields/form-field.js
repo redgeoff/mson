@@ -2,6 +2,14 @@ import Field from './field';
 // import globals from '../globals';
 
 export default class FormField extends Field {
+  _create(props) {
+    super._create(props);
+
+    this.set({
+      props: ['form']
+    });
+  }
+
   addForm(values) {
     const clonedForm = this.get('form').clone();
     clonedForm.setValues(values);
@@ -44,11 +52,14 @@ export default class FormField extends Field {
   }
 
   set(props) {
-    super.set(props);
-
     if (props.form !== undefined) {
       this._setForm(props.form);
+
+      // Clear the form prop so that super.set() does not try to set it again
+      props = Object.assign({}, props, { form: undefined });
     }
+
+    super.set(props);
 
     // Was the form set? It may not have been set yet
     if (this._form) {
@@ -84,8 +95,7 @@ export default class FormField extends Field {
       return this.getValues();
     }
 
-    value = this._getIfAllowed(name, 'form');
-    return value === undefined ? super.getOne(name) : value;
+    return super.getOne(name);
   }
 
   // async save(form) {

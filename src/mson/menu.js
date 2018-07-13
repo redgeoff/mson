@@ -25,7 +25,9 @@ import Component from './component';
 export default class Menu extends Component {
   _create(props) {
     super._create(props);
+
     this.set({
+      props: ['items' /*, 'roles'*/],
       schema: {
         component: 'Form',
         fields: [
@@ -100,7 +102,6 @@ export default class Menu extends Component {
 
   set(props) {
     super.set(props);
-    this._setIfUndefined(props, 'items' /*, 'roles' */);
 
     // Index by path so we can do a quick lookup later
     if (props.items !== undefined) {
@@ -109,11 +110,6 @@ export default class Menu extends Component {
       this._parentsByPath = {};
       this._indexParentsByPath();
     }
-  }
-
-  getOne(name) {
-    const value = this._getIfAllowed(name, 'items' /*, 'roles'*/);
-    return value === undefined ? super.getOne(name) : value;
   }
 
   getItem(path) {

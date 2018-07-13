@@ -11,6 +11,26 @@ import ButtonField from '../fields/button-field';
 export default class Form extends Component {
   _formSetMSONSchema() {
     this.set({
+      props: [
+        'fields',
+        'validators',
+        'touched',
+        'err',
+        'dirty',
+        'pristine',
+        'access',
+        'autoValidate',
+        'reportUndefined',
+        'resetOnLoad',
+        'archivedAt',
+        'userId',
+        'showArchived',
+        'searchString',
+        'cursor',
+        'snapshot',
+        'mode',
+        'isLoading'
+      ],
       schema: {
         component: 'Form',
         fields: [
@@ -191,7 +211,9 @@ export default class Form extends Component {
   }
 
   set(props) {
-    super.set(props);
+    super.set(
+      Object.assign({}, props, { fields: undefined, validators: undefined })
+    );
 
     if (props.form !== undefined) {
       this.cloneFields(props.form);
@@ -261,26 +283,6 @@ export default class Form extends Component {
     if (props.err !== undefined) {
       this._emitCanOrCannotSubmit();
     }
-
-    this._setIfUndefined(
-      props,
-      'touched',
-      'err',
-      'dirty',
-      'pristine',
-      'access',
-      'autoValidate',
-      'reportUndefined',
-      'resetOnLoad',
-      'archivedAt',
-      'userId',
-      'showArchived',
-      'searchString',
-      'cursor',
-      'snapshot',
-      'mode',
-      'isLoading'
-    );
   }
 
   _setField(field) {
@@ -362,28 +364,7 @@ export default class Form extends Component {
       return this.getValues();
     }
 
-    const value = this._getIfAllowed(
-      name,
-      'fields',
-      'validators',
-      'touched',
-      'err',
-      'dirty',
-      'pristine',
-      'access',
-      'autoValidate',
-      'reportUndefined',
-      'resetOnLoad',
-      'archivedAt',
-      'userId',
-      'showArchived',
-      'searchString',
-      'cursor',
-      'snapshot',
-      'mode',
-      'isLoading'
-    );
-    return value === undefined ? super.getOne(name) : value;
+    return super.getOne(name);
   }
 
   getField(name) {

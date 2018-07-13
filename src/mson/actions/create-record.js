@@ -4,14 +4,12 @@ import globals from '../globals';
 import utils from '../utils';
 
 export default class CreateRecord extends Action {
-  set(props) {
-    super.set(props);
-    this._setIfUndefined(props, 'type');
-  }
+  _create(props) {
+    super._create(props);
 
-  getOne(name) {
-    const value = this._getIfAllowed(name, 'type');
-    return value === undefined ? super.getOne(name) : value;
+    this.set({
+      props: ['type']
+    });
   }
 
   async act(props) {

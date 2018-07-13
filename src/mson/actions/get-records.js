@@ -4,14 +4,12 @@ import globals from '../globals';
 import utils from '../utils';
 
 export default class GetRecords extends Action {
-  set(props) {
-    super.set(props);
-    this._setIfUndefined(props, 'type', 'where');
-  }
+  _create(props) {
+    super._create(props);
 
-  getOne(name) {
-    const value = this._getIfAllowed(name, 'type', 'where');
-    return value === undefined ? super.getOne(name) : value;
+    this.set({
+      props: ['type', 'where']
+    });
   }
 
   async act(props) {

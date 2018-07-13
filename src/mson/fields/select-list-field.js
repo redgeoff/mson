@@ -2,6 +2,35 @@ import ListField from './list-field';
 import SelectField from './select-field';
 
 export default class SelectListField extends ListField {
+  _create(props) {
+    super._create(props);
+
+    this.set({
+      props: ['options', 'blankString', 'ensureInList'],
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'options',
+            // TODO: define and use a proper field
+            component: 'Field'
+          },
+          {
+            name: 'blankString',
+            component: 'TextField'
+          },
+          {
+            name: 'ensureInList',
+            component: 'BooleanField'
+          }
+        ]
+      }
+    });
+
+    // Create the first field
+    this._createNewField();
+  }
+
   _onFieldCreated(field, onDelete) {
     field.on('value', value => {
       // Don't delete the last field
@@ -35,40 +64,8 @@ export default class SelectListField extends ListField {
     field.set({ options: this.get('options') });
   }
 
-  _create(props) {
-    super._create(props);
-
-    this.set({
-      schema: {
-        component: 'Form',
-        fields: [
-          {
-            name: 'options',
-            // TODO: define and use a proper field
-            component: 'Field'
-          },
-          {
-            name: 'blankString',
-            component: 'TextField'
-          },
-          {
-            name: 'ensureInList',
-            component: 'BooleanField'
-          }
-        ]
-      }
-    });
-
-    // Create the first field
-    this._createNewField();
-  }
-
   set(props) {
     super.set(props);
-
-    // This needs to come first as we need to set the options and blankString before creating any
-    // fields
-    this._setIfUndefined(props, 'options', 'blankString', 'ensureInList');
 
     if (props.options !== undefined) {
       // Set options for all fields
@@ -82,16 +79,6 @@ export default class SelectListField extends ListField {
     if (props.ensureInList !== undefined) {
       this.eachField(field => field.set({ ensureInList: props.ensureInList }));
     }
-  }
-
-  getOne(name) {
-    const value = this._getIfAllowed(
-      name,
-      'options',
-      'blankString',
-      'ensureInList'
-    );
-    return value === undefined ? super.getOne(name) : value;
   }
 
   _shouldRemoveField(field) {

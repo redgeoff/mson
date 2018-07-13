@@ -5,6 +5,14 @@ import ListField from './list-field';
 import ChainedSelectField from './chained-select-field';
 
 export default class ChainedSelectListField extends ListField {
+  _create(props) {
+    super._create(props);
+
+    this.set({
+      props: ['options', 'blankString']
+    });
+  }
+
   constructor(props) {
     super(props);
     this.set({ allowDelete: true });
@@ -49,18 +57,9 @@ export default class ChainedSelectListField extends ListField {
   set(props) {
     super.set(props);
 
-    // This needs to come first as we need to set the options and blankString before creating any
-    // fields
-    this._setIfUndefined(props, 'options', 'blankString');
-
     if (props.options !== undefined) {
       this._setOptions(props.options);
     }
-  }
-
-  getOne(name) {
-    const value = this._getIfAllowed(name, 'options', 'blankString');
-    return value === undefined ? super.getOne(name) : value;
   }
 
   clone() {
