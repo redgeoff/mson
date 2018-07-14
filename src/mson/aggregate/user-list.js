@@ -1,6 +1,20 @@
 export default {
   component: 'FormsField',
   props: ['baseForm', 'storeType'],
+  schema: {
+    component: 'Form',
+    field: [
+      {
+        name: 'baseForm',
+        component: 'Field',
+        required: true
+      },
+      {
+        name: 'storeType',
+        component: 'TextField'
+      }
+    ]
+  },
   form: {
     component: '{{baseForm}}',
     fields: [

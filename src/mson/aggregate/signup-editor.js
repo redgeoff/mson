@@ -1,6 +1,16 @@
 export default {
   component: 'RecordEditor',
   props: ['signupBaseForm'],
+  schema: {
+    component: 'Form',
+    field: [
+      {
+        name: 'signupBaseForm',
+        component: 'Field',
+        required: true
+      }
+    ]
+  },
   preview: false,
   baseForm: {
     component: '{{signupBaseForm}}',

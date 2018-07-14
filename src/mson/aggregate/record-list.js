@@ -1,6 +1,25 @@
 export default {
   component: 'Form',
-  props: ['label', 'baseForm', 'storeType'],
+  props: ['baseForm', 'label', 'storeType'],
+  schema: {
+    component: 'Form',
+    field: [
+      {
+        name: 'baseForm',
+        component: 'Field',
+        required: true
+      },
+      {
+        name: 'label',
+        component: 'TextField',
+        required: true
+      },
+      {
+        name: 'storeType',
+        component: 'TextField'
+      }
+    ]
+  },
   fields: [
     {
       name: '{{name}}',
