@@ -2,13 +2,27 @@ import Action from './action';
 import registrar from '../compiler/registrar';
 import globals from '../globals';
 import utils from '../utils';
+import { ValidatorWhere } from '../form/form-validator';
 
 export default class GetRecords extends Action {
   _create(props) {
     super._create(props);
 
     this.set({
-      props: ['type', 'where']
+      props: ['type', 'where'],
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'type',
+            component: 'TextField'
+          },
+          {
+            name: 'where',
+            form: new ValidatorWhere()
+          }
+        ]
+      }
     });
   }
 
