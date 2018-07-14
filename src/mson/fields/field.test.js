@@ -1,4 +1,6 @@
 import Field from './field';
+import Form from '../form';
+import compiler from '../compiler';
 
 // TODO: create test suite that is applied to all fields
 
@@ -76,4 +78,33 @@ it('should set dirty when value changes', () => {
   // Dirties as value changes
   field.setValue('bar');
   expect(field.get('dirty')).toEqual(true);
+});
+
+it('should validate schema', () => {
+  const field = new Field();
+
+  const schemaForm = new Form();
+  field.buildSchemaForm(schemaForm, compiler);
+
+  schemaForm.setValues({
+    name: 'myField',
+    label: 'My Field',
+    required: true
+    // TODO: ...
+  });
+  schemaForm.validate();
+  expect(schemaForm.hasErr()).toEqual(false);
+
+  schemaForm.setValues({
+    name: 'myField',
+    foo: 'bar'
+  });
+  schemaForm.validate();
+  expect(schemaForm.hasErr()).toEqual(true);
+  expect(schemaForm.getErrs()).toEqual([
+    {
+      field: 'foo',
+      error: 'undefined field'
+    }
+  ]);
 });
