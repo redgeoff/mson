@@ -12,7 +12,20 @@ class Song extends Component {
     this._nameSpy = this.get('name');
 
     this.set({
-      props: ['song', 'artist']
+      props: ['song', 'artist'],
+      schema: {
+        component: 'Form',
+        field: [
+          {
+            name: 'song',
+            component: 'TextField'
+          },
+          {
+            name: 'artist',
+            component: 'TextField'
+          }
+        ]
+      }
     });
   }
 }
