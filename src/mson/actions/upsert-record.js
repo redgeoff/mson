@@ -9,7 +9,21 @@ export default class UpsertRecord extends Action {
     super._create(props);
 
     this.set({
-      props: ['type', 'id']
+      props: ['type', 'id'],
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'type',
+            component: 'TextField',
+            required: true
+          },
+          {
+            name: 'id',
+            component: 'TextField'
+          }
+        ]
+      }
     });
   }
 

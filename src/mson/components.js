@@ -61,6 +61,7 @@ import UpsertRecord from './actions/upsert-record';
 import User from './form/user';
 import UserList from './aggregate/user-list';
 import Vault from './vaults/vault';
+import WhereField from './fields/where-field';
 
 export default {
   Action,
@@ -120,5 +121,6 @@ export default {
   UpsertRecord,
   User,
   UserList,
-  Vault
+  Vault,
+  WhereField
 };

@@ -2,7 +2,6 @@ import Action from './action';
 import registrar from '../compiler/registrar';
 import globals from '../globals';
 import utils from '../utils';
-import { ValidatorWhere } from '../form/form-validator';
 
 export default class GetRecord extends Action {
   _create(props) {
@@ -20,7 +19,7 @@ export default class GetRecord extends Action {
           },
           {
             name: 'where',
-            form: new ValidatorWhere(),
+            component: 'WhereField',
             required: true
           }
         ]

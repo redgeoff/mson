@@ -4,7 +4,6 @@ import PropFiller from '../compiler/prop-filler';
 import registrar from '../compiler/registrar';
 import globals from '../globals';
 import Form from '../form';
-import { ValidatorWhere } from '../form/form-validator';
 
 export default class Action extends Component {
   _create(props) {
@@ -17,7 +16,7 @@ export default class Action extends Component {
         fields: [
           {
             name: 'if',
-            form: new ValidatorWhere()
+            component: 'WhereField'
           },
           {
             name: 'ifData',
