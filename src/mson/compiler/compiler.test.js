@@ -183,7 +183,7 @@ beforeAll(() => {
     props: ['foo'],
     schema: {
       component: 'Form',
-      field: [
+      fields: [
         {
           name: 'foo',
           component: 'TextField',

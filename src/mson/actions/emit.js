@@ -8,7 +8,7 @@ export default class Emit extends Action {
       props: ['event', 'value'],
       schema: {
         component: 'Form',
-        field: [
+        fields: [
           {
             name: 'event',
             component: 'TextField'

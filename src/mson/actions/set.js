@@ -9,7 +9,7 @@ export default class Set extends Action {
       props: ['name', 'value'],
       schema: {
         component: 'Form',
-        field: [
+        fields: [
           {
             name: 'name',
             component: 'TextField'

@@ -8,7 +8,7 @@ export default class App extends Component {
       props: ['menu'],
       schema: {
         component: 'Form',
-        field: [
+        fields: [
           {
             name: 'menu',
             component: 'Field'

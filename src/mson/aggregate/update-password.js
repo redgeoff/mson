@@ -3,7 +3,7 @@ export default {
   props: ['baseForm'],
   schema: {
     component: 'Form',
-    field: [
+    fields: [
       {
         name: 'baseForm',
         component: 'Field',

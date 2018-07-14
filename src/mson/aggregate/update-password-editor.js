@@ -3,7 +3,7 @@ export default {
   props: ['updatePasswordBaseForm'],
   schema: {
     component: 'Form',
-    field: [
+    fields: [
       {
         name: 'updatePasswordBaseForm',
         component: 'Field',

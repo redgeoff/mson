@@ -9,7 +9,7 @@ export default class Snackbar extends Action {
       props: ['message'],
       schema: {
         component: 'Form',
-        field: [
+        fields: [
           {
             name: 'message',
             component: 'TextField',

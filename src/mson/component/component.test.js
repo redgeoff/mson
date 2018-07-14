@@ -15,7 +15,7 @@ class Song extends Component {
       props: ['song', 'artist'],
       schema: {
         component: 'Form',
-        field: [
+        fields: [
           {
             name: 'song',
             component: 'TextField'

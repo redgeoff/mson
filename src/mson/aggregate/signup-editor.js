@@ -3,7 +3,7 @@ export default {
   props: ['signupBaseForm'],
   schema: {
     component: 'Form',
-    field: [
+    fields: [
       {
         name: 'signupBaseForm',
         component: 'Field',

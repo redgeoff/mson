@@ -10,7 +10,7 @@ export default class Iterator extends Action {
       props: ['iterator', 'return'],
       schema: {
         component: 'Form',
-        field: [
+        fields: [
           {
             name: 'iterator',
             component: 'Field',

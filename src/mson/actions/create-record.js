@@ -11,7 +11,7 @@ export default class CreateRecord extends Action {
       props: ['type'],
       schema: {
         component: 'Form',
-        field: [
+        fields: [
           {
             name: 'type',
             component: 'TextField'

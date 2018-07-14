@@ -3,7 +3,7 @@ export default {
   props: ['baseForm', 'label', 'storeType', 'recordWhere'],
   schema: {
     component: 'Form',
-    field: [
+    fields: [
       {
         name: 'baseForm',
         component: 'Field',

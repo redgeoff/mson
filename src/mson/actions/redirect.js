@@ -9,7 +9,7 @@ export default class Redirect extends Action {
       props: ['path'],
       schema: {
         component: 'Form',
-        field: [
+        fields: [
           {
             name: 'path',
             component: 'TextField',
