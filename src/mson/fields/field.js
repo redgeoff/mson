@@ -39,6 +39,14 @@ export default class Field extends Component {
             component: 'TextField'
           },
           {
+            name: 'value',
+            component: 'Field'
+          },
+          {
+            name: 'err',
+            component: 'Field'
+          },
+          {
             name: 'required',
             component: 'BooleanField'
           },
@@ -46,7 +54,14 @@ export default class Field extends Component {
             name: 'fullWidth',
             component: 'BooleanField'
           },
-          // TODO: validators
+          {
+            name: 'touched',
+            component: 'BooleanField'
+          },
+          {
+            name: 'validators',
+            component: 'Field'
+          },
           {
             name: 'hidden',
             component: 'BooleanField'
@@ -63,13 +78,13 @@ export default class Field extends Component {
             name: 'editable',
             component: 'BooleanField'
           },
-          // {
-          //   name: 'dirty',
-          //   component: 'BooleanField'
-          // },
+          {
+            name: 'dirty',
+            component: 'BooleanField'
+          },
           {
             name: 'help',
-            component: 'Field'
+            component: 'TextField'
           },
           {
             name: 'in',
@@ -82,6 +97,22 @@ export default class Field extends Component {
           {
             name: 'before',
             component: 'TextField'
+          },
+          {
+            name: 'showArchived',
+            component: 'BooleanField'
+          },
+          {
+            name: 'searchString',
+            component: 'TextField'
+          },
+          {
+            name: 'ignoreErrs',
+            component: 'BooleanField'
+          },
+          {
+            name: 'forbidSort',
+            component: 'BooleanField'
           }
         ]
       }
