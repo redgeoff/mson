@@ -4,14 +4,39 @@ import PropFiller from '../compiler/prop-filler';
 import registrar from '../compiler/registrar';
 import globals from '../globals';
 import Form from '../form';
+import { ValidatorWhere } from '../form/form-validator';
 
 export default class Action extends Component {
   _create(props) {
     super._create(props);
 
     this.set({
-      props: ['if', 'ifData', 'actions', 'layer', 'detach']
-      // TODO: set and use schema
+      props: ['if', 'ifData', 'actions', 'layer', 'detach'],
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'if',
+            form: new ValidatorWhere()
+          },
+          {
+            name: 'ifData',
+            component: 'Field'
+          },
+          {
+            name: 'actions',
+            component: 'Field'
+          },
+          {
+            name: 'layer',
+            component: 'TextField'
+          },
+          {
+            name: 'detach',
+            component: 'BooleanField'
+          }
+        ]
+      }
     });
   }
 

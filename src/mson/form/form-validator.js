@@ -4,7 +4,7 @@ import FormField from '../fields/form-field';
 import sift from 'sift';
 import ObjectForm from '../object-form';
 
-class ValidatorWhere extends ObjectForm {
+export class ValidatorWhere extends ObjectForm {
   validate() {
     super.validate();
 
