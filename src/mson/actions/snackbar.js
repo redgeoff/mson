@@ -6,7 +6,17 @@ export default class Snackbar extends Action {
     super._create(props);
 
     this.set({
-      props: ['message']
+      props: ['message'],
+      schema: {
+        component: 'Form',
+        field: [
+          {
+            name: 'message',
+            component: 'TextField',
+            required: true
+          }
+        ]
+      }
     });
 
     this._setDefaults(props, { layer: 'frontEnd' });

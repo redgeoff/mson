@@ -15,11 +15,13 @@ export default class GetRecord extends Action {
         fields: [
           {
             name: 'type',
-            component: 'TextField'
+            component: 'TextField',
+            required: true
           },
           {
             name: 'where',
-            form: new ValidatorWhere()
+            form: new ValidatorWhere(),
+            required: true
           }
         ]
       }

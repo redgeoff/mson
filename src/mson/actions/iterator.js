@@ -13,11 +13,13 @@ export default class Iterator extends Action {
         field: [
           {
             name: 'iterator',
-            component: 'Field'
+            component: 'Field',
+            required: true
           },
           {
             name: 'return',
-            component: 'Field'
+            component: 'Field',
+            required: true
           }
         ]
       }

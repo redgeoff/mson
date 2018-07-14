@@ -12,7 +12,8 @@ export default class Redirect extends Action {
         field: [
           {
             name: 'path',
-            component: 'TextField'
+            component: 'TextField',
+            required: true
           }
         ]
       }
