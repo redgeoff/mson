@@ -19,8 +19,7 @@ export default class GetRecord extends Action {
           },
           {
             name: 'where',
-            component: 'WhereField',
-            required: true
+            component: 'WhereField'
           }
         ]
       }
