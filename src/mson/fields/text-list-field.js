@@ -6,7 +6,16 @@ export default class TextListField extends ListField {
     super._create(props);
 
     this.set({
-      props: ['invalidRegExp']
+      props: ['invalidRegExp'],
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'invalidRegExp',
+            component: 'TextField'
+          }
+        ]
+      }
     });
   }
 
