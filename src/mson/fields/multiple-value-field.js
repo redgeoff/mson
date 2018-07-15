@@ -10,16 +10,16 @@ export default class MultipleValueField extends Field {
         component: 'Form',
         fields: [
           {
-            name: 'allowDelete',
-            component: 'BooleanField'
-          },
-          {
             name: 'minSize',
             component: 'IntegerField'
           },
           {
             name: 'maxSize',
             component: 'IntegerField'
+          },
+          {
+            name: 'field',
+            component: 'Field'
           },
           {
             name: 'allowScalar',
