@@ -1,12 +1,21 @@
 import Field from './field';
-// import globals from '../globals';
 
 export default class FormField extends Field {
   _create(props) {
     super._create(props);
 
     this.set({
-      props: ['form']
+      props: ['form'],
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'form',
+            component: 'Field',
+            required: true
+          }
+        ]
+      }
     });
   }
 
@@ -97,14 +106,6 @@ export default class FormField extends Field {
 
     return super.getOne(name);
   }
-
-  // async save(form) {
-  //   globals.displaySnackbar(this.get('label') + ' saved');
-  // }
-  //
-  // async delete(form) {
-  //   globals.displaySnackbar(this.get('label') + ' deleted');
-  // }
 
   validate() {
     const form = this.get('form');
