@@ -35,11 +35,6 @@ export default class Form extends Component {
         component: 'Form',
         fields: [
           {
-            name: 'name',
-            component: 'TextField',
-            required: true
-          },
-          {
             name: 'fields',
             component: 'FormsField',
             // required: true,
@@ -70,6 +65,67 @@ export default class Form extends Component {
             //   // SchemaValidatorForm for something similar.
             //   component: 'IndexForm'
             // }
+          },
+          {
+            name: 'touched',
+            component: 'BooleanField'
+          },
+          {
+            name: 'err',
+            component: 'Field'
+          },
+          {
+            name: 'dirty',
+            component: 'BooleanField'
+          },
+          {
+            name: 'pristine',
+            component: 'BooleanField'
+          },
+          {
+            name: 'autoValidate',
+            component: 'BooleanField'
+          },
+          {
+            name: 'reportUndefined',
+            component: 'BooleanField'
+          },
+          {
+            name: 'resetOnLoad',
+            component: 'BooleanField'
+          },
+          {
+            name: 'archivedAt',
+            // TODO: DateTimeField
+            component: 'TextField'
+          },
+          {
+            name: 'userId',
+            component: 'TextField'
+          },
+          {
+            name: 'showArchived',
+            component: 'BooleanField'
+          },
+          {
+            name: 'searchString',
+            component: 'TextField'
+          },
+          {
+            name: 'cursor',
+            component: 'TextField'
+          },
+          {
+            name: 'snapshot',
+            component: 'Field'
+          },
+          {
+            name: 'mode',
+            component: 'TextField'
+          },
+          {
+            name: 'isLoading',
+            component: 'BooleanField'
           }
         ]
       }
