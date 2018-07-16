@@ -12,7 +12,6 @@ class Song extends Component {
     this._nameSpy = this.get('name');
 
     this.set({
-      props: ['song', 'artist'],
       schema: {
         component: 'Form',
         fields: [
@@ -126,8 +125,7 @@ it('should valiate schema', () => {
         }
       ]
     },
-    store: true,
-    props: ['foo']
+    store: true
   });
   schemaForm.validate();
   expect(schemaForm.hasErr()).toEqual(false);
@@ -170,7 +168,6 @@ it('should valid with a compiled schema', () => {
     ]
   };
   component.set({
-    props: ['foo'],
     schema: compiler.newComponent(schema)
   });
   schemaForm = new Form();
