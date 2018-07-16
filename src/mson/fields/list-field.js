@@ -10,7 +10,6 @@ export default class ListField extends CompositeField {
     this._nextFieldName = 0;
 
     this.set({
-      props: ['allowDelete', 'minSize', 'maxSize', 'field', 'allowScalar'],
       schema: {
         component: 'Form',
         fields: [

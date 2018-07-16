@@ -6,7 +6,6 @@ export default class SelectListField extends ListField {
     super._create(props);
 
     this.set({
-      props: ['options', 'blankString', 'ensureInList'],
       schema: {
         component: 'Form',
         fields: [

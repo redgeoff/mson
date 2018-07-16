@@ -23,26 +23,6 @@ export default class FormsField extends Field {
     const c = this.constructor;
 
     this.set({
-      props: [
-        'form',
-        'forbidCreate',
-        'forbidUpdate',
-        'forbidDelete',
-        'minSize',
-        'maxSize',
-        'singularLabel',
-        'store',
-        'scrollThreshold',
-        'itemsPerPage',
-        'maxBufferPages',
-        'spacerHeight',
-        'spacerId',
-        'bufferTopId',
-        'isLoading',
-        'order',
-        'currentForm',
-        'mode'
-      ],
       schema: {
         component: 'Form',
         fields: [

@@ -6,13 +6,6 @@ export default class SelectField extends MultipleValueField {
     super._create(props);
 
     this.set({
-      props: [
-        'options',
-        'blankString',
-        'ensureInList',
-        'multiple',
-        'removeIfNotInList'
-      ],
       schema: {
         component: 'Form',
         fields: [

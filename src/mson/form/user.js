@@ -53,7 +53,6 @@ export default class User extends Form {
     };
 
     this.set({
-      props: ['roles'],
       schema,
       access
     });

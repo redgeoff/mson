@@ -5,7 +5,6 @@ export default class ReCAPTCHAVault extends Vault {
     super._create(props);
 
     this.set({
-      props: ['secretKey'],
       schema: {
         component: 'Form',
         fields: [

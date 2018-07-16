@@ -10,15 +10,6 @@ class Globals extends Component {
     super._create(props);
 
     this.set({
-      props: [
-        'redirectPath',
-        'snackbarMessage',
-        'appId',
-        'confirmation',
-        'searchString',
-        'redirectAfterLogin',
-        'reCAPTCHASiteKey'
-      ],
       schema: {
         component: 'Form',
         fields: [

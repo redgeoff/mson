@@ -11,27 +11,6 @@ import ButtonField from '../fields/button-field';
 export default class Form extends Component {
   _formSetMSONSchema() {
     this.set({
-      props: [
-        'fields',
-        'validators',
-        'touched',
-        'err',
-        'dirty',
-        'pristine',
-        'access',
-        'indexes',
-        'autoValidate',
-        'reportUndefined',
-        'resetOnLoad',
-        'archivedAt',
-        'userId',
-        'showArchived',
-        'searchString',
-        'cursor',
-        'snapshot',
-        'mode',
-        'isLoading'
-      ],
       schema: {
         component: 'Form',
         fields: [
