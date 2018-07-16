@@ -107,7 +107,6 @@ export default class Component extends events.EventEmitter {
     // simple objects until it instantiated. The problem with a lazy setting of the schema is how we
     // would allow schemas to be defined via MSON.
     this.set({
-      props: ['component', 'name', 'listeners', 'schema', 'store', 'props'],
       schema: this._getComponentMSONSchema()
     });
   }

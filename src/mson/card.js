@@ -4,7 +4,6 @@ export default class Card extends Component {
   _create(props) {
     super._create(props);
     this.set({
-      props: ['content', 'title'],
       schema: {
         component: 'Form',
         fields: [

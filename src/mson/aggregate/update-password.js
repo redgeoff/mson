@@ -1,6 +1,5 @@
 export default {
   component: 'Form',
-  props: ['baseForm'],
   schema: {
     component: 'Form',
     fields: [

@@ -6,7 +6,6 @@ export default class Email extends Action {
     super._create(props);
 
     this.set({
-      props: ['from', 'sender', 'replyTo', 'to', 'subject', 'body'],
       schema: {
         component: 'Form',
         fields: [

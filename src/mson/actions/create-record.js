@@ -8,7 +8,6 @@ export default class CreateRecord extends Action {
     super._create(props);
 
     this.set({
-      props: ['type'],
       schema: {
         component: 'Form',
         fields: [

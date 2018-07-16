@@ -6,7 +6,6 @@ export default class Set extends Action {
     super._create(props);
 
     this.set({
-      props: ['name', 'value'],
       schema: {
         component: 'Form',
         fields: [

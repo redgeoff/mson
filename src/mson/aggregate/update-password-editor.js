@@ -1,6 +1,5 @@
 export default {
   component: 'RecordEditor',
-  props: ['updatePasswordBaseForm'],
   schema: {
     component: 'Form',
     fields: [
