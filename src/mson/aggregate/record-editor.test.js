@@ -38,10 +38,10 @@ beforeAll(() => {
     component: 'RecordEditor',
     baseForm: 'app.Account',
     label: 'Account',
-    recordWhere: {
+    storeWhere: {
       id: 'foo'
     },
-    storeType: 'app.Account'
+    storeName: 'app.Account'
   });
 
   compiler.registerComponent('app.ChangePasswordForm', {
@@ -239,7 +239,7 @@ const beforeEachLoadTest = (event, props) => {
   mockRecordEditor(editAccount, event);
 };
 
-it('should load with preview and recordWhere', async () => {
+it('should load with preview and storeWhere', async () => {
   beforeEachLoadTest('load');
   await emitLoadAndWait();
 
@@ -311,10 +311,10 @@ it('should load with preview and recordWhere', async () => {
   });
 });
 
-it('should load without preview and recordWhere', async () => {
+it('should load without preview and storeWhere', async () => {
   beforeEachLoadTest('load', {
     preview: false,
-    recordWhere: null
+    storeWhere: null
   });
   await emitLoadAndWait();
 
@@ -611,7 +611,7 @@ it('should support the change password scenario', async () => {
   const changePassword = compiler.newComponent({
     component: 'app.ChangePassword',
     preview: false,
-    recordWhere: null
+    storeWhere: null
   });
   mockRecordEditor(changePassword);
 

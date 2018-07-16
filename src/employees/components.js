@@ -142,7 +142,7 @@ export const changePassword = {
   name: 'app.ChangePassword',
   component: 'UpdatePasswordEditor',
   updatePasswordBaseForm: 'app.Employee',
-  storeType: 'app.Employee',
+  storeName: 'app.Employee',
   listeners: [
     {
       event: ['didSave', 'cancel'],
@@ -160,7 +160,7 @@ export const employeeSignup = {
   name: 'app.EmployeeSignup',
   component: 'SignupEditor',
   signupBaseForm: 'app.Employee',
-  storeType: 'app.Employee'
+  storeName: 'app.Employee'
 };
 
 export const getDepartments = {
@@ -192,10 +192,10 @@ export const viewAndEditAccount = {
   component: 'RecordEditor',
   baseForm: 'app.Employee',
   label: 'Account',
-  recordWhere: {
+  storeWhere: {
     userId: '{{globals.session.user.id}}'
   },
-  storeType: 'app.Employee',
+  storeName: 'app.Employee',
   listeners: [
     {
       event: 'load',
@@ -221,7 +221,7 @@ export const employees = {
       label: 'Employees',
       component: 'UserList',
       baseForm: 'app.Employee',
-      storeType: 'app.Employee',
+      storeName: 'app.Employee',
       listeners: [
         {
           event: 'load',
@@ -245,7 +245,7 @@ export const departments = {
   component: 'RecordList',
   label: 'Departments',
   baseForm: 'app.Department',
-  storeType: 'app.Department'
+  storeName: 'app.Department'
 };
 
 export const resetPasswordEditor = {
@@ -301,7 +301,7 @@ export const contactUs = {
   component: 'ContactUs',
   to: '"Support" <support@example.com>',
   // body: 'header\n{{fields.body.value}}\nfooter',
-  storeType: 'app.ContactUs'
+  storeName: 'app.ContactUs'
 };
 
 const menuItems = [

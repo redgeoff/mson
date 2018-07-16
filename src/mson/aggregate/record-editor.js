@@ -14,11 +14,11 @@ export default {
         required: true
       },
       {
-        name: 'storeType',
+        name: 'storeName',
         component: 'TextField'
       },
       {
-        name: 'recordWhere',
+        name: 'storeWhere',
         component: 'WhereField'
       }
     ]
@@ -61,15 +61,15 @@ export default {
         {
           component: 'Action',
           if: {
-            recordWhere: {
+            storeWhere: {
               $ne: null
             }
           },
           actions: [
             {
               component: 'GetRecord',
-              type: '{{storeType}}',
-              where: '{{recordWhere}}'
+              type: '{{storeName}}',
+              where: '{{storeWhere}}'
             },
             {
               component: 'Set',
@@ -227,7 +227,7 @@ export default {
       actions: [
         {
           component: 'UpsertRecord',
-          type: '{{storeType}}'
+          type: '{{storeName}}'
         },
         {
           '//': 'Needed or else will be prompted to discard changes',

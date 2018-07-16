@@ -9,7 +9,7 @@ export default {
         required: true
       },
       {
-        name: 'storeType',
+        name: 'storeName',
         component: 'TextField'
       }
     ]
@@ -142,6 +142,6 @@ export default {
   },
   store: {
     component: 'RecordStore',
-    type: '{{storeType}}'
+    type: '{{storeName}}'
   }
 };
