@@ -41,7 +41,7 @@ beforeAll(() => {
     recordWhere: {
       id: 'foo'
     },
-    storeType: 'app.Account'
+    storeName: 'app.Account'
   });
 
   compiler.registerComponent('app.ChangePasswordForm', {

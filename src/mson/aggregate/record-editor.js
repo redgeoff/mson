@@ -14,7 +14,7 @@ export default {
         required: true
       },
       {
-        name: 'storeType',
+        name: 'storeName',
         component: 'TextField'
       },
       {
@@ -68,7 +68,7 @@ export default {
           actions: [
             {
               component: 'GetRecord',
-              type: '{{storeType}}',
+              type: '{{storeName}}',
               where: '{{recordWhere}}'
             },
             {
@@ -227,7 +227,7 @@ export default {
       actions: [
         {
           component: 'UpsertRecord',
-          type: '{{storeType}}'
+          type: '{{storeName}}'
         },
         {
           '//': 'Needed or else will be prompted to discard changes',
