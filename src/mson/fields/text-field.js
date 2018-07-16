@@ -4,17 +4,6 @@ export default class TextField extends Field {
   _create(props) {
     super._create(props);
     this.set({
-      props: [
-        'minLength',
-        'maxLength',
-        'minWords',
-        'maxWords',
-        'type',
-        'invalidRegExp',
-        'multiline',
-        'rows',
-        'rowsMax'
-      ],
       schema: {
         component: 'Form',
         fields: [

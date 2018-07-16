@@ -9,28 +9,6 @@ export default class Field extends Component {
     super._create(props);
 
     this.set({
-      props: [
-        'label',
-        'value',
-        'err',
-        'required',
-        'fullWidth',
-        'touched',
-        'validators',
-        'hidden',
-        'block',
-        'disabled',
-        'editable',
-        'dirty',
-        'help',
-        'in',
-        'out',
-        'before',
-        'showArchived',
-        'searchString',
-        'ignoreErrs',
-        'forbidSort'
-      ],
       schema: {
         component: 'Form',
         fields: [

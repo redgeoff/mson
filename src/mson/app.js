@@ -5,7 +5,6 @@ export default class App extends Component {
     super._create(props);
 
     this.set({
-      props: ['menu'],
       schema: {
         component: 'Form',
         fields: [

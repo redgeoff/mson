@@ -10,7 +10,6 @@ export default class Action extends Component {
     super._create(props);
 
     this.set({
-      props: ['if', 'ifData', 'actions', 'layer', 'detach'],
       schema: {
         component: 'Form',
         fields: [

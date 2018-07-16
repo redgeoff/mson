@@ -112,7 +112,6 @@ it('should perform two-stage filling', async () => {
   const form = compiler.newComponent({
     component: 'Form',
     body: '{{fields.body.value}}',
-    props: ['body'],
     schema: {
       component: 'Form',
       fields: [

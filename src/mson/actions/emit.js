@@ -5,7 +5,6 @@ export default class Emit extends Action {
     super._create(props);
 
     this.set({
-      props: ['event', 'value'],
       schema: {
         component: 'Form',
         fields: [

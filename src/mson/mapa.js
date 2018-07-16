@@ -250,6 +250,10 @@ export default class Mapa {
     return this.has(this._firstKey);
   }
 
+  isEmpty() {
+    return !this.hasFirst();
+  }
+
   nextKey(key) {
     this._throwIfMissing(key);
     return this._items[key].nextKey;

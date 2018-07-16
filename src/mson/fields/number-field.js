@@ -4,7 +4,6 @@ export default class NumberField extends Field {
   _create(props) {
     super._create(props);
     this.set({
-      props: ['minValue', 'maxValue'],
       schema: {
         component: 'Form',
         fields: [

@@ -1,6 +1,5 @@
 export default {
   component: 'FormsField',
-  props: ['baseForm', 'storeType'],
   schema: {
     component: 'Form',
     fields: [

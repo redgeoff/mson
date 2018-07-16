@@ -5,7 +5,6 @@ export default class FormField extends Field {
     super._create(props);
 
     this.set({
-      props: ['form'],
       schema: {
         component: 'Form',
         fields: [

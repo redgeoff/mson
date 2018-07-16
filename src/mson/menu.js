@@ -27,7 +27,6 @@ export default class Menu extends Component {
     super._create(props);
 
     this.set({
-      props: ['items' /*, 'roles'*/],
       schema: {
         component: 'Form',
         fields: [

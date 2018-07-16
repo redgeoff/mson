@@ -5,7 +5,6 @@ export default class ButtonField extends Field {
     super._create(props);
 
     this.set({
-      props: ['type', 'icon', 'variant'],
       schema: {
         component: 'Form',
         fields: [

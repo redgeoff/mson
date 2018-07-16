@@ -9,17 +9,19 @@ export default class ChainedSelectListField extends ListField {
     super._create(props);
 
     this.set({
-      props: ['options', 'blankString'],
-      fields: [
-        {
-          name: 'options',
-          component: 'Field'
-        },
-        {
-          name: 'blankString',
-          component: 'TextField'
-        }
-      ]
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'options',
+            component: 'Field'
+          },
+          {
+            name: 'blankString',
+            component: 'TextField'
+          }
+        ]
+      }
     });
   }
 

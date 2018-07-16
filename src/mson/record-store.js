@@ -11,7 +11,6 @@ export default class RecordStore extends Component {
     super._create(props);
 
     this.set({
-      props: ['type'],
       schema: {
         component: 'Form',
         fields: [

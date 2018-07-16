@@ -12,7 +12,6 @@ class Song extends Component {
     this._nameSpy = this.get('name');
 
     this.set({
-      props: ['song', 'artist'],
       schema: {
         component: 'Form',
         fields: [
@@ -49,9 +48,9 @@ it('should get', () => {
   expect(song.get('song')).toEqual("It Don't Mean a Thing");
   expect(song.get(['song'])).toEqual({ song: "It Don't Mean a Thing" });
   expect(song.get(['song', 'artist'])).toEqual(obj);
-  expect(song.get()).toEqual(
-    Object.assign(obj, { schema: song.get('schema') })
-  );
+  const values = song.get();
+  expect(values.song).toEqual(obj.song);
+  expect(values.artist).toEqual(obj.artist);
 });
 
 it('should set name before creating', () => {
@@ -126,8 +125,7 @@ it('should valiate schema', () => {
         }
       ]
     },
-    store: true,
-    props: ['foo']
+    store: true
   });
   schemaForm.validate();
   expect(schemaForm.hasErr()).toEqual(false);
@@ -170,7 +168,6 @@ it('should valid with a compiled schema', () => {
     ]
   };
   component.set({
-    props: ['foo'],
     schema: compiler.newComponent(schema)
   });
   schemaForm = new Form();

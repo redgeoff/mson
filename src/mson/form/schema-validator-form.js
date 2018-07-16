@@ -5,7 +5,6 @@ export default class SchemaValidatorForm extends Form {
     super._create(props);
 
     this.set({
-      props: ['compiler'],
       schema: {
         component: 'Form',
         fields: [

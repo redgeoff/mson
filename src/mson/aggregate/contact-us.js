@@ -1,7 +1,6 @@
 export default {
   name: 'ContactUs',
   component: 'Form',
-  props: ['from', 'sender', 'replyTo', 'to', 'subject', 'body', 'storeType'],
   schema: {
     component: 'Form',
     fields: [

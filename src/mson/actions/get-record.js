@@ -8,7 +8,6 @@ export default class GetRecord extends Action {
     super._create(props);
 
     this.set({
-      props: ['type', 'where'],
       schema: {
         component: 'Form',
         fields: [

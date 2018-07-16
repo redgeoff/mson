@@ -5,7 +5,6 @@ export default class MultipleValueField extends Field {
     super._create(props);
 
     this.set({
-      props: ['minSize', 'maxSize', 'field', 'allowScalar'],
       schema: {
         component: 'Form',
         fields: [
