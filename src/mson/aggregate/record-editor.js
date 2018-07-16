@@ -18,7 +18,7 @@ export default {
         component: 'TextField'
       },
       {
-        name: 'recordWhere',
+        name: 'storeWhere',
         component: 'WhereField'
       }
     ]
@@ -61,7 +61,7 @@ export default {
         {
           component: 'Action',
           if: {
-            recordWhere: {
+            storeWhere: {
               $ne: null
             }
           },
@@ -69,7 +69,7 @@ export default {
             {
               component: 'GetRecord',
               type: '{{storeName}}',
-              where: '{{recordWhere}}'
+              where: '{{storeWhere}}'
             },
             {
               component: 'Set',

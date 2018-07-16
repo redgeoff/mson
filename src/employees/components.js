@@ -192,7 +192,7 @@ export const viewAndEditAccount = {
   component: 'RecordEditor',
   baseForm: 'app.Employee',
   label: 'Account',
-  recordWhere: {
+  storeWhere: {
     userId: '{{globals.session.user.id}}'
   },
   storeName: 'app.Employee',

@@ -40,7 +40,7 @@ export default {
   },
   label: 'Signup',
   hideCancel: true,
-  recordWhere: null,
+  storeWhere: null,
   listeners: [
     {
       event: 'create',

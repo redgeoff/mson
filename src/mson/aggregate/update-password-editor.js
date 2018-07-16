@@ -16,7 +16,7 @@ export default {
     baseForm: '{{updatePasswordBaseForm}}'
   },
   label: 'Password',
-  recordWhere: {
+  storeWhere: {
     userId: '{{globals.session.user.id}}'
   }
 };
