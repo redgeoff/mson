@@ -1,7 +1,6 @@
 import Field from './field';
 import Form from '../form';
 import compiler from '../compiler';
-import testUtils from '../test-utils';
 
 // TODO: create test suite that is applied to all fields
 

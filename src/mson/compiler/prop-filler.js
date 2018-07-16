@@ -66,20 +66,32 @@ export default class PropFiller {
     }
   }
 
-  fillAll(items) {
-    // Clone so that we don't mutate the passed object. We use clone instead of cloneDeep as this
-    // fun is recursive and will do a deep clone by walking the tree.
-    items = _.clone(items);
-
+  _fillAllInner(items, stack) {
     _.each(items, (item, name) => {
       if (typeof item === 'object') {
-        items[name] = this.fillAll(item);
+        // Have we already filled this item?
+        if (stack.has(item)) {
+          // Prevent an infinite recursion when there is a circular reference
+          return;
+        } else {
+          stack.add(item);
+          items[name] = this._fillAllInner(item, stack);
+        }
       } else {
         items[name] = this.fillString(item);
       }
     });
 
     return items;
+  }
+
+  fillAll(items) {
+    const stack = new Set();
+
+    // We do a deep clone of the items so that we don't modify the original data
+    items = _.cloneDeep(items);
+
+    return this._fillAllInner(items, stack);
   }
 
   fill(obj) {
