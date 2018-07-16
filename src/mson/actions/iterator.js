@@ -7,7 +7,22 @@ export default class Iterator extends Action {
     super._create(props);
 
     this.set({
-      props: ['iterator', 'return']
+      props: ['iterator', 'return'],
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'iterator',
+            component: 'Field',
+            required: true
+          },
+          {
+            name: 'return',
+            component: 'Field',
+            required: true
+          }
+        ]
+      }
     });
   }
 

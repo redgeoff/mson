@@ -180,7 +180,17 @@ beforeAll(() => {
 
   compiler.registerComponent('app.CustomProps', {
     component: 'Component',
-    props: ['foo']
+    props: ['foo'],
+    schema: {
+      component: 'Form',
+      fields: [
+        {
+          name: 'foo',
+          component: 'TextField',
+          required: true
+        }
+      ]
+    }
   });
 });
 

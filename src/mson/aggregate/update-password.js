@@ -1,6 +1,16 @@
 export default {
   component: 'Form',
   props: ['baseForm'],
+  schema: {
+    component: 'Form',
+    fields: [
+      {
+        name: 'baseForm',
+        component: 'Field',
+        required: true
+      }
+    ]
+  },
   form: {
     component: '{{baseForm}}',
     fields: [

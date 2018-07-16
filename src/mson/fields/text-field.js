@@ -40,6 +40,10 @@ export default class TextField extends Field {
             component: 'TextField'
           },
           {
+            name: 'invalidRegExp',
+            component: 'TextField'
+          },
+          {
             name: 'multiline',
             component: 'BooleanField'
           },

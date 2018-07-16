@@ -42,7 +42,85 @@ export default class FormsField extends Field {
         'order',
         'currentForm',
         'mode'
-      ]
+      ],
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'form',
+            component: 'Field',
+            required: true
+          },
+          {
+            name: 'forbidCreate',
+            component: 'BooleanField'
+          },
+          {
+            name: 'forbidUpdate',
+            component: 'BooleanField'
+          },
+          {
+            name: 'forbidDelete',
+            component: 'BooleanField'
+          },
+          {
+            name: 'minSize',
+            component: 'IntergerField'
+          },
+          {
+            name: 'maxSize',
+            component: 'IntergerField'
+          },
+          {
+            name: 'singularLabel',
+            component: 'TextField'
+          },
+          {
+            name: 'store',
+            component: 'TextField'
+          },
+          {
+            name: 'scrollThreshold',
+            component: 'IntergerField'
+          },
+          {
+            name: 'itemsPerPage',
+            component: 'IntergerField'
+          },
+          {
+            name: 'maxBufferPages',
+            component: 'IntergerField'
+          },
+          {
+            name: 'spacerHeight',
+            component: 'IntergerField'
+          },
+          {
+            name: 'spacerId',
+            component: 'TextField'
+          },
+          {
+            name: 'bufferTopId',
+            component: 'TextField'
+          },
+          {
+            name: 'isLoading',
+            component: 'BooleanField'
+          },
+          {
+            name: 'order',
+            component: 'Field'
+          },
+          {
+            name: 'currentForm',
+            component: 'Field'
+          },
+          {
+            name: 'mode',
+            component: 'TextField'
+          }
+        ]
+      }
     });
 
     this._setDefaults(props, {

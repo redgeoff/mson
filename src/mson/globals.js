@@ -16,7 +16,40 @@ class Globals extends Component {
         'searchString',
         'redirectAfterLogin',
         'reCAPTCHASiteKey'
-      ]
+      ],
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'redirectPath',
+            component: 'TextField'
+          },
+          {
+            name: 'snackbarMessage',
+            component: 'TextField'
+          },
+          {
+            name: 'appId',
+            component: 'TextField'
+          },
+          {
+            name: 'confirmation',
+            component: 'TextField'
+          },
+          {
+            name: 'searchString',
+            component: 'TextField'
+          },
+          {
+            name: 'redirectAfterLogin',
+            component: 'TextField'
+          },
+          {
+            name: 'reCAPTCHASiteKey',
+            component: 'TextField'
+          }
+        ]
+      }
     });
 
     super._create(props);

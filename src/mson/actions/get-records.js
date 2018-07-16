@@ -8,7 +8,21 @@ export default class GetRecords extends Action {
     super._create(props);
 
     this.set({
-      props: ['type', 'where']
+      props: ['type', 'where'],
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'type',
+            component: 'TextField',
+            required: true
+          },
+          {
+            name: 'where',
+            component: 'WhereField'
+          }
+        ]
+      }
     });
   }
 

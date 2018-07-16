@@ -46,16 +46,17 @@ export class Compiler {
     }
   }
 
-  _removeComponentDefinitions(props) {
-    if (typeof props === 'object' && props !== null) {
-      if (props.component) {
-        delete props.component;
-      }
-      _.each(props, (prop, name) => {
-        this._removeComponentDefinitions(prop);
-      });
-    }
-  }
+  // Note: preserve a reminder of slower older implementation
+  // _removeComponentDefinitions(props) {
+  //   if (typeof props === 'object' && props !== null) {
+  //     if (props.component) {
+  //       delete props.component;
+  //     }
+  //     _.each(props, (prop, name) => {
+  //       this._removeComponentDefinitions(prop);
+  //     });
+  //   }
+  // }
 
   // TODO: should this really be called in multiple places?
   _fillProps(props, component) {
@@ -65,10 +66,15 @@ export class Compiler {
     component = propFiller.fillAll(component);
 
     // Capture props and set passed so that actions ifData is automatically injected for actions.
-    // We remove component definitions so that we prevent infinite recursion.
-    var clonedProps = _.cloneDeep(props);
-    this._removeComponentDefinitions(clonedProps);
-    component.passed = clonedProps;
+    //
+    // Note: the following commented out implementation below is VERY slow. Instead, we make sure to
+    // ignore the passed prop when compiling to prevent infinite recursion. In addition, fillAll()
+    // has also been enhanced to handle circular references.
+    //
+    // var clonedProps = _.cloneDeep(props);
+    // this._removeComponentDefinitions(clonedProps);
+    // component.passed = clonedProps;
+    component.passed = props;
 
     return component;
   }
@@ -165,8 +171,9 @@ export class Compiler {
     }
 
     _.each(props, (prop, name) => {
-      // Is there something to compile?
-      if (prop !== null && !this.isCompiled(prop)) {
+      // Is there something to compile? We need to ignore the passed prop to prevent infinite
+      // recursion. See _fillProps() for more info.
+      if (prop !== null && !this.isCompiled(prop) && name !== 'passed') {
         if (prop.component) {
           prop = this._fillProps(props, prop);
 

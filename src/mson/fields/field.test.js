@@ -1,4 +1,6 @@
 import Field from './field';
+import Form from '../form';
+import compiler from '../compiler';
 
 // TODO: create test suite that is applied to all fields
 
@@ -77,3 +79,40 @@ it('should set dirty when value changes', () => {
   field.setValue('bar');
   expect(field.get('dirty')).toEqual(true);
 });
+
+// Note: we explicitly set a timeout on the following test to ensure that it doesn't take too long
+// to compile components, particularly because the field schema is for a relatively long form. Once
+// upon a time, inefficiencies in cloning data lead to extreme latency when compiling.
+const VALIDATE_TIMEOUT_MS = 1;
+it(
+  'should validate schema',
+  () => {
+    const field = new Field();
+
+    const schemaForm = new Form();
+    field.buildSchemaForm(schemaForm, compiler);
+
+    schemaForm.setValues({
+      name: 'myField',
+      label: 'My Field',
+      required: true
+      // TODO: ...
+    });
+    schemaForm.validate();
+    expect(schemaForm.hasErr()).toEqual(false);
+
+    schemaForm.setValues({
+      name: 'myField',
+      foo: 'bar'
+    });
+    schemaForm.validate();
+    expect(schemaForm.hasErr()).toEqual(true);
+    expect(schemaForm.getErrs()).toEqual([
+      {
+        field: 'foo',
+        error: 'undefined field'
+      }
+    ]);
+  },
+  VALIDATE_TIMEOUT_MS
+);

@@ -6,7 +6,17 @@ export default class Redirect extends Action {
     super._create(props);
 
     this.set({
-      props: ['path']
+      props: ['path'],
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'path',
+            component: 'TextField',
+            required: true
+          }
+        ]
+      }
     });
 
     this._setDefaults(props, { layer: 'frontEnd' });

@@ -10,8 +10,32 @@ export default class Action extends Component {
     super._create(props);
 
     this.set({
-      props: ['if', 'ifData', 'actions', 'layer', 'detach']
-      // TODO: set and use schema
+      props: ['if', 'ifData', 'actions', 'layer', 'detach'],
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'if',
+            component: 'WhereField'
+          },
+          {
+            name: 'ifData',
+            component: 'Field'
+          },
+          {
+            name: 'actions',
+            component: 'Field'
+          },
+          {
+            name: 'layer',
+            component: 'TextField'
+          },
+          {
+            name: 'detach',
+            component: 'BooleanField'
+          }
+        ]
+      }
     });
   }
 

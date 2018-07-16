@@ -1,4 +1,5 @@
 import PropFiller from './prop-filler';
+import _ from 'lodash';
 
 it('should fill props', () => {
   const props = {
@@ -38,4 +39,33 @@ it('should fill props', () => {
       a: 'bar'
     }
   });
+});
+
+it('should handle circular references', () => {
+  const props = {
+    foo: 'bar',
+    nar: {
+      yar: 'tar'
+    }
+  };
+
+  // Define circular reference
+  props.nar.props = props;
+
+  const items = {
+    a: {
+      v: '{{foo}}'
+    },
+    v: '{{nar.yar}}'
+  };
+
+  // Define circular reference
+  items.a.items = items;
+
+  const filler = new PropFiller(props);
+
+  const clonedItems = _.cloneDeep(items);
+  clonedItems.a.v = 'bar';
+  clonedItems.v = 'tar';
+  expect(filler.fillAll(items)).toEqual(clonedItems);
 });
