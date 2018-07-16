@@ -19,6 +19,7 @@ export default class Form extends Component {
         'dirty',
         'pristine',
         'access',
+        'indexes',
         'autoValidate',
         'reportUndefined',
         'resetOnLoad',

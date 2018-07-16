@@ -7,6 +7,8 @@ class Globals extends Component {
   _onNavigate = null;
 
   _create(props) {
+    super._create(props);
+
     this.set({
       props: [
         'redirectPath',
@@ -51,8 +53,6 @@ class Globals extends Component {
         ]
       }
     });
-
-    super._create(props);
   }
 
   redirect(path) {

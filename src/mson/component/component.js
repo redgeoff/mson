@@ -78,6 +78,8 @@ export default class Component extends events.EventEmitter {
 
     this._listenToAllChanges();
 
+    this._props = [];
+
     // We have to set the name before we create the component as the name is needed to create the
     // component, e.g. to create sub fields using the name as a prefix.
     if (props && props.name !== undefined) {
@@ -104,7 +106,10 @@ export default class Component extends events.EventEmitter {
     // whenever the component is created? In some ways we already have this the schema exists as
     // simple objects until it instantiated. The problem with a lazy setting of the schema is how we
     // would allow schemas to be defined via MSON.
-    this.set({ schema: this._getComponentMSONSchema() });
+    this.set({
+      props: ['component', 'name', 'listeners', 'schema', 'store', 'props'],
+      schema: this._getComponentMSONSchema()
+    });
   }
 
   // TODO: refactor out and use emitChange instead
@@ -174,7 +179,7 @@ export default class Component extends events.EventEmitter {
   }
 
   _setProps(props) {
-    this._concat('props', props);
+    this._props = this._props.concat(props);
   }
 
   _setStore(store) {
@@ -315,9 +320,44 @@ export default class Component extends events.EventEmitter {
     });
   }
 
+  _setSchema(schema) {
+    // Schemas are pushed that they can accumulate through the layers of inheritance
+    this._push('schema', schema);
+
+    // Push props so that we have a fast way of identifying the props for this component
+    if (schema.fields) {
+      // Uncompiled?
+      schema.fields.forEach(field => {
+        // Is the prop missing? The prop may already exist if we overloading the type in a dervied
+        // component
+        if (this._props.indexOf(field.name) === -1) {
+          this._props.push(field.name);
+        }
+      });
+    } else if (schema.eachField) {
+      schema.eachField(field => {
+        if (!schema.isDefaultField(field.get('name'))) {
+          // Is the prop missing? The prop may already exist if we overloading the type in a dervied
+          // component
+          if (this._props.indexOf(field.get('name')) === -1) {
+            this._props.push(field.get('name'));
+          }
+        }
+      });
+    }
+  }
+
   set(props) {
     if (typeof props !== 'object') {
       throw new Error('props must be an object');
+    }
+
+    if (props.props !== undefined) {
+      this._setProps(props.props);
+    }
+
+    if (props.schema !== undefined) {
+      this._setSchema(props.schema);
     }
 
     if (props.name !== undefined) {
@@ -332,10 +372,6 @@ export default class Component extends events.EventEmitter {
       this._setParent(props.parent);
     }
 
-    if (props.props !== undefined) {
-      this._setProps(props.props);
-    }
-
     if (props.store !== undefined) {
       this._setStore(props.store);
     }
@@ -344,13 +380,19 @@ export default class Component extends events.EventEmitter {
       this._setListeners(props.listeners, props.passed);
     }
 
-    if (props.schema !== undefined) {
-      // Schemas are pushed that they can accumulate through the layers of inheritance
-      this._push('schema', props.schema);
-    }
-
     if (this._props) {
-      this._setIfUndefined(props, ...this._props);
+      this._setIfUndefined(
+        Object.assign({}, props, {
+          component: undefined,
+          name: undefined,
+          listeners: undefined,
+          schema: undefined,
+          store: undefined,
+          props: undefined,
+          passed: undefined
+        }),
+        ...this._props
+      );
     }
   }
 
