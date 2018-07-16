@@ -177,10 +177,6 @@ export default class Component extends events.EventEmitter {
     this._set('parent', parent);
   }
 
-  _setProps(props) {
-    this._props = this._props.concat(props);
-  }
-
   _setStore(store) {
     this._set('store', store);
   }
@@ -349,10 +345,6 @@ export default class Component extends events.EventEmitter {
   set(props) {
     if (typeof props !== 'object') {
       throw new Error('props must be an object');
-    }
-
-    if (props.props !== undefined) {
-      this._setProps(props.props);
     }
 
     if (props.schema !== undefined) {
