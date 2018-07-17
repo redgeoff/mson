@@ -18,6 +18,14 @@ import registrar from './registrar';
 export class Compiler {
   constructor(props) {
     this._components = props.components;
+    this._validateOnly = false;
+  }
+
+  setValidateOnly(validateOnly) {
+    // The validateOnly mode allows us to validate a definition that contains dynamic components
+    // without requiring these dynamic components to be instantiated. It essentially disables the
+    // listeners and then just uses the schemas to validate the definition.
+    this._validateOnly = validateOnly;
   }
 
   // // We keep this separate from components so that we have a way of referencing uncompiled
@@ -32,6 +40,10 @@ export class Compiler {
   _getComponent(name) {
     if (this._components[name]) {
       return this._components[name];
+    } else if (this._validateOnly) {
+      // We return a Form as for now all dynamic components are forms. In the future, we may need to
+      // use the associated schema to determine the base component for instantiation.
+      return this._components.Form;
     } else {
       throw new Error('missing component ' + name);
     }
@@ -86,6 +98,12 @@ export class Compiler {
     // still have a reference to original hierarchy. Alternatively, maybe we can track this
     // hierarchy via something like a prototype chain in the actual JS object.
     delete props.component;
+
+    if (this._validateOnly) {
+      // We need to mute the events or else there may be listeners that will try to act on a dynamic
+      // component that will never be supplied.
+      props = Object.assign({}, props, { muteCreate: true });
+    }
 
     return new Component(props);
   }
@@ -262,6 +280,21 @@ export class Compiler {
 
   deregisterComponent(name) {
     delete this._components[name];
+  }
+
+  validateDefinition(definition) {
+    const component = this.newComponent({
+      component: definition.component
+    });
+
+    const Form = this._components.Form;
+    const schemaForm = new Form();
+    component.buildSchemaForm(schemaForm, this);
+
+    schemaForm.setValues(definition);
+    schemaForm.validate();
+
+    return schemaForm;
   }
 }
 

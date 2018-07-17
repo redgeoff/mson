@@ -1,4 +1,5 @@
 export default {
+  name: 'RecordEditor',
   component: 'Form',
   schema: {
     component: 'Form',

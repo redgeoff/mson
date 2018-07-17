@@ -1,4 +1,5 @@
 export default {
+  name: 'RecordList',
   component: 'Form',
   schema: {
     component: 'Form',

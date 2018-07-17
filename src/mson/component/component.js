@@ -83,14 +83,22 @@ export default class Component extends events.EventEmitter {
     // We have to set the name before we create the component as the name is needed to create the
     // component, e.g. to create sub fields using the name as a prefix.
     if (props && props.name !== undefined) {
-      this._setName(props.name);
+      // Use setProperty so we don'trigger any events before creation
+      this._setProperty('name', props.name);
+    }
+
+    if (props && props.muteCreate !== undefined) {
+      // Use setProperty so we don'trigger the create event
+      this._setProperty('muteCreate', props.muteCreate);
     }
 
     this._create(props === undefined ? {} : props);
     this.set(props === undefined ? {} : props);
 
-    // Emit the create event after we have set up the initial listeners
-    this._emitCreate();
+    if (!this.get('muteCreate')) {
+      // Emit the create event after we have set up the initial listeners
+      this._emitCreate();
+    }
 
     this._setKey();
   }
@@ -123,6 +131,10 @@ export default class Component extends events.EventEmitter {
 
   _setProperty(name, value) {
     this['_' + name] = value;
+  }
+
+  _setPropertyAndEmitChange(name, value) {
+    this._setProperty(name, value);
     this._emitChange(name, value);
   }
 
@@ -131,7 +143,7 @@ export default class Component extends events.EventEmitter {
     // design treated undefined and null values as equals, but this had to be changed as otherwise
     // we have no construct for detecting when properties are omitted from a MSON definition.
     if (this['_' + name] !== value) {
-      this._setProperty(name, value);
+      this._setPropertyAndEmitChange(name, value);
     }
   }
 
@@ -268,7 +280,7 @@ export default class Component extends events.EventEmitter {
       registrar.log.error(err);
 
       // Provide a way to intercept errors from detached actions
-      this.emit('actionError', err);
+      this.emitChange('actionError', err);
     }
   }
 
@@ -342,6 +354,10 @@ export default class Component extends events.EventEmitter {
     }
   }
 
+  _setMuteEvents(muteCreate) {
+    this._set('muteCreate', muteCreate);
+  }
+
   set(props) {
     if (typeof props !== 'object') {
       throw new Error('props must be an object');
@@ -371,6 +387,10 @@ export default class Component extends events.EventEmitter {
       this._setListeners(props.listeners, props.passed);
     }
 
+    if (props.muteCreate !== undefined) {
+      this._setMuteEvents(props.muteCreate);
+    }
+
     if (this._props) {
       this._setIfUndefined(
         Object.assign({}, props, {
@@ -398,7 +418,15 @@ export default class Component extends events.EventEmitter {
   }
 
   getOne(name) {
-    let names = ['name', 'listeners', 'passed', 'schema', 'parent', 'store'];
+    let names = [
+      'name',
+      'listeners',
+      'passed',
+      'schema',
+      'parent',
+      'store',
+      'muteCreate'
+    ];
 
     if (this._props) {
       names = names.concat(this._props);

@@ -1,4 +1,5 @@
 export default {
+  name: 'SignupEditor',
   component: 'RecordEditor',
   schema: {
     component: 'Form',
@@ -6,6 +7,11 @@ export default {
       {
         name: 'signupBaseForm',
         component: 'Field',
+        required: true
+      },
+      {
+        name: 'storeName',
+        component: 'TextField',
         required: true
       }
     ]
