@@ -28,7 +28,7 @@ export default {
       form: {
         component: '{{baseForm}}'
       },
-      store: {
+      storeComponent: {
         component: 'RecordStore',
         type: '{{storeName}}'
       }

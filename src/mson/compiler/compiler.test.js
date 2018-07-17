@@ -2,6 +2,7 @@ import { Compiler } from './compiler';
 import components from '../components';
 import globals from '../globals';
 import testUtils from '../test-utils';
+import _ from 'lodash';
 
 const newCompiler = () => {
   return new Compiler({ components });
@@ -9,7 +10,7 @@ const newCompiler = () => {
 
 const expectDefinitionToBeValid = definition => {
   const schemaForm = compiler.validateDefinition(definition);
-  expect(schemaForm.hasErr()).toEqual(false);
+  expect(schemaForm.getErrs()).toEqual([]);
 };
 
 let compiler = null;
@@ -61,6 +62,15 @@ beforeAll(() => {
   // Dynamic nested inheritance
   compiler.registerComponent('app.EditNestedThing', {
     component: 'Form',
+    schema: {
+      component: 'Form',
+      fields: [
+        {
+          name: 'thing',
+          component: 'Field'
+        }
+      ]
+    },
     form: {
       component: '{{thing}}',
       fields: [
@@ -535,5 +545,32 @@ it('should validate definitions with dynamic components', () => {
         storeName: 'User'
       }
     ]
+  });
+});
+
+it('should support schema props at the same layer', () => {
+  expectDefinitionToBeValid({
+    name: 'app.SameLayer',
+    component: 'Component',
+    schema: {
+      component: 'Form',
+      fields: [
+        {
+          name: 'foo',
+          component: 'Field'
+        }
+      ]
+    },
+    foo: 'bar'
+  });
+});
+
+it('should validate the definitions of all core components', () => {
+  setValidateOnly();
+
+  _.each(components, component => {
+    if (!compiler.isCompiled(component)) {
+      expectDefinitionToBeValid(component);
+    }
   });
 });

@@ -141,7 +141,7 @@ export default {
       }
     }
   },
-  store: {
+  storeComponent: {
     component: 'RecordStore',
     type: '{{storeName}}'
   }

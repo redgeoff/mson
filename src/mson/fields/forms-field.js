@@ -55,8 +55,8 @@ export default class FormsField extends Field {
             component: 'TextField'
           },
           {
-            name: 'store',
-            component: 'TextField'
+            name: 'storeComponent',
+            component: 'Field'
           },
           {
             name: 'scrollThreshold',
@@ -257,7 +257,7 @@ export default class FormsField extends Field {
   _createInfiniteLoader() {
     this._infiniteLoader = new InfiniteLoader({
       onGetAll: async props => {
-        const store = this.get('store');
+        const store = this.get('storeComponent');
         if (store) {
           const response = await store.getAll(props);
           return response.data.records;
@@ -649,7 +649,7 @@ export default class FormsField extends Field {
 
   async _saveForm(form) {
     const id = form.getField('id');
-    const store = this.get('store');
+    const store = this.get('storeComponent');
     const creating = id.isBlank();
     if (store) {
       // New?
@@ -705,7 +705,7 @@ export default class FormsField extends Field {
   }
 
   async archive(form) {
-    const store = this.get('store');
+    const store = this.get('storeComponent');
     if (store) {
       const archive = await store.archive({ form, id: form.getValue('id') });
       form.set({ archivedAt: archive.data.archiveRecord.archivedAt });
@@ -725,7 +725,7 @@ export default class FormsField extends Field {
   }
 
   async restore(form) {
-    const store = this.get('store');
+    const store = this.get('storeComponent');
     if (store) {
       await store.restore({ form, id: form.getValue('id') });
     }

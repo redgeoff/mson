@@ -14,7 +14,7 @@ const createField = () => {
 };
 
 // Yes, PersonFullNameField exists but we recreate it to test more functionality
-compiler.registerComponent('org.proj.PersonFullNameField', {
+compiler.registerComponent('app.PersonFullNameField', {
   component: 'CompositeField',
   fields: [
     {
@@ -33,12 +33,14 @@ compiler.registerComponent('org.proj.PersonFullNameField', {
 });
 
 fieldTester.shouldAll({
-  Field: compiler.getComponent('org.proj.PersonFullNameField'),
+  Field: compiler.getComponent('app.PersonFullNameField'),
   exampleValue: {
     firstName: 'Frank',
     lastName: 'Sinatra'
   }
 });
+
+compiler.deregisterComponent('app.PersonFullNameField');
 
 it('should rename sub fields', () => {
   const field = createField();

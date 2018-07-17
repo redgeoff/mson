@@ -291,6 +291,16 @@ export class Compiler {
     const schemaForm = new Form();
     component.buildSchemaForm(schemaForm, this);
 
+    // Set the schema so that props can be set at the same layer as the schema
+    if (definition.schema) {
+      const topSchema = compiler.newComponent(definition.schema);
+
+      // Not required as these values are defaults at the same layer as the schema
+      topSchema.setRequired(false);
+
+      schemaForm.copyFields(topSchema);
+    }
+
     schemaForm.setValues(definition);
     schemaForm.validate();
 
