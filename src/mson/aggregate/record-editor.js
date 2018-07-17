@@ -21,6 +21,14 @@ export default {
       {
         name: 'storeWhere',
         component: 'WhereField'
+      },
+      {
+        name: 'preview',
+        component: 'BooleanField'
+      },
+      {
+        name: 'hideCancel',
+        component: 'BooleanField'
       }
     ]
   },
