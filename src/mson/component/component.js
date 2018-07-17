@@ -87,16 +87,18 @@ export default class Component extends events.EventEmitter {
       this._setProperty('name', props.name);
     }
 
-    if (props && props.muteEvents !== undefined) {
-      // Use setProperty so we don'trigger any events before creation
-      this._setProperty('muteEvents', props.muteEvents);
+    if (props && props.muteCreate !== undefined) {
+      // Use setProperty so we don'trigger the create event
+      this._setProperty('muteCreate', props.muteCreate);
     }
 
     this._create(props === undefined ? {} : props);
     this.set(props === undefined ? {} : props);
 
-    // Emit the create event after we have set up the initial listeners
-    this._emitCreate();
+    if (!this.get('muteCreate')) {
+      // Emit the create event after we have set up the initial listeners
+      this._emitCreate();
+    }
 
     this._setKey();
   }
@@ -119,10 +121,8 @@ export default class Component extends events.EventEmitter {
 
   // TODO: refactor out and use emitChange instead
   _emitChange(name, value) {
-    if (!this.get('muteEvents')) {
-      this.emit(name, value);
-      this.emit('$change', name, value);
-    }
+    this.emit(name, value);
+    this.emit('$change', name, value);
   }
 
   emitChange(name, value) {
@@ -354,8 +354,8 @@ export default class Component extends events.EventEmitter {
     }
   }
 
-  _setMuteEvents(muteEvents) {
-    this._set('muteEvents', muteEvents);
+  _setMuteEvents(muteCreate) {
+    this._set('muteCreate', muteCreate);
   }
 
   set(props) {
@@ -387,8 +387,8 @@ export default class Component extends events.EventEmitter {
       this._setListeners(props.listeners, props.passed);
     }
 
-    if (props.muteEvents !== undefined) {
-      this._setMuteEvents(props.muteEvents);
+    if (props.muteCreate !== undefined) {
+      this._setMuteEvents(props.muteCreate);
     }
 
     if (this._props) {
@@ -425,7 +425,7 @@ export default class Component extends events.EventEmitter {
       'schema',
       'parent',
       'store',
-      'muteEvents'
+      'muteCreate'
     ];
 
     if (this._props) {

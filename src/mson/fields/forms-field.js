@@ -28,8 +28,7 @@ export default class FormsField extends Field {
         fields: [
           {
             name: 'form',
-            component: 'Field',
-            required: true
+            component: 'Field'
           },
           {
             name: 'forbidCreate',

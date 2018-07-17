@@ -102,7 +102,7 @@ export class Compiler {
     if (this._validateOnly) {
       // We need to mute the events or else there may be listeners that will try to act on a dynamic
       // component that will never be supplied.
-      props = Object.assign({}, props, { muteEvents: true });
+      props = Object.assign({}, props, { muteCreate: true });
     }
 
     return new Component(props);

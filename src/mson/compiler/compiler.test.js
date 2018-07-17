@@ -7,6 +7,11 @@ const newCompiler = () => {
   return new Compiler({ components });
 };
 
+const expectDefinitionToBeValid = definition => {
+  const schemaForm = compiler.validateDefinition(definition);
+  expect(schemaForm.hasErr()).toEqual(false);
+};
+
 let compiler = null;
 
 beforeAll(() => {
@@ -468,15 +473,36 @@ it('should support custom props', () => {
   expect(customProps.get('foo')).toEqual('bar');
 });
 
-const expectDefinitionToBeValid = definition => {
-  const schemaForm = compiler.validateDefinition(definition);
-  expect(schemaForm.hasErr()).toEqual(false);
-};
-
-it('should validate definitions with dynamic components', () => {
+const setValidateOnly = () => {
   // We need to put the compiler in to validateOnly mode so that it doesn't crash when trying to
   // instantiate dynamic components that will not be supplied.
   compiler.setValidateOnly(true);
+};
+
+it('should validate schema', () => {
+  setValidateOnly();
+
+  const def1 = {
+    name: 'app.BadSchema',
+    component: 'Form',
+    store: true,
+    fields: [
+      {
+        component: 'TextField',
+        name: 'firstName',
+        badProperty: 'foo'
+      }
+    ]
+  };
+
+  const schemaForm = compiler.validateDefinition(def1);
+
+  // Make sure there were validation errors with the defintion
+  expect(schemaForm.hasErr()).toEqual(true);
+});
+
+it('should validate definitions with dynamic components', () => {
+  setValidateOnly();
 
   expectDefinitionToBeValid({
     name: 'app.ChangePassword',
@@ -486,6 +512,7 @@ it('should validate definitions with dynamic components', () => {
   });
 
   expectDefinitionToBeValid({
+    name: 'app.EditThingInstance',
     component: 'app.EditThing'
   });
 
