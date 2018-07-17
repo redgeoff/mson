@@ -13,7 +13,7 @@ export default class UpsertRecord extends Action {
         component: 'Form',
         fields: [
           {
-            name: 'type',
+            name: 'storeName',
             component: 'TextField',
             required: true
           },
@@ -52,7 +52,7 @@ export default class UpsertRecord extends Action {
 
         await this._recordUpdate({
           appId,
-          componentName: this.get('type'),
+          componentName: this.get('storeName'),
           id,
           fieldValues
         });
@@ -61,7 +61,7 @@ export default class UpsertRecord extends Action {
 
         await this._recordCreate({
           appId,
-          componentName: this.get('type'),
+          componentName: this.get('storeName'),
           fieldValues
         });
       }

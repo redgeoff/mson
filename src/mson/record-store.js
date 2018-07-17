@@ -15,7 +15,7 @@ export default class RecordStore extends Component {
         component: 'Form',
         fields: [
           {
-            name: 'type',
+            name: 'storeName',
             component: 'TextField'
           }
         ]
@@ -55,7 +55,7 @@ export default class RecordStore extends Component {
     return this._request(props, appId => {
       return registrar.client.record.create({
         appId,
-        componentName: this.get('type'),
+        componentName: this.get('storeName'),
         fieldValues
       });
     });
@@ -83,7 +83,7 @@ export default class RecordStore extends Component {
     return this._request(props, appId => {
       const opts = {
         appId,
-        componentName: this.get('type'),
+        componentName: this.get('storeName'),
         asArray: true,
         where,
         after: props.after,
@@ -113,7 +113,7 @@ export default class RecordStore extends Component {
     return this._request(props, appId => {
       return registrar.client.record.update({
         appId,
-        componentName: this.get('type'),
+        componentName: this.get('storeName'),
         id: props.id,
         fieldValues
       });
@@ -125,7 +125,7 @@ export default class RecordStore extends Component {
     return this._request(props, appId => {
       return registrar.client.record.archive({
         appId,
-        componentName: this.get('type'),
+        componentName: this.get('storeName'),
         id: props.id
       });
     });
@@ -136,7 +136,7 @@ export default class RecordStore extends Component {
     return this._request(props, appId => {
       return registrar.client.record.restore({
         appId,
-        componentName: this.get('type'),
+        componentName: this.get('storeName'),
         id: props.id
       });
     });

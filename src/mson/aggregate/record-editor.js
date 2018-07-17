@@ -44,7 +44,7 @@ export default {
       },
       {
         component: 'ButtonField',
-        type: 'submit',
+        storeName: 'submit',
         name: 'save',
         label: 'Save',
         icon: 'Save'
@@ -77,7 +77,7 @@ export default {
           actions: [
             {
               component: 'GetRecord',
-              type: '{{storeName}}',
+              storeName: '{{storeName}}',
               where: '{{storeWhere}}'
             },
             {
@@ -236,7 +236,7 @@ export default {
       actions: [
         {
           component: 'UpsertRecord',
-          type: '{{storeName}}'
+          storeName: '{{storeName}}'
         },
         {
           '//': 'Needed or else will be prompted to discard changes',

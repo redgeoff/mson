@@ -12,7 +12,7 @@ export default class CreateRecord extends Action {
         component: 'Form',
         fields: [
           {
-            name: 'type',
+            name: 'storeName',
             component: 'TextField'
           }
         ]
@@ -26,7 +26,7 @@ export default class CreateRecord extends Action {
     try {
       await registrar.client.record.create({
         appId,
-        componentName: this.get('type'),
+        componentName: this.get('storeName'),
         fieldValues: props.component.get('value')
       });
 

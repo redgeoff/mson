@@ -143,6 +143,6 @@ export default {
   },
   store: {
     component: 'RecordStore',
-    type: '{{storeName}}'
+    storeName: '{{storeName}}'
   }
 };
