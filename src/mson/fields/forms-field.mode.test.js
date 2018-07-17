@@ -29,7 +29,7 @@ let field = null;
 
 beforeEach(async () => {
   field = createField({
-    storeComponent: createMockedStore()
+    store: createMockedStore()
   });
 
   // Simulate the load event emitted by the UI, which will trigger the initial load
