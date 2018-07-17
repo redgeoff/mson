@@ -27,8 +27,8 @@ export default class Component extends events.EventEmitter {
         },
         {
           name: 'name',
-          component: 'TextField',
-          required: true
+          component: 'TextField'
+          // required: true
         },
         {
           name: 'listeners',

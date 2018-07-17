@@ -313,10 +313,6 @@ it('should validate schema', () => {
             {
               field: 'badProperty',
               error: 'undefined field'
-            },
-            {
-              field: 'name',
-              error: 'required'
             }
           ]
         }
