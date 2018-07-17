@@ -495,7 +495,7 @@ it('should validate schema', () => {
   const def1 = {
     name: 'app.BadSchema',
     component: 'Form',
-    store: true,
+    isStore: true,
     fields: [
       {
         component: 'TextField',

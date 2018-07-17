@@ -125,7 +125,7 @@ it('should valiate schema', () => {
         }
       ]
     },
-    store: true
+    isStore: true
   });
   schemaForm.validate();
   expect(schemaForm.hasErr()).toEqual(false);

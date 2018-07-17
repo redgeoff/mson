@@ -1,7 +1,7 @@
 export const employee = {
   name: 'app.Employee',
   component: 'User',
-  store: true,
+  isStore: true,
   fields: [
     {
       component: 'PersonNameField',
@@ -66,7 +66,7 @@ export const employee = {
 export const department = {
   name: 'app.Department',
   component: 'Form',
-  store: true,
+  isStore: true,
   fields: [
     {
       component: 'PersonNameField',
