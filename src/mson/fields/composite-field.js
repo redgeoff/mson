@@ -3,6 +3,30 @@ import Mapa from '../mapa';
 import _ from 'lodash';
 
 export default class CompositeField extends Field {
+  _create(props) {
+    // We use a Mapa instead of an array as sometimes we need to reference the fields via keys that
+    // don't change even when fields are deleted. With arrays, the keys change when we slice the
+    // array. We cannot use just a basic object as our fields must preseve order. We cannot use a
+    // Map as we need to be able to iterate through the fields beginning with any given field.
+    this._fields = new Mapa();
+
+    super._create(props);
+
+    this._listenForChanges();
+
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'fields',
+            component: 'Field'
+          }
+        ]
+      }
+    });
+  }
+
   _bubbleUpTouches(field) {
     // Bubble up the touched events from the children
     field.on('touched', touched => {
@@ -66,21 +90,8 @@ export default class CompositeField extends Field {
     this._listenForChangesToField(field);
   }
 
-  _create(props) {
-    // We use a Mapa instead of an array as sometimes we need to reference the fields via keys that
-    // don't change even when fields are deleted. With arrays, the keys change when we slice the
-    // array. We cannot use just a basic object as our fields must preseve order. We cannot use a
-    // Map as we need to be able to iterate through the fields beginning with any given field.
-    this._fields = new Mapa();
-
-    super._create(props);
-
-    // TODO: move to set?
-    if (props.fields) {
-      props.fields.forEach(field => this._addField(field));
-    }
-
-    this._listenForChanges();
+  _setFields(fields) {
+    fields.forEach(field => this._addField(field));
   }
 
   _setForAllFields(props) {
@@ -117,7 +128,12 @@ export default class CompositeField extends Field {
   }
 
   set(props) {
-    super.set(props);
+    super.set(Object.assign({}, props, { fields: undefined }));
+
+    if (props.fields !== undefined) {
+      this._setFields(props.fields);
+    }
+
     this.eachField(field => this._setIfUndefinedProp(props, field.get('name')));
   }
 
