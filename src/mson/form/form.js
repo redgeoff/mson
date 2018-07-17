@@ -23,6 +23,10 @@ export default class Form extends Component {
             }
           },
           {
+            name: 'form',
+            component: 'Field'
+          },
+          {
             name: 'validators',
             component: 'FormsField',
             form: {

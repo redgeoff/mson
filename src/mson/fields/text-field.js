@@ -3,6 +3,7 @@ import Field from './field';
 export default class TextField extends Field {
   _create(props) {
     super._create(props);
+
     this.set({
       schema: {
         component: 'Form',
