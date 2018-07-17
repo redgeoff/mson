@@ -548,16 +548,29 @@ it('should validate definitions with dynamic components', () => {
   });
 });
 
+it('should support schema props at the same layer', () => {
+  expectDefinitionToBeValid({
+    name: 'app.SameLayer',
+    component: 'Component',
+    schema: {
+      component: 'Form',
+      fields: [
+        {
+          name: 'foo',
+          component: 'Field'
+        }
+      ]
+    },
+    foo: 'bar'
+  });
+});
+
 it('should validate the definitions of all core components', () => {
   setValidateOnly();
 
   _.each(components, component => {
     if (!compiler.isCompiled(component)) {
-      // console.log(component);
-      if (component.name !== 'ContactUs') {
-        // TODO: remove
-        expectDefinitionToBeValid(component);
-      }
+      expectDefinitionToBeValid(component);
     }
   });
 });
