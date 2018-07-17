@@ -37,7 +37,7 @@ const getItems = field => {
 
 it('should infinite scroll', async () => {
   const field = createField({
-    storeComponent: createMockedStore(),
+    store: createMockedStore(),
     itemsPerPage: 2,
     maxBufferPages: 2,
     scrollThreshold: 100

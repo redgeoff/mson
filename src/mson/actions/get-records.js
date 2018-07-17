@@ -12,7 +12,7 @@ export default class GetRecords extends Action {
         component: 'Form',
         fields: [
           {
-            name: 'type',
+            name: 'storeName',
             component: 'TextField',
             required: true
           },
@@ -32,7 +32,7 @@ export default class GetRecords extends Action {
       // TODO: pagination
       const records = await registrar.client.record.getAll({
         appId,
-        componentName: this.get('type'),
+        componentName: this.get('storeName'),
         asArray: true,
         where: this.get('where')
       });

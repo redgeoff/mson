@@ -95,7 +95,7 @@ export default {
       actions: [
         {
           component: 'UpsertRecord',
-          type: '{{storeName}}'
+          storeName: '{{storeName}}'
         },
         {
           component: 'Snackbar',

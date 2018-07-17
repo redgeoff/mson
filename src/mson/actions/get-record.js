@@ -12,7 +12,7 @@ export default class GetRecord extends Action {
         component: 'Form',
         fields: [
           {
-            name: 'type',
+            name: 'storeName',
             component: 'TextField',
             required: true
           },
@@ -35,7 +35,7 @@ export default class GetRecord extends Action {
     try {
       const record = await this._recordGet({
         appId,
-        componentName: this.get('type'),
+        componentName: this.get('storeName'),
         where: this.get('where')
       });
 

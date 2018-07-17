@@ -254,7 +254,7 @@ it('should load with preview and storeWhere', async () => {
     {
       name: 'GetRecord',
       props: {
-        type: 'app.Account',
+        storeName: 'app.Account',
         where: {
           id: 'foo'
         }
@@ -528,7 +528,7 @@ const getSaveActs = preview => {
     {
       name: 'UpsertRecord',
       props: {
-        type: 'app.Account'
+        storeName: 'app.Account'
       }
     },
     {

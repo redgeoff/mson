@@ -1,7 +1,7 @@
 export const employee = {
   name: 'app.Employee',
   component: 'User',
-  store: true,
+  isStore: true,
   fields: [
     {
       component: 'PersonNameField',
@@ -66,7 +66,7 @@ export const employee = {
 export const department = {
   name: 'app.Department',
   component: 'Form',
-  store: true,
+  isStore: true,
   fields: [
     {
       component: 'PersonNameField',
@@ -169,7 +169,7 @@ export const getDepartments = {
   actions: [
     {
       component: 'GetRecords',
-      type: 'app.Department',
+      storeName: 'app.Department',
 
       // Hide archived departments so that the user cannot select them
       where: {
@@ -272,7 +272,7 @@ export const resetPasswordEditor = {
       actions: [
         {
           component: 'UpsertRecord',
-          type: 'ResetPassword'
+          storeName: 'ResetPassword'
         },
         {
           component: 'Snackbar',

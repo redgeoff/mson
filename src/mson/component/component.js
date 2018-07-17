@@ -44,7 +44,7 @@ export default class Component extends events.EventEmitter {
           }
         },
         {
-          name: 'store',
+          name: 'isStore',
           component: 'BooleanField'
         },
         {
@@ -189,8 +189,8 @@ export default class Component extends events.EventEmitter {
     this._set('parent', parent);
   }
 
-  _setStore(store) {
-    this._set('store', store);
+  _setIsStore(isStore) {
+    this._set('isStore', isStore);
   }
 
   _setDefaults(props, values) {
@@ -379,8 +379,8 @@ export default class Component extends events.EventEmitter {
       this._setParent(props.parent);
     }
 
-    if (props.store !== undefined) {
-      this._setStore(props.store);
+    if (props.isStore !== undefined) {
+      this._setIsStore(props.isStore);
     }
 
     if (props.listeners !== undefined) {
@@ -398,7 +398,7 @@ export default class Component extends events.EventEmitter {
           name: undefined,
           listeners: undefined,
           schema: undefined,
-          store: undefined,
+          isStore: undefined,
           props: undefined,
           passed: undefined
         }),
@@ -424,7 +424,7 @@ export default class Component extends events.EventEmitter {
       'passed',
       'schema',
       'parent',
-      'store',
+      'isStore',
       'muteCreate'
     ];
 
