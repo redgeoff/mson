@@ -1,4 +1,5 @@
 export default {
+  name: 'UserList',
   component: 'FormsField',
   schema: {
     component: 'Form',

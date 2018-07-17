@@ -45,11 +45,11 @@ export default class FormsField extends Field {
           },
           {
             name: 'minSize',
-            component: 'IntergerField'
+            component: 'IntegerField'
           },
           {
             name: 'maxSize',
-            component: 'IntergerField'
+            component: 'IntegerField'
           },
           {
             name: 'singularLabel',
@@ -61,19 +61,19 @@ export default class FormsField extends Field {
           },
           {
             name: 'scrollThreshold',
-            component: 'IntergerField'
+            component: 'IntegerField'
           },
           {
             name: 'itemsPerPage',
-            component: 'IntergerField'
+            component: 'IntegerField'
           },
           {
             name: 'maxBufferPages',
-            component: 'IntergerField'
+            component: 'IntegerField'
           },
           {
             name: 'spacerHeight',
-            component: 'IntergerField'
+            component: 'IntegerField'
           },
           {
             name: 'spacerId',

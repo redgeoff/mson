@@ -467,3 +467,46 @@ it('should support custom props', () => {
   });
   expect(customProps.get('foo')).toEqual('bar');
 });
+
+const expectDefinitionToBeValid = definition => {
+  const schemaForm = compiler.validateDefinition(definition);
+  expect(schemaForm.hasErr()).toEqual(false);
+};
+
+it('should validate definitions with dynamic components', () => {
+  // We need to put the compiler in to validateOnly mode so that it doesn't crash when trying to
+  // instantiate dynamic components that will not be supplied.
+  compiler.setValidateOnly(true);
+
+  expectDefinitionToBeValid({
+    name: 'app.ChangePassword',
+    component: 'UpdatePasswordEditor',
+    updatePasswordBaseForm: 'User',
+    storeName: 'User'
+  });
+
+  expectDefinitionToBeValid({
+    component: 'app.EditThing'
+  });
+
+  expectDefinitionToBeValid({
+    name: 'app.EmployeeSignup',
+    component: 'SignupEditor',
+    signupBaseForm: 'User',
+    storeName: 'User'
+  });
+
+  expectDefinitionToBeValid({
+    name: 'app.Employees',
+    component: 'Form',
+    fields: [
+      {
+        name: 'employees',
+        label: 'Employees',
+        component: 'UserList',
+        baseForm: 'User',
+        storeName: 'User'
+      }
+    ]
+  });
+});

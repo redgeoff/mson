@@ -61,30 +61,16 @@ const main = async () => {
 
   await client.app.create({ name: 'employees' });
 
-  // TODO: restore
-  // for (let i in components) {
-  //   await client.component.create({
-  //     appId: config.appId,
-  //     definition: components[i]
-  //   })
-  // }
+  for (let i in components) {
+    await client.component.create({
+      appId: config.appId,
+      definition: components[i]
+    });
+  }
 
-  // TODO: remove
   await client.component.create({
     appId: config.appId,
     definition: reCAPTCHAProperties
-  });
-  await client.component.create({
-    appId: config.appId,
-    definition: components.department
-  });
-  await client.component.create({
-    appId: config.appId,
-    definition: components.employee
-  });
-  await client.component.create({
-    appId: config.appId,
-    definition: components.contactUs
   });
 
   // Create default admin user

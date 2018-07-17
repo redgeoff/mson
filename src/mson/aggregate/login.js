@@ -1,4 +1,5 @@
 export default {
+  name: 'Login',
   component: 'Form',
   fields: [
     {

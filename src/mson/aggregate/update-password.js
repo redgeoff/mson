@@ -1,4 +1,5 @@
 export default {
+  name: 'UpdatePassword',
   component: 'Form',
   schema: {
     component: 'Form',
