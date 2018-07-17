@@ -53,12 +53,7 @@ const seed = async () => {
   }
 };
 
-const main = async () => {
-  await client.user.logIn({
-    username: config.superuser.username,
-    password: config.superuser.password
-  });
-
+const createApp = async () => {
   await client.app.create({ name: 'employees' });
 
   for (let i in components) {
@@ -87,6 +82,47 @@ const main = async () => {
   });
 
   await seed();
+};
+
+const updateComponent = async definition => {
+  // TODO: it would be better to implement client.component.upsertComponent as only 1 request
+  const component = await client.component.get({
+    appId: config.appId,
+    where: {
+      name: definition.name
+    }
+  });
+
+  await client.component.update({
+    appId: config.appId,
+    id: component.data.component.id,
+    definition
+  });
+};
+
+const updateApp = async () => {
+  for (let i in components) {
+    await updateComponent(components[i]);
+  }
+
+  await updateComponent(reCAPTCHAProperties);
+};
+
+const main = async () => {
+  await client.user.logIn({
+    username: config.superuser.username,
+    password: config.superuser.password
+  });
+
+  const app = await client.app.get({ id: config.appId });
+
+  const exists = !!app.data.app;
+
+  if (exists) {
+    await updateApp();
+  } else {
+    await createApp();
+  }
 };
 
 main();
