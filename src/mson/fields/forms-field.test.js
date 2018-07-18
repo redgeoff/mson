@@ -232,25 +232,37 @@ it('should set defaults', () => {
   });
 });
 
-// Note: we explicitly set a timeout on the following test to ensure that it doesn't take too long
-const ADD_FORMS_TIMEOUT_MS = 3000;
-it.only('should add many forms quickly when working with uncompiled components', async () => {
-  await testUtils.expectToFinishBefore(async () => {
-    const field = compiler.newComponent({
-      component: 'FormsField',
-      form: {
-        component: formName
-      }
-    });
-
+const shouldAddFormsQuickly = (field, milliseconds) => {
+  return testUtils.expectToFinishBefore(() => {
     // Set the parent to simulate usage in the UI as adding the parent can slow the PropFiller
     field.get('form').set({ parent: field });
 
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 40; i++) {
       field.addForm({
         firstName: 'First ' + i,
         lastName: 'Last ' + i
       });
     }
-  }, ADD_FORMS_TIMEOUT_MS);
+  }, milliseconds);
+};
+
+const ADD_FORMS_COMPILED_TIMEOUT_MS = 120;
+it('should add many forms quickly when using compiled components', () => {
+  const field = createField();
+
+  return shouldAddFormsQuickly(field, ADD_FORMS_COMPILED_TIMEOUT_MS);
+});
+
+// SCENARIO BELOW STILL DOESN'T SIMULATE PROBLEM--USE EMPLOYEES EXAMPLE UNTILE PINPOINT IT
+// Note: we explicitly set a timeout on the following test to ensure that it doesn't take too long
+const ADD_FORMS_UNCOMPILED_TIMEOUT_MS = 30000;
+it('should add many forms quickly when using uncompiled components', () => {
+  const field = compiler.newComponent({
+    component: 'FormsField',
+    form: {
+      component: formName
+    }
+  });
+
+  return shouldAddFormsQuickly(field, ADD_FORMS_UNCOMPILED_TIMEOUT_MS);
 });
