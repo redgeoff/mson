@@ -264,3 +264,26 @@ it('should add many forms quickly when using uncompiled components', () => {
 
   return shouldAddFormsQuickly(field, ADD_FORMS_UNCOMPILED_TIMEOUT_MS);
 });
+
+it('should save', async () => {
+  const field = createField();
+  const setSpy = jest.spyOn(field, 'set');
+  const saveFormSpy = jest.spyOn(field, '_saveForm');
+  const form = field.get('form');
+
+  // When there are form errors
+  await field.save();
+  expect(saveFormSpy).toHaveBeenCalledTimes(0);
+  expect(setSpy).toHaveBeenCalledTimes(0);
+
+  // No errors
+  form.setValues({
+    firstName: 'First',
+    lastName: 'Last'
+  });
+  await field.save();
+  expect(saveFormSpy).toHaveBeenCalledTimes(1);
+  expect(saveFormSpy).toHaveBeenCalledWith(form);
+  expect(setSpy).toHaveBeenCalledTimes(1);
+  expect(setSpy).toHaveBeenCalledWith({ currentForm: form, mode: 'read' });
+});
