@@ -87,6 +87,24 @@ class TestUtils {
     schemaForm.validate();
     expect(schemaForm.hasErr()).toEqual(false);
   }
+
+  // Note: this doesn't appear to work so we use the implementation below
+  // async expectToFinishBefore(promiseFactory, milliseconds) {
+  //   const timer = async () => {
+  //     await testUtils.timeout(milliseconds);
+  //     throw new Error('took more than ' + milliseconds + ' milliseconds');
+  //   }
+  //   return Promise.race([timer(), promiseFactory()])
+  // }
+
+  // Note: the built in timeout per test doesn't appear to work so here is a custom routine.
+  async expectToFinishBefore(promiseFactory, milliseconds) {
+    const begin = new Date();
+    await promiseFactory();
+    if (new Date().getTime() - begin.getTime() > milliseconds) {
+      throw new Error('took more than ' + milliseconds + ' milliseconds');
+    }
+  }
 }
 
 export default new TestUtils();

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import globals from './globals';
+import uuid from 'uuid';
 
 class Utils {
   async sequential(items, onItem) {
@@ -108,6 +109,10 @@ class Utils {
     return {
       $and: ands
     };
+  }
+
+  uuid() {
+    return uuid.v4();
   }
 }
 
