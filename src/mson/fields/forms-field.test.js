@@ -4,6 +4,9 @@ import Form from '../form';
 import _ from 'lodash';
 import testUtils from '../test-utils';
 import utils from '../utils';
+import compiler from '../compiler';
+
+const formName = utils.uuid();
 
 const createForm = () => {
   return new Form({
@@ -24,6 +27,26 @@ const fillDocs = field => {
   field.addForm({ id: 1, firstName: 'Ella', lastName: 'Fitzgerald' });
   field.addForm({ id: 2, firstName: 'Frank', lastName: 'Sinatra' });
 };
+
+beforeAll(() => {
+  compiler.registerComponent(formName, {
+    component: 'Form',
+    fields: [
+      {
+        name: 'firstName',
+        component: 'TextField'
+      },
+      {
+        name: 'lastName',
+        component: 'TextField'
+      }
+    ]
+  });
+});
+
+afterAll(() => {
+  compiler.deregisterComponent(formName);
+});
 
 it('should get forms', async () => {
   const field = createField();
@@ -207,4 +230,27 @@ it('should set defaults', () => {
     mode: null,
     showArchived: null
   });
+});
+
+// Note: we explicitly set a timeout on the following test to ensure that it doesn't take too long
+const ADD_FORMS_TIMEOUT_MS = 3000;
+it.only('should add many forms quickly when working with uncompiled components', async () => {
+  await testUtils.expectToFinishBefore(async () => {
+    const field = compiler.newComponent({
+      component: 'FormsField',
+      form: {
+        component: formName
+      }
+    });
+
+    // Set the parent to simulate usage in the UI as adding the parent can slow the PropFiller
+    field.get('form').set({ parent: field });
+
+    for (let i = 0; i < 30; i++) {
+      field.addForm({
+        firstName: 'First ' + i,
+        lastName: 'Last ' + i
+      });
+    }
+  }, ADD_FORMS_TIMEOUT_MS);
 });

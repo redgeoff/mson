@@ -216,6 +216,8 @@ export class Compiler {
   newComponent(props) {
     let clonedProps = _.cloneDeep(props);
 
+    // TODO: refactor so that _compileChildComponents works with cloneDeepWith so that we only
+    // iterate through the object once
     this._compileChildComponents(clonedProps);
 
     // Need to render?

@@ -5,7 +5,6 @@
 import Field from './field';
 import globals from '../globals';
 import Mapa from '../mapa';
-import uuid from 'uuid';
 import InfiniteLoader from '../infinite-loader';
 import Component from '../component';
 import utils from '../utils';
@@ -663,7 +662,7 @@ export default class FormsField extends Field {
       }
     } else if (creating) {
       // TODO: use the id from this._docs.set instead of this dummy id
-      id.setValue(uuid.v4());
+      id.setValue(utils.uuid());
     }
 
     if (this._forms.has(id.getValue())) {
