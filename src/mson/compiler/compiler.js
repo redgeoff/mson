@@ -108,6 +108,16 @@ export class Compiler {
     return new Component(props);
   }
 
+  _cloneDeep(props) {
+    // We optimize cloneDeep by ignoring any parent attribute as this data does not need to be
+    // cloned and it is computationally expensive to detect circular references in this data.
+    return _.cloneDeepWith(props, (item, index) => {
+      if (index === '_parent') {
+        return null;
+      }
+    });
+  }
+
   _buildComponent(name, defaultProps) {
     const Component =
       typeof defaultProps.component === 'string'
@@ -120,7 +130,7 @@ export class Compiler {
       constructor(props) {
         // Deep clone the props and then build any child components in the constructor so we have a
         // copy per component instance.
-        let clonedProps = _.cloneDeep(defaultProps);
+        let clonedProps = self._cloneDeep(defaultProps);
 
         clonedProps = self._fillProps(props, clonedProps);
 
@@ -214,7 +224,7 @@ export class Compiler {
   }
 
   newComponent(props) {
-    let clonedProps = _.cloneDeep(props);
+    let clonedProps = this._cloneDeep(props);
 
     // TODO: refactor so that _compileChildComponents works with cloneDeepWith so that we only
     // iterate through the object once

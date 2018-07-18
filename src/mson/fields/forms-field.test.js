@@ -253,9 +253,8 @@ it('should add many forms quickly when using compiled components', () => {
   return shouldAddFormsQuickly(field, ADD_FORMS_COMPILED_TIMEOUT_MS);
 });
 
-// SCENARIO BELOW STILL DOESN'T SIMULATE PROBLEM--USE EMPLOYEES EXAMPLE UNTILE PINPOINT IT
-const ADD_FORMS_UNCOMPILED_TIMEOUT_MS = 30000;
-it.only('should add many forms quickly when using uncompiled components', () => {
+const ADD_FORMS_UNCOMPILED_TIMEOUT_MS = 200;
+it('should add many forms quickly when using uncompiled components', () => {
   const field = compiler.newComponent({
     component: 'FormsField',
     form: {
