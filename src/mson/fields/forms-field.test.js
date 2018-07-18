@@ -253,7 +253,7 @@ it('should add many forms quickly when using compiled components', () => {
   return shouldAddFormsQuickly(field, ADD_FORMS_COMPILED_TIMEOUT_MS);
 });
 
-const ADD_FORMS_UNCOMPILED_TIMEOUT_MS = 200;
+const ADD_FORMS_UNCOMPILED_TIMEOUT_MS = 500;
 it('should add many forms quickly when using uncompiled components', () => {
   const field = compiler.newComponent({
     component: 'FormsField',
