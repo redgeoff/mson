@@ -7,6 +7,8 @@ import Form from './form';
 import attach from './attach';
 
 class FormDialog extends React.PureComponent {
+  state = { saveClicked: false };
+
   handleClose = withCancelButton => {
     // Prevent the user from losing data when pressing esc or clicking outside dialog
     const { mode, onClose, onRead } = this.props;
@@ -36,6 +38,9 @@ class FormDialog extends React.PureComponent {
     if (this.props.onSave) {
       this.props.onSave();
     }
+
+    // Disable the save button so that the user sees that something is being processed
+    this.setState({ saveClicked: true });
   };
 
   handleDelete = () => {
@@ -48,10 +53,23 @@ class FormDialog extends React.PureComponent {
     return !!this.props.mode;
   }
 
+  componentDidUpdate(prevProps) {
+    // If the mode or err changes then allow the user to click save
+    if (
+      this.props.mode !== prevProps.mode ||
+      this.props.err !== prevProps.err
+    ) {
+      this.setState({ saveClicked: false });
+    }
+  }
+
   render() {
     const { mode, form, forbidUpdate, forbidDelete, archivedAt } = this.props;
 
-    const disableSave = form.hasErrorForTouchedField() || !form.get('dirty');
+    const { saveClicked } = this.state;
+
+    const disableSave =
+      form.hasErrorForTouchedField() || !form.get('dirty') || saveClicked;
 
     const open = this.isOpen();
 
