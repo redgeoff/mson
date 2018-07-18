@@ -267,8 +267,13 @@ it('should add many forms quickly when using uncompiled components', () => {
 
 it('should save', async () => {
   const field = createField();
+
+  const createdForm = new Form();
+
   const setSpy = jest.spyOn(field, 'set');
-  const saveFormSpy = jest.spyOn(field, '_saveForm');
+  const saveFormSpy = jest
+    .spyOn(field, '_saveForm')
+    .mockImplementation(() => createdForm);
   const form = field.get('form');
 
   // When there are form errors
@@ -285,5 +290,8 @@ it('should save', async () => {
   expect(saveFormSpy).toHaveBeenCalledTimes(1);
   expect(saveFormSpy).toHaveBeenCalledWith(form);
   expect(setSpy).toHaveBeenCalledTimes(1);
-  expect(setSpy).toHaveBeenCalledWith({ currentForm: form, mode: 'read' });
+  expect(setSpy).toHaveBeenCalledWith({
+    currentForm: createdForm,
+    mode: 'read'
+  });
 });
