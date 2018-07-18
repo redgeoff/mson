@@ -202,7 +202,9 @@ export class Compiler {
       // recursion. See _fillProps() for more info.
       if (prop !== null && !this.isCompiled(prop) && name !== 'passed') {
         if (prop.component) {
-          prop = this._fillProps(props, prop, true);
+          // TODO: why is it faster here if _fillProps clones the data? (At least when toggling
+          // archived status for FormsField list)
+          prop = this._fillProps(props, prop, false);
 
           // Compile after filling so that we avoid cloning newly compiled components
           this._compileChildComponents(prop);
