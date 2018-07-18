@@ -435,6 +435,8 @@ export default class FormsField extends Field {
       // Emit change so that UI is notified
       this._emitChange('change', values);
     }
+
+    return clonedForm;
   }
 
   _clearAllFormListeners() {
@@ -650,6 +652,8 @@ export default class FormsField extends Field {
     const id = form.getField('id');
     const store = this.get('store');
     const creating = id.isBlank();
+    let fieldForm = null;
+
     if (store) {
       // New?
       if (creating) {
@@ -666,7 +670,7 @@ export default class FormsField extends Field {
     }
 
     if (this._forms.has(id.getValue())) {
-      const fieldForm = this._forms.get(id.getValue());
+      fieldForm = this._forms.get(id.getValue());
       fieldForm.setValues(form.getValues());
       fieldForm.set({
         archivedAt: form.get('archivedAt'),
@@ -674,7 +678,7 @@ export default class FormsField extends Field {
         cursor: form.get('cursor')
       });
     } else {
-      this.addForm(
+      fieldForm = this.addForm(
         form.getValues(),
         null,
         form.get('userId'),
@@ -689,6 +693,8 @@ export default class FormsField extends Field {
     );
 
     globals.displaySnackbar(this.getSingularLabel() + ' saved');
+
+    return fieldForm;
   }
 
   async save() {
@@ -698,8 +704,11 @@ export default class FormsField extends Field {
     form.setTouched(true);
     form.validate();
     if (form.getErrs().length === 0) {
-      await this._saveForm(form);
-      this.set({ currentForm: form, mode: 'read' });
+      const fieldForm = await this._saveForm(form);
+
+      // Set the currentForm to the new/updated form so that subsequent viewing or editing uses this
+      // new data
+      this.set({ currentForm: fieldForm, mode: 'read' });
     }
   }
 

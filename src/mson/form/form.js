@@ -101,7 +101,7 @@ export default class Form extends Component {
           },
           {
             name: 'snapshot',
-            component: 'Field'
+            component: 'BooleanField'
           },
           {
             name: 'mode',
