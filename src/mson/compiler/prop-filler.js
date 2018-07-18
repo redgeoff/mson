@@ -66,25 +66,22 @@ export default class PropFiller {
     }
   }
 
-  _fillItem = (item, index) => {
-    // if (index === '_parent') {
-    //   return null;
-    // } else if (typeof item === 'string') {
-    if (typeof item === 'string') {
-      return this.fillString(item);
-    }
-  };
-
-  fillAll(items) {
-    // We use cloneDeepWith so that we don't modify the original data
-    return _.cloneDeepWith(items, this._fillItem);
+  fillAll(items, inPlace) {
+    return _.cloneDeepWith(items, (item, index) => {
+      if (typeof item === 'string') {
+        return this.fillString(item);
+      } else if (inPlace) {
+        // Don't touch the data
+        return item;
+      }
+    });
   }
 
-  fill(obj) {
+  fill(obj, inPlace) {
     if (typeof obj === 'string') {
       return this.fillString(obj);
     } else {
-      return this.fillAll(obj);
+      return this.fillAll(obj, inPlace);
     }
   }
 }
