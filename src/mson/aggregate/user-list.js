@@ -126,6 +126,12 @@ export default {
             value: true
           },
           {
+            // Clear any previous value set when changing the password
+            component: 'Set',
+            name: 'fields.password.value',
+            value: null
+          },
+          {
             component: 'Set',
             name: 'parent.mode',
             value: 'update'
