@@ -70,12 +70,11 @@ export class Compiler {
   //   }
   // }
 
-  // TODO: should this really be called in multiple places?
-  _fillProps(props, component) {
+  _fillProps(props, component, inPlace) {
     const propFiller = new PropFiller(props);
 
     // We don't need to clone as fillAll does this for us
-    component = propFiller.fillAll(component);
+    component = propFiller.fillAll(component, inPlace);
 
     // Capture props and set passed so that actions ifData is automatically injected for actions.
     //
@@ -203,7 +202,7 @@ export class Compiler {
       // recursion. See _fillProps() for more info.
       if (prop !== null && !this.isCompiled(prop) && name !== 'passed') {
         if (prop.component) {
-          prop = this._fillProps(props, prop);
+          prop = this._fillProps(props, prop, true);
 
           // Compile after filling so that we avoid cloning newly compiled components
           this._compileChildComponents(prop);

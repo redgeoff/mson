@@ -62,7 +62,7 @@ export default class Action extends Component {
 
   _fillWithComponent(prop, props) {
     const propFiller = new PropFiller(props.component.get());
-    return propFiller.fill(prop);
+    return propFiller.fill(prop, true);
   }
 
   _fill(prop, props) {
