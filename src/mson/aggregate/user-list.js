@@ -133,6 +133,11 @@ export default {
           },
           {
             component: 'Set',
+            name: 'pristine',
+            value: true
+          },
+          {
+            component: 'Set',
             name: 'parent.mode',
             value: 'update'
           }
