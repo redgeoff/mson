@@ -320,6 +320,24 @@ export const contactUs = {
           component: 'Set',
           name: 'fields.captcha.required',
           value: false
+        },
+        {
+          // The email is prepopulated with that of the logged in user so we can hide this
+          component: 'Set',
+          name: 'fields.email.hidden',
+          value: true
+        }
+        // TODO: create a construct for loading the user's name into the session and use it here to
+        // prepoulate the name fields
+      ]
+    },
+    {
+      event: 'load',
+      actions: [
+        {
+          component: 'Set',
+          name: 'fields.email.value',
+          value: '{{globals.session.user.username}}'
         }
       ]
     }
