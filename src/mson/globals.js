@@ -14,6 +14,16 @@ class Globals extends Component {
         component: 'Form',
         fields: [
           {
+            // The current path. This path is changed whenever the URL changes in the
+            // browser bar, including when the user hits the back or forward buttons.
+            name: 'path',
+            component: 'TextField'
+          },
+          {
+            // A temporary prop used to hold the redirectPath until the redirect is initiated by the
+            // UI. This value should be cleared after the redirect is initiated so that back-to-back
+            // redirects to the same route are considered unique, e.g. if / routes to /somepage and
+            // then the user hits back.
             name: 'redirectPath',
             component: 'TextField'
           },
