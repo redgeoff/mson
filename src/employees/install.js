@@ -84,7 +84,7 @@ const createApp = async () => {
   await seed();
 };
 
-const updateComponent = async definition => {
+const upsertComponent = async definition => {
   // TODO: it would be better to implement client.component.upsertComponent as only 1 request
   const component = await client.component.get({
     appId: config.appId,
@@ -93,19 +93,26 @@ const updateComponent = async definition => {
     }
   });
 
-  await client.component.update({
-    appId: config.appId,
-    id: component.data.component.id,
-    definition
-  });
+  if (component.data.component) {
+    await client.component.update({
+      appId: config.appId,
+      id: component.data.component.id,
+      definition
+    });
+  } else {
+    await client.component.create({
+      appId: config.appId,
+      definition
+    });
+  }
 };
 
 const updateApp = async () => {
   for (let i in components) {
-    await updateComponent(components[i]);
+    await upsertComponent(components[i]);
   }
 
-  await updateComponent(reCAPTCHAProperties);
+  await upsertComponent(reCAPTCHAProperties);
 };
 
 const main = async () => {
