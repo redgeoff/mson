@@ -18,8 +18,8 @@ export default {
       },
       {
         name: 'to',
-        component: 'TextField',
-        required: true
+        component: 'TextField'
+        // required: true
       },
       {
         name: 'subject',
@@ -31,8 +31,8 @@ export default {
       },
       {
         name: 'storeName',
-        component: 'TextField',
-        required: true
+        component: 'TextField'
+        // required: true
       }
     ]
   },
@@ -112,9 +112,9 @@ export default {
       actions: [
         {
           component: 'Email',
-          sender: '"{{sender}}>',
-          replyTo: '"{{replyTo}}>',
-          from: '"{{from}}>',
+          sender: '"{{sender}}',
+          replyTo: '"{{replyTo}}',
+          from: '"{{from}}',
           to: '{{to}}',
           subject: '{{subject}}',
           body: '{{body}}',

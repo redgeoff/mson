@@ -131,7 +131,7 @@ export const login = {
       actions: [
         {
           component: 'Redirect',
-          path: '/contact'
+          path: '/contact-us'
         }
       ]
     }
@@ -296,12 +296,40 @@ export const resetPasswordEditor = {
   ]
 };
 
+export const contactUsShared = {
+  name: 'app.ContactUsShared',
+  component: 'ContactUs',
+  to: '"Support" <support@example.com>'
+  // body: 'header<br/>{{fields.body.value}}<br/>footer',
+};
+
 export const contactUs = {
   name: 'app.ContactUs',
-  component: 'ContactUs',
-  to: '"Support" <support@example.com>',
-  // body: 'header\n{{fields.body.value}}\nfooter',
-  storeName: 'app.ContactUs'
+  component: 'app.ContactUsShared',
+  storeName: 'app.ContactUs',
+  listeners: [
+    {
+      event: 'create',
+      actions: [
+        {
+          component: 'Set',
+          name: 'fields.captcha.hidden',
+          value: true
+        }
+      ]
+    }
+  ],
+  access: {
+    form: {
+      create: ['admin', 'employee']
+    }
+  }
+};
+
+export const publicContactUs = {
+  name: 'app.PublicContactUs',
+  component: 'app.ContactUsShared',
+  storeName: 'app.PublicContactUs'
 };
 
 const menuItems = [
@@ -421,17 +449,25 @@ const menuItems = [
         fullScreen: true
       },
       {
-        path: '/contact',
+        path: '/contact-us',
         content: {
           component: 'Card',
           title: 'Contact Us',
           content: {
-            component: 'app.ContactUs'
+            component: 'app.PublicContactUs'
           }
         },
         fullScreen: true
       }
     ]
+  },
+  {
+    path: '/contact',
+    label: 'Contact',
+    content: {
+      component: 'app.ContactUs'
+    },
+    roles: ['admin', 'employee']
   },
   {
     path: '/logout',
