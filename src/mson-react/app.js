@@ -109,8 +109,6 @@ class App extends React.PureComponent {
     super(props);
     // this.createRouteListener();
     this.setGlobalOnNavigate();
-
-    this.synchronizer = Promise.resolve();
   }
 
   onNavigate = callback => {
@@ -141,6 +139,11 @@ class App extends React.PureComponent {
 
   redirect(path) {
     const { history } = this.props;
+
+    // Clear the redirectPath so that back-to-back redirects to the same route are considered
+    // unique, e.g. if / routes to /somepage and then the user hits back.
+    globals.set({ redirectPath: null });
+
     history.push(path);
   }
 
@@ -227,70 +230,46 @@ class App extends React.PureComponent {
 
       // Note: menuItem.content can be an action if the user goes directly to a route where the
       // content is an action
-      if (menuItem && menuItem.content && !isAction) {
+      if (menuItem && menuItem.content) {
         const menu = this.props.app.get('menu');
         const parentItem = menu.getParent(menuItem.path);
         if (
           this.requireAccess(menuItem.roles) &&
           (!parentItem || this.requireAccess(parentItem.roles))
         ) {
-          // Instantiate form
-          // this.component = compiler.newComponent(menuItem.content.component);
-          this.component = menuItem.content;
+          if (isAction) {
+            // Execute the actions
+            await menuItem.content.run();
+          } else {
+            // Instantiate form
+            // this.component = compiler.newComponent(menuItem.content.component);
+            this.component = menuItem.content;
 
-          // Emit a load event so that the component can load any initial data, etc...
-          this.component.emitLoad();
+            // Emit a load event so that the component can load any initial data, etc...
+            this.component.emitLoad();
+
+            const { canArchive, isList } = this.canArchive();
+
+            globals.set({ searchString: null });
+
+            // Set showArchived to false whenever we change the route
+            this.setState({
+              menuItem,
+              showArchived: false,
+              showArchivedToggle: canArchive,
+              searchString: '',
+              showSearch: isList
+            });
+          }
         }
       } else {
         this.component = null;
       }
-
-      const { canArchive, isList } = this.canArchive();
-
-      globals.set({ searchString: null });
-
-      // Set showArchived to false whenever we change the route
-      this.setState({
-        menuItem,
-        showArchived: false,
-        showArchivedToggle: canArchive,
-        searchString: '',
-        showSearch: isList
-      });
-
-      if (isAction) {
-        // Execute the actions
-        await menuItem.content.run();
-      }
     }
   };
 
-  synchronize(promiseFactory) {
-    this.synchronizer = this.synchronizer.then(promiseFactory);
-  }
-
-  onLocationUnsynchronized(location) {
-    const { redirectPath } = this.props;
-
-    // Did the user navigate using the back or forward buttons?
-    if (redirectPath !== location.pathname) {
-      // We need to change the redirectPath state instead of calling navigateTo directly so that we
-      // have a one-way flow of changes to location, avoiding a circular loop. Changing redirectPath
-      // will cause the location to change and will lead to executing navigateTo() below.
-      globals.redirect(location.pathname);
-    } else {
-      return this.navigateTo(location.pathname);
-    }
-  }
-
   onLocation = location => {
-    // We need to synchronize calls to onLocation as otherwise a race condition, e.g. an immediate
-    // loading of the component at /somepage and redirect to /login (as we are not logged in), can
-    // result in 2 concurrent calls to switchContent that can leave the content in an inconsistent
-    // state.
-    this.synchronize(() => {
-      return this.onLocationUnsynchronized(location);
-    });
+    globals.set({ path: location.pathname });
   };
 
   // TODO: move logic to componentDidUpdate
@@ -303,8 +282,15 @@ class App extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.redirectPath !== prevProps.redirectPath) {
+    if (
+      this.props.redirectPath &&
+      this.props.redirectPath !== prevProps.redirectPath
+    ) {
       this.redirect(this.props.redirectPath);
+    }
+
+    if (this.props.path !== prevProps.path) {
+      this.navigateTo(this.props.path);
     }
 
     if (this.props.confirmation !== prevProps.confirmation) {
@@ -517,7 +503,7 @@ class App extends React.PureComponent {
 App = withStyles(styles, { withTheme: true })(App);
 App = withRouter(App);
 App = attach(
-  ['redirectPath', 'snackbarMessage', 'confirmation', 'searchString'],
+  ['path', 'redirectPath', 'snackbarMessage', 'confirmation', 'searchString'],
   globals
 )(App);
 export default App;

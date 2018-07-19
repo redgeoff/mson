@@ -342,44 +342,49 @@ const menuItems = [
     roles: ['admin', 'employee']
   },
   {
-    path: '/',
+    path: '/public',
     hidden: true,
-    content: {
-      component: 'Action',
-      actions: [
-        {
-          if: {
-            globals: {
-              session: {
-                user: {
-                  roleNames: {
-                    $in: ['admin', 'manager']
-                  }
-                }
-              }
-            }
-          },
-          component: 'Redirect',
-          path: '/employees'
-        },
-        {
-          if: {
-            globals: {
-              session: {
-                user: {
-                  roleNames: {
-                    $nin: ['admin', 'manager']
-                  }
-                }
-              }
-            }
-          },
-          component: 'Redirect',
-          path: '/account'
-        }
-      ]
-    },
     items: [
+      {
+        path: '/',
+        content: {
+          component: 'Action',
+          actions: [
+            {
+              if: {
+                globals: {
+                  session: {
+                    user: {
+                      roleNames: {
+                        $in: ['admin', 'manager']
+                      }
+                    }
+                  }
+                }
+              },
+              component: 'Redirect',
+              path: '/employees'
+            },
+            {
+              if: {
+                globals: {
+                  session: {
+                    user: {
+                      roleNames: {
+                        $nin: ['admin', 'manager']
+                      }
+                    }
+                  }
+                }
+              },
+              component: 'Redirect',
+              path: '/account'
+            }
+          ]
+        },
+        // Force the user to be logged in before the actions above are executed
+        roles: ['admin', 'employee']
+      },
       {
         path: '/login',
         label: 'Login',
