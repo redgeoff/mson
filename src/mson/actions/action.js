@@ -62,7 +62,9 @@ export default class Action extends Component {
 
   _fillWithComponent(prop, props) {
     const propFiller = new PropFiller(props.component.get());
-    return propFiller.fill(prop, true);
+    // Using inPlace=true causes issues here with props that are passed down, e.g. with ContactUs
+    const inPlace = false;
+    return propFiller.fill(prop, inPlace);
   }
 
   _fill(prop, props) {
