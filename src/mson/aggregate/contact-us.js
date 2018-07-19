@@ -102,6 +102,12 @@ export default {
           message: 'Message sent. Please expect a response shortly.'
         },
         {
+          // Set the form to pristine so that we don't get warned about discarding changes
+          component: 'Set',
+          name: 'pristine',
+          value: true
+        },
+        {
           component: 'Redirect',
           path: '/'
         }

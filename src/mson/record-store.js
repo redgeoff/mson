@@ -2,6 +2,7 @@
 
 import Component from './component';
 import utils from './utils';
+import uberUtils from './uber-utils';
 import registrar from './compiler/registrar';
 import globals from './globals';
 import access from './access';
@@ -36,9 +37,9 @@ export default class RecordStore extends Component {
       return response;
     } catch (err) {
       if (props && props.form) {
-        utils.setFormErrorsFromAPIError(err, props.form);
+        uberUtils.setFormErrorsFromAPIError(err, props.form);
       } else {
-        utils.displayError(err.toString());
+        uberUtils.displayError(err.toString());
       }
 
       // We throw the error so that the entire listener chain is aborted

@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import globals from './globals';
 import uuid from 'uuid';
 
 class Utils {
@@ -42,25 +41,6 @@ class Utils {
       keys.forEach(k => methods.add(k));
     }
     return methods;
-  }
-
-  displayError(text) {
-    globals.displayAlert({ title: 'Unexpected Error', text });
-  }
-
-  setFormErrorsFromAPIError(err, form) {
-    try {
-      const message = JSON.parse(err.graphQLErrors[0].message);
-      message.error.forEach(err => {
-        form.getField(err.field).setErr(err.error);
-      });
-    } catch (_err) {
-      // An error can occur if the message is not a JSON object, e.g. if we don't have access to
-      // archive, etc... The caller will still throw the main error. TODO: Is there a better way to
-      // handle this? Should all messages be JSON objects? That would probably be too limiting,
-      // right?
-      this.displayError(err.toString());
-    }
   }
 
   combineWheres(where1, where2) {
@@ -113,6 +93,14 @@ class Utils {
 
   uuid() {
     return uuid.v4();
+  }
+
+  once(emitter, evnt) {
+    return new Promise(function(resolve) {
+      emitter.once(evnt, function() {
+        resolve(arguments);
+      });
+    });
   }
 }
 
