@@ -246,7 +246,7 @@ const shouldAddFormsQuickly = (field, milliseconds) => {
   }, milliseconds);
 };
 
-const ADD_FORMS_COMPILED_TIMEOUT_MS = 300;
+const ADD_FORMS_COMPILED_TIMEOUT_MS = 500;
 it('should add many forms quickly when using compiled components', () => {
   const field = createField();
 

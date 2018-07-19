@@ -1,7 +1,7 @@
 import Action from './action';
 import registrar from '../compiler/registrar';
 import globals from '../globals';
-import utils from '../utils';
+import uberUtils from '../uber-utils';
 import access from '../access';
 
 export default class UpsertRecord extends Action {
@@ -68,7 +68,7 @@ export default class UpsertRecord extends Action {
 
       // TODO: What to do with the created/updated data?
     } catch (err) {
-      utils.setFormErrorsFromAPIError(err, props.component);
+      uberUtils.setFormErrorsFromAPIError(err, props.component);
 
       // We throw the error so that the entire listener chain is aborted
       throw err;

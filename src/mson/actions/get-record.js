@@ -1,7 +1,7 @@
 import Action from './action';
 import registrar from '../compiler/registrar';
 import globals from '../globals';
-import utils from '../utils';
+import uberUtils from '../uber-utils';
 
 export default class GetRecord extends Action {
   _create(props) {
@@ -41,7 +41,7 @@ export default class GetRecord extends Action {
 
       return record.data.record;
     } catch (err) {
-      utils.displayError(err.toString());
+      uberUtils.displayError(err.toString());
 
       // We throw the error so that the entire listener chain is aborted
       throw err;

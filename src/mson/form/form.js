@@ -128,17 +128,19 @@ export default class Form extends Component {
       this._createDefaultFields();
     }
 
-    // We default this to false as otherwise there is a lot of extra overhead incurred whenever we
-    // set a value-especially when setting values at the top-most component.
-    this._set('autoValidate', false);
-
-    // Whether or not to report errors when an undefined (extra) field is specified
-    this._set('reportUndefined', true);
-
-    // If true, the form is reset on load
-    this._set('resetOnLoad', true);
-
     this._formSetMSONSchema();
+
+    this._setDefaults(props, {
+      // We default this to false as otherwise there is a lot of extra overhead incurred whenever we
+      // set a value-especially when setting values at the top-most component.
+      autoValidate: false,
+
+      // Whether or not to report errors when an undefined (extra) field is specified
+      reportUndefined: true,
+
+      // If true, the form is reset on load
+      resetOnLoad: true
+    });
 
     this._listenForLoad();
     this._listenForUnload();

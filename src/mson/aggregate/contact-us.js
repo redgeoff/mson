@@ -18,8 +18,8 @@ export default {
       },
       {
         name: 'to',
-        component: 'TextField',
-        required: true
+        component: 'TextField'
+        // required: true
       },
       {
         name: 'subject',
@@ -31,8 +31,8 @@ export default {
       },
       {
         name: 'storeName',
-        component: 'TextField',
-        required: true
+        component: 'TextField'
+        // required: true
       }
     ]
   },
@@ -102,6 +102,12 @@ export default {
           message: 'Message sent. Please expect a response shortly.'
         },
         {
+          // Set the form to pristine so that we don't get warned about discarding changes
+          component: 'Set',
+          name: 'pristine',
+          value: true
+        },
+        {
           component: 'Redirect',
           path: '/'
         }
@@ -112,9 +118,9 @@ export default {
       actions: [
         {
           component: 'Email',
-          sender: '"{{sender}}>',
-          replyTo: '"{{replyTo}}>',
-          from: '"{{from}}>',
+          sender: '"{{sender}}',
+          replyTo: '"{{replyTo}}',
+          from: '"{{from}}',
           to: '{{to}}',
           subject: '{{subject}}',
           body: '{{body}}',

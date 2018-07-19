@@ -2,14 +2,11 @@
 
 import compiler from './compiler';
 import Form from './form';
+import utils from './utils';
 
 class TestUtils {
   once(emitter, evnt) {
-    return new Promise(function(resolve) {
-      emitter.once(evnt, function() {
-        resolve(arguments);
-      });
-    });
+    return utils.once(emitter, evnt);
   }
 
   timeout(ms) {

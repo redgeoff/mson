@@ -1,6 +1,7 @@
 import events from 'events';
 import _ from 'lodash';
 import registrar from '../compiler/registrar';
+import utils from '../utils';
 
 let nextKey = 0;
 const getNextKey = () => {
@@ -75,6 +76,9 @@ export default class Component extends events.EventEmitter {
     this._setDebugId();
 
     this._listenerEvents = {};
+
+    this._isLoaded = false;
+    this._resolveAfterCreate = utils.once(this, 'didCreate');
 
     this._listenToAllChanges();
 
@@ -558,5 +562,9 @@ export default class Component extends events.EventEmitter {
 
   isLoaded() {
     return this._isLoaded;
+  }
+
+  resolveAfterCreate() {
+    return this._resolveAfterCreate;
   }
 }
