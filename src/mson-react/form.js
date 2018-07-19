@@ -19,7 +19,8 @@ class Form extends React.PureComponent {
     const { form, mode } = this.props;
     const canDowngrade = true;
     const fieldsCanAccess = access.fieldsCanAccess(
-      mode,
+      // Default to update so that access control has a sensible default
+      mode ? mode : 'update',
       form,
       null,
       canDowngrade

@@ -139,10 +139,7 @@ export default class Form extends Component {
       reportUndefined: true,
 
       // If true, the form is reset on load
-      resetOnLoad: true,
-
-      // Default to update so that access control has a sensible default
-      mode: 'update'
+      resetOnLoad: true
     });
 
     this._listenForLoad();
