@@ -315,6 +315,11 @@ export const contactUs = {
           component: 'Set',
           name: 'fields.captcha.hidden',
           value: true
+        },
+        {
+          component: 'Set',
+          name: 'fields.captcha.required',
+          value: false
         }
       ]
     }
