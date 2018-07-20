@@ -252,17 +252,19 @@ export default class Form extends Component {
     this._extraErrors = [];
   }
 
+  _setAccess(access) {
+    // Merge access recursively
+    this._set('access', _.merge(this._access, access));
+  }
+
   set(props) {
     super.set(
-      Object.assign({}, props, { fields: undefined, validators: undefined })
+      Object.assign({}, props, {
+        fields: undefined,
+        validators: undefined,
+        access: undefined
+      })
     );
-
-    if (props.form !== undefined) {
-      this.cloneFields(props.form);
-      this.copyValidators(props.form);
-      this.copyListeners(props.form);
-      this.copyAccess(props.form);
-    }
 
     // Add the fields after any form is set so that inherited fields appear at the top of the form
     if (props.fields !== undefined) {
@@ -324,6 +326,10 @@ export default class Form extends Component {
 
     if (props.err !== undefined) {
       this._emitCanOrCannotSubmit();
+    }
+
+    if (props.access !== undefined) {
+      this._setAccess(props.access);
     }
   }
 
@@ -598,28 +604,10 @@ export default class Form extends Component {
   }
 
   clone() {
-    const clonedForm = _.cloneDeep(this);
+    const clonedForm = super.clone();
 
     // Remove the fields as we need to re-add them below
     clonedForm._fields.clear();
-
-    // Clone the fields and recreate any listeners
-    clonedForm.cloneFields(this);
-
-    return clonedForm;
-  }
-
-  // Provides a significantly faster way of cloning the form than clone(). The tradeoff is that
-  // properties are not deep cloned and so there can be some shared data between the cloned form and
-  // the original form.
-  cloneFast() {
-    // Note: cloneDeep() is significantly slower than creating a new form and copying over the fields
-    // and properties
-    const clonedForm = new this.constructor();
-
-    // Copy over the properties
-    const props = this.get();
-    clonedForm.set(Object.assign({}, props, { fields: undefined }));
 
     // Clone the fields and recreate any listeners
     clonedForm.cloneFields(this);

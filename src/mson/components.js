@@ -4,6 +4,7 @@
 //   appear in this file though!
 
 import Action from './actions/action';
+import AuthenticatedContactUs from './aggregate/authenticated-contact-us';
 import App from './app';
 import BooleanField from './fields/boolean-field';
 import ButtonField from './fields/button-field';
@@ -62,9 +63,11 @@ import User from './form/user';
 import UserList from './aggregate/user-list';
 import Vault from './vaults/vault';
 import WhereField from './fields/where-field';
+import WrappedComponent from './component/wrapped-component';
 
 export default {
   Action,
+  AuthenticatedContactUs,
   App,
   BooleanField,
   ButtonField,
@@ -122,5 +125,6 @@ export default {
   User,
   UserList,
   Vault,
-  WhereField
+  WhereField,
+  WrappedComponent
 };

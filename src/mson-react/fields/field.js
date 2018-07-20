@@ -7,9 +7,11 @@ import FlexBreak from '../flex-break';
 // Use MSON React Component instead?
 class Field extends React.PureComponent {
   render() {
-    const { field, hidden, block, accessEditable } = this.props;
+    const { field, hidden, block, accessEditable, didCreate } = this.props;
 
-    if (hidden) {
+    // Don't show the component until didCreate is true as we may need to wait for fields to be
+    // hidden or otherwise modified by listeners
+    if (hidden || !didCreate) {
       return null;
     } else {
       const name = field.getClassName();
@@ -32,4 +34,4 @@ class Field extends React.PureComponent {
   }
 }
 
-export default attach(['hidden', 'block'])(Field);
+export default attach(['hidden', 'block', 'didCreate'])(Field);

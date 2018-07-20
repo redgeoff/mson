@@ -33,7 +33,7 @@ compiler.registerComponent('app.PersonFullNameField', {
 });
 
 fieldTester.shouldAll({
-  Field: compiler.getComponent('app.PersonFullNameField'),
+  Field: compiler.getCompiledComponent('app.PersonFullNameField'),
   exampleValue: {
     firstName: 'Frank',
     lastName: 'Sinatra'

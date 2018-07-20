@@ -31,10 +31,8 @@ export default class Set extends Action {
     const name = this.get('name');
     let names = name ? name.split('.') : [];
 
-    const value =
-      this.get('value') === undefined
-        ? props.arguments
-        : this.getFilled('value', props);
+    const thisValue = this.get('value');
+    const value = thisValue === undefined ? props.arguments : thisValue;
 
     if (!name) {
       // No name was specified to so pipe to next action

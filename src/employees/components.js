@@ -141,7 +141,9 @@ export const login = {
 export const changePassword = {
   name: 'app.ChangePassword',
   component: 'UpdatePasswordEditor',
-  updatePasswordBaseForm: 'app.Employee',
+  updatePasswordBaseForm: {
+    component: 'app.Employee'
+  },
   storeName: 'app.Employee',
   listeners: [
     {
@@ -159,7 +161,9 @@ export const changePassword = {
 export const employeeSignup = {
   name: 'app.EmployeeSignup',
   component: 'SignupEditor',
-  signupBaseForm: 'app.Employee',
+  baseForm: {
+    component: 'app.Employee'
+  },
   storeName: 'app.Employee'
 };
 
@@ -190,7 +194,9 @@ export const getDepartments = {
 export const viewAndEditAccount = {
   name: 'app.ViewAndEditAccount',
   component: 'RecordEditor',
-  baseForm: 'app.Employee',
+  baseForm: {
+    component: 'app.Employee'
+  },
   label: 'Account',
   storeWhere: {
     userId: '{{globals.session.user.id}}'
@@ -220,7 +226,9 @@ export const employees = {
       name: 'employees',
       label: 'Employees',
       component: 'UserList',
-      baseForm: 'app.Employee',
+      baseForm: {
+        component: 'app.Employee'
+      },
       storeName: 'app.Employee',
       listeners: [
         {
@@ -244,7 +252,9 @@ export const departments = {
   name: 'app.Departments',
   component: 'RecordList',
   label: 'Departments',
-  baseForm: 'app.Department',
+  baseForm: {
+    component: 'app.Department'
+  },
   storeName: 'app.Department'
 };
 
@@ -296,52 +306,29 @@ export const resetPasswordEditor = {
   ]
 };
 
-export const contactUsShared = {
-  name: 'app.ContactUsShared',
-  component: 'ContactUs',
+export const contactUsWrapper = {
+  name: 'app.ContactUsWrapper',
+  component: 'Form',
+  schema: {
+    component: 'Form',
+    fields: [
+      {
+        name: 'to',
+        component: 'TextField'
+      }
+    ]
+  },
   to: '"Support" <support@example.com>'
   // body: 'header<br/>{{fields.body.value}}<br/>footer',
 };
 
 export const contactUs = {
   name: 'app.ContactUs',
-  component: 'app.ContactUsShared',
-  storeName: 'app.ContactUs',
-  listeners: [
-    {
-      event: 'create',
-      actions: [
-        {
-          component: 'Set',
-          name: 'fields.captcha.hidden',
-          value: true
-        },
-        {
-          component: 'Set',
-          name: 'fields.captcha.required',
-          value: false
-        },
-        {
-          // The email is prepopulated with that of the logged in user so we can hide this
-          component: 'Set',
-          name: 'fields.email.hidden',
-          value: true
-        }
-        // TODO: create a construct for loading the user's name into the session and use it here to
-        // prepoulate the name fields
-      ]
-    },
-    {
-      event: 'load',
-      actions: [
-        {
-          component: 'Set',
-          name: 'fields.email.value',
-          value: '{{globals.session.user.username}}'
-        }
-      ]
-    }
-  ],
+  component: 'app.ContactUsWrapper',
+  componentToWrap: {
+    component: 'AuthenticatedContactUs',
+    storeName: 'app.ContactUs'
+  },
   access: {
     form: {
       create: ['admin', 'employee']
@@ -351,8 +338,11 @@ export const contactUs = {
 
 export const publicContactUs = {
   name: 'app.PublicContactUs',
-  component: 'app.ContactUsShared',
-  storeName: 'app.PublicContactUs'
+  component: 'app.ContactUsWrapper',
+  componentToWrap: {
+    component: 'ContactUs',
+    storeName: 'app.PublicContactUs'
+  }
 };
 
 const menuItems = [

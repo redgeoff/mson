@@ -9,6 +9,8 @@ export default class Action extends Component {
   _create(props) {
     super._create(props);
 
+    this._fillerProps = null;
+
     this.set({
       schema: {
         component: 'Form',
@@ -16,10 +18,6 @@ export default class Action extends Component {
           {
             name: 'if',
             component: 'WhereField'
-          },
-          {
-            name: 'ifData',
-            component: 'Field'
           },
           {
             name: 'actions',
@@ -60,60 +58,56 @@ export default class Action extends Component {
     return fields;
   }
 
-  _fillWithComponent(prop, props) {
-    const propFiller = new PropFiller(props.component.get());
-    // Using inPlace=true causes issues here with props that are passed down, e.g. with ContactUs
-    const inPlace = false;
-    return propFiller.fill(prop, inPlace);
-  }
+  _fill(prop) {
+    const propFiller = new PropFiller(this._fillerProps);
 
-  _fill(prop, props) {
-    if (!props) {
-      props = {};
-    }
-
-    if (props.component) {
-      // Fill with props from coponent first so that we define default values in the component like
-      // {{fields.to.value}} that are then filled via the second fill.
-      prop = this._fillWithComponent(prop, props);
-    }
-
-    if (props.component && props.component instanceof Form) {
-      // Replace the component with values that can be used to fill
-      props.fields = this._formToFillerProps(props.component);
-    }
-
-    props.globals = this._getGlobals();
-    const propFiller = new PropFiller(props);
+    // Fill with props from coponent first so that we define default values in the component like
+    // {{fields.to.value}} that are then filled via the second fill.
     prop = propFiller.fill(prop);
+    prop = propFiller.fill(prop); // Yes, this is duplicate is needed!
+
     return prop;
   }
 
-  getFilled(names, props) {
+  _getFilled(names) {
     let prop = super.get(names);
-    return prop === null ? null : this._fill(prop, props);
+    return prop === null ? null : this._fill(prop);
   }
 
   get(names) {
-    if (names && !Array.isArray(names)) {
-      return this.getFilled(names);
-    } else {
-      return super.get(names);
+    return this._getFilled(names);
+  }
+
+  _setFillerProps(props) {
+    this._fillerProps = {};
+
+    if (props) {
+      if (props.component) {
+        this._fillerProps = Object.assign(
+          this._fillerProps,
+          props.component.get()
+        );
+
+        if (props.component instanceof Form) {
+          // Replace the component with values that can be used to fill
+          this._fillerProps.fields = this._formToFillerProps(props.component);
+        }
+      }
+
+      this._fillerProps.arguments = props.arguments;
     }
+
+    this._fillerProps.globals = this._getGlobals();
   }
 
   async run(props) {
+    this._setFillerProps(props);
+
     const where = this.get('if');
     let shouldRun = true;
 
     if (where) {
-      const ifData = this.get('ifData');
-      let whereProps = ifData ? ifData : this._fill(props.ifData);
-
-      // Inject globals
-      whereProps = Object.assign({ globals: this._getGlobals() }, whereProps);
-
-      let sifted = sift(where, [whereProps]);
+      let sifted = sift(where, [this._fillerProps]);
       if (sifted.length === 0) {
         shouldRun = false;
       }

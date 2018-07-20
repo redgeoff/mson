@@ -6,13 +6,11 @@ export default {
     fields: [
       {
         name: 'baseForm',
-        component: 'Field',
-        required: true
+        component: 'Field'
       },
       {
         name: 'label',
-        component: 'TextField',
-        required: true
+        component: 'TextField'
       },
       {
         name: 'storeName',
@@ -32,32 +30,30 @@ export default {
       }
     ]
   },
-  form: {
-    component: '{{baseForm}}',
-    fields: [
-      {
-        component: 'ButtonField',
-        name: 'edit',
-        label: 'Edit',
-        icon: 'ModeEdit',
-        hidden: true
-      },
-      {
-        component: 'ButtonField',
-        storeName: 'submit',
-        name: 'save',
-        label: 'Save',
-        icon: 'Save'
-      },
-      {
-        component: 'ButtonField',
-        name: 'cancel',
-        label: 'Cancel',
-        icon: 'Cancel',
-        hidden: true
-      }
-    ]
-  },
+  componentToWrap: '{{baseForm}}',
+  fields: [
+    {
+      component: 'ButtonField',
+      name: 'edit',
+      label: 'Edit',
+      icon: 'ModeEdit',
+      hidden: true
+    },
+    {
+      component: 'ButtonField',
+      type: 'submit',
+      name: 'save',
+      label: 'Save',
+      icon: 'Save'
+    },
+    {
+      component: 'ButtonField',
+      name: 'cancel',
+      label: 'Cancel',
+      icon: 'Cancel',
+      hidden: true
+    }
+  ],
   listeners: [
     {
       event: 'load',

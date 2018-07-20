@@ -5,7 +5,9 @@ export default class User extends Form {
   _create(props) {
     super._create(props);
 
-    this.addField(
+    // Note: we use MSONComponents as EmailField and PasswordField are uncompiled and importing from
+    // ../fields would create a circular dependency.
+    const fields = [
       new MSONComponent({
         definition: {
           component: 'EmailField',
@@ -14,10 +16,7 @@ export default class User extends Form {
           required: true
           // in: false,
         }
-      })
-    );
-
-    this.addField(
+      }),
       new MSONComponent({
         definition: {
           component: 'PasswordField',
@@ -30,7 +29,7 @@ export default class User extends Form {
           forbidSort: true
         }
       })
-    );
+    ];
 
     const schema = {
       component: 'Form',
@@ -54,7 +53,8 @@ export default class User extends Form {
 
     this.set({
       schema,
-      access
+      access,
+      fields
     });
   }
 }

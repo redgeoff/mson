@@ -402,3 +402,63 @@ it('should remove blank fields', () => {
     firstName: 'First'
   });
 });
+
+it('should merge access', () => {
+  const form = createForm();
+
+  const access1 = {
+    form: {
+      read: ['admin', 'employee'],
+      update: 'employee'
+    },
+    fields: {
+      firstName: {
+        create: 'admin'
+      },
+      middleName: {
+        update: 'employee'
+      }
+    }
+  };
+
+  form.set({ access: access1 });
+  expect(form.get('access')).toEqual(access1);
+
+  // Should merge with existing
+  form.set({
+    access: {
+      form: {
+        create: ['admin'],
+        update: ['admin', 'employee']
+      },
+      fields: {
+        firstName: {
+          update: 'admin'
+        },
+        lastName: {
+          create: 'admin'
+        }
+      }
+    }
+  });
+
+  expect(form.get('access')).toEqual({
+    form: {
+      create: ['admin'],
+      read: ['admin', 'employee'],
+      update: ['admin', 'employee']
+    },
+    fields: {
+      firstName: {
+        create: 'admin',
+        update: 'admin'
+      },
+      middleName: {
+        update: 'employee'
+      },
+      lastName: {
+        create: 'admin'
+      }
+    }
+  });
+});

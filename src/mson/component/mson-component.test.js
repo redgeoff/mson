@@ -15,3 +15,14 @@ it('should build in constructor', () => {
   component.setValue('Robert Plant');
   expect(component.getValue()).toEqual('Robert Plant');
 });
+
+it('should not preserve class name', () => {
+  const component = new MSONComponent({
+    definition: {
+      name: 'name',
+      component: 'TextField'
+    }
+  });
+
+  expect(component.getClassName()).toEqual('TextField');
+});
