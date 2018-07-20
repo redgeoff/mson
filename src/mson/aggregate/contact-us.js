@@ -36,18 +36,27 @@ export default {
       }
     ]
   },
-  sender: '"{{fields.name.value}}" <{{fields.email.value}}>',
-  replyTo: '"{{fields.name.value}}" <{{fields.email.value}}>',
-  from: '"{{fields.name.value}}" <{{fields.email.value}}>',
+  sender:
+    '"{{fields.firstName.value}} {{fields.lastName.value}}" <{{fields.email.value}}>',
+  replyTo:
+    '"{{fields.firstName.value}} {{fields.lastName.value}}" <{{fields.email.value}}>',
+  from:
+    '"{{fields.firstName.value}} {{fields.lastName.value}}" <{{fields.email.value}}>',
   subject: '{{fields.subject.value}}',
   body: '{{fields.body.value}}',
   fields: [
     {
       component: 'PersonNameField',
-      name: 'name',
-      label: 'Name',
+      name: 'firstName',
+      label: 'First Name',
       required: true,
       block: false
+    },
+    {
+      component: 'PersonNameField',
+      name: 'lastName',
+      label: 'Last Name',
+      required: true
     },
     {
       component: 'EmailField',
