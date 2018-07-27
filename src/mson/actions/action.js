@@ -1,14 +1,13 @@
 import Component from '../component';
 import sift from 'sift';
 import PropFiller from '../compiler/prop-filler';
-import registrar from '../compiler/registrar';
-import globals from '../globals';
-import Form from '../form';
+import ComponentFillerProps from '../component/component-filler-props';
 
 export default class Action extends Component {
   _create(props) {
     super._create(props);
 
+    this._componentFillerProps = new ComponentFillerProps();
     this._fillerProps = null;
 
     this.set({
@@ -36,27 +35,8 @@ export default class Action extends Component {
     });
   }
 
-  _getSession() {
-    return registrar.client ? registrar.client.user.getSession() : undefined;
-  }
-
-  _getGlobals() {
-    return {
-      session: this._getSession(),
-      ...globals.get()
-    };
-  }
-
   // Abstract method
   async act(/* props */) {}
-
-  _formToFillerProps(component) {
-    const fields = {};
-    component.eachField(
-      field => (fields[field.get('name')] = { value: field.get('value') })
-    );
-    return fields;
-  }
 
   _fill(prop) {
     const propFiller = new PropFiller(this._fillerProps);
@@ -78,30 +58,8 @@ export default class Action extends Component {
     return this._getFilled(names);
   }
 
-  _setFillerProps(props) {
-    this._fillerProps = {};
-
-    if (props) {
-      if (props.component) {
-        this._fillerProps = Object.assign(
-          this._fillerProps,
-          props.component.get()
-        );
-
-        if (props.component instanceof Form) {
-          // Replace the component with values that can be used to fill
-          this._fillerProps.fields = this._formToFillerProps(props.component);
-        }
-      }
-
-      this._fillerProps.arguments = props.arguments;
-    }
-
-    this._fillerProps.globals = this._getGlobals();
-  }
-
   async run(props) {
-    this._setFillerProps(props);
+    this._fillerProps = this._componentFillerProps.getFillerProps(props);
 
     const where = this.get('if');
     let shouldRun = true;
