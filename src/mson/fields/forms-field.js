@@ -382,17 +382,6 @@ export default class FormsField extends Field {
     });
   }
 
-  _listenForChanges(form) {
-    form.on('value', () => {
-      // TODO: does it cause problems that we are just emitting the even and not a value? If we can
-      // get away with this then our logic can remain simple and performant for when there is a lot
-      // of data. If not, we'll need to do something like add the concept of getIndex() to Mapa so
-      // that we can do directly replace the array item in this field's value. Another option is
-      // track the reference to the value in the values array here and set it here.
-      this._emitChange('value');
-    });
-  }
-
   _listenToForm(form) {
     const props = ['dirty', 'touched'];
     props.forEach(prop => {
@@ -407,7 +396,7 @@ export default class FormsField extends Field {
 
   // TODO: refactor to use named parameters
   addForm(values, archivedAt, userId, muteChange, cursor, beforeKey) {
-    const clonedForm = this.get('form').cloneFast();
+    const clonedForm = this.get('form').clone();
 
     // Reset form as there may be existing data, errors, etc...
     clonedForm.reset();

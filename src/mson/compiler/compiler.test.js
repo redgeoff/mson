@@ -5,19 +5,20 @@ import testUtils from '../test-utils';
 import _ from 'lodash';
 
 const newCompiler = () => {
-  return new Compiler({ components });
+  return new Compiler({ components: Object.assign({}, components) });
 };
 
-const expectDefinitionToBeValid = definition => {
+const expectDefinitionToBeValid = (definition, name) => {
+  if (!name) {
+    name = definition.name;
+  }
   const schemaForm = compiler.validateDefinition(definition);
-  expect(schemaForm.getErrs()).toEqual([]);
+  expect([name, schemaForm.getErrs()]).toEqual([name, []]);
 };
 
 let compiler = null;
 
-beforeAll(() => {
-  const compiler = newCompiler();
-
+const registerComponents = () => {
   compiler.registerComponent('app.Account', {
     component: 'Form',
     fields: [
@@ -54,52 +55,43 @@ beforeAll(() => {
     ]
   });
 
-  // Dynamic inheritance
+  // Composition
   compiler.registerComponent('app.EditThing', {
-    component: '{{thing}}'
+    component: 'WrappedComponent'
   });
 
-  // Dynamic nested inheritance
+  // Dynamic composition
   compiler.registerComponent('app.EditNestedThing', {
     component: 'Form',
-    schema: {
-      component: 'Form',
-      fields: [
-        {
-          name: 'thing',
-          component: 'Field'
-        }
-      ]
-    },
-    form: {
-      component: '{{thing}}',
-      fields: [
-        {
-          component: 'ButtonField',
-          name: 'edit',
-          label: 'Edit'
-        }
-      ]
+    fields: [
+      {
+        component: 'ButtonField',
+        name: 'edit',
+        label: 'Edit'
+      }
+    ]
+  });
+
+  // Dynamic composition in registration
+  compiler.registerComponent('app.EditNestedRegistrationThing', {
+    component: 'app.EditNestedThing',
+    componentToWrap: {
+      component: 'app.EditAccount'
     }
   });
 
-  // Dynamic nested inheritance in registration
-  compiler.registerComponent('app.EditNestedRegistrationThing', {
-    thing: 'app.EditAccount',
-    component: 'app.EditNestedThing'
-  });
-
-  // Dynamic nested inheritance where component is rendered in registration
-  compiler.registerComponent('app.EditNestedRegistrationRenderedThing', {
-    thing: {
-      component: {
-        component: {
-          component: 'app.EditAccount'
-        }
-      }
-    },
-    component: 'app.EditNestedThing'
-  });
+  // Note: no longer supported
+  // // Dynamic nested composition where component is compiled in registration
+  // compiler.registerComponent('app.EditNestedRegistrationRenderedThing', {
+  //   component: 'app.EditNestedThing',
+  //   componentToWrap: {
+  //     component: {
+  //       component: {
+  //         component: 'app.EditAccount'
+  //       }
+  //     }
+  //   }
+  // });
 
   compiler.registerComponent('app.EditAccount1', {
     component: 'app.EditAccount'
@@ -130,6 +122,15 @@ beforeAll(() => {
   // Template parameters in listeners
   compiler.registerComponent('app.TemplatedListeners', {
     component: 'Form',
+    schema: {
+      component: 'Form',
+      fields: [
+        {
+          name: 'foo',
+          component: 'TextField'
+        }
+      ]
+    },
     listeners: [
       {
         event: 'create',
@@ -194,28 +195,26 @@ beforeAll(() => {
   });
 
   compiler.registerComponent('app.CustomProps', {
-    component: 'Component',
+    component: 'Form',
     schema: {
       component: 'Form',
       fields: [
         {
           name: 'foo',
-          component: 'TextField',
-          required: true
+          component: 'TextField'
         }
       ]
     }
   });
-});
+};
 
-afterAll(() => {
-  const compiler = newCompiler();
+const deregisterComponents = () => {
   compiler.deregisterComponent('app.EditAccount');
   compiler.deregisterComponent('app.Account');
   compiler.deregisterComponent('app.EditThing');
   compiler.deregisterComponent('app.EditNestedThing');
   compiler.deregisterComponent('app.EditNestedRegistrationThing');
-  compiler.deregisterComponent('app.EditNestedRegistrationRenderedThing');
+  // compiler.deregisterComponent('app.EditNestedRegistrationRenderedThing');
   compiler.deregisterComponent('app.EditAccount1');
   compiler.deregisterComponent('app.EditAccount2');
   compiler.deregisterComponent('app.EditAccount3');
@@ -223,196 +222,200 @@ afterAll(() => {
   compiler.deregisterComponent('app.Login');
   compiler.deregisterComponent('app.App');
   compiler.deregisterComponent('app.CustomProps');
-});
+};
 
 beforeEach(() => {
   compiler = newCompiler();
+  registerComponents();
+});
+
+afterEach(() => {
+  deregisterComponents();
 });
 
 it('should build & destroy', () => {
   const account = compiler.newComponent({
     component: 'app.Account'
   });
-  expect(account._fields.length()).toEqual(3);
+  expect(account.get('fields').length()).toEqual(3);
 });
 
 it('should implement inheritance', () => {
   const account = compiler.newComponent({
     component: 'app.EditAccount'
   });
-  expect(account._fields.length()).toEqual(5);
+  expect(account.get('fields').length()).toEqual(5);
 });
 
-it('should implement dynamic inheritance', () => {
+it('should implement composition', () => {
   const thing1 = compiler.newComponent({
-    thing: 'app.EditAccount',
-    component: 'app.EditThing'
+    component: 'app.EditThing',
+    componentToWrap: {
+      component: 'app.EditAccount'
+    }
   });
-  expect(thing1._fields.length()).toEqual(5);
+  expect(thing1.get('fields').length()).toEqual(5);
 
   // We test with 2 dynamic inheritance back to back to make sure that we haven't cached any
   // previous component building.
   const thing2 = compiler.newComponent({
-    thing: 'app.Account',
-    component: 'app.EditThing'
+    component: 'app.EditThing',
+    componentToWrap: {
+      component: 'app.Account'
+    }
   });
-  expect(thing2._fields.length()).toEqual(3);
+  expect(thing2.get('fields').length()).toEqual(3);
 });
 
-it('should support nested component definitions', () => {
-  // TODO: check values set at topmost layer for tests below
+// TODO: is this really needed or expect use of composition?
+// it('should support nested component definitions', () => {
+//   // TODO: check values set at topmost layer for tests below
+//
+//   let thing = null;
+//
+//   thing = compiler.newComponent({
+//     component: 'Field',
+//     name: 'firstName'
+//   });
+//   expect(thing.get('name')).toEqual('firstName');
+//
+//   thing = compiler.newComponent({
+//     component: {
+//       component: 'Field'
+//     },
+//     name: 'firstName'
+//   });
+//   expect(thing.get('name')).toEqual('firstName');
+//
+//   thing = compiler.newComponent({
+//     component: {
+//       component: {
+//         component: 'Field',
+//         name: 'firstName'
+//       },
+//       label: 'First Name'
+//     },
+//     hidden: true
+//   });
+//   expect(thing.get('name')).toEqual('firstName');
+//   expect(thing.get('label')).toEqual('First Name');
+//
+//   thing = compiler.newComponent({
+//     component: {
+//       component: 'Form',
+//       fields: [
+//         {
+//           component: 'Field',
+//           name: 'firstName'
+//         }
+//       ]
+//     }
+//   });
+//   expect(thing.getField('firstName').get('name')).toEqual('firstName');
+//
+//   thing = compiler.newComponent({
+//     component: {
+//       component: 'Form',
+//       fields: [
+//         {
+//           component: 'Field',
+//           name: 'firstName'
+//         }
+//       ]
+//     },
+//     baseForm: {
+//       component: 'Form',
+//       fields: [
+//         {
+//           component: 'Field',
+//           name: 'email'
+//         }
+//       ]
+//     }
+//   });
+//   expect(thing.getField('firstName').get('name')).toEqual('firstName');
+//   // Note: baseForm is not accessible via thing as it is not a defined property
+//
+//   thing = compiler.newComponent({
+//     component: {
+//       component: {
+//         name: 'MyForm',
+//         component: {
+//           component: 'Form'
+//         },
+//         fields: [
+//           {
+//             component: {
+//               component: {
+//                 component: 'Field'
+//               }
+//             },
+//             name: 'lastName'
+//           }
+//         ]
+//       },
+//       fields: [
+//         {
+//           component: {
+//             component: {
+//               component: 'Field'
+//             }
+//           },
+//           name: 'firstName'
+//         }
+//       ]
+//     },
+//     baseForm: {
+//       component: {
+//         name: 'myBaseForm',
+//         component: {
+//           component: 'Form'
+//         }
+//       }
+//     }
+//   });
+//   expect(thing.get('name')).toEqual('MyForm');
+//   expect(thing.mapFields(field => field.get('name'))).toEqual([
+//     'id',
+//     'lastName',
+//     'firstName'
+//   ]);
+//   // Note: baseForm is not accessible via thing as it is not a defined property
+// });
 
-  let thing = null;
-
-  thing = compiler.newComponent({
-    component: 'Field',
-    name: 'firstName'
-  });
-  expect(thing.get('name')).toEqual('firstName');
-
-  thing = compiler.newComponent({
-    component: {
-      component: 'Field'
-    },
-    name: 'firstName'
-  });
-  expect(thing.get('name')).toEqual('firstName');
-
-  thing = compiler.newComponent({
-    component: {
-      component: {
-        component: 'Field',
-        name: 'firstName'
-      },
-      label: 'First Name'
-    },
-    hidden: true
-  });
-  expect(thing.get('name')).toEqual('firstName');
-  expect(thing.get('label')).toEqual('First Name');
-
-  thing = compiler.newComponent({
-    component: {
-      component: 'Form',
-      fields: [
-        {
-          component: 'Field',
-          name: 'firstName'
-        }
-      ]
-    }
-  });
-  expect(thing.getField('firstName').get('name')).toEqual('firstName');
-
-  thing = compiler.newComponent({
-    component: {
-      component: 'Form',
-      fields: [
-        {
-          component: 'Field',
-          name: 'firstName'
-        }
-      ]
-    },
-    baseForm: {
-      component: 'Form',
-      fields: [
-        {
-          component: 'Field',
-          name: 'email'
-        }
-      ]
-    }
-  });
-  expect(thing.getField('firstName').get('name')).toEqual('firstName');
-  // Note: baseForm is not accessible via thing as it is not a defined property
-
-  thing = compiler.newComponent({
-    component: {
-      component: {
-        name: 'MyForm',
-        component: {
-          component: 'Form'
-        },
-        fields: [
-          {
-            component: {
-              component: {
-                component: 'Field'
-              }
-            },
-            name: 'lastName'
-          }
-        ]
-      },
-      fields: [
-        {
-          component: {
-            component: {
-              component: 'Field'
-            }
-          },
-          name: 'firstName'
-        }
-      ]
-    },
-    baseForm: {
-      component: {
-        name: 'myBaseForm',
-        component: {
-          component: 'Form'
-        }
-      }
-    }
-  });
-  expect(thing.get('name')).toEqual('MyForm');
-  expect(thing.mapFields(field => field.get('name'))).toEqual([
-    'id',
-    'lastName',
-    'firstName'
-  ]);
-  // Note: baseForm is not accessible via thing as it is not a defined property
-});
-
-it('should implement dynamic nested inheritance', () => {
+it('should implement dynamic composition', () => {
   const thing = compiler.newComponent({
-    thing: 'app.EditAccount',
-    component: 'app.EditNestedThing'
-  });
-  expect(thing._fields.length()).toEqual(6);
-
-  // Where thing is a component and not a component name
-  const thing2 = compiler.newComponent({
-    thing: {
+    component: 'app.EditNestedThing',
+    componentToWrap: {
       component: 'app.EditAccount'
-    },
-    component: 'app.EditNestedThing'
+    }
   });
-  // console.log(thing2.mapFields(field => field.get('name')));
-  expect(thing2._fields.length()).toEqual(6);
+  expect(thing.get('fields').length()).toEqual(6);
 
-  // Where thing is a component nested in a component
-  const thing3 = compiler.newComponent({
-    thing: {
-      component: {
-        component: 'app.EditAccount'
-      }
-    },
-    component: 'app.EditNestedThing'
-  });
-  expect(thing3._fields.length()).toEqual(6);
+  // Note: no longer supported
+  // // Where thing is a component nested in a component
+  // const thing2 = compiler.newComponent({
+  //   component: 'app.EditNestedThing',
+  //   componentToWrap: {
+  //     component: {
+  //       component: 'app.EditAccount'
+  //     }
+  //   }
+  // });
+  // expect(thing2.get('fields').length()).toEqual(6);
 });
 
 it('should implement dynamic nested inheritance in registration', () => {
   let thing = compiler.newComponent({
     component: 'app.EditNestedRegistrationThing'
   });
-  expect(thing._fields.length()).toEqual(6);
+  expect(thing.get('fields').length()).toEqual(6);
 
-  thing = compiler.newComponent({
-    component: 'app.EditNestedRegistrationRenderedThing'
-  });
-  expect(thing._fields.length()).toEqual(6);
+  // Note: no longer supported
+  // thing = compiler.newComponent({
+  //   component: 'app.EditNestedRegistrationRenderedThing'
+  // });
+  // expect(thing.get('fields').length()).toEqual(6);
 });
 
 it('should not share components', () => {
@@ -511,43 +514,6 @@ it('should validate schema', () => {
   expect(schemaForm.hasErr()).toEqual(true);
 });
 
-it('should validate definitions with dynamic components', () => {
-  setValidateOnly();
-
-  expectDefinitionToBeValid({
-    name: 'app.ChangePassword',
-    component: 'UpdatePasswordEditor',
-    updatePasswordBaseForm: 'User',
-    storeName: 'User'
-  });
-
-  expectDefinitionToBeValid({
-    name: 'app.EditThingInstance',
-    component: 'app.EditThing'
-  });
-
-  expectDefinitionToBeValid({
-    name: 'app.EmployeeSignup',
-    component: 'SignupEditor',
-    signupBaseForm: 'User',
-    storeName: 'User'
-  });
-
-  expectDefinitionToBeValid({
-    name: 'app.Employees',
-    component: 'Form',
-    fields: [
-      {
-        name: 'employees',
-        label: 'Employees',
-        component: 'UserList',
-        baseForm: 'User',
-        storeName: 'User'
-      }
-    ]
-  });
-});
-
 it('should support schema props at the same layer', () => {
   expectDefinitionToBeValid({
     name: 'app.SameLayer',
@@ -568,9 +534,81 @@ it('should support schema props at the same layer', () => {
 it('should validate the definitions of all core components', () => {
   setValidateOnly();
 
-  _.each(components, component => {
+  _.each(components, (component, name) => {
     if (!compiler.isCompiled(component)) {
-      expectDefinitionToBeValid(component);
+      expectDefinitionToBeValid(component, name);
     }
   });
+});
+
+const changePassword = {
+  name: 'app.ChangePassword',
+  component: 'UpdatePasswordEditor',
+  updatePasswordBaseForm: {
+    component: 'User'
+  },
+  storeName: 'User'
+};
+
+const editThingInstance = {
+  name: 'app.EditThingInstance',
+  component: 'app.EditThing'
+};
+
+const employeeSignup = {
+  name: 'app.EmployeeSignup',
+  component: 'SignupEditor',
+  baseForm: {
+    component: 'User',
+    fields: [
+      {
+        component: 'Field',
+        name: 'roles'
+      }
+    ]
+  },
+  storeName: 'User'
+};
+
+const employees = {
+  name: 'app.Employees',
+  component: 'Form',
+  fields: [
+    {
+      name: 'employees',
+      label: 'Employees',
+      component: 'UserList',
+      baseForm: {
+        component: 'User'
+      },
+      storeName: 'User'
+    }
+  ]
+};
+
+it('should validate definitions with dynamic components', () => {
+  setValidateOnly();
+
+  expectDefinitionToBeValid(changePassword);
+
+  expectDefinitionToBeValid(editThingInstance);
+
+  expectDefinitionToBeValid(employeeSignup);
+
+  expectDefinitionToBeValid(employees);
+});
+
+const newComponentAndResolveAfterCreate = async definition => {
+  const component = compiler.newComponent(definition);
+  await component.resolveAfterCreate();
+};
+
+it('should instantiate definitions with dynamic components', async () => {
+  await newComponentAndResolveAfterCreate(changePassword);
+
+  await newComponentAndResolveAfterCreate(editThingInstance);
+
+  await newComponentAndResolveAfterCreate(employeeSignup);
+
+  await newComponentAndResolveAfterCreate(employees);
 });

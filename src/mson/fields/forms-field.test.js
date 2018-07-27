@@ -5,6 +5,7 @@ import _ from 'lodash';
 import testUtils from '../test-utils';
 import utils from '../utils';
 import compiler from '../compiler';
+import Emit from '../actions/emit';
 
 const formName = utils.uuid();
 
@@ -13,6 +14,18 @@ const createForm = () => {
     fields: [
       new TextField({ name: 'firstName', label: 'First Name', required: true }),
       new TextField({ name: 'lastName', label: 'Last Name', required: true })
+    ],
+
+    // Needed so that parent is populated in fillerProps
+    listeners: [
+      {
+        event: 'foo',
+        actions: [
+          new Emit({
+            event: 'didFoo'
+          })
+        ]
+      }
     ]
   });
 };
@@ -233,9 +246,15 @@ it('should set defaults', () => {
 });
 
 const shouldAddFormsQuickly = (field, milliseconds) => {
-  return testUtils.expectToFinishBefore(() => {
-    // Set the parent to simulate usage in the UI as adding the parent can slow the PropFiller
+  return testUtils.expectToFinishBefore(async () => {
+    // Set the parent to simulate usage in the UI as adding the parent can slow cloning
     field.get('form').set({ parent: field });
+
+    // Trigger an action so that the parent is added to the fillerProps as this can also slow down
+    // cloning
+    const didFoo = testUtils.once(field.get('form'), 'didFoo');
+    field.get('form').emitChange('foo');
+    await didFoo;
 
     for (let i = 0; i < 40; i++) {
       field.addForm({
@@ -258,7 +277,20 @@ it('should add many forms quickly when using uncompiled components', () => {
   const field = compiler.newComponent({
     component: 'FormsField',
     form: {
-      component: formName
+      component: formName,
+
+      // Needed so that parent is populated in fillerProps
+      listeners: [
+        {
+          event: 'foo',
+          actions: [
+            {
+              component: 'Emit',
+              event: 'didFoo'
+            }
+          ]
+        }
+      ]
     }
   });
 

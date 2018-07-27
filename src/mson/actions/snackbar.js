@@ -21,7 +21,7 @@ export default class Snackbar extends Action {
     this._setDefaults(props, { layer: 'frontEnd' });
   }
 
-  async act() {
+  async act(props) {
     globals.displaySnackbar(this.get('message'));
   }
 }

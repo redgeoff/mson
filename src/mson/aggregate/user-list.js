@@ -16,7 +16,8 @@ export default {
     ]
   },
   form: {
-    component: '{{baseForm}}',
+    component: 'Form',
+    componentToWrap: '{{baseForm}}',
     fields: [
       {
         component: 'ButtonField',

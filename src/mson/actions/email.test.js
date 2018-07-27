@@ -51,7 +51,7 @@ it('should send email', async () => {
 
   const sendEmailSpy = jest.spyOn(email, '_sendEmail').mockImplementation();
 
-  await email.act({ component: form });
+  await email.run({ component: form });
 
   expect(sendEmailSpy).toHaveBeenCalledWith(form.getValues({ blank: false }));
 });

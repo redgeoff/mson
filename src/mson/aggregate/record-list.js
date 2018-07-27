@@ -26,7 +26,8 @@ export default {
       label: '{{label}}',
       component: 'FormsField',
       form: {
-        component: '{{baseForm}}'
+        component: 'Form',
+        componentToWrap: '{{baseForm}}'
       },
       store: {
         component: 'RecordStore',

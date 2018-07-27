@@ -6,12 +6,9 @@ import compiler from '../compiler';
 
 const createAction = () => {
   return new Set({
-    ifData: {
-      foo: 'bar'
-    },
     if: {
-      foo: {
-        $eq: 'bar'
+      label: {
+        $eq: 'First Name'
       }
     },
     name: 'value',
@@ -36,7 +33,7 @@ const createActions = () => {
 
 it('should act', async () => {
   const action = createAction();
-  const field = new TextField({ name: 'firstName ' }); // Note: trailing space on purpose
+  const field = new TextField({ name: 'firstName ', label: 'First Name' }); // Note: trailing space on purpose
   const args = await action.run({
     arguments: 'foo',
     component: field

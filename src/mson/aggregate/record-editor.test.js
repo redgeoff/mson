@@ -36,7 +36,9 @@ beforeAll(() => {
 
   compiler.registerComponent('app.EditAccount', {
     component: 'RecordEditor',
-    baseForm: 'app.Account',
+    baseForm: {
+      component: 'app.Account'
+    },
     label: 'Account',
     storeWhere: {
       id: 'foo'
@@ -120,7 +122,9 @@ beforeAll(() => {
 
   compiler.registerComponent('app.ChangePassword', {
     component: 'RecordEditor',
-    baseForm: 'app.ChangePasswordForm',
+    baseForm: {
+      component: 'app.ChangePasswordForm'
+    },
     label: 'Password'
   });
 });
@@ -154,12 +158,12 @@ const mockActions = (actions, spyOnAct) => {
     } else {
       if (spyOnAct) {
         const origAct = action.act;
-        action.act = (...args) => {
+        action.act = function() {
           acts.push({
             name: action.getClassName(),
             props: action.get()
           });
-          return origAct.apply(action, args);
+          return origAct.apply(this, arguments);
         };
       }
 
@@ -613,6 +617,10 @@ it('should support the change password scenario', async () => {
     preview: false,
     storeWhere: null
   });
+
+  // Wait for all the create listeners to run before mocking so that we have a predictable baseline
+  await changePassword.resolveAfterCreate();
+
   mockRecordEditor(changePassword);
 
   const didLoad = testUtils.once(changePassword, 'didLoad');

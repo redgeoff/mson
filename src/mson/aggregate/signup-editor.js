@@ -1,49 +1,31 @@
 export default {
   name: 'SignupEditor',
   component: 'RecordEditor',
-  schema: {
-    component: 'Form',
-    fields: [
-      {
-        name: 'signupBaseForm',
-        component: 'Field',
-        required: true
-      },
-      {
-        name: 'storeName',
-        component: 'TextField',
-        required: true
-      }
-    ]
-  },
   preview: false,
-  baseForm: {
-    component: '{{signupBaseForm}}',
-    fields: [
-      {
-        component: 'PasswordField',
-        name: 'retypePassword',
-        label: 'Retype Password',
-        required: true,
-        out: false
-      }
-    ],
-    validators: [
-      {
-        where: {
-          retypePassword: {
-            value: {
-              $ne: '{{password.value}}'
-            }
+  fields: [
+    {
+      component: 'PasswordField',
+      name: 'retypePassword',
+      label: 'Retype Password',
+      required: true,
+      out: false
+    }
+  ],
+  validators: [
+    {
+      where: {
+        retypePassword: {
+          value: {
+            $ne: '{{password.value}}'
           }
-        },
-        error: {
-          field: 'retypePassword',
-          error: 'must match'
         }
+      },
+      error: {
+        field: 'retypePassword',
+        error: 'must match'
       }
-    ]
-  },
+    }
+  ],
   label: 'Signup',
   hideCancel: true,
   storeWhere: null,

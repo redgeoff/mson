@@ -94,7 +94,8 @@ it('should concat schemas', () => {
   c.set({ schema: 'two' });
   c.set({ schema: 'three' });
   expect(c.get('schema')).toEqual([
-    c._getComponentMSONSchema(),
+    c._getBaseComponentSchema(),
+    c._getWrappedComponentSchema(),
     'one',
     'two',
     'three'

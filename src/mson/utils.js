@@ -35,11 +35,22 @@ class Utils {
 
   // Source: https://stackoverflow.com/a/40577337/2831606
   getAllMethodNames(obj) {
-    let methods = new Set();
+    const methods = [];
     while ((obj = Reflect.getPrototypeOf(obj))) {
-      let keys = Reflect.ownKeys(obj);
-      keys.forEach(k => methods.add(k));
+      const keys = Reflect.ownKeys(obj);
+      keys.forEach(k => methods.push(k));
     }
+    return methods;
+  }
+
+  getAllFunctionNames(obj) {
+    const methods = [];
+    _.each(obj, (property, name) => {
+      if (typeof property === 'function') {
+        methods.push(name);
+      }
+    });
+
     return methods;
   }
 

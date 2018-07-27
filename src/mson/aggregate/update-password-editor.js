@@ -6,24 +6,17 @@ export default {
     fields: [
       {
         name: 'updatePasswordBaseForm',
-        component: 'Field',
-        required: true
-      },
-      {
-        name: 'storeName',
-        component: 'TextField',
-        required: true
+        component: 'Field'
       }
     ]
   },
   preview: false,
-  baseForm: {
-    component: 'UpdatePassword',
-    baseForm: '{{updatePasswordBaseForm}}',
-    storeName: '{{storeName}}'
-  },
   label: 'Password',
   storeWhere: {
     userId: '{{globals.session.user.id}}'
+  },
+  baseForm: {
+    component: 'UpdatePassword',
+    componentToWrap: '{{updatePasswordBaseForm}}'
   }
 };

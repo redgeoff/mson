@@ -47,10 +47,7 @@ export default class Email extends Action {
 
   async act(props) {
     return this._sendEmail(
-      this.getFilled(
-        ['from', 'sender', 'replyTo', 'to', 'subject', 'body'],
-        props
-      )
+      this.get(['from', 'sender', 'replyTo', 'to', 'subject', 'body'], props)
     );
   }
 }
