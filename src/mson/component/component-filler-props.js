@@ -1,6 +1,5 @@
 import globals from '../globals';
 import registrar from '../compiler/registrar';
-import Form from '../form';
 
 export default class ComponentFillerProps {
   _getSession() {
@@ -29,7 +28,10 @@ export default class ComponentFillerProps {
       if (props.component) {
         fillerProps = Object.assign(fillerProps, props.component.get());
 
-        if (props.component instanceof Form) {
+        // Is the component a form? We cannot use instanceof as otherwise it would create a circular
+        // dependency
+        // if (props.component instanceof Form) {
+        if (props.component.get('fields')) {
           // Replace the component with values that can be used to fill
           fillerProps.fields = this._formToFillerProps(props.component);
         }

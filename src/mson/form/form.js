@@ -7,6 +7,7 @@ import Validator from '../component/validator';
 import Mapa from '../mapa';
 import IdField from '../fields/id-field';
 import ButtonField from '../fields/button-field';
+import ComponentFillerProps from '../component/component-filler-props';
 
 export default class Form extends Component {
   _formSetMSONSchema() {
@@ -118,6 +119,8 @@ export default class Form extends Component {
 
   _create(props) {
     super._create(props);
+
+    this._componentFillerProps = new ComponentFillerProps();
     this._fields = new Mapa();
     this._defaultFields = new Mapa();
     this._validators = [];
@@ -497,11 +500,7 @@ export default class Form extends Component {
   _toValidatorProps() {
     // TODO: should calc of these props be a little more dynamic? e.g. could make them a function so
     // that only calculated when matched by validators
-    let props = {};
-    this._fields.each(field => {
-      props[field.get('name')] = field._toValidatorProps();
-    });
-    return props;
+    return this._componentFillerProps.getFillerProps({ component: this });
   }
 
   _validateWithValidators() {

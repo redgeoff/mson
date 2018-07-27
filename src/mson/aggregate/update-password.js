@@ -12,9 +12,11 @@ export default {
   validators: [
     {
       where: {
-        retypePassword: {
-          value: {
-            $ne: '{{password.value}}'
+        fields: {
+          retypePassword: {
+            value: {
+              $ne: '{{fields.password.value}}'
+            }
           }
         }
       },

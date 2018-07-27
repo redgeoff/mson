@@ -261,13 +261,15 @@ it('should validate schema', () => {
     validators: [
       {
         where: {
-          name: {
-            value: 'F. Scott Fitzgerald'
+          fields: {
+            name: {
+              value: 'F. Scott Fitzgerald'
+            }
           }
         },
         error: {
           field: 'name',
-          error: 'cannot be {{firstName.value}}'
+          error: 'cannot be {{fields.firstName.value}}'
         }
       }
     ]
@@ -295,7 +297,7 @@ it('should validate schema', () => {
       {
         error: {
           field: 'name',
-          error: 'cannot be {{firstName.value}}'
+          error: 'cannot be {{fields.firstName.value}}'
         }
       }
     ]
