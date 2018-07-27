@@ -310,13 +310,15 @@ it('should validate nested form validators', () => {
       validators: [
         {
           where: {
-            firstName: {
-              value: 'F. Scott'
+            fields: {
+              firstName: {
+                value: 'F. Scott'
+              }
             }
           },
           error: {
             field: 'firstName',
-            error: 'cannot be {{firstName.value}}'
+            error: 'cannot be {{fields.firstName.value}}'
           }
         }
       ]
@@ -329,13 +331,15 @@ it('should validate nested form validators', () => {
       validators: [
         {
           where: {
-            email: {
-              value: 'scott@example.com'
+            fields: {
+              email: {
+                value: 'scott@example.com'
+              }
             }
           },
           error: {
             field: 'email',
-            error: 'cannot be {{email.value}}'
+            error: 'cannot be {{fields.email.value}}'
           }
         }
       ]

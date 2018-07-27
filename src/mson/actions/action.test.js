@@ -89,7 +89,7 @@ it('should filter by globals', async () => {
   });
 
   // Mock
-  action._getSession = () => {
+  action._componentFillerProps._getSession = () => {
     return {
       user: {
         roleNames: ['admin']

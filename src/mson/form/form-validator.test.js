@@ -20,9 +20,11 @@ it('should validate', () => {
 
   validator.setValues({
     where: {
-      retypePassword: {
-        value: {
-          $ne: '{{password.value}}'
+      fields: {
+        retypePassword: {
+          value: {
+            $ne: '{{fields.password.value}}'
+          }
         }
       }
     },
@@ -37,9 +39,11 @@ it('should validate', () => {
 
   validator.setValues({
     where: {
-      retypePassword: {
-        value: {
-          $invalidOp: '{{password.value}}'
+      fields: {
+        retypePassword: {
+          value: {
+            $invalidOp: '{{fields.password.value}}'
+          }
         }
       }
     },

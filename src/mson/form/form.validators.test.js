@@ -15,20 +15,24 @@ const createForm = () => {
     validators: [
       {
         where: {
-          firstName: {
-            value: 'Jim'
+          fields: {
+            firstName: {
+              value: 'Jim'
+            }
           }
         },
         error: {
           field: 'firstName',
-          error: 'cannot be {{firstName.value}}'
+          error: 'cannot be {{fields.firstName.value}}'
         }
       },
       {
         where: {
-          lastName: {
-            value: {
-              $eq: 'Jones'
+          fields: {
+            lastName: {
+              value: {
+                $eq: 'Jones'
+              }
             }
           }
         },
@@ -39,15 +43,17 @@ const createForm = () => {
       },
       {
         where: {
-          middleName: {
-            value: {
-              $eq: '{{firstName.value}}'
+          fields: {
+            middleName: {
+              value: {
+                $eq: '{{fields.firstName.value}}'
+              }
             }
           }
         },
         error: {
           field: 'middleName',
-          error: 'cannot be same as {{firstName.value}}'
+          error: 'cannot be same as {{fields.firstName.value}}'
         }
       }
     ]

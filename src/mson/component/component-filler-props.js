@@ -1,0 +1,47 @@
+import globals from '../globals';
+import registrar from '../compiler/registrar';
+
+export default class ComponentFillerProps {
+  _getSession() {
+    return registrar.client ? registrar.client.user.getSession() : undefined;
+  }
+
+  _getGlobals() {
+    return {
+      session: this._getSession(),
+      ...globals.get()
+    };
+  }
+
+  _formToFillerProps(component) {
+    const fields = {};
+    component.eachField(
+      field => (fields[field.get('name')] = { value: field.get('value') })
+    );
+    return fields;
+  }
+
+  getFillerProps(props) {
+    let fillerProps = {};
+
+    if (props) {
+      if (props.component) {
+        fillerProps = Object.assign(fillerProps, props.component.get());
+
+        // Is the component a form? We cannot use instanceof as otherwise it would create a circular
+        // dependency
+        // if (props.component instanceof Form) {
+        if (props.component.get('fields')) {
+          // Replace the component with values that can be used to fill
+          fillerProps.fields = this._formToFillerProps(props.component);
+        }
+      }
+
+      fillerProps.arguments = props.arguments;
+    }
+
+    fillerProps.globals = this._getGlobals();
+
+    return fillerProps;
+  }
+}

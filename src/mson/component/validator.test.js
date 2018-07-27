@@ -156,9 +156,11 @@ it('should validate with escaped regex', () => {
   let rules = [
     {
       where: {
-        password: {
-          $not: {
-            $regex: '\\d'
+        fields: {
+          password: {
+            $not: {
+              $regex: '\\d'
+            }
           }
         }
       },
@@ -169,6 +171,8 @@ it('should validate with escaped regex', () => {
   expect(validator.validate(rules)).toEqual(['must contain a number']);
 
   // Simulate the user changing the password
-  validator._props.password = 'secret1';
+  validator._props.fields = {
+    password: 'secret1'
+  };
   expect(validator.validate(rules)).toEqual([]);
 });
