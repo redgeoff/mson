@@ -46,6 +46,7 @@ import RecordEditor from './aggregate/record-editor';
 import RecordList from './aggregate/record-list';
 import RecordStore from './record-store';
 import Redirect from './actions/redirect';
+import RedirectByRole from './actions/redirect-by-role';
 import ResetPassword from './aggregate/reset-password';
 import RolesField from './fields/roles-field';
 import SchemaValidatorForm from './form/schema-validator-form';
@@ -108,6 +109,7 @@ export default {
   RecordList,
   RecordStore,
   Redirect,
+  RedirectByRole,
   ResetPassword,
   RolesField,
   SchemaValidatorForm,

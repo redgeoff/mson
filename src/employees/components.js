@@ -392,34 +392,16 @@ const menuItems = [
           component: 'Action',
           actions: [
             {
-              if: {
-                globals: {
-                  session: {
-                    user: {
-                      roleNames: {
-                        $in: ['admin', 'manager']
-                      }
-                    }
-                  }
+              component: 'RedirectByRole',
+              routes: [
+                {
+                  roles: ['admin', 'manager'],
+                  path: '/employees'
+                },
+                {
+                  path: '/account'
                 }
-              },
-              component: 'Redirect',
-              path: '/employees'
-            },
-            {
-              if: {
-                globals: {
-                  session: {
-                    user: {
-                      roleNames: {
-                        $nin: ['admin', 'manager']
-                      }
-                    }
-                  }
-                }
-              },
-              component: 'Redirect',
-              path: '/account'
+              ]
             }
           ]
         },
