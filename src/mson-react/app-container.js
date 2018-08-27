@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import AppUI from '../mson-react/app';
-import app from './mson-app';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { blueGrey, lightBlue } from '@material-ui/core/colors';
@@ -18,12 +17,13 @@ const theme = createMuiTheme({
 });
 
 // Note: BrowserRouter needs to be outside of App so that we can use withRouter
-class App extends Component {
+class AppContainer extends Component {
   onNavigate = (message, callback) => {
     globals.onNavigate(message, callback);
   };
 
   render() {
+    const { app } = this.props;
     return (
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
@@ -42,4 +42,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default AppContainer;
