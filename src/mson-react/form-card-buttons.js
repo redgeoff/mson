@@ -3,7 +3,7 @@ import IconButton from '@material-ui/core/IconButton';
 // import MoreVertIcon from '@material-ui/icons/MoreVert';
 // import Menu, { MenuItem } from '@material-ui/core/Menu';
 // import { ListItemIcon, ListItemText } from '@material-ui/core/List';
-import { ModeEdit, Delete, Restore } from '@material-ui/icons';
+import { Edit, Delete, Restore } from '@material-ui/icons';
 import Grid from '@material-ui/core/Grid';
 // import { Tooltip } from '@material-ui/core';
 
@@ -28,7 +28,7 @@ export default class FormCardButtons extends React.PureComponent {
       // <Tooltip title="Edit">
       updateButton = (
         <IconButton onClick={onEdit}>
-          <ModeEdit />
+          <Edit />
         </IconButton>
       );
       // </Tooltip>
@@ -60,7 +60,7 @@ export default class FormCardButtons extends React.PureComponent {
               onClick={event => this.handleEdit(event)}
             >
               <ListItemIcon className={classes.icon}>
-                <ModeEdit />
+                <Edit />
               </ListItemIcon>
               <ListItemText
                 classes={{ primary: classes.primary }}
