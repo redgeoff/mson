@@ -36,7 +36,7 @@ export default {
       component: 'ButtonField',
       name: 'edit',
       label: 'Edit',
-      icon: 'ModeEdit',
+      icon: 'Edit',
       hidden: true
     },
     {
