@@ -235,7 +235,7 @@ export default {
           storeName: '{{storeName}}'
         },
         {
-          '//': 'Needed or else will be prompted to discard changes',
+          // Needed or else will be prompted to discard changes
           component: 'Set',
           name: 'pristine',
           value: true
@@ -245,8 +245,7 @@ export default {
           message: '{{label}} saved'
         },
         {
-          '//':
-            'Needed to restore read data as may be different and update access',
+          // Needed to restore read data as may be different and update access
           if: {
             preview: {
               $ne: false
