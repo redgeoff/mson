@@ -2,8 +2,14 @@ import globals from '../globals';
 import registrar from '../compiler/registrar';
 
 export default class ComponentFillerProps {
+  constructor() {
+    // For mocking
+    this._registrar = registrar;
+  }
+
   _getSession() {
-    return registrar.client ? registrar.client.user.getSession() : undefined;
+    const reg = this._registrar;
+    return reg.client ? reg.client.user.getSession() : undefined;
   }
 
   _getGlobals() {
