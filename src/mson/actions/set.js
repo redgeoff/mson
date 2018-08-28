@@ -1,5 +1,4 @@
 import Action from './action';
-import globals from '../globals';
 
 export default class Set extends Action {
   _create(props) {
@@ -24,7 +23,7 @@ export default class Set extends Action {
 
   // For mocking. Note: _getGlobals() is already in use by Action
   _getGlobalsComponent() {
-    return globals;
+    return this._globals;
   }
 
   _setProp(props) {

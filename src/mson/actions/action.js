@@ -2,10 +2,16 @@ import Component from '../component';
 import sift from 'sift';
 import PropFiller from '../compiler/prop-filler';
 import ComponentFillerProps from '../component/component-filler-props';
+import registrar from '../compiler/registrar';
+import globals from '../globals';
 
 export default class Action extends Component {
   _create(props) {
     super._create(props);
+
+    // For mocking
+    this._registrar = registrar;
+    this._globals = globals;
 
     this._componentFillerProps = new ComponentFillerProps();
     this._fillerProps = null;

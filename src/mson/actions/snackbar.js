@@ -1,5 +1,4 @@
 import Action from './action';
-import globals from '../globals';
 
 export default class Snackbar extends Action {
   _create(props) {
@@ -22,6 +21,6 @@ export default class Snackbar extends Action {
   }
 
   async act(props) {
-    globals.displaySnackbar(this.get('message'));
+    this._globals.displaySnackbar(this.get('message'));
   }
 }

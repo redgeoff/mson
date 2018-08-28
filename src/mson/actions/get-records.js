@@ -1,6 +1,4 @@
 import Action from './action';
-import registrar from '../compiler/registrar';
-import globals from '../globals';
 import uberUtils from '../uber-utils';
 
 export default class GetRecords extends Action {
@@ -26,11 +24,11 @@ export default class GetRecords extends Action {
   }
 
   async act(props) {
-    const appId = globals.get('appId');
+    const appId = this._globals.get('appId');
 
     try {
       // TODO: pagination
-      const records = await registrar.client.record.getAll({
+      const records = await this._registrar.client.record.getAll({
         appId,
         componentName: this.get('storeName'),
         asArray: true,

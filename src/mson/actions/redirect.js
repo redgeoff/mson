@@ -1,5 +1,4 @@
 import Action from './action';
-import globals from '../globals';
 
 export default class Redirect extends Action {
   _create(props) {
@@ -22,6 +21,6 @@ export default class Redirect extends Action {
   }
 
   async act() {
-    globals.redirect(this.get('path'));
+    this._globals.redirect(this.get('path'));
   }
 }

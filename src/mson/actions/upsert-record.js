@@ -1,6 +1,4 @@
 import Action from './action';
-import registrar from '../compiler/registrar';
-import globals from '../globals';
 import uberUtils from '../uber-utils';
 import access from '../access';
 
@@ -31,7 +29,7 @@ export default class UpsertRecord extends Action {
   }
 
   _recordUpdate(props) {
-    return registrar.client.record.update(props);
+    return this._registrar.client.record.update(props);
   }
 
   _valuesCanCreate(component) {
@@ -39,11 +37,11 @@ export default class UpsertRecord extends Action {
   }
 
   _recordCreate(props) {
-    return registrar.client.record.create(props);
+    return this._registrar.client.record.create(props);
   }
 
   async act(props) {
-    const appId = globals.get('appId');
+    const appId = this._globals.get('appId');
 
     try {
       const id = props.component.getValue('id');

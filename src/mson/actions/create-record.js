@@ -1,15 +1,9 @@
 import Action from './action';
-import registrar from '../compiler/registrar';
-import globals from '../globals';
 import uberUtils from '../uber-utils';
 
 export default class CreateRecord extends Action {
   _create(props) {
     super._create(props);
-
-    // For mocking
-    this._registrar = registrar;
-    this._globals = globals;
 
     this.set({
       schema: {

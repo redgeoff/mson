@@ -1,6 +1,4 @@
 import Action from './action';
-import registrar from '../compiler/registrar';
-import globals from '../globals';
 import uberUtils from '../uber-utils';
 
 export default class GetRecord extends Action {
@@ -26,11 +24,11 @@ export default class GetRecord extends Action {
   }
 
   _recordGet(props) {
-    return registrar.client.record.get(props);
+    return this._registrar.client.record.get(props);
   }
 
   async act(props) {
-    const appId = globals.get('appId');
+    const appId = this._globals.get('appId');
 
     try {
       const record = await this._recordGet({
