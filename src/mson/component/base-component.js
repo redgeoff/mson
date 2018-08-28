@@ -556,6 +556,14 @@ export default class BaseComponent extends events.EventEmitter {
     return this.toUniqueId(key);
   }
 
+  getUniqueId() {
+    return this.constructor.toUniqueId(this._key);
+  }
+
+  isLoaded() {
+    return this._isLoaded;
+  }
+
   resolveAfterCreate() {
     return this._resolveAfterCreate;
   }

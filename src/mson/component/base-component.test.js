@@ -304,4 +304,10 @@ it('should set unique keys', () => {
   const component1 = new BaseComponent();
   const component2 = new BaseComponent();
   expect(component1.getKey()).not.toEqual(component2.getKey());
+  expect(component1.getUniqueId()).not.toEqual(component2.getUniqueId());
+});
+
+it('should get isLoaded', async () => {
+  const component = new BaseComponent();
+  expect(component.isLoaded()).toEqual(false);
 });
