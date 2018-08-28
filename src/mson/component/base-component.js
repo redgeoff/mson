@@ -77,6 +77,9 @@ export default class BaseComponent extends events.EventEmitter {
   constructor(props) {
     super(props);
 
+    // For mocking
+    this._registrar = registrar;
+
     this._setDebugId();
 
     this._listenerEvents = {};
@@ -194,10 +197,6 @@ export default class BaseComponent extends events.EventEmitter {
     this._set('name', name);
   }
 
-  _setPassed(passed) {
-    this._set('passed', passed);
-  }
-
   _setParent(parent) {
     this._set('parent', parent);
   }
@@ -243,7 +242,7 @@ export default class BaseComponent extends events.EventEmitter {
     return !!this._listenerEvents[event];
   }
 
-  _setListeners(listeners, passed) {
+  _setListeners(listeners) {
     // Listeners are concatentated that they can accumulate through the layers of inheritance. TODO:
     // do we need a construct to clear all previous listeners for an event?
     this._concat('listeners', listeners);
@@ -255,9 +254,6 @@ export default class BaseComponent extends events.EventEmitter {
 
       // Register the event so that we can do a quick lookup later
       events.forEach(event => (this._listenerEvents[event] = true));
-
-      // // Inject ifData so that we don't have to explicitly define it in the actions
-      // listener.ifData = passed;
     });
   }
 
@@ -282,19 +278,18 @@ export default class BaseComponent extends events.EventEmitter {
       return action.run({
         event,
         component: this,
-        // ifData: listener.ifData,
         arguments: args
       });
     }
   }
 
   _onDetachedActionError(err) {
-    if (registrar.log) {
-      registrar.log.error(err);
-
-      // Provide a way to intercept errors from detached actions
-      this.emitChange('actionError', err);
+    if (this._registrar.log) {
+      this._registrar.log.error(err);
     }
+
+    // Provide a way to intercept errors from detached actions
+    this.emitChange('actionErr', err);
   }
 
   async runListeners(event) {
@@ -315,7 +310,7 @@ export default class BaseComponent extends events.EventEmitter {
 
             const runAction = this._runAction(listener, action, event, output);
 
-            if (action.get('detach')) {
+            if (action.get('detached')) {
               // We don't wait for detached actions, but we want to log any errors
               runAction.catch(err => {
                 return this._onDetachedActionError(err);
@@ -340,28 +335,26 @@ export default class BaseComponent extends events.EventEmitter {
     });
   }
 
+  _pushProp(name) {
+    // Is the prop missing? The prop may already exist if we are overloading the type in a dervied
+    // component
+    if (this._props.indexOf(name) === -1) {
+      this._props.push(name);
+    }
+  }
+
   _setSchema(schema) {
-    // Schemas are pushed that they can accumulate through the layers of inheritance
+    // Schemas are pushed so that they can accumulate through the layers of inheritance
     this._push('schema', schema);
 
     // Push props so that we have a fast way of identifying the props for this component
     if (schema.fields) {
       // Uncompiled?
-      schema.fields.forEach(field => {
-        // Is the prop missing? The prop may already exist if we overloading the type in a dervied
-        // component
-        if (this._props.indexOf(field.name) === -1) {
-          this._props.push(field.name);
-        }
-      });
+      schema.fields.forEach(field => this._pushProp(field.name));
     } else if (schema.eachField) {
       schema.eachField(field => {
         if (!schema.isDefaultField(field.get('name'))) {
-          // Is the prop missing? The prop may already exist if we overloading the type in a dervied
-          // component
-          if (this._props.indexOf(field.get('name')) === -1) {
-            this._props.push(field.get('name'));
-          }
+          this._pushProp(field.get('name'));
         }
       });
     }
@@ -384,10 +377,6 @@ export default class BaseComponent extends events.EventEmitter {
       this._setName(props.name);
     }
 
-    if (props.passed !== undefined) {
-      this._setPassed(props.passed);
-    }
-
     if (props.parent !== undefined) {
       this._setParent(props.parent);
     }
@@ -397,27 +386,24 @@ export default class BaseComponent extends events.EventEmitter {
     }
 
     if (props.listeners !== undefined) {
-      this._setListeners(props.listeners, props.passed);
+      this._setListeners(props.listeners);
     }
 
     if (props.muteCreate !== undefined) {
       this._setMuteEvents(props.muteCreate);
     }
 
-    if (this._props) {
-      this._setIfUndefined(
-        Object.assign({}, props, {
-          component: undefined,
-          name: undefined,
-          listeners: undefined,
-          schema: undefined,
-          isStore: undefined,
-          props: undefined,
-          passed: undefined
-        }),
-        ...this._props
-      );
-    }
+    this._setIfUndefined(
+      Object.assign({}, props, {
+        component: undefined,
+        name: undefined,
+        listeners: undefined,
+        schema: undefined,
+        isStore: undefined,
+        props: undefined
+      }),
+      ...this._props
+    );
   }
 
   _get(name) {
@@ -434,16 +420,13 @@ export default class BaseComponent extends events.EventEmitter {
     let names = [
       'name',
       'listeners',
-      'passed',
       'schema',
       'parent',
       'isStore',
       'muteCreate'
     ];
 
-    if (this._props) {
-      names = names.concat(this._props);
-    }
+    names = names.concat(this._props);
 
     return this._getIfAllowed(name, ...names);
   }
@@ -464,7 +447,7 @@ export default class BaseComponent extends events.EventEmitter {
         values[name] = this.getOne(name);
       });
       return values;
-    } else if (names) {
+    } else {
       // Get single prop
       return this.getOne(names);
     }
@@ -551,15 +534,13 @@ export default class BaseComponent extends events.EventEmitter {
 
   buildSchemaForm(form, compiler) {
     const schemas = this.get('schema');
-    if (schemas) {
-      schemas.forEach(schema => {
-        // console.log('schemas', JSON.stringify(schema));
-        if (!compiler.isCompiled(schema)) {
-          schema = compiler.newComponent(schema);
-        }
-        form.copyFields(schema);
-      });
-    }
+    schemas.forEach(schema => {
+      // console.log('schemas', JSON.stringify(schema));
+      if (!compiler.isCompiled(schema)) {
+        schema = compiler.newComponent(schema);
+      }
+      form.copyFields(schema);
+    });
   }
 
   static getNextKey() {
@@ -585,13 +566,5 @@ export default class BaseComponent extends events.EventEmitter {
 
   resolveAfterCreate() {
     return this._resolveAfterCreate;
-  }
-
-  clearListeners() {
-    this._setProperty('listeners', undefined);
-
-    // Also clear the listenerEvents so that our main $change listener doesn't try to trigger any
-    // listeners
-    this._listenerEvents = {};
   }
 }

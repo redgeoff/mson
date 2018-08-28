@@ -612,3 +612,16 @@ it('should instantiate definitions with dynamic components', async () => {
 
   await newComponentAndResolveAfterCreate(employees);
 });
+
+it('get component should throw if component missing', () => {
+  expect(() => compiler.getComponent('AMissingComponent')).toThrow();
+});
+
+it('register component should throw if component exists', () => {
+  expect(() => compiler.registerComponent('Field')).toThrow();
+});
+
+it('should get oldest compiled ancestor', () => {
+  expect(compiler.getOldestCompiledAncestor('TextField')).toEqual('TextField');
+  expect(compiler.getOldestCompiledAncestor('EmailField')).toEqual('TextField');
+});

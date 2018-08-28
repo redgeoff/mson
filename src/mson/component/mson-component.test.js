@@ -26,3 +26,23 @@ it('should not preserve class name', () => {
 
   expect(component.getClassName()).toEqual('TextField');
 });
+
+it('should set and get compiler', () => {
+  const compiler = {};
+  const component = new MSONComponent();
+  component._setCompiler(compiler);
+  expect(component._getCompiler()).toEqual(compiler);
+});
+
+it('should throw if compiler not registered', () => {
+  const component = new MSONComponent();
+
+  // Simulate compiler not being registered
+  component._registrar = {};
+
+  expect(() =>
+    component.set({
+      definition: null
+    })
+  ).toThrow();
+});

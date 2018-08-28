@@ -34,28 +34,15 @@ export class Compiler {
   }
 
   getComponent(name) {
-    if (this._components[name]) {
+    if (this.exists(name)) {
       return this._components[name];
     } else {
       throw new Error('missing component ' + name);
     }
   }
 
-  _getUncompiledComponent(name) {
-    const component = this.getComponent(name);
-    if (!this.isCompiled(component)) {
-      return component;
-    } else {
-      throw new Error('missing MSON component ' + name);
-    }
-  }
-
-  _getWrappedComponentClass(nameOrClass, defaultProps, parentProps) {
-    const isName = typeof nameOrClass === 'string';
-
-    const Component = isName
-      ? this.getCompiledComponent(nameOrClass, defaultProps)
-      : nameOrClass;
+  _getWrappedComponentClass(name, defaultProps, parentProps) {
+    const Component = this.getCompiledComponent(name, defaultProps);
 
     const self = this;
 
@@ -96,9 +83,9 @@ export class Compiler {
       }
     }
 
-    // If the nameOrClass is a class then we use the inherited name
+    // If the name is a class then we use the inherited name
     Object.defineProperty(MyComponent, 'name', {
-      value: isName ? nameOrClass : Component.name,
+      value: name,
       writable: false
     });
 

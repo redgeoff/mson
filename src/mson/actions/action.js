@@ -27,7 +27,7 @@ export default class Action extends Component {
             component: 'TextField'
           },
           {
-            name: 'detach',
+            name: 'detached',
             component: 'BooleanField'
           }
         ]

@@ -134,8 +134,8 @@ export default {
           subject: '{{subject}}',
           body: '{{body}}',
 
-          // Detach so that user doesn't have to wait for email to send
-          detach: true
+          // Detached so that user doesn't have to wait for email to send
+          detached: true
         }
       ]
     },
