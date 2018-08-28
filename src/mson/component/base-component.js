@@ -194,10 +194,6 @@ export default class BaseComponent extends events.EventEmitter {
     this._set('name', name);
   }
 
-  _setPassed(passed) {
-    this._set('passed', passed);
-  }
-
   _setParent(parent) {
     this._set('parent', parent);
   }
@@ -243,7 +239,7 @@ export default class BaseComponent extends events.EventEmitter {
     return !!this._listenerEvents[event];
   }
 
-  _setListeners(listeners, passed) {
+  _setListeners(listeners) {
     // Listeners are concatentated that they can accumulate through the layers of inheritance. TODO:
     // do we need a construct to clear all previous listeners for an event?
     this._concat('listeners', listeners);
@@ -255,9 +251,6 @@ export default class BaseComponent extends events.EventEmitter {
 
       // Register the event so that we can do a quick lookup later
       events.forEach(event => (this._listenerEvents[event] = true));
-
-      // // Inject ifData so that we don't have to explicitly define it in the actions
-      // listener.ifData = passed;
     });
   }
 
@@ -384,10 +377,6 @@ export default class BaseComponent extends events.EventEmitter {
       this._setName(props.name);
     }
 
-    if (props.passed !== undefined) {
-      this._setPassed(props.passed);
-    }
-
     if (props.parent !== undefined) {
       this._setParent(props.parent);
     }
@@ -397,7 +386,7 @@ export default class BaseComponent extends events.EventEmitter {
     }
 
     if (props.listeners !== undefined) {
-      this._setListeners(props.listeners, props.passed);
+      this._setListeners(props.listeners);
     }
 
     if (props.muteCreate !== undefined) {
@@ -412,8 +401,7 @@ export default class BaseComponent extends events.EventEmitter {
           listeners: undefined,
           schema: undefined,
           isStore: undefined,
-          props: undefined,
-          passed: undefined
+          props: undefined
         }),
         ...this._props
       );
@@ -434,7 +422,6 @@ export default class BaseComponent extends events.EventEmitter {
     let names = [
       'name',
       'listeners',
-      'passed',
       'schema',
       'parent',
       'isStore',
@@ -575,23 +562,7 @@ export default class BaseComponent extends events.EventEmitter {
     return this.toUniqueId(key);
   }
 
-  getUniqueId() {
-    return this.constructor.toUniqueId(this._key);
-  }
-
-  isLoaded() {
-    return this._isLoaded;
-  }
-
   resolveAfterCreate() {
     return this._resolveAfterCreate;
-  }
-
-  clearListeners() {
-    this._setProperty('listeners', undefined);
-
-    // Also clear the listenerEvents so that our main $change listener doesn't try to trigger any
-    // listeners
-    this._listenerEvents = {};
   }
 }
