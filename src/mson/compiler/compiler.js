@@ -41,12 +41,8 @@ export class Compiler {
     }
   }
 
-  _getWrappedComponentClass(nameOrClass, defaultProps, parentProps) {
-    const isName = typeof nameOrClass === 'string';
-
-    const Component = isName
-      ? this.getCompiledComponent(nameOrClass, defaultProps)
-      : nameOrClass;
+  _getWrappedComponentClass(name, defaultProps, parentProps) {
+    const Component = this.getCompiledComponent(name, defaultProps);
 
     const self = this;
 
@@ -87,9 +83,9 @@ export class Compiler {
       }
     }
 
-    // If the nameOrClass is a class then we use the inherited name
+    // If the name is a class then we use the inherited name
     Object.defineProperty(MyComponent, 'name', {
-      value: isName ? nameOrClass : Component.name,
+      value: name,
       writable: false
     });
 
