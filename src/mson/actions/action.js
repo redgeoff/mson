@@ -36,7 +36,7 @@ export default class Action extends Component {
   }
 
   // Abstract method
-  async act(/* props */) {}
+  // async act(/* props */) {}
 
   _fill(prop) {
     const propFiller = new PropFiller(this._fillerProps);
@@ -51,7 +51,7 @@ export default class Action extends Component {
 
   _getFilled(names) {
     let prop = super.get(names);
-    return prop === null ? null : this._fill(prop);
+    return this._fill(prop);
   }
 
   get(names) {
