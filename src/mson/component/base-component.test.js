@@ -38,6 +38,10 @@ class SongAction extends Action {
     this.acts.push({
       event: props.event
     });
+
+    if (this._throwErr) {
+      throw this._throwErr;
+    }
   }
 }
 
@@ -85,6 +89,67 @@ it('should execute listeners', async () => {
 
   expect(action1.acts).toEqual([{ event: 'song' }, { event: 'artist' }]);
   expect(action2.acts).toEqual([{ event: 'song' }]);
+});
+
+it('should execute listener with an array of events', async () => {
+  const action = new SongAction();
+
+  const song = new Song({
+    listeners: [
+      {
+        event: ['song', 'artist'],
+        actions: [action]
+      }
+    ]
+  });
+
+  song.set({ song: "It Don't Mean a Thing", artist: 'Ella Fitzgerald' });
+
+  await testUtils.waitFor(() => {
+    return action.acts.length === 2 ? true : undefined;
+  });
+
+  expect(action.acts).toEqual([{ event: 'song' }, { event: 'artist' }]);
+});
+
+it('should run listeners when there are none', async () => {
+  const song = new Song({});
+  await song.runListeners();
+});
+
+it('should emit errors for detached actions', async () => {
+  const action = new SongAction({ detached: true });
+  action._throwErr = new Error();
+
+  const song = new Song({
+    listeners: [
+      {
+        event: 'artist',
+        actions: [action]
+      }
+    ]
+  });
+
+  const errThrown = testUtils.once(song, 'actionErr');
+
+  await song.runListeners('artist');
+
+  const results = await errThrown;
+  expect(results[0]).toEqual(action._throwErr);
+});
+
+it('should log errors when action is detached', () => {
+  const song = new Song();
+  song._registrar = {
+    log: {
+      error: () => {}
+    }
+  };
+  const logSpy = jest.spyOn(song._registrar.log, 'error');
+  const err = new Error();
+
+  song._onDetachedActionError(err);
+  expect(logSpy).toHaveBeenCalledWith(err);
 });
 
 it('should valiate schema', () => {
@@ -229,7 +294,3 @@ it('should set layer', () => {
   BaseComponent.setLayer('frontEnd');
   expect(BaseComponent.getLayer()).toEqual('frontEnd');
 });
-
-// it('should array of events in listeners', () => {
-//
-// });

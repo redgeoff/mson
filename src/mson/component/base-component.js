@@ -77,6 +77,9 @@ export default class BaseComponent extends events.EventEmitter {
   constructor(props) {
     super(props);
 
+    // For mocking
+    this._registrar = registrar;
+
     this._setDebugId();
 
     this._listenerEvents = {};
@@ -275,19 +278,18 @@ export default class BaseComponent extends events.EventEmitter {
       return action.run({
         event,
         component: this,
-        // ifData: listener.ifData,
         arguments: args
       });
     }
   }
 
   _onDetachedActionError(err) {
-    if (registrar.log) {
-      registrar.log.error(err);
-
-      // Provide a way to intercept errors from detached actions
-      this.emitChange('actionError', err);
+    if (this._registrar.log) {
+      this._registrar.log.error(err);
     }
+
+    // Provide a way to intercept errors from detached actions
+    this.emitChange('actionErr', err);
   }
 
   async runListeners(event) {
@@ -308,7 +310,7 @@ export default class BaseComponent extends events.EventEmitter {
 
             const runAction = this._runAction(listener, action, event, output);
 
-            if (action.get('detach')) {
+            if (action.get('detached')) {
               // We don't wait for detached actions, but we want to log any errors
               runAction.catch(err => {
                 return this._onDetachedActionError(err);
