@@ -50,5 +50,11 @@
   },
   "devDependencies": {
     "wait-on": "^2.1.0"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!**/mson-react/**"
+    ]
   }
 }
