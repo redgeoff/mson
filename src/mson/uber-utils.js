@@ -23,9 +23,20 @@ class Utils {
 
   async tryAndSetFormErrorsIfAPIError(promiseFactory, form) {
     try {
-      await promiseFactory();
+      return promiseFactory();
     } catch (err) {
       this.setFormErrorsFromAPIError(err, form);
+
+      // We throw the error so that the entire listener chain is aborted
+      throw err;
+    }
+  }
+
+  async tryAndDisplayErrorIfAPIError(promiseFactory) {
+    try {
+      return promiseFactory();
+    } catch (err) {
+      uberUtils.displayError(err.toString());
 
       // We throw the error so that the entire listener chain is aborted
       throw err;

@@ -30,7 +30,7 @@ export default class GetRecord extends Action {
   async act(props) {
     const appId = this._globals.get('appId');
 
-    try {
+    return uberUtils.tryAndDisplayErrorIfAPIError(async () => {
       const record = await this._recordGet({
         appId,
         componentName: this.get('storeName'),
@@ -38,11 +38,6 @@ export default class GetRecord extends Action {
       });
 
       return record.data.record;
-    } catch (err) {
-      uberUtils.displayError(err.toString());
-
-      // We throw the error so that the entire listener chain is aborted
-      throw err;
-    }
+    });
   }
 }
