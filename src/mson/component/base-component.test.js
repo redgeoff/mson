@@ -294,3 +294,14 @@ it('should set layer', () => {
   BaseComponent.setLayer('frontEnd');
   expect(BaseComponent.getLayer()).toEqual('frontEnd');
 });
+
+it('set should throw error if props is not an object', () => {
+  const song = new Song();
+  expect(() => song.set('foo')).toThrow();
+});
+
+it('should set unique keys', () => {
+  const component1 = new BaseComponent();
+  const component2 = new BaseComponent();
+  expect(component1.getKey()).not.toEqual(component2.getKey());
+});

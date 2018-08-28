@@ -335,28 +335,26 @@ export default class BaseComponent extends events.EventEmitter {
     });
   }
 
+  _pushProp(name) {
+    // Is the prop missing? The prop may already exist if we are overloading the type in a dervied
+    // component
+    if (this._props.indexOf(name) === -1) {
+      this._props.push(name);
+    }
+  }
+
   _setSchema(schema) {
-    // Schemas are pushed that they can accumulate through the layers of inheritance
+    // Schemas are pushed so that they can accumulate through the layers of inheritance
     this._push('schema', schema);
 
     // Push props so that we have a fast way of identifying the props for this component
     if (schema.fields) {
       // Uncompiled?
-      schema.fields.forEach(field => {
-        // Is the prop missing? The prop may already exist if we overloading the type in a dervied
-        // component
-        if (this._props.indexOf(field.name) === -1) {
-          this._props.push(field.name);
-        }
-      });
+      schema.fields.forEach(field => this._pushProp(field.name));
     } else if (schema.eachField) {
       schema.eachField(field => {
         if (!schema.isDefaultField(field.get('name'))) {
-          // Is the prop missing? The prop may already exist if we overloading the type in a dervied
-          // component
-          if (this._props.indexOf(field.get('name')) === -1) {
-            this._props.push(field.get('name'));
-          }
+          this._pushProp(field.get('name'));
         }
       });
     }
@@ -395,19 +393,17 @@ export default class BaseComponent extends events.EventEmitter {
       this._setMuteEvents(props.muteCreate);
     }
 
-    if (this._props) {
-      this._setIfUndefined(
-        Object.assign({}, props, {
-          component: undefined,
-          name: undefined,
-          listeners: undefined,
-          schema: undefined,
-          isStore: undefined,
-          props: undefined
-        }),
-        ...this._props
-      );
-    }
+    this._setIfUndefined(
+      Object.assign({}, props, {
+        component: undefined,
+        name: undefined,
+        listeners: undefined,
+        schema: undefined,
+        isStore: undefined,
+        props: undefined
+      }),
+      ...this._props
+    );
   }
 
   _get(name) {
@@ -430,9 +426,7 @@ export default class BaseComponent extends events.EventEmitter {
       'muteCreate'
     ];
 
-    if (this._props) {
-      names = names.concat(this._props);
-    }
+    names = names.concat(this._props);
 
     return this._getIfAllowed(name, ...names);
   }
@@ -453,7 +447,7 @@ export default class BaseComponent extends events.EventEmitter {
         values[name] = this.getOne(name);
       });
       return values;
-    } else if (names) {
+    } else {
       // Get single prop
       return this.getOne(names);
     }
@@ -540,15 +534,13 @@ export default class BaseComponent extends events.EventEmitter {
 
   buildSchemaForm(form, compiler) {
     const schemas = this.get('schema');
-    if (schemas) {
-      schemas.forEach(schema => {
-        // console.log('schemas', JSON.stringify(schema));
-        if (!compiler.isCompiled(schema)) {
-          schema = compiler.newComponent(schema);
-        }
-        form.copyFields(schema);
-      });
-    }
+    schemas.forEach(schema => {
+      // console.log('schemas', JSON.stringify(schema));
+      if (!compiler.isCompiled(schema)) {
+        schema = compiler.newComponent(schema);
+      }
+      form.copyFields(schema);
+    });
   }
 
   static getNextKey() {
