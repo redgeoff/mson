@@ -18,15 +18,14 @@ class Utils {
     return values;
   }
 
-  _mergeCustomizer = (objValue, srcValue) => {
-    if (_.isArray(objValue)) {
-      return objValue.concat(srcValue);
-    }
-  };
-
   // A recursive merge that also concats arrays
   merge(object, sources) {
-    return _.mergeWith(object, sources, this._mergeCustomizer);
+    const mergeCustomizer = (objValue, srcValue) => {
+      if (_.isArray(objValue)) {
+        return objValue.concat(srcValue);
+      }
+    };
+    return _.mergeWith(object, sources, mergeCustomizer);
   }
 
   inBrowser() {

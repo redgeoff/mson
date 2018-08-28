@@ -29,20 +29,20 @@ jobs:
           key: dependencies-{{ checksum "package.json" }}
 
       # Download private dependencies
-      - run: git clone ssh://git@bitbucket.org/redgeoff/mson-server ../mson-server
-      - restore_cache:
-          keys:
-          - mson-server-dependencies-{{ checksum "package.json" }}
-          - mson-server-dependencies-
-      - run: cd ../mson-server && yarn install
-      - save_cache:
-          paths:
-            - ../mson-server/node_modules
-          key: mson-server-dependencies-{{ checksum "package.json" }}
-      - run: cd ../mson-server && cp src/config.default.json src/config.json
-      - run: cd ../mson-server && yarn compile
+      # - run: git clone ssh://git@bitbucket.org/redgeoff/mson-server ../mson-server
+      # - restore_cache:
+      #     keys:
+      #     - mson-server-dependencies-{{ checksum "package.json" }}
+      #     - mson-server-dependencies-
+      # - run: cd ../mson-server && yarn install
+      # - save_cache:
+      #     paths:
+      #       - ../mson-server/node_modules
+      #     key: mson-server-dependencies-{{ checksum "package.json" }}
+      # - run: cd ../mson-server && cp src/config.default.json src/config.json
+      # - run: cd ../mson-server && yarn compile
 
-      - run: yarn setup
+      # - run: yarn setup
 
       # Wait for MySQL to be ready
       - run: ./node_modules/wait-on/bin/wait-on tcp:3306
