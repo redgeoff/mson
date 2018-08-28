@@ -36,7 +36,7 @@ class Utils {
     try {
       return promiseFactory();
     } catch (err) {
-      uberUtils.displayError(err.toString());
+      this.displayError(err.toString());
 
       // We throw the error so that the entire listener chain is aborted
       throw err;
