@@ -34,19 +34,10 @@ export class Compiler {
   }
 
   getComponent(name) {
-    if (this._components[name]) {
+    if (this.exists(name)) {
       return this._components[name];
     } else {
       throw new Error('missing component ' + name);
-    }
-  }
-
-  _getUncompiledComponent(name) {
-    const component = this.getComponent(name);
-    if (!this.isCompiled(component)) {
-      return component;
-    } else {
-      throw new Error('missing MSON component ' + name);
     }
   }
 
