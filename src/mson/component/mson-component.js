@@ -9,6 +9,9 @@ export default class MSONComponent extends WrappedComponent {
 
     // We want the class name to be that of the wrapped component
     this._preserveClassName = false;
+
+    // For mocking
+    this._registrar = registrar;
   }
 
   // Set the compiler so that we can have separate compiler spaces per list of components
@@ -16,15 +19,20 @@ export default class MSONComponent extends WrappedComponent {
     this._compiler = compiler;
   }
 
+  _getCompiler() {
+    const compiler = this._compiler ? this._compiler : this._registrar.compiler;
+    if (compiler) {
+      return compiler;
+    } else {
+      throw new Error('compiler has not been registered with registrar');
+    }
+  }
+
   set(props) {
     if (props.definition !== undefined) {
-      const compiler = this._compiler ? this._compiler : registrar.compiler;
-      if (compiler) {
-        const component = compiler.newComponent(props.definition);
-        this.setComponentToWrap(component);
-      } else {
-        throw new Error('compiler has not been registered with registrar');
-      }
+      const compiler = this._getCompiler();
+      const component = compiler.newComponent(props.definition);
+      this.setComponentToWrap(component);
     }
 
     super.set(props);
