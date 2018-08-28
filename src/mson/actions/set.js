@@ -21,11 +21,6 @@ export default class Set extends Action {
     });
   }
 
-  // For mocking. Note: _getGlobals() is already in use by Action
-  _getGlobalsComponent() {
-    return this._globals;
-  }
-
   _setProp(props) {
     const name = this.get('name');
     let names = name ? name.split('.') : [];
@@ -42,9 +37,7 @@ export default class Set extends Action {
       });
     } else {
       let component =
-        names[0] === 'globals'
-          ? this._getGlobalsComponent()
-          : props.component.get(names[0]);
+        names[0] === 'globals' ? this._globals : props.component.get(names[0]);
       for (let i = 1; i < names.length - 1; i++) {
         component = component.get(names[i]);
       }
