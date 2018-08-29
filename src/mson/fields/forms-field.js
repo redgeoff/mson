@@ -24,6 +24,7 @@ export default class FormsField extends Field {
     // For mocking
     this._window = window;
     this._document = document;
+    this._globals = globals;
 
     this.set({
       schema: {
@@ -714,7 +715,7 @@ export default class FormsField extends Field {
       id.getValue()
     );
 
-    globals.displaySnackbar(this.getSingularLabel() + ' saved');
+    this._globals.displaySnackbar(this.getSingularLabel() + ' saved');
 
     return fieldForm;
   }
@@ -751,7 +752,7 @@ export default class FormsField extends Field {
 
     form.emitChange('didArchiveRecord', form.getValue('id'));
 
-    globals.displaySnackbar(this.getSingularLabel() + ' deleted');
+    this._globals.displaySnackbar(this.getSingularLabel() + ' deleted');
   }
 
   async restore(form) {
@@ -767,7 +768,7 @@ export default class FormsField extends Field {
 
     form.emitChange('didRestoreRecord', form.getValue('id'));
 
-    globals.displaySnackbar(this.getSingularLabel() + ' restored');
+    this._globals.displaySnackbar(this.getSingularLabel() + ' restored');
   }
 
   reachedMax() {

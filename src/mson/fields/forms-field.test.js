@@ -34,6 +34,8 @@ const createForm = props => {
 
 const createField = () => {
   return new FormsField({
+    label: 'People',
+    singularLabel: 'Person',
     form: createForm()
   });
 };
@@ -364,11 +366,13 @@ it('should save', async () => {
   expect(createSpy).toHaveBeenCalledWith({ form });
   expect(form.getValue('id')).toEqual('myId');
   expect(form.get('userId')).toEqual('myUserId');
+  expect(field.getValue()).toHaveLength(1);
 
   // Update
   form.setValues({ lastName: 'Ryan' });
   await field.save();
   expect(updateSpy).toHaveBeenCalledWith({ form, id: form.getValue('id') });
+  expect(field.getValue()).toHaveLength(1);
 
   // Simulate the lack of a store
   field.set({ store: null });
@@ -376,9 +380,67 @@ it('should save', async () => {
   form.setValues(jack);
   await field.save();
   expect(form.getValue('id')).not.toBeUndefined();
+  expect(field.getValue()).toHaveLength(2);
   form.setValues({ lastName: 'Ryan' });
   await field.save();
   expect(form.getValue('lastName')).toEqual('Ryan');
+  expect(field.getValue()).toHaveLength(2);
+});
+
+it('should archive', async () => {
+  const field = createField();
+
+  const archivedAt = new Date();
+
+  const store = {
+    update: async () => {},
+    archive: async () => ({
+      data: {
+        archiveRecord: {
+          archivedAt
+        }
+      }
+    })
+  };
+
+  field._globals = {
+    displaySnackbar: () => {}
+  };
+
+  field.set({ store });
+
+  const archiveSpy = jest.spyOn(store, 'archive');
+  const displaySnackbarSpy = jest.spyOn(field._globals, 'displaySnackbar');
+
+  const jack = {
+    id: 'jack',
+    firstName: 'Jack',
+    lastName: 'Johnson'
+  };
+
+  const form = field.get('form');
+
+  form.setValues(jack);
+
+  // Create
+  await field.save();
+
+  // Archive
+  const didArchiveRecord = testUtils.once(form, 'didArchiveRecord');
+  await field.archive(form);
+  expect(archiveSpy).toHaveBeenCalledWith({ form, id: form.getValue('id') });
+  expect(form.get('archivedAt')).toEqual(archivedAt);
+  expect(field.getValue()).toHaveLength(0);
+  expect(displaySnackbarSpy).toHaveBeenCalledWith('Person deleted');
+  await didArchiveRecord;
+
+  // Simulate the lack of a store
+  field.set({ store: null });
+  form.clearValues();
+  form.setValues(jack);
+  await field.save();
+  await field.archive(form);
+  expect(field.getValue()).toHaveLength(0);
 });
 
 it('should handle missing form', () => {
