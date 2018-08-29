@@ -124,16 +124,18 @@ export default {
       required: true
     },
 
-    {
-      component: 'ListField',
-      name: 'listField',
-      label: 'ListField',
-      help: 'Example help',
-      required: true,
-      field: {
-        component: 'TextField'
-      }
-    },
+    // TODO: need to implement default mechanism in ListField that creates new field by default and
+    // then allows user to click to add new field.
+    // {
+    //   component: 'ListField',
+    //   name: 'listField',
+    //   label: 'ListField',
+    //   help: 'Example help',
+    //   required: true,
+    //   field: {
+    //     component: 'TextField'
+    //   }
+    // },
 
     {
       name: 'numberField',
@@ -144,11 +146,49 @@ export default {
     },
 
     {
+      name: 'passwordField',
+      component: 'PasswordField',
+      label: 'PasswordField',
+      help: 'Example help',
+      required: true
+    },
+
+    {
+      name: 'personFullNameField',
+      component: 'PersonFullNameField',
+      label: 'PersonFullNameField',
+      help: 'Example help',
+      required: true
+    },
+
+    {
+      name: 'personNameField',
+      component: 'PersonNameField',
+      label: 'PersonNameField',
+      help: 'Example help',
+      required: true
+    },
+
+    {
       name: 'selectField',
       component: 'SelectField',
       label: 'SelectField',
       help: 'Example help',
       required: true,
+      options: [
+        { value: 'red', label: 'Red' },
+        { value: 'green', label: 'Green' },
+        { value: 'blue', label: 'Blue' }
+      ]
+    },
+
+    {
+      name: 'selectFieldMult',
+      component: 'SelectField',
+      label: 'SelFld (mult)',
+      help: 'Example help',
+      required: true,
+      multiple: true,
       options: [
         { value: 'red', label: 'Red' },
         { value: 'green', label: 'Green' },
@@ -175,14 +215,16 @@ export default {
       label: 'TextField',
       help: 'Example help',
       required: true
-    },
-
-    {
-      component: 'TextListField',
-      name: 'textListField',
-      label: 'TextListField',
-      help: 'Example help',
-      required: true
     }
+
+    // TODO: need to implement default mechanism in ListField that creates new field by default and
+    // then allows user to click to add new field.
+    // {
+    //   component: 'TextListField',
+    //   name: 'textListField',
+    //   label: 'TextListField',
+    //   help: 'Example help',
+    //   required: true
+    // }
   ]
 };
