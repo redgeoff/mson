@@ -192,12 +192,16 @@ export default class FormsField extends Field {
     await this._infiniteLoader.getAll();
   }
 
-  _listenForShowArchived() {
-    this.on('showArchived', async showArchived => {
+  _handleShowArchivedFactory() {
+    return async showArchived => {
       this.set({ showArchived });
 
       await this._clearAndGetAll();
-    });
+    };
+  }
+
+  _listenForShowArchived() {
+    this.on('showArchived', this._handleShowArchivedFactory());
   }
 
   _toWhereFromSearchString() {

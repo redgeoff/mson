@@ -327,3 +327,28 @@ it('should save', async () => {
     mode: 'read'
   });
 });
+
+it('should handle missing form', () => {
+  const field = new FormsField();
+  field.emitLoad();
+  field.emitUnload();
+});
+
+it('should clear and get all', async () => {
+  const field = new FormsField();
+  const clearSpy = jest.spyOn(field._forms, 'clear');
+  const resetInfiniteLoaderSpy = jest.spyOn(field, '_resetInfiniteLoader');
+  const updateInfiniteLoaderSpy = jest.spyOn(field, '_updateInfiniteLoader');
+  const getAllSpy = jest.spyOn(field._infiniteLoader, 'getAll');
+  await field._clearAndGetAll();
+  expect(clearSpy).toHaveBeenCalledTimes(1);
+  expect(resetInfiniteLoaderSpy).toHaveBeenCalledTimes(1);
+  expect(updateInfiniteLoaderSpy).toHaveBeenCalledTimes(1);
+  expect(getAllSpy).toHaveBeenCalledTimes(1);
+});
+
+it('should handle show archived', () => {
+  const field = new FormsField();
+  field._handleShowArchivedFactory()(true);
+  expect(field.get('showArchived')).toEqual(true);
+});
