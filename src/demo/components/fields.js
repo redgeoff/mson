@@ -12,7 +12,7 @@ export default {
     {
       name: 'buttonField',
       component: 'ButtonField',
-      label: 'Submit',
+      label: 'ButtonField',
       icon: 'Save',
       type: 'submit',
       block: true

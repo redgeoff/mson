@@ -7,7 +7,14 @@ import FlexBreak from '../flex-break';
 // Use MSON React Component instead?
 class Field extends React.PureComponent {
   render() {
-    const { field, hidden, block, accessEditable, didCreate } = this.props;
+    const {
+      field,
+      hidden,
+      block,
+      accessEditable,
+      didCreate,
+      noBlock
+    } = this.props;
 
     // Don't show the component until didCreate is true as we may need to wait for fields to be
     // hidden or otherwise modified by listeners
@@ -27,7 +34,7 @@ class Field extends React.PureComponent {
       return (
         <span>
           <Field field={field} accessEditable={accessEditable} />
-          {block ? <FlexBreak /> : null}
+          {!noBlock && block ? <FlexBreak /> : null}
         </span>
       );
     }

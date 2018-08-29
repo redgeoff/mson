@@ -2,6 +2,7 @@ import React from 'react';
 import Field from './field';
 import attach from '../attach';
 import HelpToolTip from './help-tool-tip';
+import FlexBreak from '../flex-break';
 
 class CompositeField extends React.PureComponent {
   render() {
@@ -9,12 +10,22 @@ class CompositeField extends React.PureComponent {
 
     let fields = [];
 
-    field.eachField((field, index) => {
-      fields.push(<Field field={field} key={index} />);
+    let lastIsBlock = false;
+
+    field.eachField((field, index, last) => {
+      if (last && field.get('block')) {
+        lastIsBlock = true;
+      }
+      fields.push(<Field field={field} key={index} noBlock={last} />);
     });
 
     if (help && editable) {
       fields.push(<HelpToolTip help={help} key="help" />);
+    }
+
+    if (lastIsBlock) {
+      // Break after any help
+      fields.push(<FlexBreak />);
     }
 
     return fields;

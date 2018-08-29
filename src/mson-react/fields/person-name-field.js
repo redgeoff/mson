@@ -1,4 +1,4 @@
-// NOTE: replaced by JSON. Kept as template
+// NOTE: replaced by MSON component. Kept as template
 //
 // import React from 'react';
 // import TextField from './text-field';
