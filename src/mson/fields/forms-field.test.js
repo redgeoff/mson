@@ -406,3 +406,17 @@ it('should handle order', async () => {
   field._handleOrderFactory()(order);
   expect(clearAndGetAllSpy).toHaveBeenCalledTimes(1);
 });
+
+it('should handle scroll', async () => {
+  const field = createField();
+
+  const scrollY = 100;
+
+  field._window = {
+    scrollY
+  };
+  const scrollSpy = jest.spyOn(field._infiniteLoader, 'scroll');
+
+  field._handleScrollFactory()();
+  expect(scrollSpy).toHaveBeenCalledWith({ scrollY });
+});
