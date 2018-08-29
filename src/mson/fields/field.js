@@ -244,7 +244,8 @@ export default class Field extends Component {
     }
   }
 
-  getFirstErr(err) {
+  getFirstErr() {
+    const err = this.get('err');
     if (Array.isArray(err)) {
       if (Array.isArray(err[0].error)) {
         return err[0].error[0].error;

@@ -32,7 +32,7 @@ class CommonField extends React.PureComponent {
       );
     }
 
-    const firstErr = field.getFirstErr(err);
+    const firstErr = field.getFirstErr();
 
     fld = (
       <span>
