@@ -382,7 +382,7 @@ export default class FormsField extends Field {
         return this._document.getElementById(this.get('spacerId'));
       },
       onRemoveItems: (id, n, reverse) => {
-        this._onRemoveItems(id, n, reverse);
+        return this._onRemoveItems(id, n, reverse);
       },
       onGetItems: (id, reverse) => {
         return this._forms.values(id, reverse);
