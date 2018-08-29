@@ -63,8 +63,7 @@ export default class ListField extends CompositeField {
     // Prevent listener leaks
     field.removeAllListeners();
 
-    // Emit event so that we do things like dynamically adjust the display of fields
-    this._emitChange('fields', this._fields);
+    this._emitChangeToField(field);
 
     this._calcValue();
 

@@ -77,6 +77,13 @@ export default class CompositeField extends Field {
     });
   }
 
+  _emitChangeToField(field) {
+    // Emit event so that we do things like dynamically adjust the display of fields. We can't emit
+    // just all the fields as otherwise a shallow comparison won't detect a change.
+    // this._emitChange('fields', this._fields);
+    this._emitChange('change', field);
+  }
+
   _addField(field, name) {
     if (name === undefined) {
       name = field.get('name');
@@ -84,8 +91,7 @@ export default class CompositeField extends Field {
 
     this._fields.set(name, field);
 
-    // Emit event so that we do things like dynamically adjust the display of fields
-    this._emitChange('fields', this._fields);
+    this._emitChangeToField(field);
 
     this._listenForChangesToField(field);
   }

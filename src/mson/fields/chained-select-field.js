@@ -27,6 +27,10 @@ export default class ChainedSelectField extends ListField {
           {
             name: 'blankString',
             component: 'TextField'
+          },
+          {
+            name: 'multiline',
+            component: 'BooleanField'
           }
         ]
       }
@@ -54,7 +58,7 @@ export default class ChainedSelectField extends ListField {
       label: index === 0 ? this.get('label') : undefined,
       required: index === 0 ? this.get('required') : undefined,
       blankString: this.get('blankString'),
-      // block: this.get('block'),
+      block: !!this.get('multiline'),
       fullWidth: this.get('fullWidth')
     });
   }
