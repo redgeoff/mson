@@ -125,6 +125,17 @@ export default {
     },
 
     {
+      component: 'ListField',
+      name: 'listField',
+      label: 'ListField',
+      help: 'Example help',
+      required: true,
+      field: {
+        component: 'TextField'
+      }
+    },
+
+    {
       name: 'numberField',
       component: 'NumberField',
       label: 'NumberField',
@@ -133,9 +144,43 @@ export default {
     },
 
     {
+      name: 'selectField',
+      component: 'SelectField',
+      label: 'SelectField',
+      help: 'Example help',
+      required: true,
+      options: [
+        { value: 'red', label: 'Red' },
+        { value: 'green', label: 'Green' },
+        { value: 'blue', label: 'Blue' }
+      ]
+    },
+
+    {
+      name: 'selectListField',
+      component: 'SelectListField',
+      label: 'SelListField',
+      help: 'Example help',
+      required: true,
+      options: [
+        { value: 'red', label: 'Red' },
+        { value: 'green', label: 'Green' },
+        { value: 'blue', label: 'Blue' }
+      ]
+    },
+
+    {
       name: 'textField',
       component: 'TextField',
       label: 'TextField',
+      help: 'Example help',
+      required: true
+    },
+
+    {
+      component: 'TextListField',
+      name: 'textListField',
+      label: 'TextListField',
       help: 'Example help',
       required: true
     }

@@ -30,5 +30,6 @@ export default {
   SelectField,
   SelectListField: ListField,
   TextField,
+  TextListField: ListField,
   User: Form
 };
