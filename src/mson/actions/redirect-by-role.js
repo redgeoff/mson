@@ -1,6 +1,4 @@
 import Action from './action';
-import globals from '../globals';
-import registrar from '../compiler/registrar';
 import _ from 'lodash';
 
 export default class RedirectByRole extends Action {
@@ -26,8 +24,8 @@ export default class RedirectByRole extends Action {
   async act() {
     const routes = this.get('routes');
     _.each(routes, route => {
-      if (!route.roles || registrar.client.user.hasRole(route.roles)) {
-        globals.redirect(route.path);
+      if (!route.roles || this._registrar.client.user.hasRole(route.roles)) {
+        this._globals.redirect(route.path);
         return false; // exit loop
       }
     });

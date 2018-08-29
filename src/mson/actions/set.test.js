@@ -103,11 +103,11 @@ it('should set globals', async () => {
   let propsSet = null;
 
   // Mock
-  set._getGlobalsComponent = () => ({
+  set._globals = {
     set: props => {
       propsSet = props;
     }
-  });
+  };
 
   await set.run({ arguments: null });
   expect(propsSet).toEqual({ redirectAfterLogin: '/account' });

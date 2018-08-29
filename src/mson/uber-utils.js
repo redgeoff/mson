@@ -20,6 +20,28 @@ class Utils {
       this.displayError(err.toString());
     }
   }
+
+  async tryAndSetFormErrorsIfAPIError(promiseFactory, form) {
+    try {
+      return promiseFactory();
+    } catch (err) {
+      this.setFormErrorsFromAPIError(err, form);
+
+      // We throw the error so that the entire listener chain is aborted
+      throw err;
+    }
+  }
+
+  async tryAndDisplayErrorIfAPIError(promiseFactory) {
+    try {
+      return promiseFactory();
+    } catch (err) {
+      this.displayError(err.toString());
+
+      // We throw the error so that the entire listener chain is aborted
+      throw err;
+    }
+  }
 }
 
 export default new Utils();

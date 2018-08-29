@@ -1,5 +1,4 @@
 import Action from './action';
-import registrar from '../compiler/registrar';
 
 export default class Email extends Action {
   _create(props) {
@@ -42,7 +41,7 @@ export default class Email extends Action {
   }
 
   _sendEmail(props) {
-    return registrar.email.send(props);
+    return this._registrar.email.send(props);
   }
 
   async act(props) {

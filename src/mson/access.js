@@ -6,6 +6,9 @@ import _ from 'lodash';
 class Access {
   constructor() {
     this._accessControl = new AccessControl();
+
+    // For mocking
+    this._registrar = registrar;
   }
 
   canAccess(operation, form) {
@@ -14,7 +17,7 @@ class Access {
     if (access && access.form && access.form[operation]) {
       const opRoles = access.form[operation];
       const roles = Array.isArray(opRoles) ? opRoles : [opRoles];
-      canAccess = registrar.client.user.hasRole(roles);
+      canAccess = this._registrar.client.user.hasRole(roles);
     } else {
       // No roles specified so can access
       canAccess = true;
@@ -40,7 +43,7 @@ class Access {
 
   _fieldsOrValuesCanAccess(operation, form, getOpts, forFields, canDowngrade) {
     const access = form.get('access');
-    const session = registrar.client.user.getSession();
+    const session = this._registrar.client.user.getSession();
 
     let indexedRoles = {};
     let isOwner = false;

@@ -49,7 +49,13 @@ it('should send email', async () => {
     body: '{{fields.body.value}}'
   });
 
-  const sendEmailSpy = jest.spyOn(email, '_sendEmail').mockImplementation();
+  email._registrar = {
+    email: {
+      send: () => {}
+    }
+  };
+
+  const sendEmailSpy = jest.spyOn(email._registrar.email, 'send');
 
   await email.run({ component: form });
 

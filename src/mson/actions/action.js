@@ -2,10 +2,18 @@ import Component from '../component';
 import sift from 'sift';
 import PropFiller from '../compiler/prop-filler';
 import ComponentFillerProps from '../component/component-filler-props';
+import registrar from '../compiler/registrar';
+import globals from '../globals';
+import access from '../access';
 
 export default class Action extends Component {
   _create(props) {
     super._create(props);
+
+    // For mocking
+    this._registrar = registrar;
+    this._globals = globals;
+    this._access = access;
 
     this._componentFillerProps = new ComponentFillerProps();
     this._fillerProps = null;
@@ -36,7 +44,7 @@ export default class Action extends Component {
   }
 
   // Abstract method
-  async act(/* props */) {}
+  // async act(/* props */) {}
 
   _fill(prop) {
     const propFiller = new PropFiller(this._fillerProps);
@@ -51,7 +59,7 @@ export default class Action extends Component {
 
   _getFilled(names) {
     let prop = super.get(names);
-    return prop === null ? null : this._fill(prop);
+    return this._fill(prop);
   }
 
   get(names) {
