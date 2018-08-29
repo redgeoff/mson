@@ -18,3 +18,10 @@ it('should validate', () => {
 
   testUtils.expectValuesToBeInvalid(field, [null]);
 });
+
+it('should get display value', () => {
+  const field = new BooleanField({ label: 'MyLabel' });
+  expect(field.getDisplayValue()).toBeUndefined();
+  field.setValue(true);
+  expect(field.getDisplayValue()).toEqual('MyLabel');
+});
