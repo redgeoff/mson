@@ -9,7 +9,7 @@ import Emit from '../actions/emit';
 
 const formName = utils.uuid();
 
-const createForm = () => {
+const createForm = props => {
   return new Form({
     fields: [
       new TextField({ name: 'firstName', label: 'First Name', required: true }),
@@ -26,7 +26,9 @@ const createForm = () => {
           })
         ]
       }
-    ]
+    ],
+
+    ...props
   });
 };
 
@@ -297,7 +299,7 @@ it('should add many forms quickly when using uncompiled components', () => {
   return shouldAddFormsQuickly(field, ADD_FORMS_UNCOMPILED_TIMEOUT_MS);
 });
 
-it('should save', async () => {
+it('save should handle errors', async () => {
   const field = createField();
 
   const createdForm = new Form();
@@ -326,6 +328,57 @@ it('should save', async () => {
     currentForm: createdForm,
     mode: 'read'
   });
+});
+
+it('should save', async () => {
+  const field = createField();
+
+  const store = {
+    create: async () => ({
+      data: {
+        createRecord: {
+          id: 'myId',
+          userId: 'myUserId'
+        }
+      }
+    }),
+    update: async () => {}
+  };
+
+  field.set({ store });
+
+  const createSpy = jest.spyOn(store, 'create');
+  const updateSpy = jest.spyOn(store, 'update');
+
+  const jack = {
+    firstName: 'Jack',
+    lastName: 'Johnson'
+  };
+
+  const form = field.get('form');
+
+  form.setValues(jack);
+
+  // Create
+  await field.save();
+  expect(createSpy).toHaveBeenCalledWith({ form });
+  expect(form.getValue('id')).toEqual('myId');
+  expect(form.get('userId')).toEqual('myUserId');
+
+  // Update
+  form.setValues({ lastName: 'Ryan' });
+  await field.save();
+  expect(updateSpy).toHaveBeenCalledWith({ form, id: form.getValue('id') });
+
+  // Simulate the lack of a store
+  field.set({ store: null });
+  form.clearValues();
+  form.setValues(jack);
+  await field.save();
+  expect(form.getValue('id')).not.toBeUndefined();
+  form.setValues({ lastName: 'Ryan' });
+  await field.save();
+  expect(form.getValue('lastName')).toEqual('Ryan');
 });
 
 it('should handle missing form', () => {
