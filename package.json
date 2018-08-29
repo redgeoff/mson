@@ -54,7 +54,9 @@
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
-      "!**/mson-react/**"
+      "!**/mson-react/**",
+      "!**/demo/**",
+      "!**/src/index.js"
     ]
   }
 }
