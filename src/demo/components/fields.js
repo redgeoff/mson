@@ -85,6 +85,30 @@ export default {
     },
 
     {
+      component: 'FormsField',
+      name: 'formsField',
+      label: 'Records',
+      help: 'Example help',
+      required: true,
+      form: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'firstName',
+            component: 'TextField',
+            label: 'First Name',
+            required: true
+          },
+          {
+            name: 'lastName',
+            component: 'TextField',
+            label: 'Last Name'
+          }
+        ]
+      }
+    },
+
+    {
       name: 'textField',
       component: 'TextField',
       label: 'TextField',

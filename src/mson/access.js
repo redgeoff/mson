@@ -43,7 +43,8 @@ class Access {
 
   _fieldsOrValuesCanAccess(operation, form, getOpts, forFields, canDowngrade) {
     const access = form.get('access');
-    const session = this._registrar.client.user.getSession();
+    const session =
+      this._registrar.client && this._registrar.client.user.getSession();
 
     let indexedRoles = {};
     let isOwner = false;
