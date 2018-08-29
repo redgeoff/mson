@@ -8,9 +8,12 @@ import registerServiceWorker from './register-service-worker';
 
 class MSONReact {
   async render(app) {
-    // Make sure we load the session before doing any rendering so that components can do their
-    // initial rendering based on the user's authentication status
-    await registrar.client.user.awaitSession();
+    // Was the client registered?
+    if (registrar.client) {
+      // Make sure we load the session before doing any rendering so that components can do their
+      // initial rendering based on the user's authentication status
+      await registrar.client.user.awaitSession();
+    }
 
     ReactDOM.render(
       <AppContainer app={app} />,

@@ -1,5 +1,4 @@
-// TODO: - Should be able to covert this to a JSON field, right? Rename ListField to CommonListField
-// and then create ListField for implementing list fields from any field?
+// TODO: Should be able to covert this to a JSON field, right?
 
 import ListField from './list-field';
 import ChainedSelectField from './chained-select-field';
