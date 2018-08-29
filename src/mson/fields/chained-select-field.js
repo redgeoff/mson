@@ -88,16 +88,16 @@ export default class ChainedSelectField extends ListField {
   _getChildOptions(value, index) {
     // The parentValue can only be null if the index is 0 or else we will get the root options when
     // it is not intended.
-    if (value !== null || index === 0) {
-      return this._indexedOptions.mapByParent(value, option => {
-        return {
-          value: option.id,
-          label: option.label
-        };
-      });
-    } else {
-      return [];
-    }
+    // if (value !== null || index === 0) {
+    return this._indexedOptions.mapByParent(value, option => {
+      return {
+        value: option.id,
+        label: option.label
+      };
+    });
+    // } else {
+    //   return [];
+    // }
   }
 
   _setFieldOptions(value, index) {
@@ -159,9 +159,9 @@ export default class ChainedSelectField extends ListField {
     }
 
     if (props.required !== undefined) {
-      if (this._fields.hasFirst()) {
-        this._fields.first().set({ required: props.required });
-      }
+      // if (this._fields.hasFirst()) {
+      this._fields.first().set({ required: props.required });
+      // }
     }
   }
 
