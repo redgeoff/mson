@@ -443,6 +443,57 @@ it('should archive', async () => {
   expect(field.getValue()).toHaveLength(0);
 });
 
+it('should restore', async () => {
+  const field = createField();
+
+  const archivedAt = new Date();
+
+  const store = {
+    update: async () => {},
+    restore: async () => {}
+  };
+
+  field._globals = {
+    displaySnackbar: () => {}
+  };
+
+  field.set({ store });
+
+  const restoreSpy = jest.spyOn(store, 'restore');
+  const displaySnackbarSpy = jest.spyOn(field._globals, 'displaySnackbar');
+
+  const jack = {
+    id: 'jack',
+    firstName: 'Jack',
+    lastName: 'Johnson'
+  };
+
+  const form = field.get('form');
+  form.set({ archivedAt });
+
+  form.setValues(jack);
+
+  // Create
+  await field.save();
+
+  // Archive
+  const didRestoreRecord = testUtils.once(form, 'didRestoreRecord');
+  await field.restore(form);
+  expect(restoreSpy).toHaveBeenCalledWith({ form, id: form.getValue('id') });
+  expect(form.get('archivedAt')).toBeNull();
+  expect(field.getValue()).toHaveLength(0);
+  expect(displaySnackbarSpy).toHaveBeenCalledWith('Person restored');
+  await didRestoreRecord;
+
+  // Simulate the lack of a store
+  field.set({ store: null });
+  form.clearValues();
+  form.setValues(jack);
+  await field.save();
+  await field.restore(form);
+  expect(field.getValue()).toHaveLength(0);
+});
+
 it('should handle missing form', () => {
   const field = new FormsField();
   field.emitLoad();

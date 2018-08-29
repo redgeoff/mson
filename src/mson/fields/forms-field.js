@@ -763,7 +763,8 @@ export default class FormsField extends Field {
 
     form.set({ archivedAt: null });
 
-    // Remove from list
+    // Remove from list as assume that we are only viewing archived items. TODO: make this
+    // configurable via a param to restore?
     this.removeForm(form.getValue('id'));
 
     form.emitChange('didRestoreRecord', form.getValue('id'));
