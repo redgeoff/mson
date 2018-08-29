@@ -170,6 +170,10 @@ export default {
     },
 
     {
+      component: 'ReCAPTCHAField'
+    },
+
+    {
       name: 'selectField',
       component: 'SelectField',
       label: 'SelectField',

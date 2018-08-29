@@ -25,7 +25,7 @@ class CompositeField extends React.PureComponent {
 
     if (lastIsBlock) {
       // Break after any help
-      fields.push(<FlexBreak />);
+      fields.push(<FlexBreak key="break" />);
     }
 
     return fields;
