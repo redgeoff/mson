@@ -8,7 +8,7 @@ import HelpToolTip from './help-tool-tip';
 class CommonField extends React.PureComponent {
   render() {
     const {
-      // field,
+      field,
       children,
       label,
       required,
@@ -32,7 +32,7 @@ class CommonField extends React.PureComponent {
       );
     }
 
-    const firstErr = Array.isArray(err) ? err[0].error : err;
+    const firstErr = field.getFirstErr(err);
 
     fld = (
       <span>

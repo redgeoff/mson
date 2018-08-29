@@ -239,4 +239,16 @@ export default class Field extends Component {
       }
     }
   }
+
+  getFirstErr(err) {
+    if (Array.isArray(err)) {
+      if (Array.isArray(err[0].error)) {
+        return err[0].error[0].error;
+      } else {
+        return err[0].error;
+      }
+    } else {
+      return err;
+    }
+  }
 }
