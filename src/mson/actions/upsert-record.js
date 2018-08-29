@@ -1,6 +1,5 @@
 import Action from './action';
 import uberUtils from '../uber-utils';
-import access from '../access';
 
 export default class UpsertRecord extends Action {
   _create(props) {
@@ -25,7 +24,7 @@ export default class UpsertRecord extends Action {
   }
 
   _valuesCanUpdate(component) {
-    return access.valuesCanUpdate(component);
+    return this._access.valuesCanUpdate(component);
   }
 
   _recordUpdate(props) {
@@ -33,7 +32,7 @@ export default class UpsertRecord extends Action {
   }
 
   _valuesCanCreate(component) {
-    return access.valuesCanCreate(component);
+    return this._access.valuesCanCreate(component);
   }
 
   _recordCreate(props) {
@@ -43,7 +42,7 @@ export default class UpsertRecord extends Action {
   async act(props) {
     const appId = this._globals.get('appId');
 
-    try {
+    return uberUtils.tryAndSetFormErrorsIfAPIError(async () => {
       const id = props.component.getValue('id');
       if (id) {
         const fieldValues = this._valuesCanUpdate(props.component);
@@ -65,11 +64,6 @@ export default class UpsertRecord extends Action {
       }
 
       // TODO: What to do with the created/updated data?
-    } catch (err) {
-      uberUtils.setFormErrorsFromAPIError(err, props.component);
-
-      // We throw the error so that the entire listener chain is aborted
-      throw err;
-    }
+    }, props.component);
   }
 }

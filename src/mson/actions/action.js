@@ -4,6 +4,7 @@ import PropFiller from '../compiler/prop-filler';
 import ComponentFillerProps from '../component/component-filler-props';
 import registrar from '../compiler/registrar';
 import globals from '../globals';
+import access from '../access';
 
 export default class Action extends Component {
   _create(props) {
@@ -12,6 +13,7 @@ export default class Action extends Component {
     // For mocking
     this._registrar = registrar;
     this._globals = globals;
+    this._access = access;
 
     this._componentFillerProps = new ComponentFillerProps();
     this._fillerProps = null;
