@@ -109,6 +109,30 @@ export default {
     },
 
     {
+      name: 'idField',
+      component: 'IdField',
+      label: 'IdField',
+      help: 'Example help',
+      required: true
+    },
+
+    {
+      name: 'integerField',
+      component: 'IntegerField',
+      label: 'IntegerField',
+      help: 'Example help',
+      required: true
+    },
+
+    {
+      name: 'numberField',
+      component: 'NumberField',
+      label: 'NumberField',
+      help: 'Example help',
+      required: true
+    },
+
+    {
       name: 'textField',
       component: 'TextField',
       label: 'TextField',

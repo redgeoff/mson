@@ -1,6 +1,6 @@
-import Field from './field';
+import TextField from './text-field';
 
-export default class NumberField extends Field {
+export default class NumberField extends TextField {
   _create(props) {
     super._create(props);
     this.set({
