@@ -308,12 +308,13 @@ export default class FormsField extends Field {
     let surplus = 0;
 
     if (beginning && dHeight < 0) {
-      // When switch expanding the screen and then scrolling up, the spacer may be lager than
-      // the space needed. This is fine until we reach the top at which point we need to set the
-      // height of the spacer to 0 and then scroll to account for the offset.
+      // When expanding the screen and then scrolling up, the spacer may be lager than the space
+      // needed. This is fine until we reach the top at which point we need to set the height of the
+      // spacer to 0 and then scroll to account for the offset.
       surplus = -newHeight;
       newHeight = 0;
     } else if (newHeight < 0) {
+      // The spacer has a negative height, probably because the screen size has changed
       surplus = -newHeight;
       newHeight = 0;
     }
