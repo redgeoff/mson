@@ -224,8 +224,8 @@ export default class FormsField extends Field {
     }
   }
 
-  _listenForSearchString() {
-    this.on('searchString', async searchString => {
+  _handleSearchStringFactory() {
+    return async searchString => {
       this.set({ searchString });
 
       this._where = this._toWhereFromSearchString();
@@ -235,12 +235,15 @@ export default class FormsField extends Field {
       if (this.isLoaded()) {
         await this._clearAndGetAll();
       }
-    });
+    };
   }
 
-  // TODO: would it be better to intercept set({ order }), etc... instead of using listeners?
-  _listenForOrder() {
-    this.on('order', async order => {
+  _listenForSearchString() {
+    this.on('searchString', this._handleSearchStringFactory());
+  }
+
+  _handleOrderFactory() {
+    return async order => {
       this.set({ order });
 
       // Is the component still loaded? We want to prevent issuing a new query when the order
@@ -248,7 +251,12 @@ export default class FormsField extends Field {
       if (this.isLoaded()) {
         await this._clearAndGetAll();
       }
-    });
+    };
+  }
+
+  // TODO: would it be better to intercept set({ order }), etc... instead of using listeners?
+  _listenForOrder() {
+    this.on('order', this._handleOrderFactory());
   }
 
   _listenForScroll() {

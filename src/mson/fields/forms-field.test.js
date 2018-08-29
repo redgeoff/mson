@@ -352,3 +352,57 @@ it('should handle show archived', () => {
   field._handleShowArchivedFactory()(true);
   expect(field.get('showArchived')).toEqual(true);
 });
+
+const searchString = {
+  $and: [
+    {
+      $or: [
+        { 'fieldValues.firstName': { $iLike: 'foo%' } },
+        { 'fieldValues.lastName': { $iLike: 'foo%' } }
+      ]
+    }
+  ]
+};
+
+it('should convert where to search string', () => {
+  const field = createField();
+  expect(field._toWhereFromSearchString()).toBeNull();
+
+  field.set({ searchString: 'foo' });
+  expect(field._toWhereFromSearchString()).toEqual(searchString);
+});
+
+it('should handle search string', async () => {
+  const field = createField();
+
+  const clearAndGetAllSpy = jest.spyOn(field, '_clearAndGetAll');
+
+  field._handleSearchStringFactory()('foo');
+  expect(field.get('searchString')).toEqual('foo');
+  expect(field._where).toEqual(searchString);
+  expect(clearAndGetAllSpy).toHaveBeenCalledTimes(0);
+
+  const didLoad = testUtils.once(field, 'didLoad');
+  field.emitLoad();
+  await didLoad;
+  field._handleSearchStringFactory()('foo');
+  expect(clearAndGetAllSpy).toHaveBeenCalledTimes(1);
+});
+
+it('should handle order', async () => {
+  const field = createField();
+
+  const clearAndGetAllSpy = jest.spyOn(field, '_clearAndGetAll');
+
+  const order = [['firstName', 'asc']];
+
+  field._handleOrderFactory()(order);
+  expect(field.get('order')).toEqual(order);
+  expect(clearAndGetAllSpy).toHaveBeenCalledTimes(0);
+
+  const didLoad = testUtils.once(field, 'didLoad');
+  field.emitLoad();
+  await didLoad;
+  field._handleOrderFactory()(order);
+  expect(clearAndGetAllSpy).toHaveBeenCalledTimes(1);
+});
