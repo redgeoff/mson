@@ -3,7 +3,7 @@ import AccessControl from './access-control';
 import _ from 'lodash';
 
 // Note: this function contains client-specific access control logic
-class Access {
+export class Access {
   constructor() {
     this._accessControl = new AccessControl();
 
@@ -12,17 +12,15 @@ class Access {
   }
 
   canAccess(operation, form) {
-    let canAccess = false;
     const access = form.get('access');
     if (access && access.form && access.form[operation]) {
       const opRoles = access.form[operation];
       const roles = Array.isArray(opRoles) ? opRoles : [opRoles];
-      canAccess = this._registrar.client.user.hasRole(roles);
+      return this._registrar.client.user.hasRole(roles);
     } else {
       // No roles specified so can access
-      canAccess = true;
+      return true;
     }
-    return canAccess;
   }
 
   canCreate(form) {
