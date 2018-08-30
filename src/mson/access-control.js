@@ -127,7 +127,7 @@ export default class AccessControl {
     isOwner,
     canDowngrade
   ) {
-    const fields = [];
+    const fields = {};
     _.each(fieldValues, (value, name) => {
       const canAccess = this._canAccessField(
         operation,

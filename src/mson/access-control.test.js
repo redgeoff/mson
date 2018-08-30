@@ -1,4 +1,5 @@
 import AccessControl from './access-control';
+import Roles from './roles';
 
 const control = new AccessControl();
 
@@ -13,11 +14,18 @@ it('has access', () => {
 
   // No roles
   expect(control._hasAccess(['1', '3'], [])).toEqual(false);
+
+  // Owner by Roles.ID_OWNER
+  expect(control._hasAccess([Roles.ID_OWNER], [], false)).toEqual(false);
+  expect(control._hasAccess([Roles.ID_OWNER], [], true)).toEqual(true);
+
+  // Owner by Roles.OWNER
+  expect(control._hasAccess([Roles.OWNER], [], true)).toEqual(true);
 });
 
 it('can access field', () => {
   const indexedRoles = {
-    1: true
+    100: true
   };
 
   // Can access at field layer
@@ -26,11 +34,11 @@ it('can access field', () => {
       'create',
       {
         form: {
-          create: '2'
+          create: '200'
         },
         fields: {
           firstName: {
-            create: '1'
+            create: '100'
           }
         }
       },
@@ -45,11 +53,11 @@ it('can access field', () => {
       'create',
       {
         form: {
-          create: '1'
+          create: '100'
         },
         fields: {
           firstName: {
-            create: '2'
+            create: '200'
           }
         }
       },
@@ -64,7 +72,7 @@ it('can access field', () => {
       'create',
       {
         form: {
-          create: '1'
+          create: '100'
         }
       },
       indexedRoles,
@@ -78,7 +86,7 @@ it('can access field', () => {
       'create',
       {
         form: {
-          create: '2'
+          create: '200'
         }
       },
       indexedRoles,
@@ -90,6 +98,76 @@ it('can access field', () => {
   expect(
     control._canAccessField('create', {}, indexedRoles, 'firstName')
   ).toEqual('create');
+
+  // Can access if owner
+  expect(
+    control._canAccessField(
+      'create',
+      {
+        form: {
+          create: Roles.ID_OWNER
+        }
+      },
+      indexedRoles,
+      'firstName',
+      true
+    )
+  ).toEqual('create');
+
+  // Cannot access if not owner
+  expect(
+    control._canAccessField(
+      'create',
+      {
+        fields: {
+          firstName: {
+            create: Roles.ID_OWNER
+          }
+        }
+      },
+      indexedRoles,
+      'firstName',
+      false
+    )
+  ).toEqual(false);
+
+  // Downgrades to read
+  expect(
+    control._canAccessField(
+      'update',
+      {
+        fields: {
+          firstName: {
+            read: ['100', '200'],
+            update: '200'
+          }
+        }
+      },
+      indexedRoles,
+      'firstName',
+      false,
+      true
+    )
+  ).toEqual('read');
+
+  // Doesn't downgrade to read
+  expect(
+    control._canAccessField(
+      'update',
+      {
+        fields: {
+          firstName: {
+            read: '200',
+            update: '200'
+          }
+        }
+      },
+      indexedRoles,
+      'firstName',
+      false,
+      true
+    )
+  ).toEqual(false);
 });
 
 it('can access', () => {
@@ -189,4 +267,46 @@ it('should access', () => {
   expect(control.canRead(access, indexedRoles, fieldValues)).toHaveLength(0);
   expect(control.canUpdate(access, indexedRoles, fieldValues)).toHaveLength(1);
   expect(control.canArchive(access, indexedRoles, fieldValues)).toHaveLength(2);
+});
+
+it('can access fields', () => {
+  // Sanity test as different permutations tested by 'can access field'
+
+  let indexedRoles = {
+    100: true
+  };
+
+  const fieldValues = {
+    firstName: 'First',
+    middleName: 'Middle',
+    lastName: 'Last'
+  };
+
+  const access = {
+    fields: {
+      firstName: {
+        read: ['100', '200'],
+        update: '200'
+      },
+      middleName: {
+        read: '200',
+        update: '200'
+      }
+    }
+  };
+
+  expect(
+    control.fieldsCanAccess(
+      'update',
+      access,
+      indexedRoles,
+      fieldValues,
+      false,
+      true
+    )
+  ).toEqual({ firstName: 'read', lastName: 'update' });
+
+  expect(
+    control.valuesCanAccess('update', access, indexedRoles, fieldValues, false)
+  ).toEqual({ lastName: 'Last' });
 });
