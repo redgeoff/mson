@@ -464,3 +464,16 @@ it('should merge access', () => {
     }
   });
 });
+
+it('should handle load', () => {
+  const form = new Form({ resetOnLoad: false });
+
+  const resetSpy = jest.spyOn(form, 'reset');
+
+  form._handleLoadFactory()();
+  expect(resetSpy).toHaveBeenCalledTimes(0);
+
+  form.set({ resetOnLoad: true });
+  form._handleLoadFactory()();
+  expect(resetSpy).toHaveBeenCalledTimes(1);
+});

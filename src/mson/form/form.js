@@ -159,8 +159,8 @@ export default class Form extends Component {
     }
   }
 
-  _listenForLoad() {
-    this.on('load', () => {
+  _handleLoadFactory() {
+    return () => {
       if (this.get('resetOnLoad')) {
         // Clear any previous values
         this.reset();
@@ -175,7 +175,11 @@ export default class Form extends Component {
 
       // Pass load event down to fields
       this._fields.each(field => field.emitLoad());
-    });
+    };
+  }
+
+  _listenForLoad() {
+    this.on('load', this._handleLoadFactory());
   }
 
   _listenForUnload() {
