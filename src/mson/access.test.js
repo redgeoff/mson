@@ -1,7 +1,9 @@
 import { Access } from './access';
 import Form from './form';
+import { TextField } from './fields';
 
 let myRoles = [];
+let sessionRoles = {};
 
 const mockRegistrar = access => {
   access._registrar = {
@@ -15,6 +17,14 @@ const mockRegistrar = access => {
             }
           });
           return has;
+        },
+
+        getSession: () => {
+          return {
+            user: {
+              roles: sessionRoles
+            }
+          };
         }
       }
     }
@@ -66,4 +76,105 @@ it('should check access', () => {
   expect(access.canRead(form)).toEqual(true);
   expect(access.canUpdate(form)).toEqual(true);
   expect(access.canArchive(form)).toEqual(true);
+});
+
+it('should get fields and values', () => {
+  const access = newAccess();
+
+  const form = new Form({
+    fields: [
+      new TextField({ name: 'firstName' }),
+      new TextField({ name: 'lastName' })
+    ],
+    value: {
+      firstName: 'Robert',
+      lastName: 'Plant'
+    },
+    access: {
+      fields: {
+        firstName: {
+          create: '100',
+          read: ['100', '200'],
+          update: '100',
+          archive: '100'
+        }
+      }
+    }
+  });
+
+  expect(access.fieldsCanCreate(form)).toEqual({
+    id: 'create',
+    lastName: 'create'
+  });
+  expect(access.fieldsCanRead(form)).toEqual({ id: 'read', lastName: 'read' });
+  expect(access.fieldsCanUpdate(form)).toEqual({
+    id: 'update',
+    lastName: 'update'
+  });
+
+  expect(access.valuesCanCreate(form)).toEqual({
+    id: undefined,
+    lastName: 'Plant'
+  });
+  expect(access.valuesCanRead(form)).toEqual({
+    id: undefined,
+    lastName: 'Plant'
+  });
+  expect(access.valuesCanUpdate(form)).toEqual({
+    id: undefined,
+    lastName: 'Plant'
+  });
+
+  sessionRoles['id100'] = { name: '100' };
+
+  expect(access.fieldsCanCreate(form)).toEqual({
+    id: 'create',
+    firstName: 'create',
+    lastName: 'create'
+  });
+  expect(access.fieldsCanRead(form)).toEqual({
+    id: 'read',
+    firstName: 'read',
+    lastName: 'read'
+  });
+  expect(access.fieldsCanUpdate(form)).toEqual({
+    id: 'update',
+    firstName: 'update',
+    lastName: 'update'
+  });
+
+  expect(access.valuesCanCreate(form)).toEqual({
+    id: undefined,
+    firstName: 'Robert',
+    lastName: 'Plant'
+  });
+  expect(access.valuesCanRead(form)).toEqual({
+    id: undefined,
+    firstName: 'Robert',
+    lastName: 'Plant'
+  });
+  expect(access.valuesCanUpdate(form)).toEqual({
+    id: undefined,
+    firstName: 'Robert',
+    lastName: 'Plant'
+  });
+
+  sessionRoles = { id200: { name: '200' } };
+
+  expect(
+    access.fieldsCanAccess('update', form, { default: false }, true)
+  ).toEqual({ firstName: 'read', lastName: 'update' });
+
+  // Simulate clearing of session
+  access._registrar = {
+    client: {
+      user: {
+        getSession: () => null
+      }
+    }
+  };
+  expect(access.fieldsCanCreate(form)).toEqual({
+    id: 'create',
+    lastName: 'create'
+  });
 });
