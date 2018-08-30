@@ -3,7 +3,7 @@ import TextField from '../fields/text-field';
 import testUtils from '../test-utils';
 import compiler from '../compiler';
 
-const createForm = () => {
+const createForm = props => {
   return new Form({
     fields: [
       new TextField({ name: 'firstName', label: 'First Name', required: true }),
@@ -13,7 +13,8 @@ const createForm = () => {
         required: true
       }),
       new TextField({ name: 'lastName', label: 'Last Name', required: true })
-    ]
+    ],
+    ...props
   });
 };
 
@@ -504,4 +505,99 @@ it('should handle scroll', () => {
 
   form._handleScrollFactory()(e);
   spies.forEach(spy => expect(spy).toHaveBeenCalledWith('scroll', e));
+});
+
+it('should take snapshot', () => {
+  const form = createForm();
+
+  const firstName = form.getField('firstName');
+
+  const setValues = {
+    hidden: true,
+    required: true,
+    out: true,
+    in: true
+  };
+
+  firstName.set(setValues);
+
+  form.set({ snapshot: 'take' });
+
+  firstName.set({
+    hidden: false,
+    required: false,
+    out: false,
+    in: false
+  });
+
+  form.set({ snapshot: 'restore' });
+
+  expect(firstName.get(['hidden', 'required', 'out', 'in'])).toEqual(setValues);
+});
+
+it('should clear values', () => {
+  const form = createForm({
+    value: {
+      firstName: 'First',
+      middleName: 'Middle',
+      lastName: 'Last'
+    }
+  });
+
+  form.set({ clear: false });
+  expect(form.getValues()).toEqual({
+    id: undefined,
+    firstName: 'First',
+    middleName: 'Middle',
+    lastName: 'Last'
+  });
+
+  form.set({ clear: true });
+  expect(form.getValues()).toEqual({
+    id: null,
+    firstName: null,
+    middleName: null,
+    lastName: null
+  });
+});
+
+it('should reset', () => {
+  const form = createForm();
+
+  const resetSpy = jest.spyOn(form, 'reset');
+
+  form.set({ reset: false });
+  expect(resetSpy).toHaveBeenCalledTimes(0);
+
+  form.set({ reset: true });
+  expect(resetSpy).toHaveBeenCalledTimes(1);
+});
+
+it('should auto validate on touch', async () => {
+  const form = createForm();
+
+  const validateSpy = jest.spyOn(form, 'validate');
+  const setSpy = jest.spyOn(form, 'set');
+
+  form._handleFieldTouchedFactory()(false);
+  expect(setSpy).toHaveBeenCalledTimes(0);
+
+  form._handleFieldTouchedFactory()(true);
+  expect(setSpy).toHaveBeenCalledWith({ touched: true });
+  expect(validateSpy).toHaveBeenCalledTimes(0);
+
+  form.set({ autoValidate: true });
+
+  const afterErr = testUtils.once(form, 'err');
+
+  form.getField('firstName').set({ touched: true });
+
+  await afterErr;
+  expect(form.getErrs()).toEqual([
+    { field: 'firstName', error: 'required' },
+    { field: 'middleName', error: 'required' },
+    { field: 'lastName', error: 'required' }
+  ]);
+
+  expect(validateSpy).toHaveBeenCalledTimes(1);
 });

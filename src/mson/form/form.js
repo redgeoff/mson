@@ -346,6 +346,17 @@ export default class Form extends Component {
     this._fields.set(field.get('name'), field, beforeName);
   }
 
+  _handleFieldTouchedFactory() {
+    return touched => {
+      if (touched) {
+        this.set({ touched: true });
+      }
+      if (this.get('autoValidate')) {
+        this.validate();
+      }
+    };
+  }
+
   addField(field) {
     this._setField(field);
 
@@ -361,14 +372,7 @@ export default class Form extends Component {
       }
     });
 
-    field.on('touched', touched => {
-      if (touched) {
-        this.set({ touched: true });
-      }
-      if (this.get('autoValidate')) {
-        this.validate();
-      }
-    });
+    field.on('touched', this._handleFieldTouchedFactory());
 
     field.on('err', err => {
       if (err) {
