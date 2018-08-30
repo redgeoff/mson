@@ -52,7 +52,7 @@ export default class SelectListField extends ListField {
       label: name === 0 ? this.get('label') : undefined,
       required: false,
       blankString: this.get('blankString'),
-      block: this.get('block') === undefined ? true : this.get('block'),
+      block: this.get('block'),
       fullWidth: this.get('fullWidth'),
       options: this.get('options')
     });

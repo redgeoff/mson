@@ -9,7 +9,7 @@ import Emit from '../actions/emit';
 
 const formName = utils.uuid();
 
-const createForm = () => {
+const createForm = props => {
   return new Form({
     fields: [
       new TextField({ name: 'firstName', label: 'First Name', required: true }),
@@ -26,13 +26,18 @@ const createForm = () => {
           })
         ]
       }
-    ]
+    ],
+
+    ...props
   });
 };
 
-const createField = () => {
+const createField = props => {
   return new FormsField({
-    form: createForm()
+    label: 'People',
+    singularLabel: 'Person',
+    form: createForm(),
+    ...props
   });
 };
 
@@ -297,7 +302,7 @@ it('should add many forms quickly when using uncompiled components', () => {
   return shouldAddFormsQuickly(field, ADD_FORMS_UNCOMPILED_TIMEOUT_MS);
 });
 
-it('should save', async () => {
+it('save should handle errors', async () => {
   const field = createField();
 
   const createdForm = new Form();
@@ -327,3 +332,303 @@ it('should save', async () => {
     mode: 'read'
   });
 });
+
+it('should save', async () => {
+  const field = createField();
+
+  const store = {
+    create: async () => ({
+      data: {
+        createRecord: {
+          id: 'myId',
+          userId: 'myUserId'
+        }
+      }
+    }),
+    update: async () => {}
+  };
+
+  field.set({ store });
+
+  const createSpy = jest.spyOn(store, 'create');
+  const updateSpy = jest.spyOn(store, 'update');
+
+  const jack = {
+    firstName: 'Jack',
+    lastName: 'Johnson'
+  };
+
+  const form = field.get('form');
+
+  form.setValues(jack);
+
+  // Create
+  await field.save();
+  expect(createSpy).toHaveBeenCalledWith({ form });
+  expect(form.getValue('id')).toEqual('myId');
+  expect(form.get('userId')).toEqual('myUserId');
+  expect(field.getValue()).toHaveLength(1);
+
+  // Update
+  form.setValues({ lastName: 'Ryan' });
+  await field.save();
+  expect(updateSpy).toHaveBeenCalledWith({ form, id: form.getValue('id') });
+  expect(field.getValue()).toHaveLength(1);
+
+  // Simulate the lack of a store
+  field.set({ store: null });
+  form.clearValues();
+  form.setValues(jack);
+  await field.save();
+  expect(form.getValue('id')).not.toBeUndefined();
+  expect(field.getValue()).toHaveLength(2);
+  form.setValues({ lastName: 'Ryan' });
+  await field.save();
+  expect(form.getValue('lastName')).toEqual('Ryan');
+  expect(field.getValue()).toHaveLength(2);
+});
+
+it('should archive', async () => {
+  const field = createField();
+
+  const archivedAt = new Date();
+
+  const store = {
+    update: async () => {},
+    archive: async () => ({
+      data: {
+        archiveRecord: {
+          archivedAt
+        }
+      }
+    })
+  };
+
+  field._globals = {
+    displaySnackbar: () => {}
+  };
+
+  field.set({ store });
+
+  const archiveSpy = jest.spyOn(store, 'archive');
+  const displaySnackbarSpy = jest.spyOn(field._globals, 'displaySnackbar');
+
+  const jack = {
+    id: 'jack',
+    firstName: 'Jack',
+    lastName: 'Johnson'
+  };
+
+  const form = field.get('form');
+
+  form.setValues(jack);
+
+  // Create
+  await field.save();
+
+  // Archive
+  const didArchiveRecord = testUtils.once(form, 'didArchiveRecord');
+  await field.archive(form);
+  expect(archiveSpy).toHaveBeenCalledWith({ form, id: form.getValue('id') });
+  expect(form.get('archivedAt')).toEqual(archivedAt);
+  expect(field.getValue()).toHaveLength(0);
+  expect(displaySnackbarSpy).toHaveBeenCalledWith('Person deleted');
+  await didArchiveRecord;
+
+  // Simulate the lack of a store
+  field.set({ store: null });
+  form.clearValues();
+  form.setValues(jack);
+  await field.save();
+  await field.archive(form);
+  expect(field.getValue()).toHaveLength(0);
+});
+
+it('should restore', async () => {
+  const field = createField();
+
+  const archivedAt = new Date();
+
+  const store = {
+    update: async () => {},
+    restore: async () => {}
+  };
+
+  field._globals = {
+    displaySnackbar: () => {}
+  };
+
+  field.set({ store });
+
+  const restoreSpy = jest.spyOn(store, 'restore');
+  const displaySnackbarSpy = jest.spyOn(field._globals, 'displaySnackbar');
+
+  const jack = {
+    id: 'jack',
+    firstName: 'Jack',
+    lastName: 'Johnson'
+  };
+
+  const form = field.get('form');
+  form.set({ archivedAt });
+
+  form.setValues(jack);
+
+  // Create
+  await field.save();
+
+  // Archive
+  const didRestoreRecord = testUtils.once(form, 'didRestoreRecord');
+  await field.restore(form);
+  expect(restoreSpy).toHaveBeenCalledWith({ form, id: form.getValue('id') });
+  expect(form.get('archivedAt')).toBeNull();
+  expect(field.getValue()).toHaveLength(0);
+  expect(displaySnackbarSpy).toHaveBeenCalledWith('Person restored');
+  await didRestoreRecord;
+
+  // Simulate the lack of a store
+  field.set({ store: null });
+  form.clearValues();
+  form.setValues(jack);
+  await field.save();
+  await field.restore(form);
+  expect(field.getValue()).toHaveLength(0);
+});
+
+it('should handle missing form', () => {
+  const field = new FormsField();
+  field.emitLoad();
+  field.emitUnload();
+});
+
+it('should clear and get all', async () => {
+  const field = new FormsField();
+  const clearSpy = jest.spyOn(field._forms, 'clear');
+  const resetInfiniteLoaderSpy = jest.spyOn(field, '_resetInfiniteLoader');
+  const updateInfiniteLoaderSpy = jest.spyOn(field, '_updateInfiniteLoader');
+  const getAllSpy = jest.spyOn(field._infiniteLoader, 'getAll');
+  await field._clearAndGetAll();
+  expect(clearSpy).toHaveBeenCalledTimes(1);
+  expect(resetInfiniteLoaderSpy).toHaveBeenCalledTimes(1);
+  expect(updateInfiniteLoaderSpy).toHaveBeenCalledTimes(1);
+  expect(getAllSpy).toHaveBeenCalledTimes(1);
+});
+
+it('should handle show archived', () => {
+  const field = new FormsField();
+  field._handleShowArchivedFactory()(true);
+  expect(field.get('showArchived')).toEqual(true);
+});
+
+const searchString = {
+  $and: [
+    {
+      $or: [
+        { 'fieldValues.firstName': { $iLike: 'foo%' } },
+        { 'fieldValues.lastName': { $iLike: 'foo%' } }
+      ]
+    }
+  ]
+};
+
+it('should convert where to search string', () => {
+  const field = createField();
+  expect(field._toWhereFromSearchString()).toBeNull();
+
+  field.set({ searchString: 'foo' });
+  expect(field._toWhereFromSearchString()).toEqual(searchString);
+});
+
+it('should handle search string', async () => {
+  const field = createField();
+
+  const clearAndGetAllSpy = jest.spyOn(field, '_clearAndGetAll');
+
+  field._handleSearchStringFactory()('foo');
+  expect(field.get('searchString')).toEqual('foo');
+  expect(field._where).toEqual(searchString);
+  expect(clearAndGetAllSpy).toHaveBeenCalledTimes(0);
+
+  const didLoad = testUtils.once(field, 'didLoad');
+  field.emitLoad();
+  await didLoad;
+  field._handleSearchStringFactory()('foo');
+  expect(clearAndGetAllSpy).toHaveBeenCalledTimes(1);
+});
+
+it('should handle order', async () => {
+  const field = createField();
+
+  const clearAndGetAllSpy = jest.spyOn(field, '_clearAndGetAll');
+
+  const order = [['firstName', 'asc']];
+
+  field._handleOrderFactory()(order);
+  expect(field.get('order')).toEqual(order);
+  expect(clearAndGetAllSpy).toHaveBeenCalledTimes(0);
+
+  const didLoad = testUtils.once(field, 'didLoad');
+  field.emitLoad();
+  await didLoad;
+  field._handleOrderFactory()(order);
+  expect(clearAndGetAllSpy).toHaveBeenCalledTimes(1);
+});
+
+it('should handle scroll', async () => {
+  const field = createField();
+
+  const scrollY = 100;
+
+  field._window = {
+    scrollY
+  };
+  const scrollSpy = jest.spyOn(field._infiniteLoader, 'scroll');
+
+  field._handleScrollFactory()();
+  expect(scrollSpy).toHaveBeenCalledWith({ scrollY });
+});
+
+it('should reach max', async () => {
+  const field = createField({ maxSize: 1 });
+
+  expect(field.reachedMax()).toEqual(false);
+
+  const jack = {
+    firstName: 'Jack',
+    lastName: 'Johnson'
+  };
+
+  const form = field.get('form');
+
+  form.setValues(jack);
+
+  // Create
+  await field.save();
+
+  expect(field.reachedMax()).toEqual(true);
+});
+
+it('should validate min size', () => {
+  const field = createField({ minSize: 1 });
+  field.validate();
+  expect(field.getErr()).toEqual([{ error: '1 or more' }]);
+});
+
+it('should get singular label', () => {
+  const field = new FormsField();
+  expect(field.getSingularLabel()).toBeNull();
+
+  field.set({ label: 'Records' });
+  expect(field.getSingularLabel()).toEqual('Record');
+
+  field.set({ singularLabel: 'Rec' });
+  expect(field.getSingularLabel()).toEqual('Rec');
+});
+
+// TODO: restore after clone() is fixed
+// it('should clone', () => {
+//   const field = createField();
+//   const form = field.get('form');
+//   const clonedField = field.clone();
+//   expect(clonedField.get('form')).not.toEqual(form);
+// });

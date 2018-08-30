@@ -71,4 +71,48 @@ it('should infinite scroll', async () => {
   await field._infiniteLoader.scroll({ scrollY: 150 });
   await changed;
   expect(getItems(field)).toEqual([rayFlat, ellaFlat, stevieFlat, sinatraFlat]);
+
+  // Remove form
+  field.removeForm(rayFlat.id);
+  expect(getItems(field)).toEqual([ellaFlat, stevieFlat, sinatraFlat]);
+});
+
+it('should resize spacer', () => {
+  const field = createField();
+
+  field._window = {
+    scrollBy: () => {}
+  };
+
+  const setSpy = jest.spyOn(field, 'set');
+  const scrollBySpy = jest.spyOn(field._window, 'scrollBy');
+
+  // Shrink
+  field._onResizeSpacer(-10);
+  expect(setSpy).toHaveBeenCalledTimes(1);
+  expect(setSpy).toHaveBeenCalledWith({ spacerHeight: 0 });
+  expect(scrollBySpy).toHaveBeenCalledTimes(1);
+  expect(scrollBySpy).toHaveBeenCalledWith({ behavior: 'instant', top: 10 });
+
+  // Spacer has negative height
+  setSpy.mockReset();
+  scrollBySpy.mockReset();
+  field._infiniteLoader.beginningLoaded = () => false;
+  field._onResizeSpacer(-10);
+  expect(setSpy).toHaveBeenCalledTimes(1);
+  expect(setSpy).toHaveBeenCalledWith({ spacerHeight: 0 });
+  expect(scrollBySpy).toHaveBeenCalledTimes(1);
+  expect(scrollBySpy).toHaveBeenCalledWith({ behavior: 'instant', top: 10 });
+});
+
+it('should get spacer element', () => {
+  const field = createField();
+
+  field._document = {
+    getElementById: () => {}
+  };
+
+  const getElementByIdSpy = jest.spyOn(field._document, 'getElementById');
+  field._infiniteLoader._onGetSpacerElement();
+  expect(getElementByIdSpy).toHaveBeenCalledWith(field.get('spacerId'));
 });

@@ -23,7 +23,7 @@ export default class TextListField extends ListField {
       name: index,
       label: index === 0 ? this.get('label') : undefined,
       required: false,
-      block: this.get('block') === undefined ? true : this.get('block'),
+      block: this.get('block'),
       fullWidth: this.get('fullWidth'),
       options: this.get('options'),
       invalidRegExp: this.get('invalidRegExp')

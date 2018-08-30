@@ -26,6 +26,7 @@ import FormsField from './fields/forms-field';
 import FormValidator from './form/form-validator';
 import GetRecord from './actions/get-record';
 import GetRecords from './actions/get-records';
+import IdField from './fields/id-field';
 import IntegerField from './fields/integer-field';
 import Iterator from './actions/iterator';
 import ListField from './fields/list-field';
@@ -89,6 +90,7 @@ export default {
   FormsField,
   GetRecord,
   GetRecords,
+  IdField,
   IntegerField,
   Iterator,
   ListField,

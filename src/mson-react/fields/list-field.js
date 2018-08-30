@@ -42,4 +42,4 @@ class ListField extends React.PureComponent {
 }
 
 // We want the component to update when we receive new fields
-export default attach(['fields', 'help'])(ListField);
+export default attach(['change', 'help'])(ListField);

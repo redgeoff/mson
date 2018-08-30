@@ -44,7 +44,10 @@ export default class CompositeField extends Field {
           // The parent field is not considered touched until all the child fields have been
           // touched. This prevents prematurely showing errors like "required" errors when the user
           // tabs from first field.
-          this.setTouched(true);
+          //
+          // We use _set() instead of setTouched as we only want to set the touched
+          // property at this layer and not for the sub fields.
+          this._set('touched', touched);
         }
       }
     });
@@ -77,6 +80,13 @@ export default class CompositeField extends Field {
     });
   }
 
+  _emitChangeToField(field) {
+    // Emit event so that we do things like dynamically adjust the display of fields. We can't emit
+    // just all the fields as otherwise a shallow comparison won't detect a change.
+    // this._emitChange('fields', this._fields);
+    this._emitChange('change', field);
+  }
+
   _addField(field, name) {
     if (name === undefined) {
       name = field.get('name');
@@ -84,8 +94,7 @@ export default class CompositeField extends Field {
 
     this._fields.set(name, field);
 
-    // Emit event so that we do things like dynamically adjust the display of fields
-    this._emitChange('fields', this._fields);
+    this._emitChangeToField(field);
 
     this._listenForChangesToField(field);
   }
@@ -114,17 +123,26 @@ export default class CompositeField extends Field {
 
   _setDisabled(disabled) {
     super._setDisabled(disabled);
-    this.eachField(field => field.set({ disabled }));
+    this._setForAllFields({ disabled });
   }
 
   _setEditable(editable) {
     super._setEditable(editable);
-    this.eachField(field => field.set({ editable }));
+    this._setForAllFields({ editable });
   }
 
   _setDirty(dirty) {
     super._setDirty(dirty);
-    this.eachField(field => field.set({ dirty }));
+    this._setForAllFields({ dirty });
+  }
+
+  _setTouchedForAllFields(touched) {
+    this._setForAllFields({ touched });
+  }
+
+  setTouched(touched) {
+    super.setTouched(touched);
+    this._setTouchedForAllFields(touched);
   }
 
   set(props) {
@@ -163,11 +181,6 @@ export default class CompositeField extends Field {
   clearErr() {
     super.clearErr();
     this.eachField(field => field.clearErr());
-  }
-
-  setTouched(touched) {
-    super.setTouched(touched);
-    this.eachField(field => field.setTouched(touched));
   }
 
   _validateField(field /*, name, last */) {

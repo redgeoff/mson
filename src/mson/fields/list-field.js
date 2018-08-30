@@ -63,8 +63,7 @@ export default class ListField extends CompositeField {
     // Prevent listener leaks
     field.removeAllListeners();
 
-    // Emit event so that we do things like dynamically adjust the display of fields
-    this._emitChange('fields', this._fields);
+    this._emitChangeToField(field);
 
     this._calcValue();
 
@@ -96,29 +95,12 @@ export default class ListField extends CompositeField {
     return true;
   }
 
-  _removeNextFieldsIfExist(name) {
-    if (this._hasField(name)) {
-      const field = this._getField(name);
-      if (this._shouldRemoveField(field)) {
-        this._removeField(field);
-        const nextName = this._getNextName(name);
-        this._removeNextFieldsIfExist(nextName);
-      } else {
-        this._clearFieldIfExists(name);
-      }
-    }
-  }
-
   _getField(name) {
     return this._fields.get(name);
   }
 
   _removeFieldByName(name) {
     return this._fields.delete(name);
-  }
-
-  _fieldExists(name) {
-    return this._fields.has(name);
   }
 
   _onFieldCreated(field /*, onDelete */) {
@@ -129,6 +111,15 @@ export default class ListField extends CompositeField {
 
   _getNextFieldName() {
     return this._nextFieldName++;
+  }
+
+  _handleDirtyFactory() {
+    return dirty => {
+      // Bubble up dirty event
+      if (dirty) {
+        this.set({ dirty: true });
+      }
+    };
   }
 
   _createField() {
@@ -142,12 +133,7 @@ export default class ListField extends CompositeField {
 
     field.on('delete', onDelete);
 
-    field.on('dirty', dirty => {
-      // Bubble up dirty event
-      if (dirty) {
-        this.set({ dirty: true });
-      }
-    });
+    field.on('dirty', this._handleDirtyFactory());
 
     this._onFieldCreated(field, onDelete);
 
@@ -184,22 +170,6 @@ export default class ListField extends CompositeField {
     if (this._fields.hasFirst()) {
       this._fields.first().set({ required });
     }
-  }
-
-  _getNextName(name) {
-    if (name === null) {
-      return this._fields.firstKey();
-    } else {
-      return this._fields.nextKey(name);
-    }
-  }
-
-  _getLastName() {
-    return this._fields.lastKey();
-  }
-
-  _isFirstField(field) {
-    return field.get('name') === this._fields.firstKey();
   }
 
   _isLastField(field) {
@@ -372,7 +342,7 @@ export default class ListField extends CompositeField {
       name: index,
       label: index === 0 ? this.get('label') : undefined,
       required: false,
-      block: this.get('block') === undefined ? true : this.get('block'),
+      block: this.get('block'),
       fullWidth: this.get('fullWidth'),
       options: this.get('options')
     });

@@ -128,6 +128,10 @@ export default class Field extends Component {
     this._set('dirty', dirty);
   }
 
+  setTouched(touched) {
+    this._set('touched', touched);
+  }
+
   set(props) {
     if (props.value !== undefined && props.value !== this.get('value')) {
       this.set({ dirty: true });
@@ -153,6 +157,10 @@ export default class Field extends Component {
 
     if (props.dirty !== undefined) {
       this._setDirty(props.dirty);
+    }
+
+    if (props.touched !== undefined) {
+      this.setTouched(props.touched);
     }
   }
 
@@ -218,17 +226,13 @@ export default class Field extends Component {
     }
   }
 
-  setTouched(touched) {
-    this.set({ touched });
-  }
-
   // TODO: introduce concept of icons for display values, e.g. edit event in Google Calendar
   getDisplayValue() {
     return this.get('value');
   }
 
   hasErr() {
-    return this.get('err') ? true : false;
+    return !!this.get('err');
   }
 
   _validateWithRegExp(regExp, err) {
@@ -237,6 +241,19 @@ export default class Field extends Component {
       if (!regExp.test(value)) {
         this.setErr(err);
       }
+    }
+  }
+
+  getFirstErr() {
+    const err = this.get('err');
+    if (Array.isArray(err)) {
+      if (Array.isArray(err[0].error)) {
+        return err[0].error[0].error;
+      } else {
+        return err[0].error;
+      }
+    } else {
+      return err;
     }
   }
 }

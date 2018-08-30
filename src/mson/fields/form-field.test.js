@@ -111,3 +111,15 @@ it('should report bad types', () => {
     [{ error: 'must be an object' }]
   );
 });
+
+it('should clean up any previous form', () => {
+  const field = createField();
+
+  const form = field.get('form');
+  const removeAllListenersSpy = jest.spyOn(form, 'removeAllListeners');
+  field.set({
+    form: new Form()
+  });
+
+  expect(removeAllListenersSpy).toHaveBeenCalledTimes(1);
+});

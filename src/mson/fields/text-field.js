@@ -55,8 +55,8 @@ export default class TextField extends Field {
 
     return {
       ...super._toValidatorProps(),
-      length: value ? value.length : null,
-      words: value ? value.split(/\s+/).length : null
+      length: value.length,
+      words: value.split(/\s+/).length
     };
   }
 

@@ -116,3 +116,28 @@ it(
   },
   VALIDATE_TIMEOUT_MS
 );
+
+it('should not validate when ignoring errors', () => {
+  const field = new Field({ required: true, ignoreErrs: true });
+  field.validate();
+  expect(field.hasErr()).toEqual(false);
+});
+
+it('should get display value', () => {
+  const field = new Field();
+  field.setValue('foo');
+  expect(field.getDisplayValue()).toEqual('foo');
+});
+
+it('should get first error', () => {
+  const field = new Field({ required: true });
+
+  field.validate();
+  expect(field.getFirstErr()).toEqual('required');
+
+  field.set({ err: [{ error: '2nd layer' }] });
+  expect(field.getFirstErr()).toEqual('2nd layer');
+
+  field.set({ err: [{ error: [{ error: '3rd layer' }] }] });
+  expect(field.getFirstErr()).toEqual('3rd layer');
+});

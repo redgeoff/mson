@@ -22,10 +22,14 @@ export default {
   Field,
   Form,
   FormsField,
+  IdField: TextField,
+  IntegerField: TextField,
   ListField,
+  NumberField: TextField,
   ReCAPTCHAField,
   SelectField,
   SelectListField: ListField,
   TextField,
+  TextListField: ListField,
   User: Form
 };

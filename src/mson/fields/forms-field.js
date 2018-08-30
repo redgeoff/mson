@@ -21,6 +21,11 @@ export default class FormsField extends Field {
   _create(props) {
     const c = this.constructor;
 
+    // For mocking
+    this._window = global.window;
+    this._document = global.document;
+    this._globals = globals;
+
     this.set({
       schema: {
         component: 'Form',
@@ -192,12 +197,16 @@ export default class FormsField extends Field {
     await this._infiniteLoader.getAll();
   }
 
-  _listenForShowArchived() {
-    this.on('showArchived', async showArchived => {
+  _handleShowArchivedFactory() {
+    return async showArchived => {
       this.set({ showArchived });
 
       await this._clearAndGetAll();
-    });
+    };
+  }
+
+  _listenForShowArchived() {
+    this.on('showArchived', this._handleShowArchivedFactory());
   }
 
   _toWhereFromSearchString() {
@@ -220,8 +229,8 @@ export default class FormsField extends Field {
     }
   }
 
-  _listenForSearchString() {
-    this.on('searchString', async searchString => {
+  _handleSearchStringFactory() {
+    return async searchString => {
       this.set({ searchString });
 
       this._where = this._toWhereFromSearchString();
@@ -231,12 +240,15 @@ export default class FormsField extends Field {
       if (this.isLoaded()) {
         await this._clearAndGetAll();
       }
-    });
+    };
   }
 
-  // TODO: would it be better to intercept set({ order }), etc... instead of using listeners?
-  _listenForOrder() {
-    this.on('order', async order => {
+  _listenForSearchString() {
+    this.on('searchString', this._handleSearchStringFactory());
+  }
+
+  _handleOrderFactory() {
+    return async order => {
       this.set({ order });
 
       // Is the component still loaded? We want to prevent issuing a new query when the order
@@ -244,13 +256,107 @@ export default class FormsField extends Field {
       if (this.isLoaded()) {
         await this._clearAndGetAll();
       }
-    });
+    };
+  }
+
+  // TODO: would it be better to intercept set({ order }), etc... instead of using listeners?
+  _listenForOrder() {
+    this.on('order', this._handleOrderFactory());
+  }
+
+  _handleScrollFactory() {
+    return () => {
+      this._infiniteLoader.scroll({ scrollY: this._window.scrollY });
+    };
   }
 
   _listenForScroll() {
-    this.on('scroll', () => {
-      this._infiniteLoader.scroll({ scrollY: window.scrollY });
+    this.on('scroll', this._handleScrollFactory());
+  }
+
+  _onRemoveItems(id, n, reverse) {
+    let i = 0;
+    let lastId = null;
+    for (const entry of this._forms.entries(id, reverse)) {
+      lastId = entry[0];
+      if (i++ === n) {
+        break;
+      }
+
+      // We want to mute the changes or else we'll introduce a lot of latency on the UI thread.
+      const muteChange = true;
+      this.removeForm(lastId, muteChange);
+    }
+    return lastId;
+  }
+
+  _onResizeSpacer(dHeight, height) {
+    let newHeight = null;
+
+    // Was an absolute height specified?
+    if (height !== undefined) {
+      newHeight = height;
+    } else {
+      // Change by a delta
+      newHeight = this.get('spacerHeight') + dHeight;
+    }
+
+    // this._infiniteLoader may not exist yet
+    const beginning = this._infiniteLoader
+      ? this._infiniteLoader.beginningLoaded()
+      : false;
+
+    let surplus = 0;
+
+    if (beginning && dHeight < 0) {
+      // When expanding the screen and then scrolling up, the spacer may be lager than the space
+      // needed. This is fine until we reach the top at which point we need to set the height of the
+      // spacer to 0 and then scroll to account for the offset.
+      surplus = -newHeight;
+      newHeight = 0;
+    } else if (newHeight < 0) {
+      // The spacer has a negative height, probably because the screen size has changed
+      surplus = -newHeight;
+      newHeight = 0;
+    }
+
+    this.set({ spacerHeight: newHeight });
+
+    // The spacer has no more space (probably because the screen shrinked) so we need to scroll
+    // to make sure that the user stays at the same point in the list when the new items are
+    // added at the top.
+    if (surplus !== 0) {
+      this._window.scrollBy({
+        top: surplus,
+        behavior: 'instant'
+      });
+    }
+  }
+
+  _onAddItem(edge, beforeKey) {
+    const values = { id: edge.node.id };
+
+    const form = this.get('form');
+
+    form.eachField(field => {
+      // Field exists in returned records?
+      const val = edge.node.fieldValues[field.get('name')];
+      if (val) {
+        values[field.get('name')] = val;
+      }
     });
+
+    // We want to mute the changes until we are done adding all the forms or else we'll
+    // introduce a lot of latency on the UI thread.
+    const muteChange = true;
+    this.addForm(
+      values,
+      edge.node.archivedAt,
+      edge.node.userId,
+      muteChange,
+      edge.cursor,
+      beforeKey
+    );
   }
 
   _createInfiniteLoader() {
@@ -272,69 +378,19 @@ export default class FormsField extends Field {
         return this.get('maxBufferPages');
       },
       onGetItemElement: id => {
-        return document.getElementById(this.getUniqueItemId(id));
+        return this._document.getElementById(this.getUniqueItemId(id));
       },
       onGetSpacerElement: () => {
-        return document.getElementById(this.get('spacerId'));
+        return this._document.getElementById(this.get('spacerId'));
       },
       onRemoveItems: (id, n, reverse) => {
-        let i = 0;
-        let lastId = null;
-        for (const entry of this._forms.entries(id, reverse)) {
-          lastId = entry[0];
-          if (i++ === n) {
-            break;
-          }
-
-          // We want to mute the changes or else we'll introduce a lot of latency on the UI thread.
-          const muteChange = true;
-          this.removeForm(lastId, muteChange);
-        }
-        return lastId;
+        return this._onRemoveItems(id, n, reverse);
       },
       onGetItems: (id, reverse) => {
         return this._forms.values(id, reverse);
       },
       onResizeSpacer: (dHeight, height) => {
-        let newHeight = null;
-
-        // Was an absolute height specified?
-        if (height !== undefined) {
-          newHeight = height;
-        } else {
-          // Change by a delta
-          newHeight = this.get('spacerHeight') + dHeight;
-        }
-
-        // this._infiniteLoader may not exist yet
-        const beginning = this._infiniteLoader
-          ? this._infiniteLoader.beginningLoaded()
-          : false;
-
-        let surplus = 0;
-
-        if (beginning && dHeight < 0) {
-          // When switch expanding the screen and then scrolling up, the spacer may be lager than
-          // the space needed. This is fine until we reach the top at which point we need to set the
-          // height of the spacer to 0 and then scroll to account for the offset.
-          surplus = -newHeight;
-          newHeight = 0;
-        } else if (newHeight < 0) {
-          surplus = -newHeight;
-          newHeight = 0;
-        }
-
-        this.set({ spacerHeight: newHeight });
-
-        // The spacer has no more space (probably because the screen shrinked) so we need to scroll
-        // to make sure that the user stays at the same point in the list when the new items are
-        // added at the top.
-        if (surplus !== 0) {
-          window.scrollBy({
-            top: surplus,
-            behavior: 'instant'
-          });
-        }
+        this._onResizeSpacer(dHeight, height);
       },
       onSetBufferTopId: bufferTopId => {
         this.set({ bufferTopId });
@@ -349,29 +405,7 @@ export default class FormsField extends Field {
         return form.get('cursor');
       },
       onAddItem: (edge, beforeKey) => {
-        const values = { id: edge.node.id };
-
-        const form = this.get('form');
-
-        form.eachField(field => {
-          // Field exists in returned records?
-          const val = edge.node.fieldValues[field.get('name')];
-          if (val) {
-            values[field.get('name')] = val;
-          }
-        });
-
-        // We want to mute the changes until we are done adding all the forms or else we'll
-        // introduce a lot of latency on the UI thread.
-        const muteChange = true;
-        this.addForm(
-          values,
-          edge.node.archivedAt,
-          edge.node.userId,
-          muteChange,
-          edge.cursor,
-          beforeKey
-        );
+        this._onAddItem(edge, beforeKey);
       },
       onEmitChange: records => {
         this._emitChange('change', records);
@@ -681,7 +715,7 @@ export default class FormsField extends Field {
       id.getValue()
     );
 
-    globals.displaySnackbar(this.getSingularLabel() + ' saved');
+    this._globals.displaySnackbar(this.getSingularLabel() + ' saved');
 
     return fieldForm;
   }
@@ -718,7 +752,7 @@ export default class FormsField extends Field {
 
     form.emitChange('didArchiveRecord', form.getValue('id'));
 
-    globals.displaySnackbar(this.getSingularLabel() + ' deleted');
+    this._globals.displaySnackbar(this.getSingularLabel() + ' deleted');
   }
 
   async restore(form) {
@@ -729,12 +763,13 @@ export default class FormsField extends Field {
 
     form.set({ archivedAt: null });
 
-    // Remove from list
+    // Remove from list as assume that we are only viewing archived items. TODO: make this
+    // configurable via a param to restore?
     this.removeForm(form.getValue('id'));
 
     form.emitChange('didRestoreRecord', form.getValue('id'));
 
-    globals.displaySnackbar(this.getSingularLabel() + ' restored');
+    this._globals.displaySnackbar(this.getSingularLabel() + ' restored');
   }
 
   reachedMax() {
@@ -783,10 +818,12 @@ export default class FormsField extends Field {
   getSingularLabel() {
     if (this.get('singularLabel')) {
       return this.get('singularLabel');
-    } else {
+    } else if (this.get('label')) {
       // Automatically calculate singular label by removing last 's'
-      const label = this.get('label') ? this.get('label') : '';
+      const label = this.get('label');
       return label.substr(0, label.length - 1);
+    } else {
+      return null;
     }
   }
 
@@ -801,14 +838,18 @@ export default class FormsField extends Field {
     return isBlank;
   }
 
-  clone() {
-    const clonedField = super.clone();
-
-    // Clone form so that cloned form has a reference to a different form
-    this.set({ form: this.get('form').clone() });
-
-    return clonedField;
-  }
+  // TODO: why does using this cause the following error? TypeError: Method get
+  // TypedArray.prototype.length called on incompatible receiver [object Object] at Uint8Array.get
+  // length [as length] (<anonymous>). See forms-field.test.js, it('should clone') for example
+  //
+  // clone() {
+  //   const clonedField = super.clone();
+  //
+  //   // Clone form so that cloned field has a reference to a different form
+  //   this.set({ form: this.get('form').clone() });
+  //
+  //   return clonedField;
+  // }
 
   getUniqueItemId(id) {
     return this.getUniqueId() + '-item-' + id;

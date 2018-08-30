@@ -2,6 +2,7 @@ import CompositeField from './composite-field';
 import TextField from './text-field';
 import compiler from '../compiler';
 import fieldTester from './field-tester';
+import testUtils from '../test-utils';
 
 const createField = () => {
   return new CompositeField({
@@ -83,4 +84,44 @@ it('should toggle editable', () => {
 
   field.set({ editable: false });
   field.eachField(field => expect(field.get('editable')).toEqual(false));
+});
+
+it('should bubble up touches', async () => {
+  const field = createField();
+
+  expect(field.get('touched')).toBeUndefined();
+
+  const afterTouched = testUtils.once(field, 'touched');
+
+  field.getField('firstName').set({ touched: true });
+  field.getField('lastName').set({ touched: true });
+
+  await afterTouched;
+
+  // Trigger branch where touched is false
+  field.getField('firstName').set({ touched: false });
+});
+
+it('should set required', () => {
+  const field = createField();
+
+  field.set({ required: true });
+  expect(field.get('required')).toEqual(true);
+  field.eachField(field => expect(field.get('required')).toEqual(true));
+
+  field.set({ required: false });
+  expect(field.get('required')).toEqual(false);
+  field.eachField(field => expect(field.get('required')).toEqual(false));
+});
+
+it('should set touched', () => {
+  const field = createField();
+
+  field.set({ touched: true });
+  expect(field.get('touched')).toEqual(true);
+  field.eachField(field => expect(field.get('touched')).toEqual(true));
+
+  field.set({ touched: false });
+  expect(field.get('touched')).toEqual(false);
+  field.eachField(field => expect(field.get('touched')).toEqual(false));
 });

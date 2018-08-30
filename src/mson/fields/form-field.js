@@ -18,28 +18,12 @@ export default class FormField extends Field {
     });
   }
 
-  addForm(values) {
-    const clonedForm = this.get('form').clone();
-    clonedForm.setValues(values);
-
-    const id = clonedForm.getField('id');
-    let key = 0;
-    if (id.isBlank()) {
-      // The id value is blank so use the current _forms length as the key
-      key = this._forms.length();
-    } else {
-      key = id.getValue();
-    }
-
-    this._forms.set(key, clonedForm);
-  }
-
   _listenToForm(form) {
     this._bubbleUpEvents(form, ['dirty', 'touched']);
   }
 
   _setForm(form) {
-    // Clean up an existing form
+    // Clean up any existing form
     const oldForm = this.get('form');
     if (oldForm) {
       oldForm.removeAllListeners();
@@ -49,14 +33,6 @@ export default class FormField extends Field {
     const clonedForm = form.clone();
     this._set('form', clonedForm);
     this._listenToForm(clonedForm);
-  }
-
-  _setErr(err) {
-    // We clear all the errs if err is null. We don't pass down other values as not all errors at
-    // the parent level should be passed down to the children.
-    if (err === null) {
-      this._form.clearErrs();
-    }
   }
 
   set(props) {
@@ -80,10 +56,6 @@ export default class FormField extends Field {
         'touched',
         'pristine'
       ]);
-
-      if (props.err === 'err') {
-        this._setErr(props.err);
-      }
     }
   }
 
