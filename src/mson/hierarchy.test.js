@@ -49,3 +49,7 @@ it('should map by parent', () => {
 it('should create a hierarchy without items', () => {
   new Hierarchy();
 });
+
+it('should get', () => {
+  expect(hierarchy.get(5)).toEqual({ id: 5, parentId: 2, obj: 'Tesla' });
+});
