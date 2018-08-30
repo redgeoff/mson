@@ -3,7 +3,7 @@
 
 import Component from './component';
 
-class Globals extends Component {
+export class Globals extends Component {
   _onNavigate = null;
 
   _create(props) {
