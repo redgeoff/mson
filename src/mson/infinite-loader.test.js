@@ -337,6 +337,11 @@ it('should scroll', async () => {
   await infiniteLoader.scroll({ scrollY: 150 });
   expect(getMore).toHaveBeenCalledTimes(2);
   expect(getMore).toHaveBeenCalledWith({ previous: true });
+
+  // When spacer resizing
+  infiniteLoader.setSpacerResizing(true);
+  await infiniteLoader.scroll({ scrollY: 150 });
+  expect(getMore).toHaveBeenCalledTimes(2);
 });
 
 it('should reset', () => {
@@ -405,4 +410,20 @@ it('should resize spacer', () => {
   infiniteLoader.resizeSpacer();
   expect(infiniteLoader._spacerResizing).toEqual(true);
   expect(onResizeSpacerSpy).toHaveBeenCalledWith(100);
+});
+
+it('should get more when setSpacerResizing', () => {
+  const infiniteLoader = new InfiniteLoader(noops);
+
+  infiniteLoader._lastMoreWasPrevious = true;
+  infiniteLoader._shouldLoadPrevious = () => true;
+  infiniteLoader.beginningLoaded = () => false;
+
+  const getMoreSpy = jest
+    .spyOn(infiniteLoader, '_getMore')
+    .mockImplementation();
+
+  infiniteLoader.setSpacerResizing(false);
+
+  expect(getMoreSpy).toHaveBeenCalledWith({ previous: true });
 });
