@@ -366,3 +366,43 @@ it('should reset', () => {
   expect(onResizeSpacer).toHaveBeenCalledTimes(1);
   expect(onResizeSpacer).toHaveBeenCalledWith(null, 0);
 });
+
+it('should resize spacer', () => {
+  const infiniteLoader = new InfiniteLoader(noops);
+
+  infiniteLoader._onGetSpacerElement = () => ({
+    offsetTop: 100,
+    offsetHeight: 100
+  });
+
+  const onGetSpacerElementSpy = jest.spyOn(
+    infiniteLoader,
+    '_onGetSpacerElement'
+  );
+  const onResizeSpacerSpy = jest
+    .spyOn(infiniteLoader, '_onResizeSpacer')
+    .mockImplementation();
+
+  // Simulate buffer top not rendered yet
+  infiniteLoader._onGetItemElement = () => null;
+
+  infiniteLoader.resizeSpacer();
+  expect(onGetSpacerElementSpy).toHaveBeenCalledTimes(0);
+
+  infiniteLoader._onGetItemElement = () => ({
+    offsetTop: 200
+  });
+
+  // Where the change in height = 0
+  infiniteLoader.resizeSpacer();
+  expect(infiniteLoader._spacerResizing).toEqual(false);
+  expect(onResizeSpacerSpy).toHaveBeenCalledWith(0);
+
+  // Where the change in height > 0
+  infiniteLoader._onGetItemElement = () => ({
+    offsetTop: 100
+  });
+  infiniteLoader.resizeSpacer();
+  expect(infiniteLoader._spacerResizing).toEqual(true);
+  expect(onResizeSpacerSpy).toHaveBeenCalledWith(100);
+});
