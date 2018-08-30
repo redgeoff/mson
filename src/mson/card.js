@@ -25,12 +25,16 @@ export default class Card extends Component {
     this._bubbleUpLoad();
   }
 
-  _bubbleUpLoad() {
-    this.on('load', () => {
+  _handleLoadFactory() {
+    return () => {
       const content = this.get('content');
       if (content) {
         content.emitLoad();
       }
-    });
+    };
+  }
+
+  _bubbleUpLoad() {
+    this.on('load', this._handleLoadFactory());
   }
 }
