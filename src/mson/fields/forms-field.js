@@ -22,8 +22,8 @@ export default class FormsField extends Field {
     const c = this.constructor;
 
     // For mocking
-    this._window = window;
-    this._document = document;
+    this._window = global.window;
+    this._document = global.document;
     this._globals = globals;
 
     this.set({
