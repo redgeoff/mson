@@ -477,3 +477,19 @@ it('should handle load', () => {
   form._handleLoadFactory()();
   expect(resetSpy).toHaveBeenCalledTimes(1);
 });
+
+it('should handle showArchived', () => {
+  const form = new Form();
+
+  expect(form._fields.first().get('showArchived')).toBeUndefined();
+  form._handleShowArchivedFactory()(true);
+  expect(form._fields.first().get('showArchived')).toEqual(true);
+});
+
+it('should handle searchString', () => {
+  const form = new Form();
+
+  expect(form._fields.first().get('searchString')).toBeUndefined();
+  form._handleSearchStringFactory()('foo');
+  expect(form._fields.first().get('searchString')).toEqual('foo');
+});

@@ -189,18 +189,26 @@ export default class Form extends Component {
     });
   }
 
-  _listenForShowArchived() {
-    this.on('showArchived', showArchived => {
+  _handleShowArchivedFactory() {
+    return showArchived => {
       // Pass event down to fields
       this._fields.each(field => field.set({ showArchived }));
-    });
+    };
+  }
+
+  _listenForShowArchived() {
+    this.on('showArchived', this._handleShowArchivedFactory());
+  }
+
+  _handleSearchStringFactory() {
+    return searchString => {
+      // Pass event down to fields
+      this._fields.each(field => field.set({ searchString }));
+    };
   }
 
   _listenForSearchString() {
-    this.on('searchString', searchString => {
-      // Pass event down to fields
-      this._fields.each(field => field.set({ searchString }));
-    });
+    this.on('searchString', this._handleSearchStringFactory());
   }
 
   _listenForScroll() {
