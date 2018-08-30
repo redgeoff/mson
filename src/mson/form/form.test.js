@@ -1,4 +1,5 @@
 import Form from './form';
+import ButtonField from '../fields/button-field';
 import TextField from '../fields/text-field';
 import testUtils from '../test-utils';
 import compiler from '../compiler';
@@ -650,4 +651,39 @@ it('should get values', () => {
   expect(form.getValues({ default: false })).toEqual({
     firstName: 'firstName'
   });
+});
+
+it('should set full width', () => {
+  const form = createForm();
+
+  form.set({ fullWidth: true });
+
+  for (let field of form.getFields()) {
+    expect(field.get('fullWidth')).toEqual(true);
+  }
+});
+
+it('should check if has error for touched field', () => {
+  const form = createForm();
+  form.validate();
+  expect(form.hasErrorForTouchedField()).toEqual(false);
+
+  form.getField('firstName').set({ touched: true });
+  expect(form.hasErrorForTouchedField()).toEqual(true);
+});
+
+it('should submit', () => {
+  const form = createForm();
+
+  const emitClickOnButtonSpy = jest.spyOn(form, '_emitClickOnButton');
+
+  form.submit();
+  expect(emitClickOnButtonSpy).toHaveBeenCalledTimes(0);
+
+  form.set({
+    fields: [new ButtonField({ name: 'submit', type: 'submit' })]
+  });
+
+  form.submit();
+  expect(emitClickOnButtonSpy).toHaveBeenCalledWith(form.getField('submit'));
 });

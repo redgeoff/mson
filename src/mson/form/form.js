@@ -336,6 +336,10 @@ export default class Form extends Component {
     if (props.access !== undefined) {
       this._setAccess(props.access);
     }
+
+    if (props.fullWidth !== undefined) {
+      this._setFullWidth(props.fullWidth);
+    }
   }
 
   _setField(field) {
@@ -603,7 +607,7 @@ export default class Form extends Component {
     this._fields.each(field => field.set({ dirty }));
   }
 
-  setFullWidth(fullWidth) {
+  _setFullWidth(fullWidth) {
     this._fields.each(field => field.set({ fullWidth }));
   }
 
@@ -691,10 +695,14 @@ export default class Form extends Component {
     return button;
   }
 
+  _emitClickOnButton(button) {
+    button.emitClick();
+  }
+
   submit() {
     const button = this._getSubmitButton();
     if (button) {
-      button.emitClick();
+      this._emitClickOnButton(button);
     }
   }
 
