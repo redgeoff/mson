@@ -493,3 +493,15 @@ it('should handle searchString', () => {
   form._handleSearchStringFactory()('foo');
   expect(form._fields.first().get('searchString')).toEqual('foo');
 });
+
+it('should handle scroll', () => {
+  const form = createForm();
+
+  const e = {};
+
+  const spies = [];
+  form.eachField(field => spies.push(jest.spyOn(field, 'emit')));
+
+  form._handleScrollFactory()(e);
+  spies.forEach(spy => expect(spy).toHaveBeenCalledWith('scroll', e));
+});

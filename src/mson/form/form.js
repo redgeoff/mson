@@ -211,8 +211,8 @@ export default class Form extends Component {
     this.on('searchString', this._handleSearchStringFactory());
   }
 
-  _listenForScroll() {
-    this.on('scroll', e => {
+  _handleScrollFactory() {
+    return e => {
       // Pass scroll event down to fields
       //
       // TODO: why isn't the following working?
@@ -220,7 +220,11 @@ export default class Form extends Component {
       this._fields.each(field => {
         field.emit('scroll', e);
       });
-    });
+    };
+  }
+
+  _listenForScroll() {
+    this.on('scroll', this._handleScrollFactory());
   }
 
   isDefaultField(fieldName) {
@@ -247,20 +251,6 @@ export default class Form extends Component {
   cloneFields(form) {
     form._fields.each(field => this.addField(field.clone()));
     this._emitChange('fields');
-  }
-
-  copyValidators(form) {
-    this.set({ validators: form.get('validators') });
-  }
-
-  copyListeners(form) {
-    if (form.get('listeners')) {
-      this.set({ listeners: form.get('listeners') });
-    }
-  }
-
-  copyAccess(form) {
-    this.set({ access: form.get('access') });
   }
 
   _clearExtraErrors() {
