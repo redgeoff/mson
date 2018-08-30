@@ -521,6 +521,11 @@ it('should take snapshot', () => {
 
   firstName.set(setValues);
 
+  // Restore before snapshot is taken
+  form.set({ snapshot: 'restore' });
+
+  expect(firstName.get(['hidden', 'required', 'out', 'in'])).toEqual(setValues);
+
   form.set({ snapshot: 'take' });
 
   firstName.set({
@@ -600,4 +605,49 @@ it('should auto validate on touch', async () => {
   ]);
 
   expect(validateSpy).toHaveBeenCalledTimes(1);
+});
+
+it('get field should through when field is missing', () => {
+  const form = new Form();
+  expect(() => form.getField('firstName')).toThrow('missing field firstName');
+});
+
+it('should get values', () => {
+  const firstName = new TextField({
+    name: 'firstName',
+    label: 'First Name',
+    required: true
+  });
+
+  const form = new Form({
+    fields: [firstName],
+    value: {
+      firstName: 'firstName'
+    }
+  });
+
+  const defaults = {
+    id: undefined
+  };
+
+  expect(form.getValues()).toEqual({ ...defaults, firstName: 'firstName' });
+  expect(form.getValues({ in: true })).toEqual({
+    ...defaults,
+    firstName: 'firstName'
+  });
+  expect(form.getValues({ in: false })).toEqual({ ...defaults });
+
+  firstName.set({ in: false });
+
+  expect(form.getValues()).toEqual({ ...defaults, firstName: 'firstName' });
+  expect(form.getValues({ in: false })).toEqual({
+    ...defaults,
+    firstName: 'firstName'
+  });
+  expect(form.getValues({ in: true })).toEqual({ ...defaults });
+
+  expect(form.getValues({ default: true })).toEqual({ ...defaults });
+  expect(form.getValues({ default: false })).toEqual({
+    firstName: 'firstName'
+  });
 });

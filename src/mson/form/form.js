@@ -425,11 +425,10 @@ export default class Form extends Component {
   }
 
   getField(name) {
-    const field = this._fields.get(name);
-    if (!field) {
+    try {
+      return this._fields.get(name);
+    } catch (err) {
       throw new Error('missing field ' + name);
-    } else {
-      return field;
     }
   }
 
