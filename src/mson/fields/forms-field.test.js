@@ -32,11 +32,12 @@ const createForm = props => {
   });
 };
 
-const createField = () => {
+const createField = props => {
   return new FormsField({
     label: 'People',
     singularLabel: 'Person',
-    form: createForm()
+    form: createForm(),
+    ...props
   });
 };
 
@@ -586,3 +587,47 @@ it('should handle scroll', async () => {
   field._handleScrollFactory()();
   expect(scrollSpy).toHaveBeenCalledWith({ scrollY });
 });
+
+it('should reach max', async () => {
+  const field = createField({ maxSize: 1 });
+
+  expect(field.reachedMax()).toEqual(false);
+
+  const jack = {
+    firstName: 'Jack',
+    lastName: 'Johnson'
+  };
+
+  const form = field.get('form');
+
+  form.setValues(jack);
+
+  // Create
+  await field.save();
+
+  expect(field.reachedMax()).toEqual(true);
+});
+
+it('should validate min size', () => {
+  const field = createField({ minSize: 1 });
+  field.validate();
+  expect(field.getErr()).toEqual([{ error: '1 or more' }]);
+});
+
+it('should get singular label', () => {
+  const field = new FormsField();
+  expect(field.getSingularLabel()).toBeNull();
+
+  field.set({ label: 'Records' });
+  expect(field.getSingularLabel()).toEqual('Record');
+
+  field.set({ singularLabel: 'Rec' });
+  expect(field.getSingularLabel()).toEqual('Rec');
+});
+
+// it('should clone', () => {
+//   const field = createField();
+//   const form = field.get('form');
+//   const clonedField = field.clone();
+//   expect(clonedField.get('form')).not.toEqual(form);
+// });

@@ -818,10 +818,12 @@ export default class FormsField extends Field {
   getSingularLabel() {
     if (this.get('singularLabel')) {
       return this.get('singularLabel');
-    } else {
+    } else if (this.get('label')) {
       // Automatically calculate singular label by removing last 's'
-      const label = this.get('label') ? this.get('label') : '';
+      const label = this.get('label');
       return label.substr(0, label.length - 1);
+    } else {
+      return null;
     }
   }
 
@@ -839,7 +841,7 @@ export default class FormsField extends Field {
   clone() {
     const clonedField = super.clone();
 
-    // Clone form so that cloned form has a reference to a different form
+    // Clone form so that cloned field has a reference to a different form
     this.set({ form: this.get('form').clone() });
 
     return clonedField;
