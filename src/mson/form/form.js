@@ -159,8 +159,8 @@ export default class Form extends Component {
     }
   }
 
-  _listenForLoad() {
-    this.on('load', () => {
+  _handleLoadFactory() {
+    return () => {
       if (this.get('resetOnLoad')) {
         // Clear any previous values
         this.reset();
@@ -175,7 +175,11 @@ export default class Form extends Component {
 
       // Pass load event down to fields
       this._fields.each(field => field.emitLoad());
-    });
+    };
+  }
+
+  _listenForLoad() {
+    this.on('load', this._handleLoadFactory());
   }
 
   _listenForUnload() {
@@ -185,22 +189,30 @@ export default class Form extends Component {
     });
   }
 
-  _listenForShowArchived() {
-    this.on('showArchived', showArchived => {
+  _handleShowArchivedFactory() {
+    return showArchived => {
       // Pass event down to fields
       this._fields.each(field => field.set({ showArchived }));
-    });
+    };
+  }
+
+  _listenForShowArchived() {
+    this.on('showArchived', this._handleShowArchivedFactory());
+  }
+
+  _handleSearchStringFactory() {
+    return searchString => {
+      // Pass event down to fields
+      this._fields.each(field => field.set({ searchString }));
+    };
   }
 
   _listenForSearchString() {
-    this.on('searchString', searchString => {
-      // Pass event down to fields
-      this._fields.each(field => field.set({ searchString }));
-    });
+    this.on('searchString', this._handleSearchStringFactory());
   }
 
-  _listenForScroll() {
-    this.on('scroll', e => {
+  _handleScrollFactory() {
+    return e => {
       // Pass scroll event down to fields
       //
       // TODO: why isn't the following working?
@@ -208,7 +220,11 @@ export default class Form extends Component {
       this._fields.each(field => {
         field.emit('scroll', e);
       });
-    });
+    };
+  }
+
+  _listenForScroll() {
+    this.on('scroll', this._handleScrollFactory());
   }
 
   isDefaultField(fieldName) {
@@ -235,20 +251,6 @@ export default class Form extends Component {
   cloneFields(form) {
     form._fields.each(field => this.addField(field.clone()));
     this._emitChange('fields');
-  }
-
-  copyValidators(form) {
-    this.set({ validators: form.get('validators') });
-  }
-
-  copyListeners(form) {
-    if (form.get('listeners')) {
-      this.set({ listeners: form.get('listeners') });
-    }
-  }
-
-  copyAccess(form) {
-    this.set({ access: form.get('access') });
   }
 
   _clearExtraErrors() {
@@ -334,6 +336,10 @@ export default class Form extends Component {
     if (props.access !== undefined) {
       this._setAccess(props.access);
     }
+
+    if (props.fullWidth !== undefined) {
+      this._setFullWidth(props.fullWidth);
+    }
   }
 
   _setField(field) {
@@ -342,6 +348,17 @@ export default class Form extends Component {
     const beforeName = before && this.hasField(before) ? before : undefined;
 
     this._fields.set(field.get('name'), field, beforeName);
+  }
+
+  _handleFieldTouchedFactory() {
+    return touched => {
+      if (touched) {
+        this.set({ touched: true });
+      }
+      if (this.get('autoValidate')) {
+        this.validate();
+      }
+    };
   }
 
   addField(field) {
@@ -359,14 +376,7 @@ export default class Form extends Component {
       }
     });
 
-    field.on('touched', touched => {
-      if (touched) {
-        this.set({ touched: true });
-      }
-      if (this.get('autoValidate')) {
-        this.validate();
-      }
-    });
+    field.on('touched', this._handleFieldTouchedFactory());
 
     field.on('err', err => {
       if (err) {
@@ -419,11 +429,10 @@ export default class Form extends Component {
   }
 
   getField(name) {
-    const field = this._fields.get(name);
-    if (!field) {
+    try {
+      return this._fields.get(name);
+    } catch (err) {
       throw new Error('missing field ' + name);
-    } else {
-      return field;
     }
   }
 
@@ -598,7 +607,7 @@ export default class Form extends Component {
     this._fields.each(field => field.set({ dirty }));
   }
 
-  setFullWidth(fullWidth) {
+  _setFullWidth(fullWidth) {
     this._fields.each(field => field.set({ fullWidth }));
   }
 
@@ -686,10 +695,14 @@ export default class Form extends Component {
     return button;
   }
 
+  _emitClickOnButton(button) {
+    button.emitClick();
+  }
+
   submit() {
     const button = this._getSubmitButton();
     if (button) {
-      button.emitClick();
+      this._emitClickOnButton(button);
     }
   }
 

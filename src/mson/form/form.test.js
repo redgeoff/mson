@@ -1,9 +1,10 @@
 import Form from './form';
+import ButtonField from '../fields/button-field';
 import TextField from '../fields/text-field';
 import testUtils from '../test-utils';
 import compiler from '../compiler';
 
-const createForm = () => {
+const createForm = props => {
   return new Form({
     fields: [
       new TextField({ name: 'firstName', label: 'First Name', required: true }),
@@ -13,7 +14,8 @@ const createForm = () => {
         required: true
       }),
       new TextField({ name: 'lastName', label: 'Last Name', required: true })
-    ]
+    ],
+    ...props
   });
 };
 
@@ -463,4 +465,225 @@ it('should merge access', () => {
       }
     }
   });
+});
+
+it('should handle load', () => {
+  const form = new Form({ resetOnLoad: false });
+
+  const resetSpy = jest.spyOn(form, 'reset');
+
+  form._handleLoadFactory()();
+  expect(resetSpy).toHaveBeenCalledTimes(0);
+
+  form.set({ resetOnLoad: true });
+  form._handleLoadFactory()();
+  expect(resetSpy).toHaveBeenCalledTimes(1);
+});
+
+it('should handle showArchived', () => {
+  const form = new Form();
+
+  expect(form._fields.first().get('showArchived')).toBeUndefined();
+  form._handleShowArchivedFactory()(true);
+  expect(form._fields.first().get('showArchived')).toEqual(true);
+});
+
+it('should handle searchString', () => {
+  const form = new Form();
+
+  expect(form._fields.first().get('searchString')).toBeUndefined();
+  form._handleSearchStringFactory()('foo');
+  expect(form._fields.first().get('searchString')).toEqual('foo');
+});
+
+it('should handle scroll', () => {
+  const form = createForm();
+
+  const e = {};
+
+  const spies = [];
+  form.eachField(field => spies.push(jest.spyOn(field, 'emit')));
+
+  form._handleScrollFactory()(e);
+  spies.forEach(spy => expect(spy).toHaveBeenCalledWith('scroll', e));
+});
+
+it('should take snapshot', () => {
+  const form = createForm();
+
+  const firstName = form.getField('firstName');
+
+  const setValues = {
+    hidden: true,
+    required: true,
+    out: true,
+    in: true
+  };
+
+  firstName.set(setValues);
+
+  // Restore before snapshot is taken
+  form.set({ snapshot: 'restore' });
+
+  expect(firstName.get(['hidden', 'required', 'out', 'in'])).toEqual(setValues);
+
+  form.set({ snapshot: 'take' });
+
+  firstName.set({
+    hidden: false,
+    required: false,
+    out: false,
+    in: false
+  });
+
+  form.set({ snapshot: 'restore' });
+
+  expect(firstName.get(['hidden', 'required', 'out', 'in'])).toEqual(setValues);
+});
+
+it('should clear values', () => {
+  const form = createForm({
+    value: {
+      firstName: 'First',
+      middleName: 'Middle',
+      lastName: 'Last'
+    }
+  });
+
+  form.set({ clear: false });
+  expect(form.getValues()).toEqual({
+    id: undefined,
+    firstName: 'First',
+    middleName: 'Middle',
+    lastName: 'Last'
+  });
+
+  form.set({ clear: true });
+  expect(form.getValues()).toEqual({
+    id: null,
+    firstName: null,
+    middleName: null,
+    lastName: null
+  });
+});
+
+it('should reset', () => {
+  const form = createForm();
+
+  const resetSpy = jest.spyOn(form, 'reset');
+
+  form.set({ reset: false });
+  expect(resetSpy).toHaveBeenCalledTimes(0);
+
+  form.set({ reset: true });
+  expect(resetSpy).toHaveBeenCalledTimes(1);
+});
+
+it('should auto validate on touch', async () => {
+  const form = createForm();
+
+  const validateSpy = jest.spyOn(form, 'validate');
+  const setSpy = jest.spyOn(form, 'set');
+
+  form._handleFieldTouchedFactory()(false);
+  expect(setSpy).toHaveBeenCalledTimes(0);
+
+  form._handleFieldTouchedFactory()(true);
+  expect(setSpy).toHaveBeenCalledWith({ touched: true });
+  expect(validateSpy).toHaveBeenCalledTimes(0);
+
+  form.set({ autoValidate: true });
+
+  const afterErr = testUtils.once(form, 'err');
+
+  form.getField('firstName').set({ touched: true });
+
+  await afterErr;
+  expect(form.getErrs()).toEqual([
+    { field: 'firstName', error: 'required' },
+    { field: 'middleName', error: 'required' },
+    { field: 'lastName', error: 'required' }
+  ]);
+
+  expect(validateSpy).toHaveBeenCalledTimes(1);
+});
+
+it('get field should through when field is missing', () => {
+  const form = new Form();
+  expect(() => form.getField('firstName')).toThrow('missing field firstName');
+});
+
+it('should get values', () => {
+  const firstName = new TextField({
+    name: 'firstName',
+    label: 'First Name',
+    required: true
+  });
+
+  const form = new Form({
+    fields: [firstName],
+    value: {
+      firstName: 'firstName'
+    }
+  });
+
+  const defaults = {
+    id: undefined
+  };
+
+  expect(form.getValues()).toEqual({ ...defaults, firstName: 'firstName' });
+  expect(form.getValues({ in: true })).toEqual({
+    ...defaults,
+    firstName: 'firstName'
+  });
+  expect(form.getValues({ in: false })).toEqual({ ...defaults });
+
+  firstName.set({ in: false });
+
+  expect(form.getValues()).toEqual({ ...defaults, firstName: 'firstName' });
+  expect(form.getValues({ in: false })).toEqual({
+    ...defaults,
+    firstName: 'firstName'
+  });
+  expect(form.getValues({ in: true })).toEqual({ ...defaults });
+
+  expect(form.getValues({ default: true })).toEqual({ ...defaults });
+  expect(form.getValues({ default: false })).toEqual({
+    firstName: 'firstName'
+  });
+});
+
+it('should set full width', () => {
+  const form = createForm();
+
+  form.set({ fullWidth: true });
+
+  for (let field of form.getFields()) {
+    expect(field.get('fullWidth')).toEqual(true);
+  }
+});
+
+it('should check if has error for touched field', () => {
+  const form = createForm();
+  form.validate();
+  expect(form.hasErrorForTouchedField()).toEqual(false);
+
+  form.getField('firstName').set({ touched: true });
+  expect(form.hasErrorForTouchedField()).toEqual(true);
+});
+
+it('should submit', () => {
+  const form = createForm();
+
+  const emitClickOnButtonSpy = jest.spyOn(form, '_emitClickOnButton');
+
+  form.submit();
+  expect(emitClickOnButtonSpy).toHaveBeenCalledTimes(0);
+
+  form.set({
+    fields: [new ButtonField({ name: 'submit', type: 'submit' })]
+  });
+
+  form.submit();
+  expect(emitClickOnButtonSpy).toHaveBeenCalledWith(form.getField('submit'));
 });
