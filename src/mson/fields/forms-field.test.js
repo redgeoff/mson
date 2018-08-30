@@ -625,6 +625,7 @@ it('should get singular label', () => {
   expect(field.getSingularLabel()).toEqual('Rec');
 });
 
+// TODO: restore after clone() is fixed
 // it('should clone', () => {
 //   const field = createField();
 //   const form = field.get('form');

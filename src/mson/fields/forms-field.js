@@ -838,14 +838,18 @@ export default class FormsField extends Field {
     return isBlank;
   }
 
-  clone() {
-    const clonedField = super.clone();
-
-    // Clone form so that cloned field has a reference to a different form
-    this.set({ form: this.get('form').clone() });
-
-    return clonedField;
-  }
+  // TODO: why does using this cause the following error? TypeError: Method get
+  // TypedArray.prototype.length called on incompatible receiver [object Object] at Uint8Array.get
+  // length [as length] (<anonymous>). See forms-field.test.js, it('should clone') for example
+  //
+  // clone() {
+  //   const clonedField = super.clone();
+  //
+  //   // Clone form so that cloned field has a reference to a different form
+  //   this.set({ form: this.get('form').clone() });
+  //
+  //   return clonedField;
+  // }
 
   getUniqueItemId(id) {
     return this.getUniqueId() + '-item-' + id;
