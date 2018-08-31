@@ -9,7 +9,9 @@ it('should set, get and all', async () => {
     changes.push(change);
   });
 
+  expect(await docs.has(1)).toEqual(false);
   await docs.set({ id: 1, foo: 'one' });
+  expect(await docs.has(1)).toEqual(true);
   const doc2 = await docs.set({ foo: 'two' });
   await docs.set({ id: 3, foo: 'three' });
 
@@ -52,6 +54,8 @@ it('should set, get and all', async () => {
     allDocs.push(doc);
   }
   expect(allDocs).toEqual(expDocs);
+
+  expect(docs.numTotalDocs()).toEqual(3);
 });
 
 it('set should not mutate parameter', async () => {

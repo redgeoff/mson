@@ -11,6 +11,11 @@ export default class RecordStore extends Component {
   _create(props) {
     super._create(props);
 
+    // For mocking
+    this._globals = globals;
+    this._uberUtils = uberUtils;
+    this._registrar = registrar;
+
     this.set({
       schema: {
         component: 'Form',
@@ -30,16 +35,16 @@ export default class RecordStore extends Component {
   }
 
   async _request(props, promiseFactory) {
-    const appId = globals.get('appId');
+    const appId = this._globals.get('appId');
 
     try {
       const response = await promiseFactory(appId);
       return response;
     } catch (err) {
       if (props && props.form) {
-        uberUtils.setFormErrorsFromAPIError(err, props.form);
+        this._uberUtils.setFormErrorsFromAPIError(err, props.form);
       } else {
-        uberUtils.displayError(err.toString());
+        this._uberUtils.displayError(err.toString());
       }
 
       // We throw the error so that the entire listener chain is aborted
@@ -54,7 +59,7 @@ export default class RecordStore extends Component {
     const fieldValues = access.valuesCanCreate(props.form);
 
     return this._request(props, appId => {
-      return registrar.client.record.create({
+      return this._registrar.client.record.create({
         appId,
         componentName: this.get('storeName'),
         fieldValues
@@ -74,11 +79,14 @@ export default class RecordStore extends Component {
     this._cachedQueries[JSON.stringify(opts)] = true;
   }
 
+  _getShowArchivedWhere(showArchived) {
+    return showArchived ? { archivedAt: { $ne: null } } : { archivedAt: null };
+  }
+
   async getAll(props) {
-    const showArchivedWhere =
+    const showArchivedWhere = this._getShowArchivedWhere(
       props && props.showArchived
-        ? { archivedAt: { $ne: null } }
-        : { archivedAt: null };
+    );
     const where = utils.combineWheres(showArchivedWhere, props.where);
 
     return this._request(props, appId => {
@@ -97,13 +105,14 @@ export default class RecordStore extends Component {
       // The built-in apollo client cache cannot automatically accomodate the mutations so we use a
       // thin layer on top to clear the cache (invalidate it) when it needs to be rebuilt. In
       // particular this is needed when archiving/restoring and then toggling showArchived. TODO: is
-      // there a better way?
+      // there a better way? Using readQuery and writeQuery at the ApolloClient layer doesn't appear
+      // to fix this issue.
       if (!this._inCache(opts)) {
         this._addToCache(opts);
         opts.bypassCache = true;
       }
 
-      return registrar.client.record.getAll(opts);
+      return this._registrar.client.record.getAll(opts);
     });
   }
 
@@ -112,7 +121,7 @@ export default class RecordStore extends Component {
     const fieldValues = access.valuesCanUpdate(props.form);
 
     return this._request(props, appId => {
-      return registrar.client.record.update({
+      return this._registrar.client.record.update({
         appId,
         componentName: this.get('storeName'),
         id: props.id,
@@ -124,7 +133,7 @@ export default class RecordStore extends Component {
   async archive(props) {
     this._clearCache();
     return this._request(props, appId => {
-      return registrar.client.record.archive({
+      return this._registrar.client.record.archive({
         appId,
         componentName: this.get('storeName'),
         id: props.id
@@ -135,7 +144,7 @@ export default class RecordStore extends Component {
   async restore(props) {
     this._clearCache();
     return this._request(props, appId => {
-      return registrar.client.record.restore({
+      return this._registrar.client.record.restore({
         appId,
         componentName: this.get('storeName'),
         id: props.id

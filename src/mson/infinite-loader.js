@@ -61,22 +61,8 @@ export default class InfiniteLoader {
     this._onGetItems = onGetItems;
     this._onSetIsLoading = onSetIsLoading;
 
-    if (onGetItemId) {
-      this._onGetItemId = onGetItemId;
-    } else {
-      this._onGetItemId = item => {
-        return item.getValue('id');
-      };
-    }
-
-    if (onGetItemCursor) {
-      this._onGetItemCursor = onGetItemCursor;
-    } else {
-      this._onGetItemCursor = item => {
-        return item.get('cursor');
-      };
-    }
-
+    this._onGetItemId = onGetItemId;
+    this._onGetItemCursor = onGetItemCursor;
     this._onAddItem = onAddItem;
     this._onEmitChange = onEmitChange;
 
@@ -212,8 +198,6 @@ export default class InfiniteLoader {
   }
 
   async _getAllDebounced(props) {
-    props = props ? props : {};
-
     // Standardize props
     if (!props.after) {
       props.after = null;
@@ -411,7 +395,8 @@ export default class InfiniteLoader {
           this._bufferTopId = newId;
           this._bufferTopCursor = newCursor;
           this._firstCursor = newCursor;
-        } else if (id === this._bufferBottomId) {
+        } else {
+          // id === this._bufferBottomId
           this._bufferBottomId = newId;
           this._bufferBottomCursor = newCursor;
         }

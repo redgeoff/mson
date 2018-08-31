@@ -1,7 +1,12 @@
 import _ from 'lodash';
 import uuid from 'uuid';
 
-class Utils {
+export class Utils {
+  constructor() {
+    // For mocking
+    this._global = global;
+  }
+
   async sequential(items, onItem) {
     const values = [];
     await _.reduce(
@@ -18,18 +23,18 @@ class Utils {
     return values;
   }
 
-  // A recursive merge that also concats arrays
-  merge(object, sources) {
-    const mergeCustomizer = (objValue, srcValue) => {
-      if (_.isArray(objValue)) {
-        return objValue.concat(srcValue);
-      }
-    };
-    return _.mergeWith(object, sources, mergeCustomizer);
-  }
+  // // A recursive merge that also concats arrays
+  // merge(object, sources) {
+  //   const mergeCustomizer = (objValue, srcValue) => {
+  //     if (_.isArray(objValue)) {
+  //       return objValue.concat(srcValue);
+  //     }
+  //   };
+  //   return _.mergeWith(object, sources, mergeCustomizer);
+  // }
 
   inBrowser() {
-    return !!global.window;
+    return !!this._global.window;
   }
 
   // Source: https://stackoverflow.com/a/40577337/2831606
