@@ -127,8 +127,6 @@ it('should update', async () => {
 });
 
 it('should archive', async () => {
-  const form = createForm();
-
   const archived = {};
 
   store._registrar = {
@@ -153,8 +151,6 @@ it('should archive', async () => {
 });
 
 it('should restore', async () => {
-  const form = createForm();
-
   const restored = {};
 
   store._registrar = {
@@ -176,4 +172,89 @@ it('should restore', async () => {
     componentName: storeName,
     id
   });
+});
+
+it('should get showArchived where', () => {
+  expect(store._getShowArchivedWhere()).toEqual({ archivedAt: null });
+  expect(store._getShowArchivedWhere(true)).toEqual({
+    archivedAt: { $ne: null }
+  });
+});
+
+it('should get all', async () => {
+  const all = {};
+
+  store._registrar = {
+    client: {
+      record: {
+        getAll: async () => all
+      }
+    }
+  };
+
+  const addToCacheSpy = jest.spyOn(store, '_addToCache');
+  const getAllSpy = jest.spyOn(store._registrar.client.record, 'getAll');
+
+  const after = 'after';
+  const first = 'first';
+  const before = 'before';
+  const last = 'last';
+  const order = 'order';
+
+  expect(
+    await store.getAll({
+      where: {
+        foo: 'bar'
+      },
+      after,
+      first,
+      before,
+      last,
+      order
+    })
+  ).toEqual(all);
+
+  const opts = {
+    appId,
+    componentName: storeName,
+    asArray: true,
+    where: {
+      $and: [
+        {
+          archivedAt: null
+        },
+        {
+          foo: 'bar'
+        }
+      ]
+    },
+    after,
+    first,
+    before,
+    last,
+    order,
+    bypassCache: true
+  };
+
+  expect(addToCacheSpy).toHaveBeenCalledTimes(1);
+  expect(getAllSpy).toHaveBeenCalledWith(opts);
+
+  expect(
+    await store.getAll({
+      where: {
+        foo: 'bar'
+      },
+      after,
+      first,
+      before,
+      last,
+      order
+    })
+  ).toEqual(all);
+
+  // Verify cache used
+  expect(addToCacheSpy).toHaveBeenCalledTimes(1);
+  expect(getAllSpy).toHaveBeenCalledWith(
+    Object.assign({}, opts, { bypassCache: undefined })
+  );
 });

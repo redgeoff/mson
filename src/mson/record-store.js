@@ -79,11 +79,14 @@ export default class RecordStore extends Component {
     this._cachedQueries[JSON.stringify(opts)] = true;
   }
 
+  _getShowArchivedWhere(showArchived) {
+    return showArchived ? { archivedAt: { $ne: null } } : { archivedAt: null };
+  }
+
   async getAll(props) {
-    const showArchivedWhere =
+    const showArchivedWhere = this._getShowArchivedWhere(
       props && props.showArchived
-        ? { archivedAt: { $ne: null } }
-        : { archivedAt: null };
+    );
     const where = utils.combineWheres(showArchivedWhere, props.where);
 
     return this._request(props, appId => {
