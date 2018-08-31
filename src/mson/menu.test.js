@@ -35,6 +35,11 @@ it('should index by path', () => {
   expect(menu.getItem('light-red')).toEqual(colors[0].items[0]);
   expect(menu.getItem('light-light-red')).toEqual(colors[0].items[0].items[0]);
   expect(menu.getItem('green')).toEqual(colors[1]);
+
+  expect(menu.getParent(colors[0].items[0].items[0].path)).toEqual(
+    colors[0].items[0]
+  );
+  expect(menu.getFirstItem()).toEqual(colors[0]);
 });
 
 it('should validate schema', () => {
