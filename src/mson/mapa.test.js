@@ -332,6 +332,19 @@ it('should get entries', () => {
   expect(entries).toEqual([['b', 2], ['a', 1]]);
 });
 
+it('should allow for empty', () => {
+  const emptyMapa = new Mapa();
+
+  expect(emptyMapa.isEmpty()).toEqual(true);
+
+  // Backward when empty
+  const entries = [];
+  for (const entry of emptyMapa.entries(null, true)) {
+    entries.push(entry);
+  }
+  expect(entries).toEqual([]);
+});
+
 it('should work with 0 key', () => {
   const m = new Mapa();
   m.set(0, 'a');
@@ -600,4 +613,12 @@ it('should move', () => {
   // Move a before a
   m.set('a', m.get('a'), 'a');
   expectABeforeC();
+});
+
+it('should report if has last', () => {
+  const m = new Mapa();
+  expect(m.hasLast()).toEqual(false);
+
+  m.set('a', 1);
+  expect(m.hasLast()).toEqual(true);
 });
