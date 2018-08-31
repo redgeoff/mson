@@ -55,6 +55,10 @@ export default class BaseComponent extends events.EventEmitter {
         {
           name: 'didCreate',
           component: 'BooleanField'
+        },
+        {
+          name: 'backEndOnly',
+          component: 'BooleanField'
         }
       ]
     };

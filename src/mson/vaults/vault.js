@@ -9,7 +9,7 @@ export default class Vault extends Component {
     super._create(props);
 
     this.set({
-      backendOnly: true
+      backEndOnly: true
     });
   }
 }
