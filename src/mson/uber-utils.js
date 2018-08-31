@@ -1,9 +1,14 @@
 import globals from './globals';
 
 // Utils that are above the component layer
-class Utils {
+export class UberUtils {
+  constructor() {
+    // For mocking
+    this._globals = globals;
+  }
+
   displayError(text) {
-    globals.displayAlert({ title: 'Unexpected Error', text });
+    this._globals.displayAlert({ title: 'Unexpected Error', text });
   }
 
   setFormErrorsFromAPIError(err, form) {
@@ -23,7 +28,7 @@ class Utils {
 
   async tryAndSetFormErrorsIfAPIError(promiseFactory, form) {
     try {
-      return promiseFactory();
+      return await promiseFactory();
     } catch (err) {
       this.setFormErrorsFromAPIError(err, form);
 
@@ -34,7 +39,7 @@ class Utils {
 
   async tryAndDisplayErrorIfAPIError(promiseFactory) {
     try {
-      return promiseFactory();
+      return await promiseFactory();
     } catch (err) {
       this.displayError(err.toString());
 
@@ -44,4 +49,4 @@ class Utils {
   }
 }
 
-export default new Utils();
+export default new UberUtils();
