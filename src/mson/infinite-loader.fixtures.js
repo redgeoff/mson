@@ -130,14 +130,15 @@ export const onGetAllPeople = async props => {
     }
   } else {
     switch (props.before) {
-      case records1.edges[0].cursor:
-        return noEdges;
+      // case records1.edges[0].cursor:
+      //   return noEdges;
       case records2.edges[0].cursor:
         return records1;
-      case records3.edges[0].cursor:
-        return records2;
       default:
-        return records3;
+        //case records3.edges[0].cursor:
+        return records2;
+      // default:
+      //   return records3;
     }
   }
 };
