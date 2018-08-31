@@ -55,6 +55,12 @@ export default class BaseComponent extends events.EventEmitter {
         {
           name: 'didCreate',
           component: 'BooleanField'
+        },
+        {
+          // True if the component should never be sent to the front end, e.g. if they contain
+          // secrets
+          name: 'backEndOnly',
+          component: 'BooleanField'
         }
       ]
     };
