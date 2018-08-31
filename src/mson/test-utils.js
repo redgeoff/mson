@@ -94,7 +94,7 @@ class TestUtils {
   //   return Promise.race([timer(), promiseFactory()])
   // }
 
-  // Note: the built in timeout per test doesn't appear to work so here is a custom routine.
+  // Note: the built in timeout per test in jest doesn't appear to work so here is a custom routine.
   async expectToFinishBefore(promiseFactory, milliseconds) {
     const begin = new Date();
     await promiseFactory();
