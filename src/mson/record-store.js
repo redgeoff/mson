@@ -11,6 +11,10 @@ export default class RecordStore extends Component {
   _create(props) {
     super._create(props);
 
+    // For mocking
+    this._globals = globals;
+    this._uberUtils = uberUtils;
+
     this.set({
       schema: {
         component: 'Form',
@@ -30,16 +34,16 @@ export default class RecordStore extends Component {
   }
 
   async _request(props, promiseFactory) {
-    const appId = globals.get('appId');
+    const appId = this._globals.get('appId');
 
     try {
       const response = await promiseFactory(appId);
       return response;
     } catch (err) {
       if (props && props.form) {
-        uberUtils.setFormErrorsFromAPIError(err, props.form);
+        this._uberUtils.setFormErrorsFromAPIError(err, props.form);
       } else {
-        uberUtils.displayError(err.toString());
+        this._uberUtils.displayError(err.toString());
       }
 
       // We throw the error so that the entire listener chain is aborted
