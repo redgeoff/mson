@@ -1,14 +1,34 @@
 import RecordStore from './record-store';
 import Form from './form';
+import { TextField } from './fields';
 import testUtils from './test-utils';
 
-it('should request', async () => {
-  const store = new RecordStore();
+let store = null;
+const storeName = 'MyStore';
+const appId = 'appId';
+
+beforeEach(() => {
+  store = new RecordStore({ storeName });
 
   store._globals = {
-    get: () => 'appId'
+    get: () => appId
   };
+});
 
+const createForm = () => {
+  return new Form({
+    fields: [
+      new TextField({ name: 'firstName' }),
+      new TextField({ name: 'lastName' })
+    ],
+    value: {
+      firstName: 'Jay',
+      lastName: 'Kay'
+    }
+  });
+};
+
+it('should request', async () => {
   store._uberUtils = {
     setFormErrorsFromAPIError: () => {},
     displayError: () => {}
@@ -27,7 +47,7 @@ it('should request', async () => {
 
   // Success
   await store._request(null, container.promiseFactory);
-  expect(promiseFactorySpy).toHaveBeenCalledWith('appId');
+  expect(promiseFactorySpy).toHaveBeenCalledWith(appId);
   expect(setFormErrorsFromAPIErrorSpy).toHaveBeenCalledTimes(0);
   expect(displayError).toHaveBeenCalledTimes(0);
 
@@ -52,4 +72,30 @@ it('should request', async () => {
   );
   expect(setFormErrorsFromAPIErrorSpy).toHaveBeenCalledTimes(0);
   expect(displayError).toHaveBeenCalledWith(err.toString());
+});
+
+it('should create', async () => {
+  const form = createForm();
+
+  const created = {};
+
+  store._registrar = {
+    client: {
+      record: {
+        create: async () => created
+      }
+    }
+  };
+
+  const clearCacheSpy = jest.spyOn(store, '_clearCache');
+  const createSpy = jest.spyOn(store._registrar.client.record, 'create');
+
+  expect(await store.create({ form })).toEqual(created);
+
+  expect(clearCacheSpy).toHaveBeenCalledTimes(1);
+  expect(createSpy).toHaveBeenCalledWith({
+    appId,
+    componentName: storeName,
+    fieldValues: form.getValues()
+  });
 });
