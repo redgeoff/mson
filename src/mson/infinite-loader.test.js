@@ -21,6 +21,10 @@ const onGetItemCursorMock = item => {
   return item.cursor;
 };
 
+const onGetItemIdMock = item => {
+  return item.node.id;
+};
+
 const onRemoveItemsMock = (id, n, reverse) => {
   let i = 0;
   let lastId = null;
@@ -426,4 +430,47 @@ it('should get more when setSpacerResizing', () => {
   infiniteLoader.setSpacerResizing(false);
 
   expect(getMoreSpy).toHaveBeenCalledWith({ previous: true });
+});
+
+it('should remove item', async () => {
+  const infiniteLoader = new InfiniteLoader(
+    Object.assign({}, noops, {
+      onGetAll: onGetAllPeople,
+      onGetItemsPerPage: onGetItemsPerPageMock,
+      onGetMaxBufferPages: onGetMaxBufferPagesMock,
+      onGetItemId: onGetItemIdMock,
+      onGetItemCursor: onGetItemCursorMock,
+      onGetItems: (id, reverse) => {
+        return allRecords.values(id, reverse);
+      }
+    })
+  );
+
+  const resetBufferReferencesSpy = jest
+    .spyOn(infiniteLoader, '_resetBufferReferences')
+    .mockImplementation();
+
+  // Initial load
+  await infiniteLoader.getAll();
+
+  // Simulate item not rendered yet
+  infiniteLoader._onGetItemId = () => null;
+  infiniteLoader.removeItem('ray');
+  expect(resetBufferReferencesSpy).toHaveBeenCalledTimes(1);
+
+  // Simulate items rendered
+  infiniteLoader._onGetItemId = onGetItemIdMock;
+
+  // Remove bottom of buffer
+  infiniteLoader.removeItem('ella');
+  expect(infiniteLoader._bufferBottomId).toEqual('ray');
+  expect(infiniteLoader._bufferBottomCursor).toEqual('rayCursor');
+
+  // Remove top of buffer
+  infiniteLoader.removeItem('ray');
+  expect(infiniteLoader._bufferTopId).toEqual('ray');
+  expect(infiniteLoader._bufferTopCursor).toEqual('rayCursor');
+  expect(infiniteLoader._firstCursor).toEqual('rayCursor');
+
+  expect(resetBufferReferencesSpy).toHaveBeenCalledTimes(1);
 });

@@ -395,7 +395,8 @@ export default class InfiniteLoader {
           this._bufferTopId = newId;
           this._bufferTopCursor = newCursor;
           this._firstCursor = newCursor;
-        } else if (id === this._bufferBottomId) {
+        } else {
+          // id === this._bufferBottomId
           this._bufferBottomId = newId;
           this._bufferBottomCursor = newCursor;
         }
