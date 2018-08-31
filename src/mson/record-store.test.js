@@ -6,6 +6,7 @@ import testUtils from './test-utils';
 let store = null;
 const storeName = 'MyStore';
 const appId = 'appId';
+const id = 'myId';
 
 beforeEach(() => {
   store = new RecordStore({ storeName });
@@ -97,5 +98,82 @@ it('should create', async () => {
     appId,
     componentName: storeName,
     fieldValues: form.getValues()
+  });
+});
+
+it('should update', async () => {
+  const form = createForm();
+
+  const updated = {};
+
+  store._registrar = {
+    client: {
+      record: {
+        update: async () => updated
+      }
+    }
+  };
+
+  const updateSpy = jest.spyOn(store._registrar.client.record, 'update');
+
+  expect(await store.update({ form, id })).toEqual(updated);
+
+  expect(updateSpy).toHaveBeenCalledWith({
+    appId,
+    id,
+    componentName: storeName,
+    fieldValues: form.getValues()
+  });
+});
+
+it('should archive', async () => {
+  const form = createForm();
+
+  const archived = {};
+
+  store._registrar = {
+    client: {
+      record: {
+        archive: async () => archived
+      }
+    }
+  };
+
+  const clearCacheSpy = jest.spyOn(store, '_clearCache');
+  const archiveSpy = jest.spyOn(store._registrar.client.record, 'archive');
+
+  expect(await store.archive({ id })).toEqual(archived);
+
+  expect(clearCacheSpy).toHaveBeenCalledTimes(1);
+  expect(archiveSpy).toHaveBeenCalledWith({
+    appId,
+    componentName: storeName,
+    id
+  });
+});
+
+it('should restore', async () => {
+  const form = createForm();
+
+  const restored = {};
+
+  store._registrar = {
+    client: {
+      record: {
+        restore: async () => restored
+      }
+    }
+  };
+
+  const clearCacheSpy = jest.spyOn(store, '_clearCache');
+  const restoreSpy = jest.spyOn(store._registrar.client.record, 'restore');
+
+  expect(await store.restore({ id })).toEqual(restored);
+
+  expect(clearCacheSpy).toHaveBeenCalledTimes(1);
+  expect(restoreSpy).toHaveBeenCalledWith({
+    appId,
+    componentName: storeName,
+    id
   });
 });
