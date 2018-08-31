@@ -225,7 +225,8 @@ class App extends React.PureComponent {
         this.component.set({ searchString: null });
       }
 
-      const isAction = menuItem.content instanceof Action;
+      // Note: menuItem can be null if there is no content on the landing page
+      const isAction = menuItem && menuItem.content instanceof Action;
 
       // Note: menuItem.content can be an action if the user goes directly to a route where the
       // content is an action
