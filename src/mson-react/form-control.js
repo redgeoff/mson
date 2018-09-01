@@ -1,6 +1,6 @@
 import React from 'react';
 import FormControlMU from '@material-ui/core/FormControl';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles';
 
 const styles = theme => ({
   formControl: {
