@@ -1,13 +1,14 @@
 import React from 'react';
 import ButtonMui from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles';
+import Icon from '@material-ui/core/Icon';
+import _ from 'lodash';
 
-// Note: this is a bit wasteful as it bundles all icons, regardless of whether they will be used.
-// TODO: is there a better way?
-// https://kamranicus.com/posts/2017-09-02-dynamic-import-material-icons-react mentions using the
-// webpack API with eager loading, but wouldn't it still require bundling all the icons as the
-// icon can be dynamic. Maybe we need a construct that bundles components based on the MSON?
-import * as Icons from '@material-ui/icons';
+// Note: we use font icons instead of SVG icons as this allows us to support any icon dynamically
+// without adding all icons to the JS bundle. The MaterialUI icons are about 54KB which is
+// substantially smaller than their SVG counterparts.
+//
+// import * as Icons from '@material-ui/icons';
 
 const styles = theme => ({
   leftIcon: {
@@ -25,26 +26,24 @@ class Button extends React.PureComponent {
     }
   };
 
+  // Convert to the font icon name so that we can use the SVG Icon names. This allows us to make
+  // changes to this logic without changing the calling code.
+  toFontIconName(svgIconName) {
+    return _.snakeCase(svgIconName);
+  }
+
   render() {
     const {
       classes,
       type,
       disabled,
       label,
-      iconComponent,
       icon,
       fullWidth,
       variant
     } = this.props;
 
-    // React component must be capitalized to render
-    let Icon = null;
-
-    if (iconComponent) {
-      Icon = iconComponent;
-    } else if (icon) {
-      Icon = Icons[icon];
-    }
+    const iconContents = icon ? this.toFontIconName(icon) : null;
 
     return (
       <ButtonMui
@@ -56,7 +55,7 @@ class Button extends React.PureComponent {
         fullWidth={fullWidth}
         variant={variant}
       >
-        {Icon ? <Icon className={classes.leftIcon} /> : null}
+        {icon ? <Icon className={classes.leftIcon}>{iconContents}</Icon> : null}
         {label}
       </ButtonMui>
     );
