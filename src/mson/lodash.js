@@ -1,4 +1,8 @@
-// Lodash with just the pieces needed for mson. This reduces the build size.
+// Lodash with just the pieces needed for MSON. This reduces the build size. TODO: refactor the
+// calling code to actually reference lodash modules, e.g. `import cloneDeep from
+// 'lodash/cloneDeep'` as this way code that uses just pieces of MSON won't have to include
+// unecessary pieces of lodash.
+
 import clone from 'lodash/clone';
 import cloneDeep from 'lodash/cloneDeep';
 import cloneDeepWith from 'lodash/cloneDeepWith';
