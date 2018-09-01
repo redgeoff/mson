@@ -2,7 +2,7 @@ import compiler from '../compiler';
 import testUtils from '../test-utils';
 import GetRecord from '../actions/get-record';
 import UpsertRecord from '../actions/upsert-record';
-import _ from 'lodash';
+import _ from '../lodash';
 
 let acts = null;
 let editAccount = null;

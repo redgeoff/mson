@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from '../lodash';
 import sift from 'sift';
 
 export default class Validator {

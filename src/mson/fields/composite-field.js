@@ -1,6 +1,6 @@
 import Field from './field';
 import Mapa from '../mapa';
-import _ from 'lodash';
+import _ from '../lodash';
 
 export default class CompositeField extends Field {
   _create(props) {

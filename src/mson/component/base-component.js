@@ -1,5 +1,5 @@
 import events from 'events';
-import _ from 'lodash';
+import _ from '../lodash';
 import registrar from '../compiler/registrar';
 import utils from '../utils';
 

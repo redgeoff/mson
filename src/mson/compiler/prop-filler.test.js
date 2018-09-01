@@ -1,5 +1,5 @@
 import PropFiller from './prop-filler';
-import _ from 'lodash';
+import _ from '../lodash';
 
 it('should fill props', () => {
   const props = {

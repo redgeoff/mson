@@ -6,7 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import Typography from '@material-ui/core/Typography';
 import Icon from './icon';
-import _ from 'lodash';
+import _ from '../mson/lodash';
 import registrar from '../mson/compiler/registrar';
 
 const styles = theme => ({

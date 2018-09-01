@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from '../mson/lodash';
 import compiler from '../mson/compiler';
 import * as components from './components';
 import globals from '../mson/globals';
