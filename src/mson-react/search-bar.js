@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import TextField from '@material-ui/core/TextField';
-import SearchIcon from '@material-ui/icons/Search';
+import Icon from './icon';
 import globals from '../mson/globals';
 
 // TODO: see https://material-ui-next.com/style/icons/#icons and implement:
@@ -50,7 +50,7 @@ class SearchBar extends React.PureComponent {
           onKeyUp={this.handleKeyUp}
           onChange={onChange}
         />
-        <SearchIcon className={classes.searchIcon} />
+        <Icon icon="Search" className={classes.searchIcon} />
       </div>
     );
   }

@@ -9,7 +9,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import Icon from './icon';
 import Menu from './menu';
 import SearchBar from './search-bar';
 import Switch from 'react-router-dom/Switch';
@@ -439,7 +439,7 @@ class App extends React.PureComponent {
             onClick={this.handleDrawerToggle}
             className={classes.navIconHide}
           >
-            <MenuIcon />
+            <Icon icon="Menu" />
           </IconButton>
           <Typography variant="title" color="inherit" noWrap>
             {menuItem ? menuItem.label : ''}

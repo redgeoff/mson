@@ -4,7 +4,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 // import Button from '@material-ui/core/Button';
 import SnackbarMUI from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
+import Icon from './icon';
 
 const styles = theme => ({
   close: {
@@ -50,7 +50,7 @@ class Snackbar extends React.PureComponent {
             className={classes.close}
             onClick={this.handleClose}
           >
-            <CloseIcon />
+            <Icon icon="Close" />
           </IconButton>
         ]}
       />

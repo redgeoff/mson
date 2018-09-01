@@ -1,11 +1,12 @@
 import React from 'react';
 import IconButton from '@material-ui/core/IconButton';
-// import MoreVertIcon from '@material-ui/icons/MoreVert';
-// import Menu, { MenuItem } from '@material-ui/core/Menu';
-// import { ListItemIcon, ListItemText } from '@material-ui/core/List';
-import { Edit, Delete, Restore } from '@material-ui/icons';
+// import Menu from '@material-ui/core/Menu';
+// import MenuItem from '@material-ui/core/Menu/MenuItem';
+// import ListItemIcon from '@material-ui/core/List/ListItemIcon';
+// import ListItemText from '@material-ui/core/List/ListItemText';
+import Icon from './icon';
 import Grid from '@material-ui/core/Grid';
-// import { Tooltip } from '@material-ui/core';
+// import Tooltip from '@material-ui/core/Tooltip';
 
 export default class FormCardButtons extends React.PureComponent {
   render() {
@@ -28,7 +29,7 @@ export default class FormCardButtons extends React.PureComponent {
       // <Tooltip title="Edit">
       updateButton = (
         <IconButton onClick={onEdit}>
-          <Edit />
+          <Icon icon="Edit" />
         </IconButton>
       );
       // </Tooltip>
@@ -38,7 +39,7 @@ export default class FormCardButtons extends React.PureComponent {
     if (!forbidDelete) {
       deleteButton = (
         <IconButton onClick={onDelete}>
-          {archivedAt ? <Restore /> : <Delete />}
+          <Icon icon={archivedAt ? 'Restore' : 'Delete'} />
         </IconButton>
       );
     }
@@ -60,7 +61,7 @@ export default class FormCardButtons extends React.PureComponent {
               onClick={event => this.handleEdit(event)}
             >
               <ListItemIcon className={classes.icon}>
-                <Edit />
+                <Icon icon="Edit" />
               </ListItemIcon>
               <ListItemText
                 classes={{ primary: classes.primary }}
@@ -73,7 +74,7 @@ export default class FormCardButtons extends React.PureComponent {
               onClick={event => this.handleDelete(event)}
             >
               <ListItemIcon className={classes.icon}>
-                <Delete />
+                <Icon icon="Delete" />
               </ListItemIcon>
               <ListItemText
                 classes={{ primary: classes.primary }}

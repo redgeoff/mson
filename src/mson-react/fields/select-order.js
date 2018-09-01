@@ -1,6 +1,9 @@
 import React from 'react';
-import { IconButton, MenuItem, FormControl, Select } from '@material-ui/core';
-import { Sort } from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import Icon from '../icon';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 const styles = theme => ({
@@ -43,7 +46,7 @@ class SelectOrder extends React.PureComponent {
     //     startAdornment:
     //     <InputAdornment position="start">
     //       <IconButton color="primary" aria-label="new" onClick={this.handleOrder}>
-    //         <Sort className={classes.flip} />
+    //         <Icon icon="Sort" className={classes.flip} />
     //       </IconButton>
     //     </InputAdornment>,
     //   }}
@@ -70,7 +73,7 @@ class SelectOrder extends React.PureComponent {
           aria-label="sort order"
           onClick={this.handleClick}
         >
-          <Sort className={flipped ? classes.flip : null} />
+          <Icon icon="Sort" className={flipped ? classes.flip : null} />
         </IconButton>
       </div>
     );

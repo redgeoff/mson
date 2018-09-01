@@ -3,7 +3,7 @@
 import React from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import HelpOutline from '@material-ui/icons/HelpOutline';
+import Icon from '../icon';
 
 export default class HelpToolTip extends React.PureComponent {
   render() {
@@ -11,7 +11,7 @@ export default class HelpToolTip extends React.PureComponent {
     return (
       <Tooltip title={help}>
         <IconButton aria-label="Help">
-          <HelpOutline />
+          <Icon icon="HelpOutline" />
         </IconButton>
       </Tooltip>
     );
