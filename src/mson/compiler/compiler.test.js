@@ -2,7 +2,7 @@ import { Compiler } from './compiler';
 import components from '../components';
 import globals from '../globals';
 import testUtils from '../test-utils';
-import _ from 'lodash';
+import _ from '../lodash';
 
 const newCompiler = () => {
   return new Compiler({ components: Object.assign({}, components) });

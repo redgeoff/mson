@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from './lodash';
 
 // TODO: improve the loading when scrolling up so that the user can "jump" to previous pages.
 // Currently, when we scroll up the pages are loaded in reverse order, which means that it can take

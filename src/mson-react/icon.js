@@ -1,6 +1,6 @@
 import React from 'react';
 import IconMui from '@material-ui/core/Icon';
-import _ from 'lodash';
+import _ from '../mson/lodash';
 
 // Note: we use font icons instead of SVG icons as this allows us to support any icon dynamically
 // without adding all icons to the JS bundle. The MaterialUI icons are about 54KB which is

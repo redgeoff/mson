@@ -1,6 +1,6 @@
 import SchemaValidatorForm from './schema-validator-form';
 import compiler from '../compiler';
-import _ from 'lodash';
+import _ from '../lodash';
 
 it('should not mutate values when setting', () => {
   const form = new SchemaValidatorForm();

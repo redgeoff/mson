@@ -1,5 +1,5 @@
 import Action from './action';
-import _ from 'lodash';
+import _ from '../lodash';
 import PropFiller from '../compiler/prop-filler';
 
 export default class Iterator extends Action {

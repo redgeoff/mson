@@ -1,6 +1,6 @@
 import registrar from './compiler/registrar';
 import AccessControl from './access-control';
-import _ from 'lodash';
+import _ from './lodash';
 
 // Note: this function contains client-specific access control logic
 export class Access {

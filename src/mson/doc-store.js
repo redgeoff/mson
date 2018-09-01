@@ -1,6 +1,6 @@
 import events from 'events';
 import Mapa from './mapa';
-import _ from 'lodash';
+import _ from './lodash';
 import uuid from 'uuid';
 
 // TODO:

@@ -2,7 +2,7 @@
 //   - Refactor out setValues(), clearValues(), etc... and use set({ value: value }), etc...?
 
 import Component from '../component';
-import _ from 'lodash';
+import _ from '../lodash';
 import Validator from '../component/validator';
 import Mapa from '../mapa';
 import IdField from '../fields/id-field';

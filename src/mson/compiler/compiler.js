@@ -7,7 +7,7 @@
 //    storing more in memory.
 
 import components from '../components';
-import _ from 'lodash';
+import _ from '../lodash';
 import PropFiller from './prop-filler';
 import registrar from './registrar';
 

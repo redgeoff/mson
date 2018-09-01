@@ -1,7 +1,7 @@
 import FormField from './form-field';
 import Form from '../form';
 import TextField from './text-field';
-import _ from 'lodash';
+import _ from '../lodash';
 import testUtils from '../test-utils';
 
 const createField = () => {

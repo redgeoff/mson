@@ -1,5 +1,5 @@
 import Action from './action';
-import _ from 'lodash';
+import _ from '../lodash';
 
 export default class RedirectByRole extends Action {
   _create(props) {

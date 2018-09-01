@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from './lodash';
 
 //   { "id": 1, "parentId": null, "obj": "Germany" },
 //   { "id": 2, "parentId": null, "obj": "USA" },
