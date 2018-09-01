@@ -1,7 +1,7 @@
 import React from 'react';
 import Field from './field';
 import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
+import Icon from '../icon';
 import FlexBreak from '../flex-break';
 import attach from '../attach';
 import HelpToolTip from './help-tool-tip';
@@ -27,7 +27,7 @@ class ListItemField extends React.PureComponent {
           <Field field={field} block={false} />
           {allowDelete && !isBlank && !disabled && editable ? (
             <IconButton aria-label="Delete">
-              <DeleteIcon onClick={this.handleDelete} />
+              <Icon icon="DeleteIcon" onClick={this.handleDelete} />
             </IconButton>
           ) : null}
           {help && editable ? <HelpToolTip help={help} /> : ''}

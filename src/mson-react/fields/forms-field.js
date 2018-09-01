@@ -3,15 +3,16 @@ import Grid from '@material-ui/core/Grid';
 import FormCard from '../form-card';
 import FormDialog from '../form-dialog';
 import attach from '../attach';
-import { Button, Typography } from '@material-ui/core';
-import { Add, Info } from '@material-ui/icons';
+import Button from '../button';
+import Typography from '@material-ui/core/Typography';
 import ConfirmationDialog from '../confirmation-dialog';
 import access from '../../mson/access';
-import { withStyles } from '@material-ui/core/styles';
-import { blueGrey } from '@material-ui/core/colors';
+import withStyles from '@material-ui/core/styles/withStyles';
+import blueGrey from '@material-ui/core/colors/blueGrey';
 import './forms-field.css';
 import SelectOrder from './select-order';
 import ButtonField from '../../mson/fields/button-field';
+import Icon from '../icon';
 
 // TODO:
 //   - Support drag to order
@@ -241,10 +242,12 @@ class FormsField extends React.PureComponent {
       <Grid container spacing={0}>
         <Grid item xs={12} sm={6} lg={6}>
           {showNewButton ? (
-            <Button color="primary" aria-label="new" onClick={this.handleNew}>
-              <Add />
-              New {singularLabel}
-            </Button>
+            <Button
+              aria-label="new"
+              onClick={this.handleNew}
+              icon="Add"
+              label={'New ' + singularLabel}
+            />
           ) : null}
         </Grid>
         <Grid item xs={12} sm={6} lg={6} align="right">
@@ -300,7 +303,7 @@ class FormsField extends React.PureComponent {
 
         {showNoRecords ? (
           <Typography variant="display1">
-            <Info /> No {label} found
+            <Icon icon="Info" /> No {label} found
           </Typography>
         ) : null}
 

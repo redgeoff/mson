@@ -1,13 +1,13 @@
 // TODO: when click on another section, close other sections? Requires moving menu state to app?
 
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import Divider from '@material-ui/core/Divider';
 import Submenu from './submenu';
 import attach from './attach';
-import { Typography } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import registrar from '../mson/compiler/registrar';
 
 const drawerWidth = 240;

@@ -1,8 +1,9 @@
 import React from 'react';
 import Button from './button';
-import { Dialog, DialogActions, withMobileDialog } from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import { Edit, Delete, Save, Cancel, Restore } from '@material-ui/icons';
 import Form from './form';
 import attach from './attach';
 
@@ -82,12 +83,12 @@ class FormDialog extends React.PureComponent {
           <Button
             type="submit"
             label="Save"
-            iconComponent={Save}
+            icon="Save"
             disabled={disableSave}
           />
           <Button
             label="Cancel"
-            iconComponent={Cancel}
+            icon="Cancel"
             onClick={() => this.handleClose(true)}
           />
         </div>
@@ -98,24 +99,20 @@ class FormDialog extends React.PureComponent {
           {forbidUpdate ? (
             ''
           ) : (
-            <Button
-              label="Edit"
-              iconComponent={Edit}
-              onClick={this.handleEdit}
-            />
+            <Button label="Edit" icon="Edit" onClick={this.handleEdit} />
           )}
           {forbidDelete ? (
             ''
           ) : (
             <Button
               label={archivedAt ? 'Restore' : 'Delete'}
-              iconComponent={archivedAt ? Restore : Delete}
+              icon={archivedAt ? 'Restore' : 'Delete'}
               onClick={this.handleDelete}
             />
           )}
           <Button
             label="Close"
-            iconComponent={Cancel}
+            icon="Cancel"
             onClick={() => this.handleClose(true)}
           />
         </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import IconButton from '@material-ui/core/IconButton';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import Icon from './icon';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 
@@ -34,7 +34,7 @@ export default class UserDropDown extends React.PureComponent {
           onClick={this.handleMenu}
           color="inherit"
         >
-          <AccountCircle />
+          <Icon icon="AccountCircle" />
         </IconButton>
         <Menu
           id="menu-appbar"

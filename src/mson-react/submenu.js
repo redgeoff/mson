@@ -1,10 +1,11 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles';
 import List from '@material-ui/core/List';
-import { ListItem, ListItemText } from '@material-ui/core';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import Typography from '@material-ui/core/Typography';
-import { ExpandLess, ExpandMore } from '@material-ui/icons';
+import Icon from './icon';
 import _ from 'lodash';
 import registrar from '../mson/compiler/registrar';
 
@@ -132,7 +133,13 @@ class Submenu extends React.PureComponent {
               </Typography>
             }
           />
-          {items ? this.state.open ? <ExpandLess /> : <ExpandMore /> : null}
+          {items ? (
+            this.state.open ? (
+              <Icon icon="ExpandLess" />
+            ) : (
+              <Icon icon="ExpandMore" />
+            )
+          ) : null}
         </ListItem>
         {listItems}
       </div>
