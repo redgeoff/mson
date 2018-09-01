@@ -1,12 +1,10 @@
 import React from 'react';
-import {
-  MenuItem,
-  Select,
-  Checkbox,
-  ListItemText,
-  Input,
-  Chip
-} from '@material-ui/core';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import Checkbox from '@material-ui/core/Checkbox';
+import ListItemText from '@material-ui/core/ListItemText';
+import Input from '@material-ui/core/Input';
+import Chip from '@material-ui/core/Chip';
 import CommonField from './common-field';
 import attach from '../attach';
 import withStyles from '@material-ui/core/styles/withStyles';
