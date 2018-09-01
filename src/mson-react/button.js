@@ -1,14 +1,7 @@
 import React from 'react';
 import ButtonMui from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Icon from '@material-ui/core/Icon';
-import _ from 'lodash';
-
-// Note: we use font icons instead of SVG icons as this allows us to support any icon dynamically
-// without adding all icons to the JS bundle. The MaterialUI icons are about 54KB which is
-// substantially smaller than their SVG counterparts.
-//
-// import * as Icons from '@material-ui/icons';
+import Icon from './icon';
 
 const styles = theme => ({
   leftIcon: {
@@ -26,12 +19,6 @@ class Button extends React.PureComponent {
     }
   };
 
-  // Convert to the font icon name so that we can use the SVG Icon names. This allows us to make
-  // changes to this logic without changing the calling code.
-  toFontIconName(svgIconName) {
-    return _.snakeCase(svgIconName);
-  }
-
   render() {
     const {
       classes,
@@ -43,8 +30,6 @@ class Button extends React.PureComponent {
       variant
     } = this.props;
 
-    const iconContents = icon ? this.toFontIconName(icon) : null;
-
     return (
       <ButtonMui
         className={classes.button}
@@ -55,7 +40,7 @@ class Button extends React.PureComponent {
         fullWidth={fullWidth}
         variant={variant}
       >
-        {icon ? <Icon className={classes.leftIcon}>{iconContents}</Icon> : null}
+        {icon ? <Icon className={classes.leftIcon} icon={icon} /> : null}
         {label}
       </ButtonMui>
     );

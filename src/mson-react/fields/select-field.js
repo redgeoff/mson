@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import CommonField from './common-field';
 import attach from '../attach';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles';
 import DisplayValueTypography from './display-value-typography';
 
 const styles = theme => ({

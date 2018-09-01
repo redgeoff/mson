@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import AppUI from '../mson-react/app';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { blueGrey, lightBlue } from '@material-ui/core/colors';
-import { BrowserRouter, Prompt } from 'react-router-dom';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
+import blueGrey from '@material-ui/core/colors/blueGrey';
+import lightBlue from '@material-ui/core/colors/lightBlue';
+import BrowserRouter from 'react-router-dom/BrowserRouter';
+import Prompt from 'react-router-dom/Prompt';
 import globals from '../mson/globals';
 
 const theme = createMuiTheme({
@@ -17,7 +20,7 @@ const theme = createMuiTheme({
 });
 
 // Note: BrowserRouter needs to be outside of App so that we can use withRouter
-class AppContainer extends Component {
+class AppContainer extends React.Component {
   onNavigate = (message, callback) => {
     globals.onNavigate(message, callback);
   };

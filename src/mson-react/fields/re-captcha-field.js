@@ -1,7 +1,7 @@
 import React from 'react';
 import attach from '../attach';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles';
 import globals from '../../mson/globals';
 
 const styles = theme => ({

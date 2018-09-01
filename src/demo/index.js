@@ -19,5 +19,7 @@ import ReactDOM from 'react-dom';
 // ReactDOM.render(<TextFieldUI field={field} />, document.getElementById('root'));
 
 import Button from '../mson-react/button';
+// import Icon from '../mson-react/icon';
 ReactDOM.render(<Button icon="AddCircle" />, document.getElementById('root'));
 // ReactDOM.render(<Button icon="Save" />, document.getElementById('root'));
+// ReactDOM.render(<Icon icon="Info" />, document.getElementById('root'));

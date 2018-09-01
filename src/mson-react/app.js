@@ -3,18 +3,20 @@
 //     hides title and allows for search string to be entered.
 
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import { AppBar, Tooltip } from '@material-ui/core';
+import withStyles from '@material-ui/core/styles/withStyles';
+import AppBar from '@material-ui/core/AppBar';
+import Tooltip from '@material-ui/core/Tooltip';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Menu from './menu';
 import SearchBar from './search-bar';
-import { Switch, Route } from 'react-router-dom';
+import Switch from 'react-router-dom/Switch';
+import Route from 'react-router-dom/Route';
 import Component from './component';
 // import compiler from '../mson/compiler';
-import { withRouter } from 'react-router';
+import withRouter from 'react-router/withRouter';
 import attach from './attach';
 import globals from '../mson/globals';
 import Snackbar from './snackbar';

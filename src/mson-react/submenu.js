@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles';
 import List from '@material-ui/core/List';
 import { ListItem, ListItemText } from '@material-ui/core';
 import Collapse from '@material-ui/core/Collapse';
