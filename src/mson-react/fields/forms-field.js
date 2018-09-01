@@ -12,6 +12,7 @@ import blueGrey from '@material-ui/core/colors/blueGrey';
 import './forms-field.css';
 import SelectOrder from './select-order';
 import ButtonField from '../../mson/fields/button-field';
+import Icon from '../icon';
 
 // TODO:
 //   - Support drag to order
@@ -245,7 +246,7 @@ class FormsField extends React.PureComponent {
               aria-label="new"
               onClick={this.handleNew}
               icon="Add"
-              label={'New '.singularLabel}
+              label={'New ' + singularLabel}
             />
           ) : null}
         </Grid>
