@@ -53,4 +53,4 @@ jobs:
       - run: CI=true yarn test
 
       # Check bundle size
-      - run: yarn build && if [ $(wc -c < build/static/js/main.*.js) -gt 800000 ]; then echo 'Error: Bundle too large!'; exit 1; fi
+      - run: yarn build && ./scripts/bundle-size.sh
