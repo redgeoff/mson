@@ -9,16 +9,11 @@
     "apollo-client": "^2.4.1",
     "apollo-link-context": "^1.0.8",
     "apollo-link-http": "^1.5.4",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
     "events": "^3.0.0",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
-    "husky": "^0.14.3",
     "js-cookie": "^2.2.0",
-    "lint-staged": "^7.2.2",
     "lodash": "^4.17.10",
-    "prettier": "^1.14.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-google-recaptcha": "^1.0.0",
@@ -49,6 +44,11 @@
     "touch": "find src -exec touch {} \\;"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.2.2",
+    "prettier": "^1.14.2",
     "wait-on": "^2.1.0",
     "webpack-bundle-analyzer": "^2.13.1"
   },
