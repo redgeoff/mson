@@ -50,5 +50,7 @@ jobs:
       # Wait for Redis to be ready
       - run: ./node_modules/wait-on/bin/wait-on tcp:6379
 
-      # TODO: require 100% coverage
       - run: CI=true yarn test
+
+      # Check bundle size
+      - run: yarn build && if [ $(wc -c < build/static/js/main.*.js) -gt 800000 ]; then echo 'Error: Bundle too large!'; exit 1; fi
