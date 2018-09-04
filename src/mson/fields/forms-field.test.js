@@ -270,14 +270,14 @@ const shouldAddFormsQuickly = (field, milliseconds) => {
   }, milliseconds);
 };
 
-const ADD_FORMS_COMPILED_TIMEOUT_MS = 500;
+const ADD_FORMS_COMPILED_TIMEOUT_MS = 700;
 it('should add many forms quickly when using compiled components', () => {
   const field = createField();
 
   return shouldAddFormsQuickly(field, ADD_FORMS_COMPILED_TIMEOUT_MS);
 });
 
-const ADD_FORMS_UNCOMPILED_TIMEOUT_MS = 500;
+const ADD_FORMS_UNCOMPILED_TIMEOUT_MS = 700;
 it('should add many forms quickly when using uncompiled components', () => {
   const field = compiler.newComponent({
     component: 'FormsField',
@@ -338,12 +338,8 @@ it('should save', async () => {
 
   const store = {
     create: async () => ({
-      data: {
-        createRecord: {
-          id: 'myId',
-          userId: 'myUserId'
-        }
-      }
+      id: 'myId',
+      userId: 'myUserId'
     }),
     update: async () => {}
   };
@@ -396,11 +392,7 @@ it('should archive', async () => {
   const store = {
     update: async () => {},
     archive: async () => ({
-      data: {
-        archiveRecord: {
-          archivedAt
-        }
-      }
+      archivedAt
     })
   };
 

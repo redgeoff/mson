@@ -682,9 +682,9 @@ export default class FormsField extends Field {
     if (store) {
       // New?
       if (creating) {
-        const response = await store.create({ form });
-        id.setValue(response.data.createRecord.id);
-        form.set({ userId: response.data.createRecord.userId });
+        const record = await store.create({ form });
+        id.setValue(record.id);
+        form.set({ userId: record.userId });
       } else {
         // Existing
         await store.update({ form, id: id.getValue() });
@@ -740,8 +740,8 @@ export default class FormsField extends Field {
   async archive(form) {
     const store = this.get('store');
     if (store) {
-      const archive = await store.archive({ form, id: form.getValue('id') });
-      form.set({ archivedAt: archive.data.archiveRecord.archivedAt });
+      const record = await store.archive({ form, id: form.getValue('id') });
+      form.set({ archivedAt: record.archivedAt });
     }
 
     // // Not showing archived?

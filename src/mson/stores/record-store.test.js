@@ -78,12 +78,20 @@ it('should request', async () => {
 it('should create', async () => {
   const form = createForm();
 
-  const created = {};
+  const created = {
+    foo: 'bar'
+  };
+
+  const response = {
+    data: {
+      createRecord: created
+    }
+  };
 
   store._registrar = {
     client: {
       record: {
-        create: async () => created
+        create: async () => response
       }
     }
   };
@@ -104,12 +112,20 @@ it('should create', async () => {
 it('should update', async () => {
   const form = createForm();
 
-  const updated = {};
+  const updated = {
+    foo: 'bar'
+  };
+
+  const response = {
+    data: {
+      updateRecord: updated
+    }
+  };
 
   store._registrar = {
     client: {
       record: {
-        update: async () => updated
+        update: async () => response
       }
     }
   };
@@ -127,12 +143,20 @@ it('should update', async () => {
 });
 
 it('should archive', async () => {
-  const archived = {};
+  const archived = {
+    archivedAt: new Date()
+  };
+
+  const response = {
+    data: {
+      archiveRecord: archived
+    }
+  };
 
   store._registrar = {
     client: {
       record: {
-        archive: async () => archived
+        archive: async () => response
       }
     }
   };
@@ -151,12 +175,20 @@ it('should archive', async () => {
 });
 
 it('should restore', async () => {
-  const restored = {};
+  const restored = {
+    archivedAt: null
+  };
+
+  const response = {
+    data: {
+      restoreRecord: restored
+    }
+  };
 
   store._registrar = {
     client: {
       record: {
-        restore: async () => restored
+        restore: async () => response
       }
     }
   };
