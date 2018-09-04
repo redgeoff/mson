@@ -29,6 +29,9 @@ export default {
             label: 'Email'
           }
         ]
+      },
+      store: {
+        component: 'MemoryStore'
       }
     }
   ]
