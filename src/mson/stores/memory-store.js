@@ -32,8 +32,8 @@ export default class MemoryStore extends Component {
   }
 
   async getAll(props) {
+    console.log('getAll', { props });
     // TODO:
-    // props.showArchived
     // props.after
     // props.first
     // props.before
@@ -42,11 +42,14 @@ export default class MemoryStore extends Component {
 
     const items = { edges: [] };
     for (const item of this._items.values()) {
-      items.edges.push({
-        node: {
-          fieldValues: item.fieldValues
-        }
-      });
+      if (
+        props.showArchived === null ||
+        !!item.archivedAt === props.showArchived
+      ) {
+        items.edges.push({
+          node: item
+        });
+      }
     }
 
     return items;
@@ -62,6 +65,8 @@ export default class MemoryStore extends Component {
     item.fieldValues = Object.assign(item.fieldValues, fieldValues);
 
     this._items.set(props.id, item);
+
+    return item;
   }
 
   async archive(props) {
@@ -70,13 +75,17 @@ export default class MemoryStore extends Component {
     item.archivedAt = new Date();
 
     this._items.set(props.id, item);
+
+    return item;
   }
 
   async restore(props) {
     const item = this._items.get(props.id);
 
-    delete item.archivedAt;
+    item.archivedAt = null;
 
     this._items.set(props.id, item);
+
+    return item;
   }
 }
