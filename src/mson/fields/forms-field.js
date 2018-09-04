@@ -732,7 +732,11 @@ export default class FormsField extends Field {
 
       // Set the currentForm to the new/updated form so that subsequent viewing or editing uses this
       // new data
-      this.set({ currentForm: fieldForm, mode: 'read' });
+      //
+      // TODO: create a prop called 'readAfterSave' that sets the mode to read instead of null
+      //
+      // this.set({ currentForm: fieldForm, mode: 'read' });
+      this.set({ currentForm: fieldForm, mode: null });
     }
   }
 
