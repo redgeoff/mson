@@ -329,7 +329,8 @@ it('save should handle errors', async () => {
   expect(setSpy).toHaveBeenCalledTimes(1);
   expect(setSpy).toHaveBeenCalledWith({
     currentForm: createdForm,
-    mode: 'read'
+    // mode: 'read'
+    mode: null
   });
 });
 
