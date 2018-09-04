@@ -7,6 +7,8 @@ import globals from '../globals';
 import access from '../access';
 
 export default class Action extends Component {
+  _className = 'Action';
+
   _create(props) {
     super._create(props);
 

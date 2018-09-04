@@ -16,6 +16,8 @@ const getNextKey = () => {
 // - We attempted to require all access to all props via get() and set(), but this can cause
 //   infinite recursion, e.g. when a get() calls itself either directly or via some inherited logic.
 export default class BaseComponent extends events.EventEmitter {
+  _className = 'Component';
+
   _getBaseComponentSchema() {
     return {
       component: 'Form',
@@ -289,13 +291,17 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
+  _onActionError(err) {
+    // Provide a way to intercept errors from detached actions
+    this.emitChange('actionErr', err);
+  }
+
   _onDetachedActionError(err) {
     if (this._registrar.log) {
       this._registrar.log.error(err);
     }
 
-    // Provide a way to intercept errors from detached actions
-    this.emitChange('actionErr', err);
+    this._onActionError(err);
   }
 
   async runListeners(event) {
@@ -322,7 +328,7 @@ export default class BaseComponent extends events.EventEmitter {
                 return this._onDetachedActionError(err);
               });
             } else {
-              // Pass the previous action's output as this actions arguments
+              // Pass the previous action's output as this action's arguments
               output = await runAction;
             }
           }
@@ -336,7 +342,12 @@ export default class BaseComponent extends events.EventEmitter {
   _listenToAllChanges() {
     this.on('$change', async (event, value) => {
       if (this._listenerEvents[event]) {
-        await this.runListeners(event);
+        try {
+          await this.runListeners(event);
+        } catch (err) {
+          // Swallow the error and report it via the actionErr event
+          this._onActionError(err);
+        }
       }
     });
   }
@@ -460,13 +471,17 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   getClassName() {
+    // Note: we cannot use Class.prototype.name as this is overwritten by minifiers like UglifyJS.
+    //
     // The compiler now uses Object.defineProperty to dynamically set the class name
     // if (this._className) {
     //   // The component was generated via MSON and so the contructor.name is inaccurate
     //   return this._className;
     // } else {
-    return this.constructor.name;
+    //   return this.constructor.name;
     // }
+    //
+    return this._className;
   }
 
   clone() {

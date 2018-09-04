@@ -1,6 +1,8 @@
 import Action from './action';
 
 export default class Redirect extends Action {
+  _className = 'Redirect';
+
   _create(props) {
     super._create(props);
 

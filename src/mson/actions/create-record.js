@@ -2,6 +2,8 @@ import Action from './action';
 import uberUtils from '../uber-utils';
 
 export default class CreateRecord extends Action {
+  _className = 'CreateRecord';
+
   _create(props) {
     super._create(props);
 

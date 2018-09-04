@@ -2,6 +2,8 @@ import MultipleValueField from './multiple-value-field';
 import _ from '../lodash';
 
 export default class SelectField extends MultipleValueField {
+  _className = 'SelectField';
+
   _create(props) {
     super._create(props);
 

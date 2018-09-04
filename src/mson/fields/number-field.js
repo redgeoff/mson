@@ -1,6 +1,8 @@
 import Field from './field';
 
 export default class NumberField extends Field {
+  _className = 'NumberField';
+
   _create(props) {
     super._create(props);
     this.set({

@@ -2,6 +2,8 @@ import ListField from './list-field';
 import TextField from './text-field';
 
 export default class TextListField extends ListField {
+  _className = 'TextListField';
+
   _create(props) {
     super._create(props);
 

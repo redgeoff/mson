@@ -48,6 +48,12 @@ export class Compiler {
 
     // Create a class that sets the props by default
     class MyComponent extends Component {
+      // If the name is a class then we use the inherited name. Note: we cannot use
+      // Class.prototype.name as this is overwritten by minifiers like UglifyJS. You can turn this
+      // off with keep-classnames, but instead we’ll just use a custom _className so that we don’t
+      // need to worry about custom configs for minifiers.
+      _className = name;
+
       _create(props) {
         // Use the parentProps and props to fill
         const propFiller = new PropFiller(
@@ -83,11 +89,12 @@ export class Compiler {
       }
     }
 
-    // If the name is a class then we use the inherited name
-    Object.defineProperty(MyComponent, 'name', {
-      value: name,
-      writable: false
-    });
+    // Note: we cannot use Class.prototype.name as this is overwritten by minifiers like UglifyJS.
+    //
+    // Object.defineProperty(MyComponent, 'name', {
+    //   value: name,
+    //   writable: false
+    // });
 
     return MyComponent;
   }

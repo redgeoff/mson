@@ -1,6 +1,8 @@
 import Component from './component';
 
 export default class Card extends Component {
+  _className = 'Card';
+
   _create(props) {
     super._create(props);
     this.set({

@@ -1,6 +1,8 @@
 import Component from './component';
 
 export default class App extends Component {
+  _className = 'App';
+
   _create(props) {
     super._create(props);
 

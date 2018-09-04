@@ -1,6 +1,8 @@
 import Form from './form';
 
 export default class SchemaValidatorForm extends Form {
+  _className = 'SchemaValidatorForm';
+
   _create(props) {
     super._create(props);
 

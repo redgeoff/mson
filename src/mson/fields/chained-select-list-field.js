@@ -4,6 +4,8 @@ import ListField from './list-field';
 import ChainedSelectField from './chained-select-field';
 
 export default class ChainedSelectListField extends ListField {
+  _className = 'ChainedSelectListField';
+
   _create(props) {
     super._create(props);
 

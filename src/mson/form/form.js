@@ -10,6 +10,8 @@ import ButtonField from '../fields/button-field';
 import ComponentFillerProps from '../component/component-filler-props';
 
 export default class Form extends Component {
+  _className = 'Form';
+
   _formSetMSONSchema() {
     this.set({
       schema: {

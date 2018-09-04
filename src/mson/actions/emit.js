@@ -1,6 +1,8 @@
 import Action from './action';
 
 export default class Emit extends Action {
+  _className = 'Emit';
+
   _create(props) {
     super._create(props);
 

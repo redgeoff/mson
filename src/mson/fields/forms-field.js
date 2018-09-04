@@ -10,6 +10,8 @@ import Component from '../component';
 import utils from '../utils';
 
 export default class FormsField extends Field {
+  _className = 'FormsField';
+
   static SCROLLTHRESHOLD_DEFAULT = 1000;
 
   // We want this to be a multiple of 4 as we may make it optional to have 4 columns in

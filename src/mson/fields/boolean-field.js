@@ -1,6 +1,8 @@
 import Field from './field';
 
 export default class BooleanField extends Field {
+  _className = 'BooleanField';
+
   validate() {
     super.validate();
 

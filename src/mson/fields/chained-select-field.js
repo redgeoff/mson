@@ -13,6 +13,8 @@ import SelectField from './select-field';
 //   { "value": "i3", "label": "i3", "parentValue": "bmw" }
 // ]
 export default class ChainedSelectField extends ListField {
+  _className = 'ChainedSelectField';
+
   _create(props) {
     super._create(props);
 

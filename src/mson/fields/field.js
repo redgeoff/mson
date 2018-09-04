@@ -5,6 +5,8 @@ import Component from '../component';
 import Validator from '../component/validator';
 
 export default class Field extends Component {
+  _className = 'Field';
+
   _create(props) {
     super._create(props);
 

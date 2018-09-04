@@ -8,6 +8,8 @@ import globals from './globals';
 import access from './access';
 
 export default class RecordStore extends Component {
+  _className = 'RecordStore';
+
   _create(props) {
     super._create(props);
 

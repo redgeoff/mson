@@ -22,12 +22,16 @@ import FormField from '../fields/form-field';
 // }
 
 class AccessRolesField extends Field {
+  _className = 'AccessRolesField';
+
   _create(props) {
     super._create(Object.assign({}, props, { allowScalar: true }));
   }
 }
 
 class AccessNode extends Form {
+  _className = 'AccessNode';
+
   _create(props) {
     super._create(props);
 
@@ -39,6 +43,8 @@ class AccessNode extends Form {
 }
 
 class AccessFields extends Form {
+  _className = 'AccessFields';
+
   set(props) {
     super.set(props);
     if (props.fieldNames !== undefined) {
@@ -56,6 +62,8 @@ class AccessFields extends Form {
 }
 
 export default class FormAccess extends Form {
+  _className = 'FormAccess';
+
   _create(props) {
     super._create(props);
 

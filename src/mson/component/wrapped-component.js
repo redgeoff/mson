@@ -5,6 +5,8 @@ import utils from '../utils';
 // essentially exposes componentToWrap, which means that mutating the wrapped component mutates
 // componentToWrap.
 export default class WrappedComponent extends BaseComponent {
+  _className = 'WrappedComponent';
+
   _getWrappedComponentSchema() {
     return {
       component: 'Form',
@@ -52,8 +54,6 @@ export default class WrappedComponent extends BaseComponent {
   _wrapComponent() {
     const names = this._getAllMethodOrFunctionNames();
 
-    const thisClassName = this.getClassName();
-
     names.forEach(name => {
       // Skip system function names
       if (
@@ -71,10 +71,15 @@ export default class WrappedComponent extends BaseComponent {
 
     if (this._preserveClassName) {
       // Preserve the original className
-      Object.defineProperty(this._componentToWrap.constructor, 'name', {
-        value: thisClassName,
-        writable: false
-      });
+      //
+      // Note: we cannot use Class.prototype.name as this is overwritten by minifiers like UglifyJS.
+      //
+      // Object.defineProperty(this._componentToWrap.constructor, 'name', {
+      //   value: thisClassName,
+      //   writable: false
+      // });
+      //
+      this.getClassName = this._componentToWrap.getClassName.bind(this);
     }
   }
 }

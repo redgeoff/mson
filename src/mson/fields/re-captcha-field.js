@@ -1,6 +1,8 @@
 import Field from './field';
 
 export default class ReCAPTCHAField extends Field {
+  _className = 'ReCAPTCHAField';
+
   _create(props) {
     super._create(props);
 

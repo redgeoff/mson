@@ -1,6 +1,8 @@
 import Action from './action';
 
 export default class Email extends Action {
+  _className = 'Email';
+
   _create(props) {
     super._create(props);
 

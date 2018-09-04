@@ -3,6 +3,8 @@ import Mapa from '../mapa';
 import _ from '../lodash';
 
 export default class CompositeField extends Field {
+  _className = 'CompositeField';
+
   _create(props) {
     // We use a Mapa instead of an array as sometimes we need to reference the fields via keys that
     // don't change even when fields are deleted. With arrays, the keys change when we slice the

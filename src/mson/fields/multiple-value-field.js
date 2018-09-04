@@ -1,6 +1,8 @@
 import Field from './field';
 
 export default class MultipleValueField extends Field {
+  _className = 'MultipleValueField';
+
   _create(props) {
     super._create(props);
 

@@ -3,6 +3,8 @@ import _ from '../lodash';
 import PropFiller from '../compiler/prop-filler';
 
 export default class Iterator extends Action {
+  _className = 'Iterator';
+
   _create(props) {
     super._create(props);
 

@@ -1,6 +1,8 @@
 import Field from './field';
 
 export default class TextField extends Field {
+  _className = 'TextField';
+
   _create(props) {
     super._create(props);
 

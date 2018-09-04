@@ -541,6 +541,16 @@ it('should validate the definitions of all core components', () => {
   });
 });
 
+it('should define className for all core components', () => {
+  _.each(components, (component, name) => {
+    const c = compiler.newComponent({
+      component: name
+    });
+
+    expect(c._className).toEqual(name);
+  });
+});
+
 const changePassword = {
   name: 'app.ChangePassword',
   component: 'UpdatePasswordEditor',
