@@ -40,8 +40,7 @@ export default class RecordStore extends Component {
     const appId = this._globals.get('appId');
 
     try {
-      const response = await promiseFactory(appId);
-      return response;
+      return await promiseFactory(appId);
     } catch (err) {
       if (props && props.form) {
         this._uberUtils.setFormErrorsFromAPIError(err, props.form);
@@ -93,7 +92,7 @@ export default class RecordStore extends Component {
     );
     const where = utils.combineWheres(showArchivedWhere, props.where);
 
-    return this._request(props, appId => {
+    return this._request(props, async appId => {
       const opts = {
         appId,
         componentName: this.get('storeName'),
@@ -116,7 +115,8 @@ export default class RecordStore extends Component {
         opts.bypassCache = true;
       }
 
-      return this._registrar.client.record.getAll(opts);
+      const response = await this._registrar.client.record.getAll(opts);
+      return response.data.records;
     });
   }
 

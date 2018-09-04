@@ -216,10 +216,16 @@ it('should get showArchived where', () => {
 it('should get all', async () => {
   const all = {};
 
+  const response = {
+    data: {
+      records: all
+    }
+  };
+
   store._registrar = {
     client: {
       record: {
-        getAll: async () => all
+        getAll: async () => response
       }
     }
   };

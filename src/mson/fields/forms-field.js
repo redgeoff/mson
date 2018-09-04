@@ -366,8 +366,7 @@ export default class FormsField extends Field {
       onGetAll: async props => {
         const store = this.get('store');
         if (store) {
-          const response = await store.getAll(props);
-          return response.data.records;
+          return await store.getAll(props);
         }
       },
       onGetItemsPerPage: () => {
