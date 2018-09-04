@@ -26,6 +26,10 @@ export default class Icon extends React.PureComponent {
 
     const iconContents = icon ? this.toFontIconName(icon) : null;
 
-    return <IconMui className={className}>{iconContents}</IconMui>;
+    return (
+      <IconMui className={className} onClick={this.handleClick}>
+        {iconContents}
+      </IconMui>
+    );
   }
 }
