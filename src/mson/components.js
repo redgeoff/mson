@@ -35,6 +35,7 @@ import Login from './aggregate/login';
 import LogInToApp from './actions/log-in-to-app';
 import LogInToAppAndRedirect from './actions/log-in-to-app-and-redirect';
 import LogOutOfApp from './actions/log-out-of-app';
+import MemoryStore from './stores/memory-store';
 import Menu from './menu';
 import MSONComponent from './component/mson-component';
 import NumberField from './fields/number-field';
@@ -100,6 +101,7 @@ export default {
   LogInToApp,
   LogInToAppAndRedirect,
   LogOutOfApp,
+  MemoryStore,
   Menu,
   MSONComponent,
   NumberField,
