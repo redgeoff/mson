@@ -1,5 +1,5 @@
 import App from './app';
 import Fields from './fields';
-import People from './people';
+import Contacts from './contacts';
 
-export { App, Fields, People };
+export { App, Fields, Contacts };

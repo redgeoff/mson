@@ -12,10 +12,10 @@ export default {
         }
       },
       {
-        path: '/people',
-        label: 'People',
+        path: '/contacts',
+        label: 'Contacts',
         content: {
-          component: 'app.People'
+          component: 'app.Contacts'
         }
       }
     ]

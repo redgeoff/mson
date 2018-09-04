@@ -1,11 +1,11 @@
 export default {
-  name: 'app.People',
+  name: 'app.Contacts',
   component: 'Form',
   fields: [
     {
       component: 'FormsField',
       name: 'formsField',
-      label: 'Records',
+      label: 'Contacts',
       help: 'Example help',
       required: true,
       form: {
@@ -22,6 +22,11 @@ export default {
             name: 'lastName',
             component: 'TextField',
             label: 'Last Name'
+          },
+          {
+            name: 'email',
+            component: 'EmailField',
+            label: 'Email'
           }
         ]
       }
