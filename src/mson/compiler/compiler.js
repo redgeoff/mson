@@ -60,10 +60,9 @@ export class Compiler {
           Object.assign({}, parentProps, props)
         );
 
-        // Clone the data as we will be instantiating pieces of it below and we want each instance
-        // of MyComponent to have its own copy
-        const inPlace = false;
-        defaultProps = propFiller.fillAll(defaultProps, inPlace);
+        // Note: fillAll clones the data and this is needed as we will be instantiating pieces of
+        // the data below and we want each instance of MyComponent to have its own copy
+        defaultProps = propFiller.fillAll(defaultProps);
 
         // Remove the component property as it is no longer needed
         delete defaultProps.component;
