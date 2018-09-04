@@ -124,7 +124,7 @@ export default class RecordStore extends Component {
     // Omit values based on access
     const fieldValues = access.valuesCanUpdate(props.form);
 
-    const record = await this._request(props, appId => {
+    const response = await this._request(props, appId => {
       return this._registrar.client.record.update({
         appId,
         componentName: this.get('storeName'),
@@ -133,13 +133,13 @@ export default class RecordStore extends Component {
       });
     });
 
-    return record.data.updateRecord;
+    return response.data.updateRecord;
   }
 
   async archive(props) {
     this._clearCache();
 
-    const record = await this._request(props, appId => {
+    const response = await this._request(props, appId => {
       return this._registrar.client.record.archive({
         appId,
         componentName: this.get('storeName'),
@@ -147,13 +147,13 @@ export default class RecordStore extends Component {
       });
     });
 
-    return record.data.archiveRecord;
+    return response.data.archiveRecord;
   }
 
   async restore(props) {
     this._clearCache();
 
-    const record = await this._request(props, appId => {
+    const response = await this._request(props, appId => {
       return this._registrar.client.record.restore({
         appId,
         componentName: this.get('storeName'),
@@ -161,6 +161,6 @@ export default class RecordStore extends Component {
       });
     });
 
-    return record.data.restoreRecord;
+    return response.data.restoreRecord;
   }
 }
