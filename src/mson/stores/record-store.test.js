@@ -1,7 +1,7 @@
 import RecordStore from './record-store';
-import Form from './form';
-import { TextField } from './fields';
-import testUtils from './test-utils';
+import Form from '../form';
+import { TextField } from '../fields';
+import testUtils from '../test-utils';
 
 let store = null;
 const storeName = 'MyStore';

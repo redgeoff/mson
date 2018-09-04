@@ -1,11 +1,11 @@
 // TODO: incorporate pieces of DocStore? How to make changes real-time?
 
-import Component from './component';
-import utils from './utils';
-import uberUtils from './uber-utils';
-import registrar from './compiler/registrar';
-import globals from './globals';
-import access from './access';
+import Component from '../component';
+import utils from '../utils';
+import uberUtils from '../uber-utils';
+import registrar from '../compiler/registrar';
+import globals from '../globals';
+import access from '../access';
 
 export default class RecordStore extends Component {
   _className = 'RecordStore';

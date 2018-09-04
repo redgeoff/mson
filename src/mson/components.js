@@ -47,7 +47,7 @@ import ReCAPTCHAField from './fields/re-captcha-field';
 import ReCAPTCHAVault from './vaults/re-captcha-vault';
 import RecordEditor from './aggregate/record-editor';
 import RecordList from './aggregate/record-list';
-import RecordStore from './record-store';
+import RecordStore from './stores/record-store';
 import Redirect from './actions/redirect';
 import RedirectByRole from './actions/redirect-by-role';
 import ResetPassword from './aggregate/reset-password';
