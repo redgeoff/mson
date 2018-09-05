@@ -10,6 +10,13 @@ export default {
         content: {
           component: 'app.Fields'
         }
+      },
+      {
+        path: '/contacts',
+        label: 'Contacts',
+        content: {
+          component: 'app.Contacts'
+        }
       }
     ]
   }

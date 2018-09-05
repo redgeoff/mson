@@ -270,14 +270,14 @@ const shouldAddFormsQuickly = (field, milliseconds) => {
   }, milliseconds);
 };
 
-const ADD_FORMS_COMPILED_TIMEOUT_MS = 500;
+const ADD_FORMS_COMPILED_TIMEOUT_MS = 700;
 it('should add many forms quickly when using compiled components', () => {
   const field = createField();
 
   return shouldAddFormsQuickly(field, ADD_FORMS_COMPILED_TIMEOUT_MS);
 });
 
-const ADD_FORMS_UNCOMPILED_TIMEOUT_MS = 500;
+const ADD_FORMS_UNCOMPILED_TIMEOUT_MS = 700;
 it('should add many forms quickly when using uncompiled components', () => {
   const field = compiler.newComponent({
     component: 'FormsField',
@@ -329,7 +329,8 @@ it('save should handle errors', async () => {
   expect(setSpy).toHaveBeenCalledTimes(1);
   expect(setSpy).toHaveBeenCalledWith({
     currentForm: createdForm,
-    mode: 'read'
+    // mode: 'read'
+    mode: null
   });
 });
 
@@ -337,21 +338,17 @@ it('should save', async () => {
   const field = createField();
 
   const store = {
-    create: async () => ({
-      data: {
-        createRecord: {
-          id: 'myId',
-          userId: 'myUserId'
-        }
-      }
+    createItem: async () => ({
+      id: 'myId',
+      userId: 'myUserId'
     }),
-    update: async () => {}
+    updateItem: async () => {}
   };
 
   field.set({ store });
 
-  const createSpy = jest.spyOn(store, 'create');
-  const updateSpy = jest.spyOn(store, 'update');
+  const createSpy = jest.spyOn(store, 'createItem');
+  const updateSpy = jest.spyOn(store, 'updateItem');
 
   const jack = {
     firstName: 'Jack',
@@ -394,13 +391,9 @@ it('should archive', async () => {
   const archivedAt = new Date();
 
   const store = {
-    update: async () => {},
-    archive: async () => ({
-      data: {
-        archiveRecord: {
-          archivedAt
-        }
-      }
+    updateItem: async () => {},
+    archiveItem: async () => ({
+      archivedAt
     })
   };
 
@@ -410,7 +403,7 @@ it('should archive', async () => {
 
   field.set({ store });
 
-  const archiveSpy = jest.spyOn(store, 'archive');
+  const archiveSpy = jest.spyOn(store, 'archiveItem');
   const displaySnackbarSpy = jest.spyOn(field._globals, 'displaySnackbar');
 
   const jack = {
@@ -450,8 +443,8 @@ it('should restore', async () => {
   const archivedAt = new Date();
 
   const store = {
-    update: async () => {},
-    restore: async () => {}
+    updateItem: async () => {},
+    restoreItem: async () => {}
   };
 
   field._globals = {
@@ -460,7 +453,7 @@ it('should restore', async () => {
 
   field.set({ store });
 
-  const restoreSpy = jest.spyOn(store, 'restore');
+  const restoreSpy = jest.spyOn(store, 'restoreItem');
   const displaySnackbarSpy = jest.spyOn(field._globals, 'displaySnackbar');
 
   const jack = {

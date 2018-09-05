@@ -1,13 +1,12 @@
-// TODO: incorporate pieces of DocStore? How to make changes real-time?
+// TODO: make changes real time with subscriptions
 
-import Component from './component';
-import utils from './utils';
-import uberUtils from './uber-utils';
-import registrar from './compiler/registrar';
-import globals from './globals';
-import access from './access';
+import Store from './store';
+import utils from '../utils';
+import uberUtils from '../uber-utils';
+import registrar from '../compiler/registrar';
+import globals from '../globals';
 
-export default class RecordStore extends Component {
+export default class RecordStore extends Store {
   _className = 'RecordStore';
 
   _create(props) {
@@ -40,8 +39,7 @@ export default class RecordStore extends Component {
     const appId = this._globals.get('appId');
 
     try {
-      const response = await promiseFactory(appId);
-      return response;
+      return await promiseFactory(appId);
     } catch (err) {
       if (props && props.form) {
         this._uberUtils.setFormErrorsFromAPIError(err, props.form);
@@ -54,19 +52,18 @@ export default class RecordStore extends Component {
     }
   }
 
-  async create(props) {
+  async _createItem(props, fieldValues) {
     this._clearCache();
 
-    // Omit values based on access
-    const fieldValues = access.valuesCanCreate(props.form);
-
-    return this._request(props, appId => {
+    const response = await this._request(props, appId => {
       return this._registrar.client.record.create({
         appId,
         componentName: this.get('storeName'),
         fieldValues
       });
     });
+
+    return response.data.createRecord;
   }
 
   _clearCache() {
@@ -85,13 +82,13 @@ export default class RecordStore extends Component {
     return showArchived ? { archivedAt: { $ne: null } } : { archivedAt: null };
   }
 
-  async getAll(props) {
+  async _getAllItems(props) {
     const showArchivedWhere = this._getShowArchivedWhere(
       props && props.showArchived
     );
     const where = utils.combineWheres(showArchivedWhere, props.where);
 
-    return this._request(props, appId => {
+    return this._request(props, async appId => {
       const opts = {
         appId,
         componentName: this.get('storeName'),
@@ -114,15 +111,13 @@ export default class RecordStore extends Component {
         opts.bypassCache = true;
       }
 
-      return this._registrar.client.record.getAll(opts);
+      const response = await this._registrar.client.record.getAll(opts);
+      return response.data.records;
     });
   }
 
-  async update(props) {
-    // Omit values based on access
-    const fieldValues = access.valuesCanUpdate(props.form);
-
-    return this._request(props, appId => {
+  async _updateItem(props, fieldValues) {
+    const response = await this._request(props, appId => {
       return this._registrar.client.record.update({
         appId,
         componentName: this.get('storeName'),
@@ -130,27 +125,35 @@ export default class RecordStore extends Component {
         fieldValues
       });
     });
+
+    return response.data.updateRecord;
   }
 
-  async archive(props) {
+  async _archiveItem(props) {
     this._clearCache();
-    return this._request(props, appId => {
+
+    const response = await this._request(props, appId => {
       return this._registrar.client.record.archive({
         appId,
         componentName: this.get('storeName'),
         id: props.id
       });
     });
+
+    return response.data.archiveRecord;
   }
 
-  async restore(props) {
+  async _restoreItem(props) {
     this._clearCache();
-    return this._request(props, appId => {
+
+    const response = await this._request(props, appId => {
       return this._registrar.client.record.restore({
         appId,
         componentName: this.get('storeName'),
         id: props.id
       });
     });
+
+    return response.data.restoreRecord;
   }
 }

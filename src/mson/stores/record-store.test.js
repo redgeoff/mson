@@ -1,7 +1,7 @@
 import RecordStore from './record-store';
-import Form from './form';
-import { TextField } from './fields';
-import testUtils from './test-utils';
+import Form from '../form';
+import { TextField } from '../fields';
+import testUtils from '../test-utils';
 
 let store = null;
 const storeName = 'MyStore';
@@ -78,12 +78,20 @@ it('should request', async () => {
 it('should create', async () => {
   const form = createForm();
 
-  const created = {};
+  const created = {
+    foo: 'bar'
+  };
+
+  const response = {
+    data: {
+      createRecord: created
+    }
+  };
 
   store._registrar = {
     client: {
       record: {
-        create: async () => created
+        create: async () => response
       }
     }
   };
@@ -91,7 +99,7 @@ it('should create', async () => {
   const clearCacheSpy = jest.spyOn(store, '_clearCache');
   const createSpy = jest.spyOn(store._registrar.client.record, 'create');
 
-  expect(await store.create({ form })).toEqual(created);
+  expect(await store.createItem({ form })).toEqual(created);
 
   expect(clearCacheSpy).toHaveBeenCalledTimes(1);
   expect(createSpy).toHaveBeenCalledWith({
@@ -104,19 +112,27 @@ it('should create', async () => {
 it('should update', async () => {
   const form = createForm();
 
-  const updated = {};
+  const updated = {
+    foo: 'bar'
+  };
+
+  const response = {
+    data: {
+      updateRecord: updated
+    }
+  };
 
   store._registrar = {
     client: {
       record: {
-        update: async () => updated
+        update: async () => response
       }
     }
   };
 
   const updateSpy = jest.spyOn(store._registrar.client.record, 'update');
 
-  expect(await store.update({ form, id })).toEqual(updated);
+  expect(await store.updateItem({ form, id })).toEqual(updated);
 
   expect(updateSpy).toHaveBeenCalledWith({
     appId,
@@ -127,12 +143,20 @@ it('should update', async () => {
 });
 
 it('should archive', async () => {
-  const archived = {};
+  const archived = {
+    archivedAt: new Date()
+  };
+
+  const response = {
+    data: {
+      archiveRecord: archived
+    }
+  };
 
   store._registrar = {
     client: {
       record: {
-        archive: async () => archived
+        archive: async () => response
       }
     }
   };
@@ -140,7 +164,7 @@ it('should archive', async () => {
   const clearCacheSpy = jest.spyOn(store, '_clearCache');
   const archiveSpy = jest.spyOn(store._registrar.client.record, 'archive');
 
-  expect(await store.archive({ id })).toEqual(archived);
+  expect(await store.archiveItem({ id })).toEqual(archived);
 
   expect(clearCacheSpy).toHaveBeenCalledTimes(1);
   expect(archiveSpy).toHaveBeenCalledWith({
@@ -151,12 +175,20 @@ it('should archive', async () => {
 });
 
 it('should restore', async () => {
-  const restored = {};
+  const restored = {
+    archivedAt: null
+  };
+
+  const response = {
+    data: {
+      restoreRecord: restored
+    }
+  };
 
   store._registrar = {
     client: {
       record: {
-        restore: async () => restored
+        restore: async () => response
       }
     }
   };
@@ -164,7 +196,7 @@ it('should restore', async () => {
   const clearCacheSpy = jest.spyOn(store, '_clearCache');
   const restoreSpy = jest.spyOn(store._registrar.client.record, 'restore');
 
-  expect(await store.restore({ id })).toEqual(restored);
+  expect(await store.restoreItem({ id })).toEqual(restored);
 
   expect(clearCacheSpy).toHaveBeenCalledTimes(1);
   expect(restoreSpy).toHaveBeenCalledWith({
@@ -184,10 +216,16 @@ it('should get showArchived where', () => {
 it('should get all', async () => {
   const all = {};
 
+  const response = {
+    data: {
+      records: all
+    }
+  };
+
   store._registrar = {
     client: {
       record: {
-        getAll: async () => all
+        getAll: async () => response
       }
     }
   };
@@ -202,7 +240,7 @@ it('should get all', async () => {
   const order = 'order';
 
   expect(
-    await store.getAll({
+    await store.getAllItems({
       where: {
         foo: 'bar'
       },
@@ -240,7 +278,7 @@ it('should get all', async () => {
   expect(getAllSpy).toHaveBeenCalledWith(opts);
 
   expect(
-    await store.getAll({
+    await store.getAllItems({
       where: {
         foo: 'bar'
       },

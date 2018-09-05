@@ -474,3 +474,25 @@ it('should remove item', async () => {
 
   expect(resetBufferReferencesSpy).toHaveBeenCalledTimes(1);
 });
+
+it('should check if has more data', () => {
+  const infiniteLoader = new InfiniteLoader(noops);
+  expect(infiniteLoader._noMoreData()).toEqual(true);
+  expect(
+    infiniteLoader._noMoreData({
+      edges: []
+    })
+  ).toEqual(true);
+  expect(
+    infiniteLoader._noMoreData({
+      pageInfo: {
+        hasNextPage: false
+      }
+    })
+  ).toEqual(true);
+  expect(
+    infiniteLoader._noMoreData({
+      edges: ['foo']
+    })
+  ).toEqual(false);
+});

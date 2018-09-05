@@ -311,3 +311,9 @@ it('should get isLoaded', async () => {
   const component = new BaseComponent();
   expect(component.isLoaded()).toEqual(false);
 });
+
+it('should emit create even when cloned', async () => {
+  const component = new BaseComponent();
+  const clonedComponent = component.clone();
+  await testUtils.once(clonedComponent, 'create');
+});

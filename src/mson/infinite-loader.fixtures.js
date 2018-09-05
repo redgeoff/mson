@@ -105,6 +105,9 @@ export const records3 = {
 };
 
 const noEdges = {
+  pageInfo: {
+    hasNextPage: false
+  },
   edges: []
 };
 
@@ -155,17 +158,12 @@ const asyncNoop = async () => {};
 
 export const createMockedStore = () => {
   return {
-    getAll: async props => {
-      const records = await onGetAllPeople(props);
-      return {
-        data: {
-          records
-        }
-      };
+    getAllItems: async props => {
+      return await onGetAllPeople(props);
     },
-    create: asyncNoop,
-    update: asyncNoop,
-    archive: asyncNoop,
-    restore: asyncNoop
+    createItem: asyncNoop,
+    updateItem: asyncNoop,
+    archiveItem: asyncNoop,
+    restoreItem: asyncNoop
   };
 };

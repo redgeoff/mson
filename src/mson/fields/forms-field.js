@@ -366,8 +366,7 @@ export default class FormsField extends Field {
       onGetAll: async props => {
         const store = this.get('store');
         if (store) {
-          const response = await store.getAll(props);
-          return response.data.records;
+          return await store.getAllItems(props);
         }
       },
       onGetItemsPerPage: () => {
@@ -682,12 +681,12 @@ export default class FormsField extends Field {
     if (store) {
       // New?
       if (creating) {
-        const response = await store.create({ form });
-        id.setValue(response.data.createRecord.id);
-        form.set({ userId: response.data.createRecord.userId });
+        const record = await store.createItem({ form });
+        id.setValue(record.id);
+        form.set({ userId: record.userId });
       } else {
         // Existing
-        await store.update({ form, id: id.getValue() });
+        await store.updateItem({ form, id: id.getValue() });
       }
     } else if (creating) {
       // TODO: use the id from this._docs.set instead of this dummy id
@@ -733,15 +732,19 @@ export default class FormsField extends Field {
 
       // Set the currentForm to the new/updated form so that subsequent viewing or editing uses this
       // new data
-      this.set({ currentForm: fieldForm, mode: 'read' });
+      //
+      // TODO: create a prop called 'readAfterSave' that sets the mode to read instead of null
+      //
+      // this.set({ currentForm: fieldForm, mode: 'read' });
+      this.set({ currentForm: fieldForm, mode: null });
     }
   }
 
   async archive(form) {
     const store = this.get('store');
     if (store) {
-      const archive = await store.archive({ form, id: form.getValue('id') });
-      form.set({ archivedAt: archive.data.archiveRecord.archivedAt });
+      const record = await store.archiveItem({ form, id: form.getValue('id') });
+      form.set({ archivedAt: record.archivedAt });
     }
 
     // // Not showing archived?
@@ -760,7 +763,7 @@ export default class FormsField extends Field {
   async restore(form) {
     const store = this.get('store');
     if (store) {
-      await store.restore({ form, id: form.getValue('id') });
+      await store.restoreItem({ form, id: form.getValue('id') });
     }
 
     form.set({ archivedAt: null });

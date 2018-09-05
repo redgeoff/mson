@@ -35,6 +35,7 @@ import Login from './aggregate/login';
 import LogInToApp from './actions/log-in-to-app';
 import LogInToAppAndRedirect from './actions/log-in-to-app-and-redirect';
 import LogOutOfApp from './actions/log-out-of-app';
+import MemoryStore from './stores/memory-store';
 import Menu from './menu';
 import MSONComponent from './component/mson-component';
 import NumberField from './fields/number-field';
@@ -46,7 +47,7 @@ import ReCAPTCHAField from './fields/re-captcha-field';
 import ReCAPTCHAVault from './vaults/re-captcha-vault';
 import RecordEditor from './aggregate/record-editor';
 import RecordList from './aggregate/record-list';
-import RecordStore from './record-store';
+import RecordStore from './stores/record-store';
 import Redirect from './actions/redirect';
 import RedirectByRole from './actions/redirect-by-role';
 import ResetPassword from './aggregate/reset-password';
@@ -100,6 +101,7 @@ export default {
   LogInToApp,
   LogInToAppAndRedirect,
   LogOutOfApp,
+  MemoryStore,
   Menu,
   MSONComponent,
   NumberField,
