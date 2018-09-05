@@ -106,12 +106,23 @@ it('should get all', async () => {
     ]
   };
 
+  const searchDefaults = {
+    after: null,
+    before: null,
+    first: null,
+    order: null,
+    showArchived: null
+  };
+
   // Default props
-  expect(await store.getAllItems({})).toEqual(all);
+  expect(
+    await store.getAllItems({ ...searchDefaults, showArchived: null })
+  ).toEqual(all);
 
   // Search
   expect(
     await store.getAllItems({
+      ...searchDefaults,
       where: {
         $and: [
           {
@@ -130,11 +141,13 @@ it('should get all', async () => {
   // Archived status
   expect(
     await store.getAllItems({
+      ...searchDefaults,
       showArchived: true
     })
   ).toEqual(Object.assign({}, all, { edges: [{ node: hermione }] }));
   expect(
     await store.getAllItems({
+      ...searchDefaults,
       showArchived: false
     })
   ).toEqual(
@@ -144,6 +157,7 @@ it('should get all', async () => {
   // Order
   expect(
     await store.getAllItems({
+      ...searchDefaults,
       order: [['fieldValues.firstName', 'DESC']]
     })
   ).toEqual(

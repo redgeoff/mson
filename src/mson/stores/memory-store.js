@@ -67,7 +67,7 @@ export default class MemoryStore extends Store {
     for (const item of this._items.values()) {
       const sifted = where ? sift(where, [item]) : null;
       if (
-        (props.showArchived === undefined ||
+        (props.showArchived === null ||
           !!item.archivedAt === props.showArchived) &&
         (where === null || sifted.length !== 0)
       ) {
