@@ -4,10 +4,8 @@ export default {
   fields: [
     {
       component: 'FormsField',
-      name: 'formsField',
+      name: 'contacts',
       label: 'Contacts',
-      help: 'Example help',
-      required: true,
       form: {
         component: 'Form',
         fields: [

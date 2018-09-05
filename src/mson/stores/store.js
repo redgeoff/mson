@@ -18,6 +18,10 @@ export default class Store extends Component {
     return this._createItem(props, fieldValues);
   }
 
+  async getItem(props) {
+    return this._getItem(props);
+  }
+
   async getAll(props) {
     return this._getAllItems(props);
   }

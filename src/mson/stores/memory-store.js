@@ -37,6 +37,10 @@ export default class MemoryStore extends Store {
     });
   }
 
+  async _getItem(props) {
+    return this._items.get(props.id);
+  }
+
   async _getAllItems(props) {
     // TODO:
     // props.after
