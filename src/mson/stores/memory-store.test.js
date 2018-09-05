@@ -62,6 +62,94 @@ it('should create, update, archive & restore', async () => {
   expect(archived.archivedAt).toBeNull();
 });
 
-it('should get all', () => {
-  // TODO: blank props, i.e. await store.getAll({})
+const createItem = async (store, fieldValues) => {
+  const form = createForm({ value: fieldValues });
+  return store.create({ form });
+};
+
+it('should get all', async () => {
+  const store = new MemoryStore();
+
+  const harryValues = {
+    firstName: 'Harry',
+    lastName: 'Potter'
+  };
+  const harry = await createItem(store, harryValues);
+
+  const hermioneValues = {
+    firstName: 'Hermione',
+    lastName: 'Granger'
+  };
+  const hermione = await createItem(store, hermioneValues);
+  await store.archive({ id: hermione.id });
+
+  const ronValues = {
+    firstName: 'Ron',
+    lastName: 'Weasley'
+  };
+  const ron = await createItem(store, ronValues);
+
+  const all = {
+    pageInfo: {
+      hasNextPage: false
+    },
+    edges: [
+      {
+        node: harry
+      },
+      {
+        node: hermione
+      },
+      {
+        node: ron
+      }
+    ]
+  };
+
+  // Default props
+  expect(await store.getAll({})).toEqual(all);
+
+  // Search
+  expect(
+    await store.getAll({
+      where: {
+        $and: [
+          {
+            $or: [
+              { 'fieldValues.firstName': { $iLike: 'h%' } },
+              { 'fieldValues.lastName': { $iLike: 'h%' } },
+              { 'fieldValues.email': { $iLike: 'h%' } }
+            ]
+          }
+        ]
+      }
+    })
+  ).toEqual(
+    Object.assign({}, all, { edges: [{ node: harry }, { node: hermione }] })
+  );
+
+  // Archived status
+  expect(
+    await store.getAll({
+      showArchived: true
+    })
+  ).toEqual(Object.assign({}, all, { edges: [{ node: hermione }] }));
+  expect(
+    await store.getAll({
+      showArchived: false
+    })
+  ).toEqual(
+    Object.assign({}, all, { edges: [{ node: harry }, { node: ron }] })
+  );
+
+  // Order
+  expect(
+    await store.getAll({
+      order: [['fieldValues.firstName', 'DESC']]
+    })
+  ).toEqual(
+    Object.assign({}, all, {
+      edges: [{ node: ron }, { node: hermione }, { node: harry }]
+    })
+  );
 });
