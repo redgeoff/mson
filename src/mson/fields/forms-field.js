@@ -45,7 +45,19 @@ export default class FormsField extends Field {
             component: 'BooleanField'
           },
           {
-            name: 'forbidDelete',
+            name: 'forbidDestroy',
+            component: 'BooleanField'
+          },
+          {
+            name: 'forbidViewArchived',
+            component: 'BooleanField'
+          },
+          {
+            name: 'forbidSearch',
+            component: 'BooleanField'
+          },
+          {
+            name: 'forbidSort',
             component: 'BooleanField'
           },
           {

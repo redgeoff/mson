@@ -144,7 +144,7 @@ class FormsField extends React.PureComponent {
     const {
       field,
       forbidUpdate,
-      forbidDelete,
+      forbidDestroy,
       editable,
       disabled
     } = this.props;
@@ -170,7 +170,7 @@ class FormsField extends React.PureComponent {
             onDelete={this.handleDelete}
             form={f}
             forbidUpdate={forbidUpdate || !canUpdate}
-            forbidDelete={forbidDelete || !canArchive}
+            forbidDestroy={forbidDestroy || !canArchive}
             editable={editable}
             disabled={disabled}
           />
@@ -218,7 +218,7 @@ class FormsField extends React.PureComponent {
   }
 
   header(numCards) {
-    const { forbidCreate, editable, disabled, field } = this.props;
+    const { forbidCreate, editable, disabled, field, forbidSort } = this.props;
 
     const { sortBy, sortOrder } = this.state;
 
@@ -231,8 +231,7 @@ class FormsField extends React.PureComponent {
     const showNewButton =
       editable && !disabled && !forbidCreate && !reachedMax && canCreate;
 
-    // TODO: make configurable via field
-    const canOrder = true;
+    const canOrder = !forbidSort;
 
     const sortOptions = this.sortOptions();
 
@@ -269,7 +268,7 @@ class FormsField extends React.PureComponent {
   render() {
     const {
       forbidUpdate,
-      forbidDelete,
+      forbidDestroy,
       field,
       spacerHeight,
       classes,
@@ -328,7 +327,7 @@ class FormsField extends React.PureComponent {
           onEdit={this.handleEdit}
           onDelete={this.handleDelete}
           forbidUpdate={forbidUpdate || !canUpdate}
-          forbidDelete={forbidDelete || !canArchive}
+          forbidDestroy={forbidDestroy || !canArchive}
         />
 
         <ConfirmationDialog
@@ -348,7 +347,8 @@ FormsField = attach([
   'singularLabel',
   'forbidCreate',
   'forbidUpdate',
-  'forbidDelete',
+  'forbidDestroy',
+  'forbidSort',
   'editable',
   'disabled',
   'spacerHeight',
