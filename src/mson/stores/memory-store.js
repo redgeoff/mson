@@ -5,6 +5,7 @@ import utils from '../utils';
 import access from '../access';
 import Mapa from '../mapa';
 import cloneDeepWith from 'lodash/cloneDeepWith';
+import orderBy from 'lodash/orderBy';
 import sift from 'sift';
 
 export default class MemoryStore extends Component {
@@ -48,11 +49,11 @@ export default class MemoryStore extends Component {
     // props.first
     // props.before
     // props.last
-    // props.order
 
     let where = null;
 
     if (props.where) {
+      // Convert to a sift expression and then filter
       where = this._toSiftWhere(props.where);
     }
 
@@ -68,6 +69,17 @@ export default class MemoryStore extends Component {
           node: item
         });
       }
+    }
+
+    if (props.order) {
+      // Order by properties
+      const names = [];
+      const orders = [];
+      props.order.forEach(order => {
+        names.push('node.' + order[0]);
+        orders.push(order[1].toLowerCase());
+      });
+      items.edges = orderBy(items.edges, names, orders);
     }
 
     return items;
