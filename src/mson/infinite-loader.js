@@ -197,6 +197,14 @@ export default class InfiniteLoader {
     return records;
   }
 
+  _noMoreData(records) {
+    return (
+      !records ||
+      (!!records.edges && records.edges.length === 0) ||
+      (!!records.pageInfo && !records.pageInfo.hasNextPage)
+    );
+  }
+
   async _getAllDebounced(props) {
     // Standardize props
     if (!props.after) {
@@ -213,11 +221,7 @@ export default class InfiniteLoader {
       const records = await this._onGetAll(props);
 
       // No more data?
-      if (
-        !records ||
-        records.edges.length === 0 ||
-        (records.pageInfo && !records.pageInfo.hasNextPage)
-      ) {
+      if (this._noMoreData(records)) {
         // Set isLoading to false as the UI will not be changed so the UI will not set isLoading
         this._onSetIsLoading(false);
       }

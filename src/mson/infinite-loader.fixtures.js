@@ -105,6 +105,9 @@ export const records3 = {
 };
 
 const noEdges = {
+  pageInfo: {
+    hasNextPage: false
+  },
   edges: []
 };
 
