@@ -25,6 +25,7 @@ export default class MemoryStore extends Component {
     fieldValues.id = id;
     const item = {
       id,
+      archivedAt: null, // Needed by the UI as a default
       // userId, // TODO
       fieldValues
     };
