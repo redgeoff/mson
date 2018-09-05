@@ -1,14 +1,11 @@
-// TODO: move access-layer stuff to Store base class and refactor record-store to use it
-
-import Component from '../component';
+import Store from './store';
 import utils from '../utils';
-import access from '../access';
 import Mapa from '../mapa';
 import cloneDeepWith from 'lodash/cloneDeepWith';
 import orderBy from 'lodash/orderBy';
 import sift from 'sift';
 
-export default class MemoryStore extends Component {
+export default class MemoryStore extends Store {
   _className = 'MemoryStore';
 
   _create(props) {
@@ -17,10 +14,7 @@ export default class MemoryStore extends Component {
     this._items = new Mapa();
   }
 
-  async create(props) {
-    // Omit values based on access
-    const fieldValues = access.valuesCanCreate(props.form);
-
+  async _createItem(props, fieldValues) {
     const id = utils.uuid();
     fieldValues.id = id;
     const item = {
@@ -43,7 +37,7 @@ export default class MemoryStore extends Component {
     });
   }
 
-  async getAll(props) {
+  async _getAllItems(props) {
     // TODO:
     // props.after
     // props.first
@@ -93,10 +87,7 @@ export default class MemoryStore extends Component {
     return items;
   }
 
-  async update(props) {
-    // Omit values based on access
-    const fieldValues = access.valuesCanUpdate(props.form);
-
+  async _updateItem(props, fieldValues) {
     const item = this._items.get(props.id);
 
     // Merge so that we support partial updates
@@ -107,7 +98,7 @@ export default class MemoryStore extends Component {
     return item;
   }
 
-  async archive(props) {
+  async _archiveItem(props) {
     const item = this._items.get(props.id);
 
     item.archivedAt = new Date();
@@ -117,7 +108,7 @@ export default class MemoryStore extends Component {
     return item;
   }
 
-  async restore(props) {
+  async _restoreItem(props) {
     const item = this._items.get(props.id);
 
     item.archivedAt = null;
