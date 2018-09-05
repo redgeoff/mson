@@ -57,6 +57,10 @@ export default class FormsField extends Field {
             component: 'BooleanField'
           },
           {
+            name: 'forbidSort',
+            component: 'BooleanField'
+          },
+          {
             name: 'minSize',
             component: 'IntegerField'
           },

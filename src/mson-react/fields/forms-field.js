@@ -218,7 +218,7 @@ class FormsField extends React.PureComponent {
   }
 
   header(numCards) {
-    const { forbidCreate, editable, disabled, field } = this.props;
+    const { forbidCreate, editable, disabled, field, forbidSort } = this.props;
 
     const { sortBy, sortOrder } = this.state;
 
@@ -231,8 +231,7 @@ class FormsField extends React.PureComponent {
     const showNewButton =
       editable && !disabled && !forbidCreate && !reachedMax && canCreate;
 
-    // TODO: make configurable via field
-    const canOrder = true;
+    const canOrder = !forbidSort;
 
     const sortOptions = this.sortOptions();
 
@@ -349,6 +348,7 @@ FormsField = attach([
   'forbidCreate',
   'forbidUpdate',
   'forbidDestroy',
+  'forbidSort',
   'editable',
   'disabled',
   'spacerHeight',

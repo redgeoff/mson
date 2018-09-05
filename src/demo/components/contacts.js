@@ -11,6 +11,7 @@ export default {
       // forbidDestroy: true,
       // forbidViewArchived: true,
       // forbidSearch: true,
+      // forbidSort: true,
       form: {
         component: 'Form',
         fields: [
