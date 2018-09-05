@@ -44,7 +44,6 @@ export default class MemoryStore extends Component {
   }
 
   async getAll(props) {
-    console.log('getAll', { props });
     // TODO:
     // props.after
     // props.first
@@ -58,7 +57,15 @@ export default class MemoryStore extends Component {
       where = this._toSiftWhere(props.where);
     }
 
-    const items = { edges: [] };
+    const items = {
+      // TODO: hasNextPage will need to change once we support pagination via after, first, etc...
+      // depending on if there is still more data to get
+      pageInfo: {
+        hasNextPage: false
+      },
+      edges: []
+    };
+
     for (const item of this._items.values()) {
       const sifted = where ? sift(where, [item]) : null;
       if (

@@ -213,7 +213,11 @@ export default class InfiniteLoader {
       const records = await this._onGetAll(props);
 
       // No more data?
-      if (!records || records.edges.length === 0) {
+      if (
+        !records ||
+        records.edges.length === 0 ||
+        (records.pageInfo && !records.pageInfo.hasNextPage)
+      ) {
         // Set isLoading to false as the UI will not be changed so the UI will not set isLoading
         this._onSetIsLoading(false);
       }
