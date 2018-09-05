@@ -117,8 +117,7 @@ it('should get all', async () => {
           {
             $or: [
               { 'fieldValues.firstName': { $iLike: 'h%' } },
-              { 'fieldValues.lastName': { $iLike: 'h%' } },
-              { 'fieldValues.email': { $iLike: 'h%' } }
+              { 'fieldValues.lastName': { $iLike: 'h%' } }
             ]
           }
         ]
