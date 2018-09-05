@@ -1,13 +1,12 @@
-// TODO: incorporate pieces of DocStore? How to make changes real-time?
+// TODO: make changes real time with subscriptions
 
-import Component from '../component';
+import Store from './store';
 import utils from '../utils';
 import uberUtils from '../uber-utils';
 import registrar from '../compiler/registrar';
 import globals from '../globals';
-import access from '../access';
 
-export default class RecordStore extends Component {
+export default class RecordStore extends Store {
   _className = 'RecordStore';
 
   _create(props) {
@@ -53,11 +52,8 @@ export default class RecordStore extends Component {
     }
   }
 
-  async create(props) {
+  async _createItem(props, fieldValues) {
     this._clearCache();
-
-    // Omit values based on access
-    const fieldValues = access.valuesCanCreate(props.form);
 
     const response = await this._request(props, appId => {
       return this._registrar.client.record.create({
@@ -86,7 +82,7 @@ export default class RecordStore extends Component {
     return showArchived ? { archivedAt: { $ne: null } } : { archivedAt: null };
   }
 
-  async getAll(props) {
+  async _getAllItems(props) {
     const showArchivedWhere = this._getShowArchivedWhere(
       props && props.showArchived
     );
@@ -120,10 +116,7 @@ export default class RecordStore extends Component {
     });
   }
 
-  async update(props) {
-    // Omit values based on access
-    const fieldValues = access.valuesCanUpdate(props.form);
-
+  async _updateItem(props, fieldValues) {
     const response = await this._request(props, appId => {
       return this._registrar.client.record.update({
         appId,
@@ -136,7 +129,7 @@ export default class RecordStore extends Component {
     return response.data.updateRecord;
   }
 
-  async archive(props) {
+  async _archiveItem(props) {
     this._clearCache();
 
     const response = await this._request(props, appId => {
@@ -150,7 +143,7 @@ export default class RecordStore extends Component {
     return response.data.archiveRecord;
   }
 
-  async restore(props) {
+  async _restoreItem(props) {
     this._clearCache();
 
     const response = await this._request(props, appId => {
