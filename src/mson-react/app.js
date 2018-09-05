@@ -190,7 +190,9 @@ class App extends React.PureComponent {
     if (this.component && this.component instanceof Form) {
       for (const field of this.component.getFields()) {
         if (field instanceof FormsField) {
-          canArchive = access.canArchive(field.get('form'));
+          canArchive =
+            !field.get('forbidViewArchived') &&
+            access.canArchive(field.get('form'));
           isList = true;
         }
       }

@@ -49,6 +49,10 @@ export default class FormsField extends Field {
             component: 'BooleanField'
           },
           {
+            name: 'forbidViewArchived',
+            component: 'BooleanField'
+          },
+          {
             name: 'minSize',
             component: 'IntegerField'
           },

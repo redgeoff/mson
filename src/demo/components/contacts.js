@@ -6,6 +6,10 @@ export default {
       component: 'FormsField',
       name: 'contacts',
       label: 'Contacts',
+      // forbidCreate: true,
+      // forbidUpdate: true,
+      // forbidDestroy: true,
+      // forbidViewArchived: true,
       form: {
         component: 'Form',
         fields: [
