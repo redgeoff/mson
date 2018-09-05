@@ -13,6 +13,10 @@ export default class App extends Component {
           {
             name: 'menu',
             component: 'Field'
+          },
+          {
+            name: 'menuAlwaysTemporary',
+            component: 'BooleanField'
           }
         ]
       }

@@ -19,7 +19,9 @@ const styles = theme => ({
     paddingTop: theme.spacing.unit
   },
   drawerPaper: {
-    width: 250,
+    width: 250
+  },
+  drawPaperResponsive: {
     [theme.breakpoints.up('md')]: {
       width: drawerWidth,
       // position: 'relative',
@@ -72,7 +74,7 @@ class Menu extends React.PureComponent {
   }
 
   render() {
-    const { classes, theme, mobileOpen /*, roles*/ } = this.props;
+    const { classes, theme, mobileOpen, responsive /*, roles*/ } = this.props;
 
     let items = null;
     // if (!roles || (registrar.client && registrar.client.user.hasRole(roles))) {
@@ -89,37 +91,49 @@ class Menu extends React.PureComponent {
       </div>
     );
 
-    return (
-      <div>
-        <Hidden mdUp>
-          <Drawer
-            variant="temporary"
-            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-            open={mobileOpen}
-            classes={{
-              paper: classes.drawerPaper
-            }}
-            onClose={this.handleDrawerToggle}
-            ModalProps={{
-              keepMounted: true // Better open performance on mobile.
-            }}
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-        <Hidden smDown implementation="css">
-          <Drawer
-            variant="permanent"
-            open
-            classes={{
-              paper: classes.drawerPaper
-            }}
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-      </div>
+    const temporaryDrawer = (
+      <Drawer
+        variant="temporary"
+        anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+        open={mobileOpen}
+        classes={{
+          paper: classes.drawerPaper
+        }}
+        onClose={this.handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true // Better open performance on mobile.
+        }}
+      >
+        {drawer}
+      </Drawer>
     );
+
+    const permanentDrawer = (
+      <Drawer
+        variant="permanent"
+        open
+        classes={{
+          paper:
+            classes.drawerPaper +
+            (responsive ? ` ${classes.drawPaperResponsive}` : '')
+        }}
+      >
+        {drawer}
+      </Drawer>
+    );
+
+    if (responsive) {
+      return (
+        <div>
+          <Hidden mdUp>{temporaryDrawer}</Hidden>
+          <Hidden smDown implementation="css">
+            {permanentDrawer}
+          </Hidden>
+        </div>
+      );
+    } else {
+      return temporaryDrawer;
+    }
   }
 }
 

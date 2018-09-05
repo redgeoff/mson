@@ -47,7 +47,9 @@ const styles = theme => ({
   },
   appBar: {
     position: 'fixed',
-    marginLeft: drawerWidth,
+    marginLeft: drawerWidth
+  },
+  appBarResponsive: {
     [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${drawerWidth}px)`
     }
@@ -68,15 +70,16 @@ const styles = theme => ({
       marginTop: 64
     },
 
-    // Also needed to extend menu vertically
-    [theme.breakpoints.up('md')]: {
-      marginLeft: drawerWidth
-    },
-
     // Disable Chrome's Scroll Anchoring as it causes problems with inifinite scrolling when
     // scrolling up. Specifically, the scroll location is locked after items are prepended to the
     // top of the list before the spacer is resized.
     overflowAnchor: 'none'
+  },
+  contentResponsive: {
+    // Also needed to extend menu vertically
+    [theme.breakpoints.up('md')]: {
+      marginLeft: drawerWidth
+    }
   },
   searchBar: {
     // marginLeft: theme.spacing.unit * 3, // left align
@@ -381,7 +384,7 @@ class App extends React.PureComponent {
   };
 
   render() {
-    const { classes, app, confirmation } = this.props;
+    const { classes, app, confirmation, menuAlwaysTemporary } = this.props;
     const {
       mobileOpen,
       menuItem,
@@ -395,6 +398,8 @@ class App extends React.PureComponent {
       showSearch
       // isLoggedIn
     } = this.state;
+
+    const responsive = !menuAlwaysTemporary;
 
     const menu = app.get('menu');
 
@@ -433,13 +438,17 @@ class App extends React.PureComponent {
     }
 
     const appBar = (
-      <AppBar className={classes.appBar}>
+      <AppBar
+        className={
+          classes.appBar + (responsive ? ` ${classes.appBarResponsive}` : '')
+        }
+      >
         <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             onClick={this.handleDrawerToggle}
-            className={classes.navIconHide}
+            className={responsive ? classes.navIconHide : ''}
           >
             <Icon icon="Menu" />
           </IconButton>
@@ -465,6 +474,7 @@ class App extends React.PureComponent {
         mobileOpen={mobileOpen}
         onNavigate={this.handleNavigate}
         path={path}
+        responsive={responsive}
       />
     );
 
@@ -481,7 +491,13 @@ class App extends React.PureComponent {
         <div className={classes.appFrame}>
           {menuItem && menuItem.fullScreen ? null : appBar}
           {menuItem && menuItem.fullScreen ? null : menuSidebar}
-          <main className={classes.content} style={fullScreenStyle}>
+          <main
+            className={
+              classes.content +
+              (responsive ? ` ${classes.contentResponsive}` : '')
+            }
+            style={fullScreenStyle}
+          >
             <Switch>
               {/* Omitting path so that all paths are matched */}
               <Route />
@@ -510,6 +526,7 @@ class App extends React.PureComponent {
 
 App = withStyles(styles, { withTheme: true })(App);
 App = withRouter(App);
+App = attach(['menuAlwaysTemporary'], 'app')(App);
 App = attach(
   ['path', 'redirectPath', 'snackbarMessage', 'confirmation', 'searchString'],
   globals
