@@ -240,7 +240,7 @@ it('should get all', async () => {
   const order = 'order';
 
   expect(
-    await store.getAll({
+    await store.getAllItems({
       where: {
         foo: 'bar'
       },
@@ -278,7 +278,7 @@ it('should get all', async () => {
   expect(getAllSpy).toHaveBeenCalledWith(opts);
 
   expect(
-    await store.getAll({
+    await store.getAllItems({
       where: {
         foo: 'bar'
       },

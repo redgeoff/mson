@@ -22,7 +22,7 @@ export default class Store extends Component {
     return this._getItem(props);
   }
 
-  async getAll(props) {
+  async getAllItems(props) {
     return this._getAllItems(props);
   }
 

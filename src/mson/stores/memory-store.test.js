@@ -107,11 +107,11 @@ it('should get all', async () => {
   };
 
   // Default props
-  expect(await store.getAll({})).toEqual(all);
+  expect(await store.getAllItems({})).toEqual(all);
 
   // Search
   expect(
-    await store.getAll({
+    await store.getAllItems({
       where: {
         $and: [
           {
@@ -129,12 +129,12 @@ it('should get all', async () => {
 
   // Archived status
   expect(
-    await store.getAll({
+    await store.getAllItems({
       showArchived: true
     })
   ).toEqual(Object.assign({}, all, { edges: [{ node: hermione }] }));
   expect(
-    await store.getAll({
+    await store.getAllItems({
       showArchived: false
     })
   ).toEqual(
@@ -143,7 +143,7 @@ it('should get all', async () => {
 
   // Order
   expect(
-    await store.getAll({
+    await store.getAllItems({
       order: [['fieldValues.firstName', 'DESC']]
     })
   ).toEqual(

@@ -158,7 +158,7 @@ const asyncNoop = async () => {};
 
 export const createMockedStore = () => {
   return {
-    getAll: async props => {
+    getAllItems: async props => {
       return await onGetAllPeople(props);
     },
     createItem: asyncNoop,
