@@ -4,6 +4,8 @@ import Component from '../component';
 import utils from '../utils';
 import access from '../access';
 import Mapa from '../mapa';
+import cloneDeepWith from 'lodash/cloneDeepWith';
+import sift from 'sift';
 
 export default class MemoryStore extends Component {
   _className = 'MemoryStore';
@@ -31,6 +33,14 @@ export default class MemoryStore extends Component {
     return item;
   }
 
+  _toSiftWhere(where) {
+    return cloneDeepWith(where, (item, index) => {
+      if (item.$iLike) {
+        return { $regex: '^' + item.$iLike.replace(/%/, ''), $options: 'i' };
+      }
+    });
+  }
+
   async getAll(props) {
     console.log('getAll', { props });
     // TODO:
@@ -40,11 +50,19 @@ export default class MemoryStore extends Component {
     // props.last
     // props.order
 
+    let where = null;
+
+    if (props.where) {
+      where = this._toSiftWhere(props.where);
+    }
+
     const items = { edges: [] };
     for (const item of this._items.values()) {
+      const sifted = where ? sift(where, [item]) : null;
       if (
-        props.showArchived === null ||
-        !!item.archivedAt === props.showArchived
+        (props.showArchived === null ||
+          !!item.archivedAt === props.showArchived) &&
+        (where === null || sifted.length !== 0)
       ) {
         items.edges.push({
           node: item
