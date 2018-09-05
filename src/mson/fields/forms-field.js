@@ -53,6 +53,10 @@ export default class FormsField extends Field {
             component: 'BooleanField'
           },
           {
+            name: 'forbidSearch',
+            component: 'BooleanField'
+          },
+          {
             name: 'minSize',
             component: 'IntegerField'
           },

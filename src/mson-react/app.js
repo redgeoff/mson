@@ -186,20 +186,20 @@ class App extends React.PureComponent {
 
   canArchive() {
     let canArchive = false;
-    let isList = false;
+    let canSearch = false;
     if (this.component && this.component instanceof Form) {
       for (const field of this.component.getFields()) {
         if (field instanceof FormsField) {
           canArchive =
             !field.get('forbidViewArchived') &&
             access.canArchive(field.get('form'));
-          isList = true;
+          canSearch = !field.get('forbidSearch');
         }
       }
     }
     return {
       canArchive,
-      isList
+      canSearch
     };
   }
 
@@ -252,7 +252,7 @@ class App extends React.PureComponent {
             // Emit a load event so that the component can load any initial data, etc...
             this.component.emitLoad();
 
-            const { canArchive, isList } = this.canArchive();
+            const { canArchive, canSearch } = this.canArchive();
 
             globals.set({ searchString: null });
 
@@ -262,7 +262,7 @@ class App extends React.PureComponent {
               showArchived: false,
               showArchivedToggle: canArchive,
               searchString: '',
-              showSearch: isList
+              showSearch: canSearch
             });
           }
         }
