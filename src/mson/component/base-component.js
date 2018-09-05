@@ -82,6 +82,18 @@ export default class BaseComponent extends events.EventEmitter {
     this._debugId = Math.random();
   }
 
+  _emitCreateIfNotMuted() {
+    if (!this.get('muteCreate')) {
+      // Execute on next tick so that there is time for any wrapping components to finish the
+      // wrapping. This also gives the caller a chance to listen for the create event before it is
+      // emitted.
+      setTimeout(() => {
+        // Emit the create event after we have set up the initial listeners
+        this._emitCreate();
+      });
+    }
+  }
+
   constructor(props) {
     super(props);
 
@@ -114,15 +126,7 @@ export default class BaseComponent extends events.EventEmitter {
     this._create(props === undefined ? {} : props);
     this.set(props === undefined ? {} : props);
 
-    if (!this.get('muteCreate')) {
-      // Execute on next tick so that there is time for any wrapping components to finish the
-      // wrapping. This also gives the caller a chance to listen for the create event before it is
-      // emitted.
-      setTimeout(() => {
-        // Emit the create event after we have set up the initial listeners
-        this._emitCreate();
-      });
-    }
+    this._emitCreateIfNotMuted();
 
     this._setKey();
   }
@@ -502,6 +506,10 @@ export default class BaseComponent extends events.EventEmitter {
     // Remove all listeners and expect new ones to be set up so that we don't have duplicate
     // listeners
     clonedComponent.removeAllListeners();
+
+    // We have to manually emitCreate as otherwise the cloned component may not emit didCreate. This
+    // can occur when a component is cloned before didCreate is emitted.
+    clonedComponent._emitCreateIfNotMuted();
 
     return clonedComponent;
   }
