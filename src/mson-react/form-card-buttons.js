@@ -12,7 +12,7 @@ export default class FormCardButtons extends React.PureComponent {
   render() {
     const {
       forbidUpdate,
-      forbidDelete,
+      forbidDestroy,
       editable,
       disabled,
       archivedAt,
@@ -36,7 +36,7 @@ export default class FormCardButtons extends React.PureComponent {
     }
 
     let deleteButton = null;
-    if (!forbidDelete) {
+    if (!forbidDestroy) {
       deleteButton = (
         <IconButton onClick={onDelete}>
           <Icon icon={archivedAt ? 'Restore' : 'Delete'} />
@@ -44,7 +44,7 @@ export default class FormCardButtons extends React.PureComponent {
       );
     }
 
-    if (editable && !disabled && (!forbidUpdate || !forbidDelete)) {
+    if (editable && !disabled && (!forbidUpdate || !forbidDestroy)) {
       return (
         <Grid item>
           {updateButton}

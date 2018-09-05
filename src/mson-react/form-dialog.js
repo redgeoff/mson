@@ -65,7 +65,7 @@ class FormDialog extends React.PureComponent {
   }
 
   render() {
-    const { mode, form, forbidUpdate, forbidDelete, archivedAt } = this.props;
+    const { mode, form, forbidUpdate, forbidDestroy, archivedAt } = this.props;
 
     const { saveClicked } = this.state;
 
@@ -93,7 +93,7 @@ class FormDialog extends React.PureComponent {
           />
         </div>
       );
-    } else if (!forbidUpdate || !forbidDelete) {
+    } else if (!forbidUpdate || !forbidDestroy) {
       buttons = (
         <div>
           {forbidUpdate ? (
@@ -101,7 +101,7 @@ class FormDialog extends React.PureComponent {
           ) : (
             <Button label="Edit" icon="Edit" onClick={this.handleEdit} />
           )}
-          {forbidDelete ? (
+          {forbidDestroy ? (
             ''
           ) : (
             <Button
