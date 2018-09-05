@@ -11,7 +11,7 @@ export default class Store extends Component {
     this._access = access;
   }
 
-  async create(props) {
+  async createItem(props) {
     // Omit values based on access
     const fieldValues = this._access.valuesCanCreate(props.form);
 
@@ -26,18 +26,18 @@ export default class Store extends Component {
     return this._getAllItems(props);
   }
 
-  async update(props) {
+  async updateItem(props) {
     // Omit values based on access
     const fieldValues = this._access.valuesCanUpdate(props.form);
 
     return this._updateItem(props, fieldValues);
   }
 
-  async archive(props) {
+  async archiveItem(props) {
     return this._archiveItem(props);
   }
 
-  async restore(props) {
+  async restoreItem(props) {
     return this._restoreItem(props);
   }
 }

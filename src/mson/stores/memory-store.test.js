@@ -24,7 +24,7 @@ it('should create, update, archive & restore', async () => {
 
   const store = new MemoryStore();
 
-  const created = await store.create({ form });
+  const created = await store.createItem({ form });
   expect(created.id).not.toBeFalsy();
   expect(created.archivedAt).toBeNull();
   expect(created.fieldValues).toEqual(
@@ -38,7 +38,7 @@ it('should create, update, archive & restore', async () => {
     firstName: 'F. Scott'
   });
 
-  const updated = await store.update({ id: created.id, form });
+  const updated = await store.updateItem({ id: created.id, form });
   expect(updated).toEqual({
     id: created.id,
     archivedAt: null,
@@ -51,20 +51,20 @@ it('should create, update, archive & restore', async () => {
 
   expect(await store.getItem({ id: created.id })).toEqual(updated);
 
-  const archived = await store.archive({ id: created.id });
+  const archived = await store.archiveItem({ id: created.id });
   expect(archived).toEqual(
     Object.assign({}, updated, { archivedAt: archived.archivedAt })
   );
   expect(archived.archivedAt).not.toBeFalsy();
 
-  const restored = await store.restore({ id: created.id });
+  const restored = await store.restoreItem({ id: created.id });
   expect(restored).toEqual(updated);
   expect(archived.archivedAt).toBeNull();
 });
 
 const createItem = async (store, fieldValues) => {
   const form = createForm({ value: fieldValues });
-  return store.create({ form });
+  return store.createItem({ form });
 };
 
 it('should get all', async () => {
@@ -81,7 +81,7 @@ it('should get all', async () => {
     lastName: 'Granger'
   };
   const hermione = await createItem(store, hermioneValues);
-  await store.archive({ id: hermione.id });
+  await store.archiveItem({ id: hermione.id });
 
   const ronValues = {
     firstName: 'Ron',

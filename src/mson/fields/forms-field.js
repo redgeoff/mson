@@ -681,12 +681,12 @@ export default class FormsField extends Field {
     if (store) {
       // New?
       if (creating) {
-        const record = await store.create({ form });
+        const record = await store.createItem({ form });
         id.setValue(record.id);
         form.set({ userId: record.userId });
       } else {
         // Existing
-        await store.update({ form, id: id.getValue() });
+        await store.updateItem({ form, id: id.getValue() });
       }
     } else if (creating) {
       // TODO: use the id from this._docs.set instead of this dummy id
@@ -743,7 +743,7 @@ export default class FormsField extends Field {
   async archive(form) {
     const store = this.get('store');
     if (store) {
-      const record = await store.archive({ form, id: form.getValue('id') });
+      const record = await store.archiveItem({ form, id: form.getValue('id') });
       form.set({ archivedAt: record.archivedAt });
     }
 
@@ -763,7 +763,7 @@ export default class FormsField extends Field {
   async restore(form) {
     const store = this.get('store');
     if (store) {
-      await store.restore({ form, id: form.getValue('id') });
+      await store.restoreItem({ form, id: form.getValue('id') });
     }
 
     form.set({ archivedAt: null });

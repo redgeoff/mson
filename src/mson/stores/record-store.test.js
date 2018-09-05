@@ -99,7 +99,7 @@ it('should create', async () => {
   const clearCacheSpy = jest.spyOn(store, '_clearCache');
   const createSpy = jest.spyOn(store._registrar.client.record, 'create');
 
-  expect(await store.create({ form })).toEqual(created);
+  expect(await store.createItem({ form })).toEqual(created);
 
   expect(clearCacheSpy).toHaveBeenCalledTimes(1);
   expect(createSpy).toHaveBeenCalledWith({
@@ -132,7 +132,7 @@ it('should update', async () => {
 
   const updateSpy = jest.spyOn(store._registrar.client.record, 'update');
 
-  expect(await store.update({ form, id })).toEqual(updated);
+  expect(await store.updateItem({ form, id })).toEqual(updated);
 
   expect(updateSpy).toHaveBeenCalledWith({
     appId,
@@ -164,7 +164,7 @@ it('should archive', async () => {
   const clearCacheSpy = jest.spyOn(store, '_clearCache');
   const archiveSpy = jest.spyOn(store._registrar.client.record, 'archive');
 
-  expect(await store.archive({ id })).toEqual(archived);
+  expect(await store.archiveItem({ id })).toEqual(archived);
 
   expect(clearCacheSpy).toHaveBeenCalledTimes(1);
   expect(archiveSpy).toHaveBeenCalledWith({
@@ -196,7 +196,7 @@ it('should restore', async () => {
   const clearCacheSpy = jest.spyOn(store, '_clearCache');
   const restoreSpy = jest.spyOn(store._registrar.client.record, 'restore');
 
-  expect(await store.restore({ id })).toEqual(restored);
+  expect(await store.restoreItem({ id })).toEqual(restored);
 
   expect(clearCacheSpy).toHaveBeenCalledTimes(1);
   expect(restoreSpy).toHaveBeenCalledWith({

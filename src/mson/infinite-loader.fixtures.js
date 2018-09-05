@@ -161,9 +161,9 @@ export const createMockedStore = () => {
     getAll: async props => {
       return await onGetAllPeople(props);
     },
-    create: asyncNoop,
-    update: asyncNoop,
-    archive: asyncNoop,
-    restore: asyncNoop
+    createItem: asyncNoop,
+    updateItem: asyncNoop,
+    archiveItem: asyncNoop,
+    restoreItem: asyncNoop
   };
 };
