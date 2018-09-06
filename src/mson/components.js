@@ -31,6 +31,7 @@ import IdField from './fields/id-field';
 import IntegerField from './fields/integer-field';
 import Iterator from './actions/iterator';
 import ListField from './fields/list-field';
+import LocalStorageStore from './stores/local-storage-store';
 import Login from './aggregate/login';
 import LogInToApp from './actions/log-in-to-app';
 import LogInToAppAndRedirect from './actions/log-in-to-app-and-redirect';
@@ -97,6 +98,7 @@ export default {
   IntegerField,
   Iterator,
   ListField,
+  LocalStorageStore,
   Login,
   LogInToApp,
   LogInToAppAndRedirect,

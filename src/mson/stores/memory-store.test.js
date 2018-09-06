@@ -2,7 +2,7 @@ import MemoryStore from './memory-store';
 import Form from '../form';
 import { TextField } from '../fields';
 
-const createForm = props => {
+export const createForm = props => {
   return new Form({
     fields: [
       new TextField({ name: 'firstName' }),
@@ -12,7 +12,7 @@ const createForm = props => {
   });
 };
 
-it('should create, update, archive & restore', async () => {
+export const shouldCRUD = async (Store, props) => {
   let fieldValues = {
     firstName: 'Ella',
     lastName: 'Fitzgerald'
@@ -22,7 +22,7 @@ it('should create, update, archive & restore', async () => {
     value: fieldValues
   });
 
-  const store = new MemoryStore();
+  const store = new Store(props);
 
   const created = await store.createItem({ form });
   expect(created.id).not.toBeFalsy();
@@ -60,6 +60,10 @@ it('should create, update, archive & restore', async () => {
   const restored = await store.restoreItem({ id: created.id });
   expect(restored).toEqual(updated);
   expect(archived.archivedAt).toBeNull();
+};
+
+it('should create, update, archive & restore', async () => {
+  await shouldCRUD(MemoryStore);
 });
 
 const createItem = async (store, fieldValues) => {
@@ -67,8 +71,8 @@ const createItem = async (store, fieldValues) => {
   return store.createItem({ form });
 };
 
-it('should get all', async () => {
-  const store = new MemoryStore();
+export const shouldGetAll = async (Store, props) => {
+  const store = new Store(props);
 
   const harryValues = {
     firstName: 'Harry',
@@ -165,4 +169,8 @@ it('should get all', async () => {
       edges: [{ node: ron }, { node: hermione }, { node: harry }]
     })
   );
+};
+
+it('should get all', async () => {
+  await shouldGetAll(MemoryStore);
 });

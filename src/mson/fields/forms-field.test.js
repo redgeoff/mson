@@ -246,7 +246,7 @@ it('should set defaults', () => {
     spacerHeight: 0,
     order: null,
     mode: null,
-    showArchived: null
+    showArchived: false
   });
 });
 

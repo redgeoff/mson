@@ -131,7 +131,7 @@ export default class FormsField extends Field {
       // initialized as undefined
       order: null,
       mode: null,
-      showArchived: null
+      showArchived: false
     });
 
     this._createInfiniteLoader();
