@@ -2,7 +2,7 @@ import MemoryStore from './memory-store';
 import Form from '../form';
 import { TextField } from '../fields';
 
-const createForm = props => {
+export const createForm = props => {
   return new Form({
     fields: [
       new TextField({ name: 'firstName' }),
