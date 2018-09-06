@@ -12,7 +12,7 @@ const createForm = props => {
   });
 };
 
-export const shouldCRUD = async Store => {
+export const shouldCRUD = async (Store, props) => {
   let fieldValues = {
     firstName: 'Ella',
     lastName: 'Fitzgerald'
@@ -22,7 +22,7 @@ export const shouldCRUD = async Store => {
     value: fieldValues
   });
 
-  const store = new Store();
+  const store = new Store(props);
 
   const created = await store.createItem({ form });
   expect(created.id).not.toBeFalsy();
@@ -71,8 +71,8 @@ const createItem = async (store, fieldValues) => {
   return store.createItem({ form });
 };
 
-export const shouldGetAll = async Store => {
-  const store = new Store();
+export const shouldGetAll = async (Store, props) => {
+  const store = new Store(props);
 
   const harryValues = {
     firstName: 'Harry',
