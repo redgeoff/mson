@@ -1,3 +1,4 @@
+import testUtils from './test-utils';
 import { Access } from './access';
 import Form from './form';
 import { TextField } from './fields';
@@ -103,12 +104,15 @@ it('should get fields and values', () => {
   });
 
   expect(access.fieldsCanCreate(form)).toEqual({
-    id: 'create',
+    ...testUtils.toDefaultFieldsObject('create'),
     lastName: 'create'
   });
-  expect(access.fieldsCanRead(form)).toEqual({ id: 'read', lastName: 'read' });
+  expect(access.fieldsCanRead(form)).toEqual({
+    ...testUtils.toDefaultFieldsObject('read'),
+    lastName: 'read'
+  });
   expect(access.fieldsCanUpdate(form)).toEqual({
-    id: 'update',
+    ...testUtils.toDefaultFieldsObject('update'),
     lastName: 'update'
   });
 
@@ -128,17 +132,17 @@ it('should get fields and values', () => {
   sessionRoles['id100'] = { name: '100' };
 
   expect(access.fieldsCanCreate(form)).toEqual({
-    id: 'create',
+    ...testUtils.toDefaultFieldsObject('create'),
     firstName: 'create',
     lastName: 'create'
   });
   expect(access.fieldsCanRead(form)).toEqual({
-    id: 'read',
+    ...testUtils.toDefaultFieldsObject('read'),
     firstName: 'read',
     lastName: 'read'
   });
   expect(access.fieldsCanUpdate(form)).toEqual({
-    id: 'update',
+    ...testUtils.toDefaultFieldsObject('update'),
     firstName: 'update',
     lastName: 'update'
   });
@@ -174,7 +178,7 @@ it('should get fields and values', () => {
     }
   };
   expect(access.fieldsCanCreate(form)).toEqual({
-    id: 'create',
+    ...testUtils.toDefaultFieldsObject('create'),
     lastName: 'create'
   });
 });

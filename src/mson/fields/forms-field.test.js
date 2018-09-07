@@ -76,12 +76,16 @@ it('should get forms', async () => {
     forms.push(form);
   }
 
+  const defaults = testUtils.toDefaultFieldsObject(null);
+
   expect(forms[0].getValues()).toEqual({
+    ...defaults,
     id: 1,
     firstName: 'Ella',
     lastName: 'Fitzgerald'
   });
   expect(forms[1].getValues()).toEqual({
+    ...defaults,
     id: 2,
     firstName: 'Frank',
     lastName: 'Sinatra'
@@ -105,7 +109,19 @@ it('should set and get value', async () => {
   ];
 
   field.setValue(value);
-  expect(field.getValue()).toEqual(value);
+
+  const defaults = testUtils.toDefaultFieldsObject(null);
+
+  expect(field.getValue()).toEqual([
+    {
+      ...defaults,
+      ...value[0]
+    },
+    {
+      ...defaults,
+      ...value[1]
+    }
+  ]);
 });
 
 it('should clear errors for nested forms', () => {
@@ -270,14 +286,14 @@ const shouldAddFormsQuickly = (field, milliseconds) => {
   }, milliseconds);
 };
 
-const ADD_FORMS_COMPILED_TIMEOUT_MS = 700;
+const ADD_FORMS_COMPILED_TIMEOUT_MS = 1500;
 it('should add many forms quickly when using compiled components', () => {
   const field = createField();
 
   return shouldAddFormsQuickly(field, ADD_FORMS_COMPILED_TIMEOUT_MS);
 });
 
-const ADD_FORMS_UNCOMPILED_TIMEOUT_MS = 700;
+const ADD_FORMS_UNCOMPILED_TIMEOUT_MS = 1500;
 it('should add many forms quickly when using uncompiled components', () => {
   const field = compiler.newComponent({
     component: 'FormsField',

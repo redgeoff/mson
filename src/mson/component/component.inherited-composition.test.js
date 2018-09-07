@@ -3,6 +3,7 @@
 import Form from '../form';
 import { TextField } from '../fields';
 import WrappedComponent from './wrapped-component';
+import testUtils from '../test-utils';
 
 // Uses inheritance
 class FirstNameForm extends Form {
@@ -55,10 +56,7 @@ class AddLastNameForm extends AddMiddleNameForm {
 
 it('should support inherited composition', () => {
   const component = new AddLastNameForm();
-  expect(component.mapFields(field => field.get('name'))).toEqual([
-    'id',
-    'firstName',
-    'middleName',
-    'lastName'
-  ]);
+  expect(component.mapFields(field => field.get('name'))).toEqual(
+    testUtils.defaultFields.concat(['firstName', 'middleName', 'lastName'])
+  );
 });

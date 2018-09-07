@@ -1,5 +1,6 @@
 // NOTE: the tests in this file must maintain parity with component.inherited-composition.test.js
 
+import testUtils from '../test-utils';
 import utils from '../utils';
 import compiler from './compiler';
 
@@ -64,10 +65,7 @@ it('should support inherited composition', () => {
   const component = compiler.newComponent({
     component: addLastName
   });
-  expect(component.mapFields(field => field.get('name'))).toEqual([
-    'id',
-    'firstName',
-    'middleName',
-    'lastName'
-  ]);
+  expect(component.mapFields(field => field.get('name'))).toEqual(
+    testUtils.defaultFields.concat(['firstName', 'middleName', 'lastName'])
+  );
 });

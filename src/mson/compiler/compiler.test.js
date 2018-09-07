@@ -237,14 +237,18 @@ it('should build & destroy', () => {
   const account = compiler.newComponent({
     component: 'app.Account'
   });
-  expect(account.get('fields').length()).toEqual(3);
+  expect(account.get('fields').length()).toEqual(
+    testUtils.defaultFields.length + 2
+  );
 });
 
 it('should implement inheritance', () => {
   const account = compiler.newComponent({
     component: 'app.EditAccount'
   });
-  expect(account.get('fields').length()).toEqual(5);
+  expect(account.get('fields').length()).toEqual(
+    testUtils.defaultFields.length + 4
+  );
 });
 
 it('should implement composition', () => {
@@ -254,7 +258,9 @@ it('should implement composition', () => {
       component: 'app.EditAccount'
     }
   });
-  expect(thing1.get('fields').length()).toEqual(5);
+  expect(thing1.get('fields').length()).toEqual(
+    testUtils.defaultFields.length + 4
+  );
 
   // We test with 2 dynamic inheritance back to back to make sure that we haven't cached any
   // previous component building.
@@ -264,7 +270,9 @@ it('should implement composition', () => {
       component: 'app.Account'
     }
   });
-  expect(thing2.get('fields').length()).toEqual(3);
+  expect(thing2.get('fields').length()).toEqual(
+    testUtils.defaultFields.length + 2
+  );
 });
 
 // TODO: is this really needed or expect use of composition?
@@ -390,7 +398,9 @@ it('should implement dynamic composition', () => {
       component: 'app.EditAccount'
     }
   });
-  expect(thing.get('fields').length()).toEqual(6);
+  expect(thing.get('fields').length()).toEqual(
+    testUtils.defaultFields.length + 5
+  );
 
   // Note: no longer supported
   // // Where thing is a component nested in a component
@@ -409,7 +419,9 @@ it('should implement dynamic nested inheritance in registration', () => {
   let thing = compiler.newComponent({
     component: 'app.EditNestedRegistrationThing'
   });
-  expect(thing.get('fields').length()).toEqual(6);
+  expect(thing.get('fields').length()).toEqual(
+    testUtils.defaultFields.length + 5
+  );
 
   // Note: no longer supported
   // thing = compiler.newComponent({

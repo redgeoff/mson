@@ -1,11 +1,15 @@
+import testUtils from './test-utils';
 import Mapa from './mapa';
 
 export const noop = () => {};
+
+const defaults = testUtils.toDefaultFieldsObject(null);
 
 export const ray = {
   node: {
     id: 'ray',
     fieldValues: {
+      ...defaults,
       name: 'Ray'
     }
   },
@@ -13,6 +17,7 @@ export const ray = {
 };
 
 export const rayFlat = {
+  ...defaults,
   id: 'ray',
   name: 'Ray'
 };
@@ -21,6 +26,7 @@ export const ella = {
   node: {
     id: 'ella',
     fieldValues: {
+      ...defaults,
       name: 'Ella'
     }
   },
@@ -28,6 +34,7 @@ export const ella = {
 };
 
 export const ellaFlat = {
+  ...defaults,
   id: 'ella',
   name: 'Ella'
 };
@@ -40,6 +47,7 @@ export const stevie = {
   node: {
     id: 'stevie',
     fieldValues: {
+      ...defaults,
       name: 'Stevie'
     }
   },
@@ -47,6 +55,7 @@ export const stevie = {
 };
 
 export const stevieFlat = {
+  ...defaults,
   id: 'stevie',
   name: 'Stevie'
 };
@@ -55,6 +64,7 @@ export const sinatra = {
   node: {
     id: 'sinatra',
     fieldValues: {
+      ...defaults,
       name: 'Sinatra'
     }
   },
@@ -62,6 +72,7 @@ export const sinatra = {
 };
 
 export const sinatraFlat = {
+  ...defaults,
   id: 'sinatra',
   name: 'Sinatra'
 };
@@ -74,6 +85,7 @@ export const michael = {
   node: {
     id: 'michael',
     fieldValues: {
+      ...defaults,
       name: 'Michael'
     }
   },
@@ -81,6 +93,7 @@ export const michael = {
 };
 
 export const michaelFlat = {
+  ...defaults,
   id: 'michael',
   name: 'Michael'
 };
@@ -89,6 +102,7 @@ export const bowie = {
   node: {
     id: 'bowie',
     fieldValues: {
+      ...defaults,
       name: 'Bowie'
     }
   },
@@ -96,6 +110,7 @@ export const bowie = {
 };
 
 export const bowieFlat = {
+  ...defaults,
   id: 'bowie',
   name: 'Bowie'
 };

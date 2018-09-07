@@ -6,6 +6,7 @@ import _ from '../lodash';
 import Validator from '../component/validator';
 import Mapa from '../mapa';
 import IdField from '../fields/id-field';
+// import DateField from '../fields/date-field';
 import ButtonField from '../fields/button-field';
 import ComponentFillerProps from '../component/component-filler-props';
 
@@ -243,7 +244,30 @@ export default class Form extends Component {
       'id',
       new IdField({ name: 'id', label: 'Id', hidden: true })
     );
-    // TODO: createdAt, updatedAt
+
+    // Commented out as the default fields appear to add a lot of latency. TODO: comment on specific
+    // test results
+    //
+    // this._defaultFields.set(
+    //   'userId',
+    //   new IdField({ name: 'userId', label: 'User Id', hidden: true })
+    // );
+    // this._defaultFields.set(
+    //   'createdAt',
+    //   new DateField({ name: 'createdAt', label: 'Created At', hidden: true })
+    // );
+    // this._defaultFields.set(
+    //   'updatedAt',
+    //   new DateField({ name: 'updatedAt', label: 'Updated At', hidden: true })
+    // );
+    //
+    // const archivedAt = new DateField({
+    //   name: 'archivedAt',
+    //   label: 'Archived At',
+    //   hidden: true
+    // });
+    // archivedAt.on('value', archivedAt => this.set({ archivedAt }));
+    // this._defaultFields.set('archivedAt', archivedAt);
   }
 
   _createDefaultFields() {

@@ -311,6 +311,7 @@ it('should load with preview and storeWhere', async () => {
 
   // Sanity test
   expect(editAccount.getValues({ out: true })).toEqual({
+    ...testUtils.toDefaultFieldsObject(null),
     id: '1',
     name: 'Miles Davis',
     email: 'miles@example.com'

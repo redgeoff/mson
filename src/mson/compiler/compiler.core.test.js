@@ -1,3 +1,4 @@
+import testUtils from '../test-utils';
 import { Compiler } from './compiler';
 import components from '../components';
 
@@ -87,10 +88,9 @@ it('should compile component with nested component', () => {
   });
 
   const component = new Component();
-  expect(component.mapFields(field => field.get('name'))).toEqual([
-    'id',
-    'firstName'
-  ]);
+  expect(component.mapFields(field => field.get('name'))).toEqual(
+    testUtils.defaultFields.concat(['firstName'])
+  );
   expect(component.getField('firstName').get('maxLength')).toEqual(5);
   expect(component.getClassName()).toEqual('Form');
   expect(component.getField('firstName').getClassName()).toEqual('TextField');
@@ -139,11 +139,9 @@ it('should instantiate uncompiled component', () => {
       }
     ]
   });
-  expect(person.mapFields(field => field.get('name'))).toEqual([
-    'id',
-    'firstName',
-    'lastName'
-  ]);
+  expect(person.mapFields(field => field.get('name'))).toEqual(
+    testUtils.defaultFields.concat(['firstName', 'lastName'])
+  );
   expect(person.getClassName()).toEqual('app.Person');
 });
 
@@ -172,11 +170,9 @@ it('should instantiate extended component', () => {
   const personFullName = compiler.newComponent({
     component: 'app.PersonFullName'
   });
-  expect(personFullName.mapFields(field => field.get('name'))).toEqual([
-    'id',
-    'firstName',
-    'lastName'
-  ]);
+  expect(personFullName.mapFields(field => field.get('name'))).toEqual(
+    testUtils.defaultFields.concat(['firstName', 'lastName'])
+  );
   expect(personFullName.getClassName()).toEqual('app.PersonFullName');
 });
 

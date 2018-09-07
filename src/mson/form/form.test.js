@@ -22,9 +22,11 @@ const createForm = props => {
 it('should set, get and clear', () => {
   const form = createForm();
 
+  const defaults = testUtils.toDefaultFieldsObject(null);
+
   form.clearValues();
   expect(form.getValues()).toEqual({
-    id: null,
+    ...defaults,
     firstName: null,
     middleName: null,
     lastName: null
@@ -36,6 +38,7 @@ it('should set, get and clear', () => {
     lastName: 'Charles'
   });
   expect(form.getValues()).toEqual({
+    ...defaults,
     id: 1,
     firstName: 'Ray',
     middleName: null,
@@ -47,6 +50,7 @@ it('should set, get and clear', () => {
     lastName: 'Robinson'
   });
   expect(form.getValues()).toEqual({
+    ...defaults,
     id: 1,
     firstName: 'Ray',
     middleName: 'Charles',
@@ -55,6 +59,7 @@ it('should set, get and clear', () => {
 
   form.clearValues();
   expect(form.getValues()).toEqual({
+    ...defaults,
     id: null,
     firstName: null,
     middleName: null,
@@ -124,8 +129,10 @@ it('should clone', () => {
   form.addField(
     new TextField({ name: 'suffix', label: 'Suffix', required: true })
   );
-  expect(form._fields.length()).toEqual(5);
-  expect(clonedForm._fields.length()).toEqual(4);
+  expect(form._fields.length()).toEqual(testUtils.defaultFields.length + 4);
+  expect(clonedForm._fields.length()).toEqual(
+    testUtils.defaultFields.length + 3
+  );
 
   clonedForm.clearValues();
   expect(form.getValues()).toEqual({
@@ -560,7 +567,7 @@ it('should clear values', () => {
 
   form.set({ clear: true });
   expect(form.getValues()).toEqual({
-    id: null,
+    ...testUtils.toDefaultFieldsObject(null),
     firstName: null,
     middleName: null,
     lastName: null
