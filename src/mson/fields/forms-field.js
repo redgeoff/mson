@@ -200,39 +200,37 @@ export default class FormsField extends Field {
 
   _handleStoreChangeFactory() {
     return (name, value) => {
-      if (
-        ['createItem', 'updateItem', 'deleteItem'].indexOf(name) !== -1 &&
-        !!value.value.archivedAt === this.get('showArchived')
-      ) {
-        const muteChange = false;
-        switch (name) {
-          case 'createItem':
-            this.addForm(
-              value.value.fieldValues,
-              value.value.archivedAt,
-              value.value.userId,
+      const muteChange = false;
+      const vv = value && value.value;
+      switch (name) {
+        case 'createItem':
+        case 'updateItem':
+          // Does the form exist and the archivedAt is changing?
+          if (
+            this._forms.has(vv.id) &&
+            vv.archivedAt !== this._forms.get(vv.id).get('archivedAt')
+          ) {
+            this.removeForm(vv.id, muteChange);
+          } else if (!!vv.archivedAt === this.get('showArchived')) {
+            // The archivedAt matches the current showArchived
+            this.upsertForm(
+              vv.fieldValues,
+              vv.archivedAt,
+              vv.userId,
               muteChange,
-              value.value.cursor
+              vv.cursor
               // value.prevKey
             );
-            break;
+          }
+          break;
 
-          case 'updateItem':
-            this.updateForm(
-              value.value.fieldValues,
-              value.value.archivedAt,
-              value.value.userId,
-              muteChange,
-              value.value.cursor
-              // value.prevKey
-            );
-            break;
+        case 'deleteItem':
+          this.removeFormIfExists(vv.id, muteChange);
+          break;
 
-          default:
-            // deleteItem
-            this.removeForm(value.value.id, muteChange);
-            break;
-        }
+        default:
+          // Do nothing
+          break;
       }
     };
   }
@@ -581,6 +579,14 @@ export default class FormsField extends Field {
       // Emit change so that UI is notified
       this._emitChange('change', form.getValues());
     }
+
+    return form;
+  }
+
+  removeFormIfExists(id, muteChange) {
+    if (this._forms.has(id)) {
+      return this.removeForm(id, muteChange);
+    }
   }
 
   getForm(id) {
@@ -759,6 +765,15 @@ export default class FormsField extends Field {
     return fieldForm;
   }
 
+  // TODO: refactor to use named parameters
+  upsertForm(values, archivedAt, userId, muteChange, cursor /*, beforeKey */) {
+    if (this._forms.has(values.id)) {
+      return this.updateForm(values, archivedAt, userId, false, cursor);
+    } else {
+      return this.addForm(values, archivedAt, userId, false, cursor);
+    }
+  }
+
   async _saveForm(form) {
     const id = form.getField('id');
     const store = this.get('store');
@@ -780,23 +795,13 @@ export default class FormsField extends Field {
       id.setValue(utils.uuid());
     }
 
-    if (this._forms.has(id.getValue())) {
-      fieldForm = this.updateForm(
-        form.getValues(),
-        null,
-        form.get('userId'),
-        false,
-        form.get('cursor')
-      );
-    } else {
-      fieldForm = this.addForm(
-        form.getValues(),
-        null,
-        form.get('userId'),
-        false,
-        form.get('cursor')
-      );
-    }
+    fieldForm = this.upsertForm(
+      form.getValues(),
+      null,
+      form.get('userId'),
+      false,
+      form.get('cursor')
+    );
 
     form.emitChange(
       creating ? 'didCreateRecord' : 'didUpdateRecord',
@@ -837,8 +842,9 @@ export default class FormsField extends Field {
     // // Not showing archived?
     // if (!this.get('showArchived')) {
 
-    // Remove from list
-    this.removeForm(form.getValue('id'));
+    // Remove from list. We have to use removeFormIfExists as there may be a race condition where
+    // the store has already resulted in the form being removed.
+    this.removeFormIfExists(form.getValue('id'));
 
     // }
 
@@ -855,9 +861,10 @@ export default class FormsField extends Field {
 
     form.set({ archivedAt: null });
 
-    // Remove from list as assume that we are only viewing archived items. TODO: make this
-    // configurable via a param to restore?
-    this.removeForm(form.getValue('id'));
+    // Remove from list as assume that we are only viewing archived items. We have to use
+    // removeFormIfExists as there may be a race condition where the store has already resulted in
+    // the form being removed. TODO: make this configurable via a param to restore?
+    this.removeFormIfExists(form.getValue('id'));
 
     form.emitChange('didRestoreRecord', form.getValue('id'));
 

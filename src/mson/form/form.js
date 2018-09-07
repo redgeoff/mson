@@ -83,8 +83,7 @@ export default class Form extends Component {
           },
           {
             name: 'archivedAt',
-            // TODO: DateTimeField
-            component: 'TextField'
+            component: 'DateField'
           },
           {
             name: 'userId',

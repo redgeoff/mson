@@ -16,6 +16,7 @@ import CompositeField from './fields/composite-field';
 import ConsoleLogAction from './actions/console-log-action';
 import ContactUs from './aggregate/contact-us';
 import CreateRecord from './actions/create-record';
+import DateField from './fields/date-field';
 import Email from './actions/email';
 import EmailField from './fields/email-field';
 import Emit from './actions/emit';
@@ -85,6 +86,7 @@ export default {
   ConsoleLogAction,
   ContactUs,
   CreateRecord,
+  DateField,
   Email,
   EmailField,
   Emit,
