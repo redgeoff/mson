@@ -5,7 +5,9 @@ import Form from './form';
 import utils from './utils';
 
 class TestUtils {
-  defaultFields = ['id', 'userId', 'createdAt', 'updatedAt', 'archivedAt'];
+  defaultFields = [
+    'id' /*, 'userId', 'createdAt', 'updatedAt', 'archivedAt' */
+  ];
 
   toDefaultFieldsObject(value) {
     const obj = {};
