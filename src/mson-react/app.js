@@ -227,9 +227,6 @@ class App extends React.PureComponent {
       if (this.component) {
         // Emit an unload event so that the component can unload any data, etc...
         this.component.emitUnload();
-
-        // Clear the search string--this will cascade down all the components for the previous route
-        this.component.set({ searchString: null });
       }
 
       // Note: menuItem can be null if there is no content on the landing page

@@ -144,7 +144,10 @@ export default class Form extends Component {
       reportUndefined: true,
 
       // If true, the form is reset on load
-      resetOnLoad: true
+      resetOnLoad: true,
+
+      // Only show non-archived
+      showArchived: false
     });
 
     this._listenForLoad();
@@ -186,6 +189,9 @@ export default class Form extends Component {
 
   _listenForUnload() {
     this.on('unload', () => {
+      // Revert to some defaults
+      this.set({ showArchived: false, searchString: null });
+
       // Pass unload event down to fields
       this._fields.each(field => field.emitUnload());
     });
