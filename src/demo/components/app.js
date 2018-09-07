@@ -15,9 +15,22 @@ export default {
       {
         path: '/contacts',
         label: 'Contacts',
-        content: {
-          component: 'app.Contacts'
-        }
+        items: [
+          {
+            path: '/contacts',
+            label: 'Contacts LocalStorage',
+            content: {
+              component: 'app.Contacts'
+            }
+          },
+          {
+            path: '/contacts-firebase',
+            label: 'Contacts Firebase',
+            content: {
+              component: 'app.ContactsFirebase'
+            }
+          }
+        ]
       }
     ]
   }
