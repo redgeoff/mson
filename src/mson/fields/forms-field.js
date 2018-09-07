@@ -174,7 +174,7 @@ export default class FormsField extends Field {
 
   _onUnload() {
     // Clear order, mode and showArchived so that we are ready for when we return
-    this.set({ order: null, mode: null, showArchived: null });
+    this.set({ order: null, mode: null, showArchived: false });
 
     const form = this.get('form');
     if (form) {

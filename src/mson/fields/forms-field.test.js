@@ -223,7 +223,7 @@ it('should clear props on unload', () => {
   expect(setSpy).toHaveBeenCalledWith({
     order: null,
     mode: null,
-    showArchived: null
+    showArchived: false
   });
 });
 
