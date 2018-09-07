@@ -256,10 +256,14 @@ export default class Form extends Component {
       'updatedAt',
       new DateField({ name: 'updatedAt', label: 'Updated At', hidden: true })
     );
-    this._defaultFields.set(
-      'archivedAt',
-      new DateField({ name: 'archivedAt', label: 'Archived At', hidden: true })
-    );
+
+    const archivedAt = new DateField({
+      name: 'archivedAt',
+      label: 'Archived At',
+      hidden: true
+    });
+    archivedAt.on('value', archivedAt => this.set({ archivedAt }));
+    this._defaultFields.set('archivedAt', archivedAt);
   }
 
   _createDefaultFields() {
