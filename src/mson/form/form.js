@@ -6,7 +6,7 @@ import _ from '../lodash';
 import Validator from '../component/validator';
 import Mapa from '../mapa';
 import IdField from '../fields/id-field';
-import DateField from '../fields/date-field';
+// import DateField from '../fields/date-field';
 import ButtonField from '../fields/button-field';
 import ComponentFillerProps from '../component/component-filler-props';
 
