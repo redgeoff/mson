@@ -1,3 +1,4 @@
+import testUtils from '../test-utils';
 import WrappedComponent from './wrapped-component';
 import TextField from '../fields/text-field';
 import Form from '../form';
@@ -43,12 +44,9 @@ it('should support nested wrapping', async () => {
     ]
   });
 
-  expect(last.mapFields(field => field.get('name'))).toEqual([
-    'id',
-    'firstName',
-    'middleName',
-    'lastName'
-  ]);
+  expect(last.mapFields(field => field.get('name'))).toEqual(
+    testUtils.defaultFields.concat(['firstName', 'middleName', 'lastName'])
+  );
 
   // The wrapping className is preserved so that we can track the name of the class doing the
   // wrapping

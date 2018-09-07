@@ -1,5 +1,6 @@
 // NOTE: the tests in this file must maintain parity with component.dynamic.test.js
 
+import testUtils from '../test-utils';
 import utils from '../utils';
 import compiler from './compiler';
 
@@ -102,11 +103,9 @@ it('should support dynamic components', () => {
   const component = compiler.newComponent({
     component: dynamicFormExtendedName
   });
-  expect(component.mapFields(field => field.get('name'))).toEqual([
-    'id',
-    'firstName',
-    'lastName'
-  ]);
+  expect(component.mapFields(field => field.get('name'))).toEqual(
+    testUtils.defaultFields.concat(['firstName', 'lastName'])
+  );
 });
 
 it('should support dynamic composition', () => {
@@ -122,12 +121,9 @@ it('should support dynamic composition', () => {
       ]
     }
   });
-  expect(component.mapFields(field => field.get('name'))).toEqual([
-    'id',
-    'firstName',
-    'middleName',
-    'lastName'
-  ]);
+  expect(component.mapFields(field => field.get('name'))).toEqual(
+    testUtils.defaultFields.concat(['firstName', 'middleName', 'lastName'])
+  );
 });
 
 it('should support inheritance of dynamic composition', () => {
@@ -143,11 +139,12 @@ it('should support inheritance of dynamic composition', () => {
       ]
     }
   });
-  expect(component.mapFields(field => field.get('name'))).toEqual([
-    'id',
-    'firstName',
-    'middleName',
-    'lastName',
-    'suffix'
-  ]);
+  expect(component.mapFields(field => field.get('name'))).toEqual(
+    testUtils.defaultFields.concat([
+      'firstName',
+      'middleName',
+      'lastName',
+      'suffix'
+    ])
+  );
 });

@@ -1,5 +1,6 @@
 // TODO: should we care strings pass for say IntegerField, FloatField, etc...?
 
+import testUtils from '../test-utils';
 import Form from './form';
 import TextField from '../fields/text-field';
 import FormsField from '../fields/forms-field';
@@ -94,21 +95,24 @@ it('should set and get nested values', () => {
     phoneNumbers: ['(206) 111-1111', '(206) 222-2222']
   });
 
+  const defaults = testUtils.toDefaultFieldsObject(undefined);
+  const nulls = testUtils.toDefaultFieldsObject(null);
+
   expect(form.getValues()).toEqual({
-    id: undefined,
+    ...defaults,
     fullName: {
-      id: undefined,
+      ...defaults,
       firstName: 'Ella',
       lastName: 'Fitzgerald'
     },
     title: 'Founder',
     emails: [
       {
-        id: null,
+        ...nulls,
         email: 'ella1@example.com'
       },
       {
-        id: null,
+        ...nulls,
         email: 'ella2@example.com'
       }
     ],
@@ -128,20 +132,20 @@ it('should set and get nested values', () => {
     .setValue('(206) 333-3333');
 
   expect(form.getValues()).toEqual({
-    id: undefined,
+    ...defaults,
     fullName: {
-      id: undefined,
+      ...defaults,
       firstName: 'Ella',
       lastName: 'Fitz'
     },
     title: 'Founder',
     emails: [
       {
-        id: null,
+        ...nulls,
         email: 'ella3@example.com'
       },
       {
-        id: null,
+        ...nulls,
         email: 'ella2@example.com'
       }
     ],

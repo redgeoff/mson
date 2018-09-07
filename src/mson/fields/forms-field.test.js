@@ -76,12 +76,16 @@ it('should get forms', async () => {
     forms.push(form);
   }
 
+  const defaults = testUtils.toDefaultFieldsObject(null);
+
   expect(forms[0].getValues()).toEqual({
+    ...defaults,
     id: 1,
     firstName: 'Ella',
     lastName: 'Fitzgerald'
   });
   expect(forms[1].getValues()).toEqual({
+    ...defaults,
     id: 2,
     firstName: 'Frank',
     lastName: 'Sinatra'
@@ -105,7 +109,19 @@ it('should set and get value', async () => {
   ];
 
   field.setValue(value);
-  expect(field.getValue()).toEqual(value);
+
+  const defaults = testUtils.toDefaultFieldsObject(null);
+
+  expect(field.getValue()).toEqual([
+    {
+      ...defaults,
+      ...value[0]
+    },
+    {
+      ...defaults,
+      ...value[1]
+    }
+  ]);
 });
 
 it('should clear errors for nested forms', () => {
