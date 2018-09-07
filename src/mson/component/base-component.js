@@ -1,7 +1,9 @@
 import events from 'events';
-import _ from '../lodash';
 import registrar from '../compiler/registrar';
 import utils from '../utils';
+import each from 'lodash/each';
+import difference from 'lodash/difference';
+import cloneDeepWith from 'lodash/cloneDeepWith';
 
 let nextKey = 0;
 const getNextKey = () => {
@@ -218,7 +220,7 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   _setDefaults(props, values) {
-    _.each(values, (value, name) => {
+    each(values, (value, name) => {
       if (props[name] === undefined) {
         this._set(name, value);
       }
@@ -454,14 +456,11 @@ export default class BaseComponent extends events.EventEmitter {
 
   get(names) {
     if (!names) {
-      // Get all props
-      let values = {};
-      _.each(this, (value, name) => {
-        const n = name.replace('_', '');
-        values[n] = this.getOne(n);
-      });
-      return values;
-    } else if (Array.isArray(names)) {
+      // Get a list of all the property names
+      names = this.get('props');
+    }
+
+    if (Array.isArray(names)) {
       // Get multiple props
       let values = {};
       names.forEach(name => {
@@ -488,8 +487,8 @@ export default class BaseComponent extends events.EventEmitter {
     return this._className;
   }
 
-  clone() {
-    const clonedComponent = _.cloneDeepWith(this, (item, index, obj, stack) => {
+  _cloneDeep(obj) {
+    return cloneDeepWith(obj, (item, index, obj, stack) => {
       if (index === '_parent' || index === 'parent') {
         // We don't clone any parent data as this data is circular. This check greatly speeds up
         // cloning as otherwise cloneDeepWith has to auto detect circular references, which can be
@@ -498,6 +497,10 @@ export default class BaseComponent extends events.EventEmitter {
         return item;
       }
     });
+  }
+
+  _cloneSlow() {
+    const clonedComponent = this._cloneDeep(this);
 
     clonedComponent._setDebugId();
 
@@ -512,6 +515,44 @@ export default class BaseComponent extends events.EventEmitter {
     clonedComponent._emitCreateIfNotMuted();
 
     return clonedComponent;
+  }
+
+  _cloneFast({ excludeProps }) {
+    // _cloneFast is almost 10 times faster than _cloneSlow. It is far faster to instantiate a new
+    // component, deep clone some props and then set the props on the new component.
+    const Component = this._registrar.compiler.getCompiledComponent(
+      this.getClassName()
+    );
+    const clonedComponent = new Component();
+
+    let names = this.get('props');
+    if (excludeProps) {
+      names = difference(names, excludeProps);
+    }
+
+    // Note: sing JSON stringify+parse may be slightly faster than cloneDeep, but cloneDeep can
+    // handle circular references.
+    clonedComponent.set(this._cloneDeep(this.get(names)));
+
+    // The names don't include the parent. The parent should not be deep cloned.
+    clonedComponent.set(this.get(['parent']));
+
+    return clonedComponent;
+  }
+
+  _clone({ excludeProps } = {}) {
+    if (
+      this._registrar.compiler &&
+      this._registrar.compiler.exists(this.getClassName())
+    ) {
+      return this._cloneFast({ excludeProps });
+    } else {
+      return this._cloneSlow();
+    }
+  }
+
+  clone() {
+    return this._clone();
   }
 
   // This should be called whenever the route changes and the component is loaded

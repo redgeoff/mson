@@ -317,3 +317,47 @@ it('should emit create even when cloned', async () => {
   const clonedComponent = component.clone();
   await testUtils.once(clonedComponent, 'create');
 });
+
+it('should clone', () => {
+  const component = new BaseComponent({
+    name: 'a'
+  });
+
+  const clonedComponent = component.clone();
+
+  component.set({ name: 'c' });
+
+  expect(component.get('name')).toEqual('c');
+  expect(clonedComponent.get('name')).toEqual('a');
+
+  clonedComponent.set({ name: 'b' });
+
+  expect(component.get('name')).toEqual('c');
+  expect(clonedComponent.get('name')).toEqual('b');
+});
+
+it('cloneSlow should shallow clone parent', () => {
+  const parent = new BaseComponent();
+  const component = new BaseComponent({ parent });
+  const clonedComponent = component._cloneSlow();
+  expect(clonedComponent.get('parent')).toEqual(parent);
+});
+
+const CREATE_COMPONENTS_TIMEOUT_MS = 300;
+it('should create many components quickly', () => {
+  return testUtils.expectToFinishBefore(async () => {
+    for (let i = 0; i < 1000; i++) {
+      new BaseComponent();
+    }
+  }, CREATE_COMPONENTS_TIMEOUT_MS);
+});
+
+const CLONE_COMPONENTS_TIMEOUT_MS = 300;
+it('should clone many components quickly', () => {
+  return testUtils.expectToFinishBefore(async () => {
+    const component = new BaseComponent();
+    for (let i = 0; i < 500; i++) {
+      component.clone();
+    }
+  }, CLONE_COMPONENTS_TIMEOUT_MS);
+});

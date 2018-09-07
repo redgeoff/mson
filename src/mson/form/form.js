@@ -27,6 +27,7 @@ export default class Form extends Component {
             }
           },
           {
+            // TODO: can't this be removed?
             name: 'form',
             component: 'Field'
           },
@@ -643,10 +644,7 @@ export default class Form extends Component {
   }
 
   clone() {
-    const clonedForm = super.clone();
-
-    // Remove the fields as we need to re-add them below
-    clonedForm._fields.clear();
+    const clonedForm = this._clone({ excludeProps: ['fields'] });
 
     // Clone the fields and recreate any listeners
     clonedForm.cloneFields(this);

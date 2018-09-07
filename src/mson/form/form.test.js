@@ -694,3 +694,22 @@ it('should submit', () => {
   form.submit();
   expect(emitClickOnButtonSpy).toHaveBeenCalledWith(form.getField('submit'));
 });
+
+const CREATE_FORMS_TIMEOUT_MS = 500;
+it('should create many forms quickly', () => {
+  return testUtils.expectToFinishBefore(async () => {
+    for (let i = 0; i < 100; i++) {
+      createForm();
+    }
+  }, CREATE_FORMS_TIMEOUT_MS);
+});
+
+const CLONE_FORMS_TIMEOUT_MS = 600;
+it('should clone many forms quickly', () => {
+  return testUtils.expectToFinishBefore(async () => {
+    const form = createForm();
+    for (let i = 0; i < 100; i++) {
+      form.clone();
+    }
+  }, CLONE_FORMS_TIMEOUT_MS);
+});
