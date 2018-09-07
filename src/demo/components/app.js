@@ -20,7 +20,7 @@ export default {
             path: '/contacts',
             label: 'Contacts LocalStorage',
             content: {
-              component: 'app.Contacts'
+              component: 'app.ContactsLocalStorage'
             }
           },
           {

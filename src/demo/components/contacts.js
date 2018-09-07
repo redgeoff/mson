@@ -34,9 +34,7 @@ export default {
           }
         ]
       },
-      store: {
-        component: 'LocalStorageStore'
-      }
+      store: '{{store}}'
     }
   ]
 };
