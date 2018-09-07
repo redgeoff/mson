@@ -2,6 +2,8 @@
 //
 // Usage: node build-analyzer
 //
+//  Then open build/report.html in a browser
+//
 // Source: https://github.com/facebook/create-react-app/issues/3518#issue-277616195
 
 process.env.NODE_ENV = "production"
