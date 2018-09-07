@@ -1,4 +1,5 @@
 import compiler from '../compiler';
+import DateField from './date-field';
 import Field from './field';
 import FormField from './form-field';
 import FormsField from './forms-field';
@@ -23,6 +24,7 @@ const PersonNameField = compile('PersonNameField');
 const PasswordField = compile('PasswordField');
 
 export {
+  DateField,
   EmailField,
   Field,
   FormField,
