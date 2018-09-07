@@ -1,7 +1,7 @@
 import Store from './store';
-import utils from '../utils';
 import Mapa from '../mapa';
 import cloneDeepWith from 'lodash/cloneDeepWith';
+import cloneDeep from 'lodash/cloneDeep';
 import orderBy from 'lodash/orderBy';
 import sift from 'sift';
 
@@ -12,19 +12,16 @@ export default class MemoryStore extends Store {
     super._create(props);
 
     this._items = new Mapa();
+
+    this._items.on('$change', (name, value) => {
+      this.emitChange(name + 'Item', value);
+    });
   }
 
   async _createItem(props, fieldValues) {
-    const id = utils.uuid();
-    fieldValues.id = id;
-    const item = {
-      id,
-      archivedAt: null, // Needed by the UI as a default
-      // userId, // TODO
-      fieldValues
-    };
+    const item = this._buildDoc({ fieldValues });
 
-    this._items.set(fieldValues.id, item);
+    this._items.set(item.id, item);
 
     return item;
   }
@@ -92,10 +89,10 @@ export default class MemoryStore extends Store {
   }
 
   async _updateItem(props, fieldValues) {
-    const item = this._items.get(props.id);
+    // Clone the data so that we don't modify the original
+    let item = cloneDeep(this._items.get(props.id));
 
-    // Merge so that we support partial updates
-    item.fieldValues = Object.assign(item.fieldValues, fieldValues);
+    item = this._setDoc(item, { fieldValues });
 
     this._items.set(props.id, item);
 
@@ -103,9 +100,10 @@ export default class MemoryStore extends Store {
   }
 
   async _archiveItem(props) {
-    const item = this._items.get(props.id);
+    // Clone the data so that we don't modify the original
+    let item = cloneDeep(this._items.get(props.id));
 
-    item.archivedAt = new Date();
+    item = this._setDoc(item, { archivedAt: new Date() });
 
     this._items.set(props.id, item);
 
@@ -113,9 +111,10 @@ export default class MemoryStore extends Store {
   }
 
   async _restoreItem(props) {
-    const item = this._items.get(props.id);
+    // Clone the data so that we don't modify the original
+    let item = cloneDeep(this._items.get(props.id));
 
-    item.archivedAt = null;
+    item = this._setDoc(item, { archivedAt: null });
 
     this._items.set(props.id, item);
 

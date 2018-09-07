@@ -198,6 +198,61 @@ export default class FormsField extends Field {
     this._infiniteLoader.setOrder(this.get('order'));
   }
 
+  _handleStoreChangeFactory() {
+    return (name, value) => {
+      if (
+        ['createItem', 'updateItem', 'deleteItem'].indexOf(name) !== -1 &&
+        !!value.value.archivedAt === this.get('showArchived')
+      ) {
+        const muteChange = false;
+        switch (name) {
+          case 'createItem':
+            this.addForm(
+              value.value.fieldValues,
+              value.value.archivedAt,
+              value.value.userId,
+              muteChange,
+              value.value.cursor
+              // value.prevKey
+            );
+            break;
+
+          case 'updateItem':
+            this.updateForm(
+              value.value.fieldValues,
+              value.value.archivedAt,
+              value.value.userId,
+              muteChange,
+              value.value.cursor
+              // value.prevKey
+            );
+            break;
+
+          default:
+            // deleteItem
+            this.removeForm(value.value.id, muteChange);
+            break;
+        }
+      }
+    };
+  }
+
+  _setStore(newStore) {
+    const store = this.get('store');
+    if (newStore !== store) {
+      if (store) {
+        store.removeAllListeners();
+      }
+
+      // newStore can be falsy if the store is being cleared
+      if (newStore) {
+        newStore.on('$change', this._handleStoreChangeFactory());
+      }
+
+      this._set('store', newStore);
+    }
+  }
+
   async _clearAndGetAll() {
     // Clear any existing forms. TODO: it would be more efficient to just record ids of all
     // existing items and then use getAll() result to determine if item needs to be inserted or
@@ -645,7 +700,11 @@ export default class FormsField extends Field {
 
   set(props) {
     super.set(
-      Object.assign({}, props, { currentForm: undefined, mode: undefined })
+      Object.assign({}, props, {
+        currentForm: undefined,
+        mode: undefined,
+        store: undefined
+      })
     );
 
     // Set properties on all forms
@@ -663,6 +722,10 @@ export default class FormsField extends Field {
 
     if (props.mode !== undefined && props.mode !== this._mode) {
       this._setMode(props.mode);
+    }
+
+    if (props.store !== undefined) {
+      this._setStore(props.store);
     }
   }
 
@@ -682,6 +745,18 @@ export default class FormsField extends Field {
 
   *getForms() {
     yield* this._forms.values();
+  }
+
+  // TODO: refactor to use named parameters
+  updateForm(values, archivedAt, userId, muteChange, cursor /*, beforeKey */) {
+    const fieldForm = this._forms.get(values.id);
+    fieldForm.setValues(values);
+    fieldForm.set({
+      archivedAt,
+      userId,
+      cursor
+    });
+    return fieldForm;
   }
 
   async _saveForm(form) {
@@ -706,13 +781,13 @@ export default class FormsField extends Field {
     }
 
     if (this._forms.has(id.getValue())) {
-      fieldForm = this._forms.get(id.getValue());
-      fieldForm.setValues(form.getValues());
-      fieldForm.set({
-        archivedAt: form.get('archivedAt'),
-        userId: form.get('userId'),
-        cursor: form.get('cursor')
-      });
+      fieldForm = this.updateForm(
+        form.getValues(),
+        null,
+        form.get('userId'),
+        false,
+        form.get('cursor')
+      );
     } else {
       fieldForm = this.addForm(
         form.getValues(),

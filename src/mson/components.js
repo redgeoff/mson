@@ -20,6 +20,7 @@ import Email from './actions/email';
 import EmailField from './fields/email-field';
 import Emit from './actions/emit';
 import Field from './fields/field';
+import FirebaseStore from './stores/firebase-store';
 import Form from './form';
 import FormAccess from './form/form-access';
 import FormField from './fields/form-field';
@@ -88,6 +89,7 @@ export default {
   EmailField,
   Emit,
   Field,
+  FirebaseStore,
   Form,
   AccessForm: FormAccess,
   FormField,

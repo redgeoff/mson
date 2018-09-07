@@ -1,6 +1,7 @@
 import MemoryStore from './memory-store';
 import Form from '../form';
 import { TextField } from '../fields';
+import testUtils from '../test-utils';
 
 export const createForm = props => {
   return new Form({
@@ -27,6 +28,8 @@ export const shouldCRUD = async (Store, props) => {
   const created = await store.createItem({ form });
   expect(created.id).not.toBeFalsy();
   expect(created.archivedAt).toBeNull();
+  expect(created.createdAt).not.toBeFalsy();
+  expect(created.updatedAt).not.toBeFalsy();
   expect(created.fieldValues).toEqual(
     Object.assign({ id: created.id }, fieldValues)
   );
@@ -38,28 +41,48 @@ export const shouldCRUD = async (Store, props) => {
     firstName: 'F. Scott'
   });
 
+  // Make sure timestamps aren't the same
+  await testUtils.timeout(1);
+
   const updated = await store.updateItem({ id: created.id, form });
   expect(updated).toEqual({
     id: created.id,
     archivedAt: null,
+    createdAt: created.createdAt,
+    updatedAt: updated.updatedAt,
+    userId: null,
     fieldValues: {
       id: created.id,
       firstName: 'F. Scott',
       lastName: 'Fitzgerald'
     }
   });
+  expect(updated.updatedAt).not.toEqual(created.updatedAt);
 
   expect(await store.getItem({ id: created.id })).toEqual(updated);
 
+  // Make sure timestamps aren't the same
+  await testUtils.timeout(1);
+
   const archived = await store.archiveItem({ id: created.id });
   expect(archived).toEqual(
-    Object.assign({}, updated, { archivedAt: archived.archivedAt })
+    Object.assign({}, updated, {
+      archivedAt: archived.archivedAt,
+      updatedAt: archived.updatedAt
+    })
   );
   expect(archived.archivedAt).not.toBeFalsy();
+  expect(archived.updatedAt).not.toEqual(updated.updatedAt);
+
+  // Make sure timestamps aren't the same
+  await testUtils.timeout(1);
 
   const restored = await store.restoreItem({ id: created.id });
-  expect(restored).toEqual(updated);
-  expect(archived.archivedAt).toBeNull();
+  expect(restored).toEqual(
+    Object.assign({}, updated, { updatedAt: restored.updatedAt })
+  );
+  expect(restored.archivedAt).toBeNull();
+  expect(restored.updatedAt).not.toEqual(archived.updatedAt);
 };
 
 it('should create, update, archive & restore', async () => {
@@ -84,8 +107,8 @@ export const shouldGetAll = async (Store, props) => {
     firstName: 'Hermione',
     lastName: 'Granger'
   };
-  const hermione = await createItem(store, hermioneValues);
-  await store.archiveItem({ id: hermione.id });
+  let hermione = await createItem(store, hermioneValues);
+  hermione = await store.archiveItem({ id: hermione.id });
 
   const ronValues = {
     firstName: 'Ron',

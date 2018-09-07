@@ -12,8 +12,11 @@
 // - Open source Mapa as its own project? Mention at
 //   https://stackoverflow.com/a/5773972/2831606
 
-export default class Mapa {
+import events from 'events';
+
+export default class Mapa extends events.EventEmitter {
   constructor() {
+    super();
     this.clear();
   }
 
@@ -71,26 +74,38 @@ export default class Mapa {
 
     // Increment our length counter
     this._length++;
+
+    return item;
+  }
+
+  _update(key, value, beforeKey) {
+    const item = this._items[key];
+
+    // Is the item moving?
+    if (
+      beforeKey !== undefined &&
+      item.nextKey !== beforeKey &&
+      beforeKey !== key
+    ) {
+      this._delete(key);
+      this.set(key, value, beforeKey);
+    } else {
+      // Update
+      item.value = value;
+    }
+
+    return item;
   }
 
   set(key, value, beforeKey) {
     if (key === null || key === undefined) {
       throw new Error('key cannot be null or undefined');
     } else if (this.has(key)) {
-      // Is the item moving?
-      if (
-        beforeKey !== undefined &&
-        this._items[key].nextKey !== beforeKey &&
-        beforeKey !== key
-      ) {
-        this.delete(key);
-        this.set(key, value, beforeKey);
-      } else {
-        // Update
-        this._items[key].value = value;
-      }
+      const item = this._update(key, value, beforeKey);
+      this._emitChange('update', item);
     } else {
-      this._insert(key, value, beforeKey);
+      const item = this._insert(key, value, beforeKey);
+      this._emitChange('create', item);
     }
   }
 
@@ -178,7 +193,7 @@ export default class Mapa {
     return values;
   }
 
-  delete(key) {
+  _delete(key) {
     this._throwIfMissing(key);
 
     const item = this._items[key];
@@ -223,6 +238,19 @@ export default class Mapa {
 
     // Delete the item
     delete this._items[key];
+
+    return item;
+  }
+
+  _emitChange(name, value) {
+    this.emit(name, value);
+    this.emit('$change', name, value);
+  }
+
+  delete(key) {
+    const item = this._delete(key);
+    this._emitChange('delete', item);
+    return item;
   }
 
   length() {

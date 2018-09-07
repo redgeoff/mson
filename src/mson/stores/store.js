@@ -1,5 +1,6 @@
 import Component from '../component';
 import access from '../access';
+import utils from '../utils';
 
 export default class Store extends Component {
   _className = 'Store';
@@ -9,6 +10,10 @@ export default class Store extends Component {
 
     // For mocking
     this._access = access;
+
+    if (!props || !props.muteDidLoad) {
+      this._emitDidLoad();
+    }
   }
 
   async createItem(props) {
@@ -39,5 +44,37 @@ export default class Store extends Component {
 
   async restoreItem(props) {
     return this._restoreItem(props);
+  }
+
+  _emitError(err) {
+    this.emitChange('err', err);
+  }
+
+  _buildDoc({ fieldValues, userId }) {
+    const id = utils.uuid();
+    const createdAt = new Date();
+    return {
+      id,
+      archivedAt: null, // Needed by the UI as a default
+      createdAt,
+      updatedAt: createdAt,
+      userId: userId ? userId : null,
+      fieldValues: Object.assign({}, fieldValues, { id })
+    };
+  }
+
+  _setDoc(doc, { fieldValues, archivedAt }) {
+    if (fieldValues !== undefined) {
+      // Merge so that we support partial updates
+      doc.fieldValues = Object.assign(doc.fieldValues, fieldValues);
+    }
+
+    if (archivedAt !== undefined) {
+      doc.archivedAt = archivedAt;
+    }
+
+    doc.updatedAt = new Date();
+
+    return doc;
   }
 }

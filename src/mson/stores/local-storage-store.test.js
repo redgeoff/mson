@@ -28,7 +28,9 @@ it('should loads items when store exists', async () => {
     storeName: 'local-storage-store-exists'
   });
   const item = await store2.getItem({ id: ella.id });
-  expect(item).toEqual(ella);
+  // Use JSON.parse and JSON.stringify as the store converts dates to strings in this manner
+  const ellaConverted = JSON.parse(JSON.stringify(ella));
+  expect(item).toEqual(ellaConverted);
 });
 
 it('should get local storage', () => {

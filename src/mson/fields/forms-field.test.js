@@ -342,7 +342,9 @@ it('should save', async () => {
       id: 'myId',
       userId: 'myUserId'
     }),
-    updateItem: async () => {}
+    updateItem: async () => {},
+    on: () => {},
+    removeAllListeners: () => {}
   };
 
   field.set({ store });
@@ -394,7 +396,9 @@ it('should archive', async () => {
     updateItem: async () => {},
     archiveItem: async () => ({
       archivedAt
-    })
+    }),
+    on: () => {},
+    removeAllListeners: () => {}
   };
 
   field._globals = {
@@ -444,7 +448,9 @@ it('should restore', async () => {
 
   const store = {
     updateItem: async () => {},
-    restoreItem: async () => {}
+    restoreItem: async () => {},
+    on: () => {},
+    removeAllListeners: () => {}
   };
 
   field._globals = {

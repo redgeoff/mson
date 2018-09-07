@@ -164,6 +164,7 @@ export const createMockedStore = () => {
     createItem: asyncNoop,
     updateItem: asyncNoop,
     archiveItem: asyncNoop,
-    restoreItem: asyncNoop
+    restoreItem: asyncNoop,
+    on: noop
   };
 };
