@@ -600,8 +600,11 @@ const employees = {
       name: 'employees',
       label: 'Employees',
       component: 'UserList',
-      baseForm: {
-        component: 'User'
+      baseFormFactory: {
+        component: 'Factory',
+        product: {
+          component: 'User'
+        }
       },
       storeName: 'User'
     }

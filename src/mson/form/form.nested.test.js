@@ -6,8 +6,9 @@ import TextField from '../fields/text-field';
 import FormsField from '../fields/forms-field';
 import FormField from '../fields/form-field';
 import ListField from '../fields/list-field';
+import Factory from '../component/factory';
 
-const createForm = () => {
+const createForm = formFactoryProps => {
   const nameForm = new Form({
     fields: [
       new TextField({
@@ -24,14 +25,19 @@ const createForm = () => {
     ]
   });
 
-  const emailForm = new Form({
-    fields: [
-      new TextField({
-        name: 'email',
-        label: 'Email',
-        required: true
-      })
-    ]
+  const formFactory = new Factory({
+    product: () => {
+      return new Form({
+        fields: [
+          new TextField({
+            name: 'email',
+            label: 'Email',
+            required: true
+          })
+        ],
+        ...formFactoryProps
+      });
+    }
   });
 
   const form = new Form({
@@ -52,7 +58,7 @@ const createForm = () => {
       new FormsField({
         name: 'emails',
         label: 'Emails',
-        form: emailForm,
+        formFactory,
         required: true,
         maxSize: 2
       }),
@@ -75,7 +81,7 @@ const createForm = () => {
   return form;
 };
 
-it('should set and get nested values', () => {
+it('should set and get nested values', async () => {
   const form = createForm();
 
   form.setValues({
@@ -96,7 +102,6 @@ it('should set and get nested values', () => {
   });
 
   const defaults = testUtils.toDefaultFieldsObject(undefined);
-  const nulls = testUtils.toDefaultFieldsObject(null);
 
   expect(form.getValues()).toEqual({
     ...defaults,
@@ -108,11 +113,11 @@ it('should set and get nested values', () => {
     title: 'Founder',
     emails: [
       {
-        ...nulls,
+        ...defaults,
         email: 'ella1@example.com'
       },
       {
-        ...nulls,
+        ...defaults,
         email: 'ella2@example.com'
       }
     ],
@@ -141,11 +146,11 @@ it('should set and get nested values', () => {
     title: 'Founder',
     emails: [
       {
-        ...nulls,
+        ...defaults,
         email: 'ella3@example.com'
       },
       {
-        ...nulls,
+        ...defaults,
         email: 'ella2@example.com'
       }
     ],
@@ -153,7 +158,7 @@ it('should set and get nested values', () => {
   });
 });
 
-it('should validate nested values', () => {
+it('should validate nested values', async () => {
   const form = createForm();
 
   // No errors
@@ -175,6 +180,7 @@ it('should validate nested values', () => {
     ],
     phoneNumbers: ['(206) 111-1111', '(206) 222-2222']
   });
+
   form.validate();
   expect(form.hasErr()).toBe(false);
 
@@ -304,8 +310,24 @@ it('should require nested values', () => {
   expect(form.hasErr()).toBe(false);
 });
 
-it('should validate nested form validators', () => {
-  const form = createForm();
+it('should validate nested form validators', async () => {
+  const form = createForm({
+    validators: [
+      {
+        where: {
+          fields: {
+            email: {
+              value: 'scott@example.com'
+            }
+          }
+        },
+        error: {
+          field: 'email',
+          error: 'cannot be {{fields.email.value}}'
+        }
+      }
+    ]
+  });
 
   form
     .getField('fullName')
@@ -328,27 +350,6 @@ it('should validate nested form validators', () => {
       ]
     });
 
-  form
-    .getField('emails')
-    .get('form')
-    .set({
-      validators: [
-        {
-          where: {
-            fields: {
-              email: {
-                value: 'scott@example.com'
-              }
-            }
-          },
-          error: {
-            field: 'email',
-            error: 'cannot be {{fields.email.value}}'
-          }
-        }
-      ]
-    });
-
   // No errors
   form.setValues({
     fullName: {
@@ -364,6 +365,7 @@ it('should validate nested form validators', () => {
     ],
     phoneNumbers: ['(206) 111-1111']
   });
+
   form.validate();
   expect(form.hasErr()).toBe(false);
 
@@ -382,6 +384,7 @@ it('should validate nested form validators', () => {
     ],
     phoneNumbers: ['(206) 111-1111']
   });
+
   form.validate();
   expect(form.hasErr()).toBe(true);
 
@@ -451,7 +454,7 @@ it('should report bad types', () => {
   });
 });
 
-it('should report extra fields', () => {
+it('should report extra fields', async () => {
   const form = createForm();
 
   form.setValues({

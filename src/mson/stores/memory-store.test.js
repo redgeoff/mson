@@ -42,7 +42,7 @@ export const shouldCRUD = async (Store, props) => {
   });
 
   // Make sure timestamps aren't the same
-  await testUtils.timeout(1);
+  await testUtils.sleepToEnsureDifferentTimestamps();
 
   const updated = await store.updateItem({ id: created.id, form });
   expect(updated).toEqual({
@@ -62,7 +62,7 @@ export const shouldCRUD = async (Store, props) => {
   expect(await store.getItem({ id: created.id })).toEqual(updated);
 
   // Make sure timestamps aren't the same
-  await testUtils.timeout(1);
+  await testUtils.sleepToEnsureDifferentTimestamps();
 
   const archived = await store.archiveItem({ id: created.id });
   expect(archived).toEqual(
@@ -75,7 +75,7 @@ export const shouldCRUD = async (Store, props) => {
   expect(archived.updatedAt).not.toEqual(updated.updatedAt);
 
   // Make sure timestamps aren't the same
-  await testUtils.timeout(1);
+  await testUtils.sleepToEnsureDifferentTimestamps();
 
   const restored = await store.restoreItem({ id: created.id });
   expect(restored).toEqual(

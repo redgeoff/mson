@@ -57,15 +57,18 @@ it('should validate schema', () => {
               name: 'people',
               label: 'People',
               component: 'FormsField',
-              form: {
-                component: 'Form',
-                fields: [
-                  {
-                    name: 'firstName',
-                    component: 'TextField',
-                    label: 'First Name'
-                  }
-                ]
+              formFactory: {
+                component: 'Factory',
+                product: {
+                  component: 'Form',
+                  fields: [
+                    {
+                      name: 'firstName',
+                      component: 'TextField',
+                      label: 'First Name'
+                    }
+                  ]
+                }
               }
             }
           ]

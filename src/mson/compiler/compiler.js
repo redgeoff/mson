@@ -7,9 +7,10 @@
 //    storing more in memory.
 
 import components from '../components';
-import _ from '../lodash';
 import PropFiller from './prop-filler';
 import registrar from './registrar';
+import each from 'lodash/each';
+import cloneDeep from 'lodash/cloneDeep';
 
 export class Compiler {
   constructor(props) {
@@ -41,6 +42,36 @@ export class Compiler {
     }
   }
 
+  _compileAnyFactoryProduct(defaultProps) {
+    // Note: we have to do this here, and not in Factory as we need to defer instantiation of
+    // factory props until the factory produces. Otherwise, multiple calls to produce() can yield
+    // components with shared memory.
+    if (defaultProps.component === 'Factory') {
+      const product = defaultProps.product;
+      const properties = defaultProps.properties;
+      delete defaultProps.properties;
+      defaultProps.product = () => {
+        let component = null;
+        if (this.isCompiled(product)) {
+          // Component is a factory so call produce so that we can wrap the result
+          component = product.produce();
+        } else {
+          // Note: we don't have to clone the product definition as this is done when calling
+          // newComponent
+          component = this.newComponent(product);
+        }
+
+        if (properties) {
+          // We need to clone the properties so that each product has its own instance
+          const clonedProperties = cloneDeep(properties);
+          this._instantiate(clonedProperties);
+          component.set(clonedProperties);
+        }
+        return component;
+      };
+    }
+  }
+
   _getWrappedComponentClass(name, defaultProps, parentProps) {
     const Component = this.getCompiledComponent(name, defaultProps);
 
@@ -64,7 +95,9 @@ export class Compiler {
         // the data below and we want each instance of MyComponent to have its own copy
         defaultProps = propFiller.fillAll(defaultProps);
 
-        // Remove the component property as it is no longer needed
+        self._compileAnyFactoryProduct(defaultProps);
+
+        // Remove these properties as they are no longer needed
         delete defaultProps.component;
 
         // Instantiate defaultProps. We do this in _create() so that we have a fresh instance of all
@@ -157,8 +190,15 @@ export class Compiler {
       return props;
     }
 
+    if (props.component === 'Factory') {
+      // The definition is for a factory, wrap up the component and defer the instantiation of the
+      // child props
+      const Component = this.compile(props);
+      return new Component();
+    }
+
     // Descend all the way down the tree and then start instantiating on the way up
-    _.each(props, (prop, name) => {
+    each(props, (prop, name) => {
       if (typeof prop === 'object' && prop !== null) {
         props[name] = this._instantiate(prop);
       }

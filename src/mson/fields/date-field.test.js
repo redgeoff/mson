@@ -10,7 +10,7 @@ it('should convert dates to strings', () => {
 
 it('should set value to now', async () => {
   const date1 = new DateField({ now: true });
-  await testUtils.timeout(1); // Sleep to ensure timestamps different
+  await testUtils.sleepToEnsureDifferentTimestamps();
   const date2 = new DateField({ now: true });
   expect(date2.getValue() > date1.getValue()).toEqual(true);
 });

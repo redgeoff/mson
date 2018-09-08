@@ -35,43 +35,46 @@ export default class Menu extends Component {
           {
             name: 'items',
             component: 'FormsField',
-            form: {
-              component: 'Form',
-              fields: [
-                {
-                  name: 'path',
-                  component: 'TextField',
-                  label: 'Path',
-                  required: true
-                },
-                {
-                  name: 'label',
-                  component: 'TextField',
-                  label: 'Label',
-                  required: true
-                },
-                {
-                  name: 'content',
-                  component: 'Field',
-                  label: 'Content',
-                  required: true
-                },
-                {
-                  name: 'fullScreen',
-                  component: 'BooleanField',
-                  label: 'Full Screen'
-                },
-                {
-                  name: 'roles',
-                  component: 'RolesField',
-                  label: 'Roles'
-                },
-                {
-                  name: 'hidden',
-                  component: 'BooleanField',
-                  label: 'Hidden'
-                }
-              ]
+            formFactory: {
+              component: 'Factory',
+              product: {
+                component: 'Form',
+                fields: [
+                  {
+                    name: 'path',
+                    component: 'TextField',
+                    label: 'Path',
+                    required: true
+                  },
+                  {
+                    name: 'label',
+                    component: 'TextField',
+                    label: 'Label',
+                    required: true
+                  },
+                  {
+                    name: 'content',
+                    component: 'Field',
+                    label: 'Content',
+                    required: true
+                  },
+                  {
+                    name: 'fullScreen',
+                    component: 'BooleanField',
+                    label: 'Full Screen'
+                  },
+                  {
+                    name: 'roles',
+                    component: 'RolesField',
+                    label: 'Roles'
+                  },
+                  {
+                    name: 'hidden',
+                    component: 'BooleanField',
+                    label: 'Hidden'
+                  }
+                ]
+              }
             }
           }
         ]

@@ -53,10 +53,6 @@ export default class BaseComponent extends events.EventEmitter {
           component: 'BooleanField'
         },
         {
-          name: 'props',
-          component: 'TextListField'
-        },
-        {
           name: 'didCreate',
           component: 'BooleanField'
         },
@@ -65,6 +61,10 @@ export default class BaseComponent extends events.EventEmitter {
           // secrets
           name: 'backEndOnly',
           component: 'BooleanField'
+        },
+        {
+          name: 'parent',
+          component: 'Field'
         }
       ]
     };
@@ -108,10 +108,16 @@ export default class BaseComponent extends events.EventEmitter {
 
     this._isLoaded = false;
     this._resolveAfterCreate = utils.once(this, 'didCreate');
+    this._resolveAfterLoad = utils.once(this, 'didLoad');
+
+    // this._onWillSet = null;
+    // this._onDidSet = null;
 
     this._listenToAllChanges();
 
-    this._props = [];
+    // Define schema as setting the schema will define the reset of the props
+    this._propNames = ['schema'];
+    this._indexedPropNames = { schema: true };
 
     // We have to set the name before we create the component as the name is needed to create the
     // component, e.g. to create sub fields using the name as a prefix.
@@ -164,11 +170,17 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   _setPropertyAndEmitChange(name, value) {
+    // if (this._onWillSet) {
+    //   this._onWillSet(name, value);
+    // }
     this._setProperty(name, value);
     this._emitChange(name, value);
+    // if (this._onDidSet) {
+    //   this._onDidSet(name, value);
+    // }
   }
 
-  _set(name, value) {
+  _setIfDifferent(name, value) {
     // Is the value changing? Prevent emitting when the value doesn't change. Note: a previous
     // design treated undefined and null values as equals, but this had to be changed as otherwise
     // we have no construct for detecting when properties are omitted from a MSON definition.
@@ -195,16 +207,47 @@ export default class BaseComponent extends events.EventEmitter {
     this._set(name, values);
   }
 
-  _setIfUndefinedProp(props, name) {
-    if (props[name] !== undefined) {
-      this._set(name, props[name]);
+  hasProperty(name) {
+    return this._indexedPropNames[name] !== undefined;
+  }
+
+  _setIfPropDefined(name, value) {
+    if (this.hasProperty(name)) {
+      this._setIfDifferent(name, value);
+    } else {
+      // TODO: throw error
     }
   }
 
-  _setIfUndefined(props, ...names) {
-    names.forEach(name => {
-      this._setIfUndefinedProp(props, name);
-    });
+  _set(name, value) {
+    // Most of the time, name will not be in dot notation so we want to do the quickest possible
+    // check
+    const hasDot = name.indexOf('.') !== -1;
+
+    // Using dot notation?
+    if (hasDot) {
+      const names = name.split('.');
+      let component = this.get(names[0]);
+      for (let i = 1; i < names.length - 1; i++) {
+        component = component.get(names[i]);
+      }
+      component.set({
+        [names[names.length - 1]]: value
+      });
+    } else {
+      // Not dot notation
+      this._setIfPropDefined(name, value);
+    }
+  }
+
+  _setIfDefined(name, value) {
+    if (value !== undefined) {
+      this._set(name, value);
+    }
+  }
+
+  _setProps(props) {
+    each(props, (value, name) => this._setIfDefined(name, value));
   }
 
   _setName(name) {
@@ -361,8 +404,9 @@ export default class BaseComponent extends events.EventEmitter {
   _pushProp(name) {
     // Is the prop missing? The prop may already exist if we are overloading the type in a dervied
     // component
-    if (this._props.indexOf(name) === -1) {
-      this._props.push(name);
+    if (!this.hasProperty(name)) {
+      this._propNames.push(name);
+      this._indexedPropNames[name] = true;
     }
   }
 
@@ -416,7 +460,7 @@ export default class BaseComponent extends events.EventEmitter {
       this._setMuteEvents(props.muteCreate);
     }
 
-    this._setIfUndefined(
+    this._setProps(
       Object.assign({}, props, {
         component: undefined,
         name: undefined,
@@ -424,8 +468,7 @@ export default class BaseComponent extends events.EventEmitter {
         schema: undefined,
         isStore: undefined,
         props: undefined
-      }),
-      ...this._props
+      })
     );
   }
 
@@ -449,7 +492,7 @@ export default class BaseComponent extends events.EventEmitter {
       'muteCreate'
     ];
 
-    names = names.concat(this._props);
+    names = names.concat(this._propNames);
 
     return this._getIfAllowed(name, ...names);
   }
@@ -457,7 +500,7 @@ export default class BaseComponent extends events.EventEmitter {
   get(names) {
     if (!names) {
       // Get a list of all the property names
-      names = this.get('props');
+      names = this._propNames;
     }
 
     if (Array.isArray(names)) {
@@ -525,7 +568,7 @@ export default class BaseComponent extends events.EventEmitter {
     );
     const clonedComponent = new Component();
 
-    let names = this.get('props');
+    let names = this._propNames;
     if (excludeProps) {
       names = difference(names, excludeProps);
     }
@@ -605,7 +648,6 @@ export default class BaseComponent extends events.EventEmitter {
   buildSchemaForm(form, compiler) {
     const schemas = this.get('schema');
     schemas.forEach(schema => {
-      // console.log('schemas', JSON.stringify(schema));
       if (!compiler.isCompiled(schema)) {
         schema = compiler.newComponent(schema);
       }
@@ -636,5 +678,9 @@ export default class BaseComponent extends events.EventEmitter {
 
   resolveAfterCreate() {
     return this._resolveAfterCreate;
+  }
+
+  resolveAfterLoad() {
+    return this._resolveAfterLoad;
   }
 }

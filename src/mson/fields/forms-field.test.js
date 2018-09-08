@@ -6,6 +6,7 @@ import testUtils from '../test-utils';
 import utils from '../utils';
 import compiler from '../compiler';
 import Emit from '../actions/emit';
+import Factory from '../component/factory';
 
 const formName = utils.uuid();
 
@@ -36,14 +37,22 @@ const createField = props => {
   return new FormsField({
     label: 'People',
     singularLabel: 'Person',
-    form: createForm(),
+    formFactory: new Factory({
+      product: () => createForm()
+    }),
     ...props
   });
 };
 
 const fillDocs = field => {
-  field.addForm({ id: 1, firstName: 'Ella', lastName: 'Fitzgerald' });
-  field.addForm({ id: 2, firstName: 'Frank', lastName: 'Sinatra' });
+  field.addForm({
+    values: { id: 1, firstName: 'Ella', lastName: 'Fitzgerald' },
+    synchronous: true
+  });
+  field.addForm({
+    values: { id: 2, firstName: 'Frank', lastName: 'Sinatra' },
+    synchronous: true
+  });
 };
 
 beforeAll(() => {
@@ -76,7 +85,7 @@ it('should get forms', async () => {
     forms.push(form);
   }
 
-  const defaults = testUtils.toDefaultFieldsObject(null);
+  const defaults = testUtils.toDefaultFieldsObject(undefined);
 
   expect(forms[0].getValues()).toEqual({
     ...defaults,
@@ -110,7 +119,7 @@ it('should set and get value', async () => {
 
   field.setValue(value);
 
-  const defaults = testUtils.toDefaultFieldsObject(null);
+  const defaults = testUtils.toDefaultFieldsObject(undefined);
 
   expect(field.getValue()).toEqual([
     {
@@ -124,9 +133,9 @@ it('should set and get value', async () => {
   ]);
 });
 
-it('should clear errors for nested forms', () => {
+it('should clear errors for nested forms', async () => {
   const field = createField();
-  field.setValue([
+  await field.setValue([
     {
       firstName: null,
       lastName: null
@@ -239,6 +248,7 @@ it('should clear props on unload', () => {
   expect(setSpy).toHaveBeenCalledWith({
     order: null,
     mode: null,
+    searchString: null,
     showArchived: false
   });
 });
@@ -266,7 +276,7 @@ it('should set defaults', () => {
   });
 });
 
-const shouldAddFormsQuickly = (field, milliseconds) => {
+const shouldAddFormsQuickly = (field, milliseconds, synchronous) => {
   return testUtils.expectToFinishBefore(async () => {
     // Set the parent to simulate usage in the UI as adding the parent can slow cloning
     field.get('form').set({ parent: field });
@@ -278,44 +288,117 @@ const shouldAddFormsQuickly = (field, milliseconds) => {
     await didFoo;
 
     for (let i = 0; i < 40; i++) {
-      field.addForm({
-        firstName: 'First ' + i,
-        lastName: 'Last ' + i
+      const result = field.addForm({
+        values: {
+          firstName: 'First ' + i,
+          lastName: 'Last ' + i
+        },
+        synchronous
       });
+      if (!synchronous) {
+        await result;
+      }
     }
   }, milliseconds);
 };
 
-const ADD_FORMS_COMPILED_TIMEOUT_MS = 700;
+const ADD_FORMS_COMPILED_TIMEOUT_MS = 300;
 it('should add many forms quickly when using compiled components', () => {
   const field = createField();
 
-  return shouldAddFormsQuickly(field, ADD_FORMS_COMPILED_TIMEOUT_MS);
+  return shouldAddFormsQuickly(field, ADD_FORMS_COMPILED_TIMEOUT_MS, true);
 });
 
-const ADD_FORMS_UNCOMPILED_TIMEOUT_MS = 700;
-it('should add many forms quickly when using uncompiled components', () => {
+const shouldAddFormsQuicklyUncompiledComponents = (timeout, synchronous) => {
   const field = compiler.newComponent({
     component: 'FormsField',
-    form: {
-      component: formName,
-
-      // Needed so that parent is populated in fillerProps
-      listeners: [
-        {
-          event: 'foo',
-          actions: [
-            {
-              component: 'Emit',
-              event: 'didFoo'
-            }
-          ]
-        }
-      ]
+    formFactory: {
+      component: 'Factory',
+      product: {
+        component: formName,
+        // Needed so that parent is populated in fillerProps
+        listeners: [
+          {
+            event: 'foo',
+            actions: [
+              {
+                component: 'Emit',
+                event: 'didFoo'
+              }
+            ]
+          }
+        ]
+      }
     }
   });
 
-  return shouldAddFormsQuickly(field, ADD_FORMS_UNCOMPILED_TIMEOUT_MS);
+  return shouldAddFormsQuickly(field, timeout, synchronous);
+};
+
+const ADD_FORMS_UNCOMPILED_TIMEOUT_MS = 300;
+it('should add many forms quickly when using uncompiled components', () => {
+  return shouldAddFormsQuicklyUncompiledComponents(
+    ADD_FORMS_UNCOMPILED_TIMEOUT_MS,
+    true
+  );
+});
+
+const ADD_FORMS_UNCOMPILED_ASYNC_TIMEOUT_MS = 600;
+it('should add many forms asynchronously & quickly when using uncompiled components', () => {
+  return shouldAddFormsQuicklyUncompiledComponents(
+    ADD_FORMS_UNCOMPILED_ASYNC_TIMEOUT_MS,
+    false
+  );
+});
+
+it('save add form', async () => {
+  const field = createField();
+
+  const form = field.get('form');
+  const addForm = jest.spyOn(field, '_addForm');
+  const addFormSynchronous = jest.spyOn(field, '_addFormSynchronous');
+  const addFormAsynchronous = jest.spyOn(field, '_addFormAsynchronous');
+
+  // Adds synchronously as form specified
+  const ella = { id: 1, firstName: 'Ella', lastName: 'Fitzgerald' };
+  const form1 = field.addForm({
+    form,
+    values: ella
+  });
+  expect(form1.getValues()).toEqual({
+    ...testUtils.toDefaultFieldsObject(undefined),
+    ...ella
+  });
+  expect(addForm).toHaveBeenCalledTimes(1);
+  expect(addFormSynchronous).toHaveBeenCalledTimes(0);
+  expect(addFormAsynchronous).toHaveBeenCalledTimes(0);
+
+  // Add asynchronously
+  const ray = { id: 2, firstName: 'Ray', lastName: 'Charles' };
+  const form2 = await field.addForm({
+    values: ray
+  });
+  expect(form2.getValues()).toEqual({
+    ...testUtils.toDefaultFieldsObject(null),
+    ...ray
+  });
+  expect(addForm).toHaveBeenCalledTimes(2);
+  expect(addFormSynchronous).toHaveBeenCalledTimes(0);
+  expect(addFormAsynchronous).toHaveBeenCalledTimes(1);
+
+  // Add synchronously as synchronous=true
+  const frank = { id: 2, firstName: 'Frank', lastName: 'Sinatra' };
+  const form3 = field.addForm({
+    values: frank,
+    synchronous: true
+  });
+  expect(form3.getValues()).toEqual({
+    ...testUtils.toDefaultFieldsObject(undefined),
+    ...frank
+  });
+  expect(addForm).toHaveBeenCalledTimes(3);
+  expect(addFormSynchronous).toHaveBeenCalledTimes(1);
+  expect(addFormAsynchronous).toHaveBeenCalledTimes(1);
 });
 
 it('save should handle errors', async () => {
@@ -323,11 +406,11 @@ it('save should handle errors', async () => {
 
   const createdForm = new Form();
 
+  const form = field.get('form');
   const setSpy = jest.spyOn(field, 'set');
   const saveFormSpy = jest
     .spyOn(field, '_saveForm')
     .mockImplementation(() => createdForm);
-  const form = field.get('form');
 
   // When there are form errors
   await field.save();

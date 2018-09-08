@@ -274,7 +274,8 @@ class FormsField extends React.PureComponent {
       classes,
       isLoading,
       form,
-      currentForm
+      currentForm,
+      noResults
     } = this.props;
 
     const { confirmationOpen, confirmationTitle } = this.state;
@@ -290,9 +291,7 @@ class FormsField extends React.PureComponent {
 
     const cards = this.cards(canUpdate, canArchive);
 
-    const searchString = field.get('searchString');
-
-    const showNoRecords = searchString && !isLoading && cards.length === 0;
+    const showNoRecords = noResults;
 
     const header = this.header(cards.length);
 
@@ -356,6 +355,7 @@ FormsField = attach([
   'isLoading',
   'form',
   'currentForm',
-  'mode'
+  'mode',
+  'noResults'
 ])(FormsField);
 export default FormsField;

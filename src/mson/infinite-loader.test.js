@@ -50,7 +50,7 @@ const onGetMaxBufferPagesMock = () => {
 };
 
 const noops = {
-  onAddItem: noop,
+  onAddItems: noop,
   onEmitChange: noop,
   onGetAll: noop,
   onResizeSpacer: noop,
@@ -92,7 +92,7 @@ it('should getAll', async () => {
   );
 
   const onGetAll = jest.spyOn(infiniteLoader, '_onGetAll');
-  const onAddItem = jest.spyOn(infiniteLoader, '_onAddItem');
+  const onAddItems = jest.spyOn(infiniteLoader, '_onAddItems');
   const onEmitChange = jest.spyOn(infiniteLoader, '_onEmitChange');
 
   // Get 1st page
@@ -116,9 +116,8 @@ it('should getAll', async () => {
     first: 2,
     showArchived: false
   });
-  expect(onAddItem).toHaveBeenCalledTimes(2);
-  expect(onAddItem).toHaveBeenCalledWith(ella, null);
-  expect(onAddItem).toHaveBeenCalledWith(ray, null);
+  expect(onAddItems).toHaveBeenCalledTimes(1);
+  expect(onAddItems).toHaveBeenCalledWith([ray, ella], null);
   expect(onEmitChange).toHaveBeenCalledTimes(1);
   expect(onEmitChange).toHaveBeenCalledWith(records1);
 
@@ -126,11 +125,11 @@ it('should getAll', async () => {
   await infiniteLoader.getAll();
   expect(onGetAll).toHaveBeenCalledTimes(1);
   expect(onEmitChange).toHaveBeenCalledTimes(1);
-  expect(onAddItem).toHaveBeenCalledTimes(2);
+  expect(onAddItems).toHaveBeenCalledTimes(1);
 
   // Get 2nd page
   // onGetAll.mockReset();
-  onAddItem.mockReset();
+  onAddItems.mockReset();
   onEmitChange.mockReset();
   infiniteLoader.setWhere(null);
   await infiniteLoader.getAll({ after: 'ellaCursor' });
@@ -150,14 +149,13 @@ it('should getAll', async () => {
     first: 2,
     showArchived: false
   });
-  expect(onAddItem).toHaveBeenCalledTimes(2);
-  expect(onAddItem).toHaveBeenCalledWith(stevie, null);
-  expect(onAddItem).toHaveBeenCalledWith(sinatra, null);
+  expect(onAddItems).toHaveBeenCalledTimes(1);
+  expect(onAddItems).toHaveBeenCalledWith([stevie, sinatra], null);
   expect(onEmitChange).toHaveBeenCalledTimes(1);
   expect(onEmitChange).toHaveBeenCalledWith(records2);
 
   // Get 1st page again
-  onAddItem.mockReset();
+  onAddItems.mockReset();
   onEmitChange.mockReset();
   await infiniteLoader.getAll({ before: 'stevieCursor' });
   expect(infiniteLoader._beginId).toEqual('ray');
@@ -176,9 +174,8 @@ it('should getAll', async () => {
     last: 2,
     showArchived: false
   });
-  expect(onAddItem).toHaveBeenCalledTimes(2);
-  expect(onAddItem).toHaveBeenCalledWith(ray, 'ray');
-  expect(onAddItem).toHaveBeenCalledWith(ella, 'ray');
+  expect(onAddItems).toHaveBeenCalledTimes(1);
+  expect(onAddItems).toHaveBeenCalledWith([ray, ella], 'ray');
   expect(onEmitChange).toHaveBeenCalledTimes(1);
   expect(onEmitChange).toHaveBeenCalledWith(records1);
 });

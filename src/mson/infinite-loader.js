@@ -45,6 +45,7 @@ export default class InfiniteLoader {
     onGetItemId,
     onGetItemCursor,
     onAddItem,
+    onAddItems,
     onEmitChange,
     onSetIsLoading
   }) {
@@ -64,7 +65,10 @@ export default class InfiniteLoader {
     this._onGetItemId = onGetItemId;
     this._onGetItemCursor = onGetItemCursor;
     this._onAddItem = onAddItem;
+    this._onAddItems = onAddItems;
     this._onEmitChange = onEmitChange;
+
+    this._synchronizer = Promise.resolve();
 
     this.reset();
   }
@@ -167,15 +171,14 @@ export default class InfiniteLoader {
       let last = null;
       const size = records.edges.length;
 
-      records.edges.forEach(edge => {
-        const beforeKey = props.before ? this._bufferTopId : null;
-        this._onAddItem(edge, beforeKey);
-        if (!this._firstCursor) {
-          this._firstCursor = edge.cursor;
-        }
-      });
+      const beforeKey = props.before ? this._bufferTopId : null;
+
+      await this._onAddItems(records.edges, beforeKey);
 
       if (size > 0) {
+        if (!this._firstCursor) {
+          this._firstCursor = records.edges[0].cursor;
+        }
         first = records.edges[0];
         beginId = first.node.id;
         last = records.edges[size - 1];

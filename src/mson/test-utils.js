@@ -141,6 +141,11 @@ class TestUtils {
 
     return err;
   }
+
+  async sleepToEnsureDifferentTimestamps() {
+    // Sleep for 2 milliseconds as timestamps can be the same with 1 millisecond
+    return this.timeout(2);
+  }
 }
 
 export default new TestUtils();

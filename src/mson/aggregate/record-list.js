@@ -5,7 +5,7 @@ export default {
     component: 'Form',
     fields: [
       {
-        name: 'baseForm',
+        name: 'baseFormFactory',
         component: 'Field',
         required: true
       },
@@ -25,9 +25,9 @@ export default {
       name: '{{name}}',
       label: '{{label}}',
       component: 'FormsField',
-      form: {
-        component: 'Form',
-        componentToWrap: '{{baseForm}}'
+      formFactory: {
+        component: 'Factory',
+        product: '{{baseFormFactory}}'
       },
       store: {
         component: 'RecordStore',

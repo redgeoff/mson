@@ -2,6 +2,7 @@ import BaseComponent from './base-component';
 import Action from '../actions/action';
 import testUtils from '../test-utils';
 import Form from '../form';
+import TextField from '../fields/text-field';
 import compiler from '../compiler';
 import Set from '../actions/set';
 
@@ -356,8 +357,26 @@ const CLONE_COMPONENTS_TIMEOUT_MS = 300;
 it('should clone many components quickly', () => {
   return testUtils.expectToFinishBefore(async () => {
     const component = new BaseComponent();
-    for (let i = 0; i < 500; i++) {
+    for (let i = 0; i < 300; i++) {
       component.clone();
     }
   }, CLONE_COMPONENTS_TIMEOUT_MS);
+});
+
+it('should set with dot notation', () => {
+  const form = new Form({
+    fields: [
+      new TextField({
+        name: 'firstName',
+        label: 'First Name'
+      })
+    ]
+  });
+  expect(form.getField('firstName').get('label')).toEqual('First Name');
+  form.set({
+    'fields.firstName.label': 'First Name Modified'
+  });
+  expect(form.getField('firstName').get('label')).toEqual(
+    'First Name Modified'
+  );
 });
