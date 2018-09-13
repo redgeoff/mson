@@ -127,6 +127,10 @@ export default class FormsField extends Field {
           {
             name: 'pristine',
             component: 'BooleanField'
+          },
+          {
+            name: 'change',
+            component: 'Field'
           }
         ]
       }
@@ -447,7 +451,7 @@ export default class FormsField extends Field {
       onGetItemId: form => form.getValue('id'),
       onGetItemCursor: form => form.get('cursor'),
       onAddItems: (edges, beforeKey) => this._onAddItems(edges, beforeKey),
-      onEmitChange: records => this.emitChange('change', records),
+      onEmitChange: records => this.set({ change: records }),
       onSetIsLoading: isLoading => this.set({ isLoading })
     });
   }
@@ -497,7 +501,7 @@ export default class FormsField extends Field {
 
     if (!muteChange) {
       // Emit change so that UI is notified
-      this.emitChange('change', values);
+      this.set({ change: values });
     }
 
     return form;
@@ -664,7 +668,7 @@ export default class FormsField extends Field {
 
     if (!muteChange) {
       // Emit change so that UI is notified
-      this.emitChange('change', form.getValues());
+      this.set({ change: form.getValues() });
     }
 
     return form;

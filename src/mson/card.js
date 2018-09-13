@@ -23,6 +23,10 @@ export default class Card extends Component {
           {
             name: 'searchString',
             component: 'TextField'
+          },
+          {
+            name: 'dirty',
+            component: 'BooleanField'
           }
         ]
       }

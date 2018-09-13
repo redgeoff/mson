@@ -345,8 +345,7 @@ export default class ListField extends CompositeField {
       label: index === 0 ? this.get('label') : undefined,
       required: false,
       block: this.get('block'),
-      fullWidth: this.get('fullWidth'),
-      options: this.get('options')
+      fullWidth: this.get('fullWidth')
     });
 
     return clonedField;

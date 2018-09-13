@@ -6,6 +6,8 @@ export default class TextField extends Field {
   _create(props) {
     super._create(props);
 
+    this._requireString = true;
+
     this.set({
       schema: {
         component: 'Form',
@@ -79,7 +81,7 @@ export default class TextField extends Field {
         } else if (invalidRegExp && new RegExp(invalidRegExp).test(value)) {
           this.setErr(`invalid`);
         }
-      } else {
+      } else if (this._requireString) {
         this.setErr(`must be a string`);
       }
     }

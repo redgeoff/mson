@@ -37,7 +37,7 @@ export default class ComponentFillerProps {
         // Is the component a form? We cannot use instanceof as otherwise it would create a circular
         // dependency
         // if (props.component instanceof Form) {
-        if (props.component.get('fields')) {
+        if (props.component.hasProperty('fields')) {
           // Replace the component with values that can be used to fill
           fillerProps.fields = this._formToFillerProps(props.component);
         }

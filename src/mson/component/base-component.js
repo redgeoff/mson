@@ -210,12 +210,15 @@ export default class BaseComponent extends events.EventEmitter {
     return this._indexedPropNames[name] !== undefined;
   }
 
-  _setIfPropDefined(name, value) {
-    if (this.hasProperty(name)) {
-      this._setIfDifferent(name, value);
-    } else {
+  _throwIfNotDefined(name) {
+    if (!this.hasProperty(name)) {
       throw new Error(this.getClassName() + ': ' + name + ' not defined');
     }
+  }
+
+  _setIfPropDefined(name, value) {
+    this._throwIfNotDefined(name);
+    this._setIfDifferent(name, value);
   }
 
   _set(name, value) {
@@ -477,14 +480,13 @@ export default class BaseComponent extends events.EventEmitter {
     return this['_' + name];
   }
 
-  _getIfAllowed(name, ...allowedNames) {
-    if (allowedNames.indexOf(name) !== -1) {
-      return this._get(name);
-    }
+  _getIfDefined(name) {
+    this._throwIfNotDefined(name);
+    return this._get(name);
   }
 
   getOne(name) {
-    return this._getIfAllowed(name, ...this._propNames);
+    return this._getIfDefined(name);
   }
 
   get(names) {
