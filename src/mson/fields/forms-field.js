@@ -123,6 +123,10 @@ export default class FormsField extends Field {
           {
             name: 'noResults',
             component: 'BooleanField'
+          },
+          {
+            name: 'pristine',
+            component: 'BooleanField'
           }
         ]
       }

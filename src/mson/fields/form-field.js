@@ -14,6 +14,10 @@ export default class FormField extends Field {
             name: 'form',
             component: 'Field',
             required: true
+          },
+          {
+            name: 'pristine',
+            component: 'BooleanField'
           }
         ]
       }
@@ -38,19 +42,20 @@ export default class FormField extends Field {
   }
 
   set(props) {
+    const clonedProps = Object.assign({}, props, {
+      form: undefined
+    });
+
+    super.set(clonedProps);
+
     if (props.form !== undefined) {
       this._setForm(props.form);
-
-      // Clear the form prop so that super.set() does not try to set it again
-      props = Object.assign({}, props, { form: undefined });
     }
-
-    super.set(props);
 
     // Was the form set? It may not have been set yet
     if (this._form) {
       // Set properties on form
-      this._setOn(this._form, props, [
+      this._setOn(this._form, clonedProps, [
         'value',
         'dirty',
         'disabled',
@@ -100,7 +105,13 @@ export default class FormField extends Field {
   }
 
   getValues() {
-    return this.get('form').get('value');
+    const form = this.get('form');
+    if (form) {
+      return this.get('form').get('value');
+    } else {
+      // This can happen if the form isn't set or hasn't been set yet
+      return null;
+    }
   }
 
   setValues(values) {

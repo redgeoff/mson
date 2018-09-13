@@ -9,6 +9,18 @@ export default class MSONComponent extends WrappedComponent {
   _create(props) {
     super._create(props);
 
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'definition',
+            component: 'Field'
+          }
+        ]
+      }
+    });
+
     // We want the class name to be that of the wrapped component
     this._preserveClassName = false;
 
@@ -31,12 +43,12 @@ export default class MSONComponent extends WrappedComponent {
   }
 
   set(props) {
+    super.set(props);
+
     if (props.definition !== undefined) {
       const compiler = this._getCompiler();
       const component = compiler.newComponent(props.definition);
       this.setComponentToWrap(component);
     }
-
-    super.set(props);
   }
 }
