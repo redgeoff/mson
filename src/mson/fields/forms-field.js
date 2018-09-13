@@ -49,7 +49,7 @@ export default class FormsField extends Field {
             component: 'BooleanField'
           },
           {
-            name: 'forbidDestroy',
+            name: 'forbidDelete',
             component: 'BooleanField'
           },
           {
