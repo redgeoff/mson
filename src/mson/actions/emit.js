@@ -24,6 +24,6 @@ export default class Emit extends Action {
   }
 
   async act(props) {
-    props.component._emitChange(this.get('event'), this.get('value'));
+    props.component.emitChange(this.get('event'), this.get('value'));
   }
 }

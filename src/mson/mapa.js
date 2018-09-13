@@ -102,10 +102,10 @@ export default class Mapa extends events.EventEmitter {
       throw new Error('key cannot be null or undefined');
     } else if (this.has(key)) {
       const item = this._update(key, value, beforeKey);
-      this._emitChange('update', item);
+      this.emitChange('update', item);
     } else {
       const item = this._insert(key, value, beforeKey);
-      this._emitChange('create', item);
+      this.emitChange('create', item);
     }
   }
 
@@ -242,14 +242,14 @@ export default class Mapa extends events.EventEmitter {
     return item;
   }
 
-  _emitChange(name, value) {
+  emitChange(name, value) {
     this.emit(name, value);
     this.emit('$change', name, value);
   }
 
   delete(key) {
     const item = this._delete(key);
-    this._emitChange('delete', item);
+    this.emitChange('delete', item);
     return item;
   }
 

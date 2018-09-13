@@ -71,7 +71,7 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   _emitCreate() {
-    this._emitChange('create');
+    this.emitChange('create');
 
     if (!this._hasListenerForEvent('create')) {
       // There are no create listeners so emit a created event
@@ -155,14 +155,9 @@ export default class BaseComponent extends events.EventEmitter {
     });
   }
 
-  // TODO: refactor out and use emitChange instead
-  _emitChange(name, value) {
+  emitChange(name, value) {
     this.emit(name, value);
     this.emit('$change', name, value);
-  }
-
-  emitChange(name, value) {
-    this._emitChange(name, value);
   }
 
   _setProperty(name, value) {
@@ -174,7 +169,7 @@ export default class BaseComponent extends events.EventEmitter {
     //   this._onWillSet(name, value);
     // }
     this._setProperty(name, value);
-    this._emitChange(name, value);
+    this.emitChange(name, value);
     // if (this._onDidSet) {
     //   this._onDidSet(name, value);
     // }
@@ -275,7 +270,7 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   _emitDidLoad() {
-    this._emitChange('didLoad');
+    this.emitChange('didLoad');
     this._isLoaded = true;
   }
 
@@ -600,7 +595,7 @@ export default class BaseComponent extends events.EventEmitter {
 
   // This should be called whenever the route changes and the component is loaded
   emitLoad() {
-    this._emitChange('load');
+    this.emitChange('load');
 
     if (!this._hasListenerForEvent('load')) {
       // There are no load listeners so emit a loaded event
@@ -614,13 +609,13 @@ export default class BaseComponent extends events.EventEmitter {
     // isLoaded=false
     this._isLoaded = false;
 
-    this._emitChange('unload');
+    this.emitChange('unload');
   }
 
   _bubbleUpEvents(component, events) {
     events.forEach(event => {
       component.on(event, value => {
-        this._emitChange(event, value);
+        this.emitChange(event, value);
       });
     });
   }

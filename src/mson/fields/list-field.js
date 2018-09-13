@@ -65,7 +65,7 @@ export default class ListField extends CompositeField {
     // Prevent listener leaks
     field.removeAllListeners();
 
-    this._emitChangeToField(field);
+    this.emitChangeToField(field);
 
     this._calcValue();
 
@@ -161,7 +161,7 @@ export default class ListField extends CompositeField {
     //
     // this.setValue(this._getValue());
     this._value = this._getValue();
-    this._emitChange('value', this._value);
+    this.emitChange('value', this._value);
   }
 
   _listenForChangesToField(field) {

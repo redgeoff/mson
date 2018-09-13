@@ -283,12 +283,12 @@ export default class Form extends Component {
 
   copyFields(form) {
     form._fields.each(field => this.addField(field));
-    this._emitChange('fields');
+    this.emitChange('fields');
   }
 
   cloneFields(form) {
     form._fields.each(field => this.addField(field.clone()));
-    this._emitChange('fields');
+    this.emitChange('fields');
   }
 
   _clearExtraErrors() {
@@ -314,7 +314,7 @@ export default class Form extends Component {
       props.fields.forEach(field => {
         this.addField(field);
       });
-      this._emitChange('fields');
+      this.emitChange('fields');
     }
 
     if (props.validators !== undefined) {
@@ -408,7 +408,7 @@ export default class Form extends Component {
     field.on('value', () => {
       // We don't emit a value as we don't want to calculate the form value each time a field value
       // changes. Instead, you can simply call form.getValues();
-      this._emitChange('values');
+      this.emitChange('values');
       if (this.get('autoValidate')) {
         this.validate();
       }
@@ -429,7 +429,7 @@ export default class Form extends Component {
     });
 
     field.on('click', () => {
-      this._emitChange(field.get('name'));
+      this.emitChange(field.get('name'));
     });
   }
 
@@ -574,7 +574,7 @@ export default class Form extends Component {
       this._setSubmitDisabled(false);
     }
     // this._setSubmitDisabled(!canSubmit);
-    this._emitChange(canSubmit ? 'canSubmit' : 'cannotSubmit');
+    this.emitChange(canSubmit ? 'canSubmit' : 'cannotSubmit');
   }
 
   validate() {

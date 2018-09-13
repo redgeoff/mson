@@ -30,7 +30,7 @@ export default class ButtonField extends Field {
   }
 
   emitClick() {
-    this._emitChange('click');
+    this.emitChange('click');
 
     if (this.get('type') === 'submit') {
       // Disable to prevent the user from clicking the button again before the action has completed
