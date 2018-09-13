@@ -484,6 +484,9 @@ export default class FormsField extends Field {
 
     form.set({ archivedAt, userId, cursor });
 
+    // Set noResults to false as we now have results
+    this.set({ noResults: false });
+
     this._forms.set(key, form, beforeKey);
 
     this._listenToForm(form);
