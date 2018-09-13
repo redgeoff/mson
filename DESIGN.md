@@ -324,3 +324,7 @@ Even with a cache, this can be very inefficient as it requires a call to get the
   ]
 }
 ```
+
+## Errors Are Named Err
+
+All components are EventEmitters and Node.js EventEmitters reserve special treatment for the `error` event. If there is no listener for the `error` event, a stack trace is printed and the process will exit. In MSON, errors are properties and as such they emit an event with the same name. In many cases it isn't necessary to have an event handler to process errors as these errors happen synchronously. In order to avoid this special treatment, we name all errors `err`.
