@@ -291,7 +291,10 @@ class FormsField extends React.PureComponent {
 
     const cards = this.cards(canUpdate, canArchive);
 
-    const showNoRecords = noResults;
+    const searchString = field.get('searchString');
+
+    // Is the user searching and there are no records?
+    const showNoRecords = searchString && noResults;
 
     const header = this.header(cards.length);
 
