@@ -1,4 +1,4 @@
-// TODO: should we care strings pass for say IntegerField, FloatField, etc...?
+// TODO: should we care if strings pass for say IntegerField, FloatField, etc...?
 
 import testUtils from '../test-utils';
 import Form from './form';

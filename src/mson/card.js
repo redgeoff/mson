@@ -19,6 +19,10 @@ export default class Card extends Component {
             component: 'Field',
             label: 'Content',
             required: true
+          },
+          {
+            name: 'searchString',
+            component: 'TextField'
           }
         ]
       }

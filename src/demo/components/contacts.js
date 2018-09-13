@@ -1,6 +1,15 @@
 export default {
   name: 'app.Contacts',
   component: 'Form',
+  schema: {
+    component: 'Form',
+    fields: [
+      {
+        name: 'store',
+        component: 'Field'
+      }
+    ]
+  },
   fields: [
     {
       component: 'FormsField',

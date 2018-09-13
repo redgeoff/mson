@@ -45,6 +45,22 @@ class AccessNode extends Form {
 class AccessFields extends Form {
   _className = 'AccessFields';
 
+  _create(props) {
+    super._create(props);
+
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'fieldNames',
+            component: 'Field' // TODO: properly define
+          }
+        ]
+      }
+    });
+  }
+
   set(props) {
     super.set(props);
     if (props.fieldNames !== undefined) {
@@ -66,6 +82,18 @@ export default class FormAccess extends Form {
 
   _create(props) {
     super._create(props);
+
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'fieldNames',
+            component: 'Field' // TODO: properly define
+          }
+        ]
+      }
+    });
 
     this.addField(
       new FormField({

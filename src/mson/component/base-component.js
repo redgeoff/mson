@@ -65,6 +65,10 @@ export default class BaseComponent extends events.EventEmitter {
         {
           name: 'parent',
           component: 'Field'
+        },
+        {
+          name: 'muteCreate',
+          component: 'BooleanField'
         }
       ]
     };
@@ -210,7 +214,7 @@ export default class BaseComponent extends events.EventEmitter {
     if (this.hasProperty(name)) {
       this._setIfDifferent(name, value);
     } else {
-      // TODO: throw error
+      throw new Error(this.getClassName() + ': ' + name + ' not defined');
     }
   }
 
@@ -458,11 +462,13 @@ export default class BaseComponent extends events.EventEmitter {
     this._setProps(
       Object.assign({}, props, {
         component: undefined,
-        name: undefined,
-        listeners: undefined,
+        props: undefined,
         schema: undefined,
+        name: undefined,
+        parent: undefined,
         isStore: undefined,
-        props: undefined
+        listeners: undefined,
+        muteCreate: undefined
       })
     );
   }
@@ -478,18 +484,7 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   getOne(name) {
-    let names = [
-      'name',
-      'listeners',
-      'schema',
-      'parent',
-      'isStore',
-      'muteCreate'
-    ];
-
-    names = names.concat(this._propNames);
-
-    return this._getIfAllowed(name, ...names);
+    return this._getIfAllowed(name, ...this._propNames);
   }
 
   get(names) {
@@ -555,20 +550,23 @@ export default class BaseComponent extends events.EventEmitter {
     return clonedComponent;
   }
 
-  _cloneFast({ excludeProps }) {
+  _cloneFast({ defaultProps, excludeProps }) {
     // _cloneFast is almost 10 times faster than _cloneSlow. It is far faster to instantiate a new
     // component, deep clone some props and then set the props on the new component.
     const Component = this._registrar.compiler.getCompiledComponent(
       this.getClassName()
     );
-    const clonedComponent = new Component();
+    const clonedComponent = new Component(defaultProps);
 
-    let names = this._propNames;
+    const excludePropsByDefault = ['parent'];
+
     if (excludeProps) {
-      names = difference(names, excludeProps);
+      excludeProps = excludeProps.concat(excludePropsByDefault);
     }
 
-    // Note: sing JSON stringify+parse may be slightly faster than cloneDeep, but cloneDeep can
+    const names = difference(this._propNames, excludeProps);
+
+    // Note: using JSON stringify+parse may be slightly faster than cloneDeep, but cloneDeep can
     // handle circular references.
     clonedComponent.set(this._cloneDeep(this.get(names)));
 
@@ -578,12 +576,16 @@ export default class BaseComponent extends events.EventEmitter {
     return clonedComponent;
   }
 
-  _clone({ excludeProps } = {}) {
-    if (
+  _canCloneFast() {
+    return (
       this._registrar.compiler &&
       this._registrar.compiler.exists(this.getClassName())
-    ) {
-      return this._cloneFast({ excludeProps });
+    );
+  }
+
+  _clone({ defaultProps, excludeProps } = {}) {
+    if (this._canCloneFast()) {
+      return this._cloneFast({ defaultProps, excludeProps });
     } else {
       return this._cloneSlow();
     }

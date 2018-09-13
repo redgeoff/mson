@@ -120,6 +120,46 @@ export default class Form extends Component {
           {
             name: 'isLoading',
             component: 'BooleanField'
+          },
+          {
+            name: 'omitDefaultFields',
+            component: 'BooleanField'
+          },
+          {
+            name: 'value',
+            component: 'Field'
+          },
+          {
+            name: 'clear',
+            component: 'BooleanField'
+          },
+          {
+            name: 'reset',
+            component: 'BooleanField'
+          },
+          {
+            name: 'fullWidth',
+            component: 'BooleanField'
+          },
+          {
+            name: 'editable',
+            component: 'BooleanField'
+          },
+          {
+            name: 'hidden',
+            component: 'BooleanField'
+          },
+          {
+            name: 'required',
+            component: 'BooleanField'
+          },
+          {
+            name: 'out',
+            component: 'BooleanField'
+          },
+          {
+            name: 'disabled',
+            component: 'BooleanField'
           }
         ]
       }
@@ -305,11 +345,19 @@ export default class Form extends Component {
       Object.assign({}, props, {
         fields: undefined,
         validators: undefined,
-        access: undefined
+        access: undefined,
+        value: undefined,
+        clear: undefined,
+        reset: undefined,
+        fullWidth: undefined,
+        editable: undefined,
+        hidden: undefined,
+        required: undefined,
+        out: undefined,
+        disabled: undefined
       })
     );
 
-    // Add the fields after any form is set so that inherited fields appear at the top of the form
     if (props.fields !== undefined) {
       props.fields.forEach(field => {
         this.addField(field);
@@ -650,10 +698,29 @@ export default class Form extends Component {
   }
 
   clone() {
-    const clonedForm = this._clone({ excludeProps: ['fields'] });
+    // It is much faster to call field.clone() instead of doing a cloneDeep of field as
+    // field.clone() can use field._cloneFast()
 
-    // Clone the fields and recreate any listeners
-    clonedForm.cloneFields(this);
+    const clonedFields = this.mapFields(field => field.clone());
+
+    let opts = {};
+    const canCloneFast = this._canCloneFast();
+
+    if (canCloneFast) {
+      // We exclude the fields from the deep clone and clone them manually
+      opts = {
+        defaultProps: {
+          fields: clonedFields
+        },
+        excludeProps: ['fields']
+      };
+    }
+
+    const clonedForm = this._clone(opts);
+
+    if (!canCloneFast) {
+      clonedForm.set({ fields: clonedFields });
+    }
 
     return clonedForm;
   }

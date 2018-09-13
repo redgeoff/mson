@@ -145,12 +145,12 @@ export default {
             }
           ]
         }
-      ]
-    },
-    access: {
-      fields: {
-        setPassword: {
-          read: 'admin'
+      ],
+      access: {
+        fields: {
+          setPassword: {
+            read: 'admin'
+          }
         }
       }
     }
