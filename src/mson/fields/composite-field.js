@@ -23,6 +23,10 @@ export default class CompositeField extends Field {
           {
             name: 'fields',
             component: 'Field'
+          },
+          {
+            name: 'change',
+            component: 'Field'
           }
         ]
       }
@@ -85,8 +89,7 @@ export default class CompositeField extends Field {
   emitChangeToField(field) {
     // Emit event so that we do things like dynamically adjust the display of fields. We can't emit
     // just all the fields as otherwise a shallow comparison won't detect a change.
-    // this.emitChange('fields', this._fields);
-    this.emitChange('change', field);
+    this.set({ change: field });
   }
 
   _addField(field, name) {

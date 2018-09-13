@@ -1,10 +1,13 @@
-import Field from './field';
+import TextField from './text-field';
 
-export default class NumberField extends Field {
+export default class NumberField extends TextField {
   _className = 'NumberField';
 
   _create(props) {
     super._create(props);
+
+    this._requireString = false;
+
     this.set({
       schema: {
         component: 'Form',

@@ -383,9 +383,16 @@ it('should set with dot notation', () => {
   );
 });
 
-it('should throw if property not defined', () => {
+it('set should throw if property not defined', () => {
   const component = new BaseComponent();
   expect(() => component.set({ undefinedProperty: 'foo' })).toThrow(
+    'Component: undefinedProperty not defined'
+  );
+});
+
+it('get should throw if property not defined', () => {
+  const component = new BaseComponent();
+  expect(() => component.get('undefinedProperty')).toThrow(
     'Component: undefinedProperty not defined'
   );
 });

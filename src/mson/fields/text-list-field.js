@@ -27,7 +27,6 @@ export default class TextListField extends ListField {
       required: false,
       block: this.get('block'),
       fullWidth: this.get('fullWidth'),
-      options: this.get('options'),
       invalidRegExp: this.get('invalidRegExp')
     });
   }
