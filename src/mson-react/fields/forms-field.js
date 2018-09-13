@@ -144,7 +144,7 @@ class FormsField extends React.PureComponent {
     const {
       field,
       forbidUpdate,
-      forbidDestroy,
+      forbidDelete,
       editable,
       disabled
     } = this.props;
@@ -170,7 +170,7 @@ class FormsField extends React.PureComponent {
             onDelete={this.handleDelete}
             form={f}
             forbidUpdate={forbidUpdate || !canUpdate}
-            forbidDestroy={forbidDestroy || !canArchive}
+            forbidDelete={forbidDelete || !canArchive}
             editable={editable}
             disabled={disabled}
           />
@@ -268,7 +268,7 @@ class FormsField extends React.PureComponent {
   render() {
     const {
       forbidUpdate,
-      forbidDestroy,
+      forbidDelete,
       field,
       spacerHeight,
       classes,
@@ -329,7 +329,7 @@ class FormsField extends React.PureComponent {
           onEdit={this.handleEdit}
           onDelete={this.handleDelete}
           forbidUpdate={forbidUpdate || !canUpdate}
-          forbidDestroy={forbidDestroy || !canArchive}
+          forbidDelete={forbidDelete || !canArchive}
         />
 
         <ConfirmationDialog
@@ -349,7 +349,7 @@ FormsField = attach([
   'singularLabel',
   'forbidCreate',
   'forbidUpdate',
-  'forbidDestroy',
+  'forbidDelete',
   'forbidSort',
   'editable',
   'disabled',

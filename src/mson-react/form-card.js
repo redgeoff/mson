@@ -43,7 +43,7 @@ class FormCard extends React.PureComponent {
       classes,
       form,
       forbidUpdate,
-      forbidDestroy,
+      forbidDelete,
       editable,
       disabled,
       archivedAt
@@ -62,7 +62,7 @@ class FormCard extends React.PureComponent {
             </Grid>
             <FormCardButtons
               forbidUpdate={forbidUpdate}
-              forbidDestroy={forbidDestroy}
+              forbidDelete={forbidDelete}
               editable={editable}
               disabled={disabled}
               archivedAt={archivedAt}

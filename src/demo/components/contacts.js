@@ -8,7 +8,7 @@ export default {
       label: 'Contacts',
       // forbidCreate: true,
       // forbidUpdate: true,
-      // forbidDestroy: true,
+      // forbidDelete: true,
       // forbidViewArchived: true,
       // forbidSearch: true,
       // forbidSort: true,
