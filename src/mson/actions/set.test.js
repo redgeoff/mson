@@ -3,6 +3,7 @@ import Form from '../form';
 import ButtonField from '../fields/button-field';
 import testUtils from '../test-utils';
 import compiler from '../compiler';
+import Factory from '../component/factory';
 
 const createFields = () => {
   return [
@@ -125,4 +126,23 @@ it('should set using arguments when value is undefined', async () => {
       .get('lastName')
       .get('value')
   ).toEqual('Fooerson');
+});
+
+it('should set nested value of property', async () => {
+  const component = new Factory({
+    product: () => createForm()
+  });
+
+  const set = new Set({
+    name: 'properties',
+    value: {
+      'fields.lastName.value': '{{arguments}}'
+    }
+  });
+
+  await set.run({ arguments: 'Jackson', component });
+
+  expect(component.get('properties')).toEqual({
+    'fields.lastName.value': 'Jackson'
+  });
 });

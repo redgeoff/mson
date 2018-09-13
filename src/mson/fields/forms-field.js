@@ -1,7 +1,3 @@
-// TODO: what to do about doc store? Is it even needed as all data is stored locally via form. Maybe
-// the store provides a good abstraction though the DB. If so then probably want to refactor to have
-// something like field.bind(store)
-
 import Field from './field';
 import globals from '../globals';
 import Mapa from '../mapa';
@@ -12,7 +8,7 @@ import utils from '../utils';
 export default class FormsField extends Field {
   _className = 'FormsField';
 
-  static SCROLLTHRESHOLD_DEFAULT = 1000;
+  static SCROLLTHRESHOLD_DEFAULT = 2000;
 
   // We want this to be a multiple of 4 as we may make it optional to have 4 columns in
   // FormsField
@@ -21,6 +17,8 @@ export default class FormsField extends Field {
   static MAX_BUFFER_PAGES_DEFAULT = 3;
 
   _create(props) {
+    super._create(props);
+
     const c = this.constructor;
 
     // For mocking
@@ -33,6 +31,12 @@ export default class FormsField extends Field {
         component: 'Form',
         fields: [
           {
+            name: 'formFactory',
+            component: 'Field'
+          },
+          {
+            // Note: this prop is automatically generated using the formFactory and can be read, but
+            // should not be be set
             name: 'form',
             component: 'Field'
           },
@@ -115,6 +119,10 @@ export default class FormsField extends Field {
           {
             name: 'mode',
             component: 'TextField'
+          },
+          {
+            name: 'noResults',
+            component: 'BooleanField'
           }
         ]
       }
@@ -131,7 +139,8 @@ export default class FormsField extends Field {
       // initialized as undefined
       order: null,
       mode: null,
-      showArchived: false
+      showArchived: false,
+      searchString: null
     });
 
     this._createInfiniteLoader();
@@ -140,9 +149,6 @@ export default class FormsField extends Field {
     // instead of a Map as we may want to iterate through the forms beginning at any single form.
     this._forms = new Mapa();
 
-    super._create(props);
-
-    this._listenForLoad();
     this._listenForLoaded();
     this._listenForUnload();
     this._listenForShowArchived();
@@ -151,18 +157,18 @@ export default class FormsField extends Field {
     this._listenForScroll();
   }
 
-  _listenForLoad() {
-    this.on('load', async () => {
-      const form = this.get('form');
-      if (form) {
-        form.emitLoad();
-      }
-    });
-  }
-
   _listenForLoaded() {
     this.on('didLoad', async () => {
       // Wait for loaded event so that we have had a chance to load options, etc...
+
+      if (this.get('formFactory')) {
+        // Regenerate the form so that we have one that has any loaded data
+        this._generateForm(this.get('formFactory'));
+
+        // Emit load so that form can complete any listeners, e.g. taking snapshot
+        const form = this.get('form');
+        form.emitLoad();
+      }
 
       this._resetInfiniteLoader();
 
@@ -174,10 +180,15 @@ export default class FormsField extends Field {
 
   _onUnload() {
     // Clear order, mode and showArchived so that we are ready for when we return
-    this.set({ order: null, mode: null, showArchived: false });
+    this.set({
+      order: null,
+      mode: null,
+      showArchived: false,
+      searchString: null
+    });
 
-    const form = this.get('form');
-    if (form) {
+    if (this.get('formFactory')) {
+      const form = this.get('form');
       form.emitUnload();
     }
   }
@@ -199,7 +210,7 @@ export default class FormsField extends Field {
   }
 
   _handleStoreChangeFactory() {
-    return (name, value) => {
+    return async (name, value) => {
       const muteChange = false;
       const vv = value && value.value;
       switch (name) {
@@ -210,23 +221,22 @@ export default class FormsField extends Field {
             this._forms.has(vv.id) &&
             vv.archivedAt !== this._forms.get(vv.id).get('archivedAt')
           ) {
-            this.removeForm(vv.id, muteChange);
+            return this.removeForm(vv.id, muteChange);
           } else if (!!vv.archivedAt === this.get('showArchived')) {
             // The archivedAt matches the current showArchived
-            this.upsertForm(
-              vv.fieldValues,
-              vv.archivedAt,
-              vv.userId,
+            return this.upsertForm({
+              values: vv.fieldValues,
+              archivedAt: vv.archivedAt,
+              userId: vv.userId,
               muteChange,
-              vv.cursor
-              // value.prevKey
-            );
+              cursor: vv.cursor
+              // beforeKey: value.prevKey
+            });
           }
           break;
 
         case 'deleteItem':
-          this.removeFormIfExists(vv.id, muteChange);
-          break;
+          return this.removeFormIfExists(vv.id, muteChange);
 
         default:
           // Do nothing
@@ -400,85 +410,41 @@ export default class FormsField extends Field {
     }
   }
 
-  _onAddItem(edge, beforeKey) {
-    const values = { id: edge.node.id };
+  async _onGetAll(props) {
+    const store = this.get('store');
+    if (store) {
+      const records = await store.getAllItems(props);
 
-    const form = this.get('form');
+      // Did we get back an empty set of results and we are on the first page?
+      const noResults =
+        records.edges.length === 0 && !props.after && !props.before;
 
-    form.eachField(field => {
-      // Field exists in returned records?
-      const val = edge.node.fieldValues[field.get('name')];
-      if (val) {
-        values[field.get('name')] = val;
-      }
-    });
-
-    // We want to mute the changes until we are done adding all the forms or else we'll
-    // introduce a lot of latency on the UI thread.
-    const muteChange = true;
-    this.addForm(
-      values,
-      edge.node.archivedAt,
-      edge.node.userId,
-      muteChange,
-      edge.cursor,
-      beforeKey
-    );
+      this.set({ noResults });
+      return records;
+    }
   }
 
   _createInfiniteLoader() {
     this._infiniteLoader = new InfiniteLoader({
-      onGetAll: async props => {
-        const store = this.get('store');
-        if (store) {
-          return await store.getAllItems(props);
-        }
-      },
-      onGetItemsPerPage: () => {
-        return this.get('itemsPerPage');
-      },
-      onGetScrollThreshold: () => {
-        return this.get('scrollThreshold');
-      },
-      onGetMaxBufferPages: () => {
-        return this.get('maxBufferPages');
-      },
-      onGetItemElement: id => {
-        return this._document.getElementById(this.getUniqueItemId(id));
-      },
-      onGetSpacerElement: () => {
-        return this._document.getElementById(this.get('spacerId'));
-      },
-      onRemoveItems: (id, n, reverse) => {
-        return this._onRemoveItems(id, n, reverse);
-      },
-      onGetItems: (id, reverse) => {
-        return this._forms.values(id, reverse);
-      },
-      onResizeSpacer: (dHeight, height) => {
-        this._onResizeSpacer(dHeight, height);
-      },
-      onSetBufferTopId: bufferTopId => {
-        this.set({ bufferTopId });
-      },
-      onGetItem: id => {
-        return this._forms.get(id);
-      },
-      onGetItemId: form => {
-        return form.getValue('id');
-      },
-      onGetItemCursor: form => {
-        return form.get('cursor');
-      },
-      onAddItem: (edge, beforeKey) => {
-        this._onAddItem(edge, beforeKey);
-      },
-      onEmitChange: records => {
-        this._emitChange('change', records);
-      },
-      onSetIsLoading: isLoading => {
-        this.set({ isLoading });
-      }
+      onGetAll: props => this._onGetAll(props),
+      onGetItemsPerPage: () => this.get('itemsPerPage'),
+      onGetScrollThreshold: () => this.get('scrollThreshold'),
+      onGetMaxBufferPages: () => this.get('maxBufferPages'),
+      onGetItemElement: id =>
+        this._document.getElementById(this.getUniqueItemId(id)),
+      onGetSpacerElement: () =>
+        this._document.getElementById(this.get('spacerId')),
+      onRemoveItems: (id, n, reverse) => this._onRemoveItems(id, n, reverse),
+      onGetItems: (id, reverse) => this._forms.values(id, reverse),
+      onResizeSpacer: (dHeight, height) =>
+        this._onResizeSpacer(dHeight, height),
+      onSetBufferTopId: bufferTopId => this.set({ bufferTopId }),
+      onGetItem: id => this._forms.get(id),
+      onGetItemId: form => form.getValue('id'),
+      onGetItemCursor: form => form.get('cursor'),
+      onAddItems: (edges, beforeKey) => this._onAddItems(edges, beforeKey),
+      onEmitChange: records => this._emitChange('change', records),
+      onSetIsLoading: isLoading => this.set({ isLoading })
     });
   }
 
@@ -494,18 +460,20 @@ export default class FormsField extends Field {
     });
   }
 
-  // TODO: refactor to use named parameters
-  addForm(values, archivedAt, userId, muteChange, cursor, beforeKey) {
-    const clonedForm = this.get('form').clone();
+  _addForm({
+    form,
+    values,
+    archivedAt,
+    userId,
+    muteChange,
+    cursor,
+    beforeKey
+  }) {
+    form.setValues(values);
 
-    // Reset form as there may be existing data, errors, etc...
-    clonedForm.reset();
+    form.set({ parent: this });
 
-    clonedForm.setValues(values);
-
-    clonedForm.set({ parent: this });
-
-    const id = clonedForm.getField('id');
+    const id = form.getField('id');
     let key = 0;
     if (id.isBlank()) {
       // The id value is blank so use the current _forms length as the key
@@ -514,18 +482,126 @@ export default class FormsField extends Field {
       key = id.getValue();
     }
 
-    clonedForm.set({ archivedAt, userId, cursor });
+    form.set({ archivedAt, userId, cursor });
 
-    this._forms.set(key, clonedForm, beforeKey);
+    this._forms.set(key, form, beforeKey);
 
-    this._listenToForm(clonedForm);
+    this._listenToForm(form);
 
     if (!muteChange) {
       // Emit change so that UI is notified
       this._emitChange('change', values);
     }
 
-    return clonedForm;
+    return form;
+  }
+
+  async _produceFormAndWaitForLoad() {
+    const form = this.produce();
+
+    // Wait for component to be created so that UI components like the InfiniteLoader can determine
+    // the exact size and location of the element when it is first rendered.
+    await form.resolveAfterCreate();
+
+    // Trigger the load as would be done by the UI so that we can populate options, etc... This adds
+    // extra latency (~100ms), but it is a useful construct. Load listeners, especially those that
+    // take a while, should be avoided.
+    form.emitLoad();
+    await form.resolveAfterLoad();
+
+    return form;
+  }
+
+  async _produceFormWaitForLoadAndPushForm(forms) {
+    const form = await this._produceFormAndWaitForLoad();
+
+    forms.push(form);
+  }
+
+  async _onAddItems(edges, beforeKey) {
+    // It is much more efficient to batch the creation and event waiting on the forms so that the
+    // promises can be executed concurrently.
+
+    const forms = [];
+    const promises = [];
+
+    for (let i = 0; i < edges.length; i++) {
+      promises.push(this._produceFormWaitForLoadAndPushForm(forms));
+    }
+
+    await Promise.all(promises);
+
+    // To reduce latency, mute changes for individual forms. InfiniteLoader will emit a change event
+    // after all the forms have been added.
+    const muteChange = true;
+
+    for (let i = 0; i < edges.length; i++) {
+      const edge = edges[i];
+
+      const values = { id: edge.node.id };
+      const form = forms[i];
+
+      form.eachField(field => {
+        // Field exists in returned records?
+        const val = edge.node.fieldValues[field.get('name')];
+        if (val) {
+          values[field.get('name')] = val;
+        }
+      });
+
+      this._addForm({
+        form,
+        values,
+        archivedAt: edge.node.archivedAt,
+        userId: edge.node.userId,
+        muteChange,
+        cursor: edge.cursor,
+        beforeKey
+      });
+    }
+  }
+
+  produce() {
+    // Note: a previous design cloned an instance of a form to generate a new form. Cloning a form
+    // is VERY slow, it requires a recursive dive into the instance because the original class
+    // structure isn't immediately recoverable once a class has been instantiated. Instead, it is
+    // much faster to generate a form via a factory.
+    const factory = this.get('formFactory');
+    return factory.produce();
+  }
+
+  _addFormSynchronous(args) {
+    const form = this.produce();
+    return this._addForm(Object.assign({ form }, args));
+  }
+
+  async _addFormAsynchronous(args) {
+    const form = await this._produceFormAndWaitForLoad();
+    return this._addForm(Object.assign({ form }, args));
+  }
+
+  addForm({
+    form,
+    values,
+    archivedAt,
+    userId,
+    muteChange,
+    cursor,
+    beforeKey,
+    synchronous
+  }) {
+    const args = { values, archivedAt, userId, muteChange, cursor, beforeKey };
+    if (form) {
+      // A form is being supplied so save some CPU processing by using the form instead of
+      // generating another form
+      return this._addForm(Object.assign({ form }, args));
+    } else if (synchronous) {
+      // Add the form synchronously, i.e. don't wait for any events
+      return this._addFormSynchronous(args);
+    } else {
+      // Add the form asynchronously, i.e. wait for the didCreate and didLoad events
+      return this._addFormAsynchronous(args);
+    }
   }
 
   _clearAllFormListeners() {
@@ -559,7 +635,11 @@ export default class FormsField extends Field {
       this._clearAllFormListeners(); // prevent listener leaks
       this._forms.clear();
       if (value && value.length > 0) {
-        value.forEach(values => this.addForm(values));
+        // Note: we add the form synchronously because set() and get() must remain synchronous (core
+        // design principle of MSON). In other words, we don't wait for the didCreate or didLoad
+        // events when creating the form.
+        const synchronous = true;
+        value.forEach(values => this.addForm({ values, synchronous }));
       }
     }
   }
@@ -704,6 +784,12 @@ export default class FormsField extends Field {
     this._set('mode', mode);
   }
 
+  _generateForm(factory) {
+    // Generate a form so that we have access to the field names, etc...
+    const form = factory.produce();
+    this.set({ form });
+  }
+
   set(props) {
     super.set(
       Object.assign({}, props, {
@@ -746,6 +832,14 @@ export default class FormsField extends Field {
       return this._getValue();
     }
 
+    if (name === 'form' && !this._form) {
+      // We have to generate a form immediately so that we have a place holder for the UI. After we
+      // receive didLoad, we'll regenerate the form so that we'll also have the loaded data.
+      // Generating the form on demand allows us to instantiate a factory where the product is a
+      // missing template parameter, which is useful for testing.
+      this._generateForm(this.get('formFactory'));
+    }
+
     return super.getOne(name);
   }
 
@@ -753,8 +847,7 @@ export default class FormsField extends Field {
     yield* this._forms.values();
   }
 
-  // TODO: refactor to use named parameters
-  updateForm(values, archivedAt, userId, muteChange, cursor /*, beforeKey */) {
+  updateForm({ values, archivedAt, userId, muteChange, cursor, beforeKey }) {
     const fieldForm = this._forms.get(values.id);
     fieldForm.setValues(values);
     fieldForm.set({
@@ -765,12 +858,25 @@ export default class FormsField extends Field {
     return fieldForm;
   }
 
-  // TODO: refactor to use named parameters
-  upsertForm(values, archivedAt, userId, muteChange, cursor /*, beforeKey */) {
+  upsertForm({ values, archivedAt, userId, muteChange, cursor, beforeKey }) {
     if (this._forms.has(values.id)) {
-      return this.updateForm(values, archivedAt, userId, false, cursor);
+      return this.updateForm({
+        values,
+        archivedAt,
+        userId,
+        muteChange,
+        cursor,
+        beforeKey
+      });
     } else {
-      return this.addForm(values, archivedAt, userId, false, cursor);
+      return this.addForm({
+        values,
+        archivedAt,
+        userId,
+        muteChange,
+        cursor,
+        beforeKey
+      });
     }
   }
 
@@ -795,13 +901,15 @@ export default class FormsField extends Field {
       id.setValue(utils.uuid());
     }
 
-    fieldForm = this.upsertForm(
-      form.getValues(),
-      null,
-      form.get('userId'),
-      false,
-      form.get('cursor')
-    );
+    fieldForm = this.upsertForm({
+      // Specify the form so that we don't have to generate another one
+      form,
+      values: form.getValues(),
+      archivedAt: null,
+      userId: form.get('userId'),
+      muteChange: false,
+      cursor: form.get('cursor')
+    });
 
     form.emitChange(
       creating ? 'didCreateRecord' : 'didUpdateRecord',

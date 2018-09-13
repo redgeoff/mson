@@ -2,6 +2,7 @@ import testUtils from '../test-utils';
 import FormsField from './forms-field';
 import TextField from './text-field';
 import Form from '../form';
+import Factory from '../component/factory';
 import {
   onGetItemElementMock,
   createMockedStore
@@ -15,7 +16,7 @@ const createForm = () => {
 
 const createField = props => {
   const field = new FormsField({
-    form: createForm(),
+    formFactory: new Factory({ product: () => createForm() }),
     ...props
   });
 

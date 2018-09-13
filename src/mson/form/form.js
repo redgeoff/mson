@@ -22,8 +22,11 @@ export default class Form extends Component {
             name: 'fields',
             component: 'FormsField',
             // required: true,
-            form: {
-              component: 'SchemaValidatorForm'
+            formFactory: {
+              component: 'Factory',
+              product: {
+                component: 'SchemaValidatorForm'
+              }
             }
           },
           {
@@ -34,8 +37,11 @@ export default class Form extends Component {
           {
             name: 'validators',
             component: 'FormsField',
-            form: {
-              component: 'ValidatorForm'
+            formFactory: {
+              component: 'Factory',
+              product: {
+                component: 'ValidatorForm'
+              }
             }
           },
           {
@@ -761,10 +767,16 @@ export default class Form extends Component {
   buildSchemaForm(form, compiler) {
     super.buildSchemaForm(form, compiler);
 
-    form
-      .getField('fields')
-      .get('form')
-      .set({ compiler });
+    // Wrap factory so that it sets the compiler
+    const formFactory = form.getField('fields').get('formFactory');
+    const product = formFactory.get('product');
+    formFactory.set({
+      product: () => {
+        const form = product();
+        form.set({ compiler });
+        return form;
+      }
+    });
 
     // Monkey patch setValues so that we can dynamically set the fieldNames when validating the
     // access

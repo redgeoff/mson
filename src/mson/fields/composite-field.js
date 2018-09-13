@@ -154,7 +154,10 @@ export default class CompositeField extends Field {
       this._setFields(props.fields);
     }
 
-    this.eachField(field => this._setIfUndefinedProp(props, field.get('name')));
+    this.eachField(field => {
+      const name = field.get('name');
+      this._setIfDefined(name, props[name]);
+    });
   }
 
   getField(name) {

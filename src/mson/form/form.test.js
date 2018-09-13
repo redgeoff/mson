@@ -333,7 +333,7 @@ it('should validate schema', () => {
       field: 'validators',
       error: [
         {
-          id: null,
+          id: undefined,
           error: [{ error: 'required', field: 'where' }]
         }
       ]
@@ -708,7 +708,7 @@ const CLONE_FORMS_TIMEOUT_MS = 600;
 it('should clone many forms quickly', () => {
   return testUtils.expectToFinishBefore(async () => {
     const form = createForm();
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 50; i++) {
       form.clone();
     }
   }, CLONE_FORMS_TIMEOUT_MS);

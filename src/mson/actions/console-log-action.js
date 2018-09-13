@@ -23,7 +23,10 @@ export default class ConsoleLogAction extends Action {
     });
   }
 
-  async act(/* props */) {
+  async act(props) {
     this._console.log(this.get('message'));
+
+    // Pass on the arguments so that the log can be used in the middle of 2 components
+    return props.arguments;
   }
 }

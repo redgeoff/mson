@@ -90,21 +90,24 @@ export default {
       label: 'Records',
       help: 'Example help',
       required: true,
-      form: {
-        component: 'Form',
-        fields: [
-          {
-            name: 'firstName',
-            component: 'TextField',
-            label: 'First Name',
-            required: true
-          },
-          {
-            name: 'lastName',
-            component: 'TextField',
-            label: 'Last Name'
-          }
-        ]
+      formFactory: {
+        component: 'Factory',
+        product: {
+          component: 'Form',
+          fields: [
+            {
+              name: 'firstName',
+              component: 'TextField',
+              label: 'First Name',
+              required: true
+            },
+            {
+              name: 'lastName',
+              component: 'TextField',
+              label: 'Last Name'
+            }
+          ]
+        }
       }
     },
 

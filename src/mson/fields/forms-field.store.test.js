@@ -2,6 +2,7 @@ import FormsField from './forms-field';
 import MemoryStore from '../stores/memory-store';
 import Form from '../form';
 import TextField from '../fields/text-field';
+import Factory from '../component/factory';
 
 it('should set store', () => {
   const store1 = new MemoryStore();
@@ -31,12 +32,16 @@ it('should set store', () => {
   expect(removeAllListenersSpy2).toHaveBeenCalledTimes(1);
 });
 
-it('should listen to store changes', () => {
+it('should listen to store changes', async () => {
   const store = new MemoryStore();
-  const form = new Form({
-    fields: [new TextField({ name: 'firstName' })]
+  const formFactory = new Factory({
+    product: () => {
+      return new Form({
+        fields: [new TextField({ name: 'firstName' })]
+      });
+    }
   });
-  const field = new FormsField({ showArchived: false, store, form });
+  const field = new FormsField({ showArchived: false, store, formFactory });
   const upsertFormSpy = jest.spyOn(field, 'upsertForm');
   const removeFormSpy = jest.spyOn(field, 'removeForm');
 
@@ -53,13 +58,13 @@ it('should listen to store changes', () => {
   };
 
   // Ignore other events
-  field._handleStoreChangeFactory()('otherEvent', null);
+  await field._handleStoreChangeFactory()('otherEvent', null);
   expect(upsertFormSpy).toHaveBeenCalledTimes(0);
   expect(removeFormSpy).toHaveBeenCalledTimes(0);
 
   // Create fails as archivedAt does not match
   field.set({ showArchived: true });
-  field._handleStoreChangeFactory()('createItem', value);
+  await field._handleStoreChangeFactory()('createItem', value);
   expect(upsertFormSpy).toHaveBeenCalledTimes(0);
   expect(removeFormSpy).toHaveBeenCalledTimes(0);
   field.set({ showArchived: false });
@@ -67,42 +72,42 @@ it('should listen to store changes', () => {
   const muteChange = false;
 
   // Create
-  field._handleStoreChangeFactory()('createItem', value);
-  expect(upsertFormSpy).toHaveBeenCalledWith(
-    value.value.fieldValues,
-    value.value.archivedAt,
-    value.value.userId,
+  await field._handleStoreChangeFactory()('createItem', value);
+  expect(upsertFormSpy).toHaveBeenCalledWith({
+    values: value.value.fieldValues,
+    archivedAt: value.value.archivedAt,
+    userId: value.value.userId,
     muteChange,
-    value.value.cursor
-  );
+    cursor: value.value.cursor
+  });
 
   // Update
-  field._handleStoreChangeFactory()('updateItem', value);
-  expect(upsertFormSpy).toHaveBeenCalledWith(
-    value.value.fieldValues,
-    value.value.archivedAt,
-    value.value.userId,
+  await field._handleStoreChangeFactory()('updateItem', value);
+  expect(upsertFormSpy).toHaveBeenCalledWith({
+    values: value.value.fieldValues,
+    archivedAt: value.value.archivedAt,
+    userId: value.value.userId,
     muteChange,
-    value.value.cursor
-  );
+    cursor: value.value.cursor
+  });
 
   // Update leads to delete as archivedAt changing
   value.value.archivedAt = new Date();
-  field._handleStoreChangeFactory()('updateItem', value);
+  await field._handleStoreChangeFactory()('updateItem', value);
   expect(removeFormSpy).toHaveBeenCalledWith(value.value.id, muteChange);
   value.value.archivedAt = null;
 
   // Prepare for deleteItem by creating again
-  field._handleStoreChangeFactory()('createItem', value);
+  await field._handleStoreChangeFactory()('createItem', value);
   removeFormSpy.mockReset();
 
   // Delete fails as item not found
-  field._handleStoreChangeFactory()('deleteItem', {
+  await field._handleStoreChangeFactory()('deleteItem', {
     value: { value: { id: 'missing id' } }
   });
   expect(removeFormSpy).toHaveBeenCalledTimes(0);
 
   // Delete
-  field._handleStoreChangeFactory()('deleteItem', value);
+  await field._handleStoreChangeFactory()('deleteItem', value);
   expect(removeFormSpy).toHaveBeenCalledWith(value.value.id, muteChange);
 });

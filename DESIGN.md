@@ -2,9 +2,11 @@
 
 ## Design Principles
 
-  - This is parity between compiled and uncompiled components so that the same feature set is supported by both compiled and uncompiled code.
+  - MSON & JS Parity: There is parity between compiled and uncompiled components so that the same feature set is supported by both compiled and uncompiled code.
 
-  - Compiled components are those where MSON is executed in the constructor. As such, parentProps can be passed to replace template parameters in the MSON before compiling, which provides parity with how components are dynamically instantiated in compiled components.
+  - Simplicity through Synchrony: Nearly every operation results in calling set and get on a component. If set and get were made asynchronous, every function would become asynchronous and this would lead to convoluted code. Instead, asynchronous logic is handled by pub/sub.
+
+  - Template Parameters: Compiled components are those where MSON is executed in the constructor. As such, parentProps can be passed to replace template parameters in the MSON before compiling. This provides parity with how components are dynamically instantiated in compiled components.
 
 ## Wrapping vs High Order Components
 
@@ -138,5 +140,187 @@ class AddMiddleName extends Form {
       ]
     })
   }
+}
+```
+
+## Factory vs Clone
+
+Components, like FormsField, create an instance of a form for each record. Often, users view a large number of records simultaneously and therefore the instantiation of these forms must be very fast. An initial implementation of FormsField created a new instance of the form using a recursive clone. The simplicity of this approach meant that it was easy to customize this instance via listeners and then the customized instance would be cloned. The downside of this approach was that doing a recursive clone in JS is very inefficient as it requires a recursive walk of the object. This inefficiency introduces a very apparent latency in the UI. You can optimize the clone by instantiating a new instance, doing a recursive clone of the properties and then setting these properties on the new instance. The instantiation is done by analyzing the `className` and using `compiler.getCompiledComponent(className)` and is therefore only available for registered components. Unfortunately, even with this optimization, the latency is significant as it requires a deep clone of the properties and a recursive walk of the original instance.
+
+Alternatively, a factory, a function that creates an instance of a component, is a much faster method of instantiation. Here is an example factory that creates a form:
+
+```js
+{
+  component: 'Factory',
+  product: {
+    component: 'Form',
+    fields: [
+      {
+        name: 'firstName',
+        component: 'TextField'
+      }
+    ]
+  }
+}
+```
+
+Factories can also contain extra `properties` that are set after a component is produced:
+
+```js
+{
+  component: 'Factory',
+  product: {
+    component: 'Form',
+    fields: [
+      {
+        name: 'firstName',
+        component: 'TextField'
+      }
+    ]
+  },
+  properties: {
+    fields: [
+      {
+        name: 'middleName',
+        component: 'TextField'
+      }
+    ]
+  }
+}
+```
+
+The properties are set after the component is instantiated and not in the constructor of the component as this allows for the seamless handling of properties with the same key. If not, things like new fields would overwrite existing fields.
+
+You can even wrap a factory around another factory, allowing for extension through composition:
+
+```js
+{
+  component: 'Factory',
+  product: {
+    component: 'Factory',
+    product: {
+      component: 'Form',
+      fields: [
+        {
+          name: 'firstName',
+          component: 'TextField'
+        }
+      ]
+    }
+    properties: {
+      fields: [
+        {
+          name: 'middleName',
+          component: 'TextField'
+        }
+      ]
+    }
+  },
+  properties: {
+    fields: [
+      {
+        name: 'lastName',
+        component: 'TextField'
+      }
+    ]
+  }
+}
+```
+
+An important detail of a MSON factory is that the properties of the factory are not instantiated until the factory produces a component. This is necessary, as each product of the factory has its own memory space. The JS equivalent of this concept looks like:
+
+```js
+new Factory({
+  product: () => {
+    const form = new Form({
+      field: [
+        new TextField({ name: 'firstName '})
+      ]
+    })
+
+    // Fresh instantiation of properties
+    form.set({
+      fields: [
+        new TextField({ name: 'middleName '})
+      ]
+    })
+
+    return form
+  }
+})
+```
+
+An important performance consideration is that it can be a lot faster to set certain properties via the factory than via the listeners of the product itself. Consider the example where our select options are populated via an API call:
+
+```js
+{
+  component: 'Factory',
+  product: {
+    component: 'Form',
+    fields: [
+      {
+        name: 'car',
+        component: 'SelectField'
+      }
+    ],
+    listeners: [
+      {
+        event: 'load',
+        actions: [
+          {
+            component: 'GetFromAPI'
+            // ...
+          },
+          {
+            component: 'Iterator'
+            // ...
+          },
+          {
+            component: 'Set',
+            name: 'fields.car.options'
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Even with a cache, this can be very inefficient as it requires a call to get the options each time a form is produced. Instead, we can perform the asynchronous communication once and then quickly copy the result to each produced component:
+
+```js
+{
+  component: 'Factory',
+  product: {
+    component: 'Form',
+    fields: [
+      {
+        name: 'car',
+        component: 'SelectField'
+      }
+    ]
+  },
+  listeners: [
+    {
+      event: 'load',
+      actions: [
+        {
+          component: 'GetFromAPI'
+          // ...
+        },
+        {
+          component: 'Iterator'
+          // ...
+        },
+        {
+          component: 'Set',
+          name: 'properties',
+          value: {
+            'fields.car.options': '{{arguments}}'
+          }
+        }
+      ]
+    }
+  ]
 }
 ```
