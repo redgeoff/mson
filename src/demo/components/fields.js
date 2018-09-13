@@ -209,6 +209,7 @@ export default {
       label: 'SelListField',
       help: 'Example help',
       required: true,
+      blankString: 'None', // Provide a way for the user to delete the entry
       options: [
         { value: 'red', label: 'Red' },
         { value: 'green', label: 'Green' },
