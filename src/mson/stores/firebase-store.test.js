@@ -46,14 +46,14 @@ it('should listen to changes', async () => {
 
   // Verify initial load
   await testUtils.once(store, 'didLoad');
-  const initialDocs = await store.getAllItems({ showArchived: false });
+  const initialDocs = await store.getAllDocs({ showArchived: false });
   expect(initialDocs.edges.map(doc => doc.node)).toEqual(docs);
 
   // Use string to avoid race condition on comparing dates
   const createdAt = new Date().toISOString();
 
   // Simulate create
-  const afterCreate = testUtils.once(store, 'createItem');
+  const afterCreate = testUtils.once(store, 'createDoc');
   const docToCreate = {
     type: 'added',
     data: {
@@ -73,7 +73,7 @@ it('should listen to changes', async () => {
   expect(created[0].value).toEqual(docToCreate.data);
 
   // Simulate update
-  const afterUpdate = testUtils.once(store, 'updateItem');
+  const afterUpdate = testUtils.once(store, 'updateDoc');
   const docToUpdate = {
     type: 'modified',
     data: {
@@ -93,7 +93,7 @@ it('should listen to changes', async () => {
   expect(updated[0].value).toEqual(docToUpdate.data);
 
   // Simulate delete
-  const afterDelete = testUtils.once(store, 'deleteItem');
+  const afterDelete = testUtils.once(store, 'deleteDoc');
   const docToDelete = {
     type: 'removed',
     data: {

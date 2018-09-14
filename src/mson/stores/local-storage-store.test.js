@@ -9,7 +9,7 @@ it('should get all', () =>
     storeName: 'local-storage-store-get-all'
   }));
 
-it('should loads items when store exists', async () => {
+it('should loads docs when store exists', async () => {
   let fieldValues = {
     firstName: 'Ella',
     lastName: 'Fitzgerald'
@@ -22,15 +22,15 @@ it('should loads items when store exists', async () => {
   const store1 = new LocalStorageStore({
     storeName: 'local-storage-store-exists'
   });
-  const ella = await store1.createItem({ form });
+  const ella = await store1.createDoc({ form });
 
   const store2 = new LocalStorageStore({
     storeName: 'local-storage-store-exists'
   });
-  const item = await store2.getItem({ id: ella.id });
+  const doc = await store2.getDoc({ id: ella.id });
   // Use JSON.parse and JSON.stringify as the store converts dates to strings in this manner
   const ellaConverted = JSON.parse(JSON.stringify(ella));
-  expect(item).toEqual(ellaConverted);
+  expect(doc).toEqual(ellaConverted);
 });
 
 it('should get local storage', () => {

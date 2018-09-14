@@ -20,10 +20,10 @@ export default class FirebaseStore extends MemoryStore {
         snapshot.docChanges().forEach(change => {
           const data = change.doc.data();
           if (change.type === 'removed') {
-            this._items.delete(data.id);
+            this._docs.delete(data.id);
           } else {
             // added or modified
-            this._items.set(data.id, data);
+            this._docs.set(data.id, data);
           }
         });
 
@@ -41,11 +41,11 @@ export default class FirebaseStore extends MemoryStore {
     );
   }
 
-  // async _loadItems() {
+  // async _loadDocs() {
   //   const docs = await this._coll.get();
   //   docs.forEach(doc => {
-  //     const item = doc.data();
-  //     this._items.set(item.id, item);
+  //     const doc = doc.data();
+  //     this._docs.set(doc.id, doc);
   //   });
   // }
 
@@ -68,8 +68,8 @@ export default class FirebaseStore extends MemoryStore {
 
     this._listenToChanges(props.collection);
 
-    // Not needed as we get the items by listening to the changes
-    // await this._loadItems();
+    // Not needed as we get the docs by listening to the changes
+    // await this._loadDocs();
   }
 
   _create(props) {
@@ -124,45 +124,45 @@ export default class FirebaseStore extends MemoryStore {
     }
   }
 
-  async _createItem(props, fieldValues) {
-    const item = this._buildDoc({ fieldValues });
+  async _createDoc(props, fieldValues) {
+    const doc = this._buildDoc({ fieldValues });
 
-    await this._docSet(item.id, item);
+    await this._docSet(doc.id, doc);
 
     // Note: we need to update the underlying MemoryStore so that the data is there after this
     // function completes even though Firebase will emit an onWrite with the changed data.
-    this._items.set(item.id, item);
+    this._docs.set(doc.id, doc);
 
-    return item;
+    return doc;
   }
 
-  async _modifyItem(props, { fieldValues, archivedAt }) {
+  async _modifyDoc(props, { fieldValues, archivedAt }) {
     // We use cloneDeep so that we don't modify the data in the memory store before we modify the
     // data in the Firebase store. The write to Firebase could always fail.
-    let item = cloneDeep(this._items.get(props.id));
+    let doc = cloneDeep(this._docs.get(props.id));
 
-    item = this._setDoc(item, { fieldValues, archivedAt });
+    doc = this._setDoc(doc, { fieldValues, archivedAt });
 
-    await this._docSet(item.id, item, {
+    await this._docSet(doc.id, doc, {
       merge: true // allow for partial updates
     });
 
     // Note: we need to update the underlying MemoryStore so that the data is there after this
     // function completes even though Firebase will emit an onWrite with the changed data.
-    this._items.set(item.id, item);
+    this._docs.set(doc.id, doc);
 
-    return item;
+    return doc;
   }
 
-  async _updateItem(props, fieldValues) {
-    return this._modifyItem(props, { fieldValues });
+  async _updateDoc(props, fieldValues) {
+    return this._modifyDoc(props, { fieldValues });
   }
 
-  async _archiveItem(props /*, fieldValues */) {
-    return this._modifyItem(props, { archivedAt: new Date() });
+  async _archiveDoc(props /*, fieldValues */) {
+    return this._modifyDoc(props, { archivedAt: new Date() });
   }
 
-  async _restoreItem(props /*, fieldValues */) {
-    return this._modifyItem(props, { archivedAt: null });
+  async _restoreDoc(props /*, fieldValues */) {
+    return this._modifyDoc(props, { archivedAt: null });
   }
 }

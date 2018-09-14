@@ -25,7 +25,7 @@ export const shouldCRUD = async (Store, props) => {
 
   const store = new Store(props);
 
-  const created = await store.createItem({ form });
+  const created = await store.createDoc({ form });
   expect(created.id).not.toBeFalsy();
   expect(created.archivedAt).toBeNull();
   expect(created.createdAt).not.toBeFalsy();
@@ -34,7 +34,7 @@ export const shouldCRUD = async (Store, props) => {
     Object.assign({ id: created.id }, fieldValues)
   );
 
-  expect(await store.getItem({ id: created.id })).toEqual(created);
+  expect(await store.getDoc({ id: created.id })).toEqual(created);
 
   form.setValues({
     id: created.id,
@@ -44,7 +44,7 @@ export const shouldCRUD = async (Store, props) => {
   // Make sure timestamps aren't the same
   await testUtils.sleepToEnsureDifferentTimestamps();
 
-  const updated = await store.updateItem({ id: created.id, form });
+  const updated = await store.updateDoc({ id: created.id, form });
   expect(updated).toEqual({
     id: created.id,
     archivedAt: null,
@@ -59,12 +59,12 @@ export const shouldCRUD = async (Store, props) => {
   });
   expect(updated.updatedAt).not.toEqual(created.updatedAt);
 
-  expect(await store.getItem({ id: created.id })).toEqual(updated);
+  expect(await store.getDoc({ id: created.id })).toEqual(updated);
 
   // Make sure timestamps aren't the same
   await testUtils.sleepToEnsureDifferentTimestamps();
 
-  const archived = await store.archiveItem({ id: created.id });
+  const archived = await store.archiveDoc({ id: created.id });
   expect(archived).toEqual(
     Object.assign({}, updated, {
       archivedAt: archived.archivedAt,
@@ -77,7 +77,7 @@ export const shouldCRUD = async (Store, props) => {
   // Make sure timestamps aren't the same
   await testUtils.sleepToEnsureDifferentTimestamps();
 
-  const restored = await store.restoreItem({ id: created.id });
+  const restored = await store.restoreDoc({ id: created.id });
   expect(restored).toEqual(
     Object.assign({}, updated, { updatedAt: restored.updatedAt })
   );
@@ -89,9 +89,9 @@ it('should create, update, archive & restore', async () => {
   await shouldCRUD(MemoryStore);
 });
 
-const createItem = async (store, fieldValues) => {
+const createDoc = async (store, fieldValues) => {
   const form = createForm({ value: fieldValues });
-  return store.createItem({ form });
+  return store.createDoc({ form });
 };
 
 export const shouldGetAll = async (Store, props) => {
@@ -101,20 +101,20 @@ export const shouldGetAll = async (Store, props) => {
     firstName: 'Harry',
     lastName: 'Potter'
   };
-  const harry = await createItem(store, harryValues);
+  const harry = await createDoc(store, harryValues);
 
   const hermioneValues = {
     firstName: 'Hermione',
     lastName: 'Granger'
   };
-  let hermione = await createItem(store, hermioneValues);
-  hermione = await store.archiveItem({ id: hermione.id });
+  let hermione = await createDoc(store, hermioneValues);
+  hermione = await store.archiveDoc({ id: hermione.id });
 
   const ronValues = {
     firstName: 'Ron',
     lastName: 'Weasley'
   };
-  const ron = await createItem(store, ronValues);
+  const ron = await createDoc(store, ronValues);
 
   const all = {
     pageInfo: {
@@ -143,12 +143,12 @@ export const shouldGetAll = async (Store, props) => {
 
   // Default props
   expect(
-    await store.getAllItems({ ...searchDefaults, showArchived: null })
+    await store.getAllDocs({ ...searchDefaults, showArchived: null })
   ).toEqual(all);
 
   // Search
   expect(
-    await store.getAllItems({
+    await store.getAllDocs({
       ...searchDefaults,
       where: {
         $and: [
@@ -167,13 +167,13 @@ export const shouldGetAll = async (Store, props) => {
 
   // Archived status
   expect(
-    await store.getAllItems({
+    await store.getAllDocs({
       ...searchDefaults,
       showArchived: true
     })
   ).toEqual(Object.assign({}, all, { edges: [{ node: hermione }] }));
   expect(
-    await store.getAllItems({
+    await store.getAllDocs({
       ...searchDefaults,
       showArchived: false
     })
@@ -183,7 +183,7 @@ export const shouldGetAll = async (Store, props) => {
 
   // Order
   expect(
-    await store.getAllItems({
+    await store.getAllDocs({
       ...searchDefaults,
       order: [['fieldValues.firstName', 'DESC']]
     })

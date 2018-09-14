@@ -64,7 +64,7 @@ it('should listen to store changes', async () => {
 
   // Create fails as archivedAt does not match
   field.set({ showArchived: true });
-  await field._handleStoreChangeFactory()('createItem', value);
+  await field._handleStoreChangeFactory()('createDoc', value);
   expect(upsertFormSpy).toHaveBeenCalledTimes(0);
   expect(removeFormSpy).toHaveBeenCalledTimes(0);
   field.set({ showArchived: false });
@@ -72,7 +72,7 @@ it('should listen to store changes', async () => {
   const muteChange = false;
 
   // Create
-  await field._handleStoreChangeFactory()('createItem', value);
+  await field._handleStoreChangeFactory()('createDoc', value);
   expect(upsertFormSpy).toHaveBeenCalledWith({
     values: value.value.fieldValues,
     archivedAt: value.value.archivedAt,
@@ -82,7 +82,7 @@ it('should listen to store changes', async () => {
   });
 
   // Update
-  await field._handleStoreChangeFactory()('updateItem', value);
+  await field._handleStoreChangeFactory()('updateDoc', value);
   expect(upsertFormSpy).toHaveBeenCalledWith({
     values: value.value.fieldValues,
     archivedAt: value.value.archivedAt,
@@ -93,12 +93,12 @@ it('should listen to store changes', async () => {
 
   // Update leads to delete as archivedAt changing
   value.value.archivedAt = new Date();
-  await field._handleStoreChangeFactory()('updateItem', value);
+  await field._handleStoreChangeFactory()('updateDoc', value);
   expect(removeFormSpy).toHaveBeenCalledWith(value.value.id, muteChange);
   value.value.archivedAt = null;
 
   // Prepare for deleteItem by creating again
-  await field._handleStoreChangeFactory()('createItem', value);
+  await field._handleStoreChangeFactory()('createDoc', value);
   removeFormSpy.mockReset();
 
   // Delete fails as item not found

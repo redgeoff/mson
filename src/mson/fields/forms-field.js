@@ -222,8 +222,8 @@ export default class FormsField extends Field {
       const muteChange = false;
       const vv = value && value.value;
       switch (name) {
-        case 'createItem':
-        case 'updateItem':
+        case 'createDoc':
+        case 'updateDoc':
           // Does the form exist and the archivedAt is changing?
           if (
             this._forms.has(vv.id) &&
@@ -421,7 +421,7 @@ export default class FormsField extends Field {
   async _onGetAll(props) {
     const store = this.get('store');
     if (store) {
-      const records = await store.getAllItems(props);
+      const records = await store.getAllDocs(props);
 
       // Did we get back an empty set of results and we are on the first page?
       const noResults =
@@ -900,12 +900,12 @@ export default class FormsField extends Field {
     if (store) {
       // New?
       if (creating) {
-        const record = await store.createItem({ form });
+        const record = await store.createDoc({ form });
         id.setValue(record.id);
         form.set({ userId: record.userId });
       } else {
         // Existing
-        await store.updateItem({ form, id: id.getValue() });
+        await store.updateDoc({ form, id: id.getValue() });
       }
     } else if (creating) {
       // TODO: use the id from this._docs.set instead of this dummy id
@@ -954,7 +954,7 @@ export default class FormsField extends Field {
   async archive(form) {
     const store = this.get('store');
     if (store) {
-      const record = await store.archiveItem({ form, id: form.getValue('id') });
+      const record = await store.archiveDoc({ form, id: form.getValue('id') });
       form.set({ archivedAt: record.archivedAt });
     }
 
@@ -975,7 +975,7 @@ export default class FormsField extends Field {
   async restore(form) {
     const store = this.get('store');
     if (store) {
-      await store.restoreItem({ form, id: form.getValue('id') });
+      await store.restoreDoc({ form, id: form.getValue('id') });
     }
 
     form.set({ archivedAt: null });

@@ -30,13 +30,13 @@ class CollectionMock {
     // Simulate the response from Firebase after a write
     // this._docs.on('$change', (name, value) => {
     //   switch (name) {
-    //     case 'createItem':
+    //     case 'createDoc':
     //       this.emitSnapshot([ { type: 'added', data: value.value } ])
     //       break;
-    //     case 'updateItem':
+    //     case 'updateDoc':
     //       this.emitSnapshot([ { type: 'modified', data: value.value } ])
     //       break;
-    //     case 'deleteItem':
+    //     case 'deleteDoc':
     //       this.emitSnapshot([ { type: 'removed', data: value.value } ])
     //       break;
     //     default:
