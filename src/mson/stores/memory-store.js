@@ -11,34 +11,34 @@ export default class MemoryStore extends Store {
   _create(props) {
     super._create(props);
 
-    this._items = new Mapa();
+    this._docs = new Mapa();
 
-    this._items.on('$change', (name, value) => {
-      this.emitChange(name + 'Item', value);
+    this._docs.on('$change', (name, value) => {
+      this.emitChange(name + 'Doc', value);
     });
   }
 
-  async _createItem(props, fieldValues) {
-    const item = this._buildDoc({ fieldValues });
+  async _createDoc(props, fieldValues) {
+    const doc = this._buildDoc({ fieldValues });
 
-    this._items.set(item.id, item);
+    this._docs.set(doc.id, doc);
 
-    return item;
+    return doc;
   }
 
   _toSiftWhere(where) {
-    return cloneDeepWith(where, (item, index) => {
-      if (item.$iLike) {
-        return { $regex: '^' + item.$iLike.replace(/%/, ''), $options: 'i' };
+    return cloneDeepWith(where, (doc, index) => {
+      if (doc.$iLike) {
+        return { $regex: '^' + doc.$iLike.replace(/%/, ''), $options: 'i' };
       }
     });
   }
 
-  async _getItem(props) {
-    return this._items.get(props.id);
+  async _getDoc(props) {
+    return this._docs.get(props.id);
   }
 
-  async _getAllItems(props) {
+  async _getAllDocs(props) {
     // TODO:
     // props.after
     // props.first
@@ -52,7 +52,7 @@ export default class MemoryStore extends Store {
       where = this._toSiftWhere(props.where);
     }
 
-    const items = {
+    const docs = {
       // TODO: hasNextPage will need to change once we support pagination via after, first, etc...
       // depending on if there is still more data to get
       pageInfo: {
@@ -61,15 +61,15 @@ export default class MemoryStore extends Store {
       edges: []
     };
 
-    for (const item of this._items.values()) {
-      const sifted = where ? sift(where, [item]) : null;
+    for (const doc of this._docs.values()) {
+      const sifted = where ? sift(where, [doc]) : null;
       if (
         (props.showArchived === null ||
-          !!item.archivedAt === props.showArchived) &&
+          !!doc.archivedAt === props.showArchived) &&
         (where === null || sifted.length !== 0)
       ) {
-        items.edges.push({
-          node: item
+        docs.edges.push({
+          node: doc
         });
       }
     }
@@ -82,42 +82,42 @@ export default class MemoryStore extends Store {
         names.push('node.' + order[0]);
         orders.push(order[1].toLowerCase());
       });
-      items.edges = orderBy(items.edges, names, orders);
+      docs.edges = orderBy(docs.edges, names, orders);
     }
 
-    return items;
+    return docs;
   }
 
-  async _updateItem(props, fieldValues) {
+  async _updateDoc(props, fieldValues) {
     // Clone the data so that we don't modify the original
-    let item = cloneDeep(this._items.get(props.id));
+    let doc = cloneDeep(this._docs.get(props.id));
 
-    item = this._setDoc(item, { fieldValues });
+    doc = this._setDoc(doc, { fieldValues });
 
-    this._items.set(props.id, item);
+    this._docs.set(props.id, doc);
 
-    return item;
+    return doc;
   }
 
-  async _archiveItem(props) {
+  async _archiveDoc(props) {
     // Clone the data so that we don't modify the original
-    let item = cloneDeep(this._items.get(props.id));
+    let doc = cloneDeep(this._docs.get(props.id));
 
-    item = this._setDoc(item, { archivedAt: new Date() });
+    doc = this._setDoc(doc, { archivedAt: new Date() });
 
-    this._items.set(props.id, item);
+    this._docs.set(props.id, doc);
 
-    return item;
+    return doc;
   }
 
-  async _restoreItem(props) {
+  async _restoreDoc(props) {
     // Clone the data so that we don't modify the original
-    let item = cloneDeep(this._items.get(props.id));
+    let doc = cloneDeep(this._docs.get(props.id));
 
-    item = this._setDoc(item, { archivedAt: null });
+    doc = this._setDoc(doc, { archivedAt: null });
 
-    this._items.set(props.id, item);
+    this._docs.set(props.id, doc);
 
-    return item;
+    return doc;
   }
 }

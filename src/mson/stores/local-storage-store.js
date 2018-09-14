@@ -4,12 +4,12 @@ import localStorage from './local-storage';
 export default class LocalStorageStore extends MemoryStore {
   _className = 'LocalStorageStore';
 
-  _loadItems(storeName) {
+  _loadDocs(storeName) {
     const store = this._localStorage.getItem(storeName);
     if (store !== null) {
-      const items = JSON.parse(store);
-      items.forEach(item => {
-        this._items.set(item.id, item);
+      const docs = JSON.parse(store);
+      docs.forEach(doc => {
+        this._docs.set(doc.id, doc);
       });
     }
   }
@@ -42,33 +42,33 @@ export default class LocalStorageStore extends MemoryStore {
       }
     });
 
-    this._loadItems(props && props.storeName);
+    this._loadDocs(props && props.storeName);
   }
 
-  _saveItems() {
-    const items = this._items.map(item => item);
-    this._localStorage.setItem(this.get('storeName'), JSON.stringify(items));
+  _saveDocs() {
+    const docs = this._docs.map(doc => doc);
+    this._localStorage.setItem(this.get('storeName'), JSON.stringify(docs));
   }
 
   async _doAndSave(promiseFactory) {
     const response = await promiseFactory();
-    this._saveItems();
+    this._saveDocs();
     return response;
   }
 
-  async _createItem(props, fieldValues) {
-    return this._doAndSave(() => super._createItem(props, fieldValues));
+  async _createDoc(props, fieldValues) {
+    return this._doAndSave(() => super._createDoc(props, fieldValues));
   }
 
-  async _updateItem(props, fieldValues) {
-    return this._doAndSave(() => super._updateItem(props, fieldValues));
+  async _updateDoc(props, fieldValues) {
+    return this._doAndSave(() => super._updateDoc(props, fieldValues));
   }
 
-  async _archiveItem(props, fieldValues) {
-    return this._doAndSave(() => super._archiveItem(props, fieldValues));
+  async _archiveDoc(props, fieldValues) {
+    return this._doAndSave(() => super._archiveDoc(props, fieldValues));
   }
 
-  async _restoreItem(props, fieldValues) {
-    return this._doAndSave(() => super._restoreItem(props, fieldValues));
+  async _restoreDoc(props, fieldValues) {
+    return this._doAndSave(() => super._restoreDoc(props, fieldValues));
   }
 }

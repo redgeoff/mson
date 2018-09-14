@@ -173,13 +173,13 @@ const asyncNoop = async () => {};
 
 export const createMockedStore = () => {
   return {
-    getAllItems: async props => {
+    getAllDocs: async props => {
       return await onGetAllPeople(props);
     },
-    createItem: asyncNoop,
-    updateItem: asyncNoop,
-    archiveItem: asyncNoop,
-    restoreItem: asyncNoop,
+    createDoc: asyncNoop,
+    updateDoc: asyncNoop,
+    archiveDoc: asyncNoop,
+    restoreDoc: asyncNoop,
     on: noop
   };
 };

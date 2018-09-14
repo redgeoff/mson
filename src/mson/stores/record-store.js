@@ -52,7 +52,7 @@ export default class RecordStore extends Store {
     }
   }
 
-  async _createItem(props, fieldValues) {
+  async _createDoc(props, fieldValues) {
     this._clearCache();
 
     const response = await this._request(props, appId => {
@@ -82,7 +82,7 @@ export default class RecordStore extends Store {
     return showArchived ? { archivedAt: { $ne: null } } : { archivedAt: null };
   }
 
-  async _getAllItems(props) {
+  async _getAllDocs(props) {
     const showArchivedWhere = this._getShowArchivedWhere(
       props && props.showArchived
     );
@@ -116,7 +116,7 @@ export default class RecordStore extends Store {
     });
   }
 
-  async _updateItem(props, fieldValues) {
+  async _updateDoc(props, fieldValues) {
     const response = await this._request(props, appId => {
       return this._registrar.client.record.update({
         appId,
@@ -129,7 +129,7 @@ export default class RecordStore extends Store {
     return response.data.updateRecord;
   }
 
-  async _archiveItem(props) {
+  async _archiveDoc(props) {
     this._clearCache();
 
     const response = await this._request(props, appId => {
@@ -143,7 +143,7 @@ export default class RecordStore extends Store {
     return response.data.archiveRecord;
   }
 
-  async _restoreItem(props) {
+  async _restoreDoc(props) {
     this._clearCache();
 
     const response = await this._request(props, appId => {

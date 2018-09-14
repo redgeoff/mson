@@ -16,34 +16,34 @@ export default class Store extends Component {
     }
   }
 
-  async createItem(props) {
+  async createDoc(props) {
     // Omit values based on access
     const fieldValues = this._access.valuesCanCreate(props.form);
 
-    return this._createItem(props, fieldValues);
+    return this._createDoc(props, fieldValues);
   }
 
-  async getItem(props) {
-    return this._getItem(props);
+  async getDoc(props) {
+    return this._getDoc(props);
   }
 
-  async getAllItems(props) {
-    return this._getAllItems(props);
+  async getAllDocs(props) {
+    return this._getAllDocs(props);
   }
 
-  async updateItem(props) {
+  async updateDoc(props) {
     // Omit values based on access
     const fieldValues = this._access.valuesCanUpdate(props.form);
 
-    return this._updateItem(props, fieldValues);
+    return this._updateDoc(props, fieldValues);
   }
 
-  async archiveItem(props) {
-    return this._archiveItem(props);
+  async archiveDoc(props) {
+    return this._archiveDoc(props);
   }
 
-  async restoreItem(props) {
-    return this._restoreItem(props);
+  async restoreDoc(props) {
+    return this._restoreDoc(props);
   }
 
   _emitError(err) {

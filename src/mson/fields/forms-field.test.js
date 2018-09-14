@@ -437,19 +437,19 @@ it('should save', async () => {
   const field = createField();
 
   const store = {
-    createItem: async () => ({
+    createDoc: async () => ({
       id: 'myId',
       userId: 'myUserId'
     }),
-    updateItem: async () => {},
+    updateDoc: async () => {},
     on: () => {},
     removeAllListeners: () => {}
   };
 
   field.set({ store });
 
-  const createSpy = jest.spyOn(store, 'createItem');
-  const updateSpy = jest.spyOn(store, 'updateItem');
+  const createSpy = jest.spyOn(store, 'createDoc');
+  const updateSpy = jest.spyOn(store, 'updateDoc');
 
   const jack = {
     firstName: 'Jack',
@@ -492,8 +492,8 @@ it('should archive', async () => {
   const archivedAt = new Date();
 
   const store = {
-    updateItem: async () => {},
-    archiveItem: async () => ({
+    updateDoc: async () => {},
+    archiveDoc: async () => ({
       archivedAt
     }),
     on: () => {},
@@ -506,7 +506,7 @@ it('should archive', async () => {
 
   field.set({ store });
 
-  const archiveSpy = jest.spyOn(store, 'archiveItem');
+  const archiveSpy = jest.spyOn(store, 'archiveDoc');
   const displaySnackbarSpy = jest.spyOn(field._globals, 'displaySnackbar');
 
   const jack = {
@@ -546,8 +546,8 @@ it('should restore', async () => {
   const archivedAt = new Date();
 
   const store = {
-    updateItem: async () => {},
-    restoreItem: async () => {},
+    updateDoc: async () => {},
+    restoreDoc: async () => {},
     on: () => {},
     removeAllListeners: () => {}
   };
@@ -558,7 +558,7 @@ it('should restore', async () => {
 
   field.set({ store });
 
-  const restoreSpy = jest.spyOn(store, 'restoreItem');
+  const restoreSpy = jest.spyOn(store, 'restoreDoc');
   const displaySnackbarSpy = jest.spyOn(field._globals, 'displaySnackbar');
 
   const jack = {
