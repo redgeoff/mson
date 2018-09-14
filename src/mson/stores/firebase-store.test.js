@@ -72,51 +72,51 @@ it('should listen to changes', async () => {
   const created = await afterCreate;
   expect(created[0].value).toEqual(docToCreate.data);
 
-  // // Simulate update
-  // const afterUpdate = testUtils.once(store, 'updateDoc');
-  // const docToUpdate = {
-  //   type: 'modified',
-  //   data: {
-  //     id: '3',
-  //     userId: null,
-  //     archivedAt: null,
-  //     createdAt,
-  //     updatedAt: createdAt,
-  //     fieldValues: {
-  //       id: '3',
-  //       firstName: 'Ronald'
-  //     }
-  //   }
-  // };
-  // firebaseMock.emitSnapshot([docToUpdate]);
-  // const updated = await afterUpdate;
-  // expect(updated[0].value).toEqual(docToUpdate.data);
+  // Simulate update
+  const afterUpdate = testUtils.once(store, 'updateDoc');
+  const docToUpdate = {
+    type: 'modified',
+    data: {
+      id: '3',
+      userId: null,
+      archivedAt: null,
+      createdAt,
+      updatedAt: createdAt,
+      fieldValues: {
+        id: '3',
+        firstName: 'Ronald'
+      }
+    }
+  };
+  firebaseMock.emitSnapshot([docToUpdate]);
+  const updated = await afterUpdate;
+  expect(updated[0].value).toEqual(docToUpdate.data);
 
-  // // Simulate delete
-  // const afterDelete = testUtils.once(store, 'deleteDoc');
-  // const docToDelete = {
-  //   type: 'removed',
-  //   data: {
-  //     id: '3',
-  //     userId: null,
-  //     archivedAt: null,
-  //     createdAt,
-  //     updatedAt: createdAt,
-  //     fieldValues: {
-  //       id: '3',
-  //       firstName: 'Ronald'
-  //     }
-  //   }
-  // };
-  // firebaseMock.emitSnapshot([docToDelete]);
-  // const deleted = await afterDelete;
-  // expect(deleted[0].value).toEqual(docToDelete.data);
+  // Simulate delete
+  const afterDelete = testUtils.once(store, 'deleteDoc');
+  const docToDelete = {
+    type: 'removed',
+    data: {
+      id: '3',
+      userId: null,
+      archivedAt: null,
+      createdAt,
+      updatedAt: createdAt,
+      fieldValues: {
+        id: '3',
+        firstName: 'Ronald'
+      }
+    }
+  };
+  firebaseMock.emitSnapshot([docToDelete]);
+  const deleted = await afterDelete;
+  expect(deleted[0].value).toEqual(docToDelete.data);
 
-  // // Emit errors
-  // const err = {};
-  // const emitErrorSpy = jest.spyOn(store, '_emitError');
-  // firebaseMock.emitError(err);
-  // expect(emitErrorSpy).toHaveBeenCalledWith(err);
+  // Emit errors
+  const err = {};
+  const emitErrorSpy = jest.spyOn(store, '_emitError');
+  firebaseMock.emitError(err);
+  expect(emitErrorSpy).toHaveBeenCalledWith(err);
 });
 
 it('should not set if apiKey missing', async () => {
