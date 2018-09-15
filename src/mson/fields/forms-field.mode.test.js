@@ -113,14 +113,15 @@ it('should set current form', () => {
   const userId = 1;
   const archivedAt = new Date().toISOString();
   firstForm.set({
-    archivedAt,
-    userId
+    value: {
+      userId,
+      archivedAt
+    }
   });
 
   // currentForm is null
   field._setCurrentForm(null);
   expect(clearValues).toHaveBeenCalledTimes(1);
-  expect(set).toHaveBeenCalledWith({ userId: null });
   expect(prepareForm).toHaveBeenCalledTimes(1);
   expect(setTouched).toHaveBeenCalledTimes(1);
   expect(setTouched).toHaveBeenCalledWith(false);
@@ -135,8 +136,6 @@ it('should set current form', () => {
   field._setCurrentForm(firstForm);
   expect(clearValues).toHaveBeenCalledTimes(1);
   expect(set).toHaveBeenCalledWith({
-    userId,
-    archivedAt,
     value: firstForm.getValues()
   });
   expect(prepareForm).toHaveBeenCalledTimes(1);
@@ -146,8 +145,6 @@ it('should set current form', () => {
   field.set({ currentForm: firstForm });
   field._setCurrentForm(firstForm);
   expect(set).toHaveBeenCalledWith({
-    userId,
-    archivedAt,
     value: firstForm.getValues()
   });
 });

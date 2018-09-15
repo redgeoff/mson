@@ -18,7 +18,7 @@ export default class DateField extends TextField {
   }
 
   now() {
-    this._set('value', new Date());
+    this.set({ value: new Date() });
   }
 
   set(props) {

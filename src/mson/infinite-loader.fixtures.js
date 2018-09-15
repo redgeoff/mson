@@ -169,17 +169,21 @@ export const onGetItemElementMock = id => {
   };
 };
 
-const asyncNoop = async () => {};
+// const asyncNoop = async () => {};
 
 export const createMockedStore = () => {
   return {
     getAllDocs: async props => {
       return await onGetAllPeople(props);
     },
-    createDoc: asyncNoop,
-    updateDoc: asyncNoop,
-    archiveDoc: asyncNoop,
-    restoreDoc: asyncNoop,
+    // createDoc: asyncNoop,
+    updateDoc: async props => {
+      return {
+        id: props.form.getValue('id')
+      };
+    },
+    // archiveDoc: asyncNoop,
+    // restoreDoc: asyncNoop,
     on: noop
   };
 };

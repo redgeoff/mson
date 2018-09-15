@@ -46,7 +46,7 @@ class FormCard extends React.PureComponent {
       forbidDelete,
       editable,
       disabled,
-      archivedAt
+      value
     } = this.props;
 
     return (
@@ -65,7 +65,7 @@ class FormCard extends React.PureComponent {
               forbidDelete={forbidDelete}
               editable={editable}
               disabled={disabled}
-              archivedAt={archivedAt}
+              archivedAt={value.archivedAt}
               onEdit={event => this.handleEdit(event)}
               onDelete={event => this.handleDelete(event)}
             />
@@ -77,4 +77,4 @@ class FormCard extends React.PureComponent {
 }
 
 FormCard = withStyles(styles)(FormCard);
-export default attach(['archivedAt'], 'form')(FormCard);
+export default attach(['value'], 'form')(FormCard);

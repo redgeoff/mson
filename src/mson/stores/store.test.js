@@ -15,7 +15,7 @@ it('should build doc', () => {
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
     userId,
-    fieldValues: Object.assign({}, fieldValues, { id: doc.id })
+    fieldValues
   });
 
   // When userId is null

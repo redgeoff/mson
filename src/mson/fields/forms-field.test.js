@@ -1,5 +1,6 @@
 import FormsField from './forms-field';
 import TextField from './text-field';
+import DateField from './date-field';
 import Form from '../form';
 import _ from '../lodash';
 import testUtils from '../test-utils';
@@ -335,7 +336,7 @@ const shouldAddFormsQuicklyUncompiledComponents = (timeout, synchronous) => {
   return shouldAddFormsQuickly(field, timeout, synchronous);
 };
 
-const ADD_FORMS_UNCOMPILED_TIMEOUT_MS = 300;
+const ADD_FORMS_UNCOMPILED_TIMEOUT_MS = 600;
 it('should add many forms quickly when using uncompiled components', () => {
   return shouldAddFormsQuicklyUncompiledComponents(
     ADD_FORMS_UNCOMPILED_TIMEOUT_MS,
@@ -343,7 +344,7 @@ it('should add many forms quickly when using uncompiled components', () => {
   );
 });
 
-const ADD_FORMS_UNCOMPILED_ASYNC_TIMEOUT_MS = 600;
+const ADD_FORMS_UNCOMPILED_ASYNC_TIMEOUT_MS = 800;
 it('should add many forms asynchronously & quickly when using uncompiled components', () => {
   return shouldAddFormsQuicklyUncompiledComponents(
     ADD_FORMS_UNCOMPILED_ASYNC_TIMEOUT_MS,
@@ -433,15 +434,20 @@ it('save should handle errors', async () => {
   });
 });
 
+const updateDocMock = () => async props => {
+  return {
+    id: props.form.getValue('id')
+  };
+};
+
 it('should save', async () => {
   const field = createField();
 
   const store = {
     createDoc: async () => ({
-      id: 'myId',
-      userId: 'myUserId'
+      id: 'myId'
     }),
-    updateDoc: async () => {},
+    updateDoc: updateDocMock,
     on: () => {},
     removeAllListeners: () => {}
   };
@@ -453,7 +459,8 @@ it('should save', async () => {
 
   const jack = {
     firstName: 'Jack',
-    lastName: 'Johnson'
+    lastName: 'Johnson',
+    userId: 'myUserId'
   };
 
   const form = field.get('form');
@@ -464,7 +471,7 @@ it('should save', async () => {
   await field.save();
   expect(createSpy).toHaveBeenCalledWith({ form });
   expect(form.getValue('id')).toEqual('myId');
-  expect(form.get('userId')).toEqual('myUserId');
+  expect(form.getValue('userId')).toEqual('myUserId');
   expect(field.getValue()).toHaveLength(1);
 
   // Update
@@ -489,12 +496,12 @@ it('should save', async () => {
 it('should archive', async () => {
   const field = createField();
 
-  const archivedAt = new Date();
+  const archivedAt = new DateField({ now: true });
 
   const store = {
-    updateDoc: async () => {},
+    updateDoc: updateDocMock,
     archiveDoc: async () => ({
-      archivedAt
+      archivedAt: archivedAt.getValue()
     }),
     on: () => {},
     removeAllListeners: () => {}
@@ -526,7 +533,7 @@ it('should archive', async () => {
   const didArchiveRecord = testUtils.once(form, 'didArchiveRecord');
   await field.archive(form);
   expect(archiveSpy).toHaveBeenCalledWith({ form, id: form.getValue('id') });
-  expect(form.get('archivedAt')).toEqual(archivedAt);
+  expect(form.getValue('archivedAt')).toEqual(archivedAt.getValue());
   expect(field.getValue()).toHaveLength(0);
   expect(displaySnackbarSpy).toHaveBeenCalledWith('Person deleted');
   await didArchiveRecord;
@@ -546,7 +553,7 @@ it('should restore', async () => {
   const archivedAt = new Date();
 
   const store = {
-    updateDoc: async () => {},
+    updateDoc: updateDocMock,
     restoreDoc: async () => {},
     on: () => {},
     removeAllListeners: () => {}
@@ -563,12 +570,12 @@ it('should restore', async () => {
 
   const jack = {
     id: 'jack',
+    archivedAt,
     firstName: 'Jack',
     lastName: 'Johnson'
   };
 
   const form = field.get('form');
-  form.set({ archivedAt });
 
   form.setValues(jack);
 
@@ -579,7 +586,7 @@ it('should restore', async () => {
   const didRestoreRecord = testUtils.once(form, 'didRestoreRecord');
   await field.restore(form);
   expect(restoreSpy).toHaveBeenCalledWith({ form, id: form.getValue('id') });
-  expect(form.get('archivedAt')).toBeNull();
+  expect(form.getValue('archivedAt')).toBeNull();
   expect(field.getValue()).toHaveLength(0);
   expect(displaySnackbarSpy).toHaveBeenCalledWith('Person restored');
   await didRestoreRecord;

@@ -1,3 +1,28 @@
+// Timestamps are set in the store as some stores, e.g. those backed by remote databases, may wish
+// to manage the timestamps for better reliability.
+//
+// Structure of doc in a store, e.g.
+//  {
+//     id,
+//     userId,
+//     ...,
+//     fieldValues: {
+//       firstName,
+//       lastName,
+//       ...
+//     }
+//   }
+// In other words, we nest the default fields in the root of the document and then nest the
+// non-default fields in fieldValues. This is done because:
+//   1. There are some properties, like the cursor, which should not be a field as they shouldn't be
+//      displayed to the user. However, these fields need to be associated with the form.
+//   2. It allows for the creation of extra properties in the future without adding them to the form
+//      as default fields
+//   3. Default fields are not included in the fieldValues as this allows the default fields,
+//      especially the id to be at the root of the record and not nested in the fieldValues. We also
+//      don’t want to duplicate these default fields in both the root of the record and in the field
+//      values as this can waste memory when storing the data
+
 import Component from '../component';
 import access from '../access';
 import utils from '../utils';
@@ -18,7 +43,9 @@ export default class Store extends Component {
 
   async createDoc(props) {
     // Omit values based on access
-    const fieldValues = this._access.valuesCanCreate(props.form);
+    const fieldValues = this._access.valuesCanCreate(props.form, {
+      default: false
+    });
 
     return this._createDoc(props, fieldValues);
   }
@@ -33,7 +60,9 @@ export default class Store extends Component {
 
   async updateDoc(props) {
     // Omit values based on access
-    const fieldValues = this._access.valuesCanUpdate(props.form);
+    const fieldValues = this._access.valuesCanUpdate(props.form, {
+      default: false
+    });
 
     return this._updateDoc(props, fieldValues);
   }
@@ -50,16 +79,22 @@ export default class Store extends Component {
     this.emitChange('err', err);
   }
 
+  _now() {
+    return new Date();
+  }
+
   _buildDoc({ fieldValues, userId }) {
     const id = utils.uuid();
-    const createdAt = new Date();
+
+    const createdAt = this._now();
+
     return {
       id,
       archivedAt: null, // Needed by the UI as a default
       createdAt,
       updatedAt: createdAt,
       userId: userId ? userId : null,
-      fieldValues: Object.assign({}, fieldValues, { id })
+      fieldValues: Object.assign({}, fieldValues)
     };
   }
 
@@ -73,7 +108,7 @@ export default class Store extends Component {
       doc.archivedAt = archivedAt;
     }
 
-    doc.updatedAt = new Date();
+    doc.updatedAt = this._now();
 
     return doc;
   }

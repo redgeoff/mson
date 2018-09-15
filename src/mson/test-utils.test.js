@@ -8,7 +8,7 @@ it('should wait for', async () => {
 });
 
 it('should expect to finish before', async () => {
-  await testUtils.expectToFinishBefore(() => testUtils.timeout(10), 100);
+  await testUtils.expectToFinishBefore(() => testUtils.timeout(10), 200);
 
   await testUtils.expectToThrow(() =>
     testUtils.expectToFinishBefore(() => testUtils.timeout(20), 10)

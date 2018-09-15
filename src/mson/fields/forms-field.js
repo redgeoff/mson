@@ -227,15 +227,18 @@ export default class FormsField extends Field {
           // Does the form exist and the archivedAt is changing?
           if (
             this._forms.has(vv.id) &&
-            vv.archivedAt !== this._forms.get(vv.id).get('archivedAt')
+            vv.archivedAt !== this._forms.get(vv.id).getValue('archivedAt')
           ) {
             return this.removeForm(vv.id, muteChange);
           } else if (!!vv.archivedAt === this.get('showArchived')) {
             // The archivedAt matches the current showArchived
             return this.upsertForm({
-              values: vv.fieldValues,
-              archivedAt: vv.archivedAt,
-              userId: vv.userId,
+              values: {
+                ...vv.fieldValues,
+                id: vv.id,
+                archivedAt: vv.archivedAt,
+                userId: vv.userId
+              },
               muteChange,
               cursor: vv.cursor
               // beforeKey: value.prevKey
@@ -243,7 +246,7 @@ export default class FormsField extends Field {
           }
           break;
 
-        case 'deleteItem':
+        case 'deleteDoc':
           return this.removeFormIfExists(vv.id, muteChange);
 
         default:
@@ -468,18 +471,10 @@ export default class FormsField extends Field {
     });
   }
 
-  _addForm({
-    form,
-    values,
-    archivedAt,
-    userId,
-    muteChange,
-    cursor,
-    beforeKey
-  }) {
+  _addForm({ form, values, muteChange, cursor, beforeKey }) {
     form.setValues(values);
 
-    form.set({ parent: this });
+    form.set({ parent: this, cursor });
 
     const id = form.getField('id');
     let key = 0;
@@ -490,11 +485,10 @@ export default class FormsField extends Field {
       key = id.getValue();
     }
 
-    form.set({ archivedAt, userId, cursor });
-
     // Set noResults to false as we now have results
     this.set({ noResults: false });
 
+    // Add form to mapa
     this._forms.set(key, form, beforeKey);
 
     this._listenToForm(form);
@@ -548,13 +542,20 @@ export default class FormsField extends Field {
 
     for (let i = 0; i < edges.length; i++) {
       const edge = edges[i];
+      const node = edge.node;
 
-      const values = { id: edge.node.id };
+      const values = {
+        id: node.id,
+        userId: node.userId,
+        createdAt: node.createdAt,
+        updatedAt: node.updatedAt,
+        archivedAt: node.archivedAt
+      };
       const form = forms[i];
 
       form.eachField(field => {
         // Field exists in returned records?
-        const val = edge.node.fieldValues[field.get('name')];
+        const val = node.fieldValues[field.get('name')];
         if (val) {
           values[field.get('name')] = val;
         }
@@ -563,8 +564,6 @@ export default class FormsField extends Field {
       this._addForm({
         form,
         values,
-        archivedAt: edge.node.archivedAt,
-        userId: edge.node.userId,
         muteChange,
         cursor: edge.cursor,
         beforeKey
@@ -591,17 +590,8 @@ export default class FormsField extends Field {
     return this._addForm(Object.assign({ form }, args));
   }
 
-  addForm({
-    form,
-    values,
-    archivedAt,
-    userId,
-    muteChange,
-    cursor,
-    beforeKey,
-    synchronous
-  }) {
-    const args = { values, archivedAt, userId, muteChange, cursor, beforeKey };
+  addForm({ form, values, muteChange, cursor, beforeKey, synchronous }) {
+    const args = { values, muteChange, cursor, beforeKey };
     if (form) {
       // A form is being supplied so save some CPU processing by using the form instead of
       // generating another form
@@ -713,14 +703,10 @@ export default class FormsField extends Field {
     const form = this.get('form');
     if (currentForm === null) {
       form.clearValues();
-      form.set({ userId: null });
     } else {
-      // We get the values and userId as currentForm may actually be form
       const values = currentForm.getValues();
-      const userId = currentForm.get('userId');
-      const archivedAt = currentForm.get('archivedAt');
       form.clearValues();
-      form.set({ userId, archivedAt, value: values });
+      form.set({ value: values });
       this._set('currentForm', currentForm);
     }
     this._prepareForm(form);
@@ -858,23 +844,17 @@ export default class FormsField extends Field {
     yield* this._forms.values();
   }
 
-  updateForm({ values, archivedAt, userId, muteChange, cursor, beforeKey }) {
+  updateForm({ values, muteChange, cursor, beforeKey }) {
     const fieldForm = this._forms.get(values.id);
     fieldForm.setValues(values);
-    fieldForm.set({
-      archivedAt,
-      userId,
-      cursor
-    });
+    fieldForm.set({ cursor });
     return fieldForm;
   }
 
-  upsertForm({ values, archivedAt, userId, muteChange, cursor, beforeKey }) {
+  upsertForm({ values, muteChange, cursor, beforeKey }) {
     if (this._forms.has(values.id)) {
       return this.updateForm({
         values,
-        archivedAt,
-        userId,
         muteChange,
         cursor,
         beforeKey
@@ -882,8 +862,6 @@ export default class FormsField extends Field {
     } else {
       return this.addForm({
         values,
-        archivedAt,
-        userId,
         muteChange,
         cursor,
         beforeKey
@@ -898,15 +876,19 @@ export default class FormsField extends Field {
     let fieldForm = null;
 
     if (store) {
+      let record = null;
       // New?
       if (creating) {
-        const record = await store.createDoc({ form });
-        id.setValue(record.id);
-        form.set({ userId: record.userId });
+        record = await store.createDoc({ form });
       } else {
         // Existing
-        await store.updateDoc({ form, id: id.getValue() });
+        record = await store.updateDoc({ form, id: id.getValue() });
       }
+      form.setValues({
+        id: record.id,
+        createdAt: record.createdAt,
+        updatedAt: record.updatedAt
+      });
     } else if (creating) {
       // TODO: use the id from this._docs.set instead of this dummy id
       id.setValue(utils.uuid());
@@ -916,8 +898,6 @@ export default class FormsField extends Field {
       // Specify the form so that we don't have to generate another one
       form,
       values: form.getValues(),
-      archivedAt: null,
-      userId: form.get('userId'),
       muteChange: false,
       cursor: form.get('cursor')
     });
@@ -955,7 +935,7 @@ export default class FormsField extends Field {
     const store = this.get('store');
     if (store) {
       const record = await store.archiveDoc({ form, id: form.getValue('id') });
-      form.set({ archivedAt: record.archivedAt });
+      form.setValues({ archivedAt: record.archivedAt });
     }
 
     // // Not showing archived?
@@ -978,7 +958,7 @@ export default class FormsField extends Field {
       await store.restoreDoc({ form, id: form.getValue('id') });
     }
 
-    form.set({ archivedAt: null });
+    form.setValues({ archivedAt: null });
 
     // Remove from list as assume that we are only viewing archived items. We have to use
     // removeFormIfExists as there may be a race condition where the store has already resulted in

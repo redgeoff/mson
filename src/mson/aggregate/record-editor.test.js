@@ -232,9 +232,8 @@ it('should auto validate', async () => {
 });
 
 const emitLoadAndWait = async () => {
-  const loaded = testUtils.once(editAccount, 'didLoad');
   editAccount.emitLoad();
-  await loaded;
+  await editAccount.resolveAfterLoad();
 };
 
 const beforeEachLoadTest = (event, props) => {
@@ -276,7 +275,7 @@ it('should load with preview and storeWhere', async () => {
     {
       name: 'Set',
       props: {
-        name: 'userId',
+        name: 'fields.userId.value',
         value: '{{arguments.userId}}'
       }
     },
@@ -313,6 +312,7 @@ it('should load with preview and storeWhere', async () => {
   expect(editAccount.getValues({ out: true })).toEqual({
     ...testUtils.toDefaultFieldsObject(null),
     id: '1',
+    userId: '1',
     name: 'Miles Davis',
     email: 'miles@example.com'
   });
