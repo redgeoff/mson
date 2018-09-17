@@ -34,6 +34,9 @@ export const shouldCRUD = async (Store, props) => {
 
   expect(await store.getDoc({ id: created.id })).toEqual(created);
 
+  // Get when empty
+  expect(await store.getDoc({ where: { id: 'missingId' } })).toBeNull();
+
   form.setValues({
     id: created.id,
     firstName: 'F. Scott'

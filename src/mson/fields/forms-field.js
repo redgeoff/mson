@@ -263,8 +263,10 @@ export default class FormsField extends Field {
         store.removeAllListeners();
       }
 
-      // newStore can be falsy if the store is being cleared
-      if (newStore) {
+      // newStore can be falsy if the store is being cleared. TODO: is there a better way than doing
+      // the typeof check to ensure that an empty RecordList doesn't bomb out when
+      // newStore='{{store}}'?
+      if (newStore && typeof newStore !== 'string') {
         newStore.on('$change', this._handleStoreChangeFactory());
       }
 

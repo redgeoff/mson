@@ -30,9 +30,8 @@ export default {
         component: 'TextField'
       },
       {
-        name: 'storeName',
-        component: 'TextField'
-        // required: true
+        name: 'store',
+        component: 'Field'
       }
     ]
   },
@@ -103,8 +102,8 @@ export default {
       event: 'submit',
       actions: [
         {
-          component: 'UpsertRecord',
-          storeName: '{{storeName}}'
+          component: 'UpsertDoc',
+          store: '{{store}}'
         },
         {
           component: 'Snackbar',

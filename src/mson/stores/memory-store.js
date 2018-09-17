@@ -18,8 +18,8 @@ export default class MemoryStore extends Store {
     });
   }
 
-  async _createDoc(props, fieldValues) {
-    const doc = this._buildDoc({ fieldValues });
+  async _createDoc({ fieldValues, id }) {
+    const doc = this._buildDoc({ fieldValues, id });
 
     this._docs.set(doc.id, doc);
 
@@ -27,29 +27,27 @@ export default class MemoryStore extends Store {
   }
 
   _toSiftWhere(where) {
-    return cloneDeepWith(where, (doc, index) => {
+    return cloneDeepWith(where, doc => {
       if (doc.$iLike) {
         return { $regex: '^' + doc.$iLike.replace(/%/, ''), $options: 'i' };
       }
     });
   }
 
-  async _getDoc(props) {
-    return this._docs.get(props.id);
+  async _hasDoc({ id }) {
+    return this._docs.has(id);
   }
 
-  async _getAllDocs(props) {
-    // TODO:
-    // props.after
-    // props.first
-    // props.before
-    // props.last
+  async _getDoc({ id }) {
+    return this._docs.get(id);
+  }
 
-    let where = null;
+  async _getAllDocs({ where, showArchived, order }) {
+    // TODO: after, first, before, last and cursors in results
 
-    if (props.where) {
+    if (where) {
       // Convert to a sift expression and then filter
-      where = this._toSiftWhere(props.where);
+      where = this._toSiftWhere(where);
     }
 
     const docs = {
@@ -62,11 +60,12 @@ export default class MemoryStore extends Store {
     };
 
     for (const doc of this._docs.values()) {
-      const sifted = where ? sift(where, [doc]) : null;
+      const sifted = where === undefined ? null : sift(where, [doc]);
       if (
-        (props.showArchived === null ||
-          !!doc.archivedAt === props.showArchived) &&
-        (where === null || sifted.length !== 0)
+        (showArchived === null ||
+          showArchived === undefined ||
+          !!doc.archivedAt === showArchived) &&
+        (where === undefined || sifted.length !== 0)
       ) {
         docs.edges.push({
           node: doc
@@ -74,11 +73,11 @@ export default class MemoryStore extends Store {
       }
     }
 
-    if (props.order) {
+    if (order) {
       // Order by properties
       const names = [];
       const orders = [];
-      props.order.forEach(order => {
+      order.forEach(order => {
         names.push('node.' + order[0]);
         orders.push(order[1].toLowerCase());
       });
@@ -88,35 +87,35 @@ export default class MemoryStore extends Store {
     return docs;
   }
 
-  async _updateDoc(props, fieldValues) {
+  async _updateDoc({ id, fieldValues }) {
     // Clone the data so that we don't modify the original
-    let doc = cloneDeep(this._docs.get(props.id));
+    let doc = cloneDeep(this._docs.get(id));
 
-    doc = this._setDoc(doc, { fieldValues });
+    doc = this._setDoc({ doc, fieldValues });
 
-    this._docs.set(props.id, doc);
+    this._docs.set(id, doc);
 
     return doc;
   }
 
-  async _archiveDoc(props) {
+  async _archiveDoc({ id }) {
     // Clone the data so that we don't modify the original
-    let doc = cloneDeep(this._docs.get(props.id));
+    let doc = cloneDeep(this._docs.get(id));
 
-    doc = this._setDoc(doc, { archivedAt: new Date() });
+    doc = this._setDoc({ doc, archivedAt: new Date() });
 
-    this._docs.set(props.id, doc);
+    this._docs.set(id, doc);
 
     return doc;
   }
 
-  async _restoreDoc(props) {
+  async _restoreDoc({ id }) {
     // Clone the data so that we don't modify the original
-    let doc = cloneDeep(this._docs.get(props.id));
+    let doc = cloneDeep(this._docs.get(id));
 
-    doc = this._setDoc(doc, { archivedAt: null });
+    doc = this._setDoc({ doc, archivedAt: null });
 
-    this._docs.set(props.id, doc);
+    this._docs.set(id, doc);
 
     return doc;
   }

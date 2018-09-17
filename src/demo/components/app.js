@@ -31,6 +31,13 @@ export default {
             }
           }
         ]
+      },
+      {
+        path: '/contact/edit',
+        label: 'Edit Contact',
+        content: {
+          component: 'app.EditContact'
+        }
       }
     ]
   }

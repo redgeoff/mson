@@ -47,7 +47,7 @@ it('should request', async () => {
   const displayError = jest.spyOn(store._uberUtils, 'displayError');
 
   // Success
-  await store._request(null, container.promiseFactory);
+  await store._request(container);
   expect(promiseFactorySpy).toHaveBeenCalledWith(appId);
   expect(setFormErrorsFromAPIErrorSpy).toHaveBeenCalledTimes(0);
   expect(displayError).toHaveBeenCalledTimes(0);
@@ -57,20 +57,17 @@ it('should request', async () => {
   container.promiseFactory = async () => {
     throw err;
   };
-  const props = { form: new Form() };
+  const form = new Form();
   await testUtils.expectToThrow(
-    () => store._request(props, container.promiseFactory),
+    () => store._request({ form, promiseFactory: container.promiseFactory }),
     err
   );
-  expect(setFormErrorsFromAPIErrorSpy).toHaveBeenCalledWith(err, props.form);
+  expect(setFormErrorsFromAPIErrorSpy).toHaveBeenCalledWith(err, form);
   expect(displayError).toHaveBeenCalledTimes(0);
 
   // Error and no form defined
   setFormErrorsFromAPIErrorSpy.mockReset();
-  await testUtils.expectToThrow(
-    () => store._request({}, container.promiseFactory),
-    err
-  );
+  await testUtils.expectToThrow(() => store._request(container), err);
   expect(setFormErrorsFromAPIErrorSpy).toHaveBeenCalledTimes(0);
   expect(displayError).toHaveBeenCalledWith(err.toString());
 });
@@ -295,4 +292,84 @@ it('should get all', async () => {
   expect(getAllSpy).toHaveBeenCalledWith(
     Object.assign({}, opts, { bypassCache: undefined })
   );
+});
+
+it('should upsert and get', async () => {
+  const form = createForm();
+
+  const id = 'myId';
+
+  form.setValues({ id });
+
+  const created = {
+    foo: 'bar'
+  };
+
+  store._registrar = {
+    client: {
+      record: {
+        create: async () => ({
+          data: {
+            createRecord: created
+          }
+        }),
+        get: () => {
+          throw new Error('GraphQL error: record not found');
+        },
+        update: async () => ({
+          data: {
+            updateRecord: created
+          }
+        })
+      }
+    }
+  };
+
+  const clearCacheSpy = jest.spyOn(store, '_clearCache');
+  const createSpy = jest.spyOn(store._registrar.client.record, 'create');
+  const updateSpy = jest.spyOn(store._registrar.client.record, 'update');
+
+  // Create
+  expect(await store.upsertDoc({ form })).toEqual(created);
+  expect(clearCacheSpy).toHaveBeenCalledTimes(1);
+  expect(createSpy).toHaveBeenCalledWith({
+    appId,
+    componentName: storeName,
+    fieldValues: form.getValues({ default: false })
+  });
+
+  // Create without id
+  const form2 = createForm();
+  const created2 = await store.upsertDoc({ form: form2 });
+  expect(created2).toEqual(created);
+  expect(clearCacheSpy).toHaveBeenCalledTimes(2);
+  expect(createSpy).toHaveBeenCalledWith({
+    appId,
+    componentName: storeName,
+    fieldValues: form2.getValues({ default: false })
+  });
+
+  // Get
+  store._registrar.client.record.get = () => ({
+    data: {
+      record: created
+    }
+  });
+  expect(await store.getDoc({ id: 'myId' })).toEqual(created);
+
+  // Update
+  expect(await store.upsertDoc({ form })).toEqual(created);
+  expect(updateSpy).toHaveBeenCalledWith({
+    appId,
+    id,
+    componentName: storeName,
+    fieldValues: form.getValues({ default: false })
+  });
+
+  // Error other than "not found"
+  const err = new Error();
+  store._registrar.client.record.get = () => {
+    throw err;
+  };
+  testUtils.expectToThrow(() => store.upsertDoc({ form }), err);
 });

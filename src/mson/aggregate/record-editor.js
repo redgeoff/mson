@@ -13,8 +13,8 @@ export default {
         component: 'TextField'
       },
       {
-        name: 'storeName',
-        component: 'TextField'
+        name: 'store',
+        component: 'Field'
       },
       {
         name: 'storeWhere',
@@ -72,24 +72,34 @@ export default {
           },
           actions: [
             {
-              component: 'GetRecord',
-              storeName: '{{storeName}}',
+              component: 'GetDoc',
+              store: '{{store}}',
               where: '{{storeWhere}}'
             },
             {
-              component: 'Set',
-              name: 'value',
-              value: '{{arguments.fieldValues}}'
-            },
-            {
-              component: 'Set',
-              name: 'fields.userId.value',
-              value: '{{arguments.userId}}'
-            },
-            {
-              component: 'Set',
-              name: 'fields.id.value',
-              value: '{{arguments.id}}'
+              component: 'Action',
+              if: {
+                arguments: {
+                  $ne: null
+                }
+              },
+              actions: [
+                {
+                  component: 'Set',
+                  name: 'value',
+                  value: '{{arguments.fieldValues}}'
+                },
+                {
+                  component: 'Set',
+                  name: 'fields.userId.value',
+                  value: '{{arguments.userId}}'
+                },
+                {
+                  component: 'Set',
+                  name: 'fields.id.value',
+                  value: '{{arguments.id}}'
+                }
+              ]
             }
           ]
         },
@@ -231,8 +241,8 @@ export default {
       event: 'save',
       actions: [
         {
-          component: 'UpsertRecord',
-          storeName: '{{storeName}}'
+          component: 'UpsertDoc',
+          store: '{{store}}'
         },
         {
           // Needed or else will be prompted to discard changes

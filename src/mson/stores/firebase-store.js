@@ -117,7 +117,7 @@ export default class FirebaseStore extends MemoryStore {
     }
   }
 
-  async _docSet(id, doc, options) {
+  async _docSet({ id, doc, options }) {
     // Don't actually connect to Firebase unless we specify an API Key
     if (this.get('apiKey')) {
       // Update the Firebase store
@@ -125,10 +125,10 @@ export default class FirebaseStore extends MemoryStore {
     }
   }
 
-  async _createDoc(props, fieldValues) {
-    const doc = this._buildDoc({ fieldValues });
+  async _createDoc({ fieldValues, id }) {
+    const doc = this._buildDoc({ fieldValues, id });
 
-    await this._docSet(doc.id, doc);
+    await this._docSet({ id: doc.id, doc });
 
     // Note: we need to update the underlying MemoryStore so that the data is there after this
     // function completes even though Firebase will emit an onWrite with the changed data.
@@ -137,15 +137,19 @@ export default class FirebaseStore extends MemoryStore {
     return doc;
   }
 
-  async _modifyDoc(props, { fieldValues, archivedAt }) {
+  async _modifyDoc({ id, fieldValues, archivedAt }) {
     // We use cloneDeep so that we don't modify the data in the memory store before we modify the
     // data in the Firebase store. The write to Firebase could always fail.
-    let doc = cloneDeep(this._docs.get(props.id));
+    let doc = cloneDeep(this._docs.get(id));
 
-    doc = this._setDoc(doc, { fieldValues, archivedAt });
+    doc = this._setDoc({ doc, fieldValues, archivedAt });
 
-    await this._docSet(doc.id, doc, {
-      merge: true // allow for partial updates
+    await this._docSet({
+      id: doc.id,
+      doc,
+      options: {
+        merge: true // allow for partial updates
+      }
     });
 
     // Note: we need to update the underlying MemoryStore so that the data is there after this
@@ -162,15 +166,36 @@ export default class FirebaseStore extends MemoryStore {
     return date.getValue();
   }
 
-  async _updateDoc(props, fieldValues) {
-    return this._modifyDoc(props, { fieldValues });
+  async _updateDoc(props) {
+    return this._modifyDoc(props);
   }
 
-  async _archiveDoc(props /*, fieldValues */) {
-    return this._modifyDoc(props, { archivedAt: this._now() });
+  async _archiveDoc(props) {
+    return this._modifyDoc({
+      ...props,
+      archivedAt: this._now()
+    });
   }
 
-  async _restoreDoc(props /*, fieldValues */) {
-    return this._modifyDoc(props, { archivedAt: null });
+  async _restoreDoc(props) {
+    return this._modifyDoc({
+      ...props,
+      archivedAt: null
+    });
+  }
+
+  async _waitForDataToBeLoaded() {
+    // Wait until the data is first loaded before trying to get it from the underlying MemoryStore
+    await this.resolveAfterLoad();
+  }
+
+  async _getDoc(props) {
+    await this._waitForDataToBeLoaded();
+    return super._getDoc(props);
+  }
+
+  async _getAllDocs(props) {
+    await this._waitForDataToBeLoaded();
+    return super._getAllDocs(props);
   }
 }

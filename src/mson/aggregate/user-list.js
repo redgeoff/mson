@@ -8,10 +8,6 @@ export default {
         name: 'baseFormFactory',
         component: 'Field',
         required: true
-      },
-      {
-        name: 'storeName',
-        component: 'TextField'
       }
     ]
   },

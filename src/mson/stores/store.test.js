@@ -19,6 +19,7 @@ it('should build doc', () => {
   });
 
   // When userId is null
-  doc = store._buildDoc({ fieldValues, userId: null });
+  doc = store._buildDoc({ fieldValues, id: '1', userId: null });
   expect(doc.userId).toBeNull();
+  expect(doc.id).toEqual('1');
 });
