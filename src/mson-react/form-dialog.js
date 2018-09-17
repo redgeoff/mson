@@ -65,7 +65,14 @@ class FormDialog extends React.PureComponent {
   }
 
   render() {
-    const { mode, form, forbidUpdate, forbidDelete, value } = this.props;
+    const {
+      mode,
+      form,
+      forbidUpdate,
+      forbidDelete,
+      value,
+      previousMode
+    } = this.props;
 
     const { saveClicked } = this.state;
 
@@ -76,9 +83,14 @@ class FormDialog extends React.PureComponent {
 
     let buttons = null;
 
-    // Note: we also display just the save and cancel buttons when mode is null so that the user is
-    // not flashed with a delete button immediately after they click save.
-    if (mode === 'update' || mode === 'create' || mode === null) {
+    // Note: we analyze the previousMode so that the user isn't flashed with new buttons immediately
+    // after they click save or close the dialog
+    if (
+      mode === 'update' ||
+      mode === 'create' ||
+      (mode === null &&
+        (previousMode === 'update' || previousMode === 'create'))
+    ) {
       buttons = (
         <div>
           {/* We use type=submit so that the form is submitted when the user presses enter */}
@@ -140,5 +152,7 @@ class FormDialog extends React.PureComponent {
 }
 
 FormDialog = withMobileDialog()(FormDialog);
-FormDialog = attach(['err', 'dirty', 'value', 'mode'], 'form')(FormDialog);
+FormDialog = attach(['err', 'dirty', 'value', 'mode', 'previousMode'], 'form')(
+  FormDialog
+);
 export default FormDialog;

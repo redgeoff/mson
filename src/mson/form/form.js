@@ -107,6 +107,10 @@ export default class Form extends Component {
             component: 'TextField'
           },
           {
+            name: 'previousMode',
+            component: 'TextField'
+          },
+          {
             name: 'isLoading',
             component: 'BooleanField'
           },
@@ -330,6 +334,11 @@ export default class Form extends Component {
     this._set('access', _.merge(this._access, access));
   }
 
+  _setMode(mode) {
+    this._set('previousMode', this.get('mode'));
+    this._set('mode', mode);
+  }
+
   set(props) {
     super.set(
       Object.assign({}, props, {
@@ -344,7 +353,8 @@ export default class Form extends Component {
         hidden: undefined,
         required: undefined,
         out: undefined,
-        disabled: undefined
+        disabled: undefined,
+        mode: undefined
       })
     );
 
@@ -415,6 +425,10 @@ export default class Form extends Component {
 
     if (props.fullWidth !== undefined) {
       this._setFullWidth(props.fullWidth);
+    }
+
+    if (props.mode !== undefined) {
+      this._setMode(props.mode);
     }
   }
 
