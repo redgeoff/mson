@@ -245,7 +245,7 @@ export default {
           message: '{{label}} saved'
         },
         {
-          // Needed to restore read data as may be different and update access
+          // Needed to restore read data/format as it may be different than that for updating
           if: {
             preview: {
               $ne: false
