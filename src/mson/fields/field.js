@@ -93,6 +93,10 @@ export default class Field extends Component {
           {
             name: 'forbidSort',
             component: 'BooleanField'
+          },
+          {
+            name: 'hideLabel',
+            component: 'BooleanField'
           }
         ]
       }
