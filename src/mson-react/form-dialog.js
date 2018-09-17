@@ -76,7 +76,9 @@ class FormDialog extends React.PureComponent {
 
     let buttons = null;
 
-    if (mode === 'update' || mode === 'create') {
+    // Note: we also display just the save and cancel buttons when mode is null so that the user is
+    // not flashed with a delete button immediately after they click save.
+    if (mode === 'update' || mode === 'create' || mode === null) {
       buttons = (
         <div>
           {/* We use type=submit so that the form is submitted when the user presses enter */}
