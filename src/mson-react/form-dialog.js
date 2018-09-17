@@ -8,7 +8,7 @@ import Form from './form';
 import attach from './attach';
 
 class FormDialog extends React.PureComponent {
-  state = { saveClicked: false };
+  state = { saveClicked: false, previousMode: null };
 
   handleClose = withCancelButton => {
     // Prevent the user from losing data when pressing esc or clicking outside dialog
@@ -62,19 +62,16 @@ class FormDialog extends React.PureComponent {
     ) {
       this.setState({ saveClicked: false });
     }
+
+    if (this.props.mode !== prevProps.mode) {
+      this.setState({ previousMode: prevProps.mode });
+    }
   }
 
   render() {
-    const {
-      mode,
-      form,
-      forbidUpdate,
-      forbidDelete,
-      value,
-      previousMode
-    } = this.props;
+    const { mode, form, forbidUpdate, forbidDelete, value } = this.props;
 
-    const { saveClicked } = this.state;
+    const { saveClicked, previousMode } = this.state;
 
     const disableSave =
       form.hasErrorForTouchedField() || !form.get('dirty') || saveClicked;
@@ -152,7 +149,5 @@ class FormDialog extends React.PureComponent {
 }
 
 FormDialog = withMobileDialog()(FormDialog);
-FormDialog = attach(['err', 'dirty', 'value', 'mode', 'previousMode'], 'form')(
-  FormDialog
-);
+FormDialog = attach(['err', 'dirty', 'value', 'mode'], 'form')(FormDialog);
 export default FormDialog;
