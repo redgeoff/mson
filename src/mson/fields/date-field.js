@@ -40,4 +40,15 @@ export default class DateField extends TextField {
 
     super.set(props);
   }
+
+  // For mocking
+  _toLocaleString(date) {
+    return date.toLocaleString();
+  }
+
+  getDisplayValue() {
+    return this.isBlank()
+      ? null
+      : this._toLocaleString(new Date(this.getValue()));
+  }
 }
