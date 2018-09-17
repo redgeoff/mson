@@ -34,6 +34,8 @@ class CommonField extends React.PureComponent {
 
     let lbl = null;
 
+    const isBlank = field.isBlank();
+
     if (!hideLabelUI && !hideLabel) {
       if (editable) {
         lbl = (
@@ -59,7 +61,11 @@ class CommonField extends React.PureComponent {
       </span>
     );
 
-    return <FormControl fullWidth={fullWidth}>{fld}</FormControl>;
+    if (editable || !isBlank) {
+      return <FormControl fullWidth={fullWidth}>{fld}</FormControl>;
+    } else {
+      return null;
+    }
   }
 }
 
