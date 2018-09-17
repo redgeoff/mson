@@ -15,7 +15,7 @@ class BooleanField extends React.PureComponent {
     const label = field.get('label');
 
     return (
-      <CommonField field={field} hideLabel="true">
+      <CommonField field={field} hideLabelUI="true">
         <FormControlLabel
           control={
             <Switch

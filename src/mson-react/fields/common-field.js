@@ -1,9 +1,17 @@
 import React from 'react';
 import InputLabel from '@material-ui/core/InputLabel';
+import FormLabel from '@material-ui/core/FormLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '../form-control';
 import attach from '../attach';
 import HelpToolTip from './help-tool-tip';
+import withStyles from '@material-ui/core/styles/withStyles';
+
+const styles = theme => ({
+  label: {
+    fontSize: theme.typography.caption.fontSize
+  }
+});
 
 class CommonField extends React.PureComponent {
   render() {
@@ -17,19 +25,25 @@ class CommonField extends React.PureComponent {
       editable,
       touched,
       help,
-      hideLabel
+      hideLabelUI,
+      hideLabel,
+      classes
     } = this.props;
 
     let fld = null;
 
     let lbl = null;
 
-    if (editable && !hideLabel) {
-      lbl = (
-        <InputLabel error={touched && err ? true : false} required={required}>
-          {label}
-        </InputLabel>
-      );
+    if (!hideLabelUI && !hideLabel) {
+      if (editable) {
+        lbl = (
+          <InputLabel error={touched && err ? true : false} required={required}>
+            {label}
+          </InputLabel>
+        );
+      } else {
+        lbl = <FormLabel className={classes.label}>{label}</FormLabel>;
+      }
     }
 
     const firstErr = field.getFirstErr();
@@ -50,7 +64,7 @@ class CommonField extends React.PureComponent {
 }
 
 // 'value' is needed in the event we are showing the display value
-export default attach([
+CommonField = attach([
   'label',
   'required',
   'fullWidth',
@@ -58,5 +72,8 @@ export default attach([
   'err',
   'editable',
   'touched',
-  'help'
+  'help',
+  'hideLabel'
 ])(CommonField);
+
+export default withStyles(styles)(CommonField);
