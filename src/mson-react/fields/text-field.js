@@ -36,13 +36,14 @@ class TextField extends React.PureComponent {
       accessEditable,
       multiline,
       rows,
-      rowsMax
+      rowsMax,
+      useDisplayValue
     } = this.props;
 
     const dis = accessEditable === false || disabled;
 
     let fld = null;
-    if (editable) {
+    if (editable && !useDisplayValue) {
       fld = (
         <Input
           error={touched && err ? true : false}
@@ -84,5 +85,6 @@ export default attach([
   'editable',
   'multiline',
   'rows',
-  'rowsMax'
+  'rowsMax',
+  'useDisplayValue'
 ])(TextField);

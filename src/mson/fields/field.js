@@ -97,6 +97,10 @@ export default class Field extends Component {
           {
             name: 'hideLabel',
             component: 'BooleanField'
+          },
+          {
+            name: 'useDisplayValue',
+            component: 'BooleanField'
           }
         ]
       }

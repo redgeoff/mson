@@ -77,7 +77,8 @@ class SelectField extends React.PureComponent {
       classes,
       editable,
       multiple,
-      accessEditable
+      accessEditable,
+      useDisplayValue
     } = this.props;
 
     const dis = accessEditable === false || disabled;
@@ -109,7 +110,7 @@ class SelectField extends React.PureComponent {
     }
 
     let fld = null;
-    if (editable) {
+    if (editable && !useDisplayValue) {
       fld = (
         <Select
           multiple={multiple}
@@ -157,5 +158,6 @@ export default attach([
   'disabled',
   'fullWidth',
   'editable',
-  'multiple'
+  'multiple',
+  'useDisplayValue'
 ])(SelectField);
