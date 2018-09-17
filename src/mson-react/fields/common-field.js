@@ -27,7 +27,8 @@ class CommonField extends React.PureComponent {
       help,
       hideLabelUI,
       hideLabel,
-      classes
+      classes,
+      useDisplayValue
     } = this.props;
 
     let fld = null;
@@ -37,7 +38,7 @@ class CommonField extends React.PureComponent {
     const isBlank = field.isBlank();
 
     if (!hideLabelUI && !hideLabel) {
-      if (editable) {
+      if (editable && !useDisplayValue) {
         lbl = (
           <InputLabel error={touched && err ? true : false} required={required}>
             {label}
@@ -79,7 +80,8 @@ CommonField = attach([
   'editable',
   'touched',
   'help',
-  'hideLabel'
+  'hideLabel',
+  'useDisplayValue'
 ])(CommonField);
 
 export default withStyles(styles)(CommonField);
