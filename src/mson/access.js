@@ -53,7 +53,7 @@ export class Access {
         indexedRoles[role.name] = true;
       });
 
-      isOwner = session.user.id === form.get('userId');
+      isOwner = session.user.id === form.getValue('userId');
     }
     const fieldValues = form.getValues(getOpts);
 
@@ -95,16 +95,24 @@ export class Access {
     return this._fieldsOrValuesCanAccess(operation, form, getOpts, false);
   }
 
-  valuesCanCreate(form) {
-    return this.valuesCanAccess('create', form, { out: true });
+  valuesCanCreate(form, opts) {
+    return this.valuesCanAccess(
+      'create',
+      form,
+      Object.assign({ out: true }, opts)
+    );
   }
 
-  valuesCanRead(form) {
-    return this.valuesCanAccess('read', form);
+  valuesCanRead(form, opts) {
+    return this.valuesCanAccess('read', form, opts);
   }
 
-  valuesCanUpdate(form) {
-    return this.valuesCanAccess('update', form, { out: true });
+  valuesCanUpdate(form, opts) {
+    return this.valuesCanAccess(
+      'update',
+      form,
+      Object.assign({ out: true }, opts)
+    );
   }
 }
 

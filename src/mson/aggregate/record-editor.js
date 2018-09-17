@@ -83,7 +83,7 @@ export default {
             },
             {
               component: 'Set',
-              name: 'userId',
+              name: 'fields.userId.value',
               value: '{{arguments.userId}}'
             },
             {

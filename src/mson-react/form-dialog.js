@@ -65,7 +65,7 @@ class FormDialog extends React.PureComponent {
   }
 
   render() {
-    const { mode, form, forbidUpdate, forbidDelete, archivedAt } = this.props;
+    const { mode, form, forbidUpdate, forbidDelete, value } = this.props;
 
     const { saveClicked } = this.state;
 
@@ -105,8 +105,8 @@ class FormDialog extends React.PureComponent {
             ''
           ) : (
             <Button
-              label={archivedAt ? 'Restore' : 'Delete'}
-              icon={archivedAt ? 'Restore' : 'Delete'}
+              label={value.archivedAt ? 'Restore' : 'Delete'}
+              icon={value.archivedAt ? 'Restore' : 'Delete'}
               onClick={this.handleDelete}
             />
           )}
@@ -138,5 +138,5 @@ class FormDialog extends React.PureComponent {
 }
 
 FormDialog = withMobileDialog()(FormDialog);
-FormDialog = attach(['err', 'dirty', 'archivedAt', 'mode'], 'form')(FormDialog);
+FormDialog = attach(['err', 'dirty', 'value', 'mode'], 'form')(FormDialog);
 export default FormDialog;

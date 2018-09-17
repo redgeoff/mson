@@ -1,12 +1,9 @@
-// TODO:
-//   - Refactor out setValues(), clearValues(), etc... and use set({ value: value }), etc...?
-
 import Component from '../component';
 import _ from '../lodash';
 import Validator from '../component/validator';
 import Mapa from '../mapa';
 import IdField from '../fields/id-field';
-// import DateField from '../fields/date-field';
+import DateField from '../fields/date-field';
 import ButtonField from '../fields/button-field';
 import ComponentFillerProps from '../component/component-filler-props';
 
@@ -88,14 +85,6 @@ export default class Form extends Component {
           {
             name: 'resetOnLoad',
             component: 'BooleanField'
-          },
-          {
-            name: 'archivedAt',
-            component: 'DateField'
-          },
-          {
-            name: 'userId',
-            component: 'TextField'
           },
           {
             name: 'showArchived',
@@ -287,34 +276,35 @@ export default class Form extends Component {
   }
 
   _addDefaultFields() {
+    // Default fields are hidden by default but accompany the form and allow for special
+    // functionality, e.g. whether an archived form should be displayed. These fields exist as
+    // fields and not properties on the form as this allows us to override the display of things
+    // like creation dates. Moreover, default fields allow for the automatic formatting of things
+    // like dates for stores like Firebase, which would otherwise destroy the formatting of our
+    // dates.
     this._defaultFields.set(
       'id',
       new IdField({ name: 'id', label: 'Id', hidden: true })
     );
+    this._defaultFields.set(
+      'userId',
+      new IdField({ name: 'userId', label: 'User Id', hidden: true })
+    );
+    this._defaultFields.set(
+      'createdAt',
+      new DateField({ name: 'createdAt', label: 'Created At', hidden: true })
+    );
+    this._defaultFields.set(
+      'updatedAt',
+      new DateField({ name: 'updatedAt', label: 'Updated At', hidden: true })
+    );
 
-    // Commented out as the default fields appear to add a lot of latency. TODO: comment on specific
-    // test results
-    //
-    // this._defaultFields.set(
-    //   'userId',
-    //   new IdField({ name: 'userId', label: 'User Id', hidden: true })
-    // );
-    // this._defaultFields.set(
-    //   'createdAt',
-    //   new DateField({ name: 'createdAt', label: 'Created At', hidden: true })
-    // );
-    // this._defaultFields.set(
-    //   'updatedAt',
-    //   new DateField({ name: 'updatedAt', label: 'Updated At', hidden: true })
-    // );
-    //
-    // const archivedAt = new DateField({
-    //   name: 'archivedAt',
-    //   label: 'Archived At',
-    //   hidden: true
-    // });
-    // archivedAt.on('value', archivedAt => this.set({ archivedAt }));
-    // this._defaultFields.set('archivedAt', archivedAt);
+    const archivedAt = new DateField({
+      name: 'archivedAt',
+      label: 'Archived At',
+      hidden: true
+    });
+    this._defaultFields.set('archivedAt', archivedAt);
   }
 
   _createDefaultFields() {

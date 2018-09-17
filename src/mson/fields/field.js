@@ -191,8 +191,7 @@ export default class Field extends Component {
   }
 
   isValueBlank(value) {
-    // value can be '' for select when blankString selected. TODO: better here or in SelectField?
-    return value === null || value === '' || value === undefined;
+    return this.constructor.isValueBlank(value);
   }
 
   isBlank() {
@@ -259,3 +258,8 @@ export default class Field extends Component {
     }
   }
 }
+
+Field.isValueBlank = value => {
+  // value can be '' for select when blankString selected. TODO: better here or in SelectField?
+  return value === null || value === '' || value === undefined;
+};

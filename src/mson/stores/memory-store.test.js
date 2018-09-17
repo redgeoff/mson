@@ -30,9 +30,7 @@ export const shouldCRUD = async (Store, props) => {
   expect(created.archivedAt).toBeNull();
   expect(created.createdAt).not.toBeFalsy();
   expect(created.updatedAt).not.toBeFalsy();
-  expect(created.fieldValues).toEqual(
-    Object.assign({ id: created.id }, fieldValues)
-  );
+  expect(created.fieldValues).toEqual(fieldValues);
 
   expect(await store.getDoc({ id: created.id })).toEqual(created);
 
@@ -52,7 +50,6 @@ export const shouldCRUD = async (Store, props) => {
     updatedAt: updated.updatedAt,
     userId: null,
     fieldValues: {
-      id: created.id,
       firstName: 'F. Scott',
       lastName: 'Fitzgerald'
     }

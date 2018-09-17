@@ -84,7 +84,7 @@ class FormsField extends React.PureComponent {
       formToDelete = field.get('form');
     }
 
-    const archivedAt = formToDelete.get('archivedAt');
+    const archivedAt = formToDelete.getValue('archivedAt');
 
     // Are we restoring?
     if (archivedAt) {
@@ -201,10 +201,11 @@ class FormsField extends React.PureComponent {
       form.eachField(field => {
         const name = field.get('name');
 
-        // Do we have access to the field? We allowed to sort? Not a button?
+        // Do we have access to the field? Allowed to sort? Not hidden? Not a button?
         if (
           fieldsCanAccess[name] !== undefined &&
           !field.get('forbidSort') &&
+          !field.get('hidden') &&
           !(field instanceof ButtonField)
         ) {
           fields.push({

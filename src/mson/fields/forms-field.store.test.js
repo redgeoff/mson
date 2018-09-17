@@ -74,9 +74,12 @@ it('should listen to store changes', async () => {
   // Create
   await field._handleStoreChangeFactory()('createDoc', value);
   expect(upsertFormSpy).toHaveBeenCalledWith({
-    values: value.value.fieldValues,
-    archivedAt: value.value.archivedAt,
-    userId: value.value.userId,
+    values: {
+      ...value.value.fieldValues,
+      id: value.value.id,
+      archivedAt: value.value.archivedAt,
+      userId: value.value.userId
+    },
     muteChange,
     cursor: value.value.cursor
   });
@@ -84,9 +87,12 @@ it('should listen to store changes', async () => {
   // Update
   await field._handleStoreChangeFactory()('updateDoc', value);
   expect(upsertFormSpy).toHaveBeenCalledWith({
-    values: value.value.fieldValues,
-    archivedAt: value.value.archivedAt,
-    userId: value.value.userId,
+    values: {
+      ...value.value.fieldValues,
+      id: value.value.id,
+      archivedAt: value.value.archivedAt,
+      userId: value.value.userId
+    },
     muteChange,
     cursor: value.value.cursor
   });
@@ -97,17 +103,17 @@ it('should listen to store changes', async () => {
   expect(removeFormSpy).toHaveBeenCalledWith(value.value.id, muteChange);
   value.value.archivedAt = null;
 
-  // Prepare for deleteItem by creating again
+  // Prepare for deleteDoc by creating again
   await field._handleStoreChangeFactory()('createDoc', value);
   removeFormSpy.mockReset();
 
   // Delete fails as item not found
-  await field._handleStoreChangeFactory()('deleteItem', {
+  await field._handleStoreChangeFactory()('deleteDoc', {
     value: { value: { id: 'missing id' } }
   });
   expect(removeFormSpy).toHaveBeenCalledTimes(0);
 
   // Delete
-  await field._handleStoreChangeFactory()('deleteItem', value);
+  await field._handleStoreChangeFactory()('deleteDoc', value);
   expect(removeFormSpy).toHaveBeenCalledWith(value.value.id, muteChange);
 });
