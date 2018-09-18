@@ -67,8 +67,13 @@ export default class PropFiller {
   }
 
   fillAll(items) {
-    return _.cloneDeepWith(items, (item, index) => {
-      if (typeof item === 'string') {
+    // Recursively dive into objects and fill any strings
+    return _.cloneDeepWith(items, item => {
+      if (item && item._className) {
+        // The item is a component, therefore we should not clone it. TODO: is there a better way to
+        // determine this?
+        return item;
+      } else if (typeof item === 'string') {
         return this.fillString(item);
       }
     });

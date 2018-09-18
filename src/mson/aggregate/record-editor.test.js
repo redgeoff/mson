@@ -269,21 +269,25 @@ it('should load with preview and storeWhere', async () => {
       name: 'Set',
       props: {
         name: 'value',
-        value: '{{arguments.fieldValues}}'
+        value: {
+          email: 'miles@example.com',
+          name: 'Miles Davis',
+          password: 'miles12345'
+        }
       }
     },
     {
       name: 'Set',
       props: {
         name: 'fields.userId.value',
-        value: '{{arguments.userId}}'
+        value: '1'
       }
     },
     {
       name: 'Set',
       props: {
         name: 'fields.id.value',
-        value: '{{arguments.id}}'
+        value: '1'
       }
     },
     {

@@ -151,3 +151,67 @@ it('should perform two-stage filling', async () => {
   });
   expect(form.getValue('foo')).toEqual('body from override');
 });
+
+it('should filter by arguments', async () => {
+  const action = new Set({
+    if: {
+      arguments: {
+        $ne: null
+      }
+    },
+    name: 'value',
+    value: 'Jack'
+  });
+
+  const field = new TextField({ name: 'firstName' });
+
+  await action.run({
+    component: field,
+    arguments: null
+  });
+  expect(field.getValue()).toBeUndefined();
+
+  await action.run({
+    component: field,
+    arguments: {}
+  });
+  expect(field.getValue()).toEqual('Jack');
+});
+
+class SetNameAction extends Action {
+  _className = 'SetNameAction';
+
+  _create(props) {
+    super._create(props);
+
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'thing',
+            component: 'Field'
+          },
+          {
+            name: 'value',
+            component: 'TextField'
+          }
+        ]
+      }
+    });
+  }
+
+  async act(/* props */) {
+    this.get('thing').setValue(this.get('value'));
+  }
+}
+
+it('should share components', async () => {
+  const name = new TextField();
+
+  const action = new SetNameAction({ thing: name, value: 'bar' });
+
+  await action.run();
+
+  expect(name.getValue()).toEqual('bar');
+});
