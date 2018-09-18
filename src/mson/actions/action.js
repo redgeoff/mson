@@ -54,7 +54,7 @@ export default class Action extends Component {
     // Fill with props from coponent first so that we define default values in the component like
     // {{fields.to.value}} that are then filled via the second fill.
     prop = propFiller.fill(prop);
-    prop = propFiller.fill(prop); // Yes, this is duplicate is needed!
+    prop = propFiller.fill(prop); // Yes, this duplicate is needed!
 
     return prop;
   }

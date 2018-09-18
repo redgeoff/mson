@@ -3,6 +3,7 @@ import components from '../components';
 import globals from '../globals';
 import testUtils from '../test-utils';
 import _ from '../lodash';
+import Action from '../actions/action';
 
 const newCompiler = () => {
   return new Compiler({ components: Object.assign({}, components) });
@@ -649,4 +650,84 @@ it('register component should throw if component exists', () => {
 it('should get oldest compiled ancestor', () => {
   expect(compiler.getOldestCompiledAncestor('TextField')).toEqual('TextField');
   expect(compiler.getOldestCompiledAncestor('EmailField')).toEqual('TextField');
+});
+
+class FooIt extends Action {
+  _className = 'FooIt';
+
+  _create(props) {
+    super._create(props);
+
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'theStore',
+            component: 'Field'
+          },
+          {
+            name: 'expected',
+            component: 'Field'
+          },
+          {
+            name: 'value',
+            component: 'Field'
+          }
+        ]
+      }
+    });
+  }
+
+  async act(/* props */) {
+    const theStore = this.get('theStore');
+    expect(theStore.get('foo')).toEqual(this.get('expected'));
+    theStore.set({ foo: this.get('value') });
+  }
+}
+
+it('should share template parameters', async () => {
+  compiler.registerComponent('app.FooIt', FooIt);
+
+  compiler.registerComponent('app.SharedTemplateParameters', {
+    component: 'Component',
+    schema: {
+      component: 'Form',
+      fields: [
+        {
+          name: 'store',
+          component: 'Field'
+        }
+      ]
+    },
+    listeners: [
+      {
+        event: 'foo',
+        actions: [
+          {
+            component: 'app.FooIt',
+            theStore: '{{store}}',
+            expected: 'bar',
+            value: 'baz'
+          },
+          {
+            component: 'app.FooIt',
+            theStore: '{{store}}',
+            expected: 'baz',
+            value: 'naz'
+          }
+        ]
+      }
+    ]
+  });
+
+  const component = compiler.newComponent({
+    component: 'app.SharedTemplateParameters',
+    store: {
+      component: 'app.CustomProps',
+      foo: 'bar'
+    }
+  });
+
+  await component.runListeners('foo');
 });
