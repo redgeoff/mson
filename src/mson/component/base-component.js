@@ -189,7 +189,7 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   _push(name, value) {
-    let values = this._get(name);
+    let values = this._getProperty(name);
     if (!Array.isArray(values)) {
       values = [];
     }
@@ -198,7 +198,7 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   _concat(name, newValues) {
-    let values = this._get(name);
+    let values = this._getProperty(name);
     if (!Array.isArray(values)) {
       values = [];
     }
@@ -221,18 +221,26 @@ export default class BaseComponent extends events.EventEmitter {
     this._setIfDifferent(name, value);
   }
 
+  _getSubComponent(name) {
+    const names = name.split('.');
+    let component = this.get(names[0]);
+    for (let i = 1; i < names.length - 1; i++) {
+      component = component.get(names[i]);
+    }
+    return {
+      component,
+      names
+    };
+  }
+
   _set(name, value) {
     // Most of the time, name will not be in dot notation so we want to do the quickest possible
     // check
-    const hasDot = name.indexOf('.') !== -1;
+    const hasDot = this._hasDot(name);
 
     // Using dot notation?
     if (hasDot) {
-      const names = name.split('.');
-      let component = this.get(names[0]);
-      for (let i = 1; i < names.length - 1; i++) {
-        component = component.get(names[i]);
-      }
+      const { component, names } = this._getSubComponent(name);
       component.set({
         [names[names.length - 1]]: value
       });
@@ -301,6 +309,24 @@ export default class BaseComponent extends events.EventEmitter {
     return !!this._listenerEvents[event];
   }
 
+  _hasDot(event) {
+    return event.indexOf('.') !== -1;
+  }
+
+  _listenToSubEvent(event) {
+    // Get the sub component
+    const { component, names } = this._getSubComponent(event);
+
+    // The sub event is the last name
+    const subEvent = names[names.length - 1];
+
+    // Listen to the event and bubble it up. We choose to bubble up the events and let runListeners
+    // take care of the response so that we can reuse the same logic for all listeners. TODO: when
+    // is this listener destroyed? Do we need a destroy() function in each component that can
+    // release this?
+    component.on(subEvent, value => this.emitChange(event, value));
+  }
+
   _setListeners(listeners) {
     // Listeners are concatentated that they can accumulate through the layers of inheritance. TODO:
     // do we need a construct to clear all previous listeners for an event?
@@ -311,8 +337,15 @@ export default class BaseComponent extends events.EventEmitter {
         ? listener.event
         : [listener.event];
 
-      // Register the event so that we can do a quick lookup later
-      events.forEach(event => (this._listenerEvents[event] = true));
+      events.forEach(event => {
+        // New sub event?
+        if (this._hasDot(event) && this._listenerEvents[event] === undefined) {
+          this._listenToSubEvent(event);
+        }
+
+        // Register the event so that we can do a quick lookup later
+        this._listenerEvents[event] = true;
+      });
     });
   }
 
@@ -355,7 +388,7 @@ export default class BaseComponent extends events.EventEmitter {
     this._onActionError(err);
   }
 
-  async runListeners(event) {
+  async runListeners(event, output) {
     const listeners = this.get('listeners');
     if (listeners) {
       for (let i in listeners) {
@@ -367,7 +400,6 @@ export default class BaseComponent extends events.EventEmitter {
 
         // Listener is for this event?
         if (events.indexOf(event) !== -1) {
-          let output = null;
           for (const i in listener.actions) {
             const action = listener.actions[i];
 
@@ -394,7 +426,7 @@ export default class BaseComponent extends events.EventEmitter {
     this.on('$change', async (event, value) => {
       if (this._listenerEvents[event]) {
         try {
-          await this.runListeners(event);
+          await this.runListeners(event, value);
         } catch (err) {
           // Swallow the error and report it via the actionErr event
           this._onActionError(err);
@@ -476,17 +508,28 @@ export default class BaseComponent extends events.EventEmitter {
     );
   }
 
-  _get(name) {
+  _getProperty(name) {
     return this['_' + name];
   }
 
   _getIfDefined(name) {
     this._throwIfNotDefined(name);
-    return this._get(name);
+    return this._getProperty(name);
+  }
+
+  _get(name) {
+    if (this._hasDot(name)) {
+      // Using dot notation
+      const { component, names } = this._getSubComponent(name);
+      return component.get(names[names.length - 1]);
+    } else {
+      // Not using dot notation
+      return this._getIfDefined(name);
+    }
   }
 
   getOne(name) {
-    return this._getIfDefined(name);
+    return this._get(name);
   }
 
   get(names) {

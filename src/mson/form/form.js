@@ -331,6 +331,14 @@ export default class Form extends Component {
   }
 
   set(props) {
+    // Add fields before calling super.set so that listeners are added after the fields
+    if (props.fields !== undefined) {
+      props.fields.forEach(field => {
+        this.addField(field);
+      });
+      this.emitChange('fields');
+    }
+
     super.set(
       Object.assign({}, props, {
         fields: undefined,
@@ -347,13 +355,6 @@ export default class Form extends Component {
         disabled: undefined
       })
     );
-
-    if (props.fields !== undefined) {
-      props.fields.forEach(field => {
-        this.addField(field);
-      });
-      this.emitChange('fields');
-    }
 
     if (props.validators !== undefined) {
       this._validators = [];
