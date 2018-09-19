@@ -5,6 +5,7 @@ import Form from '../form';
 import TextField from '../fields/text-field';
 import compiler from '../compiler';
 import Set from '../actions/set';
+import Emit from '../actions/emit';
 
 class Song extends BaseComponent {
   _create(props) {
@@ -383,6 +384,18 @@ it('should set with dot notation', () => {
   );
 });
 
+it('should get with dot notation', () => {
+  const form = new Form({
+    fields: [
+      new TextField({
+        name: 'firstName',
+        label: 'First Name'
+      })
+    ]
+  });
+  expect(form.get('fields.firstName.label')).toEqual('First Name');
+});
+
 it('set should throw if property not defined', () => {
   const component = new BaseComponent();
   expect(() => component.set({ undefinedProperty: 'foo' })).toThrow(
@@ -395,4 +408,32 @@ it('get should throw if property not defined', () => {
   expect(() => component.get('undefinedProperty')).toThrow(
     'Component: undefinedProperty not defined'
   );
+});
+
+it('should listen to sub events', async () => {
+  const form = new Form({
+    fields: [
+      new TextField({ name: 'firstName' }),
+      new TextField({ name: 'lastName' })
+    ],
+    listeners: [
+      {
+        event: 'fields.firstName.value',
+        actions: [
+          new Set({ name: 'fields.lastName.value' }),
+          new Emit({ event: 'didGetFirstName' })
+        ]
+      }
+    ]
+  });
+
+  const didGetFirstName = testUtils.once(form, 'didGetFirstName');
+  form.setValues({
+    firstName: 'Max'
+  });
+  await didGetFirstName;
+  expect(form.getValues({ default: false })).toEqual({
+    firstName: 'Max',
+    lastName: 'Max'
+  });
 });
