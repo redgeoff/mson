@@ -173,6 +173,10 @@ export default class CompositeField extends Field {
     }
   }
 
+  has(name) {
+    return super.has(name) || this._fields.has(name);
+  }
+
   getOne(name) {
     const value = this._getFieldIfExists(name);
     return value === undefined ? super.getOne(name) : value;

@@ -43,6 +43,12 @@ export default class ComponentFillerProps {
         }
       }
 
+      if (props.parent) {
+        // Inject the parent so that nested components, e.g. nested actions, have access to the
+        // parent properties
+        fillerProps.parent = props.parent.get();
+      }
+
       fillerProps.arguments = props.arguments;
     }
 

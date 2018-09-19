@@ -77,29 +77,14 @@ export default {
               where: '{{storeWhere}}'
             },
             {
-              component: 'Action',
+              component: 'SetFromDoc',
               if: {
                 arguments: {
                   $ne: null
                 }
               },
-              actions: [
-                {
-                  component: 'Set',
-                  name: 'value',
-                  value: '{{arguments.fieldValues}}'
-                },
-                {
-                  component: 'Set',
-                  name: 'fields.userId.value',
-                  value: '{{arguments.userId}}'
-                },
-                {
-                  component: 'Set',
-                  name: 'fields.id.value',
-                  value: '{{arguments.id}}'
-                }
-              ]
+              name: 'value',
+              doc: '{{arguments}}'
             }
           ]
         },
@@ -280,6 +265,24 @@ export default {
         {
           component: 'Emit',
           event: 'didCancel'
+        }
+      ]
+    },
+    {
+      // Get real-time updates from store
+      event: 'store.updateDoc',
+      actions: [
+        {
+          component: 'SetFromDoc',
+          name: 'value',
+          doc: '{{arguments.value}}'
+        },
+        {
+          // Disable the save button so that a save, followed by an immediate updateDoc, e.g.
+          // Firebase, keeps the save button disabled.
+          component: 'Set',
+          name: 'fields.save.disabled',
+          value: true
         }
       ]
     }

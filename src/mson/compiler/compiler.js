@@ -75,6 +75,15 @@ export class Compiler {
   _getWrappedComponentClass(name, defaultProps, parentProps) {
     const Component = this.getCompiledComponent(name, defaultProps);
 
+    if (this._validateOnly) {
+      // We need to mute the events or else there may be listeners that will try to act on a dynamic
+      // component that will never be supplied.
+      defaultProps = Object.assign({}, defaultProps, {
+        muteCreate: true,
+        disableSubEvents: true
+      });
+    }
+
     const self = this;
 
     // Create a class that sets the props by default
@@ -111,6 +120,7 @@ export class Compiler {
         // act on these props. E.G. componentToWrap needs to be set via _create() before any other
         // action is taken.
         const propsAndDefaultProps = Object.assign({}, defaultProps, props);
+
         super._create(propsAndDefaultProps);
 
         // Are we wrapping a component? Clear the componentToWrap
@@ -179,12 +189,6 @@ export class Compiler {
   }
 
   _instantiateComponent(Component, props) {
-    if (this._validateOnly) {
-      // We need to mute the events or else there may be listeners that will try to act on a dynamic
-      // component that will never be supplied.
-      props = Object.assign({}, props, { muteCreate: true });
-    }
-
     return new Component(props);
   }
 

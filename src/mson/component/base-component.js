@@ -4,6 +4,7 @@ import utils from '../utils';
 import each from 'lodash/each';
 import difference from 'lodash/difference';
 import cloneDeepWith from 'lodash/cloneDeepWith';
+import Mapa from '../mapa';
 
 let nextKey = 0;
 const getNextKey = () => {
@@ -69,6 +70,10 @@ export default class BaseComponent extends events.EventEmitter {
         {
           name: 'muteCreate',
           component: 'BooleanField'
+        },
+        {
+          name: 'disableSubEvents',
+          component: 'BooleanField'
         }
       ]
     };
@@ -109,6 +114,7 @@ export default class BaseComponent extends events.EventEmitter {
     this._setDebugId();
 
     this._listenerEvents = {};
+    this._subEvents = {};
 
     this._isLoaded = false;
     this._resolveAfterCreate = utils.once(this, 'didCreate');
@@ -128,11 +134,6 @@ export default class BaseComponent extends events.EventEmitter {
     if (props && props.name !== undefined) {
       // Use setProperty so we don'trigger any events before creation
       this._setProperty('name', props.name);
-    }
-
-    if (props && props.muteCreate !== undefined) {
-      // Use setProperty so we don'trigger the create event
-      this._setProperty('muteCreate', props.muteCreate);
     }
 
     this._create(props === undefined ? {} : props);
@@ -221,25 +222,46 @@ export default class BaseComponent extends events.EventEmitter {
     this._setIfDifferent(name, value);
   }
 
-  _getSubComponent(name) {
+  _throwPropertyNotFound(propertyNames) {
+    throw new Error(propertyNames.join('.') + ' not found');
+  }
+
+  _isComponent(property) {
+    return property instanceof BaseComponent || property instanceof Mapa;
+  }
+
+  _getSubProperty(name, end) {
     const names = name.split('.');
-    let component = this;
+    let property = this;
 
-    const componentNames = [];
+    if (end === undefined) {
+      end = names.length;
+    } else if (end < 0) {
+      end += names.length;
+    }
 
-    for (let i = 0; i < names.length - 1; i++) {
-      componentNames.push(names[i]);
-      if (!component.has(names[i])) {
-        throw new Error(componentNames.join('.') + ' not found');
-      }
-      component = component.get(names[i]);
-      if (!component) {
-        throw new Error(componentNames.join('.') + ' not found');
+    const propertyNames = [];
+
+    for (let i = 0; i < end; i++) {
+      const nme = names[i];
+      propertyNames.push(nme);
+      if (this._isComponent(property)) {
+        if (!property.has(nme)) {
+          this._throwPropertyNotFound(propertyNames);
+        }
+        property = property.get(nme);
+        if (!property) {
+          this._throwPropertyNotFound(propertyNames);
+        }
+      } else if (property[nme] === undefined) {
+        this._throwPropertyNotFound(propertyNames);
+      } else {
+        property = property[nme];
       }
     }
 
     return {
-      component,
+      property,
       names
     };
   }
@@ -251,10 +273,15 @@ export default class BaseComponent extends events.EventEmitter {
 
     // Using dot notation?
     if (hasDot) {
-      const { component, names } = this._getSubComponent(name);
-      component.set({
-        [names[names.length - 1]]: value
-      });
+      const { property, names } = this._getSubProperty(name, -1);
+      const lastName = names[names.length - 1];
+      if (this._isComponent(property)) {
+        property.set({
+          [lastName]: value
+        });
+      } else {
+        property[lastName] = value;
+      }
     } else {
       // Not dot notation
       this._setIfPropDefined(name, value);
@@ -325,8 +352,11 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   _listenToSubEvent(event) {
+    // Register sub event so that we don't have duplicate listeners
+    this._subEvents[event] = true;
+
     // Get the sub component
-    const { component, names } = this._getSubComponent(event);
+    const { property, names } = this._getSubProperty(event, -1);
 
     // The sub event is the last name
     const subEvent = names[names.length - 1];
@@ -335,7 +365,26 @@ export default class BaseComponent extends events.EventEmitter {
     // take care of the response so that we can reuse the same logic for all listeners. TODO: when
     // is this listener destroyed? Do we need a destroy() function in each component that can
     // release this?
-    component.on(subEvent, value => this.emitChange(event, value));
+    property.on(subEvent, value => this.emitChange(event, value));
+  }
+
+  _listenIfNewSubEvent(event) {
+    // Check on _subEvents is done here to avoid race conditions
+    if (this._subEvents[event] === undefined && !this.get('disableSubEvents')) {
+      this._listenToSubEvent(event);
+    }
+  }
+
+  _listenIfSubEvent(event) {
+    // New sub event?
+    if (this._hasDot(event)) {
+      // We wait until the create event has fired so that we can be sure that the initial properties
+      // have been set for by any derived components. Otherwise, the properties may not exist yet.
+      // The alternative would be to create the listener when the property is set, but this would
+      // add a lot of latency to set() and it probably wouldn't work for components nested within
+      // properties.
+      this.resolveAfterCreate().then(() => this._listenIfNewSubEvent(event));
+    }
   }
 
   _setListeners(listeners) {
@@ -349,10 +398,7 @@ export default class BaseComponent extends events.EventEmitter {
         : [listener.event];
 
       events.forEach(event => {
-        // New sub event?
-        if (this._hasDot(event) && this._listenerEvents[event] === undefined) {
-          this._listenToSubEvent(event);
-        }
+        this._listenIfSubEvent(event);
 
         // Register the event so that we can do a quick lookup later
         this._listenerEvents[event] = true;
@@ -433,15 +479,23 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
+  async _runListenersAndEmitError(event, value) {
+    try {
+      await this.runListeners(event, value);
+    } catch (err) {
+      // Report error via the actionErr event
+      this._onActionError(err);
+
+      // Throw the error so that it is clear that something went wrong even if the user is not
+      // listening to the action error
+      throw err;
+    }
+  }
+
   _listenToAllChanges() {
     this.on('$change', async (event, value) => {
       if (this._listenerEvents[event]) {
-        try {
-          await this.runListeners(event, value);
-        } catch (err) {
-          // Swallow the error and report it via the actionErr event
-          this._onActionError(err);
-        }
+        await this._runListenersAndEmitError(event, value);
       }
     });
   }
@@ -532,8 +586,8 @@ export default class BaseComponent extends events.EventEmitter {
   _get(name) {
     if (this._hasDot(name)) {
       // Using dot notation
-      const { component, names } = this._getSubComponent(name);
-      return component.get(names[names.length - 1]);
+      const { property } = this._getSubProperty(name);
+      return property;
     } else {
       // Not using dot notation
       return this._getIfDefined(name);
