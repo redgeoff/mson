@@ -206,12 +206,12 @@ export default class BaseComponent extends events.EventEmitter {
     this._set(name, values);
   }
 
-  hasProperty(name) {
+  has(name) {
     return this._indexedPropNames[name] !== undefined;
   }
 
   _throwIfNotDefined(name) {
-    if (!this.hasProperty(name)) {
+    if (!this.has(name)) {
       throw new Error(this.getClassName() + ': ' + name + ' not defined');
     }
   }
@@ -223,10 +223,21 @@ export default class BaseComponent extends events.EventEmitter {
 
   _getSubComponent(name) {
     const names = name.split('.');
-    let component = this.get(names[0]);
-    for (let i = 1; i < names.length - 1; i++) {
+    let component = this;
+
+    const componentNames = [];
+
+    for (let i = 0; i < names.length - 1; i++) {
+      componentNames.push(names[i]);
+      if (!component.has(names[i])) {
+        throw new Error(componentNames.join('.') + ' not found');
+      }
       component = component.get(names[i]);
+      if (!component) {
+        throw new Error(componentNames.join('.') + ' not found');
+      }
     }
+
     return {
       component,
       names
@@ -438,7 +449,7 @@ export default class BaseComponent extends events.EventEmitter {
   _pushProp(name) {
     // Is the prop missing? The prop may already exist if we are overloading the type in a dervied
     // component
-    if (!this.hasProperty(name)) {
+    if (!this.has(name)) {
       this._propNames.push(name);
       this._indexedPropNames[name] = true;
     }
@@ -486,10 +497,6 @@ export default class BaseComponent extends events.EventEmitter {
       this._setIsStore(props.isStore);
     }
 
-    if (props.listeners !== undefined) {
-      this._setListeners(props.listeners);
-    }
-
     if (props.muteCreate !== undefined) {
       this._setMuteEvents(props.muteCreate);
     }
@@ -506,6 +513,11 @@ export default class BaseComponent extends events.EventEmitter {
         muteCreate: undefined
       })
     );
+
+    // The listeners are set after _setProps because sub event listeners depend on other properties
+    if (props.listeners !== undefined) {
+      this._setListeners(props.listeners);
+    }
   }
 
   _getProperty(name) {
