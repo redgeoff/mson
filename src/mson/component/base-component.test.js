@@ -6,6 +6,7 @@ import TextField from '../fields/text-field';
 import compiler from '../compiler';
 import Set from '../actions/set';
 import Emit from '../actions/emit';
+import MemoryStore from '../stores/memory-store';
 
 class Song extends BaseComponent {
   _create(props) {
@@ -386,6 +387,15 @@ it('should set with dot notation', () => {
 
 it('should get with dot notation', () => {
   const form = new Form({
+    schema: {
+      component: 'Form',
+      fields: [
+        {
+          name: 'foo',
+          component: 'Field'
+        }
+      ]
+    },
     fields: [
       new TextField({
         name: 'firstName',
@@ -394,6 +404,12 @@ it('should get with dot notation', () => {
     ]
   });
   expect(form.get('fields.firstName.label')).toEqual('First Name');
+
+  expect(() => form.get('fields.missingField.value')).toThrow(
+    'fields.missingField not found'
+  );
+
+  expect(() => form.get('foo.value')).toThrow('foo not found');
 });
 
 it('set should throw if property not defined', () => {
@@ -435,5 +451,46 @@ it('should listen to sub events', async () => {
   expect(form.getValues({ default: false })).toEqual({
     firstName: 'Max',
     lastName: 'Max'
+  });
+});
+
+it('should listen to sub events on property', async () => {
+  const store = new MemoryStore();
+
+  const form = new Form({
+    schema: {
+      component: 'Form',
+      fields: [
+        {
+          name: 'store',
+          component: 'Field'
+        }
+      ]
+    },
+    store,
+    fields: [new TextField({ name: 'firstName' })],
+    listeners: [
+      {
+        event: 'store.createDoc',
+        actions: [
+          new Set({
+            name: 'fields.firstName.value',
+            value: '{{arguments.value.fieldValues.firstName}}'
+          }),
+          new Emit({ event: 'didCreateDoc' })
+        ]
+      }
+    ]
+  });
+
+  const form2 = new Form({
+    fields: [new TextField({ name: 'firstName', value: 'Max' })]
+  });
+
+  const didCreateDoc = testUtils.once(form, 'didCreateDoc');
+  await store.createDoc({ form: form2 });
+  await didCreateDoc;
+  expect(form.getValues({ default: false })).toEqual({
+    firstName: 'Max'
   });
 });
