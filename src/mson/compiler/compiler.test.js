@@ -570,7 +570,9 @@ const changePassword = {
   updatePasswordBaseForm: {
     component: 'User'
   },
-  storeName: 'User'
+  store: {
+    component: 'MemoryStore'
+  }
 };
 
 const editThingInstance = {
@@ -590,7 +592,9 @@ const employeeSignup = {
       }
     ]
   },
-  storeName: 'User'
+  store: {
+    component: 'MemoryStore'
+  }
 };
 
 const employees = {
@@ -607,7 +611,9 @@ const employees = {
           component: 'User'
         }
       },
-      storeName: 'User'
+      store: {
+        component: 'MemoryStore'
+      }
     }
   ]
 };

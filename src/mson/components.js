@@ -15,7 +15,6 @@ import Component from './component/component';
 import CompositeField from './fields/composite-field';
 import ConsoleLogAction from './actions/console-log-action';
 import ContactUs from './aggregate/contact-us';
-import CreateRecord from './actions/create-record';
 import DateField from './fields/date-field';
 import Email from './actions/email';
 import EmailField from './fields/email-field';
@@ -28,8 +27,8 @@ import FormAccess from './form/form-access';
 import FormField from './fields/form-field';
 import FormsField from './fields/forms-field';
 import FormValidator from './form/form-validator';
-import GetRecord from './actions/get-record';
-import GetRecords from './actions/get-records';
+import GetDoc from './actions/get-doc';
+import GetDocs from './actions/get-docs';
 import IdField from './fields/id-field';
 import IntegerField from './fields/integer-field';
 import Iterator from './actions/iterator';
@@ -66,7 +65,7 @@ import TextField from './fields/text-field';
 import TextListField from './fields/text-list-field';
 import UpdatePasswordEditor from './aggregate/update-password-editor';
 import UpdatePassword from './aggregate/update-password';
-import UpsertRecord from './actions/upsert-record';
+import UpsertDoc from './actions/upsert-doc';
 import User from './form/user';
 import UserList from './aggregate/user-list';
 import Vault from './vaults/vault';
@@ -86,7 +85,6 @@ export default {
   CompositeField,
   ConsoleLogAction,
   ContactUs,
-  CreateRecord,
   DateField,
   Email,
   EmailField,
@@ -98,8 +96,8 @@ export default {
   AccessForm: FormAccess,
   FormField,
   FormsField,
-  GetRecord,
-  GetRecords,
+  GetDoc,
+  GetDocs,
   IdField,
   IntegerField,
   Iterator,
@@ -137,7 +135,7 @@ export default {
   ValidatorForm: FormValidator,
   UpdatePasswordEditor,
   UpdatePassword,
-  UpsertRecord,
+  UpsertDoc,
   User,
   UserList,
   Vault,

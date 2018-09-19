@@ -15,8 +15,8 @@ export default {
         required: true
       },
       {
-        name: 'storeName',
-        component: 'TextField'
+        name: 'store',
+        component: 'Field'
       }
     ]
   },
@@ -29,10 +29,7 @@ export default {
         component: 'Factory',
         product: '{{baseFormFactory}}'
       },
-      store: {
-        component: 'RecordStore',
-        storeName: '{{storeName}}'
-      }
+      store: '{{store}}'
     }
   ]
 };

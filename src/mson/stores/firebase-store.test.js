@@ -121,5 +121,5 @@ it('should listen to changes', async () => {
 
 it('should not set if apiKey missing', async () => {
   const store = new FirebaseStore();
-  await store._docSet();
+  await store._docSet({});
 });

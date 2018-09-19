@@ -22,7 +22,7 @@ export default {
           value: true
         }
         // TODO: create a construct for loading the user's name into the session and use it here to
-        // prepopulate the name fields. Or better yet, just expect the user to configure a GetRecord
+        // prepopulate the name fields. Or better yet, just expect the user to configure a GetDoc
         // action to load the data.
       ]
     },

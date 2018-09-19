@@ -1,12 +1,32 @@
 import compiler from '../compiler';
 import testUtils from '../test-utils';
-import GetRecord from '../actions/get-record';
-import UpsertRecord from '../actions/upsert-record';
+import MemoryStore from '../stores/memory-store';
 import _ from '../lodash';
 
 let acts = null;
 let editAccount = null;
-let recordCreateSpy = null;
+let docsCreated = null;
+
+class MockStore extends MemoryStore {
+  _create(props) {
+    super._create(props);
+
+    this._docs.set('1', {
+      id: '1',
+      userId: '1',
+      fieldValues: {
+        name: 'Miles Davis',
+        email: 'miles@example.com',
+        password: 'miles12345'
+      }
+    });
+  }
+
+  async _createDoc(props) {
+    docsCreated.push(props);
+    return super._createDoc(props);
+  }
+}
 
 beforeAll(() => {
   compiler.registerComponent('app.Account', {
@@ -34,6 +54,8 @@ beforeAll(() => {
     ]
   });
 
+  compiler.registerComponent('app.MyStore', MockStore);
+
   compiler.registerComponent('app.EditAccount', {
     component: 'RecordEditor',
     baseForm: {
@@ -41,9 +63,11 @@ beforeAll(() => {
     },
     label: 'Account',
     storeWhere: {
-      id: 'foo'
+      id: '1'
     },
-    storeName: 'app.Account'
+    store: {
+      component: 'app.MyStore'
+    }
   });
 
   compiler.registerComponent('app.ChangePasswordForm', {
@@ -144,12 +168,7 @@ const clearActs = () => {
 
 beforeEach(() => {
   clearActs();
-});
-
-afterEach(() => {
-  if (recordCreateSpy) {
-    recordCreateSpy.mockReset();
-  }
+  docsCreated = [];
 });
 
 const mockActions = (actions, spyOnAct) => {
@@ -167,31 +186,6 @@ const mockActions = (actions, spyOnAct) => {
           });
           return origAct.apply(this, arguments);
         };
-      }
-
-      if (action instanceof GetRecord) {
-        action._recordGet = async () => {
-          return {
-            data: {
-              record: {
-                id: '1',
-                userId: '1',
-                fieldValues: {
-                  name: 'Miles Davis',
-                  email: 'miles@example.com',
-                  password: 'miles12345'
-                }
-              }
-            }
-          };
-        };
-      } else if (action instanceof UpsertRecord) {
-        action._valuesCanCreate = component =>
-          component.getValues({ out: true });
-        action._recordCreate = () => {};
-        recordCreateSpy = jest.spyOn(action, '_recordCreate');
-        action._valuesCanUpdate = () => {};
-        action._recordUpdate = () => {};
       }
     }
   });
@@ -257,11 +251,10 @@ it('should load with preview and storeWhere', async () => {
       }
     },
     {
-      name: 'GetRecord',
+      name: 'GetDoc',
       props: {
-        storeName: 'app.Account',
         where: {
-          id: 'foo'
+          id: '1'
         }
       }
     },
@@ -537,10 +530,8 @@ it('cannotSubmit', async () => {
 const getSaveActs = preview => {
   let acts = [
     {
-      name: 'UpsertRecord',
-      props: {
-        storeName: 'app.Account'
-      }
+      name: 'UpsertDoc',
+      props: {}
     },
     {
       name: 'Set',
@@ -622,6 +613,7 @@ it('should support the change password scenario', async () => {
   const changePassword = compiler.newComponent({
     component: 'app.ChangePassword',
     preview: false,
+    store: new MockStore(),
     storeWhere: null
   });
 
@@ -630,9 +622,8 @@ it('should support the change password scenario', async () => {
 
   mockRecordEditor(changePassword);
 
-  const didLoad = testUtils.once(changePassword, 'didLoad');
-  changePassword.emitChange('load');
-  await didLoad;
+  changePassword.emitLoad();
+  await changePassword.resolveAfterLoad();
 
   changePassword.set({ autoValidate: true });
 
@@ -644,8 +635,8 @@ it('should support the change password scenario', async () => {
   changePassword.getField('save').emitClick();
   await didSave;
 
-  expect(recordCreateSpy).toHaveBeenCalledTimes(1);
-  expect(recordCreateSpy.mock.calls[0][0].fieldValues).toEqual({
+  expect(docsCreated).toHaveLength(1);
+  expect(docsCreated[0].fieldValues).toEqual({
     password: 'secret12345'
   });
 });

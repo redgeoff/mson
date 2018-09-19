@@ -56,19 +56,19 @@ export default class LocalStorageStore extends MemoryStore {
     return response;
   }
 
-  async _createDoc(props, fieldValues) {
-    return this._doAndSave(() => super._createDoc(props, fieldValues));
+  async _createDoc(props) {
+    return this._doAndSave(() => super._createDoc(props));
   }
 
-  async _updateDoc(props, fieldValues) {
-    return this._doAndSave(() => super._updateDoc(props, fieldValues));
+  async _updateDoc(props) {
+    return this._doAndSave(() => super._updateDoc(props));
   }
 
-  async _archiveDoc(props, fieldValues) {
-    return this._doAndSave(() => super._archiveDoc(props, fieldValues));
+  async _archiveDoc(props) {
+    return this._doAndSave(() => super._archiveDoc(props));
   }
 
-  async _restoreDoc(props, fieldValues) {
-    return this._doAndSave(() => super._restoreDoc(props, fieldValues));
+  async _restoreDoc(props) {
+    return this._doAndSave(() => super._restoreDoc(props));
   }
 }

@@ -26,6 +26,7 @@
 import Component from '../component';
 import access from '../access';
 import utils from '../utils';
+import uberUtils from '../uber-utils';
 
 export default class Store extends Component {
   _className = 'Store';
@@ -41,38 +42,84 @@ export default class Store extends Component {
     }
   }
 
-  async createDoc(props) {
-    // Omit values based on access
-    const fieldValues = this._access.valuesCanCreate(props.form, {
-      default: false
-    });
+  async _tryAndHandleError(promiseFactory) {
+    return uberUtils.tryAndDisplayErrorIfAPIError(promiseFactory);
+  }
 
-    return this._createDoc(props, fieldValues);
+  async createDoc(props) {
+    return this._tryAndHandleError(() => {
+      // Omit values based on access
+      const fieldValues = this._access.valuesCanCreate(props.form, {
+        default: false
+      });
+
+      const id = props.form.getValue('id');
+
+      return this._createDoc({ ...props, fieldValues, id });
+    });
   }
 
   async getDoc(props) {
-    return this._getDoc(props);
+    return this._tryAndHandleError(async () => {
+      if (props.id) {
+        return this._getDoc(props);
+      } else {
+        // Reuse the logic in _getAllDocs to query with "where" and return the first doc
+        const docs = await this._getAllDocs({ ...props, showArchived: null });
+        return docs.edges.length > 0 ? docs.edges[0].node : null;
+      }
+    });
   }
 
   async getAllDocs(props) {
-    return this._getAllDocs(props);
+    return this._tryAndHandleError(() => {
+      return this._getAllDocs(props);
+    });
+  }
+
+  async _upsertDoc(props) {
+    const id = props.form.getValue('id');
+
+    let exists = false;
+
+    if (id) {
+      exists = await this._hasDoc({ id });
+    }
+
+    if (exists) {
+      return this.updateDoc({ ...props, id });
+    } else {
+      return this.createDoc(props);
+    }
+  }
+
+  async upsertDoc(props) {
+    return this._tryAndHandleError(() => {
+      return this._upsertDoc(props);
+    });
   }
 
   async updateDoc(props) {
-    // Omit values based on access
-    const fieldValues = this._access.valuesCanUpdate(props.form, {
-      default: false
-    });
+    return this._tryAndHandleError(() => {
+      // Omit values based on access
+      const fieldValues = this._access.valuesCanUpdate(props.form, {
+        default: false
+      });
 
-    return this._updateDoc(props, fieldValues);
+      return this._updateDoc({ ...props, fieldValues });
+    });
   }
 
   async archiveDoc(props) {
-    return this._archiveDoc(props);
+    return this._tryAndHandleError(() => {
+      return this._archiveDoc(props);
+    });
   }
 
   async restoreDoc(props) {
-    return this._restoreDoc(props);
+    return this._tryAndHandleError(() => {
+      return this._restoreDoc(props);
+    });
   }
 
   _emitError(err) {
@@ -83,22 +130,20 @@ export default class Store extends Component {
     return new Date();
   }
 
-  _buildDoc({ fieldValues, userId }) {
-    const id = utils.uuid();
-
+  _buildDoc({ fieldValues, id, userId }) {
     const createdAt = this._now();
 
     return {
-      id,
+      id: id ? id : utils.uuid(),
       archivedAt: null, // Needed by the UI as a default
       createdAt,
       updatedAt: createdAt,
       userId: userId ? userId : null,
-      fieldValues: Object.assign({}, fieldValues)
+      fieldValues
     };
   }
 
-  _setDoc(doc, { fieldValues, archivedAt }) {
+  _setDoc({ doc, fieldValues, archivedAt }) {
     if (fieldValues !== undefined) {
       // Merge so that we support partial updates
       doc.fieldValues = Object.assign(doc.fieldValues, fieldValues);
