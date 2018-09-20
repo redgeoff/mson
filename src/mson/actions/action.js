@@ -92,7 +92,8 @@ export default class Action extends Component {
           }
           args = await actions[i].run({
             ...props,
-            arguments: args
+            arguments: args,
+            parent: this
           });
         }
         return args;

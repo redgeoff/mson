@@ -14,6 +14,9 @@ class MockStore extends MemoryStore {
     this._docs.set('1', {
       id: '1',
       userId: '1',
+      archivedAt: '2018-09-20T20:34:10.372Z',
+      createdAt: '2018-09-20T20:33:10.372Z',
+      updatedAt: '2018-09-20T20:35:10.372Z',
       fieldValues: {
         name: 'Miles Davis',
         email: 'miles@example.com',
@@ -151,7 +154,10 @@ beforeAll(() => {
     baseForm: {
       component: 'app.ChangePasswordForm'
     },
-    label: 'Password'
+    label: 'Password',
+    store: {
+      component: 'MemoryStore'
+    }
   });
 });
 
@@ -272,15 +278,14 @@ it('should load with preview and storeWhere', async () => {
     {
       name: 'Set',
       props: {
-        name: 'fields.userId.value',
-        value: '1'
-      }
-    },
-    {
-      name: 'Set',
-      props: {
-        name: 'fields.id.value',
-        value: '1'
+        name: 'value',
+        value: {
+          id: '1',
+          userId: '1',
+          archivedAt: '2018-09-20T20:34:10.372Z',
+          createdAt: '2018-09-20T20:33:10.372Z',
+          updatedAt: '2018-09-20T20:35:10.372Z'
+        }
       }
     },
     {
@@ -311,7 +316,10 @@ it('should load with preview and storeWhere', async () => {
     id: '1',
     userId: '1',
     name: 'Miles Davis',
-    email: 'miles@example.com'
+    email: 'miles@example.com',
+    archivedAt: '2018-09-20T20:34:10.372Z',
+    createdAt: '2018-09-20T20:33:10.372Z',
+    updatedAt: '2018-09-20T20:35:10.372Z'
   });
 });
 

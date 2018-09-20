@@ -555,6 +555,8 @@ it('should validate the definitions of all core components', () => {
 });
 
 it('should define className for all core components', () => {
+  setValidateOnly();
+
   _.each(components, (component, name) => {
     const c = compiler.newComponent({
       component: name

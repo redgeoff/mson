@@ -58,6 +58,7 @@ import RolesField from './fields/roles-field';
 import SchemaValidatorForm from './form/schema-validator-form';
 import SelectField from './fields/select-field';
 import SelectListField from './fields/select-list-field';
+import SetFromDoc from './actions/set-from-doc';
 import Set from './actions/set';
 import SignupEditor from './aggregate/signup-editor';
 import Snackbar from './actions/snackbar';
@@ -127,6 +128,7 @@ export default {
   SchemaValidatorForm,
   SelectField,
   SelectListField,
+  SetFromDoc,
   Set,
   SignupEditor,
   Snackbar,

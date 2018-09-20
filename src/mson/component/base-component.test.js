@@ -7,6 +7,7 @@ import compiler from '../compiler';
 import Set from '../actions/set';
 import Emit from '../actions/emit';
 import MemoryStore from '../stores/memory-store';
+import { PersonFullNameField } from '../fields';
 
 class Song extends BaseComponent {
   _create(props) {
@@ -368,14 +369,42 @@ it('should clone many components quickly', () => {
 });
 
 it('should set with dot notation', () => {
+  const fullName = {
+    firstName: 'Tom',
+    lastName: 'Petty'
+  };
+
   const form = new Form({
+    schema: {
+      component: 'Form',
+      fields: [
+        {
+          name: 'foo',
+          component: 'Field'
+        },
+        {
+          name: 'person',
+          component: 'Field'
+        }
+      ]
+    },
     fields: [
       new TextField({
         name: 'firstName',
         label: 'First Name'
+      }),
+      new PersonFullNameField({
+        name: 'fullName'
       })
-    ]
+    ],
+    person: {
+      profile: {
+        fullName
+      },
+      profession: 'Musician'
+    }
   });
+
   expect(form.getField('firstName').get('label')).toEqual('First Name');
   form.set({
     'fields.firstName.label': 'First Name Modified'
@@ -383,15 +412,33 @@ it('should set with dot notation', () => {
   expect(form.getField('firstName').get('label')).toEqual(
     'First Name Modified'
   );
+
+  form.set({ 'person.profile.fullName.firstName': 'Thomas' });
+  expect(form.get('person').profile.fullName.firstName).toEqual('Thomas');
+
+  form.set({ 'person.profile.fullName': fullName });
+  expect(form.get('person').profile.fullName).toEqual(fullName);
+
+  form.set({ 'fields.fullName.firstName.value': 'Tom' });
+  expect(form.getField('fullName').getValue().firstName).toEqual('Tom');
 });
 
 it('should get with dot notation', () => {
+  const fullName = {
+    firstName: 'Tom',
+    lastName: 'Petty'
+  };
+
   const form = new Form({
     schema: {
       component: 'Form',
       fields: [
         {
           name: 'foo',
+          component: 'Field'
+        },
+        {
+          name: 'person',
           component: 'Field'
         }
       ]
@@ -401,8 +448,13 @@ it('should get with dot notation', () => {
         name: 'firstName',
         label: 'First Name'
       })
-    ]
+    ],
+    person: {
+      fullName,
+      profession: 'Musician'
+    }
   });
+
   expect(form.get('fields.firstName.label')).toEqual('First Name');
 
   expect(() => form.get('fields.missingField.value')).toThrow(
@@ -410,6 +462,13 @@ it('should get with dot notation', () => {
   );
 
   expect(() => form.get('foo.value')).toThrow('foo not found');
+
+  expect(form.get('person.fullName')).toEqual(fullName);
+  expect(form.get('person.fullName.firstName')).toEqual(fullName.firstName);
+
+  expect(() => form._getSubProperty('person.missing', 2)).toThrow(
+    'person.missing not found'
+  );
 });
 
 it('set should throw if property not defined', () => {
@@ -426,7 +485,7 @@ it('get should throw if property not defined', () => {
   );
 });
 
-it('should listen to sub events', async () => {
+it('should listen to sub events on fields', async () => {
   const form = new Form({
     fields: [
       new TextField({ name: 'firstName' }),
@@ -442,6 +501,9 @@ it('should listen to sub events', async () => {
       }
     ]
   });
+
+  // Wait for sub event listeners to be created
+  await form.resolveAfterCreate();
 
   const didGetFirstName = testUtils.once(form, 'didGetFirstName');
   form.setValues({
@@ -487,10 +549,53 @@ it('should listen to sub events on property', async () => {
     fields: [new TextField({ name: 'firstName', value: 'Max' })]
   });
 
+  // Wait for sub event listeners to be created
+  await form.resolveAfterCreate();
+
   const didCreateDoc = testUtils.once(form, 'didCreateDoc');
   await store.createDoc({ form: form2 });
   await didCreateDoc;
   expect(form.getValues({ default: false })).toEqual({
     firstName: 'Max'
   });
+});
+
+it('should not duplicate sub event listeners', () => {
+  const component = new BaseComponent({
+    schema: {
+      component: 'Form',
+      fields: [
+        {
+          name: 'store',
+          component: 'Field'
+        }
+      ]
+    },
+    store: new MemoryStore()
+  });
+  const listenToSubEventSpy = jest.spyOn(component, '_listenToSubEvent');
+
+  component._listenIfNewSubEvent('store.updateDoc');
+  expect(listenToSubEventSpy).toHaveBeenCalledWith('store.updateDoc');
+
+  component._listenIfNewSubEvent('store.updateDoc');
+  expect(listenToSubEventSpy).toHaveBeenCalledTimes(1);
+});
+
+it('should emit error when running listeners', async () => {
+  const component = new BaseComponent();
+
+  // Mock
+  const err = new Error();
+  component.runListeners = async () => {
+    throw err;
+  };
+
+  const onActionErrorSpy = jest.spyOn(component, '_onActionError');
+
+  await testUtils.expectToThrow(
+    () => component._runListenersAndEmitError(),
+    err
+  );
+  expect(onActionErrorSpy).toHaveBeenCalledWith(err);
 });
