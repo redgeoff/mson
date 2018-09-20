@@ -1,4 +1,4 @@
-import FormsField from './forms-field';
+import CollectionField from './collection-field';
 import MemoryStore from '../stores/memory-store';
 import Form from '../form';
 import TextField from '../fields/text-field';
@@ -14,7 +14,7 @@ it('should set store', () => {
   const onSpy2 = jest.spyOn(store2, 'on');
 
   // Initialize
-  const field = new FormsField({ store: store1 });
+  const field = new CollectionField({ store: store1 });
   expect(onSpy1).toHaveBeenCalledTimes(1);
 
   // Store isn't changing
@@ -41,7 +41,11 @@ it('should listen to store changes', async () => {
       });
     }
   });
-  const field = new FormsField({ showArchived: false, store, formFactory });
+  const field = new CollectionField({
+    showArchived: false,
+    store,
+    formFactory
+  });
   const upsertFormSpy = jest.spyOn(field, 'upsertForm');
   const removeFormSpy = jest.spyOn(field, 'removeForm');
 

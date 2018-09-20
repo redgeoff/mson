@@ -1,5 +1,5 @@
 import testUtils from '../test-utils';
-import FormsField from './forms-field';
+import CollectionField from './collection-field';
 import TextField from './text-field';
 import Form from '../form';
 import Factory from '../component/factory';
@@ -21,7 +21,7 @@ const createForm = () => {
 };
 
 const createField = props => {
-  const field = new FormsField({
+  const field = new CollectionField({
     formFactory: new Factory({ product: () => createForm() }),
     ...props
   });

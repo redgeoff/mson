@@ -56,7 +56,7 @@ it('should validate schema', () => {
             {
               name: 'people',
               label: 'People',
-              component: 'FormsField',
+              component: 'CollectionField',
               formFactory: {
                 component: 'Factory',
                 product: {

@@ -17,7 +17,7 @@ export default class Form extends Component {
         fields: [
           {
             name: 'fields',
-            component: 'FormsField',
+            component: 'CollectionField',
             // required: true,
             formFactory: {
               component: 'Factory',
@@ -33,7 +33,7 @@ export default class Form extends Component {
           },
           {
             name: 'validators',
-            component: 'FormsField',
+            component: 'CollectionField',
             formFactory: {
               component: 'Factory',
               product: {
@@ -51,7 +51,7 @@ export default class Form extends Component {
           {
             name: 'indexes',
             component: 'Field'
-            // component: 'FormsField',
+            // component: 'CollectionField',
             // form: {
             //   // TODO: create and use IndexForm. Needs to verfiy that fields are present--see
             //   // SchemaValidatorForm for something similar.

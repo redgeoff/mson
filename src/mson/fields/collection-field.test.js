@@ -1,4 +1,4 @@
-import FormsField from './forms-field';
+import CollectionField from './collection-field';
 import TextField from './text-field';
 import DateField from './date-field';
 import Form from '../form';
@@ -35,7 +35,7 @@ const createForm = props => {
 };
 
 const createField = props => {
-  return new FormsField({
+  return new CollectionField({
     label: 'People',
     singularLabel: 'Person',
     formFactory: new Factory({
@@ -267,9 +267,9 @@ it('should set defaults', () => {
       'showArchived'
     ])
   ).toEqual({
-    scrollThreshold: FormsField.SCROLLTHRESHOLD_DEFAULT,
-    itemsPerPage: FormsField.ITEMS_PER_PAGE_DEFAULT,
-    maxBufferPages: FormsField.MAX_BUFFER_PAGES_DEFAULT,
+    scrollThreshold: CollectionField.SCROLLTHRESHOLD_DEFAULT,
+    itemsPerPage: CollectionField.ITEMS_PER_PAGE_DEFAULT,
+    maxBufferPages: CollectionField.MAX_BUFFER_PAGES_DEFAULT,
     spacerHeight: 0,
     order: null,
     mode: null,
@@ -312,7 +312,7 @@ it('should add many forms quickly when using compiled components', () => {
 
 const shouldAddFormsQuicklyUncompiledComponents = (timeout, synchronous) => {
   const field = compiler.newComponent({
-    component: 'FormsField',
+    component: 'CollectionField',
     formFactory: {
       component: 'Factory',
       product: {
@@ -601,13 +601,13 @@ it('should restore', async () => {
 });
 
 it('should handle missing form', () => {
-  const field = new FormsField();
+  const field = new CollectionField();
   field.emitLoad();
   field.emitUnload();
 });
 
 it('should clear and get all', async () => {
-  const field = new FormsField();
+  const field = new CollectionField();
   const clearSpy = jest.spyOn(field._forms, 'clear');
   const resetInfiniteLoaderSpy = jest.spyOn(field, '_resetInfiniteLoader');
   const updateInfiniteLoaderSpy = jest.spyOn(field, '_updateInfiniteLoader');
@@ -620,7 +620,7 @@ it('should clear and get all', async () => {
 });
 
 it('should handle show archived', () => {
-  const field = new FormsField();
+  const field = new CollectionField();
   field._handleShowArchivedFactory()(true);
   expect(field.get('showArchived')).toEqual(true);
 });
@@ -720,7 +720,7 @@ it('should validate min size', () => {
 });
 
 it('should get singular label', () => {
-  const field = new FormsField();
+  const field = new CollectionField();
   expect(field.getSingularLabel()).toBeNull();
 
   field.set({ label: 'Records' });

@@ -3,7 +3,7 @@
 import testUtils from '../test-utils';
 import Form from './form';
 import TextField from '../fields/text-field';
-import FormsField from '../fields/forms-field';
+import CollectionField from '../fields/collection-field';
 import FormField from '../fields/form-field';
 import ListField from '../fields/list-field';
 import Factory from '../component/factory';
@@ -55,7 +55,7 @@ const createForm = formFactoryProps => {
         maxLength: 10
       }),
 
-      new FormsField({
+      new CollectionField({
         name: 'emails',
         label: 'Emails',
         formFactory,

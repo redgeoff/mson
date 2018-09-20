@@ -24,7 +24,7 @@ export default {
     {
       name: '{{name}}',
       label: '{{label}}',
-      component: 'FormsField',
+      component: 'CollectionField',
       formFactory: {
         component: 'Factory',
         product: '{{baseFormFactory}}'

@@ -12,7 +12,7 @@ export default {
   },
   fields: [
     {
-      component: 'FormsField',
+      component: 'CollectionField',
       name: 'contacts',
       label: 'Contacts',
       // forbidCreate: true,
