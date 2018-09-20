@@ -213,4 +213,13 @@ export default class CompositeField extends Field {
       return this.mapFields(field => field.getDisplayValue());
     }
   }
+
+  isBlank() {
+    if (super.isBlank()) {
+      return true;
+    } else {
+      const value = this.getValue();
+      return Array.isArray(value) && value.length === 0;
+    }
+  }
 }

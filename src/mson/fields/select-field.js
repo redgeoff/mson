@@ -131,4 +131,17 @@ export default class SelectField extends MultipleValueField {
       return this.getOptionLabel(value);
     }
   }
+
+  isValueBlank(value) {
+    if (super.isValueBlank(value)) {
+      return true;
+    } else if (value === '') {
+      // value can be '' for select when blankString selected
+      return true;
+    } else if (this.get('multiple')) {
+      return Array.isArray(value) && value.length === 0;
+    } else {
+      return false;
+    }
+  }
 }

@@ -109,3 +109,14 @@ it('should validate', () => {
     ['purple', 'red']
   ]);
 });
+
+it('should determine if blank', () => {
+  const field = createField({ multiple: true });
+  expect(field.isBlank()).toEqual(true);
+
+  field.setValue([]);
+  expect(field.isBlank()).toEqual(true);
+
+  field.setValue(['red', 'green']);
+  expect(field.isBlank()).toEqual(false);
+});
