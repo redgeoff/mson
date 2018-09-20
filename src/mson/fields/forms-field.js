@@ -4,6 +4,7 @@ import Mapa from '../mapa';
 import InfiniteLoader from '../infinite-loader';
 import Component from '../component';
 import utils from '../utils';
+import MemoryStore from '../stores/memory-store';
 
 export default class FormsField extends Field {
   _className = 'FormsField';
@@ -148,7 +149,11 @@ export default class FormsField extends Field {
       order: null,
       mode: null,
       showArchived: false,
-      searchString: null
+      searchString: null,
+
+      // We check props.store so that we can avoid instantiating a MemoryStore if the user has
+      // passed in a store
+      store: props && props.store ? props.store : new MemoryStore()
     });
 
     this._createInfiniteLoader();
