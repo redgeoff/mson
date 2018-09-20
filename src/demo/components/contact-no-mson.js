@@ -17,7 +17,11 @@ class ContactNoMSON extends Form {
         }),
         new TextField({ name: 'lastName', label: 'Last Name', required: true }),
         new EmailField({ name: 'email', label: 'Email' }),
-        new ButtonField({ name: 'populate', label: 'Populate' }),
+        new ButtonField({
+          name: 'import',
+          label: 'Import',
+          icon: 'ImportContacts'
+        }),
         new ButtonField({
           name: 'submit',
           label: 'Submit',
@@ -28,7 +32,7 @@ class ContactNoMSON extends Form {
       ]
     });
 
-    this.on('populate', () => {
+    this.on('import', () => {
       this.setValues({
         firstName: 'Prince',
         lastName: 'Nelson',
