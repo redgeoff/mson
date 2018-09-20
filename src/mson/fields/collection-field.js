@@ -6,13 +6,13 @@ import Component from '../component';
 import utils from '../utils';
 import MemoryStore from '../stores/memory-store';
 
-export default class FormsField extends Field {
-  _className = 'FormsField';
+export default class CollectionField extends Field {
+  _className = 'CollectionField';
 
   static SCROLLTHRESHOLD_DEFAULT = 2000;
 
   // We want this to be a multiple of 4 as we may make it optional to have 4 columns in
-  // FormsField
+  // CollectionField
   static ITEMS_PER_PAGE_DEFAULT = 20;
 
   static MAX_BUFFER_PAGES_DEFAULT = 3;
@@ -1045,7 +1045,7 @@ export default class FormsField extends Field {
 
   // TODO: why does using this cause the following error? TypeError: Method get
   // TypedArray.prototype.length called on incompatible receiver [object Object] at Uint8Array.get
-  // length [as length] (<anonymous>). See forms-field.test.js, it('should clone') for example
+  // length [as length] (<anonymous>). See collection-field.test.js, it('should clone') for example
   //
   // clone() {
   //   const clonedField = super.clone();

@@ -9,7 +9,7 @@ import ConfirmationDialog from '../confirmation-dialog';
 import access from '../../mson/access';
 import withStyles from '@material-ui/core/styles/withStyles';
 import blueGrey from '@material-ui/core/colors/blueGrey';
-import './forms-field.css';
+import './collection-field.css';
 import SelectOrder from './select-order';
 import ButtonField from '../../mson/fields/button-field';
 import Icon from '../icon';
@@ -38,7 +38,7 @@ const styles = theme => ({
   }
 });
 
-class FormsField extends React.PureComponent {
+class CollectionField extends React.PureComponent {
   state = {
     confirmationOpen: false,
     sortBy: '',
@@ -343,8 +343,8 @@ class FormsField extends React.PureComponent {
   }
 }
 
-FormsField = withStyles(styles)(FormsField);
-FormsField = attach([
+CollectionField = withStyles(styles)(CollectionField);
+CollectionField = attach([
   'change',
   'label',
   'singularLabel',
@@ -361,5 +361,5 @@ FormsField = attach([
   'currentForm',
   'mode',
   'noResults'
-])(FormsField);
-export default FormsField;
+])(CollectionField);
+export default CollectionField;

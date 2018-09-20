@@ -24,7 +24,7 @@ import ConfirmationDialog from './confirmation-dialog';
 import MUISwitch from '@material-ui/core/Switch';
 // import UserMenu from './user-menu';
 import Action from '../mson/actions/action';
-import FormsField from '../mson/fields/forms-field';
+import CollectionField from '../mson/fields/collection-field';
 import Form from '../mson/form';
 import access from '../mson/access';
 import registrar from '../mson/compiler/registrar';
@@ -192,7 +192,7 @@ class App extends React.PureComponent {
     let canSearch = false;
     if (this.component && this.component instanceof Form) {
       for (const field of this.component.getFields()) {
-        if (field instanceof FormsField) {
+        if (field instanceof CollectionField) {
           canArchive =
             !field.get('forbidViewArchived') &&
             access.canArchive(field.get('form'));

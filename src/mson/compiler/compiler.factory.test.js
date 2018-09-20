@@ -69,7 +69,7 @@ it('should compile when factory is in the root of the definition', () => {
 
 it('should handle template parameters in a nested factory', () => {
   compiler.registerComponent('app.MyComponent', {
-    component: 'FormsField',
+    component: 'CollectionField',
     formFactory: {
       component: 'Factory',
       product: {

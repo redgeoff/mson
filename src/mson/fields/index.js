@@ -2,7 +2,7 @@ import compiler from '../compiler';
 import DateField from './date-field';
 import Field from './field';
 import FormField from './form-field';
-import FormsField from './forms-field';
+import CollectionField from './collection-field';
 import IdField from './id-field';
 import IntegerField from './integer-field';
 import ListField from './list-field';
@@ -28,7 +28,7 @@ export {
   EmailField,
   Field,
   FormField,
-  FormsField,
+  CollectionField,
   IdField,
   IntegerField,
   ListField,

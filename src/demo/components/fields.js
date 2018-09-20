@@ -85,8 +85,8 @@ export default {
     },
 
     {
-      component: 'FormsField',
-      name: 'formsField',
+      component: 'CollectionField',
+      name: 'collectionField',
       label: 'Records',
       help: 'Example help',
       required: true,

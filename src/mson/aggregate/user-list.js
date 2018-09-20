@@ -1,6 +1,6 @@
 export default {
   name: 'UserList',
-  component: 'FormsField',
+  component: 'CollectionField',
   schema: {
     component: 'Form',
     fields: [

@@ -9,7 +9,7 @@ import Component from './component';
 //         path: 'light-red',
 //         label: 'Light Red',
 //         content: {
-//           component: 'FormsField',
+//           component: 'CollectionField',
 //           form: {
 //             component: 'org.proj.ColorField'
 //           }
@@ -34,7 +34,7 @@ export default class Menu extends Component {
         fields: [
           {
             name: 'items',
-            component: 'FormsField',
+            component: 'CollectionField',
             formFactory: {
               component: 'Factory',
               product: {

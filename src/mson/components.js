@@ -25,7 +25,7 @@ import FirebaseStore from './stores/firebase-store';
 import Form from './form';
 import FormAccess from './form/form-access';
 import FormField from './fields/form-field';
-import FormsField from './fields/forms-field';
+import CollectionField from './fields/collection-field';
 import FormValidator from './form/form-validator';
 import GetDoc from './actions/get-doc';
 import GetDocs from './actions/get-docs';
@@ -96,7 +96,7 @@ export default {
   Form,
   AccessForm: FormAccess,
   FormField,
-  FormsField,
+  CollectionField,
   GetDoc,
   GetDocs,
   IdField,

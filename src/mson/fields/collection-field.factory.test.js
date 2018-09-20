@@ -1,4 +1,4 @@
-import FormsField from './forms-field';
+import CollectionField from './collection-field';
 import SelectField from './select-field';
 import Form from '../form';
 import Factory from '../component/factory';
@@ -13,7 +13,7 @@ it('should set properties in nested form', async () => {
     { value: 'blue', label: 'Blue' }
   ];
 
-  const field = new FormsField({
+  const field = new CollectionField({
     formFactory: new Factory({
       product: () => {
         return new Form({

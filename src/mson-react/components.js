@@ -6,7 +6,7 @@ import Card from './card';
 import CompositeField from './fields/composite-field';
 import Field from './fields/field';
 import Form from './form';
-import FormsField from './fields/forms-field';
+import CollectionField from './fields/collection-field';
 import ListField from './fields/list-field';
 import ReCAPTCHAField from './fields/re-captcha-field';
 import SelectField from './fields/select-field';
@@ -21,7 +21,7 @@ export default {
   CompositeField,
   Field,
   Form,
-  FormsField,
+  CollectionField,
   IdField: TextField,
   IntegerField: TextField,
   ListField,
