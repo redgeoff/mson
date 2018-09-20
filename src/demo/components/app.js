@@ -6,6 +6,13 @@ export default {
     component: 'Menu',
     items: [
       {
+        path: '/',
+        label: 'Home',
+        content: {
+          component: 'app.Home'
+        }
+      },
+      {
         path: '/fields',
         label: 'Fields',
         content: {

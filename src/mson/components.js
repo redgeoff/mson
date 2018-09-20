@@ -62,6 +62,7 @@ import SetFromDoc from './actions/set-from-doc';
 import Set from './actions/set';
 import SignupEditor from './aggregate/signup-editor';
 import Snackbar from './actions/snackbar';
+import Text from './text';
 import TextField from './fields/text-field';
 import TextListField from './fields/text-list-field';
 import UpdatePasswordEditor from './aggregate/update-password-editor';
@@ -132,6 +133,7 @@ export default {
   Set,
   SignupEditor,
   Snackbar,
+  Text,
   TextField,
   TextListField,
   ValidatorForm: FormValidator,

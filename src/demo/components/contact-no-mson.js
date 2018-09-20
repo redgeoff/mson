@@ -41,7 +41,7 @@ class ContactNoMSON extends Form {
     });
 
     this.on('submit', () => {
-      // TODO: do something like contacting an API
+      // TODO: do something like contact an API
 
       const values = this.getValues();
       console.log('submitting', values);
