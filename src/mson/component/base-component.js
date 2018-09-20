@@ -432,17 +432,17 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
-  _onActionError(err) {
+  _onActionErr(err) {
     // Provide a way to intercept errors from detached actions
     this.emitChange('actionErr', err);
   }
 
-  _onDetachedActionError(err) {
+  _onDetachedActionErr(err) {
     if (this._registrar.log) {
       this._registrar.log.error(err);
     }
 
-    this._onActionError(err);
+    this._onActionErr(err);
   }
 
   async runListeners(event, output) {
@@ -465,7 +465,7 @@ export default class BaseComponent extends events.EventEmitter {
             if (action.get('detached')) {
               // We don't wait for detached actions, but we want to log any errors
               runAction.catch(err => {
-                return this._onDetachedActionError(err);
+                return this._onDetachedActionErr(err);
               });
             } else {
               // Pass the previous action's output as this action's arguments
@@ -484,7 +484,7 @@ export default class BaseComponent extends events.EventEmitter {
       await this.runListeners(event, value);
     } catch (err) {
       // Report error via the actionErr event
-      this._onActionError(err);
+      this._onActionErr(err);
 
       // Throw the error so that it is clear that something went wrong even if the user is not
       // listening to the action error
