@@ -268,6 +268,5 @@ export default class Field extends Component {
 }
 
 Field.isValueBlank = value => {
-  // value can be '' for select when blankString selected. TODO: better here or in SelectField?
-  return value === null || value === '' || value === undefined;
+  return value === null || value === undefined;
 };

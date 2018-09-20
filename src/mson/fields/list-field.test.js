@@ -116,3 +116,14 @@ it('new field should throw when field not defined', () => {
   const field = new ListField();
   expect(() => field._newField(0)).toThrow();
 });
+
+it('should determine if blank', () => {
+  const field = new TextListField();
+  expect(field.isBlank()).toEqual(true);
+
+  field.setValue([]);
+  expect(field.isBlank()).toEqual(true);
+
+  field.setValue(['red', 'green']);
+  expect(field.isBlank()).toEqual(false);
+});
