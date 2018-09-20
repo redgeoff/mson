@@ -38,6 +38,13 @@ export default {
         content: {
           component: 'app.EditContact'
         }
+      },
+      {
+        path: '/contact-no-mson',
+        label: 'Contact No MSON',
+        content: {
+          component: 'app.ContactNoMSON'
+        }
       }
     ]
   }
