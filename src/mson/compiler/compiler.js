@@ -108,7 +108,8 @@ export class Compiler {
         self._instantiate(props);
 
         // The default props and props need to be passed to _create() so that parent has a chance to
-        // act on these props.
+        // act on these props. E.G. componentToWrap needs to be set via _create() before any other
+        // action is taken.
         const propsAndDefaultProps = Object.assign({}, defaultProps, props);
         super._create(propsAndDefaultProps);
 
@@ -117,6 +118,9 @@ export class Compiler {
           delete defaultProps.componentToWrap;
         }
 
+        // Set the defaultProps, which essentially customizes the component based on the
+        // defaultProps. This would be similar to how you set properties in a
+        // constructor()/_create() if you were to build the component in JS.
         this.set(defaultProps);
       }
     }
