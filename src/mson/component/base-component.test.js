@@ -152,7 +152,7 @@ it('should log errors when action is detached', () => {
   const logSpy = jest.spyOn(song._registrar.log, 'error');
   const err = new Error();
 
-  song._onDetachedActionError(err);
+  song._onDetachedActionErr(err);
   expect(logSpy).toHaveBeenCalledWith(err);
 });
 
@@ -591,11 +591,11 @@ it('should emit error when running listeners', async () => {
     throw err;
   };
 
-  const onActionErrorSpy = jest.spyOn(component, '_onActionError');
+  const onActionErrSpy = jest.spyOn(component, '_onActionErr');
 
   await testUtils.expectToThrow(
     () => component._runListenersAndEmitError(),
     err
   );
-  expect(onActionErrorSpy).toHaveBeenCalledWith(err);
+  expect(onActionErrSpy).toHaveBeenCalledWith(err);
 });
