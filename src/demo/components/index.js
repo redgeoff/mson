@@ -4,6 +4,8 @@ import Contacts from './contacts';
 import ContactsLocalStorage from './contacts-local-storage';
 import ContactsFirebase from './contacts-firebase';
 import EditContact from './edit-contact';
+import './contact-no-mson';
+import Home from './home';
 
 export {
   App,
@@ -11,5 +13,6 @@ export {
   Contacts,
   ContactsLocalStorage,
   ContactsFirebase,
-  EditContact
+  EditContact,
+  Home
 };

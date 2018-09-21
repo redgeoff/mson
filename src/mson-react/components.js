@@ -10,6 +10,7 @@ import CollectionField from './fields/collection-field';
 import ListField from './fields/list-field';
 import ReCAPTCHAField from './fields/re-captcha-field';
 import SelectField from './fields/select-field';
+import Text from './text';
 import TextField from './fields/text-field';
 
 export default {
@@ -29,6 +30,7 @@ export default {
   ReCAPTCHAField,
   SelectField,
   SelectListField: ListField,
+  Text,
   TextField,
   TextListField: ListField,
   User: Form

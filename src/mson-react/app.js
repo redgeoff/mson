@@ -117,10 +117,12 @@ class App extends React.PureComponent {
 
   onNavigate = callback => {
     // We don't warn about discarding changes when fullScreen, e.g. a login page
+    const menuItem = this.state.menuItem;
     if (
-      this.state.menuItem &&
-      this.state.menuItem.content.get('dirty') &&
-      !this.state.menuItem.fullScreen
+      menuItem &&
+      menuItem.content.has('dirty') &&
+      menuItem.content.get('dirty') &&
+      !menuItem.fullScreen
     ) {
       // Show a confirmation dialog to see if the user wants to continue
       globals.displayConfirmation({
@@ -304,8 +306,9 @@ class App extends React.PureComponent {
 
     if (this.props.searchString !== prevProps.searchString) {
       // Pass search string down to current component
-      if (this.state.menuItem) {
-        this.state.menuItem.content.set({
+      const menuItem = this.state.menuItem;
+      if (menuItem && menuItem.content.has('searchString')) {
+        menuItem.content.set({
           searchString: this.props.searchString
         });
       }

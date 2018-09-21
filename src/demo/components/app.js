@@ -6,6 +6,13 @@ export default {
     component: 'Menu',
     items: [
       {
+        path: '/',
+        label: 'Home',
+        content: {
+          component: 'app.Home'
+        }
+      },
+      {
         path: '/fields',
         label: 'Fields',
         content: {
@@ -37,6 +44,13 @@ export default {
         label: 'Edit Contact',
         content: {
           component: 'app.EditContact'
+        }
+      },
+      {
+        path: '/contact-no-mson',
+        label: 'Contact No MSON',
+        content: {
+          component: 'app.ContactNoMSON'
         }
       }
     ]
