@@ -3,6 +3,9 @@ import { TextField, EmailField, ButtonField } from '../../mson/fields';
 import compiler from '../../mson/compiler';
 import globals from '../../mson/globals';
 
+// Note: you can also use the following instead of the import above
+// const Form = compiler.getCompiledComponent('Form');
+
 class ContactNoMSON extends Form {
   _create(props) {
     super._create(props);
