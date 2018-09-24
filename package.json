@@ -1,0 +1,74 @@
+{
+  "name": "mson",
+  "version": "0.1.0",
+  "description": "MSON Lang: Generate an app from JSON",
+  "author": "Geoff Cox",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@material-ui/core": "^3.0.0",
+    "@material-ui/icons": "^3.0.0",
+    "apollo-cache-inmemory": "^1.2.9",
+    "apollo-client": "^2.4.1",
+    "apollo-link-context": "^1.0.8",
+    "apollo-link-http": "^1.5.4",
+    "events": "^3.0.0",
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
+    "js-cookie": "^2.2.0",
+    "lodash": "^4.17.10",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-google-recaptcha": "^1.0.0",
+    "react-markdown": "^3.6.0",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "^1.1.5",
+    "sift": "^6.0.0",
+    "typeface-roboto": "^0.0.54"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,json,css}": [
+      "prettier --single-quote --write",
+      "git add"
+    ]
+  },
+  "scripts": {
+    "lint": "eslint src",
+    "precommit": "lint-staged",
+    "test-server-start": "export NODE_ENV=production && ./node_modules/babel-cli/bin/babel-node.js ../mson-server/bin/test-server.js --port=4002 --prefix=mson_test_ --CORE_TEST &",
+    "test-server-stop": "pkill -f --signal=SIGINT CORE_TEST & exit 0",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "just-test": "./scripts/test.sh",
+    "test": "npm run lint && npm run just-test -- --coverage",
+    "copy-json-rsync": "rsync -avm --include='*.json' -f 'hide,! */' src/mson lib",
+    "copy-json": "cd src && find . -name '*.json' -exec cp --parents \\{\\} ../lib \\;",
+    "copy-css": "cd src && find . -name '*.css' -exec cp --parents \\{\\} ../lib \\;",
+    "compile": "export NODE_ENV=production && babel src --ignore '**/*.test.js' -d lib && npm run copy-json && npm run copy-css",
+    "touch": "find src -exec touch {} \\;"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.2.2",
+    "prettier": "^1.14.2",
+    "wait-on": "^2.1.0",
+    "webpack-bundle-analyzer": "^2.13.1"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!**/mson-react/**",
+      "!**/demo/**",
+      "!**/src/index.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    }
+  }
+}
