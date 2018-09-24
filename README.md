@@ -693,3 +693,6 @@ However, your `EditPasswordForm` may need to allow such access:
   ]
 }
 ```
+
+## [MSON Design](DESIGN.md)
+Check out [MSON Design](DESIGN.md) for more info on why certain conventions were chosen.
