@@ -1,8 +1,3 @@
-# See https://help.github.com/ignore-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
-
 # testing
 /coverage
 
@@ -15,6 +10,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
+.circleci
 .vscode
 
 # logs
