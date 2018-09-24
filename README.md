@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/redgeoff/mson/master/mson.png" alt="MSON" width="50" height="50" /> MSON
+# <img src="https://raw.githubusercontent.com/redgeoff/mson/master/mson.png" alt="MSON" width="30" height="30" /> MSON
 
 MSON is a declarative programming language that allows you to generate an app from JSON.  MSON is a subset of JSON and comprised of just a few building blocks, yet it is as powerful as its non-declarative counterparts. It supports validation, inheritance, composition, pub/sub, access control, templating and various other features.
 
