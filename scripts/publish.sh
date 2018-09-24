@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 # For safety
-git add -A && git stash
 git checkout master
 
 # Get current version
