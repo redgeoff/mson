@@ -8,7 +8,7 @@ export default class BooleanField extends Field {
 
     if (!this.isBlank()) {
       const value = this.getValue();
-      if (value !== false && value !== true && value !== null) {
+      if (value !== false && value !== true) {
         this.setErr('must be true or false');
       }
     }
@@ -17,11 +17,5 @@ export default class BooleanField extends Field {
   getDisplayValue() {
     const value = this.get('value');
     return value ? 'Yes' : 'No';
-  }
-
-  // The value is never blank as a falsy value is considered false. This is important as it is used
-  // to determine whether the BooleanField's diplay value is shown.
-  isValueBlank(/* value */) {
-    return false;
   }
 }

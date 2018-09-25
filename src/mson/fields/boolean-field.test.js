@@ -21,7 +21,9 @@ it('should validate', () => {
 
 it('should get display value', () => {
   const field = new BooleanField({ label: 'MyLabel' });
-  expect(field.getDisplayValue()).toBeUndefined();
+  expect(field.getDisplayValue()).toEqual('No');
   field.setValue(true);
-  expect(field.getDisplayValue()).toEqual('MyLabel');
+  expect(field.getDisplayValue()).toEqual('Yes');
+  field.setValue(false);
+  expect(field.getDisplayValue()).toEqual('No');
 });
