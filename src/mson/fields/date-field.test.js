@@ -18,10 +18,15 @@ it('should set value to now', async () => {
 it('should get display value', () => {
   const date = new DateField();
 
-  const toLocaleStringSpy = jest.spyOn(date, '_toLocaleString');
   const now = new Date();
+  const toLocaleDateStringSpy = jest.spyOn(now, 'toLocaleDateString');
   date._toLocaleString(now);
-  expect(toLocaleStringSpy).toHaveBeenCalledWith(now);
+  expect(toLocaleDateStringSpy).toHaveBeenCalledTimes(1);
+
+  date.set({ includeTime: true });
+  const toLocaleStringSpy = jest.spyOn(now, 'toLocaleString');
+  date._toLocaleString(now);
+  expect(toLocaleStringSpy).toHaveBeenCalledTimes(1);
 
   // Mock for same results regardless of environment
   date._toLocaleString = date => {
