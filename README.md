@@ -1,5 +1,5 @@
 # <img src="https://raw.githubusercontent.com/redgeoff/mson/master/mson.png" alt="MSON" width="30" height="30" /> MSON
-[![Circle CI](https://circleci.com/gh/redgeoff/mson.svg?style=svg&circle-token=b9d60eb532e4d995350700256d946e833b07cdda)](https://circleci.com/gh/redgeoff/mson)
+[![Circle CI](https://circleci.com/gh/redgeoff/mson.svg?style=svg&circle-token=b9d60eb532e4d995350700256d946e833b07cdda)](https://circleci.com/gh/redgeoff/mson) [![Greenkeeper badge](https://badges.greenkeeper.io/redgeoff/mson.svg)](https://greenkeeper.io/)
 
 MSON is a declarative programming language that allows you to generate an app from JSON.  MSON is a subset of JSON and comprised of just a few building blocks, yet it is as powerful as its non-declarative counterparts. It supports validation, inheritance, composition, pub/sub, access control, templating and various other features.
 
