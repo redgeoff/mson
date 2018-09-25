@@ -20,6 +20,7 @@ The best way to get started with MSON is to play with the [Getting Started App](
 After you have played with the [Getting Started App](https://github.com/redgeoff/mson-getting-started) you may find it useful to fire up the MSON demo:
 
   - $ git clone https://github.com/redgeoff/mson
+  - $ cd mson
   - $ yarn install
   - $ yarn start
   - Visit http://localhost:3000 in a web browser
