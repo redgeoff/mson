@@ -5,14 +5,14 @@
 //
 // export default class PersonNameField extends React.Component {
 //   render() {
-//     const { field } = this.props;
-//     const firstName = field.get('firstName');
-//     const lastName = field.get('lastName');
+//     const { component } = this.props;
+//     const firstName = component.get('firstName');
+//     const lastName = component.get('lastName');
 //
 //     return (
 //       <div>
-//         <TextField field={firstName} />
-//         <TextField field={lastName} />
+//         <TextField component={firstName} />
+//         <TextField component={lastName} />
 //       </div>
 //     );
 //   }

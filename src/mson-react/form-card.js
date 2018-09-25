@@ -21,27 +21,27 @@ const styles = theme => ({
 class FormCard extends React.PureComponent {
   handleClick = event => {
     if (this.props.onClick) {
-      this.props.onClick(event, this.props.form);
+      this.props.onClick(event, this.props.component);
     }
   };
 
   handleEdit = (event, id) => {
     if (this.props.onEdit) {
-      this.props.onEdit(event, this.props.form);
+      this.props.onEdit(event, this.props.component);
     }
   };
 
   handleDelete = event => {
     // this.handleMoreClose();
     if (this.props.onDelete) {
-      this.props.onDelete(this.props.form);
+      this.props.onDelete(this.props.component);
     }
   };
 
   render() {
     const {
       classes,
-      form,
+      component,
       forbidUpdate,
       forbidDelete,
       editable,
@@ -58,7 +58,7 @@ class FormCard extends React.PureComponent {
               className={classes.content}
               onClick={event => this.handleClick(event)}
             >
-              <Form form={form} formTag={false} mode="read" />
+              <Form component={component} formTag={false} mode="read" />
             </Grid>
             <FormCardButtons
               forbidUpdate={forbidUpdate}
@@ -77,4 +77,4 @@ class FormCard extends React.PureComponent {
 }
 
 FormCard = withStyles(styles)(FormCard);
-export default attach(['value'], 'form')(FormCard);
+export default attach(['value'])(FormCard);

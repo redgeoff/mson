@@ -6,11 +6,11 @@ import DisplayValueTypography from './display-value-typography';
 
 class TextField extends React.PureComponent {
   handleChange = event => {
-    this.props.field.setValue(event.target.value);
+    this.props.component.setValue(event.target.value);
   };
 
   handleBlur = () => {
-    this.props.field.setTouched(true);
+    this.props.component.setTouched(true);
   };
 
   handleKeyUp = event => {
@@ -18,7 +18,7 @@ class TextField extends React.PureComponent {
     // user is using the keyboard to enter data and there is an error on the last field that needs
     // to be reported when the user presses enter.
     if (event.keyCode === 13) {
-      this.props.field.setTouched(true);
+      this.props.component.setTouched(true);
     }
   };
 
@@ -29,7 +29,7 @@ class TextField extends React.PureComponent {
       maxLength,
       touched,
       disabled,
-      field,
+      component,
       fullWidth,
       type,
       editable,
@@ -65,12 +65,12 @@ class TextField extends React.PureComponent {
     } else {
       fld = (
         <DisplayValueTypography>
-          {field.getDisplayValue()}
+          {component.getDisplayValue()}
         </DisplayValueTypography>
       );
     }
 
-    return <CommonField field={field}>{fld}</CommonField>;
+    return <CommonField component={component}>{fld}</CommonField>;
   }
 }
 

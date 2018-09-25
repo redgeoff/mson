@@ -8,7 +8,7 @@ import FlexBreak from '../flex-break';
 class Field extends React.PureComponent {
   render() {
     const {
-      field,
+      component,
       hidden,
       block,
       accessEditable,
@@ -21,7 +21,7 @@ class Field extends React.PureComponent {
     if (hidden || !didCreate) {
       return null;
     } else {
-      const name = field.getClassName();
+      const name = component.getClassName();
 
       let Field = components[name];
       if (!Field) {
@@ -33,7 +33,7 @@ class Field extends React.PureComponent {
 
       return (
         <span>
-          <Field field={field} accessEditable={accessEditable} />
+          <Field component={component} accessEditable={accessEditable} />
           {!noBlock && block ? <FlexBreak /> : null}
         </span>
       );

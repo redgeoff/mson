@@ -12,23 +12,23 @@ class Form extends React.PureComponent {
   // Enable automatic validation whenever a user changes data. This feature allows the user to see
   // errors in real-time.
   turnOnAutoValidate() {
-    this.props.form.set({ autoValidate: true });
+    this.props.component.set({ autoValidate: true });
   }
 
   calcFieldsCanAccess() {
-    const { form, mode } = this.props;
+    const { component, mode } = this.props;
     const canDowngrade = true;
     const fieldsCanAccess = access.fieldsCanAccess(
       // Default to update so that access control has a sensible default
       mode ? mode : 'update',
-      form,
+      component,
       null,
       canDowngrade
     );
 
     // We need to set the ignoreErrs state as there may be a field that is not accessible that is
     // generating an error.
-    for (const field of form.getFields()) {
+    for (const field of component.getFields()) {
       const ignoreErrs = fieldsCanAccess[field.get('name')] === undefined;
       field.set({ ignoreErrs });
     }
@@ -41,7 +41,7 @@ class Form extends React.PureComponent {
 
     // Was access specified? We check the form instead of this.props.access as this.props.access may
     // not have been updated yet.
-    if (this.props.form.get('access')) {
+    if (this.props.component.get('access')) {
       fieldsCanAccess = this.calcFieldsCanAccess();
     }
 
@@ -59,10 +59,10 @@ class Form extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { form, access, mode } = this.props;
+    const { component, access, mode } = this.props;
 
     // Did the form change?
-    if (prevProps.form !== form) {
+    if (prevProps.component !== component) {
       this.turnOnAutoValidate();
     }
 
@@ -70,7 +70,7 @@ class Form extends React.PureComponent {
     if (
       prevProps.access !== access ||
       prevProps.mode !== mode ||
-      prevProps.form !== form
+      prevProps.component !== component
     ) {
       this.adjustAccess();
     }
@@ -82,18 +82,18 @@ class Form extends React.PureComponent {
     event.preventDefault();
 
     // No errors?
-    const { form } = this.props;
-    form.setTouched(true);
-    form.validate();
-    if (form.getErrs().length === 0) {
-      this.props.form.submit();
+    const { component } = this.props;
+    component.setTouched(true);
+    component.validate();
+    if (component.getErrs().length === 0) {
+      component.submit();
     }
   };
 
   render() {
-    const { form, formTag, isLoading } = this.props;
+    const { component, formTag, isLoading } = this.props;
     const { fieldsCanAccess } = this.state;
-    const fields = form.get('fields');
+    const fields = component.get('fields');
 
     // Hide until the data has finished loading
     if (isLoading) {
@@ -102,7 +102,7 @@ class Form extends React.PureComponent {
 
     // The form key is needed or else React will not re-render all fields when the field indexes are
     // the same and we switch from route to another.
-    const key = form.getKey();
+    const key = component.getKey();
 
     const flds = fields.map((field, index) => {
       if (
@@ -119,7 +119,7 @@ class Form extends React.PureComponent {
         return (
           <Field
             key={key + '_' + index}
-            field={field}
+            component={field}
             accessEditable={accessEditable}
           />
         );
@@ -136,4 +136,4 @@ class Form extends React.PureComponent {
   }
 }
 
-export default attach(['access', 'mode', 'isLoading'], 'form')(Form);
+export default attach(['access', 'mode', 'isLoading'])(Form);

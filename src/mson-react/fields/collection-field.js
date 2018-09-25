@@ -46,27 +46,27 @@ class CollectionField extends React.PureComponent {
   };
 
   handleClose = () => {
-    this.props.field.set({ mode: null });
+    this.props.component.set({ mode: null });
   };
 
   handleRead = form => {
-    this.props.field.set({ currentForm: form, mode: 'read' });
+    this.props.component.set({ currentForm: form, mode: 'read' });
   };
 
   handleClick = form => {
-    this.props.field.set({ currentForm: form, mode: 'read' });
+    this.props.component.set({ currentForm: form, mode: 'read' });
   };
 
   handleEdit = form => {
-    this.props.field.set({ currentForm: form, mode: 'update' });
+    this.props.component.set({ currentForm: form, mode: 'update' });
   };
 
   handleNew = () => {
-    this.props.field.set({ currentForm: null, mode: 'create' });
+    this.props.component.set({ currentForm: null, mode: 'create' });
   };
 
   handleSave = async () => {
-    await this.props.field.save();
+    await this.props.component.save();
   };
 
   isOpen() {
@@ -74,26 +74,26 @@ class CollectionField extends React.PureComponent {
   }
 
   handleDelete = async formToDelete => {
-    const { field } = this.props;
+    const { component } = this.props;
 
     const open = this.isOpen();
     if (formToDelete) {
-      field.set({ currentForm: formToDelete });
+      component.set({ currentForm: formToDelete });
     } else {
       // Are we already focussed on this form
-      formToDelete = field.get('form');
+      formToDelete = component.get('form');
     }
 
     const archivedAt = formToDelete.getValue('archivedAt');
 
     // Are we restoring?
     if (archivedAt) {
-      await field.restore(formToDelete);
+      await component.restore(formToDelete);
 
       // Is the dialog open?
       if (open) {
         // Close it
-        field.set({ mode: null });
+        component.set({ mode: null });
       }
     } else {
       this.setState({
@@ -101,48 +101,48 @@ class CollectionField extends React.PureComponent {
         // confirmationTitle: `Are you sure you want to delete this ${singularLabel}?`
         confirmationTitle: 'Delete this?'
       });
-      field.set({ mode: null });
+      component.set({ mode: null });
     }
   };
 
   handleConfirmationClose = async yes => {
     if (yes) {
-      const { field } = this.props;
-      await field.archive(field.get('form'));
+      const { component } = this.props;
+      await component.archive(component.get('form'));
     }
     this.setState({ confirmationOpen: false });
   };
 
   canCreate() {
-    return access.canCreate(this.props.field.get('form'));
+    return access.canCreate(this.props.component.get('form'));
   }
 
   canUpdate() {
-    return access.canUpdate(this.props.field.get('form'));
+    return access.canUpdate(this.props.component.get('form'));
   }
 
   canArchive() {
-    return access.canArchive(this.props.field.get('form'));
+    return access.canArchive(this.props.component.get('form'));
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.bufferTopId !== prevProps.bufferTopId) {
       // Resize the spacer now that the newly prepended items have been rendered
-      this.props.field._infiniteLoader.resizeSpacer(this.props.bufferTopId);
+      this.props.component._infiniteLoader.resizeSpacer(this.props.bufferTopId);
     }
 
     if (this.props.spacerHeight !== prevProps.spacerHeight) {
-      this.props.field._infiniteLoader.setSpacerResizing(false);
+      this.props.component._infiniteLoader.setSpacerResizing(false);
     }
 
     if (this.props.change !== prevProps.change) {
-      this.props.field.set({ isLoading: false });
+      this.props.component.set({ isLoading: false });
     }
   }
 
   cards(canUpdate, canArchive) {
     const {
-      field,
+      component,
       forbidUpdate,
       forbidDelete,
       editable,
@@ -151,24 +151,24 @@ class CollectionField extends React.PureComponent {
 
     let cards = [];
 
-    for (const f of field.getForms()) {
-      f.setEditable(false);
+    for (const form of component.getForms()) {
+      form.setEditable(false);
 
       // We need to use the id for the key as we use the same list of cards when toggling
       // showArchive
-      const key = f.getValue('id');
+      const key = form.getValue('id');
 
       // Note: we use an id instead of ref so that more of our logic can be reused across different
       // frameworks.
-      const id = field.getUniqueItemId(key);
+      const id = component.getUniqueItemId(key);
 
       cards.push(
         <Grid item xs={12} sm={6} lg={6} key={key} id={id}>
           <FormCard
-            onClick={() => this.handleClick(f)}
-            onEdit={() => this.handleEdit(f)}
+            onClick={() => this.handleClick(form)}
+            onEdit={() => this.handleEdit(form)}
             onDelete={this.handleDelete}
-            form={f}
+            component={form}
             forbidUpdate={forbidUpdate || !canUpdate}
             forbidDelete={forbidDelete || !canArchive}
             editable={editable}
@@ -184,7 +184,7 @@ class CollectionField extends React.PureComponent {
   handleOrdering = props => {
     // TODO: shouldn't the ordering just be in the field and not have to be in this state?
     this.setState(props, () => {
-      this.props.field.set({
+      this.props.component.set({
         order: this.state.sortBy
           ? [[this.state.sortBy, this.state.sortOrder]]
           : null
@@ -193,9 +193,9 @@ class CollectionField extends React.PureComponent {
   };
 
   sortOptions() {
-    const { field } = this.props;
-    if (field && field.get('form')) {
-      const form = field.get('form');
+    const { component } = this.props;
+    if (component && component.get('form')) {
+      const form = component.get('form');
       const fieldsCanAccess = access.fieldsCanAccess('read', form);
       const fields = [];
       form.eachField(field => {
@@ -219,13 +219,19 @@ class CollectionField extends React.PureComponent {
   }
 
   header(numCards) {
-    const { forbidCreate, editable, disabled, field, forbidSort } = this.props;
+    const {
+      forbidCreate,
+      editable,
+      disabled,
+      component,
+      forbidSort
+    } = this.props;
 
     const { sortBy, sortOrder } = this.state;
 
-    const singularLabel = field.getSingularLabel();
+    const singularLabel = component.getSingularLabel();
 
-    const reachedMax = field.reachedMax();
+    const reachedMax = component.reachedMax();
 
     const canCreate = this.canCreate();
 
@@ -270,7 +276,7 @@ class CollectionField extends React.PureComponent {
     const {
       forbidUpdate,
       forbidDelete,
-      field,
+      component,
       spacerHeight,
       classes,
       isLoading,
@@ -281,18 +287,18 @@ class CollectionField extends React.PureComponent {
 
     const { confirmationOpen, confirmationTitle } = this.state;
 
-    const label = field.get('label').toLowerCase();
+    const label = component.get('label').toLowerCase();
 
     const canUpdate = this.canUpdate();
     const canArchive = this.canArchive();
 
     const spacerStyle = { height: spacerHeight };
 
-    const spacerId = field.get('spacerId');
+    const spacerId = component.get('spacerId');
 
     const cards = this.cards(canUpdate, canArchive);
 
-    const searchString = field.get('searchString');
+    const searchString = component.get('searchString');
 
     // Is the user searching and there are no records?
     const showNoRecords = searchString && noResults;
@@ -322,7 +328,7 @@ class CollectionField extends React.PureComponent {
         hybrid where we have a dialog per form. There is almost certainly more overhead in having an
         instance per record, right? */}
         <FormDialog
-          form={form}
+          component={form}
           currentForm={currentForm}
           onClose={this.handleClose}
           onRead={this.handleRead}

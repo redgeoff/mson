@@ -49,8 +49,8 @@ class Menu extends React.PureComponent {
   };
 
   items() {
-    const { menu, path } = this.props;
-    const items = menu.get('items');
+    const { component, path } = this.props;
+    const items = component.get('items');
     const submenus = [];
     items.forEach((item, index) => {
       // Has access to item?
@@ -138,5 +138,5 @@ class Menu extends React.PureComponent {
 }
 
 Menu = withStyles(styles, { withTheme: true })(Menu);
-Menu = attach(['items' /*, 'roles'*/], 'menu')(Menu);
+Menu = attach(['items' /*, 'roles'*/])(Menu);
 export default Menu;

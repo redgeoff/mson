@@ -6,16 +6,16 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 class BooleanField extends React.PureComponent {
   handleChange = event => {
-    this.props.field.setValue(event.target.checked);
+    this.props.component.setValue(event.target.checked);
   };
 
   render() {
-    const { value, disabled, field } = this.props;
+    const { value, disabled, component } = this.props;
 
-    const label = field.get('label');
+    const label = component.get('label');
 
     return (
-      <CommonField field={field} hideLabelUI="true">
+      <CommonField component={component} hideLabelUI="true">
         <FormControlLabel
           control={
             <Switch

@@ -6,13 +6,13 @@ import attach from '../attach';
 
 class ListField extends React.PureComponent {
   render() {
-    const { field, help } = this.props;
-    const allowDelete = field.get('allowDelete');
+    const { component, help } = this.props;
+    const allowDelete = component.get('allowDelete');
 
     let fields = [];
     let first = true;
 
-    field.eachField((field, index, last) => {
+    component.eachField((field, index, last) => {
       let itemHelp = null;
 
       if (field.get('block')) {
@@ -29,7 +29,7 @@ class ListField extends React.PureComponent {
       // We have to pass allowDelete as it is the allowDelete of the parent
       fields.push(
         <ListItemField
-          field={field}
+          component={field}
           key={index}
           allowDelete={allowDelete}
           help={itemHelp}
