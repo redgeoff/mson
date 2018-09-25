@@ -13,7 +13,22 @@ You can read more about why I created MSON at [Creating a New Programming Langua
 
 **Stability Disclaimer:** MSON is still an evolving project and should not be considered stable. The project has 100% code coverage and the API has already gone through several iterations, but the details may change. There is also limited documentation for now, so you may be required to dive into the code to gain a deeper understanding. PRs are very welcome.
 
-## Getting Started: TODO
+## Getting Started
+
+The best way to get started with MSON is to play with the [Getting Started App](https://github.com/redgeoff/mson-getting-started). In just a few lines of MSON, you'll generate an app that can list, edit, filter and sort a list of contacts. And, for extra fun, you can use Firebase to make it real-time capable.
+
+After you have played with the [Getting Started App](https://github.com/redgeoff/mson-getting-started) you may find it useful to fire up the MSON demo:
+
+  - $ git clone https://github.com/redgeoff/mson
+  - $ yarn install
+  - $ yarn start
+  - Visit http://localhost:3000 in a web browser
+
+The MSON code can be found in [components](https://github.com/redgeoff/mson/tree/master/src/demo/components). Here are some highlights:
+  1. [List of Contacts](https://github.com/redgeoff/mson/blob/master/src/demo/components/contacts.js)
+  2. [Editing with a RecordEditor](https://github.com/redgeoff/mson/blob/master/src/demo/components/edit-contact.js)
+  3. [List of Fields](https://github.com/redgeoff/mson/blob/master/src/demo/components/fields.js)
+  4. [Displaying Markdown](https://github.com/redgeoff/mson/blob/master/src/demo/components/home.js)
 
 ## Language Principles
 
