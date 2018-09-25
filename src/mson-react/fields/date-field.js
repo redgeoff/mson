@@ -14,37 +14,23 @@ const styles = theme => ({
 });
 
 class DateField extends React.PureComponent {
-  state = {
-    selectedDate: null
-  };
-
   handleDateChange = date => {
     this.props.component.setValue(date);
   };
 
-  componentDidUpdate(prevProps) {
-    const { value } = this.props;
-    if (value !== prevProps.value) {
-      // The picker expects the date to be a Date and not a ISO date string
-      this.setState({ selectedDate: value ? new Date(value) : null });
-    }
-  }
-
   render() {
-    const { component, classes } = this.props;
-
-    const { selectedDate } = this.state;
+    const { component, classes, value } = this.props;
 
     // The picker doesn't play well with the label from Material-UI so we need to manually shrink
     // the label when there is a value.
-    const shrinkLabel = !!selectedDate;
+    const shrinkLabel = !!value;
 
     return (
       <CommonField component={component} shrinkLabel={shrinkLabel}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <span>
             <DateTimePicker
-              value={selectedDate}
+              value={value}
               onChange={this.handleDateChange}
               clearable
               className={classes.root}
