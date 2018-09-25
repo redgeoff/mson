@@ -1,6 +1,9 @@
 import TextField from './text-field';
+import isValid from 'date-fns/isValid';
 
 export default class DateField extends TextField {
+  _className = 'DateField';
+
   _create(props) {
     super._create(props);
 
@@ -11,6 +14,18 @@ export default class DateField extends TextField {
           {
             name: 'now',
             component: 'BooleanField'
+          },
+          {
+            name: 'includeTime',
+            component: 'BooleanField'
+          },
+          {
+            name: 'minDate',
+            component: 'DateField'
+          },
+          {
+            name: 'maxDate',
+            component: 'DateField'
           }
         ]
       }
@@ -43,12 +58,37 @@ export default class DateField extends TextField {
 
   // For mocking
   _toLocaleString(date) {
-    return date.toLocaleString();
+    return this.get('includeTime')
+      ? date.toLocaleString()
+      : date.toLocaleDateString();
   }
 
   getDisplayValue() {
     return this.isBlank()
       ? null
       : this._toLocaleString(new Date(this.getValue()));
+  }
+
+  validate() {
+    super.validate();
+
+    if (!this.isBlank()) {
+      const value = this.getValue();
+      const date = new Date(value);
+      const minDate = this.get('minDate')
+        ? new Date(this.get('minDate'))
+        : null;
+      const maxDate = this.get('maxDate')
+        ? new Date(this.get('maxDate'))
+        : null;
+
+      if (!isValid(date)) {
+        this.setErr(`invalid`);
+      } else if (minDate !== null && date.getTime() < minDate.getTime()) {
+        this.setErr(`must be after ${this._toLocaleString(minDate)}`);
+      } else if (maxDate !== null && date.getTime() > maxDate.getTime()) {
+        this.setErr(`must be before ${this._toLocaleString(maxDate)}`);
+      }
+    }
   }
 }

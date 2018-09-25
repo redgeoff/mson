@@ -77,14 +77,6 @@ export default {
     },
 
     {
-      component: 'EmailField',
-      name: 'emailField',
-      label: 'Email',
-      help: 'Example help',
-      required: true
-    },
-
-    {
       component: 'CollectionField',
       name: 'collectionField',
       label: 'Records',
@@ -109,6 +101,25 @@ export default {
           ]
         }
       }
+    },
+
+    {
+      name: 'dateField',
+      component: 'DateField',
+      label: 'DateField',
+      help: 'Example help',
+      // includeTime: true,
+      minDate: '2018-01-01T23:07:28.157Z',
+      maxDate: '2022-01-01T23:07:28.157Z',
+      required: true
+    },
+
+    {
+      component: 'EmailField',
+      name: 'emailField',
+      label: 'Email',
+      help: 'Example help',
+      required: true
     },
 
     {

@@ -28,7 +28,8 @@ class CommonField extends React.PureComponent {
       hideLabelUI,
       hideLabel,
       classes,
-      useDisplayValue
+      useDisplayValue,
+      shrinkLabel
     } = this.props;
 
     let fld = null;
@@ -40,7 +41,11 @@ class CommonField extends React.PureComponent {
     if (!hideLabelUI && !hideLabel) {
       if (editable && !useDisplayValue) {
         lbl = (
-          <InputLabel error={touched && err ? true : false} required={required}>
+          <InputLabel
+            error={touched && err ? true : false}
+            required={required}
+            shrink={shrinkLabel}
+          >
             {label}
           </InputLabel>
         );
