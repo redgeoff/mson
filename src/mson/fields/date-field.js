@@ -13,6 +13,10 @@ export default class DateField extends TextField {
           {
             name: 'now',
             component: 'BooleanField'
+          },
+          {
+            name: 'includeTime',
+            component: 'BooleanField'
           }
         ]
       }

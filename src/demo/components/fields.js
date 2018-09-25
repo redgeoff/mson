@@ -108,6 +108,7 @@ export default {
       component: 'DateField',
       label: 'DateField',
       help: 'Example help',
+      // includeTime: true,
       required: true
     },
 
