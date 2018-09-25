@@ -32,3 +32,33 @@ it('should get display value', () => {
   date.setValue('2018-9-17 17:08:57');
   expect(date.getDisplayValue()).toEqual('9/17/2018, 5:08:57 PM');
 });
+
+it('should validate', () => {
+  const field = new DateField();
+
+  testUtils.expectValuesToBeValid(field, [
+    '2018-1-1',
+    '2018-12-12 8:12 AM',
+    '1/1/2018'
+  ]);
+
+  testUtils.expectValuesToBeInvalid(field, [
+    '1/1/-1',
+    '2018-1-1 40:00 PM',
+    '2018-1-1 10:00 ZM'
+  ]);
+
+  field.set({
+    minDate: '2018-01-01',
+    maxDate: '2018-12-31'
+  });
+
+  testUtils.expectValuesToBeValid(field, [
+    '2018-01-01',
+    '2018-12-31',
+    '2018-02-01',
+    '2018-01-01 10:00 AM'
+  ]);
+
+  testUtils.expectValuesToBeInvalid(field, ['2017-01-01', '2019-01-01']);
+});
