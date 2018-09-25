@@ -12,7 +12,7 @@ const styles = theme => ({
 
 class ReCAPTCHAField extends React.PureComponent {
   handleChange = value => {
-    this.props.field.setValue(value);
+    this.props.component.setValue(value);
   };
 
   render() {

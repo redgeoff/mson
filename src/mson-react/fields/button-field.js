@@ -9,7 +9,7 @@ class ButtonField extends React.PureComponent {
     // Is the button not a submit button? Let the form handle submit buttons so that the form
     // performs the validation
     if (type !== 'submit') {
-      this.props.field.emitClick();
+      this.props.component.emitClick();
     }
   };
 

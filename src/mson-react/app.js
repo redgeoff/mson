@@ -155,8 +155,8 @@ class App extends React.PureComponent {
 
   navigateTo(path) {
     const { menuItem } = this.state;
-    const { app } = this.props;
-    const menu = app.get('menu');
+    const { component } = this.props;
+    const menu = component.get('menu');
 
     // if (path === '/home') {
     //   // Redirect so that user sees the actual path and not /home
@@ -210,7 +210,7 @@ class App extends React.PureComponent {
 
   emitLoggedOut() {
     globals.set({ redirectAfterLogin: this.props.location.pathname });
-    this.props.app.emitLoggedOut();
+    this.props.component.emitLoggedOut();
   }
 
   requireAccess(roles) {
@@ -237,7 +237,7 @@ class App extends React.PureComponent {
       // Note: menuItem.content can be an action if the user goes directly to a route where the
       // content is an action
       if (menuItem && menuItem.content) {
-        const menu = this.props.app.get('menu');
+        const menu = this.props.component.get('menu');
         const parentItem = menu.getParent(menuItem.path);
         if (
           this.requireAccess(menuItem.roles) &&
@@ -384,7 +384,12 @@ class App extends React.PureComponent {
   };
 
   render() {
-    const { classes, app, confirmation, menuAlwaysTemporary } = this.props;
+    const {
+      classes,
+      component,
+      confirmation,
+      menuAlwaysTemporary
+    } = this.props;
     const {
       mobileOpen,
       menuItem,
@@ -401,12 +406,12 @@ class App extends React.PureComponent {
 
     const responsive = !menuAlwaysTemporary;
 
-    const menu = app.get('menu');
+    const menu = component.get('menu');
 
     // Use the path from the location prop as this.state.path may not be up to date
     const path = this.props.location.pathname;
 
-    const component = this.component ? (
+    const comp = this.component ? (
       <Component component={this.component} />
     ) : null;
 
@@ -469,7 +474,7 @@ class App extends React.PureComponent {
 
     const menuSidebar = (
       <Menu
-        menu={menu}
+        component={menu}
         onDrawerToggle={this.handleDrawerToggle}
         mobileOpen={mobileOpen}
         onNavigate={this.handleNavigate}
@@ -503,7 +508,7 @@ class App extends React.PureComponent {
               <Route />
             </Switch>
 
-            {component}
+            {comp}
 
             <Snackbar
               open={snackbarOpen}
@@ -526,7 +531,7 @@ class App extends React.PureComponent {
 
 App = withStyles(styles, { withTheme: true })(App);
 App = withRouter(App);
-App = attach(['menuAlwaysTemporary'], 'app')(App);
+App = attach(['menuAlwaysTemporary'])(App);
 App = attach(
   ['path', 'redirectPath', 'snackbarMessage', 'confirmation', 'searchString'],
   globals

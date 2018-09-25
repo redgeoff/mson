@@ -69,12 +69,14 @@ class FormDialog extends React.PureComponent {
   }
 
   render() {
-    const { mode, form, forbidUpdate, forbidDelete, value } = this.props;
+    const { mode, component, forbidUpdate, forbidDelete, value } = this.props;
 
     const { saveClicked, previousMode } = this.state;
 
     const disableSave =
-      form.hasErrorForTouchedField() || !form.get('dirty') || saveClicked;
+      component.hasErrorForTouchedField() ||
+      !component.get('dirty') ||
+      saveClicked;
 
     const open = this.isOpen();
 
@@ -139,7 +141,7 @@ class FormDialog extends React.PureComponent {
         {/* We use a form element so that we can submit the form on enter */}
         <form onSubmit={this.handleSave}>
           <DialogContent>
-            <Form form={form} formTag={false} mode={mode} />
+            <Form component={component} formTag={false} mode={mode} />
           </DialogContent>
           {buttons ? <DialogActions>{buttons}</DialogActions> : ''}
         </form>
@@ -149,5 +151,5 @@ class FormDialog extends React.PureComponent {
 }
 
 FormDialog = withMobileDialog()(FormDialog);
-FormDialog = attach(['err', 'dirty', 'value', 'mode'], 'form')(FormDialog);
+FormDialog = attach(['err', 'dirty', 'value', 'mode'])(FormDialog);
 export default FormDialog;

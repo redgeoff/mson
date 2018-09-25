@@ -22,11 +22,11 @@ const styles = theme => ({
 
 class SelectField extends React.PureComponent {
   handleChange = event => {
-    this.props.field.setValue(event.target.value);
+    this.props.component.setValue(event.target.value);
   };
 
   handleBlur = () => {
-    this.props.field.setTouched(true);
+    this.props.component.setTouched(true);
   };
 
   renderOptions() {
@@ -72,7 +72,7 @@ class SelectField extends React.PureComponent {
       err,
       touched,
       disabled,
-      field,
+      component,
       fullWidth,
       classes,
       editable,
@@ -101,7 +101,7 @@ class SelectField extends React.PureComponent {
           {selected.map(value => (
             <Chip
               key={value}
-              label={field.getOptionLabel(value)}
+              label={component.getOptionLabel(value)}
               className={classes.chip}
             />
           ))}
@@ -133,17 +133,17 @@ class SelectField extends React.PureComponent {
         displayValue = value.map(val => (
           <Chip
             key={val}
-            label={field.getOptionLabel(val)}
+            label={component.getOptionLabel(val)}
             className={classes.chip}
           />
         ));
       } else {
-        displayValue = field.getDisplayValue();
+        displayValue = component.getDisplayValue();
       }
       fld = <DisplayValueTypography>{displayValue}</DisplayValueTypography>;
     }
 
-    return <CommonField field={field}>{fld}</CommonField>;
+    return <CommonField component={component}>{fld}</CommonField>;
   }
 }
 

@@ -26,14 +26,14 @@ class AppContainer extends React.Component {
   };
 
   render() {
-    const { app } = this.props;
+    const { component } = this.props;
     return (
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter getUserConfirmation={this.onNavigate}>
           {/* Wrapping div required by BrowserRouter */}
           <div>
-            <AppUI app={app} />
+            <AppUI component={component} />
 
             {/* A Prompt is needed to capture back/forward button events with ReactRouter. message
             is required, but the value is arbitrary */}

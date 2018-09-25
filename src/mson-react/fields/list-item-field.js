@@ -8,23 +8,23 @@ import HelpToolTip from './help-tool-tip';
 
 class ListItemField extends React.PureComponent {
   handleDelete = () => {
-    this.props.field.emit('delete');
+    this.props.component.emit('delete');
   };
 
   render() {
     // Note: allowDelete and help have to be passed in as a prop as it is really the parent's values
     // that we need
-    const { field, allowDelete, help } = this.props;
-    const disabled = field.get('disabled');
-    const editable = field.get('editable');
+    const { component, allowDelete, help } = this.props;
+    const disabled = component.get('disabled');
+    const editable = component.get('editable');
 
-    if (field) {
-      const block = field.get('block');
-      const isBlank = field.isBlank();
+    if (component) {
+      const block = component.get('block');
+      const isBlank = component.isBlank();
 
       return (
         <span>
-          <Field field={field} block={false} />
+          <Field component={component} block={false} />
           {allowDelete && !isBlank && !disabled && editable ? (
             <IconButton aria-label="Delete">
               <Icon icon="DeleteIcon" onClick={this.handleDelete} />
@@ -35,7 +35,7 @@ class ListItemField extends React.PureComponent {
         </span>
       );
     } else {
-      // field can be falsy if it was just deleteed
+      // component can be falsy if it was just deleteed
       return null;
     }
   }

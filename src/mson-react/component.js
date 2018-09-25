@@ -1,7 +1,6 @@
 import React from 'react';
 import components from './components';
 import compiler from '../mson/compiler';
-import Form from '../mson/form';
 
 export default class Component extends React.PureComponent {
   render() {
@@ -16,11 +15,6 @@ export default class Component extends React.PureComponent {
       Component = components[ext];
     }
 
-    // TODO: standardize so that all MSON React components have a prop named component
-    if (component instanceof Form) {
-      return <Component form={component} />;
-    } else {
-      return <Component component={component} />;
-    }
+    return <Component component={component} />;
   }
 }

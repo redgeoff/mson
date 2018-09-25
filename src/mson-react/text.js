@@ -17,4 +17,5 @@ class Text extends React.PureComponent {
   }
 }
 
-export default (Text = attach(['text'], 'component')(Text));
+Text = attach(['text'])(Text);
+export default Text;

@@ -16,7 +16,7 @@ class MSONReact {
     }
 
     ReactDOM.render(
-      <AppContainer app={app} />,
+      <AppContainer component={app} />,
       document.getElementById('root')
     );
     registerServiceWorker();

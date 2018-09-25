@@ -16,7 +16,7 @@ const styles = theme => ({
 class CommonField extends React.PureComponent {
   render() {
     const {
-      field,
+      component,
       children,
       label,
       required,
@@ -35,7 +35,7 @@ class CommonField extends React.PureComponent {
 
     let lbl = null;
 
-    const isBlank = field.isBlank();
+    const isBlank = component.isBlank();
 
     if (!hideLabelUI && !hideLabel) {
       if (editable && !useDisplayValue) {
@@ -49,7 +49,7 @@ class CommonField extends React.PureComponent {
       }
     }
 
-    const firstErr = field.getFirstErr();
+    const firstErr = component.getFirstErr();
 
     fld = (
       <span>
