@@ -49,7 +49,9 @@ export default class DateField extends TextField {
 
   // For mocking
   _toLocaleString(date) {
-    return date.toLocaleString();
+    return this.get('includeTime')
+      ? date.toLocaleString()
+      : date.toLocaleDateString();
   }
 
   getDisplayValue() {

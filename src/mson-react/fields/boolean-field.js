@@ -3,6 +3,7 @@ import Switch from '@material-ui/core/Switch';
 import CommonField from './common-field';
 import attach from '../attach';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import DisplayValueTypography from './display-value-typography';
 
 class BooleanField extends React.PureComponent {
   handleChange = event => {
@@ -10,12 +11,22 @@ class BooleanField extends React.PureComponent {
   };
 
   render() {
-    const { value, disabled, component } = this.props;
+    const {
+      value,
+      disabled,
+      component,
+      editable,
+      useDisplayValue
+    } = this.props;
 
     const label = component.get('label');
 
-    return (
-      <CommonField component={component} hideLabelUI="true">
+    let hideLabelUI = null;
+
+    let fld = null;
+    if (editable && !useDisplayValue) {
+      hideLabelUI = true;
+      fld = (
         <FormControlLabel
           control={
             <Switch
@@ -27,9 +38,27 @@ class BooleanField extends React.PureComponent {
           }
           label={label}
         />
+      );
+    } else {
+      fld = (
+        <DisplayValueTypography>
+          {component.getDisplayValue()}
+        </DisplayValueTypography>
+      );
+    }
+
+    return (
+      <CommonField component={component} hideLabelUI={hideLabelUI}>
+        {fld}
       </CommonField>
     );
   }
 }
 
-export default attach(['value', 'err', 'disabled'])(BooleanField);
+export default attach([
+  'value',
+  'err',
+  'disabled',
+  'editable',
+  'useDisplayValue'
+])(BooleanField);

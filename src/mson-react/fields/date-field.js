@@ -6,6 +6,7 @@ import DateFnsUtils from 'material-ui-pickers/utils/date-fns-utils';
 import DateTimePicker from 'material-ui-pickers/DateTimePicker';
 import DatePicker from 'material-ui-pickers/DatePicker';
 import withStyles from '@material-ui/core/styles/withStyles';
+import DisplayValueTypography from './display-value-typography';
 
 const styles = theme => ({
   root: {
@@ -20,16 +21,25 @@ class DateField extends React.PureComponent {
   };
 
   render() {
-    const { component, classes, value, includeTime } = this.props;
+    const {
+      component,
+      classes,
+      value,
+      includeTime,
+      editable,
+      useDisplayValue
+    } = this.props;
 
-    // The picker doesn't play well with the label from Material-UI so we need to manually shrink
-    // the label when there is a value.
-    const shrinkLabel = !!value;
+    let shrinkLabel = false;
 
     const Component = includeTime ? DateTimePicker : DatePicker;
 
-    return (
-      <CommonField component={component} shrinkLabel={shrinkLabel}>
+    let fld = null;
+    if (editable && !useDisplayValue) {
+      // The picker doesn't play well with the label from Material-UI so we need to manually shrink
+      // the label when there is a value.
+      shrinkLabel = !!value;
+      fld = (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <span>
             <Component
@@ -41,6 +51,18 @@ class DateField extends React.PureComponent {
             />
           </span>
         </MuiPickersUtilsProvider>
+      );
+    } else {
+      fld = (
+        <DisplayValueTypography>
+          {component.getDisplayValue()}
+        </DisplayValueTypography>
+      );
+    }
+
+    return (
+      <CommonField component={component} shrinkLabel={shrinkLabel}>
+        {fld}
       </CommonField>
     );
   }
@@ -48,4 +70,6 @@ class DateField extends React.PureComponent {
 
 DateField = withStyles(styles)(DateField);
 
-export default attach(['value', 'includeTime'])(DateField);
+export default attach(['value', 'includeTime', 'editable', 'useDisplayValue'])(
+  DateField
+);
