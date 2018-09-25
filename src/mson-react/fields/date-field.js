@@ -20,6 +20,10 @@ class DateField extends React.PureComponent {
     this.props.component.setValue(date);
   };
 
+  handleBlur = () => {
+    this.props.component.setTouched(true);
+  };
+
   render() {
     const {
       component,
@@ -27,7 +31,9 @@ class DateField extends React.PureComponent {
       value,
       includeTime,
       editable,
-      useDisplayValue
+      useDisplayValue,
+      minDate,
+      maxDate
     } = this.props;
 
     let shrinkLabel = false;
@@ -47,6 +53,9 @@ class DateField extends React.PureComponent {
               onChange={this.handleDateChange}
               clearable
               className={classes.root}
+              minDate={minDate}
+              maxDate={maxDate}
+              onClose={this.handleBlur}
               // format="M/d/YYYY h:m a"
             />
           </span>
@@ -70,6 +79,11 @@ class DateField extends React.PureComponent {
 
 DateField = withStyles(styles)(DateField);
 
-export default attach(['value', 'includeTime', 'editable', 'useDisplayValue'])(
-  DateField
-);
+export default attach([
+  'value',
+  'includeTime',
+  'editable',
+  'useDisplayValue',
+  'minDate',
+  'maxDate'
+])(DateField);

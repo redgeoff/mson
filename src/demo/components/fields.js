@@ -109,6 +109,8 @@ export default {
       label: 'DateField',
       help: 'Example help',
       // includeTime: true,
+      minDate: '2018-01-01T23:07:28.157Z',
+      maxDate: '2022-01-01T23:07:28.157Z',
       required: true
     },
 
