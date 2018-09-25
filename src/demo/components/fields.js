@@ -77,14 +77,6 @@ export default {
     },
 
     {
-      component: 'EmailField',
-      name: 'emailField',
-      label: 'Email',
-      help: 'Example help',
-      required: true
-    },
-
-    {
       component: 'CollectionField',
       name: 'collectionField',
       label: 'Records',
@@ -109,6 +101,22 @@ export default {
           ]
         }
       }
+    },
+
+    {
+      name: 'dateField',
+      component: 'DateField',
+      label: 'DateField',
+      help: 'Example help',
+      required: true
+    },
+
+    {
+      component: 'EmailField',
+      name: 'emailField',
+      label: 'Email',
+      help: 'Example help',
+      required: true
     },
 
     {

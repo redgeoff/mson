@@ -4,6 +4,7 @@ import ButtonField from './fields/button-field';
 import BooleanField from './fields/boolean-field';
 import Card from './card';
 import CompositeField from './fields/composite-field';
+import DateField from './fields/date-field';
 import Field from './fields/field';
 import Form from './form';
 import CollectionField from './fields/collection-field';
@@ -20,6 +21,7 @@ export default {
   ChainedSelectField: CompositeField,
   ChainedSelectListField: ListField,
   CompositeField,
+  DateField,
   Field,
   Form,
   CollectionField,

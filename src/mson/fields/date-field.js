@@ -1,6 +1,8 @@
 import TextField from './text-field';
 
 export default class DateField extends TextField {
+  _className = 'DateField';
+
   _create(props) {
     super._create(props);
 
