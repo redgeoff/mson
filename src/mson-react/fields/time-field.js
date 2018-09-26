@@ -24,15 +24,7 @@ class TimeField extends React.PureComponent {
   };
 
   render() {
-    const {
-      component,
-      classes,
-      value,
-      editable,
-      useDisplayValue
-      // minDate,
-      // maxDate
-    } = this.props;
+    const { component, classes, value, editable, useDisplayValue } = this.props;
 
     let shrinkLabel = false;
 
@@ -49,8 +41,16 @@ class TimeField extends React.PureComponent {
               onChange={this.handleDateChange}
               clearable
               className={classes.root}
+              // The minDate and maxDate are not used as they are confusing. They impose a
+              // restriction on the actual day, which doesn't make sense as the time is store as a
+              // timestamp with today's date and therefore the days may not match. Moreover, the
+              // picker doesn't change when these dates are specified so we can just handle the
+              // validation at the MSON-core layer. TODO: we can implement these ranges in the
+              // MSON-core layer by constructing dates with the current day and specified time from
+              // minDate and maxDate.
               // minDate={minDate}
               // maxDate={maxDate}
+
               onClose={this.handleBlur}
               invalidDateMessage="" // Let CommonField display the error
               // format="M/d/YYYY h:m a"
@@ -76,10 +76,4 @@ class TimeField extends React.PureComponent {
 
 TimeField = withStyles(styles)(TimeField);
 
-export default attach([
-  'value',
-  'editable',
-  'useDisplayValue'
-  // 'minDate',
-  // 'maxDate'
-])(TimeField);
+export default attach(['value', 'editable', 'useDisplayValue'])(TimeField);
