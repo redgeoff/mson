@@ -149,6 +149,10 @@ export default class Form extends Component {
           {
             name: 'disabled',
             component: 'BooleanField'
+          },
+          {
+            name: 'eachField',
+            component: 'Field'
           }
         ]
       }
@@ -352,7 +356,8 @@ export default class Form extends Component {
         hidden: undefined,
         required: undefined,
         out: undefined,
-        disabled: undefined
+        disabled: undefined,
+        setForEachField: undefined
       })
     );
 
@@ -416,6 +421,10 @@ export default class Form extends Component {
 
     if (props.fullWidth !== undefined) {
       this._setFullWidth(props.fullWidth);
+    }
+
+    if (props.eachField !== undefined) {
+      this.setForEachField(props.eachField);
     }
   }
 
@@ -869,5 +878,9 @@ export default class Form extends Component {
 
   getValue(fieldName) {
     return this.getField(fieldName).getValue();
+  }
+
+  setForEachField(props) {
+    this._fields.each(field => field.set(props));
   }
 }
