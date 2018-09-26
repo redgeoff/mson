@@ -628,7 +628,7 @@ Moreover, actions can be limited to the `backEnd` or `frontEnd`, so that the sam
           // Send an email on the back end
           component: 'Email',
           layer: 'backEnd',
-          from: '"{{fields.email.value}}',
+          from: '{{fields.email.value}}',
           to: 'noreply@example.com',
           subject: 'My message',
           body: '{{fields.message.value}}',
