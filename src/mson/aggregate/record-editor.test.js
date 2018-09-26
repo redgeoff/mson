@@ -14,9 +14,9 @@ class MockStore extends MemoryStore {
     this._docs.set('1', {
       id: '1',
       userId: '1',
-      archivedAt: '2018-09-20T20:34:10.372Z',
-      createdAt: '2018-09-20T20:33:10.372Z',
-      updatedAt: '2018-09-20T20:35:10.372Z',
+      archivedAt: 1537475650372,
+      createdAt: 1537475590372,
+      updatedAt: 1537475710372,
       fieldValues: {
         name: 'Miles Davis',
         email: 'miles@example.com',
@@ -282,9 +282,9 @@ it('should load with preview and storeWhere', async () => {
         value: {
           id: '1',
           userId: '1',
-          archivedAt: '2018-09-20T20:34:10.372Z',
-          createdAt: '2018-09-20T20:33:10.372Z',
-          updatedAt: '2018-09-20T20:35:10.372Z'
+          archivedAt: 1537475650372,
+          createdAt: 1537475590372,
+          updatedAt: 1537475710372
         }
       }
     },
@@ -317,9 +317,9 @@ it('should load with preview and storeWhere', async () => {
     userId: '1',
     name: 'Miles Davis',
     email: 'miles@example.com',
-    archivedAt: '2018-09-20T20:34:10.372Z',
-    createdAt: '2018-09-20T20:33:10.372Z',
-    updatedAt: '2018-09-20T20:35:10.372Z'
+    archivedAt: 1537475650372,
+    createdAt: 1537475590372,
+    updatedAt: 1537475710372
   });
 });
 

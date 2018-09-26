@@ -1,11 +1,11 @@
 import DateField from './date-field';
 import testUtils from '../test-utils';
 
-it('should convert dates to strings', () => {
+it('should convert dates to epoch time', () => {
   const date = new DateField();
   const now = new Date();
   date.setValue(now);
-  expect(date.getValue()).toEqual(now.toISOString());
+  expect(date.getValue()).toEqual(now.getTime());
 });
 
 it('should set value to now', async () => {
@@ -42,6 +42,7 @@ it('should validate', () => {
   const field = new DateField();
 
   testUtils.expectValuesToBeValid(field, [
+    1537985158759,
     '2018-1-1',
     '2018-12-12 8:12 AM',
     '1/1/2018',
