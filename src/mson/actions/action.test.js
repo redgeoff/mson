@@ -230,3 +230,49 @@ it('should fill with any field property', async () => {
   await action.run({ component: form });
   expect(form.getValue('firstName')).toEqual(false);
 });
+
+it('should branch', async () => {
+  const field = new TextField();
+
+  // An action with actions and an else block
+  const action = new Action({
+    if: {
+      value: 'Nina'
+    },
+    actions: [
+      new Set({
+        name: 'value',
+        value: 'Ella'
+      })
+    ],
+    else: [
+      new Set({
+        name: 'value',
+        value: 'Nina'
+      })
+    ]
+  });
+
+  await action.run({ component: field });
+  expect(field.getValue()).toEqual('Nina');
+
+  await action.run({ component: field });
+  expect(field.getValue()).toEqual('Ella');
+
+  // When the action doesn't have nested actions
+  const set = new Set({
+    if: {
+      value: 'Nina'
+    },
+    name: 'value',
+    value: 'Ella'
+  });
+
+  field.setValue('Billie');
+  await set.run({ component: field });
+  expect(field.getValue()).toEqual('Billie');
+
+  field.setValue('Nina');
+  await set.run({ component: field });
+  expect(field.getValue()).toEqual('Ella');
+});

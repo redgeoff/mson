@@ -243,16 +243,56 @@ export default {
       label: 'TextField',
       help: 'Example help',
       required: true
-    }
+    },
 
     // TODO: need to implement default mechanism in ListField that creates new field by default and
     // then allows user to click to add new field.
     // {
-    //   component: 'TextListField',
     //   name: 'textListField',
+    //   component: 'TextListField',
     //   label: 'TextListField',
     //   help: 'Example help',
     //   required: true
-    // }
+    // },
+
+    {
+      name: 'toggleDisplayValues',
+      component: 'ButtonField',
+      label: 'Toggle Display Values',
+      icon: 'ViewHeadline'
+    }
+  ],
+  listeners: [
+    {
+      event: 'toggleDisplayValues',
+      actions: [
+        {
+          component: 'Emit',
+          if: {
+            'fields.id.useDisplayValue': {
+              $ne: true
+            }
+          },
+          actions: [
+            {
+              component: 'Set',
+              name: 'eachField',
+              value: {
+                useDisplayValue: true
+              }
+            }
+          ],
+          else: [
+            {
+              component: 'Set',
+              name: 'eachField',
+              value: {
+                useDisplayValue: false
+              }
+            }
+          ]
+        }
+      ]
+    }
   ]
 };

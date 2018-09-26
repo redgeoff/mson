@@ -33,6 +33,10 @@ export default class Action extends Component {
             component: 'Field'
           },
           {
+            name: 'else',
+            component: 'Field'
+          },
+          {
             name: 'layer',
             component: 'TextField'
           },
@@ -82,17 +86,27 @@ export default class Action extends Component {
 
     const where = this.get('if');
     let shouldRun = true;
+    let actions = null;
 
     if (where) {
       let sifted = sift(where, [this._fillerProps]);
       if (sifted.length === 0) {
-        shouldRun = false;
+        // Condition failed
+        if (this.get('else')) {
+          actions = this.get('else');
+        } else {
+          // The condition failed and there is nothing to execute
+          shouldRun = false;
+        }
+      } else {
+        // Condition met
+        actions = this.get('actions');
       }
+    } else {
+      actions = this.get('actions');
     }
 
     if (shouldRun) {
-      const actions = this.get('actions');
-
       if (actions) {
         let args = null;
         for (const i in actions) {
