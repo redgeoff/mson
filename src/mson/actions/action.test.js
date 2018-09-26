@@ -3,6 +3,7 @@ import Action from './action';
 import LogOutOfApp from './log-out-of-app';
 import TextField from '../fields/text-field';
 import compiler from '../compiler';
+import Form from '../form';
 
 const createAction = () => {
   return new Set({
@@ -214,4 +215,18 @@ it('should share components', async () => {
   await action.run();
 
   expect(name.getValue()).toEqual('bar');
+});
+
+it('should fill with any field property', async () => {
+  const form = new Form({
+    fields: [new TextField({ name: 'firstName', useDisplayValue: false })]
+  });
+
+  const action = new Set({
+    name: 'fields.firstName.value',
+    value: '{{fields.firstName.useDisplayValue}}'
+  });
+
+  await action.run({ component: form });
+  expect(form.getValue('firstName')).toEqual(false);
 });
