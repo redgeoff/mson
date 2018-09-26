@@ -1,7 +1,7 @@
-import TextField from './text-field';
+import IntegerField from './integer-field';
 import isValid from 'date-fns/isValid';
 
-export default class DateField extends TextField {
+export default class DateField extends IntegerField {
   _className = 'DateField';
 
   _create(props) {
@@ -36,6 +36,17 @@ export default class DateField extends TextField {
     this.set({ value: new Date() });
   }
 
+  static toEpochTime(value) {
+    if (value instanceof Date) {
+      return value.getTime();
+    } else if (typeof value === 'string') {
+      return new Date(value).getTime();
+    } else {
+      // We assume it is already epoch time
+      return value;
+    }
+  }
+
   set(props) {
     const clonedProps = Object.assign({}, props);
 
@@ -47,10 +58,10 @@ export default class DateField extends TextField {
       delete clonedProps.now;
     }
 
-    // Convert Date to String? We store dates in ISO String format so that they are compatiable
-    // across all stores
-    if (props.value !== undefined && props.value instanceof Date) {
-      props.value = props.value.toISOString();
+    // Convert Date? We store dates in epoch time so that they are compatiable across all stores.
+    // Epoch time is also smaller than the ISO string and can therefore minimize the storage needed.
+    if (props.value !== undefined) {
+      props.value = this.constructor.toEpochTime(props.value);
     }
 
     super.set(props);

@@ -706,7 +706,7 @@ it('should create many forms quickly', () => {
   }, CREATE_FORMS_TIMEOUT_MS);
 });
 
-const CLONE_FORMS_TIMEOUT_MS = 800;
+const CLONE_FORMS_TIMEOUT_MS = 900;
 it('should clone many forms quickly', () => {
   return testUtils.expectToFinishBefore(async () => {
     const form = createForm();
