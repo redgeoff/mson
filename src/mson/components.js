@@ -65,6 +65,7 @@ import Snackbar from './actions/snackbar';
 import Text from './text';
 import TextField from './fields/text-field';
 import TextListField from './fields/text-list-field';
+import TimeField from './fields/time-field';
 import UpdatePasswordEditor from './aggregate/update-password-editor';
 import UpdatePassword from './aggregate/update-password';
 import UpsertDoc from './actions/upsert-doc';
@@ -136,6 +137,7 @@ export default {
   Text,
   TextField,
   TextListField,
+  TimeField,
   ValidatorForm: FormValidator,
   UpdatePasswordEditor,
   UpdatePassword,
