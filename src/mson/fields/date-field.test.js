@@ -44,13 +44,17 @@ it('should validate', () => {
   testUtils.expectValuesToBeValid(field, [
     '2018-1-1',
     '2018-12-12 8:12 AM',
-    '1/1/2018'
+    '1/1/2018',
+    null
   ]);
+
+  field.set({ required: true });
 
   testUtils.expectValuesToBeInvalid(field, [
     '1/1/-1',
     '2018-1-1 40:00 PM',
-    '2018-1-1 10:00 ZM'
+    '2018-1-1 10:00 ZM',
+    null
   ]);
 
   field.set({

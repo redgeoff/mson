@@ -229,6 +229,14 @@ export default {
     },
 
     {
+      name: 'timeField',
+      component: 'TimeField',
+      label: 'TimeField',
+      help: 'Example help',
+      required: true
+    },
+
+    {
       name: 'textField',
       component: 'TextField',
       label: 'TextField',
