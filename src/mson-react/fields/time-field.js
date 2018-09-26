@@ -24,7 +24,14 @@ class TimeField extends React.PureComponent {
   };
 
   render() {
-    const { component, classes, value, editable, useDisplayValue } = this.props;
+    const {
+      component,
+      classes,
+      value,
+      editable,
+      useDisplayValue,
+      showSeconds
+    } = this.props;
 
     let shrinkLabel = false;
 
@@ -41,6 +48,7 @@ class TimeField extends React.PureComponent {
               onChange={this.handleDateChange}
               clearable
               className={classes.root}
+              seconds={showSeconds}
               // The minDate and maxDate are not used as they are confusing. They impose a
               // restriction on the actual day, which doesn't make sense as the time is store as a
               // timestamp with today's date and therefore the days may not match. Moreover, the
@@ -76,4 +84,6 @@ class TimeField extends React.PureComponent {
 
 TimeField = withStyles(styles)(TimeField);
 
-export default attach(['value', 'editable', 'useDisplayValue'])(TimeField);
+export default attach(['value', 'editable', 'useDisplayValue', 'showSeconds'])(
+  TimeField
+);

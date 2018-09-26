@@ -4,6 +4,22 @@ import isValid from 'date-fns/isValid';
 export default class TimeField extends TextField {
   _className = 'TimeField';
 
+  _create(props) {
+    super._create(props);
+
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'showSeconds',
+            component: 'BooleanField'
+          }
+        ]
+      }
+    });
+  }
+
   set(props) {
     // Convert Date to String? We store dates in ISO String format so that they are compatiable
     // across all stores
@@ -16,7 +32,15 @@ export default class TimeField extends TextField {
 
   // For mocking
   _toLocaleString(date) {
-    return date.toLocaleTimeString();
+    const currentLocale = [];
+    let options = {};
+    if (!this.get('showSeconds')) {
+      options = {
+        hour: '2-digit',
+        minute: '2-digit'
+      };
+    }
+    return date.toLocaleTimeString(currentLocale, options);
   }
 
   getDisplayValue() {

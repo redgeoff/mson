@@ -233,6 +233,7 @@ export default {
       component: 'TimeField',
       label: 'TimeField',
       help: 'Example help',
+      // showSeconds: true,
       required: true
     },
 

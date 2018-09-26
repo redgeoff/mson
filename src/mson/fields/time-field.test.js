@@ -16,6 +16,10 @@ it('should get display value', () => {
   date._toLocaleString(now);
   expect(toLocaleTimeStringSpy).toHaveBeenCalledTimes(1);
 
+  date.set({ showSeconds: true });
+  date._toLocaleString(now);
+  expect(toLocaleTimeStringSpy).toHaveBeenCalledTimes(2);
+
   // Mock for same results regardless of environment
   date._toLocaleString = date => {
     return date.toLocaleTimeString('en-US');
