@@ -9,6 +9,12 @@ export default {
       icon: 'ImportContacts'
     },
     {
+      name: 'reset',
+      component: 'ButtonField',
+      label: 'Reset',
+      icon: 'ClearAll'
+    },
+    {
       name: 'toggleDisplayValues',
       component: 'ButtonField',
       label: 'Show Display Values',
@@ -66,6 +72,16 @@ export default {
             'fields.timeField.value': '2018-09-27T17:24:24.960Z',
             'fields.textField.value': 'Go MSON'
           }
+        }
+      ]
+    },
+    {
+      event: 'reset',
+      actions: [
+        {
+          component: 'Set',
+          name: 'reset',
+          value: true
         }
       ]
     },

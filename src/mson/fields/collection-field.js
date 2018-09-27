@@ -643,6 +643,7 @@ export default class CollectionField extends Field {
       // are indexes that are in the current forms, but not in values then just delete?
       this._clearAllFormListeners(); // prevent listener leaks
       this._forms.clear();
+
       if (value && value.length > 0) {
         // Note: we add the form synchronously because set() and get() must remain synchronous (core
         // design principle of MSON). In other words, we don't wait for the didCreate or didLoad
@@ -650,6 +651,9 @@ export default class CollectionField extends Field {
         const synchronous = true;
         value.forEach(values => this.addForm({ values, synchronous }));
       }
+
+      // Emit change so that UI is notified
+      this.set({ change: value });
     }
   }
 
