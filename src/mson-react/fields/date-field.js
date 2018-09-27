@@ -34,8 +34,12 @@ class DateField extends React.PureComponent {
       useDisplayValue,
       minDate,
       maxDate,
-      fullWidth
+      fullWidth,
+      disabled,
+      accessEditable
     } = this.props;
+
+    const dis = accessEditable === false || disabled;
 
     let shrinkLabel = false;
 
@@ -58,6 +62,7 @@ class DateField extends React.PureComponent {
               maxDate={maxDate}
               onClose={this.handleBlur}
               fullWidth={fullWidth}
+              disabled={dis}
               // format="M/d/YYYY h:m a"
             />
           </span>
@@ -88,5 +93,6 @@ export default attach([
   'useDisplayValue',
   'minDate',
   'maxDate',
-  'fullWidth'
+  'fullWidth',
+  'disabled'
 ])(DateField);

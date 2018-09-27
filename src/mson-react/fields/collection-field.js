@@ -288,8 +288,12 @@ class CollectionField extends React.PureComponent {
       isLoading,
       form,
       currentForm,
-      noResults
+      noResults,
+      disabled,
+      accessEditable
     } = this.props;
+
+    const dis = accessEditable === false || disabled;
 
     const { confirmationOpen, confirmationTitle } = this.state;
 
@@ -341,8 +345,8 @@ class CollectionField extends React.PureComponent {
           onSave={this.handleSave}
           onEdit={this.handleEdit}
           onDelete={this.handleDelete}
-          forbidUpdate={forbidUpdate || !canUpdate}
-          forbidDelete={forbidDelete || !canArchive}
+          forbidUpdate={forbidUpdate || !canUpdate || dis}
+          forbidDelete={forbidDelete || !canArchive || dis}
         />
 
         <ConfirmationDialog
