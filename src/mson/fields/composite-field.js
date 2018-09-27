@@ -152,6 +152,11 @@ export default class CompositeField extends Field {
     this._setTouchedForAllFields(touched);
   }
 
+  setFullWidth(fullWidth) {
+    super.setFullWidth(fullWidth);
+    this._setForAllFields({ fullWidth });
+  }
+
   set(props) {
     super.set(Object.assign({}, props, { fields: undefined }));
 
