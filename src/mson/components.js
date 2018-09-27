@@ -13,7 +13,7 @@ import ChainedSelectField from './fields/chained-select-field';
 import ChainedSelectListField from './fields/chained-select-list-field';
 import Component from './component/component';
 import CompositeField from './fields/composite-field';
-import ConsoleLogAction from './actions/console-log-action';
+import ConsoleLog from './actions/console-log';
 import ContactUs from './aggregate/contact-us';
 import DateField from './fields/date-field';
 import Email from './actions/email';
@@ -86,7 +86,7 @@ export default {
   ChainedSelectListField,
   Component,
   CompositeField,
-  ConsoleLogAction,
+  ConsoleLog,
   ContactUs,
   DateField,
   Email,

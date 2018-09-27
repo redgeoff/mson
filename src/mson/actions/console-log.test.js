@@ -1,9 +1,9 @@
-import ConsoleLogAction from './console-log-action';
+import ConsoleLog from './console-log';
 import Form from '../form';
 import { PersonNameField } from '../fields';
 
 it('should log message', async () => {
-  const consoleLogAction = new ConsoleLogAction({ message: 'foo' });
+  const consoleLogAction = new ConsoleLog({ message: 'foo' });
 
   // Mock
   consoleLogAction._console = {
@@ -31,7 +31,7 @@ it('should log property', async () => {
     ]
   });
 
-  const consoleLogAction = new ConsoleLogAction({
+  const consoleLogAction = new ConsoleLog({
     message: '{{fields.firstName.value}}'
   });
 
