@@ -169,6 +169,7 @@ export default class ListField extends CompositeField {
   }
 
   _setRequired(required) {
+    super._setRequired(required);
     if (this._fields.hasFirst()) {
       this._fields.first().set({ required });
     }
@@ -257,10 +258,6 @@ export default class ListField extends CompositeField {
 
     if (props.block !== undefined) {
       this.eachField(field => field.set({ block: props.block }));
-    }
-
-    if (props.fullWidth !== undefined) {
-      this.eachField(field => field.set({ fullWidth: props.fullWidth }));
     }
   }
 

@@ -13,7 +13,6 @@ const attach = (_watchProps, componentOrName) => {
           props = this.props;
         }
 
-        // TODO: require componentOrName to always be supplied?
         if (!componentOrName) {
           return props.component;
         } else if (typeof componentOrName === 'string') {

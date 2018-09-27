@@ -142,12 +142,26 @@ export default class Field extends Component {
     this._set('touched', touched);
   }
 
+  setFullWidth(fullWidth) {
+    this._set('fullWidth', fullWidth);
+  }
+
   set(props) {
     if (props.value !== undefined && props.value !== this.get('value')) {
       this.set({ dirty: true });
     }
 
-    super.set(props);
+    super.set(
+      Object.assign({}, props, {
+        value: undefined,
+        required: undefined,
+        disabled: undefined,
+        editable: undefined,
+        dirty: undefined,
+        touched: undefined,
+        fullWidth: undefined
+      })
+    );
 
     if (props.value !== undefined) {
       this._setValue(props.value);
@@ -171,6 +185,10 @@ export default class Field extends Component {
 
     if (props.touched !== undefined) {
       this.setTouched(props.touched);
+    }
+
+    if (props.fullWidth !== undefined) {
+      this.setFullWidth(props.fullWidth);
     }
   }
 

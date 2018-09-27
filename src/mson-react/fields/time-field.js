@@ -30,7 +30,8 @@ class TimeField extends React.PureComponent {
       value,
       editable,
       useDisplayValue,
-      showSeconds
+      showSeconds,
+      fullWidth
     } = this.props;
 
     let shrinkLabel = false;
@@ -60,6 +61,7 @@ class TimeField extends React.PureComponent {
               // maxDate={maxDate}
 
               onClose={this.handleBlur}
+              fullWidth={fullWidth}
               invalidDateMessage="" // Let CommonField display the error
               // format="M/d/YYYY h:m a"
             />
@@ -84,6 +86,10 @@ class TimeField extends React.PureComponent {
 
 TimeField = withStyles(styles)(TimeField);
 
-export default attach(['value', 'editable', 'useDisplayValue', 'showSeconds'])(
-  TimeField
-);
+export default attach([
+  'value',
+  'editable',
+  'useDisplayValue',
+  'showSeconds',
+  'fullWidth'
+])(TimeField);

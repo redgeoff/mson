@@ -4,8 +4,13 @@ import Mapa from '../mapa';
 import InfiniteLoader from '../infinite-loader';
 import Component from '../component';
 import utils from '../utils';
-import MemoryStore from '../stores/memory-store';
 
+// Note: We no longer instantiate a default store for the CollectionField as having a store
+// introduces extra complexity that is not always needed. For example, when using the
+// CollectionField without a store, you can use set() and get() to modify the underlying data
+// synchronously, which is useful for small datasets, e.g. nested form data. When using a store;
+// however, you have to account for the store being asynchronous, and therefore all manipulation of
+// the data should go through the store.
 export default class CollectionField extends Field {
   _className = 'CollectionField';
 
@@ -132,6 +137,10 @@ export default class CollectionField extends Field {
           {
             name: 'change',
             component: 'Field'
+          },
+          {
+            name: 'maxColumns',
+            component: 'IntegerField'
           }
         ]
       }
@@ -151,9 +160,9 @@ export default class CollectionField extends Field {
       showArchived: false,
       searchString: null,
 
-      // We check props.store so that we can avoid instantiating a MemoryStore if the user has
-      // passed in a store
-      store: props && props.store ? props.store : new MemoryStore()
+      // A good default for most content as to not wrap content, but to also take up less vertical
+      // space
+      maxColumns: 2
     });
 
     this._createInfiniteLoader();
@@ -642,6 +651,7 @@ export default class CollectionField extends Field {
       // are indexes that are in the current forms, but not in values then just delete?
       this._clearAllFormListeners(); // prevent listener leaks
       this._forms.clear();
+
       if (value && value.length > 0) {
         // Note: we add the form synchronously because set() and get() must remain synchronous (core
         // design principle of MSON). In other words, we don't wait for the didCreate or didLoad
@@ -649,6 +659,9 @@ export default class CollectionField extends Field {
         const synchronous = true;
         value.forEach(values => this.addForm({ values, synchronous }));
       }
+
+      // Emit change so that UI is notified
+      this.set({ change: value });
     }
   }
 
@@ -794,12 +807,25 @@ export default class CollectionField extends Field {
     this.set({ form });
   }
 
+  _setMaxColumns(maxColumns) {
+    // 12 (the number of grids) must be divisble by maxColumns. And, we require a power of 2 so that
+    // we can shrink the screen and not have gaps in our grid, i.e. each layer is an even multiple
+    // of the previous.
+    const allowed = [1, 2, 4, 6, 12];
+    if (allowed.indexOf(maxColumns) === -1) {
+      throw new Error('maxColumns must be ' + allowed.join(','));
+    } else {
+      this._set('maxColumns', maxColumns);
+    }
+  }
+
   set(props) {
     super.set(
       Object.assign({}, props, {
         currentForm: undefined,
         mode: undefined,
-        store: undefined
+        store: undefined,
+        maxColumns: undefined
       })
     );
 
@@ -822,6 +848,10 @@ export default class CollectionField extends Field {
 
     if (props.store !== undefined) {
       this._setStore(props.store);
+    }
+
+    if (props.maxColumns !== undefined) {
+      this._setMaxColumns(props.maxColumns);
     }
   }
 

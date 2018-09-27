@@ -146,7 +146,8 @@ class CollectionField extends React.PureComponent {
       forbidUpdate,
       forbidDelete,
       editable,
-      disabled
+      disabled,
+      maxColumns
     } = this.props;
 
     let cards = [];
@@ -162,8 +163,10 @@ class CollectionField extends React.PureComponent {
       // frameworks.
       const id = component.getUniqueItemId(key);
 
+      const maxGrids = 12 / maxColumns;
+
       cards.push(
-        <Grid item xs={12} sm={6} lg={6} key={key} id={id}>
+        <Grid item xs={12} sm={maxGrids} lg={maxGrids} key={key} id={id}>
           <FormCard
             onClick={() => this.handleClick(form)}
             onEdit={() => this.handleEdit(form)}
@@ -224,7 +227,8 @@ class CollectionField extends React.PureComponent {
       editable,
       disabled,
       component,
-      forbidSort
+      forbidSort,
+      store
     } = this.props;
 
     const { sortBy, sortOrder } = this.state;
@@ -242,7 +246,9 @@ class CollectionField extends React.PureComponent {
 
     const sortOptions = this.sortOptions();
 
-    const showOrder = numCards > 0;
+    // Sorting only works when there is a backing store
+    const hasStore = !!store;
+    const showOrder = numCards > 0 && hasStore;
 
     return (
       <Grid container spacing={0}>
@@ -366,6 +372,8 @@ CollectionField = attach([
   'form',
   'currentForm',
   'mode',
-  'noResults'
+  'noResults',
+  'store',
+  'maxColumns'
 ])(CollectionField);
 export default CollectionField;
