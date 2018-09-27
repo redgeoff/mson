@@ -7,6 +7,12 @@ export default {
       component: 'ButtonField',
       label: 'Show Display Values',
       icon: 'ViewHeadline'
+    },
+    {
+      name: 'toggleDisabled',
+      component: 'ButtonField',
+      label: 'Disable',
+      icon: 'Lock'
     }
   ],
   listeners: [
@@ -30,7 +36,7 @@ export default {
                 },
                 'fields.toggleDisplayValues': {
                   label: 'Hide Display Values',
-                  icon: 'ViewStream'
+                  icon: 'Input'
                 }
               }
             }
@@ -46,6 +52,51 @@ export default {
                 'fields.toggleDisplayValues': {
                   label: 'Show Display Values',
                   icon: 'ViewHeadline'
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      event: 'toggleDisabled',
+      actions: [
+        {
+          component: 'Action',
+          if: {
+            'fields.id.disabled': {
+              $ne: true
+            }
+          },
+          actions: [
+            {
+              component: 'Set',
+              name: 'component',
+              value: {
+                disabled: true,
+                'fields.toggleDisabled': {
+                  label: 'Enable',
+                  icon: 'LockOpen'
+                }
+              }
+            },
+            {
+              // Renable so we can still click the button
+              component: 'Set',
+              name: 'fields.toggleDisabled.disabled',
+              value: false
+            }
+          ],
+          else: [
+            {
+              component: 'Set',
+              name: 'component',
+              value: {
+                disabled: false,
+                'fields.toggleDisabled': {
+                  label: 'Disable',
+                  icon: 'Lock'
                 }
               }
             }
