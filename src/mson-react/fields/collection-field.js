@@ -224,7 +224,8 @@ class CollectionField extends React.PureComponent {
       editable,
       disabled,
       component,
-      forbidSort
+      forbidSort,
+      store
     } = this.props;
 
     const { sortBy, sortOrder } = this.state;
@@ -242,7 +243,9 @@ class CollectionField extends React.PureComponent {
 
     const sortOptions = this.sortOptions();
 
-    const showOrder = numCards > 0;
+    // Sorting only works when there is a backing store
+    const hasStore = !!store;
+    const showOrder = numCards > 0 && hasStore;
 
     return (
       <Grid container spacing={0}>
@@ -366,6 +369,7 @@ CollectionField = attach([
   'form',
   'currentForm',
   'mode',
-  'noResults'
+  'noResults',
+  'store'
 ])(CollectionField);
 export default CollectionField;

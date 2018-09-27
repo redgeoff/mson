@@ -4,8 +4,13 @@ import Mapa from '../mapa';
 import InfiniteLoader from '../infinite-loader';
 import Component from '../component';
 import utils from '../utils';
-import MemoryStore from '../stores/memory-store';
 
+// Note: We no longer instantiate a default store for the CollectionField as having a store
+// introduces extra complexity that is not always needed. For example, when using the
+// CollectionField without a store, you can use set() and get() to modify the underlying data
+// synchronously, which is useful for small datasets, e.g. nested form data. When using a store;
+// however, you have to account for the store being asynchronous, and therefore all manipulation of
+// the data should go through the store.
 export default class CollectionField extends Field {
   _className = 'CollectionField';
 
@@ -149,11 +154,7 @@ export default class CollectionField extends Field {
       order: null,
       mode: null,
       showArchived: false,
-      searchString: null,
-
-      // We check props.store so that we can avoid instantiating a MemoryStore if the user has
-      // passed in a store
-      store: props && props.store ? props.store : new MemoryStore()
+      searchString: null
     });
 
     this._createInfiniteLoader();
