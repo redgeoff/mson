@@ -421,6 +421,19 @@ it('should set with dot notation', () => {
 
   form.set({ 'fields.fullName.firstName.value': 'Tom' });
   expect(form.getField('fullName').getValue().firstName).toEqual('Tom');
+
+  // The last property is a component
+  form.set({
+    'fields.fullName.firstName': {
+      label: 'First Name Modified'
+    }
+  });
+  expect(
+    form
+      .getField('fullName')
+      .get('firstName')
+      .get('label')
+  ).toEqual('First Name Modified');
 });
 
 it('should get with dot notation', () => {

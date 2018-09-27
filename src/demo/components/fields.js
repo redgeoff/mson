@@ -258,7 +258,7 @@ export default {
     {
       name: 'toggleDisplayValues',
       component: 'ButtonField',
-      label: 'Toggle Display Values',
+      label: 'Show Display Values',
       icon: 'ViewHeadline'
     }
   ],
@@ -280,6 +280,14 @@ export default {
               value: {
                 useDisplayValue: true
               }
+            },
+            {
+              component: 'Set',
+              name: 'fields.toggleDisplayValues',
+              value: {
+                label: 'Hide Display Values',
+                icon: 'ViewStream'
+              }
             }
           ],
           else: [
@@ -288,6 +296,14 @@ export default {
               name: 'eachField',
               value: {
                 useDisplayValue: false
+              }
+            },
+            {
+              component: 'Set',
+              name: 'fields.toggleDisplayValues',
+              value: {
+                label: 'Show Display Values',
+                icon: 'ViewHeadline'
               }
             }
           ]
