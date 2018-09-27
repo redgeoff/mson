@@ -37,38 +37,16 @@ export default {
       actions: [
         {
           component: 'Set',
-          name: 'fields.username.out',
-          value: true
-        },
-        {
-          component: 'Set',
-          name: 'fields.password.hidden',
-          value: false
-        },
-        {
-          component: 'Set',
-          name: 'fields.password.out',
-          value: true
-        },
-        {
-          component: 'Set',
-          name: 'fields.password.block',
-          value: false
-        },
-        {
-          component: 'Set',
-          name: 'fields.roles.hidden',
-          value: true
-        },
-        {
-          component: 'Set',
-          name: 'fields.save.label',
-          value: 'Create Account'
-        },
-        {
-          component: 'Set',
-          name: 'fields.save.icon',
-          value: 'CheckCircle'
+          name: 'component',
+          value: {
+            'fields.username.out': true,
+            'fields.password.hidden': false,
+            'fields.password.out': true,
+            'fields.password.block': false,
+            'fields.roles.hidden': true,
+            'fields.save.label': 'Create Account',
+            'fields.save.icon': 'CheckCircle'
+          }
         }
       ]
     },

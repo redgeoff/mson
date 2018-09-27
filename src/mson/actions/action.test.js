@@ -3,6 +3,7 @@ import Action from './action';
 import LogOutOfApp from './log-out-of-app';
 import TextField from '../fields/text-field';
 import compiler from '../compiler';
+import Form from '../form';
 
 const createAction = () => {
   return new Set({
@@ -214,4 +215,64 @@ it('should share components', async () => {
   await action.run();
 
   expect(name.getValue()).toEqual('bar');
+});
+
+it('should fill with any field property', async () => {
+  const form = new Form({
+    fields: [new TextField({ name: 'firstName', useDisplayValue: false })]
+  });
+
+  const action = new Set({
+    name: 'fields.firstName.value',
+    value: '{{fields.firstName.useDisplayValue}}'
+  });
+
+  await action.run({ component: form });
+  expect(form.getValue('firstName')).toEqual(false);
+});
+
+it('should branch', async () => {
+  const field = new TextField();
+
+  // An action with actions and an else block
+  const action = new Action({
+    if: {
+      value: 'Nina'
+    },
+    actions: [
+      new Set({
+        name: 'value',
+        value: 'Ella'
+      })
+    ],
+    else: [
+      new Set({
+        name: 'value',
+        value: 'Nina'
+      })
+    ]
+  });
+
+  await action.run({ component: field });
+  expect(field.getValue()).toEqual('Nina');
+
+  await action.run({ component: field });
+  expect(field.getValue()).toEqual('Ella');
+
+  // When the action doesn't have nested actions
+  const set = new Set({
+    if: {
+      value: 'Nina'
+    },
+    name: 'value',
+    value: 'Ella'
+  });
+
+  field.setValue('Billie');
+  await set.run({ component: field });
+  expect(field.getValue()).toEqual('Billie');
+
+  field.setValue('Nina');
+  await set.run({ component: field });
+  expect(field.getValue()).toEqual('Ella');
 });

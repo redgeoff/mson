@@ -276,9 +276,17 @@ export default class BaseComponent extends events.EventEmitter {
       const { property, names } = this._getSubProperty(name, -1);
       const lastName = names[names.length - 1];
       if (this._isComponent(property)) {
-        property.set({
-          [lastName]: value
-        });
+        if (
+          property.has(lastName) &&
+          this._isComponent(property.get(lastName))
+        ) {
+          // The last property is a component so we assume that the value is a group of properties
+          property.get(lastName).set(value);
+        } else {
+          property.set({
+            [lastName]: value
+          });
+        }
       } else {
         property[lastName] = value;
       }

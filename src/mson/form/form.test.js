@@ -749,3 +749,18 @@ it('should clone fields', () => {
     lastName: 'Lovelace'
   });
 });
+
+it('should set for each field', () => {
+  const form = createForm();
+
+  const props = {
+    hidden: true,
+    editable: false,
+    useDisplayValue: true
+  };
+
+  form.set({ eachField: props });
+
+  const keys = Object.keys(props);
+  form.eachField(field => expect(field.get(keys)).toEqual(props));
+});

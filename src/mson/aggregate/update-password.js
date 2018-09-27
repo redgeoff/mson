@@ -42,23 +42,13 @@ export default {
         },
         {
           component: 'Set',
-          name: 'fields.password.hidden',
-          value: false
-        },
-        {
-          component: 'Set',
-          name: 'fields.password.out',
-          value: true
-        },
-        {
-          component: 'Set',
-          name: 'fields.password.required',
-          value: true
-        },
-        {
-          component: 'Set',
-          name: 'fields.retypePassword.hidden',
-          value: false
+          name: 'component',
+          value: {
+            'fields.password.hidden': false,
+            'fields.password.out': true,
+            'fields.password.required': true,
+            'fields.retypePassword.hidden': false
+          }
         }
       ]
     }

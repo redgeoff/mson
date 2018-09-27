@@ -21,9 +21,7 @@ export default class ComponentFillerProps {
 
   _formToFillerProps(component) {
     const fields = {};
-    component.eachField(
-      field => (fields[field.get('name')] = { value: field.get('value') })
-    );
+    component.eachField(field => (fields[field.get('name')] = field.get()));
     return fields;
   }
 

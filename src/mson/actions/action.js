@@ -33,6 +33,10 @@ export default class Action extends Component {
             component: 'Field'
           },
           {
+            name: 'else',
+            component: 'Field'
+          },
+          {
             name: 'layer',
             component: 'TextField'
           },
@@ -68,22 +72,41 @@ export default class Action extends Component {
     return this._getFilled(names);
   }
 
-  async run(props) {
+  _setFillerProps(props) {
+    // TODO: the process of generating the fillerProps is unnecessarily wasteful as it requires
+    // getting properties that will not be used. We need to generate these props for *each* action
+    // as a previous action may change a property on which the subsequent action depends. Instead,
+    // we should be able to just use component.get() with the dot notation. And, use a selectorFn
+    // with sift that uses component.get().
     this._fillerProps = this._componentFillerProps.getFillerProps(props);
+  }
+
+  async run(props) {
+    this._setFillerProps(props);
 
     const where = this.get('if');
     let shouldRun = true;
+    let actions = null;
 
     if (where) {
       let sifted = sift(where, [this._fillerProps]);
       if (sifted.length === 0) {
-        shouldRun = false;
+        // Condition failed
+        if (this.get('else')) {
+          actions = this.get('else');
+        } else {
+          // The condition failed and there is nothing to execute
+          shouldRun = false;
+        }
+      } else {
+        // Condition met
+        actions = this.get('actions');
       }
+    } else {
+      actions = this.get('actions');
     }
 
     if (shouldRun) {
-      const actions = this.get('actions');
-
       if (actions) {
         let args = null;
         for (const i in actions) {
