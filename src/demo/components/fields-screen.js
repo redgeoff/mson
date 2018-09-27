@@ -195,8 +195,8 @@ export default {
               name: 'component',
               value: {
                 fullWidth: true,
-                'fields.toggleFullWith': {
-                  label: 'Auto Width',
+                'fields.toggleFullWidth': {
+                  label: 'Flex Width',
                   icon: 'FormatAlignLeft'
                 }
               }
@@ -208,7 +208,7 @@ export default {
               name: 'component',
               value: {
                 fullWidth: false,
-                'fields.toggleFullWith': {
+                'fields.toggleFullWidth': {
                   label: 'Full Width',
                   icon: 'FormatAlignLeft'
                 }
