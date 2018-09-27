@@ -267,7 +267,7 @@ export default {
       event: 'toggleDisplayValues',
       actions: [
         {
-          component: 'Emit',
+          component: 'Action',
           if: {
             'fields.id.useDisplayValue': {
               $ne: true
@@ -276,34 +276,30 @@ export default {
           actions: [
             {
               component: 'Set',
-              name: 'eachField',
+              name: 'component',
               value: {
-                useDisplayValue: true
-              }
-            },
-            {
-              component: 'Set',
-              name: 'fields.toggleDisplayValues',
-              value: {
-                label: 'Hide Display Values',
-                icon: 'ViewStream'
+                eachField: {
+                  useDisplayValue: true
+                },
+                'fields.toggleDisplayValues': {
+                  label: 'Hide Display Values',
+                  icon: 'ViewStream'
+                }
               }
             }
           ],
           else: [
             {
               component: 'Set',
-              name: 'eachField',
+              name: 'component',
               value: {
-                useDisplayValue: false
-              }
-            },
-            {
-              component: 'Set',
-              name: 'fields.toggleDisplayValues',
-              value: {
-                label: 'Show Display Values',
-                icon: 'ViewHeadline'
+                eachField: {
+                  useDisplayValue: false
+                },
+                'fields.toggleDisplayValues': {
+                  label: 'Show Display Values',
+                  icon: 'ViewHeadline'
+                }
               }
             }
           ]

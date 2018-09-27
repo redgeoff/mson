@@ -33,11 +33,15 @@ export default class Set extends Action {
     if (!name) {
       // No name was specified to so pipe to next action
       return value;
-    } else if (names[0] === 'globals') {
-      names.splice(0, 1); // Remove 'globals'
-      this._globals.set({
-        [names.join('.')]: value
-      });
+    } else if (names[0] === 'globals' || names[0] === 'component') {
+      const first = names.splice(0, 1)[0]; // Remove globals or component
+      if (first === 'globals') {
+        this._globals.set({
+          [names.join('.')]: value
+        });
+      } else {
+        props.component.set(value);
+      }
     } else {
       props.component.set({
         [name]: value

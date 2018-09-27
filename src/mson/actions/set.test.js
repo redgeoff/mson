@@ -146,3 +146,18 @@ it('should set nested value of property', async () => {
     'fields.lastName.value': 'Jackson'
   });
 });
+
+it('should set with component', async () => {
+  const component = createForm();
+
+  const set = new Set({
+    name: 'component',
+    value: {
+      'fields.name.lastName.value': '{{arguments}}'
+    }
+  });
+
+  await set.run({ arguments: 'Jackson', component });
+
+  expect(component.get('fields.name.lastName.value')).toEqual('Jackson');
+});
