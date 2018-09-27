@@ -243,7 +243,7 @@ export default {
       label: 'TextField',
       help: 'Example help',
       required: true
-    },
+    }
 
     // TODO: need to implement default mechanism in ListField that creates new field by default and
     // then allows user to click to add new field.
@@ -254,57 +254,5 @@ export default {
     //   help: 'Example help',
     //   required: true
     // },
-
-    {
-      name: 'toggleDisplayValues',
-      component: 'ButtonField',
-      label: 'Show Display Values',
-      icon: 'ViewHeadline'
-    }
-  ],
-  listeners: [
-    {
-      event: 'toggleDisplayValues',
-      actions: [
-        {
-          component: 'Action',
-          if: {
-            'fields.id.useDisplayValue': {
-              $ne: true
-            }
-          },
-          actions: [
-            {
-              component: 'Set',
-              name: 'component',
-              value: {
-                eachField: {
-                  useDisplayValue: true
-                },
-                'fields.toggleDisplayValues': {
-                  label: 'Hide Display Values',
-                  icon: 'ViewStream'
-                }
-              }
-            }
-          ],
-          else: [
-            {
-              component: 'Set',
-              name: 'component',
-              value: {
-                eachField: {
-                  useDisplayValue: false
-                },
-                'fields.toggleDisplayValues': {
-                  label: 'Show Display Values',
-                  icon: 'ViewHeadline'
-                }
-              }
-            }
-          ]
-        }
-      ]
-    }
   ]
 };
