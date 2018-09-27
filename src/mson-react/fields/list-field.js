@@ -6,8 +6,7 @@ import attach from '../attach';
 
 class ListField extends React.PureComponent {
   render() {
-    const { component, help } = this.props;
-    const allowDelete = component.get('allowDelete');
+    const { component, help, allowDelete, useDisplayValue } = this.props;
 
     let fields = [];
     let first = true;
@@ -31,7 +30,7 @@ class ListField extends React.PureComponent {
         <ListItemField
           component={field}
           key={index}
-          allowDelete={allowDelete}
+          allowDelete={allowDelete && !useDisplayValue}
           help={itemHelp}
         />
       );
@@ -42,4 +41,6 @@ class ListField extends React.PureComponent {
 }
 
 // We want the component to update when we receive new fields
-export default attach(['change', 'help'])(ListField);
+export default attach(['change', 'help', 'allowDelete', 'useDisplayValue'])(
+  ListField
+);
