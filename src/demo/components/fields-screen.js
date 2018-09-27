@@ -25,6 +25,12 @@ export default {
       component: 'ButtonField',
       label: 'Disable',
       icon: 'Lock'
+    },
+    {
+      name: 'toggleFullWidth',
+      component: 'ButtonField',
+      label: 'Full Width',
+      icon: 'FormatAlignJustify'
     }
   ],
   listeners: [
@@ -166,6 +172,45 @@ export default {
                 'fields.toggleDisabled': {
                   label: 'Disable',
                   icon: 'Lock'
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      event: 'toggleFullWidth',
+      actions: [
+        {
+          component: 'Action',
+          if: {
+            'fields.id.fullWidth': {
+              $ne: true
+            }
+          },
+          actions: [
+            {
+              component: 'Set',
+              name: 'component',
+              value: {
+                fullWidth: true,
+                'fields.toggleFullWith': {
+                  label: 'Auto Width',
+                  icon: 'FormatAlignLeft'
+                }
+              }
+            }
+          ],
+          else: [
+            {
+              component: 'Set',
+              name: 'component',
+              value: {
+                fullWidth: false,
+                'fields.toggleFullWith': {
+                  label: 'Full Width',
+                  icon: 'FormatAlignLeft'
                 }
               }
             }
