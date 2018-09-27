@@ -3,6 +3,12 @@ export default {
   component: 'app.Fields',
   fields: [
     {
+      name: 'import',
+      component: 'ButtonField',
+      label: 'Import',
+      icon: 'ImportContacts'
+    },
+    {
       name: 'toggleDisplayValues',
       component: 'ButtonField',
       label: 'Show Display Values',
@@ -16,6 +22,53 @@ export default {
     }
   ],
   listeners: [
+    {
+      event: 'import',
+      actions: [
+        {
+          component: 'Set',
+          name: 'component',
+          value: {
+            'fields.booleanField.value': true,
+            'fields.chainedSelectField.value': [2, 5, 9, 10],
+            'fields.chainedSelectListField.value': [[1, 3, 7], [2, 5, 9, 10]],
+            'fields.collectionField.value': [
+              {
+                id: 'daenerys',
+                firstName: 'Daenerys',
+                lastName: 'Targaryen'
+              },
+              {
+                id: 'jon',
+                firstName: 'Jon',
+                lastName: 'Snow'
+              },
+              {
+                id: 'tyrion',
+                firstName: 'Tyrion',
+                lastName: 'Lannister'
+              }
+            ],
+            'fields.dateField.value': '2018-09-27T17:24:24.960Z',
+            'fields.emailField.value': 'test@example.com',
+            'fields.idField.value': 'id-123',
+            'fields.integerField.value': 123,
+            'fields.numberField.value': 123.4,
+            'fields.passwordField.value': 'password',
+            'fields.personFullNameField.value': {
+              firstName: 'Daenerys',
+              lastName: 'Targaryen'
+            },
+            'fields.personNameField.value': 'Daenerys',
+            'fields.selectField.value': 'red',
+            'fields.selectFieldMult.value': ['red', 'blue'],
+            'fields.selectListField.value': ['red', 'green'],
+            'fields.timeField.value': '2018-09-27T17:24:24.960Z',
+            'fields.textField.value': 'Go MSON'
+          }
+        }
+      ]
+    },
     {
       event: 'toggleDisplayValues',
       actions: [
