@@ -737,3 +737,15 @@ it('should get singular label', () => {
 //   const clonedField = field.clone();
 //   expect(clonedField.get('form')).not.toEqual(form);
 // });
+
+it('should set maxColumns', () => {
+  const field = new CollectionField();
+
+  const allowed = [1, 2, 4, 6, 12];
+  allowed.forEach(maxColumns => field.set({ maxColumns }));
+
+  const notAllowed = [0, 3, 13];
+  notAllowed.forEach(maxColumns =>
+    expect(() => field.set({ maxColumns })).toThrow()
+  );
+});

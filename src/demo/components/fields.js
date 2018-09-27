@@ -67,6 +67,7 @@ export default {
       label: 'Records',
       help: 'Example help',
       required: true,
+      // maxColumns: 1,
       formFactory: {
         component: 'Factory',
         product: {

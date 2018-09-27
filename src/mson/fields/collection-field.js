@@ -137,6 +137,10 @@ export default class CollectionField extends Field {
           {
             name: 'change',
             component: 'Field'
+          },
+          {
+            name: 'maxColumns',
+            component: 'IntegerField'
           }
         ]
       }
@@ -154,7 +158,11 @@ export default class CollectionField extends Field {
       order: null,
       mode: null,
       showArchived: false,
-      searchString: null
+      searchString: null,
+
+      // A good default for most content as to not wrap content, but to also take up less vertical
+      // space
+      maxColumns: 2
     });
 
     this._createInfiniteLoader();
@@ -799,12 +807,25 @@ export default class CollectionField extends Field {
     this.set({ form });
   }
 
+  _setMaxColumns(maxColumns) {
+    // 12 (the number of grids) must be divisble by maxColumns. And, we require a power of 2 so that
+    // we can shrink the screen and not have gaps in our grid, i.e. each layer is an even multiple
+    // of the previous.
+    const allowed = [1, 2, 4, 6, 12];
+    if (allowed.indexOf(maxColumns) === -1) {
+      throw new Error('maxColumns must be ' + allowed.join(','));
+    } else {
+      this._set('maxColumns', maxColumns);
+    }
+  }
+
   set(props) {
     super.set(
       Object.assign({}, props, {
         currentForm: undefined,
         mode: undefined,
-        store: undefined
+        store: undefined,
+        maxColumns: undefined
       })
     );
 
@@ -827,6 +848,10 @@ export default class CollectionField extends Field {
 
     if (props.store !== undefined) {
       this._setStore(props.store);
+    }
+
+    if (props.maxColumns !== undefined) {
+      this._setMaxColumns(props.maxColumns);
     }
   }
 
