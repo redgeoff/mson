@@ -1,4 +1,5 @@
 import App from './app';
+import FieldsScreen from './fields-screen';
 import Fields from './fields';
 import Contacts from './contacts';
 import ContactsLocalStorage from './contacts-local-storage';
@@ -9,6 +10,7 @@ import Home from './home';
 
 export {
   App,
+  FieldsScreen,
   Fields,
   Contacts,
   ContactsLocalStorage,

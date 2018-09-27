@@ -16,7 +16,7 @@ export default {
         path: '/fields',
         label: 'Fields',
         content: {
-          component: 'app.Fields'
+          component: 'app.FieldsScreen'
         }
       },
       {
