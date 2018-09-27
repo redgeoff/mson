@@ -33,7 +33,8 @@ class DateField extends React.PureComponent {
       editable,
       useDisplayValue,
       minDate,
-      maxDate
+      maxDate,
+      fullWidth
     } = this.props;
 
     let shrinkLabel = false;
@@ -56,6 +57,7 @@ class DateField extends React.PureComponent {
               minDate={minDate}
               maxDate={maxDate}
               onClose={this.handleBlur}
+              fullWidth={fullWidth}
               // format="M/d/YYYY h:m a"
             />
           </span>
@@ -85,5 +87,6 @@ export default attach([
   'editable',
   'useDisplayValue',
   'minDate',
-  'maxDate'
+  'maxDate',
+  'fullWidth'
 ])(DateField);
