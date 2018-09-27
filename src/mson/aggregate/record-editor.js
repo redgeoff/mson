@@ -131,18 +131,12 @@ export default {
         },
         {
           component: 'Set',
-          name: 'fields.save.hidden',
-          value: true
-        },
-        {
-          component: 'Set',
-          name: 'fields.edit.hidden',
-          value: false
-        },
-        {
-          component: 'Set',
-          name: 'fields.cancel.hidden',
-          value: true
+          name: 'component',
+          value: {
+            'fields.save.hidden': true,
+            'fields.edit.hidden': false,
+            'fields.cancel.hidden': true
+          }
         },
         {
           component: 'Emit',
@@ -165,18 +159,12 @@ export default {
         },
         {
           component: 'Set',
-          name: 'fields.save.hidden',
-          value: false
-        },
-        {
-          component: 'Set',
-          name: 'fields.save.disabled',
-          value: true
-        },
-        {
-          component: 'Set',
-          name: 'fields.edit.hidden',
-          value: true
+          name: 'component',
+          value: {
+            'fields.save.hidden': false,
+            'fields.save.disabled': true,
+            'fields.edit.hidden': true
+          }
         },
         {
           if: {

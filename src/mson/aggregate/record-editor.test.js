@@ -385,22 +385,12 @@ it('should read', async () => {
     {
       name: 'Set',
       props: {
-        name: 'fields.save.hidden',
-        value: true
-      }
-    },
-    {
-      name: 'Set',
-      props: {
-        name: 'fields.edit.hidden',
-        value: false
-      }
-    },
-    {
-      name: 'Set',
-      props: {
-        name: 'fields.cancel.hidden',
-        value: true
+        name: 'component',
+        value: {
+          'fields.save.hidden': true,
+          'fields.edit.hidden': false,
+          'fields.cancel.hidden': true
+        }
       }
     },
     {
@@ -431,22 +421,12 @@ const getEditActs = hideCancel => {
     {
       name: 'Set',
       props: {
-        name: 'fields.save.hidden',
-        value: false
-      }
-    },
-    {
-      name: 'Set',
-      props: {
-        name: 'fields.save.disabled',
-        value: true
-      }
-    },
-    {
-      name: 'Set',
-      props: {
-        name: 'fields.edit.hidden',
-        value: true
+        name: 'component',
+        value: {
+          'fields.save.hidden': false,
+          'fields.save.disabled': true,
+          'fields.edit.hidden': true
+        }
       }
     }
   ];

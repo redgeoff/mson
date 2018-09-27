@@ -7,19 +7,14 @@ export default {
       actions: [
         {
           component: 'Set',
-          name: 'fields.captcha.hidden',
-          value: true
-        },
-        {
-          component: 'Set',
-          name: 'fields.captcha.required',
-          value: false
-        },
-        {
-          // The email is prepopulated with that of the logged in user so we can hide this
-          component: 'Set',
-          name: 'fields.email.hidden',
-          value: true
+          name: 'component',
+          value: {
+            'fields.captcha.hidden': true,
+            'fields.captcha.required': false,
+
+            // The email is prepopulated with that of the logged in user so we can hide this
+            'fields.email.hidden': true
+          }
         }
         // TODO: create a construct for loading the user's name into the session and use it here to
         // prepopulate the name fields. Or better yet, just expect the user to configure a GetDoc

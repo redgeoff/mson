@@ -40,18 +40,12 @@ export default {
           actions: [
             {
               component: 'Set',
-              name: 'fields.password.hidden',
-              value: false
-            },
-            {
-              component: 'Set',
-              name: 'fields.password.required',
-              value: true
-            },
-            {
-              component: 'Set',
-              name: 'fields.password.out',
-              value: true
+              name: 'component',
+              value: {
+                'fields.password.hidden': false,
+                'fields.password.required': true,
+                'fields.password.out': true
+              }
             }
           ]
         },
@@ -110,24 +104,15 @@ export default {
             },
             {
               component: 'Set',
-              name: 'fields.password.hidden',
-              value: false
-            },
-            {
-              component: 'Set',
-              name: 'fields.password.required',
-              value: true
-            },
-            {
-              component: 'Set',
-              name: 'fields.password.out',
-              value: true
-            },
-            {
-              // Clear any previous value set when changing the password
-              component: 'Set',
-              name: 'fields.password.value',
-              value: null
+              name: 'component',
+              value: {
+                'fields.password.hidden': false,
+                'fields.password.required': true,
+                'fields.password.out': true,
+
+                // Clear any previous value set when changing the password
+                'fields.password.value': null
+              }
             },
             {
               component: 'Set',
