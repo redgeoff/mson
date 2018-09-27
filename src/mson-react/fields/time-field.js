@@ -31,8 +31,12 @@ class TimeField extends React.PureComponent {
       editable,
       useDisplayValue,
       showSeconds,
-      fullWidth
+      fullWidth,
+      disabled,
+      accessEditable
     } = this.props;
+
+    const dis = accessEditable === false || disabled;
 
     let shrinkLabel = false;
 
@@ -62,6 +66,7 @@ class TimeField extends React.PureComponent {
 
               onClose={this.handleBlur}
               fullWidth={fullWidth}
+              disabled={dis}
               invalidDateMessage="" // Let CommonField display the error
               // format="M/d/YYYY h:m a"
             />
@@ -91,5 +96,6 @@ export default attach([
   'editable',
   'useDisplayValue',
   'showSeconds',
-  'fullWidth'
+  'fullWidth',
+  'disabled'
 ])(TimeField);
