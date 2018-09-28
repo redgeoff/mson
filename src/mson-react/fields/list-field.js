@@ -17,7 +17,6 @@ class ListField extends React.PureComponent {
       if (field.get('block')) {
         if (first) {
           itemHelp = help;
-          first = false;
         }
       } else {
         if (last) {
@@ -26,7 +25,7 @@ class ListField extends React.PureComponent {
       }
 
       // When using the display value, we hide any blank fields, e.g. the empty "next" fields
-      if (!useDisplayValue || !field.isBlank()) {
+      if (first || !useDisplayValue || !field.isBlank()) {
         // We have to pass allowDelete as it is the allowDelete of the parent
         fields.push(
           <ListItemField
@@ -36,6 +35,10 @@ class ListField extends React.PureComponent {
             help={itemHelp}
           />
         );
+      }
+
+      if (first) {
+        first = false;
       }
     });
 

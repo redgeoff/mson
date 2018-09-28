@@ -12,14 +12,20 @@ class CompositeField extends React.PureComponent {
 
     let lastIsBlock = false;
 
+    let first = true;
+
     component.eachField((field, index, last) => {
       // Don't show the field if we are using the display value and it is blank, e.g. it is the
       // empty "next" field.
-      if (!useDisplayValue || !field.isBlank()) {
+      if (first || !useDisplayValue || !field.isBlank()) {
         if (last && field.get('block')) {
           lastIsBlock = true;
         }
         fields.push(<Field component={field} key={index} noBlock={last} />);
+      }
+
+      if (first) {
+        first = false;
       }
     });
 
