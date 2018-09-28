@@ -57,7 +57,8 @@ export default class SelectListField extends ListField {
       block: this.get('block'),
       fullWidth: this.get('fullWidth'),
       options: this.get('options'),
-      hideLabel: name === 0 ? undefined : true
+      hideLabel: name === 0 ? undefined : true,
+      useDisplayValue: this.get('useDisplayValue')
     });
   }
 
