@@ -21,6 +21,12 @@ export default {
       icon: 'ViewHeadline'
     },
     {
+      name: 'toggleEditable',
+      component: 'ButtonField',
+      label: 'Immutable',
+      icon: 'NotInterested'
+    },
+    {
       name: 'toggleDisabled',
       component: 'ButtonField',
       label: 'Disable',
@@ -133,6 +139,45 @@ export default {
                 'fields.toggleDisplayValues': {
                   label: 'Show Display Values',
                   icon: 'ViewHeadline'
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      event: 'toggleEditable',
+      actions: [
+        {
+          component: 'Action',
+          if: {
+            'fields.id.editable': {
+              $ne: true
+            }
+          },
+          actions: [
+            {
+              component: 'Set',
+              name: 'component',
+              value: {
+                editable: true,
+                'fields.toggleEditable': {
+                  label: 'Immutable',
+                  icon: 'NotInterested'
+                }
+              }
+            }
+          ],
+          else: [
+            {
+              component: 'Set',
+              name: 'component',
+              value: {
+                editable: false,
+                'fields.toggleEditable': {
+                  label: 'Editable',
+                  icon: 'Edit'
                 }
               }
             }
