@@ -50,7 +50,10 @@ class CommonField extends React.PureComponent {
           </InputLabel>
         );
       } else {
-        lbl = <FormLabel className={classes.label}>{label}</FormLabel>;
+        // We display a non-breaking space when the label is empty so that CompositeFields, like the
+        // ChainedSelectField, print all their display values on the same line.
+        const labelText = label ? label : '\u00A0';
+        lbl = <FormLabel className={classes.label}>{labelText}</FormLabel>;
       }
     }
 
