@@ -13,6 +13,7 @@ import './collection-field.css';
 import SelectOrder from './select-order';
 import ButtonField from '../../mson/fields/button-field';
 import Icon from '../icon';
+import CommonField from './common-field';
 
 // TODO:
 //   - Support drag to order
@@ -279,7 +280,7 @@ class CollectionField extends React.PureComponent {
 
   // TODO: how to prevent re-rendering of all form-cards when dialog open state is changed? Or, does
   // it not really matter as we are using PureComponents?
-  render() {
+  field() {
     const {
       forbidUpdate,
       forbidDelete,
@@ -357,6 +358,17 @@ class CollectionField extends React.PureComponent {
           title={confirmationTitle}
         />
       </div>
+    );
+  }
+
+  render() {
+    const { component } = this.props;
+
+    return (
+      <span>
+        <CommonField component={component} inlineLabel="true" />
+        {this.field()}
+      </span>
     );
   }
 }

@@ -15,6 +15,7 @@ export default {
       component: 'CollectionField',
       name: 'contacts',
       label: 'Contacts',
+      hideLabel: true,
       // forbidCreate: true,
       // forbidUpdate: true,
       // forbidDelete: true,

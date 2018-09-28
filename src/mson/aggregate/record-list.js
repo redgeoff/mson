@@ -25,6 +25,7 @@ export default {
       name: '{{name}}',
       label: '{{label}}',
       component: 'CollectionField',
+      hideLabel: true,
       formFactory: {
         component: 'Factory',
         product: '{{baseFormFactory}}'
