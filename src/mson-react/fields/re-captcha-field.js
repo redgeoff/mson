@@ -16,13 +16,19 @@ class ReCAPTCHAField extends React.PureComponent {
   };
 
   render() {
-    const { disabled, editable, accessEditable, classes } = this.props;
+    const {
+      disabled,
+      editable,
+      accessEditable,
+      classes,
+      useDisplayValue
+    } = this.props;
 
     const isEditable = accessEditable !== false && editable && !disabled;
 
     const siteKey = globals.get('reCAPTCHASiteKey');
 
-    if (isEditable) {
+    if (isEditable && !useDisplayValue) {
       return (
         <div className={classes.captcha}>
           <ReCAPTCHA
@@ -40,4 +46,6 @@ class ReCAPTCHAField extends React.PureComponent {
 
 ReCAPTCHAField = withStyles(styles)(ReCAPTCHAField);
 
-export default attach(['disabled', 'editable'])(ReCAPTCHAField);
+export default attach(['disabled', 'editable', 'useDisplayValue'])(
+  ReCAPTCHAField
+);
