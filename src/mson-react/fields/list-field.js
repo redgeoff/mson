@@ -6,8 +6,7 @@ import attach from '../attach';
 
 class ListField extends React.PureComponent {
   render() {
-    const { component, help } = this.props;
-    const allowDelete = component.get('allowDelete');
+    const { component, help, allowDelete, useDisplayValue } = this.props;
 
     let fields = [];
     let first = true;
@@ -18,7 +17,6 @@ class ListField extends React.PureComponent {
       if (field.get('block')) {
         if (first) {
           itemHelp = help;
-          first = false;
         }
       } else {
         if (last) {
@@ -26,15 +24,22 @@ class ListField extends React.PureComponent {
         }
       }
 
-      // We have to pass allowDelete as it is the allowDelete of the parent
-      fields.push(
-        <ListItemField
-          component={field}
-          key={index}
-          allowDelete={allowDelete}
-          help={itemHelp}
-        />
-      );
+      // When using the display value, we hide any blank fields, e.g. the empty "next" fields
+      if (first || !useDisplayValue || !field.isBlank()) {
+        // We have to pass allowDelete as it is the allowDelete of the parent
+        fields.push(
+          <ListItemField
+            component={field}
+            key={index}
+            allowDelete={allowDelete && !useDisplayValue}
+            help={itemHelp}
+          />
+        );
+      }
+
+      if (first) {
+        first = false;
+      }
     });
 
     return fields;
@@ -42,4 +47,6 @@ class ListField extends React.PureComponent {
 }
 
 // We want the component to update when we receive new fields
-export default attach(['change', 'help'])(ListField);
+export default attach(['change', 'help', 'allowDelete', 'useDisplayValue'])(
+  ListField
+);

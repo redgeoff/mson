@@ -147,7 +147,8 @@ class CollectionField extends React.PureComponent {
       forbidDelete,
       editable,
       disabled,
-      maxColumns
+      maxColumns,
+      useDisplayValue
     } = this.props;
 
     let cards = [];
@@ -172,8 +173,8 @@ class CollectionField extends React.PureComponent {
             onEdit={() => this.handleEdit(form)}
             onDelete={this.handleDelete}
             component={form}
-            forbidUpdate={forbidUpdate || !canUpdate}
-            forbidDelete={forbidDelete || !canArchive}
+            forbidUpdate={forbidUpdate || !canUpdate || useDisplayValue}
+            forbidDelete={forbidDelete || !canArchive || useDisplayValue}
             editable={editable}
             disabled={disabled}
           />
@@ -290,7 +291,8 @@ class CollectionField extends React.PureComponent {
       currentForm,
       noResults,
       disabled,
-      accessEditable
+      accessEditable,
+      useDisplayValue
     } = this.props;
 
     const dis = accessEditable === false || disabled;
@@ -345,8 +347,8 @@ class CollectionField extends React.PureComponent {
           onSave={this.handleSave}
           onEdit={this.handleEdit}
           onDelete={this.handleDelete}
-          forbidUpdate={forbidUpdate || !canUpdate || dis}
-          forbidDelete={forbidDelete || !canArchive || dis}
+          forbidUpdate={forbidUpdate || !canUpdate || dis || useDisplayValue}
+          forbidDelete={forbidDelete || !canArchive || dis || useDisplayValue}
         />
 
         <ConfirmationDialog
@@ -378,6 +380,7 @@ CollectionField = attach([
   'mode',
   'noResults',
   'store',
-  'maxColumns'
+  'maxColumns',
+  'useDisplayValue'
 ])(CollectionField);
 export default CollectionField;

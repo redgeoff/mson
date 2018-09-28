@@ -157,6 +157,16 @@ export default class CompositeField extends Field {
     this._setForAllFields({ fullWidth });
   }
 
+  setUseDisplayValue(useDisplayValue) {
+    super.setUseDisplayValue(useDisplayValue);
+    this._setForAllFields({ useDisplayValue });
+  }
+
+  setHideLabel(hideLabel) {
+    super.setHideLabel(hideLabel);
+    this._setForAllFields({ hideLabel });
+  }
+
   set(props) {
     super.set(Object.assign({}, props, { fields: undefined }));
 

@@ -146,6 +146,14 @@ export default class Field extends Component {
     this._set('fullWidth', fullWidth);
   }
 
+  setUseDisplayValue(useDisplayValue) {
+    this._set('useDisplayValue', useDisplayValue);
+  }
+
+  setHideLabel(hideLabel) {
+    this._set('hideLabel', hideLabel);
+  }
+
   set(props) {
     if (props.value !== undefined && props.value !== this.get('value')) {
       this.set({ dirty: true });
@@ -159,7 +167,9 @@ export default class Field extends Component {
         editable: undefined,
         dirty: undefined,
         touched: undefined,
-        fullWidth: undefined
+        fullWidth: undefined,
+        useDisplayValue: undefined,
+        hideLabel: undefined
       })
     );
 
@@ -189,6 +199,14 @@ export default class Field extends Component {
 
     if (props.fullWidth !== undefined) {
       this.setFullWidth(props.fullWidth);
+    }
+
+    if (props.useDisplayValue !== undefined) {
+      this.setUseDisplayValue(props.useDisplayValue);
+    }
+
+    if (props.hideLabel !== undefined) {
+      this.setHideLabel(props.hideLabel);
     }
   }
 

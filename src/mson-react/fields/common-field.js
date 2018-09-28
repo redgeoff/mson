@@ -43,14 +43,25 @@ class CommonField extends React.PureComponent {
         lbl = (
           <InputLabel
             error={touched && err ? true : false}
-            required={required}
+            // If label is blank then don't show as required
+            required={label && required}
             shrink={shrinkLabel}
           >
             {label}
           </InputLabel>
         );
       } else {
-        lbl = <FormLabel className={classes.label}>{label}</FormLabel>;
+        // We display a non-breaking space when the label is empty so that CompositeFields, like the
+        // ChainedSelectField, print all their display values on the same line.
+        const labelText = label ? label : '\u00A0';
+
+        // We wrap the label in a div tag so that the proceeding display value appears on a
+        // different line
+        lbl = (
+          <div>
+            <FormLabel className={classes.label}>{labelText}</FormLabel>
+          </div>
+        );
       }
     }
 

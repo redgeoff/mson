@@ -125,3 +125,15 @@ it('should set touched', () => {
   expect(field.get('touched')).toEqual(false);
   field.eachField(field => expect(field.get('touched')).toEqual(false));
 });
+
+it('should set useDisplayValue', () => {
+  const field = createField();
+
+  field.set({ useDisplayValue: true });
+  expect(field.get('useDisplayValue')).toEqual(true);
+  field.eachField(field => expect(field.get('useDisplayValue')).toEqual(true));
+
+  field.set({ useDisplayValue: false });
+  expect(field.get('useDisplayValue')).toEqual(false);
+  field.eachField(field => expect(field.get('useDisplayValue')).toEqual(false));
+});
