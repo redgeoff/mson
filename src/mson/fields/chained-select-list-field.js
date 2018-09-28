@@ -39,7 +39,8 @@ export default class ChainedSelectListField extends ListField {
       blankString: this.get('blankString'),
       block: true,
       fullWidth: this.get('fullWidth'),
-      options: this.get('options')
+      options: this.get('options'),
+      hideLabel: name === 0 ? undefined : true
     });
   }
 

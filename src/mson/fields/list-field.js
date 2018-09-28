@@ -74,7 +74,11 @@ export default class ListField extends CompositeField {
       // Set the label and required for the new first field
       this._fields
         .first()
-        .set({ label: field.get('label'), required: field.get('required') });
+        .set({
+          label: field.get('label'),
+          required: field.get('required'),
+          hideLabel: false
+        });
     }
 
     // Create a new field if we have reached the max size and delete a field

@@ -25,15 +25,18 @@ class ListField extends React.PureComponent {
         }
       }
 
-      // We have to pass allowDelete as it is the allowDelete of the parent
-      fields.push(
-        <ListItemField
-          component={field}
-          key={index}
-          allowDelete={allowDelete && !useDisplayValue}
-          help={itemHelp}
-        />
-      );
+      // When using the display value, we hide any blank fields, e.g. the empty "next" fields
+      if (!useDisplayValue || !field.isBlank()) {
+        // We have to pass allowDelete as it is the allowDelete of the parent
+        fields.push(
+          <ListItemField
+            component={field}
+            key={index}
+            allowDelete={allowDelete && !useDisplayValue}
+            help={itemHelp}
+          />
+        );
+      }
     });
 
     return fields;
