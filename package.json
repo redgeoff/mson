@@ -34,7 +34,6 @@
   },
   "scripts": {
     "lint": "eslint src",
-    "precommit": "lint-staged",
     "test-server-start": "export NODE_ENV=production && ./node_modules/babel-cli/bin/babel-node.js ../mson-server/bin/test-server.js --port=4002 --prefix=mson_test_ --CORE_TEST &",
     "test-server-stop": "pkill -f --signal=SIGINT CORE_TEST & exit 0",
     "start": "react-scripts start",
@@ -70,6 +69,11 @@
         "lines": 100,
         "statements": 100
       }
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
     }
   }
 }
