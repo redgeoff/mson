@@ -31,6 +31,12 @@ export default {
       component: 'ButtonField',
       label: 'Full Width',
       icon: 'FormatAlignJustify'
+    },
+    {
+      name: 'log',
+      component: 'ButtonField',
+      label: 'Log Values',
+      icon: 'MoveToInbox'
     }
   ],
   listeners: [
@@ -215,6 +221,15 @@ export default {
               }
             }
           ]
+        }
+      ]
+    },
+    {
+      event: 'log',
+      actions: [
+        {
+          component: 'ConsoleLog',
+          message: '{{value}}'
         }
       ]
     }
