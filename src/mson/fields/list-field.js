@@ -72,13 +72,11 @@ export default class ListField extends CompositeField {
     // Are we removing the first field?
     if (name === firstName) {
       // Set the label and required for the new first field
-      this._fields
-        .first()
-        .set({
-          label: field.get('label'),
-          required: field.get('required'),
-          hideLabel: false
-        });
+      this._fields.first().set({
+        label: field.get('label'),
+        required: field.get('required'),
+        hideLabel: false
+      });
     }
 
     // Create a new field if we have reached the max size and delete a field
@@ -345,8 +343,7 @@ export default class ListField extends CompositeField {
       name: index,
       label: index === 0 ? this.get('label') : undefined,
       required: false,
-      block: this.get('block'),
-      fullWidth: this.get('fullWidth')
+      ...this.get(['block', 'fullWidth', 'useDisplayValue', 'editable'])
     });
 
     return clonedField;

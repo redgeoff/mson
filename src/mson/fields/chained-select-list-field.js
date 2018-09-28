@@ -33,15 +33,18 @@ export default class ChainedSelectListField extends ListField {
 
   _newField(name) {
     return new ChainedSelectField({
-      name: name,
+      name,
       label: name === 0 ? this.get('label') : undefined,
       required: name === 0 ? this.get('required') : false,
-      blankString: this.get('blankString'),
-      block: true,
-      fullWidth: this.get('fullWidth'),
-      options: this.get('options'),
       hideLabel: name === 0 ? undefined : true,
-      useDisplayValue: this.get('useDisplayValue')
+      block: true,
+      ...this.get([
+        'blankString',
+        'fullWidth',
+        'options',
+        'useDisplayValue',
+        'editable'
+      ])
     });
   }
 

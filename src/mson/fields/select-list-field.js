@@ -50,15 +50,18 @@ export default class SelectListField extends ListField {
 
   _newField(name) {
     return new SelectField({
-      name: name,
+      name,
       label: name === 0 ? this.get('label') : undefined,
-      required: false,
-      blankString: this.get('blankString'),
-      block: this.get('block'),
-      fullWidth: this.get('fullWidth'),
-      options: this.get('options'),
       hideLabel: name === 0 ? undefined : true,
-      useDisplayValue: this.get('useDisplayValue')
+      required: false,
+      ...this.get([
+        'blankString',
+        'block',
+        'fullWidth',
+        'options',
+        'useDisplayValue',
+        'editable'
+      ])
     });
   }
 
