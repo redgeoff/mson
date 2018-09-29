@@ -148,3 +148,11 @@ it('should set current form', () => {
     value: firstForm.getValues()
   });
 });
+
+it('should disableSubmit on parent', () => {
+  const parent = new Form();
+  const field = createField({ parent });
+  expect(parent.get('disableSubmit')).toBeUndefined();
+  field._setParentDisableSubmit(true);
+  expect(parent.get('disableSubmit')).toEqual(true);
+});

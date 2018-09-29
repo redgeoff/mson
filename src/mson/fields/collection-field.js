@@ -769,10 +769,22 @@ export default class CollectionField extends Field {
     }
   }
 
+  _setParentDisableSubmit(disableSubmit) {
+    // Used to disable the submit action on the parent so that when the user clicks a submit button
+    // for this CollectionField, it doesn't trigger a submit on the parent form. The parent may not
+    // exist if this field is being used as a standlone component or it is the root component.
+    if (this.get('parent')) {
+      this.get('parent').set({ disableSubmit });
+    }
+  }
+
   _setMode(mode) {
     // Has a previous mode?
     if (this._mode) {
       this._emitEndEvents();
+    } else {
+      // The dialog is being opened
+      this._setParentDisableSubmit(true);
     }
 
     // Note: we set the parent here instead of in set() as otherwise we create a circular
@@ -794,6 +806,8 @@ export default class CollectionField extends Field {
         break;
 
       default:
+        // The dialog is being closed
+        this._setParentDisableSubmit(false);
         break;
     }
 
