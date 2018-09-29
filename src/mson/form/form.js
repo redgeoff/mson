@@ -6,6 +6,8 @@ import IdField from '../fields/id-field';
 import DateField from '../fields/date-field';
 import ButtonField from '../fields/button-field';
 import ComponentFillerProps from '../component/component-filler-props';
+import ComponentField from '../fields/component-field';
+import Field from '../fields/field';
 
 export default class Form extends Component {
   _className = 'Form';
@@ -455,6 +457,15 @@ export default class Form extends Component {
   }
 
   addField(field) {
+    // Not a field?
+    if (!(field instanceof Field)) {
+      // Wrap the component in a ComponentField so that we can use any component in the form
+      field = new ComponentField({
+        name: field.get('name'),
+        content: field
+      });
+    }
+
     this._setField(field);
 
     // TODO: need to consider that field already exists. Also need to worry about cleaning up any
