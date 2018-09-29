@@ -83,10 +83,14 @@ class Form extends React.PureComponent {
 
     // No errors?
     const { component } = this.props;
-    component.setTouched(true);
-    component.validate();
-    if (component.getErrs().length === 0) {
-      component.submit();
+
+    // Is the submit action enabled?
+    if (!component.get('disableSubmit')) {
+      component.setTouched(true);
+      component.validate();
+      if (component.getErrs().length === 0) {
+        component.submit();
+      }
     }
   };
 

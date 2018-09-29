@@ -153,6 +153,13 @@ export default class Form extends Component {
           {
             name: 'eachField',
             component: 'Field'
+          },
+          {
+            // Used to disable the submit action on the form so that when the user clicks a submit
+            // button on a nested form, it doesn't also trigger a submit on the parent form. This
+            // can occur when using type=submit when there are multiple forms.
+            name: 'disableSubmit',
+            component: 'BooleanField'
           }
         ]
       }
@@ -479,6 +486,8 @@ export default class Form extends Component {
     field.on('click', () => {
       this.emitChange(field.get('name'));
     });
+
+    field.set({ parent: this });
   }
 
   removeField(name) {

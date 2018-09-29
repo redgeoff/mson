@@ -1,17 +1,10 @@
 import React from 'react';
 import InputLabel from '@material-ui/core/InputLabel';
-import FormLabel from '@material-ui/core/FormLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '../form-control';
 import attach from '../attach';
 import HelpToolTip from './help-tool-tip';
-import withStyles from '@material-ui/core/styles/withStyles';
-
-const styles = theme => ({
-  label: {
-    fontSize: theme.typography.caption.fontSize
-  }
-});
+import FormLabel from './form-label';
 
 class CommonField extends React.PureComponent {
   render() {
@@ -27,9 +20,9 @@ class CommonField extends React.PureComponent {
       help,
       hideLabelUI,
       hideLabel,
-      classes,
       useDisplayValue,
-      shrinkLabel
+      shrinkLabel,
+      inlineLabel
     } = this.props;
 
     let fld = null;
@@ -39,7 +32,7 @@ class CommonField extends React.PureComponent {
     const isBlank = component.isBlank();
 
     if (!hideLabelUI && !hideLabel) {
-      if (editable && !useDisplayValue) {
+      if (editable && !useDisplayValue && !inlineLabel) {
         lbl = (
           <InputLabel
             error={touched && err ? true : false}
@@ -55,13 +48,21 @@ class CommonField extends React.PureComponent {
         // ChainedSelectField, print all their display values on the same line.
         const labelText = label ? label : '\u00A0';
 
-        // We wrap the label in a div tag so that the proceeding display value appears on a
-        // different line
         lbl = (
-          <div>
-            <FormLabel className={classes.label}>{labelText}</FormLabel>
-          </div>
+          <FormLabel
+            error={touched && err ? true : false}
+            required={required && !useDisplayValue && editable}
+            shrink={true}
+          >
+            {labelText}
+          </FormLabel>
         );
+
+        if (!inlineLabel) {
+          // We wrap the label in a div tag so that the proceeding display value appears on a
+          // different line
+          lbl = <div>{lbl}</div>;
+        }
       }
     }
 
@@ -100,4 +101,4 @@ CommonField = attach([
   'useDisplayValue'
 ])(CommonField);
 
-export default withStyles(styles)(CommonField);
+export default CommonField;

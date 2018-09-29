@@ -11,6 +11,7 @@ export default {
       }
     ]
   },
+  hideLabel: true,
   formFactory: {
     component: 'Factory',
     product: '{{baseFormFactory}}',

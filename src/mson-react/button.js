@@ -8,7 +8,8 @@ const styles = theme => ({
     marginRight: theme.spacing.unit
   },
   button: {
-    marginTop: theme.spacing.unit * 3
+    // FUTURE: if we decide we want this then make it optional via a prop
+    // marginTop: theme.spacing.unit * 3
   }
 });
 
