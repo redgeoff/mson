@@ -7,9 +7,8 @@ const styles = theme => ({
   leftIcon: {
     marginRight: theme.spacing.unit
   },
-  button: {
-    // FUTURE: if we decide we want this then make it optional via a prop
-    // marginTop: theme.spacing.unit * 3
+  marginTop: {
+    marginTop: theme.spacing.unit * 3
   }
 });
 
@@ -28,12 +27,15 @@ class Button extends React.PureComponent {
       label,
       icon,
       fullWidth,
-      variant
+      variant,
+      marginTop
     } = this.props;
+
+    const className = marginTop !== false ? classes.marginTop : null;
 
     return (
       <ButtonMui
-        className={classes.button}
+        className={className}
         type={type}
         color="primary"
         disabled={disabled}

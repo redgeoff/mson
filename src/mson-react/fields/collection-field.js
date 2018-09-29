@@ -261,6 +261,7 @@ class CollectionField extends React.PureComponent {
               onClick={this.handleNew}
               icon="Add"
               label={'New ' + singularLabel}
+              marginTop={false}
             />
           ) : null}
         </Grid>
