@@ -235,6 +235,7 @@ export default {
       component: 'TextField',
       label: 'TextField',
       help: 'Example help',
+      // mask: ['(', '/[1-9]/', '/\\d/', '/\\d/', ')'],
       required: true
     }
 

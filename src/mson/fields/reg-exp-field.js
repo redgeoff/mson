@@ -1,13 +1,7 @@
 import TextField from './text-field';
+import utils from '../utils';
 
 export default class RegExpField extends TextField {
-  _toRegExp(string) {
-    // JSON doesn't support RegExp types so convert string representations to RegExp, including
-    // flags
-    const match = string.match(new RegExp('^/(.*)/(.*)$'));
-    return new RegExp(match[1], match[2]);
-  }
-
   set(props) {
     const clonedProps = Object.assign({}, props);
 
@@ -16,7 +10,7 @@ export default class RegExpField extends TextField {
       clonedProps.value !== undefined &&
       !(clonedProps.value instanceof RegExp)
     ) {
-      clonedProps.value = this._toRegExp(clonedProps.value);
+      clonedProps.value = utils.toRegExp(clonedProps.value);
     }
 
     super.set(clonedProps);

@@ -1,4 +1,5 @@
 import Field from './field';
+import utils from '../utils';
 
 export default class TextField extends Field {
   _className = 'TextField';
@@ -48,6 +49,10 @@ export default class TextField extends Field {
           {
             name: 'rowsMax',
             component: 'IntegerField'
+          },
+          {
+            name: 'mask',
+            component: 'Field'
           }
         ]
       }
@@ -87,5 +92,28 @@ export default class TextField extends Field {
     }
 
     // TODO: minWords, maxWords
+  }
+
+  _formatMask(mask) {
+    return mask.map(item => {
+      // Is the item a RegExp or a string that is not formatted as a RegExp?
+      if (item instanceof RegExp || !utils.isRegExp(item)) {
+        return item;
+      } else {
+        // The string is formatted as a RegExp, e.g. '/foo/i'
+        return utils.toRegExp(item);
+      }
+    });
+  }
+
+  set(props) {
+    const clonedProps = Object.assign({}, props);
+
+    // Convert strings to RegExps?
+    if (clonedProps.mask !== undefined) {
+      clonedProps.mask = this._formatMask(clonedProps.mask);
+    }
+
+    super.set(clonedProps);
   }
 }

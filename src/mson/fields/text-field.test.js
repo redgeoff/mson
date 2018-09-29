@@ -88,3 +88,13 @@ it('should support an invalid reg exp', () => {
 
   testUtils.expectValuesToBeInvalid(field, ['red', 'blue'], 'invalid');
 });
+
+it('should format mask', () => {
+  const field = new TextField();
+
+  field.set({
+    mask: ['(', '/A/i']
+  });
+
+  expect(field.get('mask')).toEqual(['(', /A/i]);
+});
