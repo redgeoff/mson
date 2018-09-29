@@ -22,13 +22,18 @@ export default class TimeField extends IntegerField {
   }
 
   set(props) {
+    const clonedProps = Object.assign({}, props);
+
     // Convert Date? We store dates in epoch time so that they are compatiable across all stores.
     // Epoch time is also smaller than the ISO string and can therefore minimize the storage needed.
-    if (props.value !== undefined) {
-      props.value = DateField.toEpochTime(props.value);
+    if (
+      clonedProps.value !== undefined &&
+      typeof clonedProps.value !== 'number'
+    ) {
+      clonedProps.value = DateField.toEpochTime(clonedProps.value);
     }
 
-    super.set(props);
+    super.set(clonedProps);
   }
 
   // For mocking
