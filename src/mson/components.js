@@ -12,6 +12,7 @@ import Card from './card';
 import ChainedSelectField from './fields/chained-select-field';
 import ChainedSelectListField from './fields/chained-select-list-field';
 import Component from './component/component';
+import CollectionField from './fields/collection-field';
 import ComponentField from './fields/component-field';
 import CompositeField from './fields/composite-field';
 import ConsoleLog from './actions/console-log';
@@ -26,7 +27,6 @@ import FirebaseStore from './stores/firebase-store';
 import Form from './form';
 import FormAccess from './form/form-access';
 import FormField from './fields/form-field';
-import CollectionField from './fields/collection-field';
 import FormValidator from './form/form-validator';
 import GetDoc from './actions/get-doc';
 import GetDocs from './actions/get-docs';
@@ -54,6 +54,7 @@ import RecordList from './aggregate/record-list';
 import RecordStore from './stores/record-store';
 import Redirect from './actions/redirect';
 import RedirectByRole from './actions/redirect-by-role';
+import RegExp from './fields/reg-exp-field';
 import ResetPassword from './aggregate/reset-password';
 import RolesField from './fields/roles-field';
 import SchemaValidatorForm from './form/schema-validator-form';
@@ -77,6 +78,7 @@ import WhereField from './fields/where-field';
 import WrappedComponent from './component/wrapped-component';
 
 export default {
+  AccessForm: FormAccess,
   Action,
   AuthenticatedContactUs,
   App,
@@ -85,6 +87,7 @@ export default {
   Card,
   ChainedSelectField,
   ChainedSelectListField,
+  CollectionField,
   Component,
   ComponentField,
   CompositeField,
@@ -98,9 +101,7 @@ export default {
   Field,
   FirebaseStore,
   Form,
-  AccessForm: FormAccess,
   FormField,
-  CollectionField,
   GetDoc,
   GetDocs,
   IdField,
@@ -127,6 +128,7 @@ export default {
   RecordStore,
   Redirect,
   RedirectByRole,
+  RegExp,
   ResetPassword,
   RolesField,
   SchemaValidatorForm,
