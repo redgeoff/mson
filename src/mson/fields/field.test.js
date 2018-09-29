@@ -163,3 +163,8 @@ it('should clone many fields quickly', () => {
     }
   }, CLONE_FIELDS_TIMEOUT_MS);
 });
+
+it('should identify as field', () => {
+  const field = new Field();
+  expect(field._isField()).toEqual(true);
+});

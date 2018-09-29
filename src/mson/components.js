@@ -12,6 +12,7 @@ import Card from './card';
 import ChainedSelectField from './fields/chained-select-field';
 import ChainedSelectListField from './fields/chained-select-list-field';
 import Component from './component/component';
+import ComponentField from './fields/component-field';
 import CompositeField from './fields/composite-field';
 import ConsoleLog from './actions/console-log';
 import ContactUs from './aggregate/contact-us';
@@ -85,6 +86,7 @@ export default {
   ChainedSelectField,
   ChainedSelectListField,
   Component,
+  ComponentField,
   CompositeField,
   ConsoleLog,
   ContactUs,

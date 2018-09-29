@@ -215,6 +215,13 @@ export default {
     },
 
     {
+      name: 'text',
+      component: 'Text',
+      text:
+        '# Text\nCan contain any [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)'
+    },
+
+    {
       name: 'timeField',
       component: 'TimeField',
       label: 'TimeField',
