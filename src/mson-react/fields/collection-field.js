@@ -362,11 +362,11 @@ class CollectionField extends React.PureComponent {
   }
 
   render() {
-    const { component } = this.props;
+    const { component, hideLabel } = this.props;
 
     return (
       <span>
-        <CommonField component={component} inlineLabel="true" />
+        {!hideLabel && <CommonField component={component} inlineLabel="true" />}
         {this.field()}
       </span>
     );
@@ -393,6 +393,7 @@ CollectionField = attach([
   'noResults',
   'store',
   'maxColumns',
-  'useDisplayValue'
+  'useDisplayValue',
+  'hideLabel'
 ])(CollectionField);
 export default CollectionField;
