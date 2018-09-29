@@ -301,6 +301,11 @@ export default class Field extends Component {
       return err;
     }
   }
+
+  // Method used to determine if this component is a field, even if it is wrapped
+  _isField() {
+    return true;
+  }
 }
 
 Field.isValueBlank = value => {
