@@ -24,7 +24,7 @@ export default {
     ],
     listeners: [
       {
-        event: 'create',
+        event: 'load',
         actions: [
           {
             // Default the id to '1' so that we can edit the doc later. Usually, this id would come
