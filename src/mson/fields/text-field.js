@@ -1,5 +1,6 @@
 import Field from './field';
 import utils from '../utils';
+import { conformToMask } from 'react-text-mask';
 
 export default class TextField extends Field {
   _className = 'TextField';
@@ -53,6 +54,10 @@ export default class TextField extends Field {
           {
             name: 'mask',
             component: 'Field'
+          },
+          {
+            name: 'unmask',
+            component: 'RegExpField'
           }
         ]
       }
@@ -95,15 +100,24 @@ export default class TextField extends Field {
   }
 
   _formatMask(mask) {
-    return mask.map(item => {
-      // Is the item a RegExp or a string that is not formatted as a RegExp?
-      if (item instanceof RegExp || !utils.isRegExp(item)) {
-        return item;
-      } else {
-        // The string is formatted as a RegExp, e.g. '/foo/i'
-        return utils.toRegExp(item);
-      }
-    });
+    if (Array.isArray(mask)) {
+      return mask.map(item => {
+        // Is the item a RegExp or a string that is not formatted as a RegExp?
+        if (item instanceof RegExp || !utils.isRegExpString(item)) {
+          return item;
+        } else {
+          // The string is formatted as a RegExp, e.g. '/foo/i'
+          return utils.toRegExp(item);
+        }
+      });
+    } else {
+      // Function
+      return mask;
+    }
+  }
+
+  _formatUnmask(unmask) {
+    return utils.toRegExp(unmask);
   }
 
   set(props) {
@@ -114,6 +128,32 @@ export default class TextField extends Field {
       clonedProps.mask = this._formatMask(clonedProps.mask);
     }
 
+    // Convert string to RegExp?
+    if (clonedProps.unmask !== undefined) {
+      clonedProps.unmask = this._formatUnmask(clonedProps.unmask);
+    }
+
     super.set(clonedProps);
+  }
+
+  getDisplayValue() {
+    if (this.isBlank() || !this.get('mask')) {
+      return super.getDisplayValue();
+    } else {
+      var conformed = conformToMask(this.get('value'), this.get('mask'), {
+        guide: false
+      });
+      return conformed.conformedValue;
+    }
+  }
+
+  toUnmaskedValue(value) {
+    // The unmask is used to remove any formatting that should not be in our store
+    const unmask = this.get('unmask');
+    if (this.isValueBlank(value) || !unmask) {
+      return value;
+    } else {
+      return value.replace(unmask, '');
+    }
   }
 }

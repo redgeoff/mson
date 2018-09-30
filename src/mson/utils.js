@@ -118,15 +118,19 @@ export class Utils {
     });
   }
 
-  toRegExp(string) {
+  isRegExpString(string) {
+    return new RegExp('^/(.*)/(.*)$').test(string);
+  }
+
+  stringToRegExp(string) {
     // JSON doesn't support RegExp types so convert string representations to RegExp, including
     // flags
     const match = string.match(new RegExp('^/(.*)/(.*)$'));
     return new RegExp(match[1], match[2]);
   }
 
-  isRegExp(string) {
-    return new RegExp('^/(.*)/(.*)$').test(string);
+  toRegExp(item) {
+    return item instanceof RegExp ? item : this.stringToRegExp(item);
   }
 }
 

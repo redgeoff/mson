@@ -142,6 +142,7 @@ export default {
       component: 'NumberField',
       label: 'NumberField',
       help: 'Example help',
+      // includeThousandsSeparator: true,
       required: true
     },
 

@@ -20,7 +20,9 @@ class TextField extends React.PureComponent {
   }
 
   handleChange = event => {
-    this.props.component.setValue(event.target.value);
+    const { component } = this.props;
+    const value = component.toUnmaskedValue(event.target.value);
+    component.setValue(value);
   };
 
   handleBlur = () => {
@@ -108,5 +110,6 @@ export default attach([
   'rows',
   'rowsMax',
   'useDisplayValue',
-  'mask'
+  'mask',
+  'unmask'
 ])(TextField);

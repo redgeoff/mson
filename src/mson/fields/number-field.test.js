@@ -47,3 +47,14 @@ it('should validate lengths', () => {
   testUtils.expectValuesToBeInvalid(field, [2], 'must be 3 or greater');
   testUtils.expectValuesToBeInvalid(field, [5], 'must be 4 or less');
 });
+
+it('should format display value using mask', () => {
+  const field = new NumberField({
+    includeThousandsSeparator: true
+  });
+
+  field.setValue('1000000');
+
+  expect(field.getValue()).toEqual('1000000');
+  expect(field.getDisplayValue()).toEqual('1,000,000');
+});

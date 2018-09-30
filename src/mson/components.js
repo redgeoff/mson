@@ -54,7 +54,7 @@ import RecordList from './aggregate/record-list';
 import RecordStore from './stores/record-store';
 import Redirect from './actions/redirect';
 import RedirectByRole from './actions/redirect-by-role';
-import RegExp from './fields/reg-exp-field';
+import RegExpField from './fields/reg-exp-field';
 import ResetPassword from './aggregate/reset-password';
 import RolesField from './fields/roles-field';
 import SchemaValidatorForm from './form/schema-validator-form';
@@ -128,7 +128,7 @@ export default {
   RecordStore,
   Redirect,
   RedirectByRole,
-  RegExp,
+  RegExpField,
   ResetPassword,
   RolesField,
   SchemaValidatorForm,

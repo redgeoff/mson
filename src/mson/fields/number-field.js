@@ -1,4 +1,15 @@
 import TextField from './text-field';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+
+const MASK_PROPS = [
+  'prefix',
+  'suffix',
+  'includeThousandsSeparator',
+  'thousandsSeparatorSymbol',
+  'allowDecimal',
+  'decimalSymbol',
+  'allowNegative'
+];
 
 export default class NumberField extends TextField {
   _className = 'NumberField';
@@ -19,9 +30,41 @@ export default class NumberField extends TextField {
           {
             name: 'maxValue',
             component: 'NumberField'
+          },
+          {
+            name: 'prefix',
+            component: 'TextField'
+          },
+          {
+            name: 'suffix',
+            component: 'TextField'
+          },
+          {
+            name: 'includeThousandsSeparator',
+            component: 'BooleanField'
+          },
+          {
+            name: 'thousandsSeparatorSymbol',
+            component: 'TextField'
+          },
+          {
+            name: 'allowDecimal',
+            component: 'BooleanField'
+          },
+          {
+            name: 'decimalSymbol',
+            component: 'TextField'
+          },
+          {
+            name: 'allowNegative',
+            component: 'BooleanField'
           }
         ]
       }
+    });
+
+    this._setDefaults(props, {
+      unmask: /[^\d\\.]/g
     });
   }
 
@@ -47,5 +90,46 @@ export default class NumberField extends TextField {
     if (!this.hasErr()) {
       this._validateLengths();
     }
+  }
+
+  _shouldCreateMask(props) {
+    // Is a masked prop defined and it is changing?
+    let shouldCreate = false;
+    MASK_PROPS.forEach(name => {
+      if (
+        props[name] !== undefined &&
+        props[name] !== this._getProperty(name)
+      ) {
+        shouldCreate = true;
+      }
+    });
+    return shouldCreate;
+  }
+
+  _createMask(props) {
+    const maskOpts = {
+      prefix: '', // override default of '$'
+      allowDecimal: true,
+      decimalLimit: null,
+      allowNegative: true
+    };
+
+    MASK_PROPS.forEach(name => {
+      if (props[name] !== undefined) {
+        maskOpts[name] = props[name];
+      }
+    });
+
+    this.set({ mask: createNumberMask(maskOpts) });
+  }
+
+  set(props) {
+    // This needs to be executed before super.set() as we need to compare new and previous values of
+    // the props
+    if (this._shouldCreateMask(props)) {
+      this._createMask(props);
+    }
+
+    super.set(props);
   }
 }

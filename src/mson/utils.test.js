@@ -114,7 +114,7 @@ it('should convert to RegExp', () => {
   const items = ['/[1-9]AB/i', '/[1-9]AB/', '/\\/[1-9]AB\\//'];
   items.forEach(item => expect(utils.toRegExp(item).toString()).toEqual(item));
 
-  expect(utils.isRegExp('/[1-9]AB/i')).toEqual(true);
-  expect(utils.isRegExp('/[1-9]AB/')).toEqual(true);
-  expect(utils.isRegExp('(')).toEqual(false);
+  expect(utils.isRegExpString('/[1-9]AB/i')).toEqual(true);
+  expect(utils.isRegExpString('/[1-9]AB/')).toEqual(true);
+  expect(utils.isRegExpString('(')).toEqual(false);
 });

@@ -98,3 +98,45 @@ it('should format mask', () => {
 
   expect(field.get('mask')).toEqual(['(', /A/i]);
 });
+
+it('should format display value using mask', () => {
+  const field = new TextField({ value: '5551234444' });
+
+  expect(field.getValue()).toEqual('5551234444');
+  expect(field.getDisplayValue()).toEqual('5551234444');
+
+  field.set({
+    mask: [
+      '(',
+      /[1-9]/,
+      /\d/,
+      /\d/,
+      ')',
+      ' ',
+      /\d/,
+      /\d/,
+      /\d/,
+      '-',
+      /\d/,
+      /\d/,
+      /\d/,
+      /\d/
+    ]
+  });
+
+  expect(field.getValue()).toEqual('5551234444');
+  expect(field.getDisplayValue()).toEqual('(555) 123-4444');
+});
+
+it('should unmask value', () => {
+  const field = new TextField();
+
+  expect(field.toUnmaskedValue(null)).toEqual(null);
+  expect(field.toUnmaskedValue('1,000.10')).toEqual('1,000.10');
+
+  field.set({
+    unmask: '/[^\\d\\.]/g'
+  });
+
+  expect(field.toUnmaskedValue('1,000.10')).toEqual('1000.10');
+});
