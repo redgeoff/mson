@@ -58,3 +58,17 @@ it('should format display value using mask', () => {
   expect(field.getValue()).toEqual('1000000');
   expect(field.getDisplayValue()).toEqual('1,000,000');
 });
+
+it('should convert from UI value', () => {
+  const field = new NumberField();
+
+  expect(field.fromUIValue('1000.10')).toEqual('1000.10');
+  expect(field.fromUIValue(null)).toEqual(null);
+
+  field.set({
+    decimalSymbol: ',',
+    thousandsSeparatorSymbol: '.'
+  });
+
+  expect(field.fromUIValue('1000,10')).toEqual('1000.10');
+});

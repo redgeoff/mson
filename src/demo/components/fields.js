@@ -143,6 +143,8 @@ export default {
       label: 'MoneyField',
       help: 'Example help',
       // prefix: '€',
+      // decimalSymbol: ',',
+      // thousandsSeparatorSymbol: '.',
       required: true
     },
 
