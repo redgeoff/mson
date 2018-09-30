@@ -48,6 +48,7 @@ import ObjectForm from './object-form';
 import PasswordField from './fields/password-field';
 import PersonFullNameField from './fields/person-full-name-field';
 import PersonNameField from './fields/person-name-field';
+import PhoneField from './fields/phone-field';
 import ReCAPTCHAField from './fields/re-captcha-field';
 import ReCAPTCHAVault from './vaults/re-captcha-vault';
 import RecordEditor from './aggregate/record-editor';
@@ -123,6 +124,7 @@ export default {
   PasswordField,
   PersonFullNameField,
   PersonNameField,
+  PhoneField,
   ReCAPTCHAField,
   ReCAPTCHAVault,
   RecordEditor,

@@ -182,6 +182,14 @@ export default {
     },
 
     {
+      name: 'phoneField',
+      component: 'PhoneField',
+      label: 'PhoneField',
+      help: 'Example help',
+      required: true
+    },
+
+    {
       component: 'ReCAPTCHAField'
     },
 
