@@ -3,10 +3,26 @@ import Input from '@material-ui/core/Input';
 import CommonField from './common-field';
 import attach from '../attach';
 import DisplayValueTypography from './display-value-typography';
+import MaskedInput from 'react-text-mask';
 
 class TextField extends React.PureComponent {
+  constructor(props) {
+    super(props);
+
+    // Create a custom TextMask component. This is done once in the constructor so that it is not
+    // done in each call to render()
+    this.TextMaskCustom = props => {
+      const { inputRef, ...other } = props;
+      const { mask } = this.props;
+
+      return <MaskedInput {...other} ref={inputRef} mask={mask} />;
+    };
+  }
+
   handleChange = event => {
-    this.props.component.setValue(event.target.value);
+    const { component } = this.props;
+    const value = component.toUnmaskedValue(event.target.value);
+    component.setValue(value);
   };
 
   handleBlur = () => {
@@ -37,13 +53,19 @@ class TextField extends React.PureComponent {
       multiline,
       rows,
       rowsMax,
-      useDisplayValue
+      useDisplayValue,
+      mask
     } = this.props;
 
     const dis = accessEditable === false || disabled;
 
     let fld = null;
     if (editable && !useDisplayValue) {
+      const optional = {};
+      if (mask) {
+        optional.inputComponent = this.TextMaskCustom;
+      }
+
       fld = (
         <Input
           error={touched && err ? true : false}
@@ -60,6 +82,7 @@ class TextField extends React.PureComponent {
           multiline={multiline}
           rows={rows}
           rowsMax={rowsMax}
+          {...optional}
         />
       );
     } else {
@@ -86,5 +109,7 @@ export default attach([
   'multiline',
   'rows',
   'rowsMax',
-  'useDisplayValue'
+  'useDisplayValue',
+  'mask',
+  'unmask'
 ])(TextField);

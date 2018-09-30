@@ -117,6 +117,21 @@ export class Utils {
       });
     });
   }
+
+  isRegExpString(string) {
+    return new RegExp('^/(.*)/(.*)$').test(string);
+  }
+
+  stringToRegExp(string) {
+    // JSON doesn't support RegExp types so convert string representations to RegExp, including
+    // flags
+    const match = string.match(new RegExp('^/(.*)/(.*)$'));
+    return new RegExp(match[1], match[2]);
+  }
+
+  toRegExp(item) {
+    return item instanceof RegExp ? item : this.stringToRegExp(item);
+  }
 }
 
 export default new Utils();

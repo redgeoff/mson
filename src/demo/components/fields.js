@@ -138,10 +138,20 @@ export default {
     // },
 
     {
+      name: 'moneyField',
+      component: 'MoneyField',
+      label: 'MoneyField',
+      help: 'Example help',
+      // prefix: '€',
+      required: true
+    },
+
+    {
       name: 'numberField',
       component: 'NumberField',
       label: 'NumberField',
       help: 'Example help',
+      // includeThousandsSeparator: true,
       required: true
     },
 
@@ -235,6 +245,7 @@ export default {
       component: 'TextField',
       label: 'TextField',
       help: 'Example help',
+      // mask: ['(', '/[1-9]/', '/\\d/', '/\\d/', ')'],
       required: true
     }
 

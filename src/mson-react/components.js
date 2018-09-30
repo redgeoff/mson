@@ -31,6 +31,7 @@ export default {
   IdField: TextField,
   IntegerField: TextField,
   ListField,
+  MoneyField: TextField,
   NumberField: TextField,
   ReCAPTCHAField,
   SelectField,

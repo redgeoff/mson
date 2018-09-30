@@ -12,6 +12,7 @@ import Card from './card';
 import ChainedSelectField from './fields/chained-select-field';
 import ChainedSelectListField from './fields/chained-select-list-field';
 import Component from './component/component';
+import CollectionField from './fields/collection-field';
 import ComponentField from './fields/component-field';
 import CompositeField from './fields/composite-field';
 import ConsoleLog from './actions/console-log';
@@ -26,7 +27,6 @@ import FirebaseStore from './stores/firebase-store';
 import Form from './form';
 import FormAccess from './form/form-access';
 import FormField from './fields/form-field';
-import CollectionField from './fields/collection-field';
 import FormValidator from './form/form-validator';
 import GetDoc from './actions/get-doc';
 import GetDocs from './actions/get-docs';
@@ -41,6 +41,7 @@ import LogInToAppAndRedirect from './actions/log-in-to-app-and-redirect';
 import LogOutOfApp from './actions/log-out-of-app';
 import MemoryStore from './stores/memory-store';
 import Menu from './menu';
+import MoneyField from './fields/money-field';
 import MSONComponent from './component/mson-component';
 import NumberField from './fields/number-field';
 import ObjectForm from './object-form';
@@ -54,6 +55,7 @@ import RecordList from './aggregate/record-list';
 import RecordStore from './stores/record-store';
 import Redirect from './actions/redirect';
 import RedirectByRole from './actions/redirect-by-role';
+import RegExpField from './fields/reg-exp-field';
 import ResetPassword from './aggregate/reset-password';
 import RolesField from './fields/roles-field';
 import SchemaValidatorForm from './form/schema-validator-form';
@@ -77,6 +79,7 @@ import WhereField from './fields/where-field';
 import WrappedComponent from './component/wrapped-component';
 
 export default {
+  AccessForm: FormAccess,
   Action,
   AuthenticatedContactUs,
   App,
@@ -85,6 +88,7 @@ export default {
   Card,
   ChainedSelectField,
   ChainedSelectListField,
+  CollectionField,
   Component,
   ComponentField,
   CompositeField,
@@ -98,9 +102,7 @@ export default {
   Field,
   FirebaseStore,
   Form,
-  AccessForm: FormAccess,
   FormField,
-  CollectionField,
   GetDoc,
   GetDocs,
   IdField,
@@ -114,6 +116,7 @@ export default {
   LogOutOfApp,
   MemoryStore,
   Menu,
+  MoneyField,
   MSONComponent,
   NumberField,
   ObjectForm,
@@ -127,6 +130,7 @@ export default {
   RecordStore,
   Redirect,
   RedirectByRole,
+  RegExpField,
   ResetPassword,
   RolesField,
   SchemaValidatorForm,
