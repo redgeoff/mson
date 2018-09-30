@@ -21,7 +21,7 @@ class TextField extends React.PureComponent {
 
   handleChange = event => {
     const { component } = this.props;
-    const value = component.toUnmaskedValue(event.target.value);
+    const value = component.fromUIValue(event.target.value);
     component.setValue(value);
   };
 
@@ -40,7 +40,6 @@ class TextField extends React.PureComponent {
 
   render() {
     const {
-      value,
       err,
       maxLength,
       touched,
@@ -65,6 +64,7 @@ class TextField extends React.PureComponent {
       if (mask) {
         optional.inputComponent = this.TextMaskCustom;
       }
+      const uiValue = component.getUIValue();
 
       fld = (
         <Input
@@ -75,7 +75,7 @@ class TextField extends React.PureComponent {
           onChange={this.handleChange}
           onBlur={this.handleBlur}
           onKeyUp={this.handleKeyUp}
-          value={value ? value : ''}
+          value={uiValue ? uiValue : ''}
           disabled={dis}
           fullWidth={fullWidth}
           type={type}

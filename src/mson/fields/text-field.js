@@ -140,7 +140,7 @@ export default class TextField extends Field {
     if (this.isBlank() || !this.get('mask')) {
       return super.getDisplayValue();
     } else {
-      var conformed = conformToMask(this.get('value'), this.get('mask'), {
+      var conformed = conformToMask(this.getUIValue(), this.get('mask'), {
         guide: false
       });
       return conformed.conformedValue;
@@ -155,5 +155,13 @@ export default class TextField extends Field {
     } else {
       return value.replace(unmask, '');
     }
+  }
+
+  fromUIValue(value) {
+    return this.toUnmaskedValue(value);
+  }
+
+  getUIValue() {
+    return this.get('value');
   }
 }

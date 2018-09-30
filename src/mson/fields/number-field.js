@@ -137,4 +137,34 @@ export default class NumberField extends TextField {
 
     super.set(props);
   }
+
+  fromUIValue(value) {
+    const decimalSymbol = this.get('decimalSymbol');
+    if (decimalSymbol && decimalSymbol !== '.' && !this.isValueBlank(value)) {
+      const tmpSymbol = 'A';
+
+      // Replace decimal symbol with tmp symbol
+      value = value.replace(decimalSymbol, tmpSymbol);
+
+      // Remove everything except number, sign and tmp symbol
+      value = value.replace(/[^\d-A]/g, '');
+
+      // Replace tmp symbol with standard decimal symbol of '.'
+      value = value.replace(tmpSymbol, '.');
+    }
+    return super.fromUIValue(value);
+  }
+
+  getUIValue() {
+    let value = this.get('value');
+    const decimalSymbol = this.get('decimalSymbol');
+    if (decimalSymbol && decimalSymbol !== '.' && !this.isBlank()) {
+      // As per JS conventions, our values are always stored with a decimal symbol of '.'.
+      // Therefore, we replace the '.' with the decimalSymbol so that we can support alternative
+      // decimal symbols like Germany's ','.
+      return value.replace('.', decimalSymbol);
+    } else {
+      return value;
+    }
+  }
 }
