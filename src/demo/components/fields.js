@@ -138,6 +138,15 @@ export default {
     // },
 
     {
+      name: 'moneyField',
+      component: 'MoneyField',
+      label: 'MoneyField',
+      help: 'Example help',
+      // prefix: '€',
+      required: true
+    },
+
+    {
       name: 'numberField',
       component: 'NumberField',
       label: 'NumberField',

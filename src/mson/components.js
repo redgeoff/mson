@@ -41,6 +41,7 @@ import LogInToAppAndRedirect from './actions/log-in-to-app-and-redirect';
 import LogOutOfApp from './actions/log-out-of-app';
 import MemoryStore from './stores/memory-store';
 import Menu from './menu';
+import MoneyField from './fields/money-field';
 import MSONComponent from './component/mson-component';
 import NumberField from './fields/number-field';
 import ObjectForm from './object-form';
@@ -115,6 +116,7 @@ export default {
   LogOutOfApp,
   MemoryStore,
   Menu,
+  MoneyField,
   MSONComponent,
   NumberField,
   ObjectForm,

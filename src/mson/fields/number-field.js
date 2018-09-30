@@ -8,6 +8,7 @@ const MASK_PROPS = [
   'thousandsSeparatorSymbol',
   'allowDecimal',
   'decimalSymbol',
+  'decimalLimit',
   'allowNegative'
 ];
 
@@ -54,6 +55,10 @@ export default class NumberField extends TextField {
           {
             name: 'decimalSymbol',
             component: 'TextField'
+          },
+          {
+            name: 'decimalLimit',
+            component: 'IntegerField'
           },
           {
             name: 'allowNegative',
