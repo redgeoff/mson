@@ -1,67 +1,24 @@
 import TextField from './text-field';
+import map from 'lodash/map';
 
 export default class PhoneField extends TextField {
   _className = 'PhoneField';
+
+  // Convert from react-telephone-input to text-mask mask
+  _toMask(reactTelMask) {
+    return map(reactTelMask, item => (item === '.' ? /\d/ : item));
+  }
 
   _maskValue(value) {
     if (value) {
       if (value[0] === '+') {
         if (value.indexOf('+1') === 0) {
-          return [
-            '+',
-            '1',
-            ' ',
-            '(',
-            /\d/,
-            /\d/,
-            /\d/,
-            ')',
-            ' ',
-            /\d/,
-            /\d/,
-            /\d/,
-            '-',
-            /\d/,
-            /\d/,
-            /\d/,
-            /\d/
-          ];
+          return this._toMask('+. (...) ...-....');
         } else if (value.indexOf('+44') === 0) {
-          return [
-            '+',
-            '4',
-            '4',
-            ' ',
-            /\d/,
-            /\d/,
-            /\d/,
-            /\d/,
-            ' ',
-            /\d/,
-            /\d/,
-            /\d/,
-            /\d/,
-            /\d/,
-            /\d/
-          ];
+          return this._toMask('+.. .... ......');
         }
       } else {
-        return [
-          '(',
-          /\d/,
-          /\d/,
-          /\d/,
-          ')',
-          ' ',
-          /\d/,
-          /\d/,
-          /\d/,
-          '-',
-          /\d/,
-          /\d/,
-          /\d/,
-          /\d/
-        ];
+        return this._toMask('(...) ...-....');
       }
     }
 
