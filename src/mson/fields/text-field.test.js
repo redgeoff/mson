@@ -97,6 +97,12 @@ it('should format mask', () => {
   });
 
   expect(field.get('mask')).toEqual(['(', /A/i]);
+
+  field.set({
+    mask: '(.)'
+  });
+
+  expect(field.get('mask')).toEqual(['(', /./, ')']);
 });
 
 it('should format display value using mask', () => {

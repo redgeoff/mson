@@ -10,7 +10,6 @@ import Field from './fields/field';
 import Form from './form';
 import CollectionField from './fields/collection-field';
 import ListField from './fields/list-field';
-import PhoneField from './fields/phone-field';
 import ReCAPTCHAField from './fields/re-captcha-field';
 import SelectField from './fields/select-field';
 import TimeField from './fields/time-field';
@@ -34,7 +33,7 @@ export default {
   ListField,
   MoneyField: TextField,
   NumberField: TextField,
-  PhoneField,
+  PhoneField: TextField,
   ReCAPTCHAField,
   SelectField,
   SelectListField: ListField,
