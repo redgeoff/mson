@@ -186,6 +186,7 @@ export default {
       component: 'PhoneField',
       label: 'PhoneField',
       help: 'Example help',
+      // defaultMask: '.... ......',
       required: true
     },
 
@@ -256,6 +257,7 @@ export default {
       label: 'TextField',
       help: 'Example help',
       // mask: ['(', '/[1-9]/', '/\\d/', '/\\d/', ')'],
+      // mask: '(...)',
       required: true
     }
 

@@ -5,9 +5,8 @@ import countryTelephoneData from 'country-telephone-data';
 export default class PhoneField extends TextField {
   _className = 'PhoneField';
 
-  // Convert from country-telephone-data to text-mask mask
-  _toMask(reactTelMask) {
-    return map(reactTelMask, item => (item === '.' ? /\d/ : item));
+  _stringToArrayMask(mask) {
+    return map(mask, item => (item === '.' ? /\d/ : item));
   }
 
   static getCountriesByCode() {
@@ -39,11 +38,10 @@ export default class PhoneField extends TextField {
         }
 
         if (country) {
-          return this._toMask(country.format);
+          return this._stringToArrayMask(country.format);
         }
       } else {
-        // TODO: make this customizable, but default to US without country code
-        return this._toMask('(...) ...-....');
+        return this.get('defaultMask');
       }
     }
 
@@ -53,8 +51,32 @@ export default class PhoneField extends TextField {
   _create(props) {
     super._create(props);
 
-    this._setDefaults(props, {
-      mask: value => this._maskValue(value)
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'defaultMask',
+            component: 'Field'
+          }
+        ]
+      }
     });
+
+    this._setDefaults(props, {
+      mask: value => this._maskValue(value),
+      defaultMask: this._stringToArrayMask('(...) ...-....')
+    });
+  }
+
+  set(props) {
+    const clonedProps = Object.assign({}, props);
+
+    // Convert to RegExps?
+    if (clonedProps.defaultMask !== undefined) {
+      clonedProps.defaultMask = this._formatMask(clonedProps.defaultMask);
+    }
+
+    super.set(clonedProps);
   }
 }
