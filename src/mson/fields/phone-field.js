@@ -20,7 +20,7 @@ export default class PhoneField extends TextField {
     return this.constructor._countriesByCode;
   }
 
-  _maskValue(value) {
+  _getMask(value) {
     if (value) {
       const countries = this.constructor.getCountriesByCode();
       if (value[0] === '+') {
@@ -45,6 +45,8 @@ export default class PhoneField extends TextField {
       }
     }
 
+    // Disable mask so that user can user can enter the first few characters, which will determine
+    // the applicable mask
     return false;
   }
 
@@ -64,9 +66,19 @@ export default class PhoneField extends TextField {
     });
 
     this._setDefaults(props, {
-      mask: value => this._maskValue(value),
+      mask: value => this._getMask(value),
       defaultMask: this._stringToArrayMask('(...) ...-....')
     });
+  }
+
+  toConformedValue(value) {
+    const mask = this._getMask(value);
+    // Is there a mask in which to conform?
+    if (mask) {
+      return super.toConformedValue(value);
+    } else {
+      return value;
+    }
   }
 
   set(props) {
@@ -77,6 +89,39 @@ export default class PhoneField extends TextField {
       clonedProps.defaultMask = this._formatMask(clonedProps.defaultMask);
     }
 
+    if (
+      clonedProps.value !== undefined &&
+      !this.isValueBlank(clonedProps.value)
+    ) {
+      clonedProps.value = this.toConformedValue(clonedProps.value);
+    }
+
     super.set(clonedProps);
+  }
+
+  _conformsToMask(value, mask) {
+    let conforms = true;
+    mask.forEach((item, index) => {
+      if (item instanceof RegExp) {
+        if (!item.test(value[index])) {
+          conforms = false;
+        }
+      } else if (value[index] !== item) {
+        conforms = false;
+      }
+    });
+    return conforms;
+  }
+
+  validate() {
+    super.validate();
+
+    if (!this.hasErr() && !this.isBlank()) {
+      const value = this.getValue();
+      let mask = this._getMask(value);
+      if (!mask || !this._conformsToMask(value, mask)) {
+        this.setErr('invalid');
+      }
+    }
   }
 }

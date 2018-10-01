@@ -143,14 +143,22 @@ export default class TextField extends Field {
     super.set(clonedProps);
   }
 
+  _conformToMask(value, mask) {
+    var conformed = conformToMask(value, mask, {
+      guide: false
+    });
+    return conformed.conformedValue;
+  }
+
+  toConformedValue(value) {
+    return this._conformToMask(value, this.get('mask'));
+  }
+
   getDisplayValue() {
     if (this.isBlank() || !this.get('mask')) {
       return super.getDisplayValue();
     } else {
-      var conformed = conformToMask(this.getUIValue(), this.get('mask'), {
-        guide: false
-      });
-      return conformed.conformedValue;
+      return this.toConformedValue(this.getUIValue());
     }
   }
 
