@@ -182,6 +182,15 @@ export default {
     },
 
     {
+      name: 'phoneField',
+      component: 'PhoneField',
+      label: 'PhoneField',
+      help: 'Example help',
+      // defaultMask: '.... ......',
+      required: true
+    },
+
+    {
       component: 'ReCAPTCHAField'
     },
 
@@ -248,6 +257,7 @@ export default {
       label: 'TextField',
       help: 'Example help',
       // mask: ['(', '/[1-9]/', '/\\d/', '/\\d/', ')'],
+      // mask: '(...)',
       required: true
     }
 

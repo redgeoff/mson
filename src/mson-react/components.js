@@ -33,6 +33,7 @@ export default {
   ListField,
   MoneyField: TextField,
   NumberField: TextField,
+  PhoneField: TextField,
   ReCAPTCHAField,
   SelectField,
   SelectListField: ListField,

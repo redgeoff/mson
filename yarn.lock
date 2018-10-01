@@ -1966,6 +1966,10 @@ cosmiconfig@^5.0.2, cosmiconfig@^5.0.6:
     js-yaml "^3.9.0"
     parse-json "^4.0.0"
 
+country-telephone-data@^0.5.5:
+  version "0.5.5"
+  resolved "https://registry.yarnpkg.com/country-telephone-data/-/country-telephone-data-0.5.5.tgz#13db50387f9d51db1254b48f3b3a6baa597980df"
+
 create-ecdh@^4.0.0:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/create-ecdh/-/create-ecdh-4.0.3.tgz#c9111b6f33045c4697f144787f9254cdc77c45ff"

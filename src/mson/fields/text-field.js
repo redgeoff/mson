@@ -1,6 +1,7 @@
 import Field from './field';
 import utils from '../utils';
 import { conformToMask } from 'react-text-mask';
+import map from 'lodash/map';
 
 export default class TextField extends Field {
   _className = 'TextField';
@@ -99,6 +100,10 @@ export default class TextField extends Field {
     // TODO: minWords, maxWords
   }
 
+  _stringToArrayMask(mask) {
+    return map(mask, item => (item === '.' ? /./ : item));
+  }
+
   _formatMask(mask) {
     if (Array.isArray(mask)) {
       return mask.map(item => {
@@ -110,6 +115,8 @@ export default class TextField extends Field {
           return utils.toRegExp(item);
         }
       });
+    } else if (typeof mask === 'string') {
+      return this._stringToArrayMask(mask);
     } else {
       // Function
       return mask;
@@ -123,12 +130,12 @@ export default class TextField extends Field {
   set(props) {
     const clonedProps = Object.assign({}, props);
 
-    // Convert strings to RegExps?
+    // Convert to RegExps?
     if (clonedProps.mask !== undefined) {
       clonedProps.mask = this._formatMask(clonedProps.mask);
     }
 
-    // Convert string to RegExp?
+    // Convert to RegExp?
     if (clonedProps.unmask !== undefined) {
       clonedProps.unmask = this._formatUnmask(clonedProps.unmask);
     }
@@ -136,14 +143,22 @@ export default class TextField extends Field {
     super.set(clonedProps);
   }
 
+  _conformToMask(value, mask) {
+    var conformed = conformToMask(value, mask, {
+      guide: false
+    });
+    return conformed.conformedValue;
+  }
+
+  toConformedValue(value) {
+    return this._conformToMask(value, this.get('mask'));
+  }
+
   getDisplayValue() {
     if (this.isBlank() || !this.get('mask')) {
       return super.getDisplayValue();
     } else {
-      var conformed = conformToMask(this.getUIValue(), this.get('mask'), {
-        guide: false
-      });
-      return conformed.conformedValue;
+      return this.toConformedValue(this.getUIValue());
     }
   }
 

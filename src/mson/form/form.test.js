@@ -695,7 +695,7 @@ it('should submit', () => {
   expect(emitClickOnButtonSpy).toHaveBeenCalledWith(form.getField('submit'));
 });
 
-const NUM_COMPONENTS = 50;
+const NUM_COMPONENTS = 40;
 
 const CREATE_FORMS_TIMEOUT_MS = 500;
 it('should create many forms quickly', () => {
