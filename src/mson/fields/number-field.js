@@ -156,7 +156,7 @@ export default class NumberField extends TextField {
   }
 
   getUIValue() {
-    let value = this.get('value');
+    let value = super.getUIValue();
     const decimalSymbol = this.get('decimalSymbol');
     if (decimalSymbol && decimalSymbol !== '.' && !this.isBlank()) {
       // As per JS conventions, our values are always stored with a decimal symbol of '.'.

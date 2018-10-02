@@ -1068,9 +1068,7 @@ export default class CollectionField extends Field {
     if (this.get('singularLabel')) {
       return this.get('singularLabel');
     } else if (this.get('label')) {
-      // Automatically calculate singular label by removing last 's'
-      const label = this.get('label');
-      return label.substr(0, label.length - 1);
+      return utils.toSingular(this.get('label'));
     } else {
       return null;
     }

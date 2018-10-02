@@ -230,7 +230,8 @@ class CollectionField extends React.PureComponent {
       disabled,
       component,
       forbidSort,
-      store
+      store,
+      useDisplayValue
     } = this.props;
 
     const { sortBy, sortOrder } = this.state;
@@ -242,7 +243,12 @@ class CollectionField extends React.PureComponent {
     const canCreate = this.canCreate();
 
     const showNewButton =
-      editable && !disabled && !forbidCreate && !reachedMax && canCreate;
+      editable &&
+      !disabled &&
+      !useDisplayValue &&
+      !forbidCreate &&
+      !reachedMax &&
+      canCreate;
 
     const canOrder = !forbidSort;
 
@@ -365,9 +371,17 @@ class CollectionField extends React.PureComponent {
   render() {
     const { component, hideLabel } = this.props;
 
+    const isBlank = component.isBlank();
+
     return (
       <span>
-        {!hideLabel && <CommonField component={component} inlineLabel="true" />}
+        {!hideLabel && (
+          <CommonField
+            component={component}
+            inlineLabel="true"
+            shrinkLabel={!isBlank}
+          />
+        )}
         {this.field()}
       </span>
     );

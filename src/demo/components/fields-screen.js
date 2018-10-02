@@ -77,6 +77,15 @@ export default {
             'fields.emailField.value': 'test@example.com',
             'fields.idField.value': 'id-123',
             'fields.integerField.value': 123,
+            'fields.listFieldEmail.value': [
+              'test1@example.com',
+              'test2@example.com'
+            ],
+            'fields.listFieldName.value': [
+              { firstName: 'Ella', lastName: 'Fitzgerald' },
+              { firstName: 'Ray', lastName: 'Charles' }
+            ],
+            'fields.moneyField.value': 1000000.11,
             'fields.numberField.value': 123.4,
             'fields.passwordField.value': 'password',
             'fields.personFullNameField.value': {
@@ -84,11 +93,13 @@ export default {
               lastName: 'Targaryen'
             },
             'fields.personNameField.value': 'Daenerys',
+            'fields.phoneField.value': '6461234567',
             'fields.selectField.value': 'red',
             'fields.selectFieldMult.value': ['red', 'blue'],
             'fields.selectListField.value': ['red', 'green'],
             'fields.timeField.value': '2018-09-27T17:24:24.960Z',
-            'fields.textField.value': 'Go MSON'
+            'fields.textField.value': 'Go MSON',
+            'fields.textListField.value': ['MSON', 'React', 'Material-UI']
           }
         }
       ]

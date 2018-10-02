@@ -18,16 +18,27 @@ export default class TextListField extends ListField {
         ]
       }
     });
+
+    this._setDefaults(props, {
+      startWithField: true
+    });
   }
 
   _newField(index) {
     return new TextField({
       name: index,
-      label: index === 0 ? this.get('label') : undefined,
       required: false,
       block: this.get('block'),
       fullWidth: this.get('fullWidth'),
       invalidRegExp: this.get('invalidRegExp')
     });
+  }
+
+  set(props) {
+    super.set(props);
+
+    if (props.invalidRegExp !== undefined) {
+      this._setForAllFields({ invalidRegExp: props.invalidRegExp });
+    }
   }
 }

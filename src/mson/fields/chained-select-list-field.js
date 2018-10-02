@@ -24,19 +24,20 @@ export default class ChainedSelectListField extends ListField {
         ]
       }
     });
-  }
 
-  constructor(props) {
-    super(props);
-    this.set({ allowDelete: true });
+    this._setDefaults(props, {
+      allowDelete: true,
+      autoCreateFields: true,
+      canDeleteEmpty: false,
+      startWithField: true
+    });
   }
 
   _newField(name) {
     return new ChainedSelectField({
       name,
-      label: name === 0 ? this.get('label') : undefined,
-      required: name === 0 ? this.get('required') : false,
-      hideLabel: name === 0 ? undefined : true,
+      required: this.get('required'),
+      hideLabel: true,
       block: true,
       ...this.get([
         'blankString',
@@ -57,7 +58,7 @@ export default class ChainedSelectListField extends ListField {
     field.on('value', value => {
       // Create last field if the last field is not blank and we are allowed to add more fields
       if (!this._isLastFieldBlank() && this.canAddMoreFields(value)) {
-        this._createField();
+        this.createField();
       }
 
       this._calcValue();

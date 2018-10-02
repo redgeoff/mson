@@ -33,7 +33,11 @@ class Field extends React.PureComponent {
 
       return (
         <span>
-          <Field component={component} accessEditable={accessEditable} />
+          <Field
+            component={component}
+            accessEditable={accessEditable}
+            block={block}
+          />
           {!noBlock && block ? <FlexBreak /> : null}
         </span>
       );

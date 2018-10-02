@@ -22,7 +22,9 @@ class CommonField extends React.PureComponent {
       hideLabel,
       useDisplayValue,
       shrinkLabel,
-      inlineLabel
+      inlineLabel,
+      marginBottom,
+      autoHideLabel
     } = this.props;
 
     let fld = null;
@@ -31,7 +33,7 @@ class CommonField extends React.PureComponent {
 
     const isBlank = component.isBlank();
 
-    if (!hideLabelUI && !hideLabel) {
+    if (!hideLabelUI && !hideLabel && (!autoHideLabel || label)) {
       if (editable && !useDisplayValue && !inlineLabel) {
         lbl = (
           <InputLabel
@@ -52,7 +54,7 @@ class CommonField extends React.PureComponent {
           <FormLabel
             error={touched && err ? true : false}
             required={required && !useDisplayValue && editable}
-            shrink={true}
+            shrink={useDisplayValue || !editable || shrinkLabel}
           >
             {labelText}
           </FormLabel>
@@ -80,7 +82,11 @@ class CommonField extends React.PureComponent {
     );
 
     if (editable || !isBlank) {
-      return <FormControl fullWidth={fullWidth}>{fld}</FormControl>;
+      return (
+        <FormControl fullWidth={fullWidth} marginBottom={marginBottom}>
+          {fld}
+        </FormControl>
+      );
     } else {
       return null;
     }
@@ -98,7 +104,8 @@ CommonField = attach([
   'touched',
   'help',
   'hideLabel',
-  'useDisplayValue'
+  'useDisplayValue',
+  'autoHideLabel'
 ])(CommonField);
 
 export default CommonField;

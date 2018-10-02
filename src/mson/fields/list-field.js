@@ -2,6 +2,7 @@
 // of resources
 
 import CompositeField from './composite-field';
+import utils from '../utils';
 
 export default class ListField extends CompositeField {
   _className = 'ListField';
@@ -28,16 +29,52 @@ export default class ListField extends CompositeField {
             component: 'IntegerField'
           },
           {
-            name: 'field',
+            name: 'fieldFactory',
             component: 'Field'
           },
           {
             name: 'allowScalar',
             component: 'BooleanField'
+          },
+          {
+            name: 'singularLabel',
+            component: 'TextField'
+          },
+          {
+            name: 'autoCreateFields',
+            component: 'BooleanField'
+          },
+          {
+            name: 'startWithField',
+            component: 'BooleanField'
+          },
+          {
+            name: 'canDeleteEmpty',
+            component: 'BooleanField'
           }
         ]
       }
     });
+
+    this._setDefaults(props, {
+      allowDelete: true,
+      startWithField: props.fieldFactory,
+      canDeleteEmpty: true
+    });
+  }
+
+  constructor(props) {
+    super(props);
+
+    if (this.get('startWithField')) {
+      // Create the first field. We do this here and not in _create() as we may need the schema and
+      // properties.
+      this._createNewField();
+    }
+  }
+
+  _createNewField() {
+    this.createField();
   }
 
   _getValue() {
@@ -56,32 +93,29 @@ export default class ListField extends CompositeField {
   }
 
   _removeField(field) {
-    const name = field.get('name');
+    if (this._fields.length() === 1) {
+      // There is only 1 field so just clear the value
+      field.clearValue();
+    } else {
+      const name = field.get('name');
 
-    const firstName = this._fields.firstKey();
+      this._removeFieldByName(name);
 
-    this._removeFieldByName(name);
-
-    // Prevent listener leaks
-    field.removeAllListeners();
+      // Prevent listener leaks
+      field.removeAllListeners();
+    }
 
     this.emitChangeToField(field);
 
     this._calcValue();
 
-    // Are we removing the first field?
-    if (name === firstName) {
-      // Set the label and required for the new first field
-      this._fields.first().set({
-        label: field.get('label'),
-        required: field.get('required'),
-        hideLabel: false
-      });
-    }
-
     // Create a new field if we have reached the max size and delete a field
-    if (!this._isLastFieldBlank() && this.canAddMoreFields()) {
-      this._createField();
+    if (
+      this.get('autoCreateFields') &&
+      !this._isLastFieldBlank() &&
+      this.canAddMoreFields()
+    ) {
+      this.createField();
     }
   }
 
@@ -126,7 +160,7 @@ export default class ListField extends CompositeField {
     };
   }
 
-  _createField() {
+  createField() {
     const name = this._getNextFieldName();
 
     const field = this._newField(name);
@@ -148,13 +182,17 @@ export default class ListField extends CompositeField {
 
   _getOrCreateField(name) {
     if (!this._hasField(name)) {
-      return this._createField();
+      return this.createField();
     } else {
       return this._getField(name);
     }
   }
 
   _calcValue() {
+    // The field is now dirty. We emit this before emitting the value as we want the parent to have
+    // a chance to be dirtied so that an auto validation has a chance to fire a canSubmit event.
+    this.set({ dirty: true });
+
     // Instead of calling setValue(), we set the value directly and then emit an event. This
     // prevents an inifinite loop that would otherwise occur where the setValue() at this layer
     // triggers a setValue() on the child field, triggering a value event on the child field and
@@ -168,13 +206,6 @@ export default class ListField extends CompositeField {
 
   _listenForChangesToField(field) {
     this._bubbleUpTouches(field);
-  }
-
-  _setRequired(required) {
-    super._setRequired(required);
-    if (this._fields.hasFirst()) {
-      this._fields.first().set({ required });
-    }
   }
 
   _isLastField(field) {
@@ -232,7 +263,7 @@ export default class ListField extends CompositeField {
         values.forEach(val => {
           let field = fields.next().value;
           if (!field) {
-            field = this._createField();
+            field = this.createField();
           }
           field.setValue(val);
           name = field.get('name');
@@ -243,20 +274,18 @@ export default class ListField extends CompositeField {
     this._cleanUpNextFields(name);
   }
 
+  _setDirty(dirty) {
+    super._setDirty(dirty);
+    this.eachField(field => field.set({ dirty }));
+  }
+
+  setTouched(touched) {
+    super.setTouched(touched);
+    this.eachField(field => field.setTouched(touched));
+  }
+
   set(props) {
     super.set(props);
-
-    if (props.label !== undefined) {
-      if (this._fields.hasFirst()) {
-        this._fields.first().set({ label: props.label });
-      }
-    }
-
-    if (props.required !== undefined) {
-      if (this._fields.hasFirst()) {
-        this._fields.first().set({ required: props.required });
-      }
-    }
 
     if (props.block !== undefined) {
       this.eachField(field => field.set({ block: props.block }));
@@ -277,6 +306,7 @@ export default class ListField extends CompositeField {
       // errors can result in field errors and we want to report the root issue.
       for (const field of this._fields.values()) {
         field.validate();
+
         if (field.hasErr()) {
           errors.push({
             field: field.get('name'),
@@ -330,27 +360,41 @@ export default class ListField extends CompositeField {
     }
   }
 
+  produce() {
+    // Note: a previous design cloned an instance of a field to generate a new field. Cloning a
+    // field is VERY slow, it requires a recursive dive into the instance because the original class
+    // structure isn't immediately recoverable once a class has been instantiated. Instead, it is
+    // much faster to generate a field via a factory. In addition, the clone method leads to race
+    // conditions such as where the the didCreate event is never fired on a sub field of the cloned
+    // field.
+    const factory = this.get('fieldFactory');
+    return factory.produce();
+  }
+
   _newField(index) {
-    const field = this.get('field');
+    const field = this.produce();
 
-    if (!field) {
-      throw new Error('must define a field');
-    }
-
-    const clonedField = field.clone();
-
-    clonedField.set({
+    field.set({
       name: index,
-      label: index === 0 ? this.get('label') : undefined,
-      required: false,
+      required: this.get('required'),
       ...this.get(['block', 'fullWidth', 'useDisplayValue', 'editable'])
     });
 
-    return clonedField;
+    return field;
   }
 
   _clearFields() {
     this._fields.clear();
     this._nextFieldName = 0;
+  }
+
+  getSingularLabel() {
+    if (this.get('singularLabel')) {
+      return this.get('singularLabel');
+    } else if (this.get('label')) {
+      return utils.toSingular(this.get('label'));
+    } else {
+      return null;
+    }
   }
 }

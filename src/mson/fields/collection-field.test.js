@@ -303,7 +303,7 @@ const shouldAddFormsQuickly = (field, milliseconds, synchronous) => {
   }, milliseconds);
 };
 
-const ADD_FORMS_COMPILED_TIMEOUT_MS = 300;
+const ADD_FORMS_COMPILED_TIMEOUT_MS = 600;
 it('should add many forms quickly when using compiled components', () => {
   const field = createField();
 
@@ -336,7 +336,7 @@ const shouldAddFormsQuicklyUncompiledComponents = (timeout, synchronous) => {
   return shouldAddFormsQuickly(field, timeout, synchronous);
 };
 
-const ADD_FORMS_UNCOMPILED_TIMEOUT_MS = 600;
+const ADD_FORMS_UNCOMPILED_TIMEOUT_MS = 700;
 it('should add many forms quickly when using uncompiled components', () => {
   return shouldAddFormsQuicklyUncompiledComponents(
     ADD_FORMS_UNCOMPILED_TIMEOUT_MS,

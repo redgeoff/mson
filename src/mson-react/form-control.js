@@ -6,24 +6,29 @@ const styles = theme => ({
   formControl: {
     margin: theme.spacing.unit
   },
-  formControlFullWidth: {
-    margin: theme.spacing.unit,
-
+  fullWidth: {
     // TODO: bug in material ui?
     width: `calc(100% - ${theme.spacing.unit * 2}px)`
+  },
+  noMarginBottom: {
+    marginBottom: 0
   }
 });
 
 class FormControl extends React.PureComponent {
   render() {
-    const { fullWidth, children, classes } = this.props;
+    const { fullWidth, children, classes, marginBottom } = this.props;
+
+    const fullWidthClassName = fullWidth ? classes.fullWidth : '';
+    const noMarginBottomClassName =
+      marginBottom === false ? classes.noMarginBottom : '';
 
     return (
       <FormControlMU
         fullWidth={fullWidth}
-        className={
-          fullWidth ? classes.formControlFullWidth : classes.formControl
-        }
+        className={`${
+          classes.formControl
+        } ${fullWidthClassName} ${noMarginBottomClassName}`}
       >
         {children}
       </FormControlMU>
