@@ -6,7 +6,7 @@ jobs:
     working_directory: ~/mson
 
     docker:
-      - image: circleci/node:8.9.4-stretch-browsers
+      - image: circleci/node:stretch-browsers
 
       # Fix MySQL at version 5.7 so that it is compatible with AWS Aurora
       # - image: circleci/mysql:5.7

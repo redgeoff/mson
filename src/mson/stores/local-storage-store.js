@@ -1,5 +1,4 @@
 import MemoryStore from './memory-store';
-import localStorage from './local-storage';
 
 export default class LocalStorageStore extends MemoryStore {
   _className = 'LocalStorageStore';
@@ -14,13 +13,9 @@ export default class LocalStorageStore extends MemoryStore {
     }
   }
 
-  // Allow for testing in Node
+  // For mocking
   _getLocalStorage() {
-    if (this._global.window && this._global.window.localStorage) {
-      return this._global.window.localStorage;
-    } else {
-      return localStorage;
-    }
+    return this._global.window.localStorage;
   }
 
   _create(props) {

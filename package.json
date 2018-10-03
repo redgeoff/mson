@@ -23,7 +23,7 @@
     "react-google-recaptcha": "^1.0.0",
     "react-markdown": "^4.0.0",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^1.1.5",
+    "react-scripts": "^2.0.3",
     "react-text-mask": "^5.4.3",
     "sift": "^6.0.0",
     "text-mask-addons": "^3.8.0",
@@ -78,5 +78,11 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
