@@ -12,7 +12,7 @@ export default class URLField extends TextField {
         fields: [
           {
             name: 'newWindow',
-            component: 'Boolean'
+            component: 'BooleanField'
           }
         ]
       }
