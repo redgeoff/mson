@@ -256,7 +256,7 @@ it('should chain listeners', async () => {
 
   await testUtils.once(song, 'didCreate');
 
-  expect(song.get('artist'), name);
+  expect(song.get('artist')).toEqual(name);
 });
 
 it('should filter listeners based on layer', async () => {
