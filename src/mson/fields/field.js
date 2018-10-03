@@ -101,6 +101,10 @@ export default class Field extends Component {
           {
             name: 'useDisplayValue',
             component: 'BooleanField'
+          },
+          {
+            name: 'autoHideLabel',
+            component: 'BooleanField'
           }
         ]
       }
@@ -114,7 +118,8 @@ export default class Field extends Component {
       hidden: false,
       required: false,
       fullWidth: false,
-      disabled: false
+      disabled: false,
+      autoHideLabel: true
     });
   }
 

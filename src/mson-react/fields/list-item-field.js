@@ -14,20 +14,16 @@ class ListItemField extends React.PureComponent {
   render() {
     // Note: allowDelete and help have to be passed in as a prop as it is really the parent's values
     // that we need
-    const { component, allowDelete, help } = this.props;
-    const disabled = component.get('disabled');
-    const editable = component.get('editable');
+    const { component, allowDelete, help, disabled, editable } = this.props;
 
     if (component) {
       const block = component.get('block');
-      const isBlank = component.isBlank();
-
       return (
         <span>
           <Field component={component} block={false} />
-          {allowDelete && !isBlank && !disabled && editable ? (
-            <IconButton aria-label="Delete">
-              <Icon icon="DeleteIcon" onClick={this.handleDelete} />
+          {allowDelete && !disabled && editable ? (
+            <IconButton aria-label="Delete" onClick={this.handleDelete}>
+              <Icon icon="DeleteIcon" />
             </IconButton>
           ) : null}
           {help && editable ? <HelpToolTip help={help} /> : ''}

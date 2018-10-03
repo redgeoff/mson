@@ -67,11 +67,14 @@ const createForm = formFactoryProps => {
         name: 'phoneNumbers',
         label: 'Phone Numbers',
         required: true,
-        field: new TextField({
-          name: 'phone',
-          label: 'Phone',
-          required: true,
-          maxLength: 14
+        fieldFactory: new Factory({
+          product: () =>
+            new TextField({
+              name: 'phone',
+              label: 'Phone',
+              required: true,
+              maxLength: 14
+            })
         }),
         maxSize: 2
       })
@@ -292,7 +295,7 @@ it('should require nested values', () => {
   // Missing phone numbers
   expect(errs[2]).toEqual({
     field: 'phoneNumbers',
-    error: 'required'
+    error: [{ error: 'required', field: 0 }]
   });
 
   // Set required states of 1st layer of fields to false and test

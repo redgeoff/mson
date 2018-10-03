@@ -28,8 +28,11 @@ export default class SelectListField extends ListField {
       }
     });
 
-    // Create the first field
-    this._createNewField();
+    this._setDefaults(props, {
+      autoCreateFields: true,
+      canDeleteEmpty: false,
+      startWithField: true
+    });
   }
 
   _onFieldCreated(field, onDelete) {
@@ -51,8 +54,7 @@ export default class SelectListField extends ListField {
   _newField(name) {
     return new SelectField({
       name,
-      label: name === 0 ? this.get('label') : undefined,
-      hideLabel: name === 0 ? undefined : true,
+      hideLabel: true,
       required: false,
       ...this.get([
         'blankString',
@@ -66,7 +68,7 @@ export default class SelectListField extends ListField {
   }
 
   _createNewField() {
-    const field = this._createField();
+    const field = this.createField();
     field.set({ options: this.get('options') });
   }
 

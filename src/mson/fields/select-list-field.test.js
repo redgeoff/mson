@@ -45,14 +45,6 @@ it('should set when items removed', () => {
   expect(colors.getValue()).toEqual(['red', 'green', 'blue', 'green']);
 });
 
-it('should set label when removing first field', () => {
-  const colors = createColors();
-
-  colors.setValue(['red', 'green']);
-  colors._removeField(colors._getField(0));
-  expect(colors._fields.first().get('label')).toEqual('Colors');
-});
-
 it('should set options for next field', () => {
   const colors = createColors();
   colors._getField(0).setValue('red');

@@ -45,7 +45,7 @@ it('should get display value', () => {
 });
 
 it('should ensure in list', () => {
-  const field = createField({ removeIfNotInList: false });
+  let field = createField({ removeIfNotInList: false });
 
   field.setValue('orange');
   field.validate();
@@ -66,6 +66,11 @@ it('should ensure in list', () => {
       error: 'purple is not an option'
     }
   ]);
+
+  field = new SelectField({ ensureInList: false });
+  field.setValue(['yellow']);
+  field.validate();
+  expect(field.hasErr()).toEqual(false);
 });
 
 it('should remove if not in list', () => {

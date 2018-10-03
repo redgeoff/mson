@@ -2,6 +2,9 @@ import ListField from './list-field';
 import TextField from './text-field';
 import TextListField from './text-list-field';
 import testUtils from '../test-utils';
+import { EmailField } from '../fields';
+import Form from '../form';
+import Factory from '../component/factory';
 
 it('should validate max size', () => {
   const field = new TextListField({
@@ -31,11 +34,14 @@ it('should validate min size', () => {
   expect(field.get('err')).toEqual([{ error: '2 or more' }]);
 });
 
-it('should allow for field property', () => {
+it('should allow for fieldFactory property', () => {
   const field = new ListField({
-    field: new TextField({
-      name: 'color',
-      label: 'Color'
+    fieldFactory: new Factory({
+      product: () =>
+        new TextField({
+          name: 'color',
+          label: 'Color'
+        })
     }),
     minSize: 2
   });
@@ -113,7 +119,7 @@ it('should set full width', () => {
 });
 
 it('new field should throw when field not defined', () => {
-  const field = new ListField();
+  const field = new ListField({ startWithField: false });
   expect(() => field._newField(0)).toThrow();
 });
 
@@ -126,4 +132,75 @@ it('should determine if blank', () => {
 
   field.setValue(['red', 'green']);
   expect(field.isBlank()).toEqual(false);
+});
+
+it('should report errors in sub fields', () => {
+  const field = new ListField({
+    fieldFactory: new Factory({
+      product: () => new EmailField()
+    })
+  });
+
+  testUtils.expectValuesToBeInvalid(field, [
+    ['test@'],
+    ['test@example.com', 'test@']
+  ]);
+
+  testUtils.expectValuesToBeValid(field, [
+    ['test1@example.com', 'test2@example.com'],
+    null,
+    []
+  ]);
+
+  field.set({
+    value: ['test@'],
+    touched: false
+  });
+  field.validate();
+  expect(field.hasErr()).toEqual(true);
+});
+
+it('form should emit canSubmit when field deleted', async () => {
+  const emails = new ListField({
+    name: 'emails',
+    fieldFactory: new Factory({
+      product: () => new EmailField()
+    })
+  });
+
+  const form = new Form({
+    fields: [emails],
+    autoValidate: true
+  });
+
+  form.setValues({
+    emails: ['test1@example.com', 'test2@example.com']
+  });
+
+  // Note: this is needed as it simulates what happens in the UI after data is first loaded.
+  // Specifically, the form is no longer dirty and we expect the delete to dirty the form.
+  form.set({ pristine: true });
+
+  const canSubmit = testUtils.once(form, 'canSubmit');
+  emails._fields.last().emit('delete');
+  await canSubmit;
+});
+
+it('should clear when deleting last field', () => {
+  const field = new TextListField();
+  field.setValue(['one']);
+  const firstField = field._fields.first();
+  field._removeField(firstField);
+  expect(firstField.getValue()).toBeNull();
+});
+
+it('should get singular label', () => {
+  const field = new TextListField();
+  expect(field.getSingularLabel()).toBeNull();
+
+  field.set({ label: 'Things' });
+  expect(field.getSingularLabel()).toEqual('Thing');
+
+  field.set({ singularLabel: 'Foo' });
+  expect(field.getSingularLabel()).toEqual('Foo');
 });

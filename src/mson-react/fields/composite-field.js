@@ -6,7 +6,7 @@ import FlexBreak from '../flex-break';
 
 class CompositeField extends React.PureComponent {
   render() {
-    const { component, help, editable, useDisplayValue } = this.props;
+    const { component, help, editable, useDisplayValue, block } = this.props;
 
     let fields = [];
 
@@ -33,7 +33,7 @@ class CompositeField extends React.PureComponent {
       fields.push(<HelpToolTip help={help} key="help" />);
     }
 
-    if (lastIsBlock) {
+    if (lastIsBlock && block !== false) {
       // Break after any help
       fields.push(<FlexBreak key="break" />);
     }
