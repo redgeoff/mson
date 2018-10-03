@@ -73,6 +73,7 @@ import TimeField from './fields/time-field';
 import UpdatePasswordEditor from './aggregate/update-password-editor';
 import UpdatePassword from './aggregate/update-password';
 import UpsertDoc from './actions/upsert-doc';
+import URLField from './fields/url-field';
 import User from './form/user';
 import UserList from './aggregate/user-list';
 import Vault from './vaults/vault';
@@ -150,6 +151,7 @@ export default {
   UpdatePasswordEditor,
   UpdatePassword,
   UpsertDoc,
+  URLField,
   User,
   UserList,
   Vault,
