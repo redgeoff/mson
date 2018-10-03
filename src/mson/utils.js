@@ -132,6 +132,11 @@ export class Utils {
   toRegExp(item) {
     return item instanceof RegExp ? item : this.stringToRegExp(item);
   }
+
+  toSingular(plural) {
+    // Automatically calculate singular label by removing last 's'
+    return plural.substr(0, plural.length - 1);
+  }
 }
 
 export default new Utils();

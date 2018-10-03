@@ -124,18 +124,35 @@ export default {
       required: true
     },
 
-    // TODO: need to implement default mechanism in ListField that creates new field by default and
-    // then allows user to click to add new field.
-    // {
-    //   component: 'ListField',
-    //   name: 'listField',
-    //   label: 'ListField',
-    //   help: 'Example help',
-    //   required: true,
-    //   field: {
-    //     component: 'TextField'
-    //   }
-    // },
+    {
+      component: 'ListField',
+      name: 'listFieldEmail',
+      label: 'List Field',
+      singularLabel: 'Email',
+      help: 'Example help',
+      required: true,
+      fieldFactory: {
+        component: 'Factory',
+        product: {
+          component: 'EmailField'
+        }
+      }
+    },
+
+    {
+      component: 'ListField',
+      name: 'listFieldName',
+      label: 'List Field Name',
+      singularLabel: 'Name',
+      help: 'Example help',
+      required: true,
+      fieldFactory: {
+        component: 'Factory',
+        product: {
+          component: 'PersonFullNameField'
+        }
+      }
+    },
 
     {
       name: 'moneyField',
@@ -259,16 +276,15 @@ export default {
       // mask: ['(', '/[1-9]/', '/\\d/', '/\\d/', ')'],
       // mask: '(...)',
       required: true
-    }
+    },
 
-    // TODO: need to implement default mechanism in ListField that creates new field by default and
-    // then allows user to click to add new field.
-    // {
-    //   name: 'textListField',
-    //   component: 'TextListField',
-    //   label: 'TextListField',
-    //   help: 'Example help',
-    //   required: true
-    // },
+    {
+      name: 'textListField',
+      component: 'TextListField',
+      label: 'TextListField',
+      help: 'Example help',
+      singularLabel: 'Text Item',
+      required: true
+    }
   ]
 };

@@ -146,3 +146,14 @@ it('should unmask value', () => {
 
   expect(field.toUnmaskedValue('1,000.10')).toEqual('1000.10');
 });
+
+it('should get UI value', () => {
+  const field = new TextField();
+  expect(field.getUIValue()).toEqual('');
+
+  field.setValue('foo');
+  expect(field.getUIValue()).toEqual('foo');
+
+  field.setValue(1);
+  expect(field.getUIValue()).toEqual('1');
+});

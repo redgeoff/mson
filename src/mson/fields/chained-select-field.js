@@ -37,6 +37,11 @@ export default class ChainedSelectField extends ListField {
         ]
       }
     });
+
+    this._setDefaults(props, {
+      autoCreateFields: true,
+      startWithField: false
+    });
   }
 
   _getValue() {
@@ -60,6 +65,7 @@ export default class ChainedSelectField extends ListField {
       label: index === 0 ? this.get('label') : undefined,
       required: index === 0 ? this.get('required') : undefined,
       block: !!this.get('multiline'),
+      autoHideLabel: false,
       ...this.get([
         'blankString',
         'fullWidth',
@@ -163,12 +169,6 @@ export default class ChainedSelectField extends ListField {
 
     if (props.options !== undefined) {
       this._setOptions(props.options);
-    }
-
-    if (props.required !== undefined) {
-      // if (this._fields.hasFirst()) {
-      this._fields.first().set({ required: props.required });
-      // }
     }
   }
 

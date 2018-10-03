@@ -177,6 +177,7 @@ export default class TextField extends Field {
   }
 
   getUIValue() {
-    return this.get('value');
+    // Convert to string so that we can perform string functions on the value
+    return this.isBlank() ? '' : String(this.get('value'));
   }
 }
