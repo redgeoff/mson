@@ -53,7 +53,8 @@ class TextField extends React.PureComponent {
       rows,
       rowsMax,
       useDisplayValue,
-      mask
+      mask,
+      displayValue
     } = this.props;
 
     const dis = accessEditable === false || disabled;
@@ -88,7 +89,7 @@ class TextField extends React.PureComponent {
     } else {
       fld = (
         <DisplayValueTypography>
-          {component.getDisplayValue()}
+          {displayValue ? displayValue : component.getDisplayValue()}
         </DisplayValueTypography>
       );
     }

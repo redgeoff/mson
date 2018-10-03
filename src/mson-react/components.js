@@ -15,6 +15,7 @@ import SelectField from './fields/select-field';
 import TimeField from './fields/time-field';
 import Text from './text';
 import TextField from './fields/text-field';
+import URLField from './fields/url-field';
 
 export default {
   ButtonField,
@@ -41,5 +42,6 @@ export default {
   Text,
   TextField,
   TextListField: ListField,
+  URLField,
   User: Form
 };

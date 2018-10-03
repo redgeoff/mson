@@ -99,7 +99,8 @@ export default {
             'fields.selectListField.value': ['red', 'green'],
             'fields.timeField.value': '2018-09-27T17:24:24.960Z',
             'fields.textField.value': 'Go MSON',
-            'fields.textListField.value': ['MSON', 'React', 'Material-UI']
+            'fields.textListField.value': ['MSON', 'React', 'Material-UI'],
+            'fields.urlField.value': 'mson.co'
           }
         }
       ]

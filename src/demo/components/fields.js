@@ -285,6 +285,15 @@ export default {
       help: 'Example help',
       singularLabel: 'Text Item',
       required: true
+    },
+
+    {
+      name: 'urlField',
+      component: 'URLField',
+      label: 'URLField',
+      help: 'Example help',
+      // newWindow: true,
+      required: true
     }
   ]
 };
