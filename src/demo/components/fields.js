@@ -109,6 +109,35 @@ export default {
     },
 
     {
+      component: 'FormField',
+      name: 'formField',
+      label: 'FormField',
+      help: 'Example help',
+      required: true,
+      form: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'github',
+            component: 'URLField',
+            block: false,
+            label: 'GitHub'
+          },
+          {
+            name: 'medium',
+            component: 'URLField',
+            label: 'Medium'
+          },
+          {
+            name: 'twitter',
+            component: 'URLField',
+            label: 'Twitter'
+          }
+        ]
+      }
+    },
+
+    {
       name: 'idField',
       component: 'IdField',
       label: 'IdField',
@@ -127,7 +156,7 @@ export default {
     {
       component: 'ListField',
       name: 'listFieldEmail',
-      label: 'List Field',
+      label: 'ListField Email',
       singularLabel: 'Email',
       help: 'Example help',
       required: true,
@@ -142,7 +171,7 @@ export default {
     {
       component: 'ListField',
       name: 'listFieldName',
-      label: 'List Field Name',
+      label: 'ListField Name',
       singularLabel: 'Name',
       help: 'Example help',
       required: true,

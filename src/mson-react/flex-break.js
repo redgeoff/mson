@@ -2,11 +2,14 @@ import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 const styles = theme => ({
+  // break: {
+  //   flexBasis: '100%',
+  //   width: '0px',
+  //   height: '0px',
+  //   overflow: 'hidden'
+  // }
   break: {
-    flexBasis: '100%',
-    width: '0px',
-    height: '0px',
-    overflow: 'hidden'
+    width: '100%'
   }
 });
 

@@ -26,6 +26,10 @@ export default class FormField extends Field {
 
   _listenToForm(form) {
     this._bubbleUpEvents(form, ['dirty', 'touched']);
+
+    // We use _set() instead of set() so that a change from the form isn't passed back down to the
+    // form
+    form.on('values', () => this._set('value', this.getValues()));
   }
 
   _setForm(form) {
@@ -35,10 +39,11 @@ export default class FormField extends Field {
       oldForm.removeAllListeners();
     }
 
-    // Clone the form so that we don't mutate the original
-    const clonedForm = form.clone();
-    this._set('form', clonedForm);
-    this._listenToForm(clonedForm);
+    // Note: we will be modifying the form. A previous design cloned the form, but the clone method
+    // leads to race conditions such as where the the didCreate event is never fired on a sub field
+    // of the cloned field.
+    this._set('form', form);
+    this._listenToForm(form);
   }
 
   set(props) {
@@ -52,6 +57,10 @@ export default class FormField extends Field {
       this._setForm(props.form);
     }
 
+    if (props.err === null) {
+      this._setOnForm({ err: null });
+    }
+
     // Was the form set? It may not have been set yet
     if (this._form) {
       // Set properties on form
@@ -61,7 +70,9 @@ export default class FormField extends Field {
         'disabled',
         'editable',
         'touched',
-        'pristine'
+        'pristine',
+        'useDisplayValue',
+        'fullWidth'
       ]);
     }
   }
@@ -76,10 +87,6 @@ export default class FormField extends Field {
     ]);
     if (value !== undefined) {
       return value;
-    }
-
-    if (name === 'value') {
-      return this.getValues();
     }
 
     return super.getOne(name);
@@ -105,13 +112,7 @@ export default class FormField extends Field {
   }
 
   getValues() {
-    const form = this.get('form');
-    if (form) {
-      return this.get('form').get('value');
-    } else {
-      // This can happen if the form isn't set or hasn't been set yet
-      return null;
-    }
+    return this.get('form').get('value');
   }
 
   setValues(values) {
@@ -124,5 +125,9 @@ export default class FormField extends Field {
 
   isBlank() {
     return this.get('form').isBlank();
+  }
+
+  _setOnForm(props) {
+    this.get('form').set(props);
   }
 }

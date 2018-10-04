@@ -161,6 +161,10 @@ export default class Form extends Component {
             // can occur when using type=submit when there are multiple forms.
             name: 'disableSubmit',
             component: 'BooleanField'
+          },
+          {
+            name: 'useDisplayValue',
+            component: 'BooleanField'
           }
         ]
       }
@@ -365,7 +369,8 @@ export default class Form extends Component {
         required: undefined,
         out: undefined,
         disabled: undefined,
-        setForEachField: undefined
+        setForEachField: undefined,
+        useDisplayValue: undefined
       })
     );
 
@@ -433,6 +438,10 @@ export default class Form extends Component {
 
     if (props.eachField !== undefined) {
       this.setForEachField(props.eachField);
+    }
+
+    if (props.useDisplayValue !== undefined) {
+      this.setUseDisplayValue(props.useDisplayValue);
     }
   }
 
@@ -583,16 +592,20 @@ export default class Form extends Component {
     this._validateValuesType(values);
     this._clearExtraErrors();
     if (!this._hasTypeError) {
-      _.each(values, (value, name) => {
-        if (this.hasField(name)) {
-          this.getField(name).setValue(value);
-        } else if (this.get('reportUndefined')) {
-          this._extraErrors.push({
-            field: name,
-            error: 'undefined field'
-          });
-        }
-      });
+      if (values === null) {
+        this.clearValues();
+      } else {
+        _.each(values, (value, name) => {
+          if (this.hasField(name)) {
+            this.getField(name).setValue(value);
+          } else if (this.get('reportUndefined')) {
+            this._extraErrors.push({
+              field: name,
+              error: 'undefined field'
+            });
+          }
+        });
+      }
     }
   }
 
@@ -668,7 +681,7 @@ export default class Form extends Component {
 
   setTouched(touched) {
     this.set({ touched });
-    this._fields.each(field => field.setTouched(touched));
+    this._fields.each(field => field.set({ touched }));
   }
 
   setRequired(required) {
@@ -902,5 +915,9 @@ export default class Form extends Component {
 
   setForEachField(props) {
     this._fields.each(field => field.set(props));
+  }
+
+  setUseDisplayValue(useDisplayValue) {
+    this.setForEachField({ useDisplayValue });
   }
 }
