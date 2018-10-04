@@ -112,13 +112,7 @@ export default class FormField extends Field {
   }
 
   getValues() {
-    const form = this.get('form');
-    if (form) {
-      return this.get('form').get('value');
-    } else {
-      // This can happen if the form isn't set or hasn't been set yet
-      return null;
-    }
+    return this.get('form').get('value');
   }
 
   setValues(values) {

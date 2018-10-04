@@ -763,3 +763,11 @@ it('should set for each field', () => {
   const keys = Object.keys(props);
   form.eachField(field => expect(field.get(keys)).toEqual(props));
 });
+
+it('should set useDisplayValue', () => {
+  const form = createForm();
+  form.eachField(field => expect(field.get('useDisplayValue')).toBeUndefined());
+
+  form.set({ useDisplayValue: true });
+  form.eachField(field => expect(field.get('useDisplayValue')).toEqual(true));
+});
