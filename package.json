@@ -37,7 +37,7 @@
   },
   "scripts": {
     "lint": "eslint src",
-    "test-server-start": "export NODE_ENV=production && ./node_modules/babel-cli/bin/babel-node.js ../mson-server/bin/test-server.js --port=4002 --prefix=mson_test_ --CORE_TEST &",
+    "test-server-start": "NODE_ENV=production ./node_modules/@babel/node/bin/babel-node.js ../mson-server/bin/test-server.js --port=4002 --prefix=mson_test_ --CORE_TEST &",
     "test-server-stop": "pkill -f --signal=SIGINT CORE_TEST & exit 0",
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -46,12 +46,14 @@
     "copy-json-rsync": "rsync -avm --include='*.json' -f 'hide,! */' src/mson lib",
     "copy-json": "cd src && find . -name '*.json' -exec cp --parents \\{\\} ../lib \\;",
     "copy-css": "cd src && find . -name '*.css' -exec cp --parents \\{\\} ../lib \\;",
-    "compile": "export NODE_ENV=production && babel src --ignore '**/*.test.js' -d lib && npm run copy-json && npm run copy-css",
+    "compile": "NODE_ENV=production babel src --ignore '**/*.test.js' -d lib && npm run copy-json && npm run copy-css",
     "touch": "find src -exec touch {} \\;"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
     "husky": "^1.1.0",
     "lint-staged": "^7.2.2",
     "prettier": "^1.14.2",
