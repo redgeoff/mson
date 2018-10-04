@@ -35,6 +35,7 @@ export default class FormField extends Field {
       oldForm.removeAllListeners();
     }
 
+    // TODO: is this really the best? Can we remove this clone?
     // Clone the form so that we don't mutate the original
     const clonedForm = form.clone();
     this._set('form', clonedForm);

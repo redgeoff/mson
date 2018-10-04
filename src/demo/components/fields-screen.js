@@ -75,6 +75,11 @@ export default {
             ],
             'fields.dateField.value': '2018-09-27T17:24:24.960Z',
             'fields.emailField.value': 'test@example.com',
+            'fields.formField.value': {
+              github: 'github.com/redgeoff',
+              medium: 'medium.com/@redgeoff',
+              twitter: 'twitter.com/redgeoff7'
+            },
             'fields.idField.value': 'id-123',
             'fields.integerField.value': 123,
             'fields.listFieldEmail.value': [

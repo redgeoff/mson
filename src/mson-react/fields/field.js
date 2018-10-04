@@ -31,15 +31,17 @@ class Field extends React.PureComponent {
         Field = components[ext];
       }
 
+      // Note: we use React.Fragment over a span as spans can cause issues with the flexbox layout
+      // when displaying a nested form
       return (
-        <span>
+        <React.Fragment>
           <Field
             component={component}
             accessEditable={accessEditable}
             block={block}
           />
           {!noBlock && block ? <FlexBreak /> : null}
-        </span>
+        </React.Fragment>
       );
     }
   }

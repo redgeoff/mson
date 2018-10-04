@@ -8,6 +8,7 @@ import CompositeField from './fields/composite-field';
 import DateField from './fields/date-field';
 import Field from './fields/field';
 import Form from './form';
+import FormField from './fields/form-field';
 import CollectionField from './fields/collection-field';
 import ListField from './fields/list-field';
 import ReCAPTCHAField from './fields/re-captcha-field';
@@ -28,6 +29,7 @@ export default {
   DateField,
   Field,
   Form,
+  FormField,
   CollectionField,
   IdField: TextField,
   IntegerField: TextField,
