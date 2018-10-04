@@ -180,4 +180,9 @@ export default class TextField extends Field {
     // Convert to string so that we can perform string functions on the value
     return this.isBlank() ? '' : String(this.get('value'));
   }
+
+  isValueBlank(value) {
+    // Value can be '' when user clears value in UI
+    return super.isValueBlank(value) || value === '';
+  }
 }

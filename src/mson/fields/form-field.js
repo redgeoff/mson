@@ -26,6 +26,10 @@ export default class FormField extends Field {
 
   _listenToForm(form) {
     this._bubbleUpEvents(form, ['dirty', 'touched']);
+
+    // We use _set() instead of set() so that a change from the form isn't passed back down to the
+    // form
+    form.on('values', () => this._set('value', this.getValues()));
   }
 
   _setForm(form) {
@@ -51,6 +55,10 @@ export default class FormField extends Field {
 
     if (props.form !== undefined) {
       this._setForm(props.form);
+    }
+
+    if (props.err === null) {
+      this._setOnForm({ err: null });
     }
 
     // Was the form set? It may not have been set yet
@@ -79,10 +87,6 @@ export default class FormField extends Field {
     ]);
     if (value !== undefined) {
       return value;
-    }
-
-    if (name === 'value') {
-      return this.getValues();
     }
 
     return super.getOne(name);
@@ -127,5 +131,9 @@ export default class FormField extends Field {
 
   isBlank() {
     return this.get('form').isBlank();
+  }
+
+  _setOnForm(props) {
+    this.get('form').set(props);
   }
 }

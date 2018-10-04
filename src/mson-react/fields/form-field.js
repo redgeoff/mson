@@ -45,4 +45,7 @@ class FormField extends React.PureComponent {
 
 FormField = withStyles(styles)(FormField);
 
-export default attach(['hideLabel'])(FormField);
+export default attach([
+  'hideLabel',
+  'value' // Changes when the value is or isn't blank
+])(FormField);

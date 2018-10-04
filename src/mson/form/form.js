@@ -681,7 +681,7 @@ export default class Form extends Component {
 
   setTouched(touched) {
     this.set({ touched });
-    this._fields.each(field => field.setTouched(touched));
+    this._fields.each(field => field.set({ touched }));
   }
 
   setRequired(required) {
