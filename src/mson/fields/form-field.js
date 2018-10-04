@@ -62,7 +62,9 @@ export default class FormField extends Field {
         'disabled',
         'editable',
         'touched',
-        'pristine'
+        'pristine',
+        'useDisplayValue',
+        'fullWidth'
       ]);
     }
   }

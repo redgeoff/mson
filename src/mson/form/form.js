@@ -161,6 +161,10 @@ export default class Form extends Component {
             // can occur when using type=submit when there are multiple forms.
             name: 'disableSubmit',
             component: 'BooleanField'
+          },
+          {
+            name: 'useDisplayValue',
+            component: 'BooleanField'
           }
         ]
       }
@@ -365,7 +369,8 @@ export default class Form extends Component {
         required: undefined,
         out: undefined,
         disabled: undefined,
-        setForEachField: undefined
+        setForEachField: undefined,
+        useDisplayValue: undefined
       })
     );
 
@@ -433,6 +438,10 @@ export default class Form extends Component {
 
     if (props.eachField !== undefined) {
       this.setForEachField(props.eachField);
+    }
+
+    if (props.useDisplayValue !== undefined) {
+      this.setUseDisplayValue(props.useDisplayValue);
     }
   }
 
@@ -902,5 +911,9 @@ export default class Form extends Component {
 
   setForEachField(props) {
     this._fields.each(field => field.set(props));
+  }
+
+  setUseDisplayValue(useDisplayValue) {
+    this.setForEachField({ useDisplayValue });
   }
 }
