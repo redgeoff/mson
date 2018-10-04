@@ -157,3 +157,20 @@ it('should get UI value', () => {
   field.setValue(1);
   expect(field.getUIValue()).toEqual('1');
 });
+
+it('should detect if blank', () => {
+  const field = new TextField();
+  expect(field.isBlank()).toEqual(true);
+
+  field.setValue(null);
+  expect(field.isBlank()).toEqual(true);
+
+  field.setValue(undefined);
+  expect(field.isBlank()).toEqual(true);
+
+  field.setValue('');
+  expect(field.isBlank()).toEqual(true);
+
+  field.setValue('foo');
+  expect(field.isBlank()).toEqual(false);
+});
