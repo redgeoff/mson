@@ -592,16 +592,20 @@ export default class Form extends Component {
     this._validateValuesType(values);
     this._clearExtraErrors();
     if (!this._hasTypeError) {
-      _.each(values, (value, name) => {
-        if (this.hasField(name)) {
-          this.getField(name).setValue(value);
-        } else if (this.get('reportUndefined')) {
-          this._extraErrors.push({
-            field: name,
-            error: 'undefined field'
-          });
-        }
-      });
+      if (values === null) {
+        this.clearValues();
+      } else {
+        _.each(values, (value, name) => {
+          if (this.hasField(name)) {
+            this.getField(name).setValue(value);
+          } else if (this.get('reportUndefined')) {
+            this._extraErrors.push({
+              field: name,
+              error: 'undefined field'
+            });
+          }
+        });
+      }
     }
   }
 

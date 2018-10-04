@@ -57,7 +57,7 @@ it('should set, get and clear', () => {
     lastName: 'Robinson'
   });
 
-  form.clearValues();
+  form.setValues(null);
   expect(form.getValues()).toEqual({
     ...defaults,
     id: null,
@@ -190,8 +190,7 @@ it('should report bad types', () => {
       middleName: 'Hardaway',
       lastName: 'Wonder'
     },
-    {},
-    null
+    {}
   ];
 
   validValues.forEach(value => {

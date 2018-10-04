@@ -101,8 +101,7 @@ it('should report bad types', () => {
       firstName: 'Stevie',
       lastName: 'Wonder'
     },
-    {},
-    null
+    {}
   ]);
 
   testUtils.expectValuesToBeInvalid(
