@@ -122,3 +122,12 @@ it('should clean up any previous form', () => {
 
   expect(removeAllListenersSpy).toHaveBeenCalledTimes(1);
 });
+
+it('should bubble up change in value', async () => {
+  const field = createField();
+  const form = field.get('form');
+  const afterValue = testUtils.once(field, 'value');
+  form.getField('firstName').setValue('Jermaine');
+  const value = await afterValue;
+  expect(value[0].firstName).toEqual('Jermaine');
+});
