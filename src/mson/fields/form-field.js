@@ -39,11 +39,11 @@ export default class FormField extends Field {
       oldForm.removeAllListeners();
     }
 
-    // TODO: is this really the best? Can we remove this clone?
-    // Clone the form so that we don't mutate the original
-    const clonedForm = form.clone();
-    this._set('form', clonedForm);
-    this._listenToForm(clonedForm);
+    // Note: we will be modifying the form. A previous design cloned the form, but the clone method
+    // leads to race conditions such as where the the didCreate event is never fired on a sub field
+    // of the cloned field.
+    this._set('form', form);
+    this._listenToForm(form);
   }
 
   set(props) {
