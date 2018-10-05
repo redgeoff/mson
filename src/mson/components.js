@@ -52,6 +52,7 @@ import PersonFullNameField from './fields/person-full-name-field';
 import PersonNameField from './fields/person-name-field';
 import PhoneField from './fields/phone-field';
 import PostalCodeField from './fields/postal-code-field';
+import ProvinceField from './fields/province-field';
 import ReCAPTCHAField from './fields/re-captcha-field';
 import ReCAPTCHAVault from './vaults/re-captcha-vault';
 import RecordEditor from './aggregate/record-editor';
@@ -133,6 +134,7 @@ export default {
   PersonNameField,
   PhoneField,
   PostalCodeField,
+  ProvinceField,
   ReCAPTCHAField,
   ReCAPTCHAVault,
   RecordEditor,
