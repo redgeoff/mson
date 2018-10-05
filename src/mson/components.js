@@ -11,6 +11,7 @@ import ButtonField from './fields/button-field';
 import Card from './card';
 import ChainedSelectField from './fields/chained-select-field';
 import ChainedSelectListField from './fields/chained-select-list-field';
+import CityField from './fields/city-field';
 import Component from './component/component';
 import CollectionField from './fields/collection-field';
 import ComponentField from './fields/component-field';
@@ -91,6 +92,7 @@ export default {
   Card,
   ChainedSelectField,
   ChainedSelectListField,
+  CityField,
   CollectionField,
   Component,
   ComponentField,
