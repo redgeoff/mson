@@ -288,7 +288,7 @@ const shouldAddFormsQuickly = (field, milliseconds, synchronous) => {
     field.get('form').emitChange('foo');
     await didFoo;
 
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 30; i++) {
       const result = field.addForm({
         values: {
           firstName: 'First ' + i,

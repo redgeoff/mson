@@ -328,3 +328,7 @@ Even with a cache, this can be very inefficient as it requires a call to get the
 ## Errors Are Named Err
 
 All components are EventEmitters and Node.js EventEmitters reserve special treatment for the `error` event. If there is no listener for the `error` event, a stack trace is printed and the process will exit. In MSON, errors are properties and as such they emit an event with the same name. In many cases it isn't necessary to have an event handler to process errors as these errors happen synchronously. In order to avoid this special treatment, we name all errors `err`.
+
+## Elevate vs Flatten
+
+The original idea was to use a _flatten_ property on `Field` and modify `Form.getValues()` to flatten, e.g. `{ name: { firstName: 'First', lastName: 'Last' }}` would become `{ firstName: 'First', lastName: 'Last' }`. The issue is that this also requires `set()` to perform an "unflatten" and this is adds complexity. Specifically, the parent form would need to maintain extra data in the form of a list of flattened fields, so that the form knows where to route the flattened value. Instead, when an _elevated_ FormField is added to a form, the actual fields, validators and listeners are added to this parent form, making it identical to creating the fields, validators and listeners directly on the parent. This allows us to create fields like the `AddressField`, which can wrap all the logic for an address, but the AddressField can then be elevated so that the values appear directly on the parent form.

@@ -80,6 +80,9 @@ export default {
               medium: 'medium.com/@redgeoff',
               twitter: 'twitter.com/redgeoff7'
             },
+            // 'fields.github.value': 'github.com/redgeoff',
+            // 'fields.medium.value': 'medium.com/@redgeoff',
+            // 'fields.twitter.value': 'twitter.com/redgeoff7',
             'fields.idField.value': 'id-123',
             'fields.integerField.value': 123,
             'fields.listFieldEmail.value': [

@@ -114,6 +114,7 @@ export default {
       label: 'FormField',
       help: 'Example help',
       required: true,
+      // elevate: true,
       form: {
         component: 'Form',
         fields: [

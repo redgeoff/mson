@@ -18,6 +18,10 @@ export default class FormField extends Field {
           {
             name: 'pristine',
             component: 'BooleanField'
+          },
+          {
+            name: 'elevate',
+            component: 'BooleanField'
           }
         ]
       }
