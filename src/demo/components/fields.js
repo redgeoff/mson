@@ -262,6 +262,14 @@ export default {
     },
 
     {
+      name: 'provinceField',
+      component: 'ProvinceField',
+      label: 'ProvinceField',
+      help: 'Example help',
+      required: true
+    },
+
+    {
       component: 'ReCAPTCHAField'
     },
 
