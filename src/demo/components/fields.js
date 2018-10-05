@@ -98,6 +98,14 @@ export default {
     },
 
     {
+      name: 'countryField',
+      component: 'CountryField',
+      label: 'CountryField',
+      help: 'Example help',
+      required: true
+    },
+
+    {
       name: 'dateField',
       component: 'DateField',
       label: 'DateField',

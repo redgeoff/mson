@@ -18,6 +18,7 @@ import ComponentField from './fields/component-field';
 import CompositeField from './fields/composite-field';
 import ConsoleLog from './actions/console-log';
 import ContactUs from './aggregate/contact-us';
+import CountryField from './fields/country-field';
 import DateField from './fields/date-field';
 import Email from './actions/email';
 import EmailField from './fields/email-field';
@@ -100,6 +101,7 @@ export default {
   CompositeField,
   ConsoleLog,
   ContactUs,
+  CountryField,
   DateField,
   Email,
   EmailField,

@@ -74,6 +74,7 @@ export default {
                 lastName: 'Lannister'
               }
             ],
+            'fields.countryField.value': 'US',
             'fields.dateField.value': '2018-09-27T17:24:24.960Z',
             'fields.emailField.value': 'test@example.com',
             'fields.formField.value': {
