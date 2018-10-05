@@ -299,6 +299,14 @@ export default {
     },
 
     {
+      name: 'stateField',
+      component: 'StateField',
+      label: 'StateField',
+      help: 'Example help',
+      required: true
+    },
+
+    {
       name: 'text',
       component: 'Text',
       text:
