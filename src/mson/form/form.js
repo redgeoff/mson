@@ -7,6 +7,7 @@ import DateField from '../fields/date-field';
 import ButtonField from '../fields/button-field';
 import ComponentFillerProps from '../component/component-filler-props';
 import ComponentField from '../fields/component-field';
+import FormField from '../fields/form-field';
 
 export default class Form extends Component {
   _className = 'Form';
@@ -328,13 +329,29 @@ export default class Form extends Component {
   }
 
   copyFields(form) {
-    form._fields.each(field => this.addField(field));
+    form._fields.each(field => {
+      if (!this.isDefaultField(field.get('name'))) {
+        this.addField(field);
+      }
+    });
     this.emitChange('fields');
   }
 
   cloneFields(form) {
-    form._fields.each(field => this.addField(field.clone()));
+    form._fields.each(field => {
+      if (!this.isDefaultField(field.get('name'))) {
+        this.addField(field.clone());
+      }
+    });
     this.emitChange('fields');
+  }
+
+  elevate(form) {
+    this.copyFields(form);
+    this.set({
+      validators: form.get('validators'),
+      listeners: form.get('listeners')
+    });
   }
 
   _clearExtraErrors() {
@@ -464,17 +481,7 @@ export default class Form extends Component {
     };
   }
 
-  addField(field) {
-    // Not a field? We have to use the existence of _isField instead of `instanceof Field` as a
-    // wrapped field, e.g. a MSONComponent will fail the instanceof test, but is still a field.
-    if (!field._isField) {
-      // Wrap the component in a ComponentField so that we can use any component in the form
-      field = new ComponentField({
-        name: field.get('name'),
-        content: field
-      });
-    }
-
+  _addField(field) {
     this._setField(field);
 
     // TODO: need to consider that field already exists. Also need to worry about cleaning up any
@@ -508,6 +515,24 @@ export default class Form extends Component {
     });
 
     field.set({ parent: this });
+  }
+
+  addField(field) {
+    // Not a field? We have to use the existence of _isField instead of `instanceof Field` as a
+    // wrapped field, e.g. a MSONComponent will fail the instanceof test, but is still a field.
+    if (!field._isField) {
+      // Wrap the component in a ComponentField so that we can use any component in the form
+      field = new ComponentField({
+        name: field.get('name'),
+        content: field
+      });
+    }
+
+    if (field instanceof FormField && field.get('elevate')) {
+      this.elevate(field.get('form'));
+    } else {
+      this._addField(field);
+    }
   }
 
   removeField(name) {

@@ -3,6 +3,8 @@ import ButtonField from '../fields/button-field';
 import TextField from '../fields/text-field';
 import testUtils from '../test-utils';
 import compiler from '../compiler';
+import FormField from '../fields/form-field';
+import Set from '../actions/set';
 
 const createForm = props => {
   return new Form({
@@ -770,4 +772,66 @@ it('should set useDisplayValue', () => {
 
   form.set({ useDisplayValue: true });
   form.eachField(field => expect(field.get('useDisplayValue')).toEqual(true));
+});
+
+it('should elevate', async () => {
+  const personNameForm = new Form({
+    fields: [
+      new TextField({ name: 'firstName' }),
+      new TextField({ name: 'lastName' })
+    ],
+    validators: [
+      {
+        where: {
+          fields: {
+            lastName: {
+              value: 'Vader'
+            }
+          }
+        },
+        error: {
+          field: 'lastName',
+          error: 'nope'
+        }
+      }
+    ],
+    listeners: [
+      {
+        event: 'create',
+        actions: [
+          new Set({ name: 'fields.firstName.label', value: 'First Name' })
+        ]
+      }
+    ]
+  });
+
+  // Used to make sure default fields are not elevated
+  personNameForm.getField('archivedAt').now();
+
+  const form = new Form({
+    fields: [
+      new FormField({
+        name: 'fullName',
+        form: personNameForm,
+        elevate: true
+      })
+    ]
+  });
+
+  form.setValues({
+    firstName: 'Darth',
+    lastName: 'Vader'
+  });
+
+  expect(form.getValues()).toEqual({
+    ...testUtils.toDefaultFieldsObject(undefined),
+    firstName: 'Darth',
+    lastName: 'Vader'
+  });
+
+  form.validate();
+  expect(form.getErrs()).toEqual([{ field: 'lastName', error: 'nope' }]);
+
+  await form.resolveAfterCreate();
+  expect(form.getField('firstName').get('label')).toEqual('First Name');
 });
