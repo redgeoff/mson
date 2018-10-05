@@ -102,6 +102,7 @@ export default {
             },
             'fields.personNameField.value': 'Daenerys',
             'fields.phoneField.value': '6461234567',
+            'fields.postalCodeField.value': '98107',
             'fields.selectField.value': 'red',
             'fields.selectFieldMult.value': ['red', 'blue'],
             'fields.selectListField.value': ['red', 'green'],
