@@ -68,6 +68,7 @@ import SetFromDoc from './actions/set-from-doc';
 import Set from './actions/set';
 import SignupEditor from './aggregate/signup-editor';
 import Snackbar from './actions/snackbar';
+import StateField from './fields/state-field';
 import Text from './text';
 import TextField from './fields/text-field';
 import TextListField from './fields/text-list-field';
@@ -147,6 +148,7 @@ export default {
   Set,
   SignupEditor,
   Snackbar,
+  StateField,
   Text,
   TextField,
   TextListField,

@@ -107,6 +107,7 @@ export default {
             'fields.selectField.value': 'red',
             'fields.selectFieldMult.value': ['red', 'blue'],
             'fields.selectListField.value': ['red', 'green'],
+            'fields.stateField.value': 'WA',
             'fields.timeField.value': '2018-09-27T17:24:24.960Z',
             'fields.textField.value': 'Go MSON',
             'fields.textListField.value': ['MSON', 'React', 'Material-UI'],
