@@ -31,7 +31,8 @@ export default class SelectListField extends ListField {
     this._setDefaults(props, {
       autoCreateFields: true,
       canDeleteEmpty: false,
-      startWithField: true
+      startWithField: true,
+      hideDeleteButton: true
     });
   }
 

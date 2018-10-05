@@ -9,6 +9,7 @@ import CommonField from './common-field';
 import attach from '../attach';
 import withStyles from '@material-ui/core/styles/withStyles';
 import DisplayValueTypography from './display-value-typography';
+import AutoCompleteSelect from './autocomplete-select';
 
 const styles = theme => ({
   formControl: {
@@ -21,13 +22,31 @@ const styles = theme => ({
 });
 
 class SelectField extends React.PureComponent {
-  handleChange = event => {
-    this.props.component.setValue(event.target.value);
+  state = {
+    focus: false
   };
 
-  handleBlur = () => {
+  handleChange(value) {
+    this.props.component.setValue(value);
+  }
+
+  handleAutocompleteChange(value) {
+    const { multiple } = this.props;
+    if (multiple) {
+      this.handleChange(value.map(val => val.value));
+    } else {
+      this.handleChange(value && (value.value ? value.value : null));
+    }
+  }
+
+  handleFocus() {
+    this.setState({ focus: true });
+  }
+
+  handleBlur() {
+    this.setState({ focus: false });
     this.props.component.setTouched(true);
-  };
+  }
 
   renderOptions() {
     const { options, blankString, value, multiple } = this.props;
@@ -78,12 +97,14 @@ class SelectField extends React.PureComponent {
       editable,
       multiple,
       accessEditable,
-      useDisplayValue
+      useDisplayValue,
+      options,
+      autocomplete
     } = this.props;
 
-    const dis = accessEditable === false || disabled;
+    const { focus } = this.state;
 
-    const options = this.renderOptions();
+    const dis = accessEditable === false || disabled;
 
     let fieldValue = multiple ? [] : '';
     if (value) {
@@ -95,7 +116,6 @@ class SelectField extends React.PureComponent {
     if (multiple) {
       input = <Input />;
 
-      // renderValue={selected => selected.join(', ')}
       renderValue = selected => (
         <div className={classes.chips}>
           {selected.map(value => (
@@ -109,24 +129,62 @@ class SelectField extends React.PureComponent {
       );
     }
 
+    const optionalProps = {};
+
     let fld = null;
     if (editable && !useDisplayValue) {
-      fld = (
-        <Select
-          multiple={multiple}
-          error={touched && err ? true : false}
-          onChange={this.handleChange}
-          onBlur={this.handleBlur}
-          input={input}
-          renderValue={renderValue}
-          value={fieldValue}
-          disabled={dis}
-          fullWidth={fullWidth}
-          className={classes.formControl}
-        >
-          {options}
-        </Select>
-      );
+      if (autocomplete) {
+        let autocompleteValue = null;
+
+        if (multiple) {
+          autocompleteValue = fieldValue.map(value => ({
+            value: value,
+            label: component.getOptionLabel(value)
+          }));
+        } else {
+          autocompleteValue = {
+            value: fieldValue,
+            label: component.getOptionLabel(fieldValue)
+          };
+        }
+
+        // Shrink the label?
+        if (focus || !component.isValueBlank(fieldValue)) {
+          optionalProps.shrinkLabel = true;
+        }
+
+        fld = (
+          <AutoCompleteSelect
+            options={options}
+            isClearable={true}
+            placeholder=""
+            onChange={value => this.handleAutocompleteChange(value)}
+            onBlur={() => this.handleBlur()}
+            onFocus={() => this.handleFocus()}
+            value={autocompleteValue}
+            isDisabled={dis}
+            fullWidth={fullWidth}
+            isMulti={multiple}
+          />
+        );
+      } else {
+        fld = (
+          <Select
+            multiple={multiple}
+            error={touched && err ? true : false}
+            onChange={event => this.handleChange(event.target.value)}
+            onBlur={() => this.handleBlur()}
+            input={input}
+            renderValue={renderValue}
+            value={fieldValue}
+            disabled={dis}
+            fullWidth={fullWidth}
+            className={classes.formControl}
+          >
+            {this.renderOptions()}
+          </Select>
+        );
+      }
     } else {
       let displayValue = null;
       if (multiple && value) {
@@ -143,7 +201,11 @@ class SelectField extends React.PureComponent {
       fld = <DisplayValueTypography>{displayValue}</DisplayValueTypography>;
     }
 
-    return <CommonField component={component}>{fld}</CommonField>;
+    return (
+      <CommonField component={component} {...optionalProps}>
+        {fld}
+      </CommonField>
+    );
   }
 }
 
@@ -159,5 +221,6 @@ export default attach([
   'fullWidth',
   'editable',
   'multiple',
-  'useDisplayValue'
+  'useDisplayValue',
+  'autocomplete'
 ])(SelectField);

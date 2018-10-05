@@ -51,6 +51,10 @@ export default class ListField extends CompositeField {
           {
             name: 'canDeleteEmpty',
             component: 'BooleanField'
+          },
+          {
+            name: 'hideDeleteButton',
+            component: 'BooleanField'
           }
         ]
       }

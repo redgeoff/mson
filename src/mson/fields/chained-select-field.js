@@ -66,6 +66,7 @@ export default class ChainedSelectField extends ListField {
       required: index === 0 ? this.get('required') : undefined,
       block: !!this.get('multiline'),
       autoHideLabel: false,
+      autocomplete: false,
       ...this.get([
         'blankString',
         'fullWidth',

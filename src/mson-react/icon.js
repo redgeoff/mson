@@ -9,9 +9,9 @@ import _ from '../mson/lodash';
 // import * as Icons from '@material-ui/icons';
 
 export default class Icon extends React.PureComponent {
-  handleClick = () => {
+  handleClick = event => {
     if (this.props.onClick) {
-      this.props.onClick();
+      this.props.onClick(event);
     }
   };
 

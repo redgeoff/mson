@@ -23,7 +23,8 @@ class ListField extends React.PureComponent {
       editable,
       canDeleteEmpty,
       accessEditable,
-      disabled
+      disabled,
+      hideDeleteButton
     } = this.props;
 
     const singularLabel = component.getSingularLabel();
@@ -48,7 +49,8 @@ class ListField extends React.PureComponent {
             allowDelete={
               allowDelete &&
               !useDisplayValue &&
-              (canDeleteEmpty || !fieldIsBlank)
+              (canDeleteEmpty || !fieldIsBlank) &&
+              !hideDeleteButton
             }
           />
         );
@@ -99,5 +101,6 @@ export default attach([
   'value',
   'editable',
   'canDeleteEmpty',
-  'disabled'
+  'disabled',
+  'hideDeleteButton'
 ])(ListField);
