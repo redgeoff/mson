@@ -56,6 +56,7 @@ export default {
             'fields.booleanField.value': true,
             'fields.chainedSelectField.value': [2, 5, 9, 10],
             'fields.chainedSelectListField.value': [[1, 3, 7], [2, 5, 9, 10]],
+            'fields.cityField.value': 'Seattle',
             'fields.collectionField.value': [
               {
                 id: 'daenerys',

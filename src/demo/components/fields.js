@@ -62,6 +62,14 @@ export default {
     },
 
     {
+      name: 'cityField',
+      component: 'CityField',
+      label: 'CityField',
+      help: 'Example help',
+      required: true
+    },
+
+    {
       component: 'CollectionField',
       name: 'collectionField',
       label: 'Records',
