@@ -238,6 +238,14 @@ export default {
     },
 
     {
+      name: 'postalCodeField',
+      component: 'PostalCodeField',
+      label: 'PostalCodeField',
+      help: 'Example help',
+      required: true
+    },
+
+    {
       component: 'ReCAPTCHAField'
     },
 
