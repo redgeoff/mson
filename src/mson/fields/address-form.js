@@ -76,9 +76,9 @@ export default {
               value: true
             },
             {
-              // Reset the form to clear errors, etc...
+              // Avoid showing errors when the value is cleared
               component: 'Set',
-              name: 'reset',
+              name: 'clearErrs',
               value: true
             }
           ]

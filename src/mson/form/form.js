@@ -170,6 +170,10 @@ export default class Form extends Component {
           {
             name: 'change',
             component: 'Field'
+          },
+          {
+            name: 'clearErrs',
+            component: 'BooleanField'
           }
         ]
       }
@@ -465,6 +469,10 @@ export default class Form extends Component {
 
     if (props.useDisplayValue !== undefined) {
       this.setUseDisplayValue(props.useDisplayValue);
+    }
+
+    if (props.clearErrs === true) {
+      this.clearErrs();
     }
   }
 
