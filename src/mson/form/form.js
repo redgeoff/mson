@@ -166,6 +166,10 @@ export default class Form extends Component {
           {
             name: 'useDisplayValue',
             component: 'BooleanField'
+          },
+          {
+            name: 'change',
+            component: 'Field'
           }
         ]
       }
@@ -328,22 +332,19 @@ export default class Form extends Component {
     this._defaultFields.each(field => this.addField(field));
   }
 
-  copyFields(form) {
+  copyFields(form, clone) {
+    const fields = [];
     form._fields.each(field => {
       if (!this.isDefaultField(field.get('name'))) {
-        this.addField(field);
+        this.addField(clone ? field.clone() : field);
+        fields.push(field);
       }
     });
-    this.emitChange('fields');
+    this._emitChangeToFields(fields);
   }
 
   cloneFields(form) {
-    form._fields.each(field => {
-      if (!this.isDefaultField(field.get('name'))) {
-        this.addField(field.clone());
-      }
-    });
-    this.emitChange('fields');
+    this.copyFields(form, true);
   }
 
   elevate(form) {
@@ -363,13 +364,18 @@ export default class Form extends Component {
     this._set('access', _.merge(this._access, access));
   }
 
+  _emitChangeToFields(change) {
+    // Emit change so that UI is notified
+    this.set({ change });
+  }
+
   set(props) {
     // Add fields before calling super.set so that listeners are added after the fields
     if (props.fields !== undefined) {
       props.fields.forEach(field => {
         this.addField(field);
       });
-      this.emitChange('fields');
+      this._emitChangeToFields(props.fields);
     }
 
     super.set(
