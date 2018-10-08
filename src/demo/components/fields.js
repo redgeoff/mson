@@ -22,6 +22,14 @@ export default {
   component: 'Form',
   fields: [
     {
+      component: 'AddressField',
+      name: 'addressField',
+      label: 'AddressField',
+      help: 'Example help',
+      required: true
+    },
+
+    {
       component: 'BooleanField',
       name: 'booleanField',
       label: 'BooleanField',

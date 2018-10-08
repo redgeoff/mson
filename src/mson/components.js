@@ -4,6 +4,8 @@
 //   appear in this file though!
 
 import Action from './actions/action';
+import AddressField from './fields/address-field';
+import AddressForm from './fields/address-form';
 import AuthenticatedContactUs from './aggregate/authenticated-contact-us';
 import App from './app';
 import BooleanField from './fields/boolean-field';
@@ -88,6 +90,8 @@ import WrappedComponent from './component/wrapped-component';
 export default {
   AccessForm: FormAccess,
   Action,
+  AddressField,
+  AddressForm,
   AuthenticatedContactUs,
   App,
   BooleanField,

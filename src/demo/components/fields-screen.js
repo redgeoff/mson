@@ -53,6 +53,14 @@ export default {
           component: 'Set',
           name: 'component',
           value: {
+            'fields.addressField.value': {
+              addressLine1: '121 Pike Street',
+              addressLine2: 'Suite 201',
+              city: 'Seatte',
+              stateProvince: 'WA',
+              postalCode: '98107',
+              country: 'US'
+            },
             'fields.booleanField.value': true,
             'fields.chainedSelectField.value': [2, 5, 9, 10],
             'fields.chainedSelectListField.value': [[1, 3, 7], [2, 5, 9, 10]],
