@@ -102,6 +102,7 @@ export default {
       component: 'CountryField',
       label: 'CountryField',
       help: 'Example help',
+      blankString: 'None',
       required: true
     },
 
@@ -279,6 +280,7 @@ export default {
       label: 'SelectField',
       help: 'Example help',
       required: true,
+      blankString: 'None',
       options: [
         { value: 'red', label: 'Red' },
         { value: 'green', label: 'Green' },
@@ -293,6 +295,8 @@ export default {
       help: 'Example help',
       required: true,
       multiple: true,
+      blankString: 'None',
+      // autocomplete: false,
       options: [
         { value: 'red', label: 'Red' },
         { value: 'green', label: 'Green' },
@@ -319,6 +323,7 @@ export default {
       component: 'StateField',
       label: 'StateField',
       help: 'Example help',
+      blankString: 'None',
       required: true
     },
 

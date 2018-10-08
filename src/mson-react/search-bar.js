@@ -13,7 +13,7 @@ const styles = theme => ({
   textFieldInput: {
     borderRadius: 3,
     backgroundColor: theme.palette.primary[400],
-    fontSize: theme.typography.title.subheading,
+    fontSize: theme.typography.subheading.fontSize,
     padding: '10px 10px 10px 42px',
     width: 'calc(100%)',
     color: theme.palette.common.white

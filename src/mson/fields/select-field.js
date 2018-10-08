@@ -31,6 +31,10 @@ export default class SelectField extends MultipleValueField {
           {
             name: 'removeIfNotInList',
             component: 'BooleanField'
+          },
+          {
+            name: 'autocomplete',
+            component: 'BooleanField'
           }
         ]
       }
@@ -39,7 +43,8 @@ export default class SelectField extends MultipleValueField {
     this._setDefaults(props, {
       ensureInList: true,
       multiple: false,
-      removeIfNotInList: true
+      removeIfNotInList: true,
+      autocomplete: true
     });
   }
 
@@ -62,6 +67,8 @@ export default class SelectField extends MultipleValueField {
     return super.getOne(name);
   }
 
+  // TODO: use indexedOptions cache to speed up getOptionLabel, i.e. indexedOptions is calculated in
+  // set() when options set and then used here.
   getOptionLabel(value) {
     let label = null;
 
