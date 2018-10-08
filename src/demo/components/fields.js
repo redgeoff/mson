@@ -26,7 +26,8 @@ export default {
       name: 'addressField',
       label: 'AddressField',
       help: 'Example help',
-      required: true
+      required: true,
+      elevate: false
     },
 
     {
