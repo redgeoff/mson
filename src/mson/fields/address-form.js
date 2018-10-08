@@ -111,6 +111,12 @@ export default {
           },
           actions: [
             {
+              // Pipe the existing stateProvince so that we can preserve the value. TODO: is there
+              // an easier way?
+              component: 'Set',
+              value: '{{fields.stateProvince.value}}'
+            },
+            {
               component: 'Set',
               name: 'component',
               value: {
@@ -123,11 +129,18 @@ export default {
                     block: false
                   }
                 ],
+                'fields.stateProvince.value': '{{arguments}}',
                 'fields.postalCode.label': 'Zip Code'
               }
             }
           ],
           else: [
+            {
+              // Pipe the existing stateProvince so that we can preserve the value. TODO: is there
+              // an easier way?
+              component: 'Set',
+              value: '{{fields.stateProvince.value}}'
+            },
             {
               component: 'Set',
               name: 'component',
@@ -141,6 +154,7 @@ export default {
                     block: false
                   }
                 ],
+                'fields.stateProvince.value': '{{arguments}}',
                 'fields.postalCode.label': 'Postal Code'
               }
             }
