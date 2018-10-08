@@ -23,7 +23,7 @@ const styles = theme => ({
     alignItems: 'center',
 
     // Adjust for MUI label
-    marginTop: theme.spacing.unit * 3
+    marginTop: theme.spacing.unit * 2 + 5
   },
   chip: {
     margin: `${theme.spacing.unit / 1}px ${theme.spacing.unit / 4}px`

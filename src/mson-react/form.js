@@ -140,4 +140,11 @@ class Form extends React.PureComponent {
   }
 }
 
-export default attach(['access', 'mode', 'isLoading'])(Form);
+export default attach([
+  'access',
+  'mode',
+  'isLoading',
+
+  // We listen for a change to fields so that we can render when a field is added
+  'change'
+])(Form);
