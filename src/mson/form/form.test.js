@@ -835,3 +835,12 @@ it('should elevate', async () => {
   await form.resolveAfterCreate();
   expect(form.getField('firstName').get('label')).toEqual('First Name');
 });
+
+it('should clear errors', () => {
+  const form = createForm();
+  form.validate();
+  expect(form.getField('firstName').hasErr()).toEqual(true);
+
+  form.set({ clearErrs: true });
+  form.eachField(field => expect(field.hasErr()).toEqual(false));
+});
