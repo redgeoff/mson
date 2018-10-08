@@ -74,6 +74,12 @@ export default {
               component: 'Emit',
               event: 'setHidden',
               value: true
+            },
+            {
+              // Reset the form to clear errors, etc...
+              component: 'Set',
+              name: 'reset',
+              value: true
             }
           ]
         }
