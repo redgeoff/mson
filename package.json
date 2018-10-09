@@ -49,18 +49,24 @@
     "copy-json": "cd src && find . -name '*.json' -exec cp --parents \\{\\} ../lib \\;",
     "copy-css": "cd src && find . -name '*.css' -exec cp --parents \\{\\} ../lib \\;",
     "compile": "NODE_ENV=production babel src --ignore '**/*.test.js' -d lib && npm run copy-json && npm run copy-css",
-    "touch": "find src -exec touch {} \\;"
+    "bundle": "webpack",
+    "touch": "find src -exec touch {} \\;",
+    "analyze-bundle": "webpack --profile --json > ./dist/stats.json && webpack-bundle-analyzer ./dist/stats.json"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.4",
+    "css-loader": "^1.0.0",
     "husky": "^1.1.0",
     "lint-staged": "^7.2.2",
     "prettier": "^1.14.2",
+    "style-loader": "^0.23.1",
     "wait-on": "^3.0.1",
-    "webpack-bundle-analyzer": "^3.0.2"
+    "webpack-bundle-analyzer": "^3.0.2",
+    "webpack-cli": "^3.1.2"
   },
   "jest": {
     "collectCoverageFrom": [

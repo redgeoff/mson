@@ -23,3 +23,7 @@ Run the tests interactively:
     $ yarn start
 
 Then visit `http://localhost:3000` in a browser.
+
+## Analyzing the Bundle
+
+    $ yarn analyze-bundle # Don't run in VM

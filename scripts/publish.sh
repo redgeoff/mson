@@ -14,6 +14,9 @@ git push origin master
 # Compile JS
 yarn compile
 
+# Create bundles for CDN
+yarn bundle
+
 # Publish npm release
 npm publish
 
