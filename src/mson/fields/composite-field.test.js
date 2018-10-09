@@ -137,3 +137,15 @@ it('should set useDisplayValue', () => {
   expect(field.get('useDisplayValue')).toEqual(false);
   field.eachField(field => expect(field.get('useDisplayValue')).toEqual(false));
 });
+
+it('should destroy', () => {
+  const field = createField();
+
+  const removeAllListenersSpy = jest.spyOn(field, 'removeAllListeners');
+  const fieldSpies = field.mapFields(field => jest.spyOn(field, 'destroy'));
+
+  field.destroy();
+  expect(removeAllListenersSpy).toHaveBeenCalledTimes(1);
+  expect(fieldSpies).toHaveLength(2);
+  fieldSpies.forEach(spy => expect(spy).toHaveBeenCalledTimes(1));
+});

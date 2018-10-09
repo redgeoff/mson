@@ -749,3 +749,16 @@ it('should set maxColumns', () => {
     expect(() => field.set({ maxColumns })).toThrow()
   );
 });
+
+it('should destroy', () => {
+  const field = createField();
+  fillDocs(field);
+
+  const removeAllListenersSpy = jest.spyOn(field, 'removeAllListeners');
+  const formSpies = field._forms.map(form => jest.spyOn(form, 'destroy'));
+
+  field.destroy();
+  expect(removeAllListenersSpy).toHaveBeenCalledTimes(1);
+  expect(formSpies).toHaveLength(2);
+  formSpies.forEach(spy => expect(spy).toHaveBeenCalledTimes(1));
+});

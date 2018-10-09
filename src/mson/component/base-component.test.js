@@ -612,3 +612,10 @@ it('should emit error when running listeners', async () => {
   );
   expect(onActionErrSpy).toHaveBeenCalledWith(err);
 });
+
+it('should destroy', () => {
+  const component = new BaseComponent();
+  const removeAllListenersSpy = jest.spyOn(component, 'removeAllListeners');
+  component.destroy();
+  expect(removeAllListenersSpy).toHaveBeenCalledTimes(1);
+});

@@ -1101,4 +1101,9 @@ export default class CollectionField extends Field {
   getUniqueItemId(id) {
     return this.getUniqueId() + '-item-' + id;
   }
+
+  destroy() {
+    super.destroy();
+    this.eachForm(form => form.destroy());
+  }
 }

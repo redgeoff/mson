@@ -696,7 +696,7 @@ it('should submit', () => {
   expect(emitClickOnButtonSpy).toHaveBeenCalledWith(form.getField('submit'));
 });
 
-const NUM_COMPONENTS = 40;
+const NUM_COMPONENTS = 30;
 
 const CREATE_FORMS_TIMEOUT_MS = 500;
 it('should create many forms quickly', () => {
@@ -843,4 +843,16 @@ it('should clear errors', () => {
 
   form.set({ clearErrs: true });
   form.eachField(field => expect(field.hasErr()).toEqual(false));
+});
+
+it('should destroy', () => {
+  const form = createForm();
+
+  const removeAllListenersSpy = jest.spyOn(form, 'removeAllListeners');
+  const fieldSpies = form.mapFields(field => jest.spyOn(field, 'destroy'));
+
+  form.destroy();
+  expect(removeAllListenersSpy).toHaveBeenCalledTimes(1);
+  expect(fieldSpies).toHaveLength(testUtils.defaultFields.length + 3);
+  fieldSpies.forEach(spy => expect(spy).toHaveBeenCalledTimes(1));
 });
