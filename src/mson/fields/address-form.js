@@ -113,8 +113,24 @@ export default {
             {
               // Pipe the existing stateProvince so that we can preserve the value. TODO: is there
               // an easier way?
-              component: 'Set',
-              value: '{{fields.stateProvince.value}}'
+              component: 'Action',
+              if: {
+                'fields.stateProvince.value': {
+                  $ne: null
+                }
+              },
+              actions: [
+                {
+                  component: 'Set',
+                  value: '{{fields.stateProvince.value}}'
+                }
+              ],
+              else: [
+                {
+                  component: 'Set',
+                  value: null
+                }
+              ]
             },
             {
               component: 'Set',
@@ -138,8 +154,24 @@ export default {
             {
               // Pipe the existing stateProvince so that we can preserve the value. TODO: is there
               // an easier way?
-              component: 'Set',
-              value: '{{fields.stateProvince.value}}'
+              component: 'Action',
+              if: {
+                'fields.stateProvince.value': {
+                  $ne: null
+                }
+              },
+              actions: [
+                {
+                  component: 'Set',
+                  value: '{{fields.stateProvince.value}}'
+                }
+              ],
+              else: [
+                {
+                  component: 'Set',
+                  value: null
+                }
+              ]
             },
             {
               component: 'Set',
