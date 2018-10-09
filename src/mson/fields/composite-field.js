@@ -227,4 +227,9 @@ export default class CompositeField extends Field {
       return Array.isArray(value) && value.length === 0;
     }
   }
+
+  destroy() {
+    super.destroy();
+    this.eachField(field => field.destroy());
+  }
 }

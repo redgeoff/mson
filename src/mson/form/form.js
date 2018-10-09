@@ -959,4 +959,9 @@ export default class Form extends Component {
   setUseDisplayValue(useDisplayValue) {
     this.setForEachField({ useDisplayValue });
   }
+
+  destroy() {
+    super.destroy();
+    this.eachField(field => field.destroy());
+  }
 }

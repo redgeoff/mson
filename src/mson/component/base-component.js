@@ -799,4 +799,8 @@ export default class BaseComponent extends events.EventEmitter {
   resolveAfterLoad() {
     return this._resolveAfterLoad;
   }
+
+  destroy() {
+    this.removeAllListeners();
+  }
 }
