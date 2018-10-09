@@ -49,7 +49,8 @@ class TimeField extends React.PureComponent {
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <span>
             <TimePicker
-              value={value}
+              // Value cannot be undefined or else picker will default to today
+              value={value ? value : null}
               onChange={this.handleDateChange}
               clearable
               className={classes.root}
