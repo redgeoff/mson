@@ -1,2 +1,4 @@
 import compiler from './compiler';
-export default compiler;
+
+// Note: the "default" must be excluded so that webpack can bundle the library properly
+export { compiler };
