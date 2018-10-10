@@ -1,6 +1,6 @@
 import Field from './field';
 import utils from '../utils';
-import { conformToMask } from 'react-text-mask';
+import { conformToMask } from 'vanilla-text-mask';
 import map from 'lodash/map';
 
 export default class TextField extends Field {
