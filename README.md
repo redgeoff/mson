@@ -1,11 +1,13 @@
 # <img src="https://raw.githubusercontent.com/redgeoff/mson/master/mson.png" alt="MSON" width="30" height="30" /> MSON
 [![Circle CI](https://circleci.com/gh/redgeoff/mson.svg?style=svg&circle-token=b9d60eb532e4d995350700256d946e833b07cdda)](https://circleci.com/gh/redgeoff/mson) [![Greenkeeper badge](https://badges.greenkeeper.io/redgeoff/mson.svg)](https://greenkeeper.io/)
 
-MSON is a declarative programming language that allows you to generate an app from JSON.  MSON is a subset of JSON and comprised of just a few building blocks, yet it is as powerful as its non-declarative counterparts. It supports validation, inheritance, composition, pub/sub, access control, templating and various other features.
+The MSON compiler allows you to generate apps from JSON. The ultimate goal of MSON is to allow anyone to develop software visually, but you can also use pieces of MSON to turbo charge your development.
+
+MSON is a subset of JSON and comprised of just a few building blocks, yet it is as powerful as its non-declarative counterparts. MSON supports validation, inheritance, composition, pub/sub, access control, templating and various other features.
 
 MSON is particularly useful in software that generates other software, e.g. a form builder. This is because MSON is just JSON, so it is easy to consume, modify and store.
 
-MSON is framework agnostic, but the default rendering layer uses React and Material-UI to generate a UI. The rendering layer is pluggable and can be written to support any framework and UI library.
+MSON is framework agnostic, but the default [mson-react](https://github.com/redgeoff/mson-react) rendering layer uses React and Material-UI to generate a UI. The rendering layer is pluggable and can be written to support any framework and UI library.
 
 The MSON library can also be used without any UI dependecies, which makes it great for things like data validation in both the front and back ends.
 
@@ -19,17 +21,17 @@ The best way to get started with MSON is to play with the [Getting Started App](
 
 After you have played with the [Getting Started App](https://github.com/redgeoff/mson-getting-started) you may find it useful to fire up the MSON demo:
 
-  - $ git clone https://github.com/redgeoff/mson
-  - $ cd mson
+  - $ git clone https://github.com/redgeoff/mson-react
+  - $ cd mson-react
   - $ yarn install
   - $ yarn start
   - Visit http://localhost:3000 in a web browser
 
-The MSON code can be found in [components](https://github.com/redgeoff/mson/tree/master/src/demo/components). Here are some highlights:
-  1. [List of Contacts](https://github.com/redgeoff/mson/blob/master/src/demo/components/contacts.js)
-  2. [Editing with a RecordEditor](https://github.com/redgeoff/mson/blob/master/src/demo/components/edit-contact.js)
-  3. [List of Fields](https://github.com/redgeoff/mson/blob/master/src/demo/components/fields.js)
-  4. [Displaying Markdown](https://github.com/redgeoff/mson/blob/master/src/demo/components/home.js)
+The MSON code can be found in [components](https://github.com/redgeoff/mson-react/tree/master/src/demo/components). Here are some highlights:
+  1. [List of Contacts](https://github.com/redgeoff/mson-react/blob/master/src/demo/components/contacts.js)
+  2. [Editing with a RecordEditor](https://github.com/redgeoff/mson-react/blob/master/src/demo/components/edit-contact.js)
+  3. [List of Fields](https://github.com/redgeoff/mson-react/blob/master/src/demo/components/fields.js)
+  4. [Displaying Markdown](https://github.com/redgeoff/mson-react/blob/master/src/demo/components/home.js)
 
 ## Language Principles
 
