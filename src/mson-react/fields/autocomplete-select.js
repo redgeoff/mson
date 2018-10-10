@@ -219,6 +219,12 @@ class AutoCompleteSelect extends React.Component {
       clearIndicator: base => ({
         ...base,
         cursor: 'pointer'
+      }),
+
+      // Needed so that the menu appears above any dialog windows
+      menuPortal: base => ({
+        ...base,
+        zIndex: 2000
       })
     };
 
@@ -239,7 +245,8 @@ class AutoCompleteSelect extends React.Component {
         isDisabled={isDisabled}
         fullWidth={fullWidth}
         isMulti={isMulti}
-        // Needed so that the menu is not clipped by the app's root level overflow:hidden
+        // Needed so that the menu is not clipped by the app's root level overflow:hidden or when it
+        // appears in a dialog window
         menuPortalTarget={document.body}
       />
     );
