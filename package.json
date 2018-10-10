@@ -19,12 +19,10 @@
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/plugin-transform-runtime": "^7.1.0",
     "babel-loader": "^8.0.4",
-    "css-loader": "^1.0.0",
     "husky": "^1.1.0",
     "lint-staged": "^7.2.2",
     "prettier": "^1.14.2",
     "react-scripts": "^2.0.3",
-    "style-loader": "^0.23.1",
     "webpack-bundle-analyzer": "^3.0.2",
     "webpack-cli": "^3.1.2"
   },
