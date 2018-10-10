@@ -55,7 +55,7 @@ jobs:
       - run: CI=true yarn test
 
       # Check bundle size
-      - run: yarn build && ./scripts/bundle-size.sh
+      - run: yarn bundle && ./scripts/bundle-size.sh
 
       # Sanity check compilation as compilation uses custom babel settings
       - run: yarn compile
