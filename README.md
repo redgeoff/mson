@@ -1,15 +1,15 @@
 # <img src="https://raw.githubusercontent.com/redgeoff/mson/master/mson.png" alt="MSON" width="30" height="30" /> MSON
 [![Circle CI](https://circleci.com/gh/redgeoff/mson.svg?style=svg&circle-token=b9d60eb532e4d995350700256d946e833b07cdda)](https://circleci.com/gh/redgeoff/mson) [![Greenkeeper badge](https://badges.greenkeeper.io/redgeoff/mson.svg)](https://greenkeeper.io/)
 
-The MSON compiler allows you to generate apps from JSON. The ultimate goal of MSON is to allow anyone to develop software visually, but you can also use pieces of MSON to turbo charge your development.
+The MSON compiler allows you to generate apps from JSON. The ultimate goal of MSON is to allow anyone to develop software visually, but you can also use pieces of MSON to turbo charge your development:
 
-MSON is a subset of JSON and comprised of just a few building blocks, yet it is as powerful as its non-declarative counterparts. MSON supports validation, inheritance, composition, pub/sub, access control, templating and various other features.
+  - MSON is a subset of JSON and comprised of just a few building blocks, yet it is as powerful as its non-declarative counterparts. MSON supports validation, inheritance, composition, pub/sub, access control, templating and various other features.
 
-MSON is particularly useful in software that generates other software, e.g. a form builder. This is because MSON is just JSON, so it is easy to consume, modify and store.
+  - MSON is particularly useful in software that generates other software, e.g. a form builder. This is because MSON is just JSON, so it is easy to consume, modify and store.
 
-MSON is framework agnostic, but the default [mson-react](https://github.com/redgeoff/mson-react) rendering layer uses React and Material-UI to generate a UI. The rendering layer is pluggable and can be written to support any framework and UI library.
+  - MSON is framework agnostic, but the default [mson-react](https://github.com/redgeoff/mson-react) rendering layer uses React and Material-UI to generate a UI. The rendering layer is pluggable and can be written to support any framework and UI library.
 
-The MSON library can also be used without any UI dependecies, which makes it great for things like data validation in both the front and back ends.
+  - The MSON library can also be used without any UI dependecies, which makes it great for things like data validation in both the front and back ends.
 
 You can read more about why I created MSON at [Creating a New Programming Language That Will Allow Anyone to Make Software](https://hackernoon.com/creating-a-new-programming-language-that-will-allow-anyone-to-make-software-7a8c73238dc2).
 
