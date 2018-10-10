@@ -5,6 +5,7 @@ import testUtils from '../test-utils';
 import compiler from '../compiler';
 import FormField from '../fields/form-field';
 import Set from '../actions/set';
+import Text from '../text';
 
 const createForm = props => {
   return new Form({
@@ -855,4 +856,15 @@ it('should destroy', () => {
   expect(removeAllListenersSpy).toHaveBeenCalledTimes(1);
   expect(fieldSpies).toHaveLength(testUtils.defaultFields.length + 3);
   fieldSpies.forEach(spy => expect(spy).toHaveBeenCalledTimes(1));
+});
+
+it('should add non-field', () => {
+  const form = new Form();
+  form.addField(
+    new Text({
+      name: 'text',
+      text: 'Wecome'
+    })
+  );
+  expect(form.getField('text').getClassName()).toEqual('ComponentField');
 });
