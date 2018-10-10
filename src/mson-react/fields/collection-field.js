@@ -330,7 +330,7 @@ class CollectionField extends React.PureComponent {
         {header}
 
         {showNoRecords ? (
-          <Typography variant="display1">
+          <Typography variant="h4">
             <Icon icon="Info" /> No {label} found
           </Typography>
         ) : null}

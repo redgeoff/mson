@@ -84,7 +84,7 @@ class Menu extends React.PureComponent {
     const drawer = (
       <div>
         <div className={classes.drawerHeader}>
-          <Typography variant="display1">Logo</Typography>
+          <Typography variant="h4">Logo</Typography>
         </div>
         <Divider />
         {items}

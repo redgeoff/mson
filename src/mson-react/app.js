@@ -457,7 +457,7 @@ class App extends React.PureComponent {
           >
             <Icon icon="Menu" />
           </IconButton>
-          <Typography variant="title" color="inherit" noWrap>
+          <Typography variant="h6" color="inherit" noWrap>
             {menuItem ? menuItem.label : ''}
           </Typography>
 

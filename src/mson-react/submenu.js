@@ -91,7 +91,7 @@ class Submenu extends React.PureComponent {
             <ListItemText
               disableTypography
               primary={
-                <Typography variant="body1" className={classNames.join(' ')}>
+                <Typography variant="body2" className={classNames.join(' ')}>
                   {item.label}
                 </Typography>
               }
@@ -128,7 +128,7 @@ class Submenu extends React.PureComponent {
           <ListItemText
             disableTypography
             primary={
-              <Typography variant="subheading" className={classNames.join(' ')}>
+              <Typography variant="subtitle1" className={classNames.join(' ')}>
                 {item.label}
               </Typography>
             }

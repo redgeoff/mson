@@ -7,7 +7,7 @@ const styles = theme => ({
     ...Object.assign({}, theme.typography.caption, { color: undefined })
   },
   noShrink: {
-    ...Object.assign({}, theme.typography.subheading, { color: undefined })
+    ...Object.assign({}, theme.typography.subtitle1, { color: undefined })
   }
 });
 
