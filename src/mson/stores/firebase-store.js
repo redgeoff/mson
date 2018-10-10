@@ -50,8 +50,12 @@ export default class FirebaseStore extends MemoryStore {
   //   });
   // }
 
+  _getFirebase(props) {
+    return props.firebase ? props.firebase : this._global.firebase;
+  }
+
   async _init(props) {
-    this._fb = props.firebase ? props.firebase : global.firebase;
+    this._fb = this._getFirebase(props);
 
     this._fb.initializeApp({
       apiKey: props.apiKey,
@@ -81,6 +85,9 @@ export default class FirebaseStore extends MemoryStore {
         muteDidLoad: true
       })
     );
+
+    // For mocking
+    this._global = global;
 
     this.set({
       schema: {

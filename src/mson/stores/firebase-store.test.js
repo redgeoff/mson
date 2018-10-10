@@ -123,3 +123,12 @@ it('should not set if apiKey missing', async () => {
   const store = new FirebaseStore();
   await store._docSet({});
 });
+
+it('should get firebase from global', () => {
+  const store = new FirebaseStore();
+  const firebaseMock = new FirebaseMock();
+  store._global = {
+    firebase: firebaseMock
+  };
+  expect(store._getFirebase({})).toEqual(firebaseMock);
+});
