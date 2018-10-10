@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import render from './render';
 import compiler from '../mson/compiler';
 import Component from './component';
