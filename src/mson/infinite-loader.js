@@ -1,4 +1,5 @@
-import _ from './lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import isEqual from 'lodash/isEqual';
 
 // TODO: improve the loading when scrolling up so that the user can "jump" to previous pages.
 // Currently, when we scroll up the pages are loaded in reverse order, which means that it can take
@@ -142,7 +143,7 @@ export default class InfiniteLoader {
     let beginId = null;
     let endId = null;
 
-    props = props ? _.cloneDeep(props) : {};
+    props = props ? cloneDeep(props) : {};
 
     props.showArchived = this._showArchived;
 
@@ -218,9 +219,9 @@ export default class InfiniteLoader {
     }
 
     // Props changing? Debounce duplicates
-    if (!_.isEqual(props, this._lastGetAllProps)) {
+    if (!isEqual(props, this._lastGetAllProps)) {
       this._onSetIsLoading(true);
-      this._lastGetAllProps = _.cloneDeep(props);
+      this._lastGetAllProps = cloneDeep(props);
       const records = await this._onGetAll(props);
 
       // No more data?

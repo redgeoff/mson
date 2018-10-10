@@ -1,4 +1,5 @@
-import _ from '../lodash';
+import each from 'lodash/each';
+import cloneDeep from 'lodash/cloneDeep';
 import sift from 'sift';
 
 export default class Validator {
@@ -46,7 +47,7 @@ export default class Validator {
 
   // Performs in place fill to prepare for sift query
   _fillWhere(where) {
-    _.each(where, (node, name) => {
+    each(where, (node, name) => {
       // Leaf node?
       if (typeof node === 'string') {
         where[name] = this._fillProps(node);
@@ -68,7 +69,7 @@ export default class Validator {
 
   _validateWithRule(rule) {
     // Clone where as we will be modifying the leaf nodes
-    let where = _.cloneDeep(rule.where);
+    let where = cloneDeep(rule.where);
 
     // Fill the props
     this._fillWhere(where);

@@ -1,4 +1,6 @@
-import _ from './lodash';
+import reduce from 'lodash/reduce';
+import each from 'lodash/each';
+import cloneDeep from 'lodash/cloneDeep';
 import uuid from 'uuid';
 
 export class Utils {
@@ -9,7 +11,7 @@ export class Utils {
 
   async sequential(items, onItem) {
     const values = [];
-    await _.reduce(
+    await reduce(
       items,
       async (promise, item, key) => {
         await promise;
@@ -49,7 +51,7 @@ export class Utils {
 
   getAllFunctionNames(obj) {
     const methods = [];
-    _.each(obj, (property, name) => {
+    each(obj, (property, name) => {
       if (typeof property === 'function') {
         methods.push(name);
       }
@@ -60,8 +62,8 @@ export class Utils {
 
   combineWheres(where1, where2) {
     // Clone so that we don't modify the original where
-    where1 = _.cloneDeep(where1);
-    where2 = _.cloneDeep(where2);
+    where1 = cloneDeep(where1);
+    where2 = cloneDeep(where2);
 
     if (where1 && where2) {
       return {

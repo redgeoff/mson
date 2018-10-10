@@ -1,5 +1,5 @@
 import MultipleValueField from './multiple-value-field';
-import _ from '../lodash';
+import cloneDeep from 'lodash/cloneDeep';
 
 export default class SelectField extends MultipleValueField {
   _className = 'SelectField';
@@ -107,7 +107,7 @@ export default class SelectField extends MultipleValueField {
   _setValue(value) {
     if (this.get('removeIfNotInList') && value) {
       // Clone so that we don't modify original data
-      value = _.cloneDeep(value);
+      value = cloneDeep(value);
 
       const values = this.get('multiple') ? value : [value];
 

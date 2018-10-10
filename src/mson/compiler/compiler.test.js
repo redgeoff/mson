@@ -2,7 +2,7 @@ import { Compiler } from './compiler';
 import components from '../components';
 import globals from '../globals';
 import testUtils from '../test-utils';
-import _ from '../lodash';
+import each from 'lodash/each';
 import Action from '../actions/action';
 
 const newCompiler = () => {
@@ -547,7 +547,7 @@ it('should support schema props at the same layer', () => {
 it('should validate the definitions of all core components', () => {
   setValidateOnly();
 
-  _.each(components, (component, name) => {
+  each(components, (component, name) => {
     if (!compiler.isCompiled(component)) {
       expectDefinitionToBeValid(component, name);
     }
@@ -557,7 +557,7 @@ it('should validate the definitions of all core components', () => {
 it('should define className for all core components', () => {
   setValidateOnly();
 
-  _.each(components, (component, name) => {
+  each(components, (component, name) => {
     const c = compiler.newComponent({
       component: name
     });

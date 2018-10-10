@@ -1,7 +1,7 @@
 // TODO: use in validator as well?
 // TODO: move from compiler directory as used by multiple modules
 
-import _ from '../lodash';
+import cloneDeepWith from 'lodash/cloneDeepWith';
 
 export default class PropFiller {
   constructor(props) {
@@ -68,7 +68,7 @@ export default class PropFiller {
 
   fillAll(items) {
     // Recursively dive into objects and fill any strings
-    return _.cloneDeepWith(items, item => {
+    return cloneDeepWith(items, item => {
       if (item && item._className) {
         // The item is a component, therefore we should not clone it. TODO: is there a better way to
         // determine this?

@@ -1,5 +1,5 @@
 import PropFiller from './prop-filler';
-import _ from '../lodash';
+import cloneDeep from 'lodash/cloneDeep';
 
 it('should fill props', () => {
   const props = {
@@ -64,7 +64,7 @@ it('should handle circular references', () => {
 
   const filler = new PropFiller(props);
 
-  const clonedItems = _.cloneDeep(items);
+  const clonedItems = cloneDeep(items);
   clonedItems.a.v = 'bar';
   clonedItems.v = 'tar';
   expect(filler.fillAll(items)).toEqual(clonedItems);

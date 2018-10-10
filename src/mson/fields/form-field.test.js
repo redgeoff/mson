@@ -1,7 +1,7 @@
 import FormField from './form-field';
 import Form from '../form';
 import TextField from './text-field';
-import _ from '../lodash';
+import each from 'lodash/each';
 import testUtils from '../test-utils';
 
 const createField = () => {
@@ -43,7 +43,7 @@ it('should set and pass through properties', async () => {
   const setSpy = jest.spyOn(field._form, 'set');
   const getSpy = jest.spyOn(field._form, 'get');
 
-  _.each(properties, (value, prop) => {
+  each(properties, (value, prop) => {
     const props = { [prop]: value };
     field.set(props);
 

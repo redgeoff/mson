@@ -1,5 +1,6 @@
 import Component from '../component';
-import _ from '../lodash';
+import merge from 'lodash/merge';
+import each from 'lodash/each';
 import Validator from '../component/validator';
 import Mapa from '../mapa';
 import IdField from '../fields/id-field';
@@ -365,7 +366,7 @@ export default class Form extends Component {
 
   _setAccess(access) {
     // Merge access recursively
-    this._set('access', _.merge(this._access, access));
+    this._set('access', merge(this._access, access));
   }
 
   _emitChangeToFields(change) {
@@ -634,7 +635,7 @@ export default class Form extends Component {
       if (values === null) {
         this.clearValues();
       } else {
-        _.each(values, (value, name) => {
+        each(values, (value, name) => {
           if (this.hasField(name)) {
             this.getField(name).setValue(value);
           } else if (this.get('reportUndefined')) {

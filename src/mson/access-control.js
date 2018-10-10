@@ -1,4 +1,6 @@
-import _ from './lodash';
+import each from 'lodash/each';
+import get from 'lodash/get';
+import clone from 'lodash/clone';
 import Roles from './roles';
 
 // e.g.
@@ -28,7 +30,7 @@ export default class AccessControl {
 
     let has = false;
 
-    _.each(access, role => {
+    each(access, role => {
       if (
         indexedRoles[role] ||
         (isOwner && (role === Roles.ID_OWNER || role === Roles.OWNER))
@@ -42,7 +44,7 @@ export default class AccessControl {
   }
 
   hasFormAccess(operation, access, indexedRoles, isOwner) {
-    const formAccess = _.get(access, ['form', operation]);
+    const formAccess = get(access, ['form', operation]);
     if (formAccess !== undefined) {
       return this._hasAccess(formAccess, indexedRoles, isOwner);
     } else {
@@ -53,7 +55,7 @@ export default class AccessControl {
 
   _canAccessFieldForOp(operation, access, indexedRoles, fieldName, isOwner) {
     // Priority given to field layer access if it exists
-    const fieldAccess = _.get(access, ['fields', fieldName, operation]);
+    const fieldAccess = get(access, ['fields', fieldName, operation]);
     if (fieldAccess !== undefined) {
       return this._hasAccess(fieldAccess, indexedRoles, isOwner);
     }
@@ -109,7 +111,7 @@ export default class AccessControl {
 
   canAccess(operation, access, indexedRoles, fieldValues, isOwner) {
     const errors = [];
-    _.each(fieldValues, (value, name) => {
+    each(fieldValues, (value, name) => {
       if (
         !this._canAccessField(operation, access, indexedRoles, name, isOwner)
       ) {
@@ -128,7 +130,7 @@ export default class AccessControl {
     canDowngrade
   ) {
     const fields = {};
-    _.each(fieldValues, (value, name) => {
+    each(fieldValues, (value, name) => {
       const canAccess = this._canAccessField(
         operation,
         access,
@@ -146,8 +148,8 @@ export default class AccessControl {
 
   valuesCanAccess(operation, access, indexedRoles, fieldValues, isOwner) {
     // Clone so that we don't modify original data
-    fieldValues = _.clone(fieldValues);
-    _.each(fieldValues, (value, name) => {
+    fieldValues = clone(fieldValues);
+    each(fieldValues, (value, name) => {
       if (
         !this._canAccessField(operation, access, indexedRoles, name, isOwner)
       ) {

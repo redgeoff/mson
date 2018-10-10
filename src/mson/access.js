@@ -1,6 +1,6 @@
 import registrar from './compiler/registrar';
 import AccessControl from './access-control';
-import _ from './lodash';
+import each from 'lodash/each';
 
 // Note: this function contains client-specific access control logic
 export class Access {
@@ -48,7 +48,7 @@ export class Access {
     let isOwner = false;
 
     if (session && session.user.roles) {
-      _.each(session.user.roles, (role, id) => {
+      each(session.user.roles, (role, id) => {
         // The client uses the role name to check access
         indexedRoles[role.name] = true;
       });

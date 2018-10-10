@@ -1,6 +1,6 @@
 import SchemaValidatorForm from './schema-validator-form';
 import compiler from '../compiler';
-import _ from '../lodash';
+import cloneDeep from 'lodash/cloneDeep';
 
 it('should not mutate values when setting', () => {
   const form = new SchemaValidatorForm();
@@ -11,7 +11,7 @@ it('should not mutate values when setting', () => {
     component: 'TextField'
   };
 
-  const clonedValues = _.cloneDeep(values);
+  const clonedValues = cloneDeep(values);
 
   form.setValues(values);
 

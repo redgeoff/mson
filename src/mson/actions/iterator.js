@@ -1,5 +1,7 @@
 import Action from './action';
-import _ from '../lodash';
+import get from 'lodash/get';
+import clone from 'lodash/clone';
+import map from 'lodash/map';
 import PropFiller from '../compiler/prop-filler';
 
 export default class Iterator extends Action {
@@ -28,14 +30,14 @@ export default class Iterator extends Action {
   }
 
   _getProp(props, path) {
-    return _.get(props, path);
+    return get(props, path);
   }
 
   async act(props) {
     const iterator = this._getProp(props, this.get('iterator'));
-    const clonedProps = _.clone(props);
+    const clonedProps = clone(props);
     const filler = new PropFiller(props);
-    return _.map(iterator, item => {
+    return map(iterator, item => {
       // Inject item
       clonedProps.item = item;
       filler.setProps(clonedProps);

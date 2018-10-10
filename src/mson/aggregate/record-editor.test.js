@@ -1,7 +1,7 @@
 import compiler from '../compiler';
 import testUtils from '../test-utils';
 import MemoryStore from '../stores/memory-store';
-import _ from '../lodash';
+import each from 'lodash/each';
 
 let acts = null;
 let editAccount = null;
@@ -210,7 +210,7 @@ const expectActsToContain = expActs => {
   expActs.forEach((expAct, i) => {
     const act = acts[i];
     const actualProps = {};
-    _.each(expAct.props, (value, name) => {
+    each(expAct.props, (value, name) => {
       actualProps[name] = act.props[name];
     });
     const actualAct = { name: act.name, props: actualProps };
