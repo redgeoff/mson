@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   mode: 'production',
   entry: {
-    mson: './src/index.js',
+    mson: './src/mson/index.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
