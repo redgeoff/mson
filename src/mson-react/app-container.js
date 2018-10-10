@@ -16,6 +16,12 @@ const theme = createMuiTheme({
     // type: 'dark',
     // secondary: cyan
     secondary: lightBlue
+  },
+
+  // TODO: remove after next major Material-UI release
+  // (https://material-ui.com/style/typography/#migration-to-typography-v2)
+  typography: {
+    useNextVariants: true
   }
 });
 

@@ -14,11 +14,7 @@ class DisplayValueTypography extends React.PureComponent {
 
     // We use a span tag so that the element is inline
     return (
-      <Typography
-        variant="subheading"
-        component="span"
-        className={classes.root}
-      >
+      <Typography variant="subtitle1" component="span" className={classes.root}>
         {children}
       </Typography>
     );
