@@ -15,11 +15,19 @@ You can read more about why I created MSON at [Creating a New Programming Langua
 
 **Stability Disclaimer:** MSON is still an evolving project and should not be considered stable. The project has 100% code coverage and the API has already gone through several iterations, but the details may change. There is also limited documentation for now, so you may be required to dive into the code to gain a deeper understanding. PRs are very welcome.
 
+## Live Demo
+
+<a href="https://redgeoff.github.io/mson-react"><img src="https://raw.githubusercontent.com/redgeoff/mson-react/master/demo.png" alt="MSON Demo" /></a>
+
 ## Getting Started
+
+### Getting Started App
 
 The best way to get started with MSON is to play with the [Getting Started App](https://github.com/redgeoff/mson-getting-started). In just a few lines of MSON, you'll generate an app that can list, edit, filter and sort a list of contacts. And, for extra fun, you can use Firebase to make it real-time capable.
 
-After you have played with the [Getting Started App](https://github.com/redgeoff/mson-getting-started) you may find it useful to fire up the MSON demo:
+### MSON Demo
+
+After you have played with the Getting Started App you may find it useful to fire up the [MSON demo](https://redgeoff.github.io/mson-react):
 
   - $ git clone https://github.com/redgeoff/mson-react
   - $ cd mson-react
