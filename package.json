@@ -5,6 +5,7 @@
   "author": "Geoff Cox",
   "license": "Apache-2.0",
   "dependencies": {
+    "@babel/runtime": "^7.1.2",
     "country-telephone-data": "^0.5.5",
     "date-fns": "^2.0.0-alpha.16",
     "events": "^3.0.0",
