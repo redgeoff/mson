@@ -16,7 +16,9 @@ it('should reset password', async () => {
     'resetPassword'
   );
 
-  await resetPassword.run();
+  const context = 'foo';
 
-  expect(resetPasswordSpy).toHaveBeenCalledWith(token);
+  await resetPassword.run({ context });
+
+  expect(resetPasswordSpy).toHaveBeenCalledWith({ context, token });
 });

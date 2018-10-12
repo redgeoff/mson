@@ -16,7 +16,9 @@ it('should request password reset', async () => {
     'requestReset'
   );
 
-  await requestPasswordReset.run();
+  const context = 'foo';
 
-  expect(requestResetSpy).toHaveBeenCalledWith(email);
+  await requestPasswordReset.run({ context });
+
+  expect(requestResetSpy).toHaveBeenCalledWith({ context, email });
 });

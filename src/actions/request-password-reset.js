@@ -22,10 +22,13 @@ export default class RequestPasswordReset extends Action {
   }
 
   _requestReset(props) {
-    return this._registrar.resetPassword.requestReset(props.email);
+    return this._registrar.resetPassword.requestReset(props);
   }
 
-  async act(/* props */) {
-    return this._requestReset(this.get(['email']));
+  async act(props) {
+    return this._requestReset({
+      context: props.context,
+      email: this.get('email')
+    });
   }
 }
