@@ -451,10 +451,10 @@ The MSON compiler is written in JavaScript and can run in both the browser and i
 
 For example, here is a component that uses [Moment.js](https://momentjs.com/) to set a `currentDay` property to the current day:
 ```js
-import compiler from 'mson/compiler';
-import Component from 'mson/component';
-import Form from 'mson/form';
-import { TextField } from 'mson/fields';
+import compiler from 'mson/lib/compiler';
+import Component from 'mson/lib/component';
+import Form from 'mson/lib/form';
+import { TextField } from 'mson/lib/fields';
 import moment from 'moment';
 
 class MyComponent extends Component {
@@ -483,10 +483,10 @@ And then `MyComponent` can be used in any MSON code.
 
 You can also do things like define custom asynchronous actions, e.g. one that POSTs form data:
 ```js
-import compiler from 'mson/compiler';
-import Action from 'mson/actions/action';
-import Form from 'mson/form';
-import { TextField } from 'mson/fields';
+import compiler from 'mson/lib/compiler';
+import Action from 'mson/lib/actions/action';
+import Form from 'mson/lib/form';
+import { TextField } from 'mson/lib/fields';
 
 class MyAction extends Action {
   _create(props) {
@@ -547,8 +547,8 @@ And then you can use this in your MSON code:
 There is always parity between compiled and uncompiled components so that the same feature set is supported by both compiled and uncompiled code. For example, our same `MyAccount` component can also be defined as:
 
 ```js
-import Form from 'mson/form';
-import { TextField, Email } from 'mson/fields';
+import Form from 'mson/lib/form';
+import { TextField, Email } from 'mson/lib/fields';
 
 class MyAccount extends Form {
   _create(props) {
@@ -576,7 +576,7 @@ In fact, converting MSON code to this type of code is basically what the compile
 
 Since all MSON code can be compiled to JS code, you can use MSON components in any JS code. For example, you can set some fields and validate the data:
 ```js
-import compiler from 'mson/compiler';
+import compiler from 'mson/lib/compiler';
 
 // Compile the MyAccount component
 const MyAccount = compiler.compile({
