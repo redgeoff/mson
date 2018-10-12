@@ -1,5 +1,5 @@
 export default {
-  name: 'ResetPassword',
+  name: 'RecoverPassword',
   component: 'Form',
   fields: [
     {
