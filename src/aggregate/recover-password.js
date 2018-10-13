@@ -1,29 +1,37 @@
 export default {
   name: 'RecoverPassword',
   component: 'Form',
+
+  schema: {
+    component: 'Form',
+    fields: [
+      {
+        name: 'action',
+        component: 'Field',
+        label: 'Action'
+      }
+    ]
+  },
+
   fields: [
     {
-      component: 'EmailField',
       name: 'email',
+      component: 'EmailField',
       label: 'Email',
       required: true
-    },
+    }
+  ],
+
+  listeners: [
     {
-      component: 'ReCAPTCHAField'
+      event: 'createRecord',
+      actions: [
+        {
+          component: 'RequestPasswordReset',
+          email: '{{fields.email.value}}'
+        },
+        '{{action}}'
+      ]
     }
   ]
-
-  // // TODO:
-  // listeners: [
-  //   event: 'createRecord',
-  //   actions: [
-  //     {
-  //       component: 'Email',
-  //       subject: 'Reset Password',
-  //
-  //       // TODO: support markdown
-  //       body: '<a href="{{arguments.url}}">Reset your password</a>'
-  //     }
-  //   ]
-  // ]
 };
