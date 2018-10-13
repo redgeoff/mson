@@ -9,6 +9,7 @@ import ButtonField from '../fields/button-field';
 import ComponentFillerProps from '../component/component-filler-props';
 import ComponentField from '../fields/component-field';
 import FormField from '../fields/form-field';
+import FormErr from './form-err';
 
 export default class Form extends Component {
   _className = 'Form';
@@ -964,5 +965,18 @@ export default class Form extends Component {
   destroy() {
     super.destroy();
     this.eachField(field => field.destroy());
+  }
+
+  setFieldErr(fieldName, err) {
+    this.getField(fieldName).setErr(err);
+  }
+
+  toErr() {
+    return new FormErr({ form: this });
+  }
+
+  setFieldErrAndThrow(fieldName, err) {
+    this.setFieldErr(fieldName, err);
+    throw this.toErr();
   }
 }
