@@ -21,13 +21,14 @@ export default class ResetPassword extends Action {
     this._setDefaults(props, { layer: 'backEnd' });
   }
 
-  _requestReset(props) {
+  _reset(props) {
     return this._registrar.resetPassword.resetPassword(props);
   }
 
   async act(props) {
-    return this._requestReset({
+    return this._reset({
       context: props.context,
+      component: props.component,
       token: this.get('token')
     });
   }
