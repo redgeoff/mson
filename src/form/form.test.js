@@ -6,6 +6,7 @@ import compiler from '../compiler';
 import FormField from '../fields/form-field';
 import Set from '../actions/set';
 import Text from '../text';
+import FormErr from './form-err';
 
 const createForm = props => {
   return new Form({
@@ -867,4 +868,13 @@ it('should add non-field', () => {
     })
   );
   expect(form.getField('text').getClassName()).toEqual('ComponentField');
+});
+
+it('should set field err and throw', () => {
+  const form1 = createForm();
+  const form2 = createForm();
+  form2.getField('firstName').setErr('nope');
+  expect(() => form1.setFieldErrAndThrow('firstName', 'nope')).toThrow(
+    new FormErr({ form: form2 })
+  );
 });

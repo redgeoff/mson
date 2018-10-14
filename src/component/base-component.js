@@ -429,13 +429,14 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
-  async _runAction(listener, action, event, args) {
+  async _runAction(listener, action, event, args, context) {
     const layer = action.get('layer');
     if (!this._getLayer() || !layer || layer === this._getLayer()) {
       return action.run({
         event,
         component: this,
-        arguments: args
+        arguments: args,
+        context
       });
     }
   }
@@ -453,7 +454,7 @@ export default class BaseComponent extends events.EventEmitter {
     this._onActionErr(err);
   }
 
-  async runListeners(event, output) {
+  async runListeners(event, output, context) {
     const listeners = this.get('listeners');
     if (listeners) {
       for (let i in listeners) {
@@ -468,7 +469,13 @@ export default class BaseComponent extends events.EventEmitter {
           for (const i in listener.actions) {
             const action = listener.actions[i];
 
-            const runAction = this._runAction(listener, action, event, output);
+            const runAction = this._runAction(
+              listener,
+              action,
+              event,
+              output,
+              context
+            );
 
             if (action.get('detached')) {
               // We don't wait for detached actions, but we want to log any errors

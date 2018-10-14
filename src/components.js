@@ -60,10 +60,12 @@ import ReCAPTCHAVault from './vaults/re-captcha-vault';
 import RecordEditor from './aggregate/record-editor';
 import RecordList from './aggregate/record-list';
 import RecordStore from './stores/record-store';
+import RecoverPassword from './aggregate/recover-password';
 import Redirect from './actions/redirect';
 import RedirectByRole from './actions/redirect-by-role';
 import RegExpField from './fields/reg-exp-field';
-import ResetPassword from './aggregate/reset-password';
+import RequestPasswordReset from './actions/request-password-reset';
+import ResetPassword from './actions/reset-password';
 import RolesField from './fields/roles-field';
 import SchemaValidatorForm from './form/schema-validator-form';
 import SelectField from './fields/select-field';
@@ -144,9 +146,11 @@ export default {
   RecordEditor,
   RecordList,
   RecordStore,
+  RecoverPassword,
   Redirect,
   RedirectByRole,
   RegExpField,
+  RequestPasswordReset,
   ResetPassword,
   RolesField,
   SchemaValidatorForm,
