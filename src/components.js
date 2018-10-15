@@ -61,6 +61,7 @@ import RecordEditor from './aggregate/record-editor';
 import RecordList from './aggregate/record-list';
 import RecordStore from './stores/record-store';
 import RecoverPassword from './aggregate/recover-password';
+import RecoverPasswordEditor from './aggregate/recover-password-editor';
 import Redirect from './actions/redirect';
 import RedirectByRole from './actions/redirect-by-role';
 import RegExpField from './fields/reg-exp-field';
@@ -147,6 +148,7 @@ export default {
   RecordList,
   RecordStore,
   RecoverPassword,
+  RecoverPasswordEditor,
   Redirect,
   RedirectByRole,
   RegExpField,
