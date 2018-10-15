@@ -5,19 +5,6 @@ export default class RequestPasswordReset extends Action {
 
   _create(props) {
     super._create(props);
-
-    this.set({
-      schema: {
-        component: 'Form',
-        fields: [
-          {
-            name: 'email',
-            component: 'EmailField'
-          }
-        ]
-      }
-    });
-
     this._setDefaults(props, { layer: 'backEnd' });
   }
 
@@ -28,8 +15,7 @@ export default class RequestPasswordReset extends Action {
   async act(props) {
     return this._requestReset({
       context: props.context,
-      component: props.component,
-      email: this.get('email')
+      component: props.component
     });
   }
 }
