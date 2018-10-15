@@ -61,11 +61,13 @@ import RecordEditor from './aggregate/record-editor';
 import RecordList from './aggregate/record-list';
 import RecordStore from './stores/record-store';
 import RecoverPassword from './aggregate/recover-password';
+import RecoverPasswordEditor from './aggregate/recover-password-editor';
 import Redirect from './actions/redirect';
 import RedirectByRole from './actions/redirect-by-role';
 import RegExpField from './fields/reg-exp-field';
 import RequestPasswordReset from './actions/request-password-reset';
 import ResetPassword from './actions/reset-password';
+import ResetPasswordEditor from './aggregate/reset-password-editor';
 import RolesField from './fields/roles-field';
 import SchemaValidatorForm from './form/schema-validator-form';
 import SelectField from './fields/select-field';
@@ -147,11 +149,13 @@ export default {
   RecordList,
   RecordStore,
   RecoverPassword,
+  RecoverPasswordEditor,
   Redirect,
   RedirectByRole,
   RegExpField,
   RequestPasswordReset,
   ResetPassword,
+  ResetPasswordEditor,
   RolesField,
   SchemaValidatorForm,
   SelectField,
