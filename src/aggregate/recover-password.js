@@ -27,8 +27,7 @@ export default {
       event: 'createRecord',
       actions: [
         {
-          component: 'RequestPasswordReset',
-          email: '{{fields.email.value}}'
+          component: 'RequestPasswordReset'
         },
         '{{action}}'
       ]

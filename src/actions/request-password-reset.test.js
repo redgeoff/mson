@@ -1,9 +1,15 @@
 import RequestPasswordReset from './request-password-reset';
+import Form from '../form';
+import { EmailField } from '../fields';
 
 it('should request password reset', async () => {
   const email = 'test@example.com';
 
-  const requestPasswordReset = new RequestPasswordReset({ email });
+  const form = new Form({
+    fields: [new EmailField({ name: 'email', value: email })]
+  });
+
+  const requestPasswordReset = new RequestPasswordReset();
 
   requestPasswordReset._registrar = {
     resetPassword: {
@@ -18,7 +24,7 @@ it('should request password reset', async () => {
 
   const context = 'foo';
 
-  await requestPasswordReset.run({ context });
+  await requestPasswordReset.run({ context, component: form });
 
-  expect(requestResetSpy).toHaveBeenCalledWith({ context, email });
+  expect(requestResetSpy).toHaveBeenCalledWith({ context, component: form });
 });
