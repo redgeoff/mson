@@ -52,6 +52,10 @@ export class Globals extends Component {
           {
             name: 'reCAPTCHASiteKey',
             component: 'TextField'
+          },
+          {
+            name: 'route',
+            component: 'Field'
           }
         ]
       }
