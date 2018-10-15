@@ -1,4 +1,6 @@
 import Component from './component';
+import each from 'lodash/each';
+import querystring from 'querystring';
 
 // e.g. [
 //   {
@@ -82,8 +84,27 @@ export default class Menu extends Component {
     });
   }
 
+  _toRegExpPath(path) {
+    const paramNames = [];
+
+    const regExpPath = path.replace(/:([^/])*/g, match => {
+      paramNames.push(match.substr(1));
+      return '([^\\/]*)';
+    });
+
+    return {
+      paramNames,
+      regExpPath: new RegExp('^' + regExpPath + '$')
+    };
+  }
+
   _indexItemByPath(item) {
-    this._itemsByPath[item.path] = item;
+    let extras = {};
+    if (item.path) {
+      extras = this._toRegExpPath(item.path);
+    }
+    this._itemsByPath[item.path] = { ...item, ...extras };
+
     if (item.items) {
       item.items.forEach(item => this._indexItemByPath(item));
     }
@@ -116,8 +137,40 @@ export default class Menu extends Component {
     }
   }
 
+  getItemAndParsePath(path) {
+    let itemFound = null;
+    let params = {};
+
+    each(this._itemsByPath, item => {
+      if (item.path) {
+        const match = path.match(item.regExpPath);
+        if (match) {
+          itemFound = item;
+          item.paramNames.forEach((name, i) => (params[name] = match[i + 1]));
+          return false; // exit loop
+        }
+      }
+    });
+
+    return {
+      item: itemFound,
+      params
+    };
+  }
+
   getItem(path) {
-    return this._itemsByPath[path];
+    const { item } = this.getItemAndParsePath(path);
+    return item;
+  }
+
+  toRoute({ parameters, queryString, hash }) {
+    const query = querystring.parse(queryString);
+
+    return {
+      parameters,
+      query,
+      hash
+    };
   }
 
   getParent(path) {

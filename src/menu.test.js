@@ -1,6 +1,10 @@
 import Menu from './menu';
 import testUtils from './test-utils';
 
+const expectItemToEqual = (item1, item2) => {
+  expect(item1.path).toEqual(item2.path);
+};
+
 it('should index by path', () => {
   const colors = [
     {
@@ -20,6 +24,13 @@ it('should index by path', () => {
         {
           path: 'dark-red',
           label: 'Dark Red'
+        },
+        {
+          path: 'dark-red/user/:userId/blog/:blogId',
+          label: 'Dark Red Blog'
+        },
+        {
+          label: 'Medium Red'
         }
       ]
     },
@@ -31,15 +42,30 @@ it('should index by path', () => {
 
   const menu = new Menu({ items: colors });
 
-  expect(menu.getItem('red')).toEqual(colors[0]);
-  expect(menu.getItem('light-red')).toEqual(colors[0].items[0]);
-  expect(menu.getItem('light-light-red')).toEqual(colors[0].items[0].items[0]);
-  expect(menu.getItem('green')).toEqual(colors[1]);
+  expectItemToEqual(menu.getItem('red'), colors[0]);
+  expectItemToEqual(menu.getItem('light-red'), colors[0].items[0]);
+  expectItemToEqual(
+    menu.getItem('light-light-red'),
+    colors[0].items[0].items[0]
+  );
+  expectItemToEqual(menu.getItem('green'), colors[1]);
+  expectItemToEqual(
+    menu.getItem('dark-red/user/myUserId/blog/myBlogId'),
+    colors[0].items[2]
+  );
+  expect(menu.getItem('not-found')).toBeNull();
 
-  expect(menu.getParent(colors[0].items[0].items[0].path)).toEqual(
+  const item = menu.getItemAndParsePath('dark-red/user/myUserId/blog/myBlogId');
+  expect(item.params).toEqual({
+    userId: 'myUserId',
+    blogId: 'myBlogId'
+  });
+
+  expectItemToEqual(
+    menu.getParent(colors[0].items[0].items[0].path),
     colors[0].items[0]
   );
-  expect(menu.getFirstItem()).toEqual(colors[0]);
+  expectItemToEqual(menu.getFirstItem(), colors[0]);
 });
 
 it('should validate schema', () => {
@@ -75,5 +101,30 @@ it('should validate schema', () => {
         }
       }
     ]
+  });
+});
+
+it('should convert to route', () => {
+  const menu = new Menu();
+
+  const parameters = {
+    foo: 'bar'
+  };
+
+  const hash = 'myHash';
+
+  const route = menu.toRoute({
+    parameters,
+    queryString: 'yar=nar&star=jar',
+    hash
+  });
+
+  expect(route).toEqual({
+    parameters,
+    query: {
+      yar: 'nar',
+      star: 'jar'
+    },
+    hash
   });
 });
