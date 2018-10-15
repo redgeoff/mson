@@ -87,7 +87,7 @@ export default class Menu extends Component {
   _toRegExpPath(path) {
     const paramNames = [];
 
-    const regExpPath = path.replace(/:([^\/])*/g, match => {
+    const regExpPath = path.replace(/:([^/])*/g, match => {
       paramNames.push(match.substr(1));
       return '([^\\/]*)';
     });
@@ -167,11 +167,9 @@ export default class Menu extends Component {
     const query = querystring.parse(queryString);
 
     return {
-      route: {
-        parameters,
-        query,
-        hash
-      }
+      parameters,
+      query,
+      hash
     };
   }
 
