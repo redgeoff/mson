@@ -67,6 +67,7 @@ import RedirectByRole from './actions/redirect-by-role';
 import RegExpField from './fields/reg-exp-field';
 import RequestPasswordReset from './actions/request-password-reset';
 import ResetPassword from './actions/reset-password';
+import ResetPasswordEditor from './aggregate/reset-password-editor';
 import RolesField from './fields/roles-field';
 import SchemaValidatorForm from './form/schema-validator-form';
 import SelectField from './fields/select-field';
@@ -154,6 +155,7 @@ export default {
   RegExpField,
   RequestPasswordReset,
   ResetPassword,
+  ResetPasswordEditor,
   RolesField,
   SchemaValidatorForm,
   SelectField,
