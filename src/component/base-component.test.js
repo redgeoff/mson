@@ -619,3 +619,11 @@ it('should destroy', () => {
   component.destroy();
   expect(removeAllListenersSpy).toHaveBeenCalledTimes(1);
 });
+
+it('should parent class name', () => {
+  const textField = new TextField();
+  expect(textField.getParentClassName()).toEqual('Field');
+
+  const personFullNameField = new PersonFullNameField();
+  expect(personFullNameField.getParentClassName()).toEqual('CompositeField');
+});
