@@ -646,6 +646,13 @@ export default class BaseComponent extends events.EventEmitter {
     return this._className;
   }
 
+  getParentClassName() {
+    // Note: we cannot use Class.prototype.name as this is overwritten by minifiers like UglifyJS.
+    const Parent = Object.getPrototypeOf(this.constructor);
+    const parent = new Parent();
+    return parent.getClassName();
+  }
+
   _cloneDeep(obj) {
     return cloneDeepWith(obj, (item, index, obj, stack) => {
       if (index === '_parent' || index === 'parent') {
