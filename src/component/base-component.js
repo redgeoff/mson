@@ -33,7 +33,9 @@ export default class BaseComponent extends events.EventEmitter {
         },
         {
           name: 'name',
-          component: 'TextField'
+          component: 'TextField',
+          label: 'Name',
+          docLevel: 'basic'
           // required: true
         },
         {
@@ -74,6 +76,14 @@ export default class BaseComponent extends events.EventEmitter {
         {
           name: 'disableSubEvents',
           component: 'BooleanField'
+        },
+        {
+          name: 'docLevel',
+          component: 'SelectField',
+          options: [
+            { value: 'basic', label: 'Basic' },
+            { value: 'advanced', label: 'Advanced' }
+          ]
         }
       ]
     };
@@ -150,13 +160,17 @@ export default class BaseComponent extends events.EventEmitter {
     this._key = getNextKey();
   }
 
-  _create(/* props */) {
+  _create(props) {
     // TODO: would it be better if the schema was loaded dynamically and on demand instead of
     // whenever the component is created? In some ways we already have this the schema exists as
     // simple objects until it instantiated. The problem with a lazy setting of the schema is how we
     // would allow schemas to be defined via MSON.
     this.set({
       schema: this._getBaseComponentSchema()
+    });
+
+    this._setDefaults(props, {
+      docLevel: 'advanced'
     });
   }
 
@@ -816,5 +830,13 @@ export default class BaseComponent extends events.EventEmitter {
 
   destroy() {
     this.removeAllListeners();
+  }
+
+  getHiddenFieldDefinitions(names) {
+    return names.map(name => ({
+      name,
+      component: 'Field',
+      hidden: true
+    }));
   }
 }

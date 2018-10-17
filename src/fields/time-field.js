@@ -1,8 +1,8 @@
-import IntegerField from './integer-field';
+import Field from './field';
 import DateField from './date-field';
 import isValid from 'date-fns/isValid';
 
-export default class TimeField extends IntegerField {
+export default class TimeField extends Field {
   _className = 'TimeField';
 
   _create(props) {
@@ -14,7 +14,9 @@ export default class TimeField extends IntegerField {
         fields: [
           {
             name: 'showSeconds',
-            component: 'BooleanField'
+            component: 'BooleanField',
+            label: 'Show Seconds',
+            docLevel: 'basic'
           }
         ]
       }

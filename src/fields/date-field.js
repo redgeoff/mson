@@ -1,7 +1,7 @@
-import IntegerField from './integer-field';
+import Field from './field';
 import isValid from 'date-fns/isValid';
 
-export default class DateField extends IntegerField {
+export default class DateField extends Field {
   _className = 'DateField';
 
   _create(props) {
@@ -17,15 +17,21 @@ export default class DateField extends IntegerField {
           },
           {
             name: 'includeTime',
-            component: 'BooleanField'
+            component: 'BooleanField',
+            label: 'Include Time',
+            docLevel: 'basic'
           },
           {
             name: 'minDate',
-            component: 'DateField'
+            component: 'DateField',
+            label: 'Min Date',
+            docLevel: 'basic'
           },
           {
             name: 'maxDate',
-            component: 'DateField'
+            component: 'DateField',
+            label: 'Max Date',
+            docLevel: 'basic'
           }
         ]
       }

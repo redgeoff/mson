@@ -6,30 +6,34 @@ import map from 'lodash/map';
 export default class TextField extends Field {
   _className = 'TextField';
 
-  _create(props) {
-    super._create(props);
-
-    this._requireString = true;
-
+  _setTextFieldSchema() {
     this.set({
       schema: {
         component: 'Form',
         fields: [
           {
             name: 'minLength',
-            component: 'IntegerField'
+            component: 'IntegerField',
+            label: 'Min Length',
+            docLevel: 'basic'
           },
           {
             name: 'maxLength',
-            component: 'IntegerField'
+            component: 'IntegerField',
+            label: 'Max Length',
+            docLevel: 'basic'
           },
           {
             name: 'minWords',
-            component: 'IntegerField'
+            component: 'IntegerField',
+            label: 'Min Words',
+            docLevel: 'basic'
           },
           {
             name: 'maxWords',
-            component: 'IntegerField'
+            component: 'IntegerField',
+            label: 'Max Words',
+            docLevel: 'basic'
           },
           {
             // TODO: define list of acceptable values
@@ -38,11 +42,15 @@ export default class TextField extends Field {
           },
           {
             name: 'invalidRegExp',
-            component: 'TextField'
+            component: 'TextField',
+            label: 'Invalid RegExp',
+            docLevel: 'basic'
           },
           {
             name: 'multiline',
-            component: 'BooleanField'
+            component: 'BooleanField',
+            label: 'Multiline',
+            docLevel: 'basic'
           },
           {
             name: 'rows',
@@ -60,9 +68,18 @@ export default class TextField extends Field {
             name: 'unmask',
             component: 'RegExpField'
           }
-        ]
+        ],
+        hidden: this._hideTextFieldSchema
       }
     });
+  }
+
+  _create(props) {
+    super._create(props);
+
+    this._requireString = true;
+
+    this._setTextFieldSchema();
   }
 
   _toValidatorProps() {

@@ -79,6 +79,7 @@ import Snackbar from './actions/snackbar';
 import StateField from './fields/state-field';
 import Text from './text';
 import TextField from './fields/text-field';
+import TextFieldHiddenSchema from './fields/text-field-hidden-schema';
 import TextListField from './fields/text-list-field';
 import TimeField from './fields/time-field';
 import UpdatePasswordEditor from './aggregate/update-password-editor';
@@ -167,6 +168,7 @@ export default {
   StateField,
   Text,
   TextField,
+  TextFieldHiddenSchema,
   TextListField,
   TimeField,
   ValidatorForm: FormValidator,

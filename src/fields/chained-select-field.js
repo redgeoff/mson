@@ -24,7 +24,9 @@ export default class ChainedSelectField extends ListField {
         fields: [
           {
             name: 'options',
-            component: 'Field'
+            component: 'Field',
+            label: 'Options',
+            docLevel: 'basic'
           },
           {
             name: 'blankString',

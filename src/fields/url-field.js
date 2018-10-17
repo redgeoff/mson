@@ -10,6 +10,14 @@ export default class URLField extends TextField {
       schema: {
         component: 'Form',
         fields: [
+          ...this.getHiddenFieldDefinitions([
+            'minLength',
+            'maxLength',
+            'minWords',
+            'maxWords',
+            'invalidRegExp',
+            'multiline'
+          ]),
           {
             name: 'newWindow',
             component: 'BooleanField'

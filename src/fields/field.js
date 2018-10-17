@@ -16,7 +16,9 @@ export default class Field extends Component {
         fields: [
           {
             name: 'label',
-            component: 'TextField'
+            component: 'TextField',
+            label: 'Label',
+            docLevel: 'basic'
           },
           {
             name: 'value',
@@ -28,11 +30,15 @@ export default class Field extends Component {
           },
           {
             name: 'required',
-            component: 'BooleanField'
+            component: 'BooleanField',
+            label: 'Required',
+            docLevel: 'basic'
           },
           {
             name: 'fullWidth',
-            component: 'BooleanField'
+            component: 'BooleanField',
+            label: 'Full Width',
+            docLevel: 'basic'
           },
           {
             name: 'touched',
@@ -44,19 +50,27 @@ export default class Field extends Component {
           },
           {
             name: 'hidden',
-            component: 'BooleanField'
+            component: 'BooleanField',
+            label: 'Hidden',
+            docLevel: 'basic'
           },
           {
             name: 'block',
-            component: 'BooleanField'
+            component: 'BooleanField',
+            label: 'Block',
+            docLevel: 'basic'
           },
           {
             name: 'disabled',
-            component: 'BooleanField'
+            component: 'BooleanField',
+            label: 'Disabled',
+            docLevel: 'basic'
           },
           {
             name: 'editable',
-            component: 'BooleanField'
+            component: 'BooleanField',
+            label: 'Editable'
+            // docLevel: 'basic'
           },
           {
             name: 'dirty',
@@ -64,7 +78,8 @@ export default class Field extends Component {
           },
           {
             name: 'help',
-            component: 'TextField'
+            component: 'TextField',
+            label: 'Help'
           },
           {
             name: 'in',
@@ -100,7 +115,9 @@ export default class Field extends Component {
           },
           {
             name: 'useDisplayValue',
-            component: 'BooleanField'
+            component: 'BooleanField',
+            label: 'Use Display Value',
+            docLevel: 'basic'
           },
           {
             name: 'autoHideLabel',

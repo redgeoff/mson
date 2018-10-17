@@ -1,4 +1,4 @@
-import TextField from './text-field';
+import TextFieldHiddenSchema from './text-field-hidden-schema';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
 const MASK_PROPS = [
@@ -12,7 +12,7 @@ const MASK_PROPS = [
   'allowNegative'
 ];
 
-export default class NumberField extends TextField {
+export default class NumberField extends TextFieldHiddenSchema {
   _className = 'NumberField';
 
   _create(props) {
@@ -26,15 +26,23 @@ export default class NumberField extends TextField {
         fields: [
           {
             name: 'minValue',
-            component: 'NumberField'
+            component: 'NumberField',
+            label: 'Min Value',
+            docLevel: 'basic',
+            thousandsSeparatorSymbol: ','
           },
           {
             name: 'maxValue',
-            component: 'NumberField'
+            component: 'NumberField',
+            label: 'Max Value',
+            docLevel: 'basic',
+            thousandsSeparatorSymbol: ','
           },
           {
             name: 'prefix',
-            component: 'TextField'
+            component: 'TextField',
+            label: 'Prefix',
+            docLevel: 'basic'
           },
           {
             name: 'suffix',

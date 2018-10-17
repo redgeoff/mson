@@ -1,5 +1,5 @@
 export default {
-  component: 'TextField',
+  component: 'TextFieldHiddenSchema',
   type: 'password',
   minLength: 8,
   maxLength: 30,
