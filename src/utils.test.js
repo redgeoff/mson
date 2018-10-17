@@ -111,8 +111,10 @@ it('should combine wheres', () => {
 });
 
 it('should convert to RegExp', () => {
-  const items = ['/[1-9]AB/i', '/[1-9]AB/', '/\\/[1-9]AB\\//'];
-  items.forEach(item => expect(utils.toRegExp(item).toString()).toEqual(item));
+  const items = ['/[1-9]AB/i', '/[1-9]AB/', '/\\/[1-9]AB\\//', /[1-9]AB/i];
+  items.forEach(item =>
+    expect(utils.toRegExp(item).toString()).toEqual(item.toString())
+  );
 
   expect(utils.isRegExpString('/[1-9]AB/i')).toEqual(true);
   expect(utils.isRegExpString('/[1-9]AB/')).toEqual(true);
