@@ -657,7 +657,9 @@ it('register component should throw if component exists', () => {
 
 it('should get oldest compiled ancestor', () => {
   expect(compiler.getOldestCompiledAncestor('TextField')).toEqual('TextField');
-  expect(compiler.getOldestCompiledAncestor('EmailField')).toEqual('TextField');
+  expect(compiler.getOldestCompiledAncestor('EmailField')).toEqual(
+    'TextFieldHiddenSchema'
+  );
 });
 
 class FooIt extends Action {
