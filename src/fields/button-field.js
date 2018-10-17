@@ -12,15 +12,24 @@ export default class ButtonField extends Field {
         fields: [
           {
             name: 'type',
-            component: 'TextField'
+            component: 'SelectField',
+            label: 'Type',
+            options: [{ value: 'submit', label: 'Submit' }],
+            docLevel: 'basic'
           },
           {
+            // TODO: create IconListField (with preview) and use it here
             name: 'icon',
-            component: 'TextField'
+            component: 'TextField',
+            label: 'Icon',
+            docLevel: 'basic'
           },
           {
             name: 'variant',
-            component: 'TextField'
+            component: 'TextField',
+            // Hidden as it may not be portable to have a variant type and this may be better to
+            // configure at the theme layer
+            hidden: true
           }
         ]
       }

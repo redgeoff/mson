@@ -12,8 +12,40 @@ export default class TextListField extends ListField {
         component: 'Form',
         fields: [
           {
+            name: 'minLength',
+            component: 'IntegerField',
+            label: 'Min Length',
+            docLevel: 'basic'
+          },
+          {
+            name: 'maxLength',
+            component: 'IntegerField',
+            label: 'Max Length',
+            docLevel: 'basic'
+          },
+          {
+            name: 'minWords',
+            component: 'IntegerField',
+            label: 'Min Words',
+            docLevel: 'basic'
+          },
+          {
+            name: 'maxWords',
+            component: 'IntegerField',
+            label: 'Max Words',
+            docLevel: 'basic'
+          },
+          {
             name: 'invalidRegExp',
-            component: 'TextField'
+            component: 'TextField',
+            label: 'Invalid RegExp',
+            docLevel: 'basic'
+          },
+          {
+            name: 'multiline',
+            component: 'BooleanField',
+            label: 'Multiline',
+            docLevel: 'basic'
           }
         ]
       }

@@ -14,7 +14,9 @@ export default class SelectField extends MultipleValueField {
           {
             name: 'options',
             // TODO: define and use a proper field
-            component: 'Field'
+            component: 'Field',
+            label: 'Options',
+            docLevel: 'basic'
           },
           {
             name: 'blankString',

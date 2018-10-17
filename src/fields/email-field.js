@@ -1,5 +1,5 @@
 export default {
-  component: 'TextField',
+  component: 'TextFieldHiddenSchema',
   maxLength: '50',
   validators: [
     {

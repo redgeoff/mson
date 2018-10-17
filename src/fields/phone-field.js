@@ -1,10 +1,10 @@
-import TextField from './text-field';
+import TextFieldHiddenSchema from './text-field-hidden-schema';
 import map from 'lodash/map';
 import countryTelephoneData from 'country-telephone-data';
 
 const EMPTY_MASK = [/./, /./, /./, /./];
 
-export default class PhoneField extends TextField {
+export default class PhoneField extends TextFieldHiddenSchema {
   _className = 'PhoneField';
 
   _stringToArrayMask(mask) {
@@ -68,7 +68,9 @@ export default class PhoneField extends TextField {
         fields: [
           {
             name: 'defaultMask',
-            component: 'Field'
+            component: 'TextField',
+            label: 'Default Mask',
+            docLevel: 'basic'
           }
         ]
       }
