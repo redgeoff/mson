@@ -656,6 +656,27 @@ it('should set after key when one item', () => {
   expect(m._firstKey).toEqual('a');
   expect(m._lastKey).toEqual('b');
   expect(m._length).toEqual(2);
+
+  // Delete 2nd item
+  m.delete('b');
+
+  // Insert with afterKey=null (at the beginning) when there is 1 item
+  m.set('b', 2, undefined, null);
+  expect(m._items['b']).toEqual({
+    key: 'b',
+    nextKey: 'a',
+    prevKey: null,
+    value: 2
+  });
+  expect(m._items['a']).toEqual({
+    key: 'a',
+    nextKey: null,
+    prevKey: 'b',
+    value: 1
+  });
+  expect(m._firstKey).toEqual('b');
+  expect(m._lastKey).toEqual('a');
+  expect(m._length).toEqual(2);
 });
 
 it('should set after key when two items', () => {
