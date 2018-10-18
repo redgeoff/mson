@@ -31,10 +31,14 @@ export default class Mapa extends events.EventEmitter {
     return this._items[key] ? true : false;
   }
 
-  _insert(key, value, beforeKey) {
+  _nullOrUndefined(value) {
+    return value === undefined || value === null;
+  }
+
+  _insertBefore(key, value, beforeKey) {
     let prevKey = this._lastKey;
 
-    if (beforeKey !== undefined && beforeKey !== null) {
+    if (!this._nullOrUndefined(beforeKey)) {
       this._throwIfMissing(beforeKey);
       prevKey = this._items[beforeKey].prevKey;
     } else {
@@ -78,17 +82,77 @@ export default class Mapa extends events.EventEmitter {
     return item;
   }
 
-  _update(key, value, beforeKey) {
+  _insertAfter(key, value, afterKey) {
+    let nextKey = this._firstKey;
+
+    if (!this._nullOrUndefined(afterKey)) {
+      this._throwIfMissing(afterKey);
+      nextKey = this._items[afterKey].nextKey;
+    } else {
+      afterKey = null;
+    }
+
+    // Create item that links backwards to the previous item
+    const item = { key, prevKey: afterKey, nextKey, value };
+
+    // Are we prepending?
+    if (afterKey === null) {
+      // Is there a first item?
+      if (this._firstKey !== null) {
+        // Link the first item backward to out new item
+        this._items[this._firstKey].prevKey = key;
+      }
+
+      // Update the _firstKey
+      this._firstKey = key;
+    } else {
+      // Link the previous item forward to our new item
+      this._items[afterKey].nextKey = key;
+
+      // Is there a next item that needs to be linked backwards to our new item?
+      if (nextKey !== null) {
+        this._items[nextKey].prevKey = key;
+      }
+    }
+
+    // Add the new item
+    this._items[key] = item;
+
+    // Is this the last item?
+    if (this._lastKey === null || afterKey === this._lastKey) {
+      this._lastKey = key;
+    }
+
+    // Increment our length counter
+    this._length++;
+
+    return item;
+  }
+
+  _insert(key, value, beforeKey, afterKey) {
+    if (beforeKey !== undefined && afterKey !== undefined) {
+      throw new Error('cannot specify both beforeKey and afterKey');
+    }
+
+    if (afterKey !== undefined) {
+      return this._insertAfter(key, value, afterKey);
+    } else {
+      return this._insertBefore(key, value, beforeKey);
+    }
+  }
+
+  _update(key, value, beforeKey, afterKey) {
     const item = this._items[key];
 
     // Is the item moving?
     if (
-      beforeKey !== undefined &&
-      item.nextKey !== beforeKey &&
-      beforeKey !== key
+      (beforeKey !== undefined &&
+        item.nextKey !== beforeKey &&
+        beforeKey !== key) ||
+      (afterKey !== undefined && item.prevKey !== afterKey && afterKey !== key)
     ) {
       this._delete(key);
-      this.set(key, value, beforeKey);
+      this.set(key, value, beforeKey, afterKey);
     } else {
       // Update
       item.value = value;
@@ -97,16 +161,18 @@ export default class Mapa extends events.EventEmitter {
     return item;
   }
 
-  set(key, value, beforeKey) {
-    if (key === null || key === undefined) {
+  set(key, value, beforeKey, afterKey) {
+    let item = null;
+    if (this._nullOrUndefined(key)) {
       throw new Error('key cannot be null or undefined');
     } else if (this.has(key)) {
-      const item = this._update(key, value, beforeKey);
+      item = this._update(key, value, beforeKey, afterKey);
       this.emitChange('update', item);
     } else {
-      const item = this._insert(key, value, beforeKey);
+      item = this._insert(key, value, beforeKey, afterKey);
       this.emitChange('create', item);
     }
+    return item;
   }
 
   _throwIfMissing(key) {

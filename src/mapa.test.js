@@ -575,10 +575,10 @@ it('should set before key when three items', () => {
   expect(m._length).toEqual(4);
 });
 
-it('should move', () => {
+it('should move before', () => {
   const m = new Mapa();
 
-  m.set('a', 1);
+  const a = m.set('a', 1);
   m.set('b', 2);
   m.set('c', 3);
 
@@ -607,8 +607,9 @@ it('should move', () => {
   };
 
   // Move a to before c
-  m.set('a', m.get('a'), 'c');
+  const newA = m.set('a', m.get('a'), 'c');
   expectABeforeC();
+  expect(newA).toEqual(a);
 
   // Move a before a
   m.set('a', m.get('a'), 'a');
@@ -621,4 +622,285 @@ it('should report if has last', () => {
 
   m.set('a', 1);
   expect(m.hasLast()).toEqual(true);
+});
+
+it('should throw when setting if after key missing', () => {
+  const m = new Mapa();
+  expect(() => {
+    m.set(2, 1, undefined, 1);
+  }).toThrow('value is missing for key 1');
+});
+
+it('should set after key when one item', () => {
+  // Note: appending (afterKey=undefined) is tested above
+
+  const m = new Mapa();
+
+  // Set 1st item
+  m.set('a', 1, undefined, null);
+
+  // Set 2nd item after 1st
+  m.set('b', 2, undefined, 'a');
+  expect(m._items['b']).toEqual({
+    key: 'b',
+    nextKey: null,
+    prevKey: 'a',
+    value: 2
+  });
+  expect(m._items['a']).toEqual({
+    key: 'a',
+    nextKey: 'b',
+    prevKey: null,
+    value: 1
+  });
+  expect(m._firstKey).toEqual('a');
+  expect(m._lastKey).toEqual('b');
+  expect(m._length).toEqual(2);
+
+  // Delete 2nd item
+  m.delete('b');
+
+  // Insert with afterKey=null (at the beginning) when there is 1 item
+  m.set('b', 2, undefined, null);
+  expect(m._items['b']).toEqual({
+    key: 'b',
+    nextKey: 'a',
+    prevKey: null,
+    value: 2
+  });
+  expect(m._items['a']).toEqual({
+    key: 'a',
+    nextKey: null,
+    prevKey: 'b',
+    value: 1
+  });
+  expect(m._firstKey).toEqual('b');
+  expect(m._lastKey).toEqual('a');
+  expect(m._length).toEqual(2);
+});
+
+it('should set after key when two items', () => {
+  // Note: appending (afterKey=undefined) is tested above
+
+  const m = new Mapa();
+
+  m.set('a', 1);
+  m.set('b', 2);
+
+  // Set another item after 1st
+  m.set('c', 3, undefined, 'a');
+  expect(m._items['c']).toEqual({
+    key: 'c',
+    nextKey: 'b',
+    prevKey: 'a',
+    value: 3
+  });
+  expect(m._items['a']).toEqual({
+    key: 'a',
+    nextKey: 'c',
+    prevKey: null,
+    value: 1
+  });
+  expect(m._items['b']).toEqual({
+    key: 'b',
+    nextKey: null,
+    prevKey: 'c',
+    value: 2
+  });
+  expect(m._firstKey).toEqual('a');
+  expect(m._lastKey).toEqual('b');
+  expect(m._length).toEqual(3);
+
+  // Reset
+  m.clear();
+  m.set('a', 1);
+  m.set('b', 2);
+
+  // Set another item after 2nd
+  m.set('c', 3, undefined, 'b');
+  expect(m._items['a']).toEqual({
+    key: 'a',
+    nextKey: 'b',
+    prevKey: null,
+    value: 1
+  });
+  expect(m._items['c']).toEqual({
+    key: 'c',
+    nextKey: null,
+    prevKey: 'b',
+    value: 3
+  });
+  expect(m._items['b']).toEqual({
+    key: 'b',
+    nextKey: 'c',
+    prevKey: 'a',
+    value: 2
+  });
+  expect(m._firstKey).toEqual('a');
+  expect(m._lastKey).toEqual('c');
+  expect(m._length).toEqual(3);
+});
+
+it('should set after key when three items', () => {
+  // Note: appending (afterKey=undefined) is tested above
+
+  const m = new Mapa();
+
+  m.set('a', 1);
+  m.set('b', 2);
+  m.set('c', 3);
+
+  // Set another item after 1st
+  m.set('d', 4, undefined, 'a');
+  expect(m._items['d']).toEqual({
+    key: 'd',
+    nextKey: 'b',
+    prevKey: 'a',
+    value: 4
+  });
+  expect(m._items['a']).toEqual({
+    key: 'a',
+    nextKey: 'd',
+    prevKey: null,
+    value: 1
+  });
+  expect(m._items['b']).toEqual({
+    key: 'b',
+    nextKey: 'c',
+    prevKey: 'd',
+    value: 2
+  });
+  expect(m._items['c']).toEqual({
+    key: 'c',
+    nextKey: null,
+    prevKey: 'b',
+    value: 3
+  });
+  expect(m._firstKey).toEqual('a');
+  expect(m._lastKey).toEqual('c');
+  expect(m._length).toEqual(4);
+
+  // Reset
+  m.clear();
+  m.set('a', 1);
+  m.set('b', 2);
+  m.set('c', 3);
+
+  // Set another item after 2nd
+  m.set('d', 4, undefined, 'b');
+  expect(m._items['a']).toEqual({
+    key: 'a',
+    nextKey: 'b',
+    prevKey: null,
+    value: 1
+  });
+  expect(m._items['d']).toEqual({
+    key: 'd',
+    nextKey: 'c',
+    prevKey: 'b',
+    value: 4
+  });
+  expect(m._items['b']).toEqual({
+    key: 'b',
+    nextKey: 'd',
+    prevKey: 'a',
+    value: 2
+  });
+  expect(m._items['c']).toEqual({
+    key: 'c',
+    nextKey: null,
+    prevKey: 'd',
+    value: 3
+  });
+  expect(m._firstKey).toEqual('a');
+  expect(m._lastKey).toEqual('c');
+  expect(m._length).toEqual(4);
+
+  // Reset
+  m.clear();
+  m.set('a', 1);
+  m.set('b', 2);
+  m.set('c', 3);
+
+  // Set another item after 3rd
+  m.set('d', 4, undefined, 'c');
+  expect(m._items['a']).toEqual({
+    key: 'a',
+    nextKey: 'b',
+    prevKey: null,
+    value: 1
+  });
+  expect(m._items['b']).toEqual({
+    key: 'b',
+    nextKey: 'c',
+    prevKey: 'a',
+    value: 2
+  });
+  expect(m._items['d']).toEqual({
+    key: 'd',
+    nextKey: null,
+    prevKey: 'c',
+    value: 4
+  });
+  expect(m._items['c']).toEqual({
+    key: 'c',
+    nextKey: 'd',
+    prevKey: 'b',
+    value: 3
+  });
+  expect(m._firstKey).toEqual('a');
+  expect(m._lastKey).toEqual('d');
+  expect(m._length).toEqual(4);
+});
+
+it('should move after', () => {
+  const m = new Mapa();
+
+  m.set('a', 1);
+  m.set('b', 2);
+  const c = m.set('c', 3);
+
+  const expectAAfterC = () => {
+    expect(m._items['b']).toEqual({
+      key: 'b',
+      nextKey: null,
+      prevKey: 'c',
+      value: 2
+    });
+    expect(m._items['a']).toEqual({
+      key: 'a',
+      nextKey: 'c',
+      prevKey: null,
+      value: 1
+    });
+    expect(m._items['c']).toEqual({
+      key: 'c',
+      nextKey: 'b',
+      prevKey: 'a',
+      value: 3
+    });
+    expect(m._firstKey).toEqual('a');
+    expect(m._lastKey).toEqual('b');
+    expect(m._length).toEqual(3);
+  };
+
+  // Move c to after a
+  const newC = m.set('c', m.get('c'), undefined, 'a');
+  expectAAfterC();
+  expect(newC).toEqual(c);
+
+  // Move c after c
+  m.set('c', m.get('c'), undefined, 'c');
+  expectAAfterC();
+});
+
+it('should throw if both beforeKey and afterKey are defined', () => {
+  const m = new Mapa();
+
+  const err = 'cannot specify both beforeKey and afterKey';
+
+  expect(() => m.set('a', 1, 'b', 'c')).toThrow(err);
+  expect(() => m.set('a', 1, null, 'c')).toThrow(err);
+  expect(() => m.set('a', 1, 'b', null)).toThrow(err);
+  expect(() => m.set('a', 1, null, null)).toThrow(err);
 });
