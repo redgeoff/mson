@@ -483,7 +483,11 @@ export default class Form extends Component {
     const before = field.get('before');
     const beforeName = before && this.hasField(before) ? before : undefined;
 
-    this._fields.set(field.get('name'), field, beforeName);
+    // Make sure the after field is present
+    const after = field.get('after');
+    const afterName = after && this.hasField(after) ? after : undefined;
+
+    this._fields.set(field.get('name'), field, beforeName, afterName);
   }
 
   _handleFieldTouchedFactory() {
