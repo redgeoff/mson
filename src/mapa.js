@@ -135,9 +135,9 @@ export default class Mapa extends events.EventEmitter {
     }
 
     if (afterKey !== undefined) {
-      this._insertAfter(key, value, afterKey);
+      return this._insertAfter(key, value, afterKey);
     } else {
-      this._insertBefore(key, value, beforeKey);
+      return this._insertBefore(key, value, beforeKey);
     }
   }
 
@@ -162,15 +162,17 @@ export default class Mapa extends events.EventEmitter {
   }
 
   set(key, value, beforeKey, afterKey) {
+    let item = null;
     if (this._nullOrUndefined(key)) {
       throw new Error('key cannot be null or undefined');
     } else if (this.has(key)) {
-      const item = this._update(key, value, beforeKey, afterKey);
+      item = this._update(key, value, beforeKey, afterKey);
       this.emitChange('update', item);
     } else {
-      const item = this._insert(key, value, beforeKey, afterKey);
+      item = this._insert(key, value, beforeKey, afterKey);
       this.emitChange('create', item);
     }
+    return item;
   }
 
   _throwIfMissing(key) {

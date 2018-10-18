@@ -578,7 +578,7 @@ it('should set before key when three items', () => {
 it('should move before', () => {
   const m = new Mapa();
 
-  m.set('a', 1);
+  const a = m.set('a', 1);
   m.set('b', 2);
   m.set('c', 3);
 
@@ -607,8 +607,9 @@ it('should move before', () => {
   };
 
   // Move a to before c
-  m.set('a', m.get('a'), 'c');
+  const newA = m.set('a', m.get('a'), 'c');
   expectABeforeC();
+  expect(newA).toEqual(a);
 
   // Move a before a
   m.set('a', m.get('a'), 'a');
@@ -836,7 +837,7 @@ it('should move after', () => {
 
   m.set('a', 1);
   m.set('b', 2);
-  m.set('c', 3);
+  const c = m.set('c', 3);
 
   const expectAAfterC = () => {
     expect(m._items['b']).toEqual({
@@ -863,8 +864,9 @@ it('should move after', () => {
   };
 
   // Move c to after a
-  m.set('c', m.get('c'), undefined, 'a');
+  const newC = m.set('c', m.get('c'), undefined, 'a');
   expectAAfterC();
+  expect(newC).toEqual(c);
 
   // Move c after c
   m.set('c', m.get('c'), undefined, 'c');
