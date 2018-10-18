@@ -94,6 +94,10 @@ export default class Field extends Component {
             component: 'TextField'
           },
           {
+            name: 'after',
+            component: 'TextField'
+          },
+          {
             name: 'showArchived',
             component: 'BooleanField'
           },

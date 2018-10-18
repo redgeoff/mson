@@ -878,3 +878,27 @@ it('should set field err and throw', () => {
     new FormErr({ form: form2 })
   );
 });
+
+it('should add field before and after', () => {
+  const form = new Form({
+    fields: [new TextField({ name: 'lastName' })]
+  });
+
+  form.set({
+    fields: [
+      new TextField({ name: 'firstName', before: 'lastName' }),
+      new TextField({ name: 'middleName', after: 'firstName' })
+    ]
+  });
+
+  const expectedNames = ['firstName', 'middleName', 'lastName'];
+
+  const names = [];
+  form.eachField(field => {
+    const name = field.get('name');
+    if (expectedNames.indexOf(name) !== -1) {
+      names.push(name);
+    }
+  });
+  expect(names).toEqual(expectedNames);
+});
