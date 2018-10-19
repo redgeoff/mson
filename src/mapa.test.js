@@ -11,6 +11,8 @@ const createMapa = () => {
 it('should set and get', () => {
   const m = new Mapa();
 
+  const emitChangeSpy = jest.spyOn(m, 'emitChange');
+
   // Set 1st item
   m.set('a', 1);
   expect(m._items['a']).toEqual({
@@ -25,6 +27,11 @@ it('should set and get', () => {
   expect(m.map(value => value)).toEqual([1]);
   expect(m.nextKey('a')).toEqual(null);
   expect(m.previousKey('a')).toEqual(null);
+  expect(emitChangeSpy).toHaveBeenCalledTimes(1);
+  expect(emitChangeSpy.mock.calls[0]).toEqual([
+    'create',
+    { key: 'a', nextKey: null, prevKey: null, value: 1 }
+  ]);
 
   // Set 2nd item
   m.set('b', '2');
@@ -73,6 +80,7 @@ it('should set and get', () => {
   expect(m.map(value => value)).toEqual([1, '2', { value: 3 }]);
 
   // Update 3rd item
+  emitChangeSpy.mockReset();
   m.set('c', 'c');
   expect(m._items['a']).toEqual({
     key: 'a',
@@ -96,6 +104,11 @@ it('should set and get', () => {
   expect(m._lastKey).toEqual('c');
   expect(m._length).toEqual(3);
   expect(m.map(value => value)).toEqual([1, '2', 'c']);
+  expect(emitChangeSpy).toHaveBeenCalledTimes(1);
+  expect(emitChangeSpy.mock.calls[0]).toEqual([
+    'update',
+    { key: 'c', nextKey: null, prevKey: 'b', value: 'c' }
+  ]);
 });
 
 it('should delete', () => {
@@ -103,6 +116,7 @@ it('should delete', () => {
 
   // Single item
   m.set('a', 1);
+  const emitChangeSpy = jest.spyOn(m, 'emitChange');
   m.delete('a');
   expect(m._items['a']).toBeUndefined();
   expect(m.has('a')).toEqual(false);
@@ -110,6 +124,11 @@ it('should delete', () => {
   expect(m._lastKey).toEqual(null);
   expect(m._length).toEqual(0);
   expect(m.map(value => value)).toEqual([]);
+  expect(emitChangeSpy).toHaveBeenCalledTimes(1);
+  expect(emitChangeSpy.mock.calls[0]).toEqual([
+    'delete',
+    { key: 'a', nextKey: null, prevKey: null, value: 1 }
+  ]);
 
   // 2 items - delete 1st
   m.clear();
@@ -578,7 +597,7 @@ it('should set before key when three items', () => {
 it('should move before', () => {
   const m = new Mapa();
 
-  const a = m.set('a', 1);
+  m.set('a', 1);
   m.set('b', 2);
   m.set('c', 3);
 
@@ -607,9 +626,12 @@ it('should move before', () => {
   };
 
   // Move a to before c
+  const emitChangeSpy = jest.spyOn(m, 'emitChange');
   const newA = m.set('a', m.get('a'), 'c');
   expectABeforeC();
-  expect(newA).toEqual(a);
+  expect(newA).toEqual({ key: 'a', nextKey: 'c', prevKey: 'b', value: 1 });
+  expect(emitChangeSpy).toHaveBeenCalledTimes(1);
+  expect(emitChangeSpy.mock.calls[0]).toEqual(['update', newA]);
 
   // Move a before a
   m.set('a', m.get('a'), 'a');
@@ -858,7 +880,7 @@ it('should move after', () => {
 
   m.set('a', 1);
   m.set('b', 2);
-  const c = m.set('c', 3);
+  m.set('c', 3);
 
   const expectAAfterC = () => {
     expect(m._items['b']).toEqual({
@@ -887,7 +909,7 @@ it('should move after', () => {
   // Move c to after a
   const newC = m.set('c', m.get('c'), undefined, 'a');
   expectAAfterC();
-  expect(newC).toEqual(c);
+  expect(newC).toEqual({ key: 'c', nextKey: 'b', prevKey: 'a', value: 3 });
 
   // Move c after c
   m.set('c', m.get('c'), undefined, 'c');

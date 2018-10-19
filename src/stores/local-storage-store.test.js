@@ -1,5 +1,5 @@
 import LocalStorageStore from './local-storage-store';
-import { shouldCRUD, shouldGetAll, createForm } from './memory-store.test';
+import { shouldCRUD, shouldGetAll, createForm, shouldMove } from './store-test';
 
 it('should CRUD', () =>
   shouldCRUD(LocalStorageStore, { storeName: 'local-storage-store-crud' }));
@@ -7,6 +7,11 @@ it('should CRUD', () =>
 it('should get all', () =>
   shouldGetAll(LocalStorageStore, {
     storeName: 'local-storage-store-get-all'
+  }));
+
+it('should move', () =>
+  shouldMove(LocalStorageStore, {
+    storeName: 'local-storage-store-move'
   }));
 
 it('should loads docs when store exists', async () => {

@@ -142,7 +142,7 @@ export default class Mapa extends events.EventEmitter {
   }
 
   _update(key, value, beforeKey, afterKey) {
-    const item = this._items[key];
+    let item = this._items[key];
 
     // Is the item moving?
     if (
@@ -152,7 +152,7 @@ export default class Mapa extends events.EventEmitter {
       (afterKey !== undefined && item.prevKey !== afterKey && afterKey !== key)
     ) {
       this._delete(key);
-      this.set(key, value, beforeKey, afterKey);
+      item = this._insert(key, value, beforeKey, afterKey);
     } else {
       // Update
       item.value = value;

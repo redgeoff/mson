@@ -1,9 +1,10 @@
 import Field from './field';
 import globals from '../globals';
-import Mapa from '../mapa';
+import CollectionMapa from './collection-mapa';
 import InfiniteLoader from '../infinite-loader';
 import Component from '../component';
 import utils from '../utils';
+import each from 'lodash/each';
 
 // Note: We no longer instantiate a default store for the CollectionField as having a store
 // introduces extra complexity that is not always needed. For example, when using the
@@ -141,6 +142,14 @@ export default class CollectionField extends Field {
           {
             name: 'maxColumns',
             component: 'IntegerField'
+          },
+          {
+            name: 'skipRead',
+            component: 'BooleanField'
+          },
+          {
+            name: 'includeExtraneous',
+            component: 'BooleanField'
           }
         ]
       }
@@ -168,8 +177,10 @@ export default class CollectionField extends Field {
     this._createInfiniteLoader();
 
     // We use a Mapa instead of an array as it allows us to index the forms by id. We use a Mapa
-    // instead of a Map as we may want to iterate through the forms beginning at any single form.
-    this._forms = new Mapa();
+    // instead of a Map as we may want to iterate through the forms beginning at any single form. //
+    // Specifically, we use a CollectionStore as it maintains the order of the forms, because there
+    // is no guarantee that the underlying store will be ordered.
+    this._forms = new CollectionMapa();
 
     this._listenForLoaded();
     this._listenForUnload();
@@ -251,11 +262,11 @@ export default class CollectionField extends Field {
                 ...vv.fieldValues,
                 id: vv.id,
                 archivedAt: vv.archivedAt,
-                userId: vv.userId
+                userId: vv.userId,
+                order: vv.order
               },
               muteChange,
               cursor: vv.cursor
-              // beforeKey: value.prevKey
             });
           }
           break;
@@ -487,6 +498,13 @@ export default class CollectionField extends Field {
     });
   }
 
+  _notifyUI(muteChange, change) {
+    if (!muteChange) {
+      // Emit change so that UI is notified
+      this.set({ change });
+    }
+  }
+
   _addForm({ form, values, muteChange, cursor, beforeKey }) {
     form.setValues(values);
 
@@ -509,10 +527,7 @@ export default class CollectionField extends Field {
 
     this._listenToForm(form);
 
-    if (!muteChange) {
-      // Emit change so that UI is notified
-      this.set({ change: values });
-    }
+    this._notifyUI(muteChange, values);
 
     return form;
   }
@@ -565,15 +580,16 @@ export default class CollectionField extends Field {
         userId: node.userId,
         createdAt: node.createdAt,
         updatedAt: node.updatedAt,
-        archivedAt: node.archivedAt
+        archivedAt: node.archivedAt,
+        order: node.order
       };
       const form = forms[i];
 
-      form.eachField(field => {
-        // Field exists in returned records?
-        const val = node.fieldValues[field.get('name')];
-        if (val) {
-          values[field.get('name')] = val;
+      // Make sure the corresponding fields exist in the form. This is done so that extraneous data
+      // in the store, e.g. because a field has since been deleted, is just ignored.
+      each(node.fieldValues, (value, name) => {
+        if (value && (this.get('includeExtraneous') || form.hasField(name))) {
+          values[name] = value;
         }
       });
 
@@ -676,10 +692,7 @@ export default class CollectionField extends Field {
     form.removeAllListeners();
     this._forms.delete(id);
 
-    if (!muteChange) {
-      // Emit change so that UI is notified
-      this.set({ change: form.getValues() });
-    }
+    this._notifyUI(muteChange, form.getValues());
 
     return form;
   }
@@ -897,8 +910,22 @@ export default class CollectionField extends Field {
 
   updateForm({ values, muteChange, cursor, beforeKey }) {
     const fieldForm = this._forms.get(values.id);
+
+    const isOrderChanging = fieldForm.getValue('order') !== values.order;
+
     fieldForm.setValues(values);
     fieldForm.set({ cursor });
+
+    if (isOrderChanging) {
+      // Explicitly get the beforeKey as we are updating the values in place and so the
+      // CollectionMapa will not be able to detect the change in order
+      beforeKey = this._forms.getBeforeId(fieldForm);
+    }
+
+    this._forms.set(values.id, fieldForm, beforeKey);
+
+    this._notifyUI(muteChange, values);
+
     return fieldForm;
   }
 
@@ -933,7 +960,7 @@ export default class CollectionField extends Field {
         record = await store.createDoc({ form });
       } else {
         // Existing
-        record = await store.updateDoc({ form, id: id.getValue() });
+        record = await store.updateDoc({ form });
       }
       form.setValues({
         id: record.id,
@@ -1106,4 +1133,34 @@ export default class CollectionField extends Field {
     super.destroy();
     this.eachForm(form => form.destroy());
   }
+
+  // TODO: restore
+  // moveForm(sourceIndex, destinationIndex) {
+  //   let sourceEntry = null;
+
+  //   // If the form is moving down, we need to move to after the destination
+  //   const beforeEntryIndex =
+  //     destinationIndex + (destinationIndex > sourceIndex ? 1 : 0);
+
+  //   // Note: the Mapa does not provide sequential indexes so we have to loop through all the items.
+  //   // In general, we shouldn't be using moveForm() with large data sets as moving with beforeKey is
+  //   // far more efficient. If we need to improve performance for larger datasets in the future, we
+  //   // can store sequential indexes in Mapa.
+  //   let index = 0;
+  //   let beforeKey = undefined;
+  //   for (const entry of this._forms.entries()) {
+  //     if (index === sourceIndex) {
+  //       sourceEntry = entry;
+  //     }
+  //     if (index === beforeEntryIndex) {
+  //       beforeKey = entry[0];
+  //     }
+  //     index++;
+  //   }
+
+  //   return this.updateForm({
+  //     values: sourceEntry[1].getValues(),
+  //     beforeKey
+  //   });
+  // }
 }

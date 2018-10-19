@@ -1,6 +1,6 @@
 import FirebaseStore from './firebase-store';
 import FirebaseMock from './firebase-mock';
-import { shouldCRUD, shouldGetAll } from './memory-store.test';
+import { shouldCRUD, shouldGetAll, shouldMove } from './store-test';
 import testUtils from '../test-utils';
 
 it('should CRUD', () =>
@@ -8,6 +8,9 @@ it('should CRUD', () =>
 
 it('should get all', () =>
   shouldGetAll(FirebaseStore, { firebase: new FirebaseMock(), apiKey: 'key' }));
+
+it('should move', () =>
+  shouldMove(FirebaseStore, { firebase: new FirebaseMock(), apiKey: 'key' }));
 
 it('should listen to changes', async () => {
   const docs = [
@@ -131,4 +134,60 @@ it('should get firebase from global', () => {
     firebase: firebaseMock
   };
   expect(store._getFirebase({})).toEqual(firebaseMock);
+});
+
+it('should listen to changes with respect to order', async () => {
+  const doc1 = {
+    id: 'ron',
+    userId: null,
+    archivedAt: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    fieldValues: {
+      id: 'ron',
+      firstName: 'Ron'
+    },
+    order: '1'
+  };
+
+  const doc2 = {
+    id: 'harry',
+    userId: null,
+    archivedAt: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    fieldValues: {
+      id: 'harry',
+      firstName: 'Harry'
+    }
+  };
+
+  const doc3 = {
+    id: 'hermione',
+    userId: '2',
+    archivedAt: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    order: '1.9',
+    fieldValues: {
+      id: 'hermione',
+      firstName: 'Hermione'
+    }
+  };
+
+  const docs = [doc1, doc2, doc3];
+
+  const firebaseMock = new FirebaseMock(
+    docs.map(doc => ({ value: doc, id: doc.id }))
+  );
+
+  const store = new FirebaseStore({
+    firebase: firebaseMock,
+    apiKey: 'key'
+  });
+
+  // Verify initial load
+  await testUtils.once(store, 'didLoad');
+  const initialDocs = await store.getAllDocs({ showArchived: false });
+  expect(initialDocs.edges.map(doc => doc.node)).toEqual([doc1, doc3, doc2]);
 });
