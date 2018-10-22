@@ -173,7 +173,7 @@ export default class RecordStore extends Store {
   // TODO: refactor out after upsert is supported by API. Note: this is not a high priority as the
   // cache keeps us from hitting the API in many cases.
   async _upsertDoc(props) {
-    const id = props.form.getValue('id');
+    const id = props.id;
 
     let exists = false;
 
@@ -191,7 +191,7 @@ export default class RecordStore extends Store {
     }
 
     if (exists) {
-      return this.updateDoc({ ...props, id });
+      return this.updateDoc(props);
     } else {
       return this.createDoc(props);
     }

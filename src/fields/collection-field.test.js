@@ -477,7 +477,7 @@ it('should save', async () => {
   // Update
   form.setValues({ lastName: 'Ryan' });
   await field.save();
-  expect(updateSpy).toHaveBeenCalledWith({ form, id: form.getValue('id') });
+  expect(updateSpy).toHaveBeenCalledWith({ form });
   expect(field.getValue()).toHaveLength(1);
 
   // Simulate the lack of a store

@@ -22,6 +22,14 @@
 //      especially the id to be at the root of the record and not nested in the fieldValues. We also
 //      don’t want to duplicate these default fields in both the root of the record and in the field
 //      values as this can waste memory when storing the data
+//
+// We use a numeric order attribute to order docs in a set, e.g. allowing for drag-to-order UIs. The
+// downside to this approach, is that moving a doc requires updating the order of all subsequent
+// docs (https://dba.stackexchange.com/q/36875/94046). A previous design used a beforeId, similar to
+// the beforeKey construct in the Mapa, and this only required at most 2 writes to move a doc. The
+// downside; however, was that stores can return data in any order, or there can be race conditions,
+// which result in beforeIds for docs that don't exist. This problematic beforeIds cause a great
+// deal of extra complexity.
 
 import Component from '../component';
 import access from '../access';
@@ -54,8 +62,9 @@ export default class Store extends Component {
       });
 
       const id = props.form.getValue('id');
+      const order = props.form.getValue('order');
 
-      return this._createDoc({ ...props, fieldValues, id });
+      return this._createDoc({ ...props, fieldValues, id, order });
     });
   }
 
@@ -78,7 +87,7 @@ export default class Store extends Component {
   }
 
   async _upsertDoc(props) {
-    const id = props.form.getValue('id');
+    const id = props.id;
 
     let exists = false;
 
@@ -87,7 +96,7 @@ export default class Store extends Component {
     }
 
     if (exists) {
-      return this.updateDoc({ ...props, id });
+      return this.updateDoc(props);
     } else {
       return this.createDoc(props);
     }
@@ -95,7 +104,9 @@ export default class Store extends Component {
 
   async upsertDoc(props) {
     return this._tryAndHandleError(() => {
-      return this._upsertDoc(props);
+      const id = props.form.getValue('id');
+
+      return this._upsertDoc({ ...props, id });
     });
   }
 
@@ -106,7 +117,10 @@ export default class Store extends Component {
         default: false
       });
 
-      return this._updateDoc({ ...props, fieldValues });
+      const id = props.form.getValue('id');
+      const order = props.form.getValue('order');
+
+      return this._updateDoc({ ...props, fieldValues, id, order });
     });
   }
 
@@ -130,7 +144,7 @@ export default class Store extends Component {
     return new Date();
   }
 
-  _buildDoc({ fieldValues, id, userId }) {
+  _buildDoc({ fieldValues, id, userId, order }) {
     const createdAt = this._now();
 
     return {
@@ -139,11 +153,12 @@ export default class Store extends Component {
       createdAt,
       updatedAt: createdAt,
       userId: userId ? userId : null,
+      order,
       fieldValues
     };
   }
 
-  _setDoc({ doc, fieldValues, archivedAt }) {
+  _setDoc({ doc, fieldValues, archivedAt, order }) {
     if (fieldValues !== undefined) {
       // Merge so that we support partial updates
       doc.fieldValues = Object.assign(doc.fieldValues, fieldValues);
@@ -154,6 +169,14 @@ export default class Store extends Component {
     }
 
     doc.updatedAt = this._now();
+
+    if (order === undefined) {
+      // Delete instead of setting to undefined as stores like Firebase doesn't support undefined
+      // values
+      delete doc.order;
+    } else {
+      doc.order = order;
+    }
 
     return doc;
   }

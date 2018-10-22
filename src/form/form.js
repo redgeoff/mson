@@ -4,6 +4,7 @@ import each from 'lodash/each';
 import Validator from '../component/validator';
 import Mapa from '../mapa';
 import IdField from '../fields/id-field';
+import NumberField from '../fields/number-field';
 import DateField from '../fields/date-field';
 import ButtonField from '../fields/button-field';
 import ComponentFillerProps from '../component/component-filler-props';
@@ -309,29 +310,40 @@ export default class Form extends Component {
     // like creation dates. Moreover, default fields allow for the automatic formatting of things
     // like dates for stores like Firebase, which would otherwise destroy the formatting of our
     // dates.
+
     this._defaultFields.set(
       'id',
       new IdField({ name: 'id', label: 'Id', hidden: true })
     );
+
     this._defaultFields.set(
       'userId',
       new IdField({ name: 'userId', label: 'User Id', hidden: true })
     );
+
     this._defaultFields.set(
       'createdAt',
       new DateField({ name: 'createdAt', label: 'Created At', hidden: true })
     );
+
     this._defaultFields.set(
       'updatedAt',
       new DateField({ name: 'updatedAt', label: 'Updated At', hidden: true })
     );
 
-    const archivedAt = new DateField({
-      name: 'archivedAt',
-      label: 'Archived At',
-      hidden: true
-    });
-    this._defaultFields.set('archivedAt', archivedAt);
+    this._defaultFields.set(
+      'archivedAt',
+      new DateField({
+        name: 'archivedAt',
+        label: 'Archived At',
+        hidden: true
+      })
+    );
+
+    this._defaultFields.set(
+      'order',
+      new NumberField({ name: 'order', label: 'Order', hidden: true })
+    );
   }
 
   _createDefaultFields() {

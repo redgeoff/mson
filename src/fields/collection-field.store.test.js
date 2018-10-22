@@ -57,7 +57,21 @@ it('should listen to store changes', async () => {
       },
       archivedAt: null,
       userId: '1',
-      cursor: 'cursor'
+      cursor: 'cursor',
+      order: 1
+    }
+  };
+
+  const value2 = {
+    value: {
+      id: '2',
+      fieldValues: {
+        firstName: 'Stevie'
+      },
+      archivedAt: null,
+      userId: '2',
+      cursor: 'cursor',
+      order: 2
     }
   };
 
@@ -82,20 +96,37 @@ it('should listen to store changes', async () => {
       ...value.value.fieldValues,
       id: value.value.id,
       archivedAt: value.value.archivedAt,
-      userId: value.value.userId
+      userId: value.value.userId,
+      order: value.value.order
     },
     muteChange,
     cursor: value.value.cursor
   });
 
-  // Update
+  // Create and insert before the first value
+  await field._handleStoreChangeFactory()('createDoc', value2);
+  expect(upsertFormSpy).toHaveBeenCalledWith({
+    values: {
+      ...value2.value.fieldValues,
+      id: value2.value.id,
+      archivedAt: value2.value.archivedAt,
+      userId: value2.value.userId,
+      order: value2.value.order
+    },
+    muteChange,
+    cursor: value2.value.cursor
+  });
+
+  // Update and move
+  value.value.order = 2.1;
   await field._handleStoreChangeFactory()('updateDoc', value);
   expect(upsertFormSpy).toHaveBeenCalledWith({
     values: {
       ...value.value.fieldValues,
       id: value.value.id,
       archivedAt: value.value.archivedAt,
-      userId: value.value.userId
+      userId: value.value.userId,
+      order: value.value.order
     },
     muteChange,
     cursor: value.value.cursor

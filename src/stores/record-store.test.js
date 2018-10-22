@@ -1,3 +1,5 @@
+// TODO: get store-test working in this file by mocking _registrar.client.record
+
 import RecordStore from './record-store';
 import Form from '../form';
 import { TextField } from '../fields';
@@ -108,6 +110,7 @@ it('should create', async () => {
 
 it('should update', async () => {
   const form = createForm();
+  form.setValues({ id });
 
   const updated = {
     foo: 'bar'
@@ -129,13 +132,13 @@ it('should update', async () => {
 
   const updateSpy = jest.spyOn(store._registrar.client.record, 'update');
 
-  expect(await store.updateDoc({ form, id })).toEqual(updated);
+  expect(await store.updateDoc({ form })).toEqual(updated);
 
   expect(updateSpy).toHaveBeenCalledWith({
     appId,
     id,
     componentName: storeName,
-    fieldValues: form.getValues()
+    fieldValues: form.getValues({ default: false })
   });
 });
 

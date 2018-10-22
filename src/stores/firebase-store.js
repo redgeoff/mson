@@ -11,11 +11,12 @@ export default class FirebaseStore extends MemoryStore {
   _className = 'FirebaseStore';
 
   // React to real-time changes made remotely
-  async _listenToChanges(collection) {
+  async _listenToChanges() {
     // We order by createdAt as per https://firebase.google.com/docs/firestore/manage-data/add-data,
     // "Firestore auto-generated IDs do not provide any automatic ordering. If you want to be able
     // to order your documents by creation date, you should store a timestamp as a field in the
-    // documents"
+    // documents." We can only order by a single attribute (unless we create an index) so we'll pick
+    // the order.
     this._coll.orderBy('createdAt').onSnapshot(
       snapshot => {
         snapshot.docChanges().forEach(change => {
@@ -23,7 +24,6 @@ export default class FirebaseStore extends MemoryStore {
           if (change.type === 'removed') {
             this._docs.delete(data.id);
           } else {
-            // added or modified
             this._docs.set(data.id, data);
           }
         });
@@ -71,7 +71,7 @@ export default class FirebaseStore extends MemoryStore {
 
     this._coll = this._db.collection(props.collection);
 
-    this._listenToChanges(props.collection);
+    this._listenToChanges();
 
     // Not needed as we get the docs by listening to the changes
     // await this._loadDocs();
@@ -132,10 +132,14 @@ export default class FirebaseStore extends MemoryStore {
     }
   }
 
-  async _createDoc({ fieldValues, id }) {
-    const doc = this._buildDoc({ fieldValues, id });
+  async _createDoc({ fieldValues, id, order }) {
+    const doc = this._buildDoc({ fieldValues, id, order });
 
-    await this._docSet({ id: doc.id, doc });
+    await this._docSet({
+      id: doc.id,
+      doc,
+      order: doc.order
+    });
 
     // Note: we need to update the underlying MemoryStore so that the data is there after this
     // function completes even though Firebase will emit an onWrite with the changed data.
@@ -144,12 +148,17 @@ export default class FirebaseStore extends MemoryStore {
     return doc;
   }
 
-  async _modifyDoc({ id, fieldValues, archivedAt }) {
+  async _modifyDoc({ id, fieldValues, archivedAt, order }) {
     // We use cloneDeep so that we don't modify the data in the memory store before we modify the
     // data in the Firebase store. The write to Firebase could always fail.
     let doc = cloneDeep(this._docs.get(id));
 
-    doc = this._setDoc({ doc, fieldValues, archivedAt });
+    doc = this._setDoc({
+      doc,
+      fieldValues,
+      archivedAt,
+      order
+    });
 
     await this._docSet({
       id: doc.id,
@@ -180,7 +189,8 @@ export default class FirebaseStore extends MemoryStore {
   async _archiveDoc(props) {
     return this._modifyDoc({
       ...props,
-      archivedAt: this._now()
+      archivedAt: this._now(),
+      order: null
     });
   }
 

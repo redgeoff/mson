@@ -1,5 +1,5 @@
 import Store from './store';
-import Mapa from '../mapa';
+import StoreMapa from './store-mapa';
 import cloneDeepWith from 'lodash/cloneDeepWith';
 import cloneDeep from 'lodash/cloneDeep';
 import orderBy from 'lodash/orderBy';
@@ -11,15 +11,15 @@ export default class MemoryStore extends Store {
   _create(props) {
     super._create(props);
 
-    this._docs = new Mapa();
+    this._docs = new StoreMapa();
 
     this._docs.on('$change', (name, value) => {
       this.emitChange(name + 'Doc', value);
     });
   }
 
-  async _createDoc({ fieldValues, id }) {
-    const doc = this._buildDoc({ fieldValues, id });
+  async _createDoc({ fieldValues, id, order }) {
+    const doc = this._buildDoc({ fieldValues, id, order });
 
     this._docs.set(doc.id, doc);
 
@@ -87,11 +87,11 @@ export default class MemoryStore extends Store {
     return docs;
   }
 
-  async _updateDoc({ id, fieldValues }) {
+  async _updateDoc({ id, fieldValues, order }) {
     // Clone the data so that we don't modify the original
     let doc = cloneDeep(this._docs.get(id));
 
-    doc = this._setDoc({ doc, fieldValues });
+    doc = this._setDoc({ doc, fieldValues, order });
 
     this._docs.set(id, doc);
 
@@ -102,7 +102,11 @@ export default class MemoryStore extends Store {
     // Clone the data so that we don't modify the original
     let doc = cloneDeep(this._docs.get(id));
 
-    doc = this._setDoc({ doc, archivedAt: new Date() });
+    doc = this._setDoc({
+      doc,
+      archivedAt: new Date(),
+      order: null
+    });
 
     this._docs.set(id, doc);
 

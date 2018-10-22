@@ -8,18 +8,12 @@ class SnapshotMock {
   }
 
   docChanges() {
-    return {
-      forEach: callback => {
-        this._docs.forEach(doc =>
-          callback({
-            type: doc.type,
-            doc: {
-              data: () => doc.data
-            }
-          })
-        );
+    return this._docs.map(doc => ({
+      type: doc.type,
+      doc: {
+        data: () => doc.data
       }
-    };
+    }));
   }
 }
 
