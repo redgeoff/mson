@@ -57,7 +57,7 @@ export default class RecordStore extends Store {
     }
   }
 
-  async _createDoc({ form, fieldValues }) {
+  async _createDoc({ form, fieldValues, order }) {
     this._clearCache();
 
     const response = await this._request({
@@ -66,7 +66,8 @@ export default class RecordStore extends Store {
         return this._registrar.client.record.create({
           appId,
           componentName: this.get('storeName'),
-          fieldValues
+          fieldValues,
+          order
         });
       }
     });
@@ -87,7 +88,13 @@ export default class RecordStore extends Store {
   }
 
   _getShowArchivedWhere(showArchived) {
-    return showArchived ? { archivedAt: { $ne: null } } : { archivedAt: null };
+    if (showArchived === null) {
+      return null;
+    } else if (showArchived) {
+      return { archivedAt: { $ne: null } };
+    } else {
+      return { archivedAt: null };
+    }
   }
 
   async _getAllDocs({
@@ -134,7 +141,7 @@ export default class RecordStore extends Store {
     });
   }
 
-  async _updateDoc({ form, id, fieldValues }) {
+  async _updateDoc({ form, id, fieldValues, order }) {
     const response = await this._request({
       form,
       promiseFactory: appId => {
@@ -142,7 +149,8 @@ export default class RecordStore extends Store {
           appId,
           componentName: this.get('storeName'),
           id,
-          fieldValues
+          fieldValues,
+          order
         });
       }
     });

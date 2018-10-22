@@ -4,6 +4,8 @@ import RecordStore from './record-store';
 import Form from '../form';
 import { TextField } from '../fields';
 import testUtils from '../test-utils';
+import { shouldCRUD, shouldGetAll, shouldMove } from './store-test';
+import RecordMock from './record-mock';
 
 let store = null;
 const storeName = 'MyStore';
@@ -213,7 +215,7 @@ it('should get showArchived where', () => {
   });
 });
 
-it('should get all', async () => {
+it('should get all docs', async () => {
   const all = {};
 
   const response = {
@@ -376,3 +378,21 @@ it('should upsert and get', async () => {
   };
   testUtils.expectToThrow(() => store.upsertDoc({ form }), err);
 });
+
+class RecordStoreMock extends RecordStore {
+  constructor(props) {
+    super(props);
+    this._registrar.client = {
+      record: new RecordMock(),
+      user: {
+        getSession: () => null
+      }
+    };
+  }
+}
+
+it('should CRUD', () => shouldCRUD(RecordStoreMock));
+
+it('should get all', () => shouldGetAll(RecordStoreMock));
+
+it('should move', () => shouldMove(RecordStoreMock));
