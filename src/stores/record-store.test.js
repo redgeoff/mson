@@ -213,7 +213,7 @@ it('should get showArchived where', () => {
   });
 });
 
-it('should get all', async () => {
+it('should get all docs', async () => {
   const all = {};
 
   const response = {
@@ -391,8 +391,6 @@ class RecordStoreMock extends RecordStore {
 
 it('should CRUD', () => shouldCRUD(RecordStoreMock));
 
-// TODO:
-// it('should get all', () => shouldGetAll(RecordStoreMock));
+it('should get all', () => shouldGetAll(RecordStoreMock));
 
-// TODO:
-// it('should move', () => shouldMove(RecordStoreMock));
+it('should move', () => shouldMove(RecordStoreMock));

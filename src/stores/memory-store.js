@@ -28,7 +28,7 @@ export default class MemoryStore extends Store {
 
   _toSiftWhere(where) {
     return cloneDeepWith(where, doc => {
-      if (doc.$iLike) {
+      if (doc && doc.$iLike) {
         return { $regex: '^' + doc.$iLike.replace(/%/, ''), $options: 'i' };
       }
     });

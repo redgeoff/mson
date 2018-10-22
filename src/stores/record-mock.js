@@ -1,22 +1,14 @@
 import MemoryStore from './memory-store';
 
+// Mock the record API so that we don't need to test against an actual server
 export default class RecordMock {
   constructor() {
-    // We use a MemoryStore that we get automatic filtering, pagination, etc...
+    // We use a MemoryStore that we get automatic sorting, querying, etc...
     this._docs = new MemoryStore();
-    // appId: String
-    // componentId: String
-    // id: String
-    // fieldValues: JSON
-    // createdAt: String
-    // updatedAt: String
-    // archivedAt: String
-    // userId: String
   }
 
-  async create({ appId, componentName, fieldValues }) {
-    const doc = await this._docs._createDoc({ fieldValues /* order */ });
-
+  async create({ appId, componentName, fieldValues, order }) {
+    const doc = await this._docs._createDoc({ fieldValues, order });
     return {
       data: {
         createRecord: doc
@@ -33,8 +25,8 @@ export default class RecordMock {
     };
   }
 
-  async update({ appId, componentName, id, fieldValues }) {
-    const doc = await this._docs._updateDoc({ id, fieldValues /* order */ });
+  async update({ appId, componentName, id, fieldValues, order }) {
+    const doc = await this._docs._updateDoc({ id, fieldValues, order });
     return {
       data: {
         updateRecord: doc
@@ -60,6 +52,19 @@ export default class RecordMock {
     };
   }
 
-  // const response = await this._registrar.client.record.getAll(opts);
-  // return response.data.records;
+  async getAll(opts) {
+    const docs = await this._docs.getAllDocs(opts);
+    return {
+      data: {
+        records: {
+          edges: docs.edges,
+
+          // TODO: this will probably need adjusted once our tests support pagination
+          pageInfo: {
+            hasNextPage: false
+          }
+        }
+      }
+    };
+  }
 }
