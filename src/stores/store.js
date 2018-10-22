@@ -24,9 +24,9 @@
 //      values as this can waste memory when storing the data
 //
 // We use a numeric order attribute to order docs in a set, e.g. allowing for drag-to-order UIs. The
-// downside to this approach is that moving a doc requires updating the order of all subsequent docs
-// (https://dba.stackexchange.com/q/36875/94046). A previous design used a beforeId, similar to the
-// beforeKey construct in the Mapa, and this only required at most 2 writes to move a doc. The
+// downside to this approach, is that moving a doc requires updating the order of all subsequent
+// docs (https://dba.stackexchange.com/q/36875/94046). A previous design used a beforeId, similar to
+// the beforeKey construct in the Mapa, and this only required at most 2 writes to move a doc. The
 // downside; however, was that stores can return data in any order, or there can be race conditions,
 // which result in beforeIds for docs that don't exist. This problematic beforeIds cause a great
 // deal of extra complexity.
