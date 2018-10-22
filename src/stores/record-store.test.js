@@ -1,3 +1,5 @@
+// TODO: get store-test working in this file by mocking _registrar.client.record
+
 import RecordStore from './record-store';
 import Form from '../form';
 import { TextField } from '../fields';
