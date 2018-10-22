@@ -45,9 +45,9 @@ class CollectionMock {
     this._listenToChanges();
   }
 
-  // orderBy() {
-  //   return this;
-  // }
+  orderBy() {
+    return this;
+  }
 
   emitSnapshot(docs) {
     this._onSnapshot(new SnapshotMock(docs));

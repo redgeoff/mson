@@ -17,44 +17,29 @@ export default class FirebaseStore extends MemoryStore {
     // to order your documents by creation date, you should store a timestamp as a field in the
     // documents." We can only order by a single attribute (unless we create an index) so we'll pick
     // the order.
-    this._coll
-      // .orderBy('order')
-      // .orderBy('createdAt')
-      .onSnapshot(
-        snapshot => {
-          const changes = snapshot.docChanges();
-
-          // First load?
-          if (!this.isLoaded()) {
-            // Unfortunately, Firestore will not return a doc if the attribute by which we are ordering
-            // is null. This is problematic as we want to be flexible and allow ordering to be applied
-            // (or ignored) at any time. Therefore, we will work around this by sorting in the JS layer.
-            changes.sort((a, b) => {
-              return a.doc.data().order - b.doc.data().order;
-            });
+    this._coll.orderBy('createdAt').onSnapshot(
+      snapshot => {
+        snapshot.docChanges().forEach(change => {
+          const data = change.doc.data();
+          if (change.type === 'removed') {
+            this._docs.delete(data.id);
+          } else {
+            this._docs.set(data.id, data);
           }
+        });
 
-          changes.forEach(change => {
-            const data = change.doc.data();
-            if (change.type === 'removed') {
-              this._docs.delete(data.id);
-            } else {
-              this._docs.set(data.id, data);
-            }
+        // First load?
+        if (!this.isLoaded()) {
+          // Emit on next tick so that caller has a change to listen
+          setTimeout(() => {
+            this._emitDidLoad();
           });
-
-          // First load?
-          if (!this.isLoaded()) {
-            // Emit on next tick so that caller has a change to listen
-            setTimeout(() => {
-              this._emitDidLoad();
-            });
-          }
-        },
-        err => {
-          this._emitError(err);
         }
-      );
+      },
+      err => {
+        this._emitError(err);
+      }
+    );
   }
 
   // async _loadDocs() {
