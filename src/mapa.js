@@ -28,7 +28,7 @@ export default class Mapa extends events.EventEmitter {
   }
 
   has(key) {
-    return this._items[key] ? true : false;
+    return this._items[key] !== undefined;
   }
 
   _nullOrUndefined(value) {
