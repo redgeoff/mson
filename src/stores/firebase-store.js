@@ -5,7 +5,6 @@
 
 import MemoryStore from './memory-store';
 import cloneDeep from 'lodash/cloneDeep';
-import DateField from '../fields/date-field';
 
 export default class FirebaseStore extends MemoryStore {
   _className = 'FirebaseStore';
@@ -173,13 +172,6 @@ export default class FirebaseStore extends MemoryStore {
     this._docs.set(doc.id, doc);
 
     return doc;
-  }
-
-  _now() {
-    // We use a DateField to avoid Firestore's automatic conversion of Date's to Firebase style
-    // timestamps. DateField represents the date as a string.
-    const date = new DateField({ now: true });
-    return date.getValue();
   }
 
   async _updateDoc(props) {

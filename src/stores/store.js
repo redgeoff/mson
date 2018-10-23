@@ -35,6 +35,7 @@ import Component from '../component';
 import access from '../access';
 import utils from '../utils';
 import uberUtils from '../uber-utils';
+import DateField from '../fields/date-field';
 
 export default class Store extends Component {
   _className = 'Store';
@@ -141,7 +142,10 @@ export default class Store extends Component {
   }
 
   _now() {
-    return new Date();
+    // We use a DateField to avoid Firestore's automatic conversion of Date's to Firebase style
+    // timestamps.
+    const date = new DateField({ now: true });
+    return date.getValue();
   }
 
   _buildDoc({ fieldValues, id, userId, order }) {

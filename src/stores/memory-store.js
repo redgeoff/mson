@@ -104,7 +104,7 @@ export default class MemoryStore extends Store {
 
     doc = this._setDoc({
       doc,
-      archivedAt: new Date(),
+      archivedAt: this._now(),
       order: null
     });
 
