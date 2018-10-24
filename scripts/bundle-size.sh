@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-maxBytes=280000
+maxBytes=290000
 
 if [ $(wc -c < dist/mson.js) -gt ${maxBytes} ]; then
   echo 'Error: bundle too large!'
