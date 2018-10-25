@@ -21,7 +21,7 @@ export default class MemoryStore extends Store {
   async _createDoc({ fieldValues, id, order }) {
     const doc = this._buildDoc({ fieldValues, id, order });
 
-    this._docs.set(doc.id, doc);
+    this._docs.set(doc.id, doc, undefined, true);
 
     return doc;
   }
@@ -93,7 +93,7 @@ export default class MemoryStore extends Store {
 
     doc = this._setDoc({ doc, fieldValues, order });
 
-    this._docs.set(id, doc);
+    this._docs.set(id, doc, undefined, true);
 
     return doc;
   }
@@ -108,18 +108,18 @@ export default class MemoryStore extends Store {
       order: null
     });
 
-    this._docs.set(id, doc);
+    this._docs.set(id, doc, undefined, true);
 
     return doc;
   }
 
-  async _restoreDoc({ id }) {
+  async _restoreDoc({ id, order }) {
     // Clone the data so that we don't modify the original
     let doc = cloneDeep(this._docs.get(id));
 
-    doc = this._setDoc({ doc, archivedAt: null });
+    doc = this._setDoc({ doc, archivedAt: null, order });
 
-    this._docs.set(id, doc);
+    this._docs.set(id, doc, undefined, true);
 
     return doc;
   }

@@ -54,7 +54,8 @@ export const shouldCRUD = async (Store, props) => {
     fieldValues: {
       firstName: 'F. Scott',
       lastName: 'Fitzgerald'
-    }
+    },
+    order: null
   });
   expect(updated.updatedAt).not.toEqual(created.updatedAt);
 
@@ -79,13 +80,13 @@ export const shouldCRUD = async (Store, props) => {
 
   const restored = await store.restoreDoc({ id: created.id });
   expect(restored).toEqual(
-    Object.assign({}, updated, { updatedAt: restored.updatedAt })
+    Object.assign({}, updated, { updatedAt: restored.updatedAt, order: null })
   );
   expect(restored.archivedAt).toBeNull();
   expect(restored.updatedAt).not.toEqual(archived.updatedAt);
 };
 
-const createDoc = async (store, fieldValues) => {
+export const createDoc = async (store, fieldValues) => {
   const form = createForm({ value: fieldValues });
   return store.createDoc({ form });
 };
@@ -116,7 +117,7 @@ const createDocs = async store => {
   return { harry, hermione, ron };
 };
 
-const updateDoc = async (store, fieldValues) => {
+export const updateDoc = async (store, fieldValues) => {
   const form = createForm({ value: fieldValues });
   return store.updateDoc({ form });
 };

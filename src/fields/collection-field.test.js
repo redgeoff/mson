@@ -8,7 +8,6 @@ import utils from '../utils';
 import compiler from '../compiler';
 import Emit from '../actions/emit';
 import Factory from '../component/factory';
-import MemoryStore from '../stores/memory-store';
 
 const formName = utils.uuid();
 
@@ -586,14 +585,18 @@ it('should restore', async () => {
   // Archive
   const didRestoreRecord = testUtils.once(form, 'didRestoreRecord');
   await field.restore(form);
-  expect(restoreSpy).toHaveBeenCalledWith({ form, id: form.getValue('id') });
+  expect(restoreSpy).toHaveBeenCalledWith({
+    form,
+    id: form.getValue('id'),
+    order: form.getValue('order')
+  });
   expect(form.getValue('archivedAt')).toBeNull();
   expect(field.getValue()).toHaveLength(0);
   expect(displaySnackbarSpy).toHaveBeenCalledWith('Person restored');
   await didRestoreRecord;
 
-  // Simulate the lack of a store
-  field.set({ store: null });
+  // Simulate the lack of a store and forbidOrder=false
+  field.set({ store: null, forbidOrder: false });
   form.clearValues();
   form.setValues(jack);
   await field.save();
@@ -764,9 +767,8 @@ it('should destroy', () => {
   formSpies.forEach(spy => expect(spy).toHaveBeenCalledTimes(1));
 });
 
-it('should not have side effects', async () => {
-  const store = new MemoryStore();
-  const field = createField({ store });
+it('should move and save form', async () => {
+  const field = createField();
 
   const form = field.get('form');
 
@@ -777,39 +779,8 @@ it('should not have side effects', async () => {
     order: 0
   });
   let mosForm = await field.save();
-  let mos = await store.getDoc({ id: mosForm.getValue('id') });
-  expect(mos).toMatchObject({
-    fieldValues: {
-      firstName: 'Mos',
-      lastName: 'Def'
-    },
-    order: 0
-  });
 
-  // Update
-  mosForm = field.getForm(mosForm.getValue('id'));
-  mosForm.setValues({ lastName: 'Smith' });
-  field.updateForm({ values: mosForm.getValues() });
-  mosForm = field.getForm(mosForm.getValue('id'));
-  expect(mosForm.getValues()).toMatchObject({
-    firstName: 'Mos',
-    lastName: 'Smith',
-    order: 0
-  });
-  mos = await store.getDoc({ id: mosForm.getValue('id') });
-  expect(mos).toMatchObject({
-    fieldValues: {
-      firstName: 'Mos',
-      lastName: 'Def'
-    },
-    order: 0
-  });
-
-  // TODO: archive
-
-  // TODO: restore
-
-  // Create again so that we can move
+  // Create another
   form.clearValues();
   form.setValues({
     firstName: 'Talib',
@@ -819,35 +790,27 @@ it('should not have side effects', async () => {
   let talibForm = await field.save();
 
   // Move
-  field.moveForm({ sourceIndex: 0, destinationIndex: 1 });
-  mosForm = field.getForm(mosForm.getValue('id'));
-  expect(mosForm.getValues()).toMatchObject({
+  const movedForm = await field.moveAndSaveForm({
+    sourceIndex: 0,
+    destinationIndex: 1
+  });
+  expect(movedForm.getValues()).toMatchObject({
     firstName: 'Mos',
-    lastName: 'Smith',
+    lastName: 'Def',
     order: 1
   });
-  talibForm = field.getForm(talibForm.getValue('id'));
-  expect(talibForm.getValues()).toMatchObject({
+
+  // Verify that form orders were updated
+  const updatedTalibForm = field.getForm(talibForm.getValue('id'));
+  expect(updatedTalibForm.getValues()).toMatchObject({
     firstName: 'Talib',
     lastName: 'Kweli',
     order: 0
   });
-  mos = await store.getDoc({ id: mosForm.getValue('id') });
-  expect(mos).toMatchObject({
-    fieldValues: {
-      firstName: 'Mos',
-      lastName: 'Def'
-    },
-    order: 0
-  });
-  let talib = await store.getDoc({ id: talibForm.getValue('id') });
-  expect(talib).toMatchObject({
-    fieldValues: {
-      firstName: 'Talib',
-      lastName: 'Kweli'
-    },
+  const updatedMosForm = field.getForm(mosForm.getValue('id'));
+  expect(updatedMosForm.getValues()).toMatchObject({
+    firstName: 'Mos',
+    lastName: 'Def',
     order: 1
   });
-
-  // TODO: remove
 });

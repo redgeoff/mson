@@ -72,6 +72,10 @@ export default class CollectionField extends Field {
             component: 'BooleanField'
           },
           {
+            name: 'forbidOrder',
+            component: 'BooleanField'
+          },
+          {
             name: 'minSize',
             component: 'IntegerField'
           },
@@ -171,7 +175,10 @@ export default class CollectionField extends Field {
 
       // A good default for most content as to not wrap content, but to also take up less vertical
       // space
-      maxColumns: 2
+      maxColumns: 2,
+
+      // By default, don't allow the user to order the items by dragging them
+      forbidOrder: true
     });
 
     this._createInfiniteLoader();
@@ -916,7 +923,7 @@ export default class CollectionField extends Field {
     fieldForm.setValues(values);
     fieldForm.set({ cursor });
 
-    if (isOrderChanging) {
+    if (beforeKey === undefined && isOrderChanging) {
       // Explicitly get the beforeKey as we are updating the values in place and so the
       // CollectionMapa will not be able to detect the change in order
       beforeKey = this._forms.getBeforeId(fieldForm);
@@ -957,6 +964,11 @@ export default class CollectionField extends Field {
       let record = null;
       // New?
       if (creating) {
+        if (!this.get('forbidOrder')) {
+          // Set the order; otherwise, new items may not appear in the order in which they are added
+          // as the order of docs in the store can be arbitrary
+          form.setValues({ order: this._forms.length() });
+        }
         record = await store.createDoc({ form });
       } else {
         // Existing
@@ -1034,8 +1046,18 @@ export default class CollectionField extends Field {
 
   async restore(form) {
     const store = this.get('store');
+
+    if (!this.get('forbidOrder')) {
+      // Set the order
+      form.setValues({ order: this._forms.length() });
+    }
+
     if (store) {
-      await store.restoreDoc({ form, id: form.getValue('id') });
+      await store.restoreDoc({
+        form,
+        id: form.getValue('id'),
+        order: form.getValue('order')
+      });
     }
 
     form.setValues({ archivedAt: null });
@@ -1137,14 +1159,16 @@ export default class CollectionField extends Field {
   }
 
   moveForm({ sourceIndex, destinationIndex, muteChange }) {
+    // Note: move() also reorders any affected forms so that the order values remain contiguous. We
+    // do this in the front end so that if we receive out-of-order changes from the back end, the
+    // forms won't jump around.
     const form = this._forms.move(sourceIndex, destinationIndex);
     this._notifyUI(muteChange, form.getValues());
     return form;
   }
 
-  // TODO: restore
-  // async moveAndSaveForm({ sourceIndex, destinationIndex, muteChange }) {
-  //   const form = this.moveForm({ sourceIndex, destinationIndex, muteChange });
-  //   await this._saveForm(form);
-  // }
+  async moveAndSaveForm({ sourceIndex, destinationIndex, muteChange }) {
+    const form = this.moveForm({ sourceIndex, destinationIndex, muteChange });
+    return this._saveForm(form);
+  }
 }

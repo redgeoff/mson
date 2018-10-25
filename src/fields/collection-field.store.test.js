@@ -4,6 +4,27 @@ import Form from '../form';
 import TextField from '../fields/text-field';
 import Factory from '../component/factory';
 
+const createForm = props => {
+  return new Form({
+    fields: [
+      new TextField({ name: 'firstName', label: 'First Name', required: true }),
+      new TextField({ name: 'lastName', label: 'Last Name', required: true })
+    ],
+    ...props
+  });
+};
+
+const createField = props => {
+  return new CollectionField({
+    label: 'People',
+    singularLabel: 'Person',
+    formFactory: new Factory({
+      product: () => createForm()
+    }),
+    ...props
+  });
+};
+
 it('should set store', () => {
   const store1 = new MemoryStore();
   const removeAllListenersSpy1 = jest.spyOn(store1, 'removeAllListeners');
@@ -151,4 +172,91 @@ it('should listen to store changes', async () => {
   // Delete
   await field._handleStoreChangeFactory()('deleteDoc', value);
   expect(removeFormSpy).toHaveBeenCalledWith(value.value.id, muteChange);
+});
+
+it('should not have side effects', async () => {
+  const store = new MemoryStore();
+  const field = createField({ store, forbidOrder: false });
+
+  const form = field.get('form');
+
+  // Create
+  form.setValues({
+    firstName: 'Mos',
+    lastName: 'Def'
+  });
+  let mosForm = await field.save();
+  let mos = await store.getDoc({ id: mosForm.getValue('id') });
+  expect(mos).toMatchObject({
+    fieldValues: {
+      firstName: 'Mos',
+      lastName: 'Def'
+    },
+    order: 0
+  });
+
+  // Update
+  mosForm = field.getForm(mosForm.getValue('id'));
+  mosForm.setValues({ lastName: 'Smith' });
+  field.updateForm({ values: mosForm.getValues() });
+  mosForm = field.getForm(mosForm.getValue('id'));
+  expect(mosForm.getValues()).toMatchObject({
+    firstName: 'Mos',
+    lastName: 'Smith',
+    order: 0
+  });
+  mos = await store.getDoc({ id: mosForm.getValue('id') });
+  expect(mos).toMatchObject({
+    fieldValues: {
+      firstName: 'Mos',
+      lastName: 'Def'
+    },
+    order: 0
+  });
+
+  // TODO: archive
+
+  // TODO: restore
+
+  // Create again so that we can move
+  form.clearValues();
+  form.setValues({
+    firstName: 'Talib',
+    lastName: 'Kweli',
+    order: 1
+  });
+  let talibForm = await field.save();
+
+  // Move
+  field.moveForm({ sourceIndex: 0, destinationIndex: 1 });
+  mosForm = field.getForm(mosForm.getValue('id'));
+  expect(mosForm.getValues()).toMatchObject({
+    firstName: 'Mos',
+    lastName: 'Smith',
+    order: 1
+  });
+  talibForm = field.getForm(talibForm.getValue('id'));
+  expect(talibForm.getValues()).toMatchObject({
+    firstName: 'Talib',
+    lastName: 'Kweli',
+    order: 0
+  });
+  mos = await store.getDoc({ id: mosForm.getValue('id') });
+  expect(mos).toMatchObject({
+    fieldValues: {
+      firstName: 'Mos',
+      lastName: 'Def'
+    },
+    order: 0
+  });
+  let talib = await store.getDoc({ id: talibForm.getValue('id') });
+  expect(talib).toMatchObject({
+    fieldValues: {
+      firstName: 'Talib',
+      lastName: 'Kweli'
+    },
+    order: 1
+  });
+
+  // TODO: remove
 });

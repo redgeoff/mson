@@ -338,7 +338,7 @@ it('should update and not reorder when order is not changing', () => {
   expect(moveSpy).toHaveBeenCalledTimes(0);
 });
 
-it('should archive and reorder', () => {
+it('should reorder when archiving and restoring', () => {
   const reorder = true;
 
   // Initial data
@@ -348,11 +348,20 @@ it('should archive and reorder', () => {
   mapa.set('c', { v: 'c', order: 2 });
 
   // Archive
-  mapa.set('b', { v: 'b', order: null }, undefined, reorder);
+  const archivedAt = new Date();
+  mapa.set('b', { v: 'b', archivedAt, order: null }, undefined, reorder);
   expect(mapa.map(doc => doc)).toEqual([
     { v: 'a', order: 0 },
     { v: 'c', order: 1 },
-    { v: 'b', order: null }
+    { v: 'b', order: null, archivedAt }
+  ]);
+
+  // Restore
+  mapa.set('b', { v: 'b', archivedAt: null, order: 2 }, undefined, reorder);
+  expect(mapa.map(doc => doc)).toEqual([
+    { v: 'a', order: 0 },
+    { v: 'c', order: 1 },
+    { v: 'b', order: 2, archivedAt: null }
   ]);
 });
 

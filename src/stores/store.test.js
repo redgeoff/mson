@@ -24,9 +24,9 @@ it('should build doc', () => {
   expect(doc.id).toEqual('1');
 });
 
-it('should delete order when setting doc', () => {
+it('should set order to null when setting doc', () => {
   const store = new Store();
   const doc = { order: 1 };
   store._setDoc({ doc, order: undefined });
-  expect(doc.hasOwnProperty('order')).toEqual(false);
+  expect(doc.order).toBeNull();
 });

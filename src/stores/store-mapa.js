@@ -62,7 +62,11 @@ export default class StoreMapa extends Mapa {
     return super.set(id, doc, beforeId);
   }
 
-  _createInDocsAndReorder(id, doc) {
+  _createInDocsAndReorder(id, doc, onReorder) {
+    // Note: we don't inject `order=length() - 1` as we want the caller to be able to:
+    // - Disable reordering by not specifying an order
+    // - Set the order of the new item
+
     let order = this._getProp(doc, 'order');
     let beforeId = undefined;
     if (order !== undefined && order !== null) {
@@ -75,9 +79,11 @@ export default class StoreMapa extends Mapa {
       // Update subsequent orders
       for (const entry of this.entries(setDoc.nextKey)) {
         const value = entry[1];
-        // TODO: need onReorder
         this._setProp(value, 'order', ++order);
         super.set(entry[0], value);
+        if (onReorder) {
+          onReorder(entry[0], value);
+        }
       }
     }
 
@@ -97,7 +103,7 @@ export default class StoreMapa extends Mapa {
     return super.set(id, doc, beforeId);
   }
 
-  move(sourceIndex, destinationIndex, doc) {
+  move(sourceIndex, destinationIndex, doc, onReorder) {
     // Note: the Mapa does not provide sequential indexes so we have to loop through all the items.
     // In general, we shouldn't be using _move() with large data sets as moving with beforeKey is
     // far more efficient. If we need to improve performance for larger datasets in the future, we
@@ -182,6 +188,9 @@ export default class StoreMapa extends Mapa {
       // traversing the list to find the correct place to move the item as the order property is
       // changing
       super.set(id, item);
+      if (onReorder) {
+        onReorder(id, item);
+      }
     });
 
     return doc;
@@ -223,42 +232,48 @@ export default class StoreMapa extends Mapa {
       index++;
     }
 
+    if (destinationIndex === null && newOrder !== null) {
+      // Move to the end
+      destinationIndex = this.length() - 1;
+    }
+
     return {
       sourceIndex,
       destinationIndex
     };
   }
 
-  _updateAndReorderInDocs(id, doc) {
+  _updateAndReorderInDocs(id, doc, onReorder) {
     const existingDoc = this.get(id);
 
     const existingOrder = this._getProp(existingDoc, 'order');
     const newOrder = this._getProp(doc, 'order');
+
     if (existingOrder === newOrder) {
       // Just update the doc as the order isn't changing so we don't need to incur any extra
       // overhead in reordering
       return this._updateInDocs(id, doc);
     } else {
-      const {
+      let {
         sourceIndex,
         destinationIndex
       } = this._findSourceAndDestinationIndexes(id, doc);
-      return this.move(sourceIndex, destinationIndex, doc);
+      return this.move(sourceIndex, destinationIndex, doc, onReorder);
     }
   }
 
-  set(id, doc, beforeId, reorder) {
+  set(id, doc, beforeId, reorder, onReorder) {
     if (beforeId !== undefined) {
       return super.set(id, doc, beforeId);
     } else if (this.has(id)) {
       if (reorder) {
-        return this._updateAndReorderInDocs(id, doc);
+        return this._updateAndReorderInDocs(id, doc, onReorder);
       } else {
         return this._updateInDocs(id, doc);
       }
     } else {
       if (reorder) {
-        return this._createInDocsAndReorder(id, doc);
+        return this._createInDocsAndReorder(id, doc, onReorder);
       } else {
         return this._createInDocs(id, doc);
       }
