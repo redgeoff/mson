@@ -138,18 +138,30 @@ export default class FirebaseStore extends MemoryStore {
     }
   }
 
+  _onReorder = async (id, doc) => {
+    // Update the order in firebase of the affected doc
+    await this._docSet({
+      id,
+      doc,
+      options: {
+        merge: true // allow for partial updates
+      }
+    });
+  };
+
   async _createDoc({ fieldValues, id, order }) {
     const doc = this._buildDoc({ fieldValues, id, order });
+
+    // Note: we need to update the underlying MemoryStore so that the data is there after this
+    // function completes even though Firebase will emit an onWrite with the changed data.
+    const reorder = true;
+    this._docs.set(doc.id, doc, undefined, reorder, this._onReorder);
 
     await this._docSet({
       id: doc.id,
       doc,
       order: doc.order
     });
-
-    // Note: we need to update the underlying MemoryStore so that the data is there after this
-    // function completes even though Firebase will emit an onWrite with the changed data.
-    this._docs.set(doc.id, doc);
 
     return doc;
   }
@@ -166,6 +178,13 @@ export default class FirebaseStore extends MemoryStore {
       order
     });
 
+    // Note: we need to update the underlying MemoryStore so that the data is there after this
+    // function completes even though Firebase will emit an onWrite with the changed data.
+    const reorder = true;
+    this._docs.set(doc.id, doc, undefined, reorder, this._onReorder);
+
+    // The value has to be set in Firebase after it is set in the mapa so that _docs.set() can
+    // detect when there is a change to the order
     await this._docSet({
       id: doc.id,
       doc,
@@ -173,10 +192,6 @@ export default class FirebaseStore extends MemoryStore {
         merge: true // allow for partial updates
       }
     });
-
-    // Note: we need to update the underlying MemoryStore so that the data is there after this
-    // function completes even though Firebase will emit an onWrite with the changed data.
-    this._docs.set(doc.id, doc);
 
     return doc;
   }

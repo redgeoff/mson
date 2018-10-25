@@ -175,9 +175,9 @@ export default class Store extends Component {
     doc.updatedAt = this._now();
 
     if (order === undefined) {
-      // Delete instead of setting to undefined as stores like Firebase doesn't support undefined
+      // Set to null instead of setting to undefined as stores like Firebase don't support undefined
       // values
-      delete doc.order;
+      doc.order = null;
     } else {
       doc.order = order;
     }
