@@ -8,6 +8,7 @@ import utils from '../utils';
 import compiler from '../compiler';
 import Emit from '../actions/emit';
 import Factory from '../component/factory';
+import MemoryStore from '../stores/memory-store';
 
 const formName = utils.uuid();
 
@@ -761,4 +762,92 @@ it('should destroy', () => {
   expect(removeAllListenersSpy).toHaveBeenCalledTimes(1);
   expect(formSpies).toHaveLength(2);
   formSpies.forEach(spy => expect(spy).toHaveBeenCalledTimes(1));
+});
+
+it('should not have side effects', async () => {
+  const store = new MemoryStore();
+  const field = createField({ store });
+
+  const form = field.get('form');
+
+  // Create
+  form.setValues({
+    firstName: 'Mos',
+    lastName: 'Def',
+    order: 0
+  });
+  let mosForm = await field.save();
+  let mos = await store.getDoc({ id: mosForm.getValue('id') });
+  expect(mos).toMatchObject({
+    fieldValues: {
+      firstName: 'Mos',
+      lastName: 'Def'
+    },
+    order: 0
+  });
+
+  // Update
+  mosForm = field.getForm(mosForm.getValue('id'));
+  mosForm.setValues({ lastName: 'Smith' });
+  field.updateForm({ values: mosForm.getValues() });
+  mosForm = field.getForm(mosForm.getValue('id'));
+  expect(mosForm.getValues()).toMatchObject({
+    firstName: 'Mos',
+    lastName: 'Smith',
+    order: 0
+  });
+  mos = await store.getDoc({ id: mosForm.getValue('id') });
+  expect(mos).toMatchObject({
+    fieldValues: {
+      firstName: 'Mos',
+      lastName: 'Def'
+    },
+    order: 0
+  });
+
+  // TODO: archive
+
+  // TODO: restore
+
+  // Create again so that we can move
+  form.clearValues();
+  form.setValues({
+    firstName: 'Talib',
+    lastName: 'Kweli',
+    order: 1
+  });
+  let talibForm = await field.save();
+
+  // Move
+  field.moveForm({ sourceIndex: 0, destinationIndex: 1 });
+  mosForm = field.getForm(mosForm.getValue('id'));
+  expect(mosForm.getValues()).toMatchObject({
+    firstName: 'Mos',
+    lastName: 'Smith',
+    order: 1
+  });
+  talibForm = field.getForm(talibForm.getValue('id'));
+  expect(talibForm.getValues()).toMatchObject({
+    firstName: 'Talib',
+    lastName: 'Kweli',
+    order: 0
+  });
+  mos = await store.getDoc({ id: mosForm.getValue('id') });
+  expect(mos).toMatchObject({
+    fieldValues: {
+      firstName: 'Mos',
+      lastName: 'Def'
+    },
+    order: 0
+  });
+  let talib = await store.getDoc({ id: talibForm.getValue('id') });
+  expect(talib).toMatchObject({
+    fieldValues: {
+      firstName: 'Talib',
+      lastName: 'Kweli'
+    },
+    order: 1
+  });
+
+  // TODO: remove
 });
