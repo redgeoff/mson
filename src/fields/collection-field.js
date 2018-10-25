@@ -985,8 +985,6 @@ export default class CollectionField extends Field {
       id.getValue()
     );
 
-    this._globals.displaySnackbar(this.getSingularLabel() + ' saved');
-
     return fieldForm;
   }
 
@@ -996,8 +994,10 @@ export default class CollectionField extends Field {
     // No errors?
     form.setTouched(true);
     form.validate();
-    if (form.getErrs().length === 0) {
+    if (!form.hasErr()) {
       const fieldForm = await this._saveForm(form);
+
+      this._globals.displaySnackbar(this.getSingularLabel() + ' saved');
 
       // Set the currentForm to the new/updated form so that subsequent viewing or editing uses this
       // new data
@@ -1006,6 +1006,8 @@ export default class CollectionField extends Field {
       //
       // this.set({ currentForm: fieldForm, mode: 'read' });
       this.set({ currentForm: fieldForm, mode: null });
+
+      return fieldForm;
     }
   }
 
@@ -1134,33 +1136,15 @@ export default class CollectionField extends Field {
     this.eachForm(form => form.destroy());
   }
 
+  moveForm({ sourceIndex, destinationIndex, muteChange }) {
+    const form = this._forms.move(sourceIndex, destinationIndex);
+    this._notifyUI(muteChange, form.getValues());
+    return form;
+  }
+
   // TODO: restore
-  // moveForm(sourceIndex, destinationIndex) {
-  //   let sourceEntry = null;
-
-  //   // If the form is moving down, we need to move to after the destination
-  //   const beforeEntryIndex =
-  //     destinationIndex + (destinationIndex > sourceIndex ? 1 : 0);
-
-  //   // Note: the Mapa does not provide sequential indexes so we have to loop through all the items.
-  //   // In general, we shouldn't be using moveForm() with large data sets as moving with beforeKey is
-  //   // far more efficient. If we need to improve performance for larger datasets in the future, we
-  //   // can store sequential indexes in Mapa.
-  //   let index = 0;
-  //   let beforeKey = undefined;
-  //   for (const entry of this._forms.entries()) {
-  //     if (index === sourceIndex) {
-  //       sourceEntry = entry;
-  //     }
-  //     if (index === beforeEntryIndex) {
-  //       beforeKey = entry[0];
-  //     }
-  //     index++;
-  //   }
-
-  //   return this.updateForm({
-  //     values: sourceEntry[1].getValues(),
-  //     beforeKey
-  //   });
+  // async moveAndSaveForm({ sourceIndex, destinationIndex, muteChange }) {
+  //   const form = this.moveForm({ sourceIndex, destinationIndex, muteChange });
+  //   await this._saveForm(form);
   // }
 }
