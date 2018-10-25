@@ -85,9 +85,15 @@ export default class FirebaseMock {
     }
 
     this._collection = new CollectionMock(this._docs);
+
+    this.apps = {
+      length: 0
+    };
   }
 
-  initializeApp() {}
+  initializeApp() {
+    this.apps.length = 1;
+  }
 
   firestore() {
     return {

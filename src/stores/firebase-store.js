@@ -53,14 +53,21 @@ export default class FirebaseStore extends MemoryStore {
     return props.firebase ? props.firebase : this._global.firebase;
   }
 
+  _initializeApp(props) {
+    // Has Firebase been initialized? We must only do this once per app.
+    if (!this._fb.apps.length) {
+      this._fb.initializeApp({
+        apiKey: props.apiKey,
+        authDomain: props.authDomain,
+        projectId: props.projectId
+      });
+    }
+  }
+
   async _init(props) {
     this._fb = this._getFirebase(props);
 
-    this._fb.initializeApp({
-      apiKey: props.apiKey,
-      authDomain: props.authDomain,
-      projectId: props.projectId
-    });
+    this._initializeApp(props);
 
     this._db = this._fb.firestore();
 

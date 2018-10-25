@@ -191,3 +191,20 @@ it('should listen to changes with respect to order', async () => {
   const initialDocs = await store.getAllDocs({ showArchived: false });
   expect(initialDocs.edges.map(doc => doc.node)).toEqual([doc1, doc3, doc2]);
 });
+
+it('should only initialize app once', () => {
+  const firebase = new FirebaseMock();
+  const initializeAppSpy = jest.spyOn(firebase, 'initializeApp');
+
+  new FirebaseStore({
+    firebase,
+    apiKey: 'key'
+  });
+  expect(initializeAppSpy).toHaveBeenCalledTimes(1);
+
+  new FirebaseStore({
+    firebase,
+    apiKey: 'key'
+  });
+  expect(initializeAppSpy).toHaveBeenCalledTimes(1);
+});
