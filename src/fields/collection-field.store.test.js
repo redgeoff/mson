@@ -239,7 +239,7 @@ it('should not have side effects', async () => {
   expect(talibForm.getValues()).toMatchObject({
     firstName: 'Talib',
     lastName: 'Kweli',
-    order: 0
+    order: 1 // Still at 1 as the store will change this
   });
   mos = await store.getDoc({ id: mosForm.getValue('id') });
   expect(mos).toMatchObject({

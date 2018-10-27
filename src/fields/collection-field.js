@@ -1159,11 +1159,30 @@ export default class CollectionField extends Field {
   }
 
   moveForm({ sourceIndex, destinationIndex, muteChange }) {
-    // Note: move() also reorders any affected forms so that the order values remain contiguous. We
-    // do this in the front end so that if we receive out-of-order changes from the back end, the
-    // forms won't jump around.
-    const form = this._forms.move(sourceIndex, destinationIndex);
+    // We move the form via the beforeKey construct. Reordering of all the affected docs is done at
+    // the store layer. This way we can support things like pagination in the CollectionField, while
+    // allowing for reordering in the store.
+
+    const keys = this._forms.keysAtIndexes([sourceIndex, destinationIndex]);
+    const sourceKey = keys[sourceIndex];
+    const destinationKey = keys[destinationIndex];
+
+    const form = this.getForm(sourceKey);
+    form.setValues({ order: destinationIndex });
+
+    let beforeKey = undefined;
+    let afterKey = destinationKey;
+    if (destinationIndex < sourceIndex) {
+      // moving up?
+      beforeKey = destinationKey;
+      afterKey = undefined;
+    }
+
+    // Move
+    this._forms.set(sourceKey, form, beforeKey, afterKey);
+
     this._notifyUI(muteChange, form.getValues());
+
     return form;
   }
 

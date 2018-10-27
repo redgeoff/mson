@@ -155,7 +155,7 @@ export default class FirebaseStore extends MemoryStore {
     // Note: we need to update the underlying MemoryStore so that the data is there after this
     // function completes even though Firebase will emit an onWrite with the changed data.
     const reorder = true;
-    this._docs.set(doc.id, doc, undefined, reorder, this._onReorder);
+    this._docs.set(doc.id, doc, undefined, undefined, reorder, this._onReorder);
 
     await this._docSet({
       id: doc.id,
@@ -181,7 +181,7 @@ export default class FirebaseStore extends MemoryStore {
     // Note: we need to update the underlying MemoryStore so that the data is there after this
     // function completes even though Firebase will emit an onWrite with the changed data.
     const reorder = true;
-    this._docs.set(doc.id, doc, undefined, reorder, this._onReorder);
+    this._docs.set(doc.id, doc, undefined, undefined, reorder, this._onReorder);
 
     // The value has to be set in Firebase after it is set in the mapa so that _docs.set() can
     // detect when there is a change to the order

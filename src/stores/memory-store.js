@@ -21,7 +21,7 @@ export default class MemoryStore extends Store {
   async _createDoc({ fieldValues, id, order }) {
     const doc = this._buildDoc({ fieldValues, id, order });
 
-    this._docs.set(doc.id, doc, undefined, true);
+    this._docs.set(doc.id, doc, undefined, undefined, true);
 
     return doc;
   }
@@ -93,7 +93,7 @@ export default class MemoryStore extends Store {
 
     doc = this._setDoc({ doc, fieldValues, order });
 
-    this._docs.set(id, doc, undefined, true);
+    this._docs.set(id, doc, undefined, undefined, true);
 
     return doc;
   }
@@ -108,7 +108,7 @@ export default class MemoryStore extends Store {
       order: null
     });
 
-    this._docs.set(id, doc, undefined, true);
+    this._docs.set(id, doc, undefined, undefined, true);
 
     return doc;
   }
@@ -119,7 +119,7 @@ export default class MemoryStore extends Store {
 
     doc = this._setDoc({ doc, archivedAt: null, order });
 
-    this._docs.set(id, doc, undefined, true);
+    this._docs.set(id, doc, undefined, undefined, true);
 
     return doc;
   }
