@@ -103,6 +103,26 @@ export default class StoreMapa extends Mapa {
     return super.set(id, doc, beforeId);
   }
 
+  keysAtIndexes(indexes) {
+    const clonedIndexes = Object.assign([], indexes);
+    let index = 0;
+    const keys = {};
+    for (const entry of this.entries()) {
+      const i = clonedIndexes.indexOf(index);
+      if (i !== -1) {
+        keys[clonedIndexes[i]] = entry[0];
+        if (clonedIndexes.length === 1) {
+          // Exit loop as we found what we need
+          break;
+        } else {
+          clonedIndexes.splice(i, 1);
+        }
+      }
+      index++;
+    }
+    return keys;
+  }
+
   move(sourceIndex, destinationIndex, doc, onReorder) {
     // Note: the Mapa does not provide sequential indexes so we have to loop through all the items.
     // In general, we shouldn't be using _move() with large data sets as moving with beforeKey is

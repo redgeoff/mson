@@ -805,7 +805,7 @@ it('should move and save form', async () => {
   expect(updatedTalibForm.getValues()).toMatchObject({
     firstName: 'Talib',
     lastName: 'Kweli',
-    order: 0
+    order: 1 // Still at 1 as store will update
   });
   const updatedMosForm = field.getForm(mosForm.getValue('id'));
   expect(updatedMosForm.getValues()).toMatchObject({

@@ -382,3 +382,21 @@ it('should move with indexes', () => {
     { v: 'd', order: 3 }
   ]);
 });
+
+it('should get keys at indexes', () => {
+  let mapa = new StoreMapa();
+  mapa.set('a', { v: 'a', order: 0 });
+  mapa.set('b', { v: 'b', order: 1 });
+  mapa.set('c', { v: 'c', order: 2 });
+  mapa.set('d', { v: 'd', order: 3 });
+
+  expect(mapa.keysAtIndexes([1])).toEqual({
+    1: 'b'
+  });
+
+  expect(mapa.keysAtIndexes([2, 1, 3, 4])).toEqual({
+    2: 'c',
+    1: 'b',
+    3: 'd'
+  });
+});
