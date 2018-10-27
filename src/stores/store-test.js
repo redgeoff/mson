@@ -95,14 +95,14 @@ const createDocs = async store => {
   const harryValues = {
     firstName: 'Harry',
     lastName: 'Potter',
-    order: 1
+    order: 0
   };
   const harry = await createDoc(store, harryValues);
 
   const hermioneValues = {
     firstName: 'Hermione',
     lastName: 'Granger',
-    order: 2
+    order: 1
   };
   let hermione = await createDoc(store, hermioneValues);
   hermione = await store.archiveDoc({ id: hermione.id });
@@ -110,7 +110,7 @@ const createDocs = async store => {
   const ronValues = {
     firstName: 'Ron',
     lastName: 'Weasley',
-    order: 3
+    order: 1
   };
   const ron = await createDoc(store, ronValues);
 
@@ -234,7 +234,7 @@ export const shouldMove = async (Store, props) => {
   const ginnyValues = {
     firstName: 'Ginny',
     lastName: 'Weasley',
-    order: 1.1
+    order: 1
   };
   const ginny = await createDoc(store, ginnyValues);
   expect(await store.getAllDocs(searchDefaults)).toEqual(
@@ -259,7 +259,7 @@ export const shouldMove = async (Store, props) => {
   // Move up
   ron = await updateDoc(
     store,
-    Object.assign({}, ron.fieldValues, { id: ron.id, order: 0.9 })
+    Object.assign({}, ron.fieldValues, { id: ron.id, order: 0 })
   );
   expect(await store.getAllDocs(searchDefaults)).toEqual(
     Object.assign({}, all, {
@@ -283,8 +283,10 @@ export const shouldMove = async (Store, props) => {
   // Move to end of ordered list
   harry = await updateDoc(
     store,
-    Object.assign({}, harry.fieldValues, { id: harry.id, order: 1.2 })
+    Object.assign({}, harry.fieldValues, { id: harry.id, order: 3 })
   );
+  ginny.order = 1;
+  hermione.order = 2;
   expect(await store.getAllDocs(searchDefaults)).toEqual(
     Object.assign({}, all, {
       edges: [
@@ -295,10 +297,10 @@ export const shouldMove = async (Store, props) => {
           node: ginny
         },
         {
-          node: harry
+          node: hermione
         },
         {
-          node: hermione
+          node: harry
         }
       ]
     })
@@ -306,6 +308,8 @@ export const shouldMove = async (Store, props) => {
 
   // Archive
   const archivedGinny = await store.archiveDoc({ id: ginny.id });
+  hermione.order = 1;
+  harry.order = 2;
   expect(await store.getAllDocs(searchDefaults)).toEqual(
     Object.assign({}, all, {
       edges: [
@@ -313,10 +317,10 @@ export const shouldMove = async (Store, props) => {
           node: ron
         },
         {
-          node: harry
+          node: hermione
         },
         {
-          node: hermione
+          node: harry
         },
         {
           node: archivedGinny
