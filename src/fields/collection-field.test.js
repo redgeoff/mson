@@ -814,3 +814,52 @@ it('should move and save form', async () => {
     order: 1
   });
 });
+
+it('should move', async () => {
+  const field = createField({ forbidOrder: false });
+
+  const form = field.get('form');
+
+  // Create
+  form.setValues({
+    firstName: 'Mos',
+    lastName: 'Def',
+    order: 0
+  });
+  await field.save();
+
+  // Create again
+  form.clearValues();
+  form.setValues({
+    firstName: 'Talib',
+    lastName: 'Kweli',
+    order: 1
+  });
+  await field.save();
+
+  // Move down
+  field.moveForm({ sourceIndex: 0, destinationIndex: 1 });
+  expect(field._forms.map(form => form.getValues())).toMatchObject([
+    {
+      firstName: 'Talib',
+      order: 1 // Still at 1 as the store will change this
+    },
+    {
+      firstName: 'Mos',
+      order: 1
+    }
+  ]);
+
+  // Move up
+  field.moveForm({ sourceIndex: 1, destinationIndex: 0 });
+  expect(field._forms.map(form => form.getValues())).toMatchObject([
+    {
+      firstName: 'Mos',
+      order: 0
+    },
+    {
+      firstName: 'Talib',
+      order: 1 // Still at 1 as the store will change this
+    }
+  ]);
+});

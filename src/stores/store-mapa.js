@@ -282,9 +282,9 @@ export default class StoreMapa extends Mapa {
     }
   }
 
-  set(id, doc, beforeId, reorder, onReorder) {
-    if (beforeId !== undefined) {
-      return super.set(id, doc, beforeId);
+  set(id, doc, beforeId, afterId, reorder, onReorder) {
+    if (beforeId !== undefined || afterId !== undefined) {
+      return super.set(id, doc, beforeId, afterId);
     } else if (this.has(id)) {
       if (reorder) {
         return this._updateAndReorderInDocs(id, doc, onReorder);

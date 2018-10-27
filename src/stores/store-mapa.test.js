@@ -176,12 +176,12 @@ it('should create and reorder', () => {
 
   // Initial data
   let mapa = new StoreMapa();
-  mapa.set('a', { v: 'a', order: 0 }, undefined, reorder);
-  mapa.set('b', { v: 'b', order: 1 }, undefined, reorder);
-  mapa.set('c', { v: 'c', order: 2 }, undefined, reorder);
+  mapa.set('a', { v: 'a', order: 0 }, undefined, undefined, reorder);
+  mapa.set('b', { v: 'b', order: 1 }, undefined, undefined, reorder);
+  mapa.set('c', { v: 'c', order: 2 }, undefined, undefined, reorder);
 
   // Insert
-  mapa.set('d', { v: 'd', order: 1 }, undefined, reorder);
+  mapa.set('d', { v: 'd', order: 1 }, undefined, undefined, reorder);
   expect(mapa.map(doc => doc)).toEqual([
     { v: 'a', order: 0 },
     { v: 'd', order: 1 },
@@ -190,7 +190,7 @@ it('should create and reorder', () => {
   ]);
 
   // Create when order is null
-  mapa.set('e', { v: 'e', order: null }, undefined, reorder);
+  mapa.set('e', { v: 'e', order: null }, undefined, undefined, reorder);
   expect(mapa.map(doc => doc)).toEqual([
     { v: 'a', order: 0 },
     { v: 'd', order: 1 },
@@ -200,7 +200,7 @@ it('should create and reorder', () => {
   ]);
 
   // Create when order is undefined
-  mapa.set('f', { v: 'f' }, undefined, reorder);
+  mapa.set('f', { v: 'f' }, undefined, undefined, reorder);
   expect(mapa.map(doc => doc)).toEqual([
     { v: 'a', order: 0 },
     { v: 'd', order: 1 },
@@ -220,7 +220,7 @@ it('should create and reorder when duplicate orders', () => {
   mapa.set('c', { v: 'c', order: 1 });
   mapa.set('d', { v: 'd', order: 2 });
   mapa.set('e', { v: 'e', order: 2 });
-  mapa.set('f', { v: 'f', order: 2 }, undefined, reorder);
+  mapa.set('f', { v: 'f', order: 2 }, undefined, undefined, reorder);
   expect(mapa.map(doc => doc)).toEqual([
     { v: 'a', order: 0 },
     { v: 'b', order: 1 },
@@ -230,7 +230,7 @@ it('should create and reorder when duplicate orders', () => {
     { v: 'e', order: 4 }
   ]);
 
-  mapa.set('g', { v: 'g', order: 1 }, undefined, reorder);
+  mapa.set('g', { v: 'g', order: 1 }, undefined, undefined, reorder);
   expect(mapa.map(doc => doc)).toEqual([
     { v: 'a', order: 0 },
     { v: 'g', order: 1 },
@@ -253,7 +253,7 @@ it('should move up and reorder', () => {
   mapa.set('d', { v: 'd', order: 3 });
 
   // Move up
-  mapa.set('c', { v: 'c', order: 1 }, undefined, reorder);
+  mapa.set('c', { v: 'c', order: 1 }, undefined, undefined, reorder);
   expect(mapa.map(doc => doc)).toEqual([
     { v: 'a', order: 0 },
     { v: 'c', order: 1 },
@@ -272,7 +272,7 @@ it('should move up and reorder when duplicate orders', () => {
   mapa.set('c', { v: 'c', order: 1 });
   mapa.set('d', { v: 'd', order: 2 });
   mapa.set('e', { v: 'e', order: 2 });
-  mapa.set('d', { v: 'd', order: 1 }, undefined, reorder);
+  mapa.set('d', { v: 'd', order: 1 }, undefined, undefined, reorder);
   expect(mapa.map(doc => doc)).toEqual([
     { v: 'a', order: 0 },
     { v: 'd', order: 1 },
@@ -293,7 +293,7 @@ it('should move down and reorder', () => {
   mapa.set('d', { v: 'd', order: 3 });
 
   // Move down
-  mapa.set('b', { v: 'b', order: 2 }, undefined, reorder);
+  mapa.set('b', { v: 'b', order: 2 }, undefined, undefined, reorder);
   expect(mapa.map(doc => doc)).toEqual([
     { v: 'a', order: 0 },
     { v: 'c', order: 1 },
@@ -314,7 +314,7 @@ it('should move down and reorder when duplicate orders', () => {
   mapa.set('e', { v: 'e', order: 2 });
 
   // Move down
-  mapa.set('b', { v: 'b', order: 2 }, undefined, reorder);
+  mapa.set('b', { v: 'b', order: 2 }, undefined, undefined, reorder);
   expect(mapa.map(doc => doc)).toEqual([
     { v: 'a', order: 0 },
     { v: 'c', order: 1 },
@@ -333,7 +333,7 @@ it('should update and not reorder when order is not changing', () => {
 
   // Update
   const moveSpy = jest.spyOn(mapa, 'move');
-  mapa.set('a', { v: 'a1', order: 0 }, undefined, reorder);
+  mapa.set('a', { v: 'a1', order: 0 }, undefined, undefined, reorder);
   expect(mapa.map(doc => doc)).toEqual([{ v: 'a1', order: 0 }]);
   expect(moveSpy).toHaveBeenCalledTimes(0);
 });
@@ -349,7 +349,13 @@ it('should reorder when archiving and restoring', () => {
 
   // Archive
   const archivedAt = new Date();
-  mapa.set('b', { v: 'b', archivedAt, order: null }, undefined, reorder);
+  mapa.set(
+    'b',
+    { v: 'b', archivedAt, order: null },
+    undefined,
+    undefined,
+    reorder
+  );
   expect(mapa.map(doc => doc)).toEqual([
     { v: 'a', order: 0 },
     { v: 'c', order: 1 },
@@ -357,7 +363,13 @@ it('should reorder when archiving and restoring', () => {
   ]);
 
   // Restore
-  mapa.set('b', { v: 'b', archivedAt: null, order: 2 }, undefined, reorder);
+  mapa.set(
+    'b',
+    { v: 'b', archivedAt: null, order: 2 },
+    undefined,
+    undefined,
+    reorder
+  );
   expect(mapa.map(doc => doc)).toEqual([
     { v: 'a', order: 0 },
     { v: 'c', order: 1 },

@@ -1165,16 +1165,21 @@ export default class CollectionField extends Field {
 
     const keys = this._forms.keysAtIndexes([sourceIndex, destinationIndex]);
     const sourceKey = keys[sourceIndex];
-
-    // If the destination key wasn't found, move to the end of the list
-    const destinationKey =
-      keys[destinationIndex] === undefined ? null : keys[destinationIndex];
+    const destinationKey = keys[destinationIndex];
 
     const form = this.getForm(sourceKey);
     form.setValues({ order: destinationIndex });
 
+    let beforeKey = undefined;
+    let afterKey = destinationKey;
+    if (destinationIndex < sourceIndex) {
+      // moving up?
+      beforeKey = destinationKey;
+      afterKey = undefined;
+    }
+
     // Move
-    this._forms.set(sourceKey, form, destinationKey);
+    this._forms.set(sourceKey, form, beforeKey, afterKey);
 
     this._notifyUI(muteChange, form.getValues());
 
