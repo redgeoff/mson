@@ -1,6 +1,7 @@
 import Form from '../form';
 import { TextField } from '../fields';
 import testUtils from '../test-utils';
+import { Reorder } from './reorder';
 
 export const createForm = props => {
   return new Form({
@@ -24,13 +25,16 @@ export const shouldCRUD = async (Store, props) => {
 
   const store = new Store(props);
 
+  // Create
   const created = await store.createDoc({ form });
   expect(created.id).not.toBeFalsy();
   expect(created.archivedAt).toBeNull();
   expect(created.createdAt).not.toBeFalsy();
   expect(created.updatedAt).not.toBeFalsy();
   expect(created.fieldValues).toEqual(fieldValues);
+  expect(created.order).toEqual(Reorder.DEFAULT_ORDER);
 
+  // Get
   expect(await store.getDoc({ id: created.id })).toEqual(created);
 
   // Get when empty
@@ -44,6 +48,7 @@ export const shouldCRUD = async (Store, props) => {
   // Make sure timestamps aren't the same
   await testUtils.sleepToEnsureDifferentTimestamps();
 
+  // Update
   const updated = await store.updateDoc({ id: created.id, form });
   expect(updated).toEqual({
     id: created.id,
@@ -55,7 +60,7 @@ export const shouldCRUD = async (Store, props) => {
       firstName: 'F. Scott',
       lastName: 'Fitzgerald'
     },
-    order: null
+    order: Reorder.DEFAULT_ORDER
   });
   expect(updated.updatedAt).not.toEqual(created.updatedAt);
 
@@ -64,12 +69,13 @@ export const shouldCRUD = async (Store, props) => {
   // Make sure timestamps aren't the same
   await testUtils.sleepToEnsureDifferentTimestamps();
 
+  // Archive
   const archived = await store.archiveDoc({ id: created.id });
   expect(archived).toEqual(
     Object.assign({}, updated, {
       archivedAt: archived.archivedAt,
       updatedAt: archived.updatedAt,
-      order: null
+      order: Reorder.DEFAULT_ORDER
     })
   );
   expect(archived.archivedAt).not.toBeFalsy();
@@ -78,9 +84,13 @@ export const shouldCRUD = async (Store, props) => {
   // Make sure timestamps aren't the same
   await testUtils.sleepToEnsureDifferentTimestamps();
 
+  // Restore
   const restored = await store.restoreDoc({ id: created.id });
   expect(restored).toEqual(
-    Object.assign({}, updated, { updatedAt: restored.updatedAt, order: null })
+    Object.assign({}, updated, {
+      updatedAt: restored.updatedAt,
+      order: Reorder.DEFAULT_ORDER
+    })
   );
   expect(restored.archivedAt).toBeNull();
   expect(restored.updatedAt).not.toEqual(archived.updatedAt);
@@ -88,7 +98,7 @@ export const shouldCRUD = async (Store, props) => {
 
 export const createDoc = async (store, fieldValues) => {
   const form = createForm({ value: fieldValues });
-  return store.createDoc({ form });
+  return store.createDoc({ form, reorder: true });
 };
 
 const createDocs = async store => {
@@ -109,8 +119,7 @@ const createDocs = async store => {
 
   const ronValues = {
     firstName: 'Ron',
-    lastName: 'Weasley',
-    order: 1
+    lastName: 'Weasley'
   };
   const ron = await createDoc(store, ronValues);
 
@@ -119,7 +128,7 @@ const createDocs = async store => {
 
 export const updateDoc = async (store, fieldValues) => {
   const form = createForm({ value: fieldValues });
-  return store.updateDoc({ form });
+  return store.updateDoc({ form, reorder: true });
 };
 
 const searchDefaults = {
@@ -205,6 +214,22 @@ export const shouldGetAll = async (Store, props) => {
   );
 };
 
+const expectDocsToEqual = (docs, items) => {
+  const edges = [];
+  items.forEach(item => {
+    edges.push({
+      node: {
+        fieldValues: {
+          firstName: item.firstName
+        },
+        order: item.order
+      }
+    });
+  });
+
+  expect(docs).toMatchObject({ edges });
+};
+
 export const shouldMove = async (Store, props) => {
   const store = new Store(props);
 
@@ -237,95 +262,112 @@ export const shouldMove = async (Store, props) => {
     order: 1
   };
   const ginny = await createDoc(store, ginnyValues);
-  expect(await store.getAllDocs(searchDefaults)).toEqual(
-    Object.assign({}, all, {
-      edges: [
-        {
-          node: harry
-        },
-        {
-          node: ginny
-        },
-        {
-          node: ron
-        },
-        {
-          node: hermione
-        }
-      ]
-    })
-  );
+  expectDocsToEqual(await store.getAllDocs(searchDefaults), [
+    {
+      firstName: 'Harry',
+      order: 0
+    },
+    {
+      firstName: 'Ginny',
+      order: 1
+    },
+    {
+      firstName: 'Ron',
+      order: 2
+    },
+    {
+      firstName: 'Hermione',
+      order: Reorder.DEFAULT_ORDER
+    }
+  ]);
 
   // Move up
   ron = await updateDoc(
     store,
     Object.assign({}, ron.fieldValues, { id: ron.id, order: 0 })
   );
-  expect(await store.getAllDocs(searchDefaults)).toEqual(
-    Object.assign({}, all, {
-      edges: [
-        {
-          node: ron
-        },
-        {
-          node: harry
-        },
-        {
-          node: ginny
-        },
-        {
-          node: hermione
-        }
-      ]
-    })
-  );
+  expectDocsToEqual(await store.getAllDocs(searchDefaults), [
+    {
+      firstName: 'Ron',
+      order: 0
+    },
+    {
+      firstName: 'Harry',
+      order: 1
+    },
+    {
+      firstName: 'Ginny',
+      order: 2
+    },
+    {
+      firstName: 'Hermione',
+      order: Reorder.DEFAULT_ORDER
+    }
+  ]);
 
   // Move to end of ordered list
   harry = await updateDoc(
     store,
-    Object.assign({}, harry.fieldValues, { id: harry.id, order: 3 })
+    Object.assign({}, harry.fieldValues, { id: harry.id, order: 2 })
   );
-  ginny.order = 1;
-  hermione.order = 2;
-  expect(await store.getAllDocs(searchDefaults)).toEqual(
-    Object.assign({}, all, {
-      edges: [
-        {
-          node: ron
-        },
-        {
-          node: ginny
-        },
-        {
-          node: hermione
-        },
-        {
-          node: harry
-        }
-      ]
-    })
-  );
+  expectDocsToEqual(await store.getAllDocs(searchDefaults), [
+    {
+      firstName: 'Ron',
+      order: 0
+    },
+    {
+      firstName: 'Ginny',
+      order: 1
+    },
+    {
+      firstName: 'Harry',
+      order: 2
+    },
+    {
+      firstName: 'Hermione',
+      order: Reorder.DEFAULT_ORDER
+    }
+  ]);
 
   // Archive
-  const archivedGinny = await store.archiveDoc({ id: ginny.id });
-  hermione.order = 1;
-  harry.order = 2;
-  expect(await store.getAllDocs(searchDefaults)).toEqual(
-    Object.assign({}, all, {
-      edges: [
-        {
-          node: ron
-        },
-        {
-          node: hermione
-        },
-        {
-          node: harry
-        },
-        {
-          node: archivedGinny
-        }
-      ]
-    })
-  );
+  await store.archiveDoc({ id: ginny.id, reorder: true });
+  expectDocsToEqual(await store.getAllDocs(searchDefaults), [
+    {
+      firstName: 'Ron',
+      order: 0
+    },
+    {
+      firstName: 'Harry',
+      order: 1
+    },
+    {
+      firstName: 'Hermione',
+      order: Reorder.DEFAULT_ORDER
+    },
+    {
+      firstName: 'Ginny',
+      order: Reorder.DEFAULT_ORDER
+    }
+  ]);
+
+  // Restore
+  await store.restoreDoc({ id: ginny.id, reorder: true });
+  expectDocsToEqual(await store.getAllDocs(searchDefaults), [
+    {
+      firstName: 'Ron',
+      order: 0
+    },
+    {
+      firstName: 'Harry',
+      order: 1
+    },
+    {
+      firstName: 'Ginny',
+      order: 2
+    },
+    {
+      firstName: 'Hermione',
+      order: Reorder.DEFAULT_ORDER
+    }
+  ]);
 };

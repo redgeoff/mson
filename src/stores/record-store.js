@@ -5,9 +5,13 @@ import utils from '../utils';
 import uberUtils from '../uber-utils';
 import registrar from '../compiler/registrar';
 import globals from '../globals';
+import reorder, { Reorder } from './reorder';
 
 export default class RecordStore extends Store {
   _className = 'RecordStore';
+
+  // Used to paginate the data when reordering so that we break up our batches
+  static ITEMS_PER_PAGE_DEFAULT = 50;
 
   _create(props) {
     super._create(props);
@@ -57,8 +61,15 @@ export default class RecordStore extends Store {
     }
   }
 
-  async _createDoc({ form, fieldValues, order }) {
+  async _createDoc({ form, fieldValues, order, reorder }) {
     this._clearCache();
+
+    if (this._shouldSetToLastOrder(order, reorder)) {
+      // Reorder and get the lastOrder so that we can add the new doc to the end of the list
+      const result = await this._reorder({ form });
+      order = result.lastOrder;
+      fieldValues = Object.assign({}, fieldValues, { order });
+    }
 
     const response = await this._request({
       form,
@@ -141,7 +152,74 @@ export default class RecordStore extends Store {
     });
   }
 
-  async _updateDoc({ form, id, fieldValues, order }) {
+  // TODO: how do we know what the "where" is??
+  // - A: configure a getWhere for store? But then can't be shared!
+  // - B: optionally pass where into updateDoc. Messy?
+  // - C: create a moveDoc? But then what about when creating and need to reorder? Maybe B is best?
+  async _reorder({ form, id, order }) {
+    let loop = true;
+
+    const props = {
+      first: this.constructor.ITEMS_PER_PAGE_DEFAULT,
+      order: [['order', 'asc']]
+    };
+
+    const itemsToReorder = [];
+
+    const onReorder = (item, newOrder) => {
+      // Only reorder the affected items. The item being moved will be updated afterwards
+      if (item.id !== id) {
+        itemsToReorder.push({ id: item.id, order: newOrder });
+      }
+    };
+
+    let i = 0;
+    let destinationKey = null;
+
+    while (loop) {
+      const response = await this.getAllDocs(props);
+
+      for (let j = 0; j < response.edges.length; j++) {
+        const item = response.edges[j];
+        const result = reorder.reorderItem(
+          item.node,
+          id,
+          order,
+          i,
+          destinationKey,
+          onReorder
+        );
+        i = result.i;
+        destinationKey = result.destinationKey;
+      }
+
+      props.after = response.pageInfo.endCursor;
+
+      loop = response.pageInfo.hasNextPage;
+    }
+
+    if (itemsToReorder.length > 0) {
+      // We have to clear the cache as the order of the items has changed.
+      this._clearCache();
+
+      // We have to update the items after we get them all or else our updates can affect the order the
+      // pagination results
+      for (let j = 0; j < itemsToReorder.length; j++) {
+        const { id, order } = itemsToReorder[j];
+
+        // Set to blank as we are using partial updates and don't need to send all the data
+        const fieldValues = {};
+
+        await this._requestUpdate({ form, id, order, fieldValues });
+      }
+    }
+
+    return {
+      lastOrder: i
+    };
+  }
+
+  async _requestUpdate({ form, id, fieldValues, order }) {
     const response = await this._request({
       form,
       promiseFactory: appId => {
@@ -156,6 +234,14 @@ export default class RecordStore extends Store {
     });
 
     return response.data.updateRecord;
+  }
+
+  async _updateDoc({ form, id, fieldValues, order, reorder }) {
+    if (reorder) {
+      await this._reorder({ form, id, order });
+    }
+
+    return this._requestUpdate({ form, id, fieldValues, order });
   }
 
   async _getDoc({ form, id, where }) {
@@ -205,7 +291,7 @@ export default class RecordStore extends Store {
     }
   }
 
-  async _archiveDoc({ form, id }) {
+  async _archiveDoc({ form, id, reorder }) {
     this._clearCache();
 
     const response = await this._request({
@@ -219,10 +305,23 @@ export default class RecordStore extends Store {
       }
     });
 
+    if (reorder) {
+      // Remove from ordered list and reorder affected docs. TODO: should we refactor archive so
+      // that you can pass in values like order? This way, you can archive and reorder in a single
+      // call.
+      await this._updateDoc({
+        form,
+        id,
+        order: Reorder.DEFAULT_ORDER,
+        reorder: true,
+        fieldValues: {}
+      });
+    }
+
     return response.data.archiveRecord;
   }
 
-  async _restoreDoc({ form, id }) {
+  async _restoreDoc({ form, id, order, reorder }) {
     this._clearCache();
 
     const response = await this._request({
@@ -235,6 +334,18 @@ export default class RecordStore extends Store {
         });
       }
     });
+
+    if (this._shouldSetToLastOrder(order, reorder)) {
+      // Reorder and get the lastOrder so that we can move the restored doc to the end of the list
+      const result = await this._reorder({ form, id });
+      await this._updateDoc({
+        form,
+        id,
+        fieldValues: {},
+        order: result.lastOrder,
+        reorder: false
+      });
+    }
 
     return response.data.restoreRecord;
   }

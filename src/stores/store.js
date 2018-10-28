@@ -36,6 +36,7 @@ import access from '../access';
 import utils from '../utils';
 import uberUtils from '../uber-utils';
 import DateField from '../fields/date-field';
+import { Reorder } from './reorder';
 
 export default class Store extends Component {
   _className = 'Store';
@@ -55,6 +56,10 @@ export default class Store extends Component {
     return uberUtils.tryAndDisplayErrorIfAPIError(promiseFactory);
   }
 
+  _shouldSetToLastOrder(order, reorder) {
+    return (order === null || order === undefined) && reorder;
+  }
+
   async createDoc(props) {
     return this._tryAndHandleError(() => {
       // Omit values based on access
@@ -63,7 +68,11 @@ export default class Store extends Component {
       });
 
       const id = props.form.getValue('id');
-      const order = props.form.getValue('order');
+      let order = props.form.getValue('order');
+
+      if ((order === null || order === undefined) && !props.reorder) {
+        order = Reorder.DEFAULT_ORDER;
+      }
 
       return this._createDoc({ ...props, fieldValues, id, order });
     });
@@ -177,7 +186,7 @@ export default class Store extends Component {
     if (order === undefined) {
       // Set to null instead of setting to undefined as stores like Firebase don't support undefined
       // values
-      doc.order = null;
+      doc.order = Reorder.DEFAULT_ORDER;
     } else {
       doc.order = order;
     }

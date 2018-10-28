@@ -23,6 +23,9 @@ export default class CollectionField extends Field {
 
   static MAX_BUFFER_PAGES_DEFAULT = 3;
 
+  // This value is used to limit the amount of data received from the store in one page of data
+  static MAX_ITEMS_PER_PAGE = 100;
+
   _create(props) {
     super._create(props);
 
@@ -243,10 +246,20 @@ export default class CollectionField extends Field {
     this._infiniteLoader.reset();
   }
 
+  _getOrder() {
+    if (this.get('forbidOrder')) {
+      return this.get('order');
+    } else {
+      // Order by "order" as drag ordering is enabled
+      return [['order', 'ASC']];
+    }
+  }
+
   _updateInfiniteLoader() {
+    // TODO: refactor to use getters like _getOrder() so that always using the latest showArchived,
+    // etc...?
     this._infiniteLoader.setShowArchived(this.get('showArchived'));
     this._infiniteLoader.setWhere(this._where);
-    this._infiniteLoader.setOrder(this.get('order'));
   }
 
   _handleStoreChangeFactory() {
@@ -465,14 +478,34 @@ export default class CollectionField extends Field {
         records.edges.length === 0 && !props.after && !props.before;
 
       this.set({ noResults });
+
+      if (noResults) {
+        // Set change to null to prevent issue where we toggle showArchived, get no archived results
+        // and then toggle showArchived again
+        this.set({ change: null });
+      }
+
       return records;
+    }
+  }
+
+  _getItemsPerPage() {
+    if (this.get('forbidOrder')) {
+      return this.get('itemsPerPage');
+    } else {
+      // When drag ordering is enabled, we need to store all the docs in memory so that we can
+      // reorder them. Reordering requires changing the "order" property for all affected docs.
+      // FUTURE: we may want to support larger sets with drag ordering and will probably want to
+      // utilize the pagination concepts in CollectionField and InfiniteLoader, but will have to
+      // figure out how to load the entire set into the store so that items can be reordered.
+      return this.constructor.MAX_ITEMS_PER_PAGE;
     }
   }
 
   _createInfiniteLoader() {
     this._infiniteLoader = new InfiniteLoader({
       onGetAll: props => this._onGetAll(props),
-      onGetItemsPerPage: () => this.get('itemsPerPage'),
+      onGetItemsPerPage: () => this._getItemsPerPage(),
       onGetScrollThreshold: () => this.get('scrollThreshold'),
       onGetMaxBufferPages: () => this.get('maxBufferPages'),
       onGetItemElement: id =>
@@ -489,7 +522,8 @@ export default class CollectionField extends Field {
       onGetItemCursor: form => form.get('cursor'),
       onAddItems: (edges, beforeKey) => this._onAddItems(edges, beforeKey),
       onEmitChange: records => this.set({ change: records }),
-      onSetIsLoading: isLoading => this.set({ isLoading })
+      onSetIsLoading: isLoading => this.set({ isLoading }),
+      onGetOrder: () => this._getOrder()
     });
   }
 
@@ -961,23 +995,24 @@ export default class CollectionField extends Field {
     let fieldForm = null;
 
     if (store) {
+      // Set the order; otherwise, new items may not appear in the order in which they are added
+      // as the order of docs in the store can be arbitrary
+      const reorder = !this.get('forbidOrder');
+
       let record = null;
+
       // New?
       if (creating) {
-        if (!this.get('forbidOrder')) {
-          // Set the order; otherwise, new items may not appear in the order in which they are added
-          // as the order of docs in the store can be arbitrary
-          form.setValues({ order: this._forms.length() });
-        }
-        record = await store.createDoc({ form });
+        record = await store.createDoc({ form, reorder });
       } else {
         // Existing
-        record = await store.updateDoc({ form });
+        record = await store.updateDoc({ form, reorder });
       }
       form.setValues({
         id: record.id,
         createdAt: record.createdAt,
-        updatedAt: record.updatedAt
+        updatedAt: record.updatedAt,
+        order: record.order
       });
     } else if (creating) {
       // TODO: use the id from this._docs.set instead of this dummy id
@@ -1026,7 +1061,11 @@ export default class CollectionField extends Field {
   async archive(form) {
     const store = this.get('store');
     if (store) {
-      const record = await store.archiveDoc({ form, id: form.getValue('id') });
+      const record = await store.archiveDoc({
+        form,
+        id: form.getValue('id'),
+        reorder: !this.get('forbidOrder')
+      });
       form.setValues({ archivedAt: record.archivedAt });
     }
 
@@ -1047,16 +1086,11 @@ export default class CollectionField extends Field {
   async restore(form) {
     const store = this.get('store');
 
-    if (!this.get('forbidOrder')) {
-      // Set the order
-      form.setValues({ order: this._forms.length() });
-    }
-
     if (store) {
       await store.restoreDoc({
         form,
         id: form.getValue('id'),
-        order: form.getValue('order')
+        reorder: !this.get('forbidOrder')
       });
     }
 
@@ -1072,8 +1106,15 @@ export default class CollectionField extends Field {
     this._globals.displaySnackbar(this.getSingularLabel() + ' restored');
   }
 
+  _getMaxSize() {
+    return this.get('forbidOrder')
+      ? this.get('maxSize')
+      : this.constructor.MAX_ITEMS_PER_PAGE;
+  }
+
   reachedMax() {
-    const maxSize = this.get('maxSize');
+    // TODO: this isn't working when there are multiple pages! Need to get length from store?
+    const maxSize = this._getMaxSize();
     return maxSize !== null && this._forms.length() >= maxSize;
   }
 

@@ -1,4 +1,5 @@
 import StoreMapa from './store-mapa';
+import { Reorder } from './reorder';
 
 it('should create', () => {
   // No docs
@@ -249,13 +250,24 @@ it('should create and not reorder when order is not changing', () => {
   const createInDocsAndReorderSpy = jest.spyOn(mapa, '_createInDocsAndReorder');
   const reorderSpy = jest.spyOn(mapa, '_reorder');
 
-  mapa.set('a', { v: 'a', order: null }, undefined, undefined, reorder);
-  expect(mapa.map(doc => doc)).toEqual([{ v: 'a', order: null }]);
+  mapa.set(
+    'a',
+    { v: 'a', order: Reorder.DEFAULT_ORDER },
+    undefined,
+    undefined,
+    reorder
+  );
+  expect(mapa.map(doc => doc)).toEqual([
+    { v: 'a', order: Reorder.DEFAULT_ORDER }
+  ]);
   expect(createInDocsAndReorderSpy).toHaveBeenCalledTimes(1);
   expect(reorderSpy).toHaveBeenCalledTimes(0);
 
   mapa.set('b', { v: 'b' }, undefined, undefined, reorder);
-  expect(mapa.map(doc => doc)).toEqual([{ v: 'a', order: null }, { v: 'b' }]);
+  expect(mapa.map(doc => doc)).toEqual([
+    { v: 'a', order: Reorder.DEFAULT_ORDER },
+    { v: 'b' }
+  ]);
   expect(createInDocsAndReorderSpy).toHaveBeenCalledTimes(2);
   expect(reorderSpy).toHaveBeenCalledTimes(0);
 });

@@ -4,6 +4,7 @@ import cloneDeepWith from 'lodash/cloneDeepWith';
 import cloneDeep from 'lodash/cloneDeep';
 import orderBy from 'lodash/orderBy';
 import sift from 'sift';
+import { Reorder } from './reorder';
 
 export default class MemoryStore extends Store {
   _className = 'MemoryStore';
@@ -18,7 +19,21 @@ export default class MemoryStore extends Store {
     });
   }
 
-  async _createDoc({ fieldValues, id, order }) {
+  _numUnarchived() {
+    let n = 0;
+    for (const value of this._docs.values()) {
+      if (!value.archivedAt) {
+        n++;
+      }
+    }
+    return n;
+  }
+
+  async _createDoc({ fieldValues, id, order, reorder }) {
+    if (this._shouldSetToLastOrder(order, reorder)) {
+      order = this._numUnarchived();
+    }
+
     const doc = this._buildDoc({ fieldValues, id, order });
 
     this._docs.set(doc.id, doc, undefined, undefined, true);
@@ -105,7 +120,7 @@ export default class MemoryStore extends Store {
     doc = this._setDoc({
       doc,
       archivedAt: this._now(),
-      order: null
+      order: Reorder.DEFAULT_ORDER
     });
 
     this._docs.set(id, doc, undefined, undefined, true);
@@ -113,7 +128,11 @@ export default class MemoryStore extends Store {
     return doc;
   }
 
-  async _restoreDoc({ id, order }) {
+  async _restoreDoc({ id, reorder, order }) {
+    if (this._shouldSetToLastOrder(order, reorder)) {
+      order = this._numUnarchived();
+    }
+
     // Clone the data so that we don't modify the original
     let doc = cloneDeep(this._docs.get(id));
 

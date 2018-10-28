@@ -1,7 +1,5 @@
 import Mapa from '../mapa';
-import Reorder from './reorder';
-
-const reorder = new Reorder();
+import reorder, { Reorder } from './reorder';
 
 // Dynamically moves the docs when the order is adjusted
 export default class StoreMapa extends Mapa {
@@ -58,7 +56,7 @@ export default class StoreMapa extends Mapa {
 
     const order = this._getProp(doc, 'order');
 
-    if (order === null || order === undefined) {
+    if (order === Reorder.DEFAULT_ORDER || order === undefined) {
       // Just create the doc as there is no order so we don't need to incur any extra overhead in
       // reordering
       return this._createInDocs(id, doc);
@@ -106,7 +104,8 @@ export default class StoreMapa extends Mapa {
         this.forEach((item, id) => {
           callback({
             id,
-            order: this._getProp(item, 'order')
+            order: this._getProp(item, 'order'),
+            archivedAt: this._getProp(item, 'archivedAt')
           });
         });
       }

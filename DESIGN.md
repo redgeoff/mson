@@ -332,3 +332,35 @@ All components are EventEmitters and Node.js EventEmitters reserve special treat
 ## Elevate vs Flatten
 
 The original idea was to use a _flatten_ property on `Field` and modify `Form.getValues()` to flatten, e.g. `{ name: { firstName: 'First', lastName: 'Last' }}` would become `{ firstName: 'First', lastName: 'Last' }`. The issue is that this also requires `set()` to perform an "unflatten" and this is adds complexity. Specifically, the parent form would need to maintain extra data in the form of a list of flattened fields, so that the form knows where to route the flattened value. Instead, when an _elevated_ FormField is added to a form, the actual fields, validators and listeners are added to this parent form, making it identical to creating the fields, validators and listeners directly on the parent. This allows us to create fields like the `AddressField`, which can wrap all the logic for an address, but the AddressField can then be elevated so that the values appear directly on the parent form.
+
+## Sequential vs Linked-List Ordering
+
+Sequential ordering sorts according to a numeric _order_ attribute. Linked list ordering uses pointers, e.g. a _beforeId_ (and _afterId_), to construct the ordered list. Details of the two designs are discussed at https://stackoverflow.com/q/9536262/2831606.
+
+MSON uses doubly-linked-list ordering in its Mapa, which allows for very performant item moves and partial iterations. Initially, stores in MSON used linked-list ordering as this ordering only requires editing 2 records. Alternatively, sequential ordering can require a modification to all the items located between the source and destination. Therefore, the transactional load is lower with linked-list ordering and so are the chances of a race condition.
+
+Unfortunately, linked-list ordering adds a great deal of extra complexity. Moreover, it requires loading the entire set to construct the order, something that can be noticable in the UI for large sets. In addition, it can take 2 iterations of the set to order it as on the first iteration there may be pointers to items that have not yet been loaded. And, race conditions can lead to strange circular patterns. Because of these reasons, and the fact that sequential ordering is more natively supported by most databases, MSON now uses sequential ordering.
+
+## Reordering
+
+Sequential ordering requires reordering of all affected rows. The simple approach is to use queries:
+```
+-- Move up
+SET order = order + 1
+WHERE
+  order >= newOrder
+  AND order < oldOrder
+
+-- Move down
+SET order = order - 1
+WHERE
+  order > oldOrder
+  AND order <= newOrder
+```
+This however, will not fix data problems caused by race conditions. We assume that race conditions will occur because we do not require transactions. Transactions can be slow as we want our solution to be portable across different databases, some databases may not implement transactions. Instead, we can use a quick algorithm that simply iterates over all the docs and sets/corrects the _order_ value. This should be acceptable as we assume that sequential ordering is only being used with relatively small data sets, e.g. a user dragging items to sort them in a list.
+
+Another important detail is that reordering is done in the front end so that the front end can perform ordering on custom segments of data, e.g. a user may only be able to order her/his set of data. This avoids the complexity of having to alert the back end of the segment details when reordering.
+
+The reordering is performed in the store layer as the store layer has visibility of the entire set, something that is needed when reordering. Other front-end layers, like the CollectionField, may be viewing a smaller set of data, e.g. what is done during pagination.
+
+The DEFAULT_ORDER is set when ordering is turned off (being ignored) as it allows us to skip expensive calculations, like reordering, when the _order_ is not changing. Moreover, the DEFAULT_ORDER is used when a doc is archived and should be removed from the ordered list. The DEFAULT_ORDER is `-1` and not `null` because use of cursors translates to performing queries like `WHERE order>null`, which don't work as needed.
