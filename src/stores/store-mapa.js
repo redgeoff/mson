@@ -1,4 +1,7 @@
 import Mapa from '../mapa';
+import Reorder from './reorder';
+
+const reorder = new Reorder();
 
 // Dynamically moves the docs when the order is adjusted
 export default class StoreMapa extends Mapa {
@@ -20,20 +23,6 @@ export default class StoreMapa extends Mapa {
         entryOrder === undefined ||
         entryOrder === null ||
         entryOrder > order
-      ) {
-        return entry[0];
-      }
-    }
-    return null;
-  }
-
-  _findBeforeId(order) {
-    for (const entry of this.entries()) {
-      const entryOrder = this._getProp(entry[1], 'order');
-      if (
-        entryOrder === undefined ||
-        entryOrder === null ||
-        entryOrder >= order
       ) {
         return entry[0];
       }
@@ -67,27 +56,15 @@ export default class StoreMapa extends Mapa {
     // - Disable reordering by not specifying an order
     // - Set the order of the new item
 
-    let order = this._getProp(doc, 'order');
-    let beforeId = undefined;
-    if (order !== undefined && order !== null) {
-      beforeId = this._findBeforeId(order);
+    const order = this._getProp(doc, 'order');
+
+    if (order === null || order === undefined) {
+      // Just create the doc as there is no order so we don't need to incur any extra overhead in
+      // reordering
+      return this._createInDocs(id, doc);
+    } else {
+      return this._reorder(id, doc, order, onReorder);
     }
-
-    const setDoc = super.set(id, doc, beforeId);
-
-    if (beforeId !== null && beforeId !== undefined) {
-      // Update subsequent orders
-      for (const entry of this.entries(setDoc.nextKey)) {
-        const value = entry[1];
-        this._setProp(value, 'order', ++order);
-        super.set(entry[0], value);
-        if (onReorder) {
-          onReorder(entry[0], value);
-        }
-      }
-    }
-
-    return setDoc;
   }
 
   _updateInDocs(id, doc) {
@@ -123,147 +100,42 @@ export default class StoreMapa extends Mapa {
     return keys;
   }
 
-  move(sourceIndex, destinationIndex, doc, onReorder) {
-    // Note: the Mapa does not provide sequential indexes so we have to loop through all the items.
-    // In general, we shouldn't be using _move() with large data sets as moving with beforeKey is
-    // far more efficient. If we need to improve performance for larger datasets in the future, we
-    // can store sequential indexes in Mapa.
-
-    // The endIndex defines the end of the set that needs to be modified
-    let endIndex = null;
-
-    // The beginReorderIndex and endRedorderIndex define the set that needs to be reordered after
-    // the doc is moved
-    let beginReorderIndex = null;
-    let endRedorderIndex = null;
-
-    let docId = null;
-
-    // Are we removing the doc, e.g. archiving it?
-    let newOrder = destinationIndex;
-    if (destinationIndex === null) {
-      // Move it to the end, but set newOrder to null
-      destinationIndex = this.length() - 1;
-    }
-
-    const movingDown = destinationIndex > sourceIndex;
-    if (movingDown) {
-      endIndex = destinationIndex;
-      beginReorderIndex = sourceIndex + 1;
-      endRedorderIndex = destinationIndex;
-    } else {
-      endIndex = sourceIndex;
-      beginReorderIndex = destinationIndex;
-      endRedorderIndex = sourceIndex - 1;
-    }
-
-    let beforeKey = movingDown ? undefined : null;
-    let afterKey = movingDown ? null : undefined;
-
-    // Build a list of all the affected entries. This is done before making any updates as the
-    // updates will actually modify the underlying Mapa.
-    const entries = [];
-    let index = 0;
-    for (const entry of this.entries()) {
-      if (index >= beginReorderIndex && index <= endRedorderIndex) {
-        entries.push(entry);
+  _reorder(id, item, newOrder, onReorder) {
+    const items = {
+      forEach: callback => {
+        this.forEach((item, id) => {
+          callback({
+            id,
+            order: this._getProp(item, 'order')
+          });
+        });
       }
-
-      if (movingDown) {
-        if (index === destinationIndex) {
-          afterKey = entry[0];
-        }
-      } else if (index === destinationIndex) {
-        beforeKey = entry[0];
-      }
-
-      if (index === sourceIndex) {
-        docId = entry[0];
-        if (doc === undefined) {
-          doc = entry[1];
-        }
-      }
-
-      if (index === endIndex) {
-        // Exit the loop, the rest of the items are unaffected
-        break;
-      }
-
-      index++;
-    }
-
-    // Move the doc
-    this._setProp(doc, 'order', newOrder);
-    super.set(docId, doc, beforeKey, afterKey);
-
-    // Adjust order property of all affected docs
-    entries.forEach((entry, i) => {
-      const order = i + beginReorderIndex + (movingDown ? -1 : 1);
-
-      const item = entry[1];
-      this._setProp(item, 'order', order);
-      const id = entry[0];
-
-      // Use super.set() so that we force item to stay in the same place. This prevents us from
-      // traversing the list to find the correct place to move the item as the order property is
-      // changing
-      super.set(id, item);
-      if (onReorder) {
-        onReorder(id, item);
-      }
-    });
-
-    return doc;
-  }
-
-  _findSourceAndDestinationIndexes(id, newDoc) {
-    // Note: we use a more resilent way than just using the existingOrder and newOrder for the
-    // destinationIndex as race conditions can result in duplicate "order" values
-
-    // const sourceIndex = this._getProp(existingDoc, 'order');
-    // const destinationIndex = this._getProp(newDoc, 'order');
-
-    const newOrder = this._getProp(newDoc, 'order');
-
-    let sourceIndex = null;
-    let destinationIndex = null;
-    let index = 0;
-    for (const entry of this.entries()) {
-      const entryId = entry[0];
-      const entryOrder = this._getProp(entry[1], 'order');
-
-      if (entryId === id) {
-        sourceIndex = index;
-      }
-
-      if (
-        destinationIndex === null &&
-        newOrder !== null &&
-        newOrder <= entryOrder
-      ) {
-        destinationIndex = index;
-      }
-
-      if (sourceIndex !== null && destinationIndex !== null) {
-        // Exit loop as source and destination have been found
-        break;
-      }
-
-      index++;
-    }
-
-    if (destinationIndex === null && newOrder !== null) {
-      // Move to the end
-      destinationIndex = this.length() - 1;
-    }
-
-    return {
-      sourceIndex,
-      destinationIndex
     };
+
+    const handleReorder = (item, newOrder) => {
+      const itemId = this._getProp(item, 'id');
+
+      // Make sure this is not the target item. We'll update the target item below once we've found
+      // the destinationKey. We may need to iterate through all the items just to find the
+      // destinationKey.
+      if (itemId !== id) {
+        const doc = this.get(itemId);
+        this._setProp(doc, 'order', newOrder);
+        super.set(itemId, doc);
+        if (onReorder) {
+          onReorder(itemId, doc);
+        }
+      }
+    };
+
+    const result = reorder.reorder(items, id, newOrder, handleReorder);
+
+    this._setProp(item, 'order', newOrder);
+
+    return super.set(id, item, result.destinationKey);
   }
 
-  _updateAndReorderInDocs(id, doc, onReorder) {
+  _updateInDocsAndReorder(id, doc, onReorder) {
     const existingDoc = this.get(id);
 
     const existingOrder = this._getProp(existingDoc, 'order');
@@ -274,11 +146,7 @@ export default class StoreMapa extends Mapa {
       // overhead in reordering
       return this._updateInDocs(id, doc);
     } else {
-      let {
-        sourceIndex,
-        destinationIndex
-      } = this._findSourceAndDestinationIndexes(id, doc);
-      return this.move(sourceIndex, destinationIndex, doc, onReorder);
+      return this._reorder(id, doc, newOrder, onReorder);
     }
   }
 
@@ -287,7 +155,7 @@ export default class StoreMapa extends Mapa {
       return super.set(id, doc, beforeId, afterId);
     } else if (this.has(id)) {
       if (reorder) {
-        return this._updateAndReorderInDocs(id, doc, onReorder);
+        return this._updateInDocsAndReorder(id, doc, onReorder);
       } else {
         return this._updateInDocs(id, doc);
       }
