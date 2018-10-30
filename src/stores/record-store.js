@@ -119,7 +119,7 @@ export default class RecordStore extends Store {
     order
   }) {
     const showArchivedWhere = this._getShowArchivedWhere(showArchived);
-    where = utils.combineWheres(showArchivedWhere, where);
+    where = utils.combineWheres(showArchivedWhere, where, this.get('where'));
 
     return this._request({
       form,
@@ -152,16 +152,13 @@ export default class RecordStore extends Store {
     });
   }
 
-  // TODO: how do we know what the "where" is??
-  // - A: configure a getWhere for store? But then can't be shared!
-  // - B: optionally pass where into updateDoc. Messy?
-  // - C: create a moveDoc? But then what about when creating and need to reorder? Maybe B is best?
   async _reorder({ form, id, order }) {
     let loop = true;
 
     const props = {
       first: this.constructor.ITEMS_PER_PAGE_DEFAULT,
-      order: [['order', 'asc']]
+      order: [['order', 'asc']],
+      where: this.get('where')
     };
 
     const itemsToReorder = [];

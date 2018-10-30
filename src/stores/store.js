@@ -44,6 +44,18 @@ export default class Store extends Component {
   _create(props) {
     super._create(props);
 
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'where',
+            component: 'Field'
+          }
+        ]
+      }
+    });
+
     // For mocking
     this._access = access;
 

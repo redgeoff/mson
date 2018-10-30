@@ -60,19 +60,21 @@ export class Utils {
     return methods;
   }
 
-  combineWheres(where1, where2) {
-    // Clone so that we don't modify the original where
-    where1 = cloneDeep(where1);
-    where2 = cloneDeep(where2);
+  combineWheres(...wheres) {
+    const and = [];
 
-    if (where1 && where2) {
-      return {
-        $and: [where1, where2]
-      };
-    } else if (where1) {
-      return where1;
+    wheres.forEach(where => {
+      if (where) {
+        and.push(where);
+      }
+    });
+
+    if (and.length === 1) {
+      return and[0];
     } else {
-      return where2;
+      return {
+        $and: and
+      };
     }
   }
 
