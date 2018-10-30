@@ -659,7 +659,7 @@ it('should handle search string', async () => {
 
   field._handleSearchStringFactory()('foo');
   expect(field.get('searchString')).toEqual('foo');
-  expect(field._where).toEqual(searchString);
+  expect(field._getWhere()).toEqual(searchString);
   expect(clearAndGetAllSpy).toHaveBeenCalledTimes(0);
 
   const didLoad = testUtils.once(field, 'didLoad');

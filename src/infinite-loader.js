@@ -49,7 +49,8 @@ export default class InfiniteLoader {
     onAddItems,
     onEmitChange,
     onSetIsLoading,
-    onGetOrder
+    onGetOrder,
+    onGetWhere
   }) {
     this._onGetAll = onGetAll;
     this._onGetItemsPerPage = onGetItemsPerPage;
@@ -64,6 +65,7 @@ export default class InfiniteLoader {
     this._onGetItems = onGetItems;
     this._onSetIsLoading = onSetIsLoading;
     this._onGetOrder = onGetOrder;
+    this._onGetWhere = onGetWhere;
 
     this._onGetItemId = onGetItemId;
     this._onGetItemCursor = onGetItemCursor;
@@ -136,7 +138,6 @@ export default class InfiniteLoader {
     this._onSetBufferTopId(null);
     this._onSetIsLoading(false);
     this._onResizeSpacer(null, 0);
-    this.setWhere(null);
   }
 
   async getAll(props) {
@@ -147,8 +148,8 @@ export default class InfiniteLoader {
 
     props.showArchived = this._showArchived;
 
-    if (this._where) {
-      props.where = this._where;
+    if (this._onGetWhere) {
+      props.where = this._onGetWhere();
     }
 
     if (this._onGetOrder) {
@@ -372,10 +373,6 @@ export default class InfiniteLoader {
 
   setShowArchived(showArchived) {
     this._showArchived = showArchived;
-  }
-
-  setWhere(where) {
-    this._where = where;
   }
 
   removeItem(id) {
