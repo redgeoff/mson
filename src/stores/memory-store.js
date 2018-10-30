@@ -34,7 +34,8 @@ export default class MemoryStore extends Store {
       order = this._numUnarchived();
     }
 
-    const doc = this._buildDoc({ fieldValues, id, order });
+    const userId = this._getUserId();
+    const doc = this._buildDoc({ fieldValues, id, order, userId });
 
     this._docs.set(doc.id, doc, undefined, undefined, true);
 

@@ -4,7 +4,6 @@ import Store from './store';
 import utils from '../utils';
 import uberUtils from '../uber-utils';
 import registrar from '../compiler/registrar';
-import globals from '../globals';
 import reorder, { Reorder } from './reorder';
 
 export default class RecordStore extends Store {
@@ -17,7 +16,6 @@ export default class RecordStore extends Store {
     super._create(props);
 
     // For mocking
-    this._globals = globals;
     this._uberUtils = uberUtils;
     this._registrar = registrar;
 

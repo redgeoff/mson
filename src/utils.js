@@ -1,6 +1,5 @@
 import reduce from 'lodash/reduce';
 import each from 'lodash/each';
-import cloneDeep from 'lodash/cloneDeep';
 import uuid from 'uuid';
 
 export class Utils {
