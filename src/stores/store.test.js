@@ -1,4 +1,5 @@
 import Store from './store';
+import { Reorder } from './reorder';
 
 it('should build doc', () => {
   const store = new Store();
@@ -24,9 +25,9 @@ it('should build doc', () => {
   expect(doc.id).toEqual('1');
 });
 
-it('should set order to null when setting doc', () => {
+it('should set order to default when setting doc', () => {
   const store = new Store();
   const doc = { order: 1 };
   store._setDoc({ doc, order: undefined });
-  expect(doc.order).toBeNull();
+  expect(doc.order).toEqual(Reorder.DEFAULT_ORDER);
 });

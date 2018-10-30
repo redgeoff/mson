@@ -1,4 +1,4 @@
-import Reorder from './reorder';
+import { Reorder } from './reorder';
 
 let reorder = null;
 

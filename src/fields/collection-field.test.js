@@ -469,7 +469,7 @@ it('should save', async () => {
 
   // Create
   await field.save();
-  expect(createSpy).toHaveBeenCalledWith({ form });
+  expect(createSpy).toHaveBeenCalledWith({ form, reorder: false });
   expect(form.getValue('id')).toEqual('myId');
   expect(form.getValue('userId')).toEqual('myUserId');
   expect(field.getValue()).toHaveLength(1);
@@ -477,7 +477,7 @@ it('should save', async () => {
   // Update
   form.setValues({ lastName: 'Ryan' });
   await field.save();
-  expect(updateSpy).toHaveBeenCalledWith({ form });
+  expect(updateSpy).toHaveBeenCalledWith({ form, reorder: false });
   expect(field.getValue()).toHaveLength(1);
 
   // Simulate the lack of a store
@@ -532,7 +532,11 @@ it('should archive', async () => {
   // Archive
   const didArchiveRecord = testUtils.once(form, 'didArchiveRecord');
   await field.archive(form);
-  expect(archiveSpy).toHaveBeenCalledWith({ form, id: form.getValue('id') });
+  expect(archiveSpy).toHaveBeenCalledWith({
+    form,
+    id: form.getValue('id'),
+    reorder: false
+  });
   expect(form.getValue('archivedAt')).toEqual(archivedAt.getValue());
   expect(field.getValue()).toHaveLength(0);
   expect(displaySnackbarSpy).toHaveBeenCalledWith('Person deleted');
@@ -588,7 +592,7 @@ it('should restore', async () => {
   expect(restoreSpy).toHaveBeenCalledWith({
     form,
     id: form.getValue('id'),
-    order: form.getValue('order')
+    reorder: false
   });
   expect(form.getValue('archivedAt')).toBeNull();
   expect(field.getValue()).toHaveLength(0);
@@ -862,4 +866,28 @@ it('should move', async () => {
       order: 1 // Still at 1 as the store will change this
     }
   ]);
+});
+
+it('should get order', () => {
+  const field = createField({ order: [['createdAt', 'ASC']] });
+  expect(field._getOrder()).toEqual([['createdAt', 'ASC']]);
+
+  field.set({ forbidOrder: false });
+  expect(field._getOrder()).toEqual([['order', 'ASC']]);
+});
+
+it('should get items per page', () => {
+  const field = createField({ itemsPerPage: 2 });
+  expect(field._getItemsPerPage()).toEqual(2);
+
+  field.set({ forbidOrder: false });
+  expect(field._getItemsPerPage()).toEqual(CollectionField.MAX_ITEMS_PER_PAGE);
+});
+
+it('should get max size', () => {
+  const field = createField({ maxSize: 2 });
+  expect(field._getMaxSize()).toEqual(2);
+
+  field.set({ forbidOrder: false });
+  expect(field._getMaxSize()).toEqual(CollectionField.MAX_ITEMS_PER_PAGE);
 });

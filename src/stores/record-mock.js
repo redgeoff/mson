@@ -17,12 +17,20 @@ export default class RecordMock {
   }
 
   async get({ appId, componentName, id, where }) {
-    const doc = await this._docs.getDoc({ id, where });
-    return {
-      data: {
-        record: doc
-      }
-    };
+    try {
+      const doc = await this._docs.getDoc({ id, where });
+      return {
+        data: {
+          record: doc
+        }
+      };
+    } catch (err) {
+      // if (err.message === 'value is missing for key ' + id) {
+      throw new Error('GraphQL error: record not found');
+      // } else {
+      //   throw err;
+      // }
+    }
   }
 
   async update({ appId, componentName, id, fieldValues, order }) {

@@ -6,6 +6,7 @@ import {
   createDoc,
   updateDoc
 } from './store-test';
+import { Reorder } from './reorder';
 
 it('should create, update, archive & restore', async () => {
   await shouldCRUD(MemoryStore);
@@ -81,7 +82,7 @@ it('should reorder', async () => {
   });
   expect(await store.getDoc({ id: harry.id })).toMatchObject({
     fieldValues: harryFieldValues,
-    order: null
+    order: Reorder.DEFAULT_ORDER
   });
 
   // Restore

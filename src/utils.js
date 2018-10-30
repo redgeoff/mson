@@ -139,6 +139,14 @@ export class Utils {
     // Automatically calculate singular label by removing last 's'
     return plural.substr(0, plural.length - 1);
   }
+
+  // synchronize(synchronizer, promiseFactory) {
+  //   const promise = synchronizer.then(() => {
+  //     return promiseFactory();
+  //   });
+  //   synchronizer = synchronizer.then(() => promise);
+  //   return promise;
+  // }
 }
 
 export default new Utils();

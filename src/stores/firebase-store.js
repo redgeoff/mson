@@ -5,6 +5,7 @@
 
 import MemoryStore from './memory-store';
 import cloneDeep from 'lodash/cloneDeep';
+import { Reorder } from './reorder';
 
 export default class FirebaseStore extends MemoryStore {
   _className = 'FirebaseStore';
@@ -149,13 +150,16 @@ export default class FirebaseStore extends MemoryStore {
     });
   };
 
-  async _createDoc({ fieldValues, id, order }) {
+  async _createDoc({ fieldValues, id, order, reorder }) {
+    if (this._shouldSetToLastOrder(order, reorder)) {
+      order = this._numUnarchived();
+    }
+
     const doc = this._buildDoc({ fieldValues, id, order });
 
     // Note: we need to update the underlying MemoryStore so that the data is there after this
     // function completes even though Firebase will emit an onWrite with the changed data.
-    const reorder = true;
-    this._docs.set(doc.id, doc, undefined, undefined, reorder, this._onReorder);
+    this._docs.set(doc.id, doc, undefined, undefined, true, this._onReorder);
 
     await this._docSet({
       id: doc.id,
@@ -180,8 +184,7 @@ export default class FirebaseStore extends MemoryStore {
 
     // Note: we need to update the underlying MemoryStore so that the data is there after this
     // function completes even though Firebase will emit an onWrite with the changed data.
-    const reorder = true;
-    this._docs.set(doc.id, doc, undefined, undefined, reorder, this._onReorder);
+    this._docs.set(doc.id, doc, undefined, undefined, true, this._onReorder);
 
     // The value has to be set in Firebase after it is set in the mapa so that _docs.set() can
     // detect when there is a change to the order
@@ -204,14 +207,19 @@ export default class FirebaseStore extends MemoryStore {
     return this._modifyDoc({
       ...props,
       archivedAt: this._now(),
-      order: null
+      order: Reorder.DEFAULT_ORDER
     });
   }
 
-  async _restoreDoc(props) {
+  async _restoreDoc({ reorder, order, ...props }) {
+    if (this._shouldSetToLastOrder(order, reorder)) {
+      order = this._numUnarchived();
+    }
+
     return this._modifyDoc({
       ...props,
-      archivedAt: null
+      archivedAt: null,
+      order
     });
   }
 

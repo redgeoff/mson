@@ -1,19 +1,30 @@
-// TODO: get store-test working in this file by mocking _registrar.client.record
-
 import RecordStore from './record-store';
 import Form from '../form';
 import { TextField } from '../fields';
 import testUtils from '../test-utils';
 import { shouldCRUD, shouldGetAll, shouldMove } from './store-test';
 import RecordMock from './record-mock';
+import { Reorder } from './reorder';
 
 let store = null;
 const storeName = 'MyStore';
 const appId = 'appId';
 const id = 'myId';
 
+class RecordStoreMock extends RecordStore {
+  constructor(props) {
+    super(props);
+    this._registrar.client = {
+      record: new RecordMock(),
+      user: {
+        getSession: () => null
+      }
+    };
+  }
+}
+
 beforeEach(() => {
-  store = new RecordStore({ storeName });
+  store = new RecordStoreMock({ storeName });
 
   store._globals = {
     get: () => appId
@@ -79,66 +90,48 @@ it('should request', async () => {
 it('should create', async () => {
   const form = createForm();
 
-  const created = {
-    foo: 'bar'
-  };
-
-  const response = {
-    data: {
-      createRecord: created
-    }
-  };
-
-  store._registrar = {
-    client: {
-      record: {
-        create: async () => response
-      }
-    }
-  };
-
   const clearCacheSpy = jest.spyOn(store, '_clearCache');
   const createSpy = jest.spyOn(store._registrar.client.record, 'create');
 
-  expect(await store.createDoc({ form })).toEqual(created);
-
+  // Create
+  const created = await store.createDoc({ form });
+  form.setValues({ id: created.id });
+  expect(created).toMatchObject({
+    archivedAt: null,
+    fieldValues: form.getValues({ default: false }),
+    order: Reorder.DEFAULT_ORDER
+  });
+  expect(created.createdAt).not.toBeFalsy();
+  expect(created.updatedAt).not.toBeFalsy();
   expect(clearCacheSpy).toHaveBeenCalledTimes(1);
   expect(createSpy).toHaveBeenCalledWith({
     appId,
     componentName: storeName,
-    fieldValues: form.getValues()
+    fieldValues: form.getValues({ default: false }),
+    order: Reorder.DEFAULT_ORDER
   });
 });
 
 it('should update', async () => {
   const form = createForm();
-  form.setValues({ id });
 
-  const updated = {
-    foo: 'bar'
-  };
+  const created = await store.createDoc({ form });
 
-  const response = {
-    data: {
-      updateRecord: updated
-    }
-  };
-
-  store._registrar = {
-    client: {
-      record: {
-        update: async () => response
-      }
-    }
-  };
-
+  // Update
+  form.setValues({ id: created.id, lastName: 'Kayson' });
   const updateSpy = jest.spyOn(store._registrar.client.record, 'update');
+  const updated = await store.updateDoc({ form });
 
-  expect(await store.updateDoc({ form })).toEqual(updated);
+  expect(updated).toEqual({
+    ...created,
+    fieldValues: form.getValues({ default: false }),
+    order: Reorder.DEFAULT_ORDER,
+    updatedAt: updated.updatedAt
+  });
 
   expect(updateSpy).toHaveBeenCalledWith({
     appId,
-    id,
+    id: created.id,
     componentName: storeName,
     fieldValues: form.getValues({ default: false })
   });
@@ -302,73 +295,64 @@ it('should get all docs', async () => {
 it('should upsert and get', async () => {
   const form = createForm();
 
-  const id = 'myId';
-
-  form.setValues({ id });
-
-  const created = {
-    foo: 'bar'
-  };
-
-  store._registrar = {
-    client: {
-      record: {
-        create: async () => ({
-          data: {
-            createRecord: created
-          }
-        }),
-        get: () => {
-          throw new Error('GraphQL error: record not found');
-        },
-        update: async () => ({
-          data: {
-            updateRecord: created
-          }
-        })
-      }
-    }
-  };
-
   const clearCacheSpy = jest.spyOn(store, '_clearCache');
   const createSpy = jest.spyOn(store._registrar.client.record, 'create');
   const updateSpy = jest.spyOn(store._registrar.client.record, 'update');
 
   // Create
-  expect(await store.upsertDoc({ form })).toEqual(created);
+  const created = await store.upsertDoc({ form });
+  form.setValues({ id: created.id });
+  expect(created).toMatchObject({
+    archivedAt: null,
+    fieldValues: form.getValues({ default: false }),
+    order: Reorder.DEFAULT_ORDER
+  });
+  expect(created.createdAt).not.toBeFalsy();
+  expect(created.updatedAt).not.toBeFalsy();
   expect(clearCacheSpy).toHaveBeenCalledTimes(1);
   expect(createSpy).toHaveBeenCalledWith({
     appId,
     componentName: storeName,
+    fieldValues: form.getValues({ default: false }),
+    order: Reorder.DEFAULT_ORDER
+  });
+
+  // Get
+  expect(await store.getDoc({ id: form.getValue('id') })).toEqual(created);
+
+  // Update
+  form.setValues({ lastName: 'Kayson' });
+  const updated = await store.upsertDoc({ form });
+  expect(updated).toEqual({
+    ...created,
+    fieldValues: form.getValues({ default: false }),
+    order: Reorder.DEFAULT_ORDER,
+    updatedAt: updated.updatedAt
+  });
+  expect(updateSpy).toHaveBeenCalledWith({
+    appId,
+    id: created.id,
+    componentName: storeName,
     fieldValues: form.getValues({ default: false })
   });
 
-  // Create without id
+  // Create with id
   const form2 = createForm();
-  const created2 = await store.upsertDoc({ form: form2 });
-  expect(created2).toEqual(created);
+  form2.setValues({ id });
+  const created2 = await store.upsertDoc({ form: form2, id });
+  expect(created2).toMatchObject({
+    archivedAt: null,
+    fieldValues: form2.getValues({ default: false }),
+    order: Reorder.DEFAULT_ORDER
+  });
+  expect(created2.createdAt).not.toBeFalsy();
+  expect(created2.updatedAt).not.toBeFalsy();
   expect(clearCacheSpy).toHaveBeenCalledTimes(2);
   expect(createSpy).toHaveBeenCalledWith({
     appId,
     componentName: storeName,
-    fieldValues: form2.getValues({ default: false })
-  });
-
-  // Get
-  store._registrar.client.record.get = () => ({
-    data: {
-      record: created
-    }
-  });
-  expect(await store.getDoc({ id: 'myId' })).toEqual(created);
-
-  // Update
-  expect(await store.upsertDoc({ form })).toEqual(created);
-  expect(updateSpy).toHaveBeenCalledWith({
-    appId,
-    id,
-    componentName: storeName,
-    fieldValues: form.getValues({ default: false })
+    fieldValues: form2.getValues({ default: false }),
+    order: Reorder.DEFAULT_ORDER
   });
 
   // Error other than "not found"
@@ -378,18 +362,6 @@ it('should upsert and get', async () => {
   };
   testUtils.expectToThrow(() => store.upsertDoc({ form }), err);
 });
-
-class RecordStoreMock extends RecordStore {
-  constructor(props) {
-    super(props);
-    this._registrar.client = {
-      record: new RecordMock(),
-      user: {
-        getSession: () => null
-      }
-    };
-  }
-}
 
 it('should CRUD', () => shouldCRUD(RecordStoreMock));
 

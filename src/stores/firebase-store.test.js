@@ -8,6 +8,7 @@ import {
   updateDoc
 } from './store-test';
 import testUtils from '../test-utils';
+import { Reorder } from './reorder';
 
 it('should CRUD', () =>
   shouldCRUD(FirebaseStore, { firebase: new FirebaseMock(), apiKey: 'key' }));
@@ -298,14 +299,14 @@ it('should reorder', async () => {
 
   // Archive
   docSetSpy.mockClear();
-  await store.archiveDoc({ id: harry.id, order: null });
+  await store.archiveDoc({ id: harry.id, reorder: true });
   expect(await store.getDoc({ id: hermione.id })).toMatchObject({
     fieldValues: hermioneFieldValues,
     order: 0
   });
   expect(await store.getDoc({ id: harry.id })).toMatchObject({
     fieldValues: harryFieldValues,
-    order: null
+    order: Reorder.DEFAULT_ORDER
   });
   expect(docSetSpy.mock.calls[0][0].doc).toMatchObject({
     fieldValues: hermioneFieldValues,
@@ -313,12 +314,12 @@ it('should reorder', async () => {
   });
   expect(docSetSpy.mock.calls[1][0].doc).toMatchObject({
     fieldValues: harryFieldValues,
-    order: null
+    order: Reorder.DEFAULT_ORDER
   });
 
   // Restore
   docSetSpy.mockClear();
-  await store.restoreDoc({ id: harry.id, order: 1 });
+  await store.restoreDoc({ id: harry.id, reorder: true });
   expect(await store.getDoc({ id: hermione.id })).toMatchObject({
     fieldValues: hermioneFieldValues,
     order: 0
