@@ -309,7 +309,18 @@ export default class RecordStore extends Store {
       // Remove from ordered list and reorder affected docs. TODO: should we refactor archive so
       // that you can pass in values like order? This way, you can archive and reorder in a single
       // call.
-      await this._updateDoc({
+      //
+      // TODO: we don't await the _updateDoc() here as it can take a while to reorder all the docs
+      // and we don't want it to take this long to confirm the deletion. Is there a better way? We
+      // could:
+      //   - Pass the where property to the back end so that the back end can perform the
+      //     reordering. Would this be fast enough? The back end would still have to iterate through
+      //     all the items.
+      //   - Support batch updates. I'm not clear how much faster this would be though as we are
+      //     already using web sockets and so there is less overhead per update.
+      //   - If we stick with this detached construct (no await) then we should probably report any
+      //     errors via an 'updateErr' event on the store
+      this._updateDoc({
         form,
         id,
         order: Reorder.DEFAULT_ORDER,
