@@ -84,10 +84,13 @@ it('_getAllDebounced should debounce', async () => {
 });
 
 it('should getAll', async () => {
+  const where = { foo: 'bar' };
+
   const infiniteLoader = new InfiniteLoader(
     Object.assign({}, noops, {
       onGetAll: onGetAllPeople,
-      onGetItemsPerPage: onGetItemsPerPageMock
+      onGetItemsPerPage: onGetItemsPerPageMock,
+      onGetWhere: () => where
     })
   );
 
@@ -96,8 +99,6 @@ it('should getAll', async () => {
   const onEmitChange = jest.spyOn(infiniteLoader, '_onEmitChange');
 
   // Get 1st page
-  const where = { foo: 'bar' };
-  infiniteLoader.setWhere(where);
   await infiniteLoader.getAll();
   expect(infiniteLoader._beginId).toEqual('ray');
   expect(infiniteLoader._beginCursor).toEqual('rayCursor');
@@ -131,7 +132,7 @@ it('should getAll', async () => {
   // onGetAll.mockReset();
   onAddItems.mockReset();
   onEmitChange.mockReset();
-  infiniteLoader.setWhere(null);
+  infiniteLoader._onGetWhere = () => null;
   await infiniteLoader.getAll({ after: 'ellaCursor' });
   expect(infiniteLoader._beginId).toEqual('stevie');
   expect(infiniteLoader._beginCursor).toEqual('stevieCursor');
@@ -147,7 +148,8 @@ it('should getAll', async () => {
     after: 'ellaCursor',
     before: null,
     first: 2,
-    showArchived: false
+    showArchived: false,
+    where: null
   });
   expect(onAddItems).toHaveBeenCalledTimes(1);
   expect(onAddItems).toHaveBeenCalledWith([stevie, sinatra], null);
@@ -172,7 +174,8 @@ it('should getAll', async () => {
     after: null,
     before: 'stevieCursor',
     last: 2,
-    showArchived: false
+    showArchived: false,
+    where: null
   });
   expect(onAddItems).toHaveBeenCalledTimes(1);
   expect(onAddItems).toHaveBeenCalledWith([ray, ella], 'ray');

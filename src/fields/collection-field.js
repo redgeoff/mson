@@ -255,11 +255,14 @@ export default class CollectionField extends Field {
     }
   }
 
+  _getWhere() {
+    return this._toWhereFromSearchString();
+  }
+
   _updateInfiniteLoader() {
     // TODO: refactor to use getters like _getOrder() so that always using the latest showArchived,
     // etc...?
     this._infiniteLoader.setShowArchived(this.get('showArchived'));
-    this._infiniteLoader.setWhere(this._where);
   }
 
   _handleStoreChangeFactory() {
@@ -367,8 +370,6 @@ export default class CollectionField extends Field {
   _handleSearchStringFactory() {
     return async searchString => {
       this.set({ searchString });
-
-      this._where = this._toWhereFromSearchString();
 
       // Is the component still loaded? We want to prevent issuing a new query when the searchString
       // is cleared when we change our route.
@@ -523,7 +524,8 @@ export default class CollectionField extends Field {
       onAddItems: (edges, beforeKey) => this._onAddItems(edges, beforeKey),
       onEmitChange: records => this.set({ change: records }),
       onSetIsLoading: isLoading => this.set({ isLoading }),
-      onGetOrder: () => this._getOrder()
+      onGetOrder: () => this._getOrder(),
+      onGetWhere: () => this._getWhere()
     });
   }
 
