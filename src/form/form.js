@@ -519,10 +519,13 @@ export default class Form extends Component {
     // TODO: need to consider that field already exists. Also need to worry about cleaning up any
     // existing listeners when this happens?
 
-    field.on('value', () => {
-      // We don't emit a value as we don't want to calculate the form value each time a field value
-      // changes. Instead, you can simply call form.getValues();
-      this.emitChange('values');
+    field.on('value', fieldValue => {
+      // We use _set() as if we used set() then we would trigger an infinite loop
+      const value = this._value ? this._value : {};
+      value[field.get('name')] = fieldValue;
+      this._set('value', value); // Doesn't trigger event as shallow compare
+      this.emitChange('value', value);
+
       if (this.get('autoValidate')) {
         this.validate();
       }
