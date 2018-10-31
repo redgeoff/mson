@@ -39,7 +39,9 @@ export default class ListField extends CompositeField {
           },
           {
             name: 'singularLabel',
-            component: 'TextField'
+            component: 'TextField',
+            label: 'Singular Label',
+            docLevel: 'basic'
           },
           {
             name: 'autoCreateFields',
@@ -107,7 +109,7 @@ export default class ListField extends CompositeField {
       this._removeFieldByName(name);
 
       // Prevent listener leaks
-      field.removeAllListeners();
+      field.destroy();
     }
 
     this.emitChangeToField(field);

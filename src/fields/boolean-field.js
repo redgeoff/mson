@@ -3,6 +3,23 @@ import Field from './field';
 export default class BooleanField extends Field {
   _className = 'BooleanField';
 
+  _create(props) {
+    super._create(props);
+
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            // Hide from docs as required doesn't make sense for a BooleanField
+            name: 'required',
+            docLevel: null
+          }
+        ]
+      }
+    });
+  }
+
   validate() {
     super.validate();
 

@@ -17,9 +17,7 @@ export default class SelectListField extends ListField {
           },
           {
             name: 'options',
-            // TODO: define and use a proper field
-            component: 'Field',
-            label: 'Options',
+            component: 'OptionsField',
             docLevel: 'basic'
           },
           {
@@ -81,19 +79,7 @@ export default class SelectListField extends ListField {
 
   set(props) {
     super.set(props);
-
-    if (props.options !== undefined) {
-      // Set options for all fields
-      this.eachField(field => field.set({ options: props.options }));
-    }
-
-    if (props.blankString !== undefined) {
-      this.eachField(field => field.set({ blankString: props.blankString }));
-    }
-
-    if (props.ensureInList !== undefined) {
-      this.eachField(field => field.set({ ensureInList: props.ensureInList }));
-    }
+    this._setForAllFields(props, ['options', 'blankString', 'ensureInList']);
   }
 
   _shouldRemoveField(field) {

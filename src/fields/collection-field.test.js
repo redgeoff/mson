@@ -284,6 +284,7 @@ it('save add form', async () => {
   const addForm = jest.spyOn(field, '_addForm');
   const addFormSynchronous = jest.spyOn(field, '_addFormSynchronous');
   const addFormAsynchronous = jest.spyOn(field, '_addFormAsynchronous');
+  const calcValueSpy = jest.spyOn(field, '_calcValue');
 
   // Adds synchronously as form specified
   const ella = { id: 1, firstName: 'Ella', lastName: 'Fitzgerald' };
@@ -298,6 +299,7 @@ it('save add form', async () => {
   expect(addForm).toHaveBeenCalledTimes(1);
   expect(addFormSynchronous).toHaveBeenCalledTimes(0);
   expect(addFormAsynchronous).toHaveBeenCalledTimes(0);
+  expect(calcValueSpy).toHaveBeenCalledTimes(1);
 
   // Add asynchronously
   const ray = { id: 2, firstName: 'Ray', lastName: 'Charles' };
@@ -325,6 +327,59 @@ it('save add form', async () => {
   expect(addForm).toHaveBeenCalledTimes(3);
   expect(addFormSynchronous).toHaveBeenCalledTimes(1);
   expect(addFormAsynchronous).toHaveBeenCalledTimes(1);
+});
+
+it('save update form', async () => {
+  const field = createField();
+
+  const form = field.get('form');
+  // Add
+  const ella = { id: 1, firstName: 'Ella', lastName: 'Fitzgerald' };
+  const form1 = field.addForm({
+    form,
+    values: ella
+  });
+
+  // Update
+  const calcValueSpy = jest.spyOn(field, '_calcValue');
+  ella.lastName = 'Fitz';
+  const form2 = field.updateForm({
+    form: form1,
+    values: ella
+  });
+  expect(form2.getValues()).toEqual({
+    ...testUtils.toDefaultFieldsObject(undefined),
+    ...ella
+  });
+  expect(calcValueSpy).toHaveBeenCalledTimes(1);
+  expect(field.getValue()).toEqual([
+    {
+      ...testUtils.toDefaultFieldsObject(undefined),
+      ...ella
+    }
+  ]);
+});
+
+it('save remove form', async () => {
+  const field = createField();
+
+  const form = field.get('form');
+  // Add
+  const ella = { id: 1, firstName: 'Ella', lastName: 'Fitzgerald' };
+  const form1 = field.addForm({
+    form,
+    values: ella
+  });
+
+  // Remove
+  const calcValueSpy = jest.spyOn(field, '_calcValue');
+  const form2 = field.removeForm(form1.getValue('id'));
+  expect(form2.getValues()).toEqual({
+    ...testUtils.toDefaultFieldsObject(undefined),
+    ...ella
+  });
+  expect(calcValueSpy).toHaveBeenCalledTimes(1);
+  expect(field.getValue()).toEqual([]);
 });
 
 it('save should handle errors', async () => {
@@ -768,6 +823,8 @@ it('should move', async () => {
   });
   await field.save();
 
+  const calcValueSpy = jest.spyOn(field, '_calcValue');
+
   // Move down
   field.moveForm({ sourceIndex: 0, destinationIndex: 1 });
   expect(field._forms.map(form => form.getValues())).toMatchObject([
@@ -780,6 +837,7 @@ it('should move', async () => {
       order: 1
     }
   ]);
+  expect(calcValueSpy).toHaveBeenCalledTimes(1);
 
   // Move up
   field.moveForm({ sourceIndex: 1, destinationIndex: 0 });

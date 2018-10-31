@@ -544,6 +544,20 @@ export default class CollectionField extends Field {
         }
       });
     });
+
+    // TODO: is this needed? Does it introduce unneeded latency?
+    // form.on('value', fieldValue => {
+    //   // If no store then we assume that the data is being managed by the parent and therefore we need
+    //   // to update the value
+    //   if (!this.get('store')) {
+    //     // We use _set() as if we used set() then we would trigger an infinite loop
+    //     const value = this._value ? this._value : {};
+    //     const index = this._forms.indexOf(form);
+    //     value[index] = fieldValue;
+    //     this._set('value', value); // Doesn't trigger event as shallow compare
+    //     this.emitChange('value', value);
+    //   }
+    // });
   }
 
   _notifyUI(muteChange, change) {
@@ -574,6 +588,8 @@ export default class CollectionField extends Field {
     this._forms.set(key, form, beforeKey);
 
     this._listenToForm(form);
+
+    this._calcValue();
 
     this._notifyUI(muteChange, values);
 
@@ -739,6 +755,8 @@ export default class CollectionField extends Field {
     const form = this._forms.get(id);
     form.removeAllListeners();
     this._forms.delete(id);
+
+    this._calcValue();
 
     this._notifyUI(muteChange, form.getValues());
 
@@ -972,9 +990,23 @@ export default class CollectionField extends Field {
 
     this._forms.set(values.id, fieldForm, beforeKey);
 
+    this._calcValue();
+
     this._notifyUI(muteChange, values);
 
     return fieldForm;
+  }
+
+  _calcValue() {
+    // If no store then we assume that the data is being managed by the parent and therefore we need
+    // to update the value
+    if (!this.get('store')) {
+      // We set the entire value as items may have moved and we want to make sure that the value reflects
+      // this. We use _set() as if we used set() then we would trigger an infinite loop
+      const value = this._getValue();
+      this._set('value', value);
+      this.set({ dirty: true });
+    }
   }
 
   upsertForm({ values, muteChange, cursor, beforeKey }) {
@@ -1229,6 +1261,8 @@ export default class CollectionField extends Field {
 
     // Move
     this._forms.set(sourceKey, form, beforeKey, afterKey);
+
+    this._calcValue();
 
     this._notifyUI(muteChange, form.getValues());
 

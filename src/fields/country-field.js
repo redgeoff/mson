@@ -1,5 +1,14 @@
 export default {
   component: 'SelectField',
+  schema: {
+    component: 'Form',
+    fields: [
+      {
+        name: 'options',
+        docLevel: null
+      }
+    ]
+  },
   options: [
     { value: 'AF', label: 'Afghanistan' },
     { value: 'AX', label: 'Åland Islands' },

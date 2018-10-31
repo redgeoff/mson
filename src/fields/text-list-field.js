@@ -64,17 +64,28 @@ export default class TextListField extends ListField {
     return new TextField({
       name: index,
       required: false,
-      block: this.get('block'),
-      fullWidth: this.get('fullWidth'),
-      invalidRegExp: this.get('invalidRegExp')
+      ...this.get([
+        'block',
+        'fullWidth',
+        'minLength',
+        'maxLength',
+        'minWords',
+        'maxWords',
+        'invalidRegExp',
+        'multiline'
+      ])
     });
   }
 
   set(props) {
     super.set(props);
-
-    if (props.invalidRegExp !== undefined) {
-      this._setForAllFields({ invalidRegExp: props.invalidRegExp });
-    }
+    this._setForAllFields(props, [
+      'minLength',
+      'maxLength',
+      'minWords',
+      'maxWords',
+      'invalidRegExp',
+      'multiline'
+    ]);
   }
 }

@@ -1,5 +1,15 @@
 export default {
   component: 'CompositeField',
+  schema: {
+    component: 'Form',
+    fields: [
+      {
+        // Hide from docs as label doesn't apply
+        name: 'label',
+        docLevel: null
+      }
+    ]
+  },
   fields: [
     {
       name: 'firstName',

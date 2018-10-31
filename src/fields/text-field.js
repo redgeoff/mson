@@ -26,14 +26,14 @@ export default class TextField extends Field {
           {
             name: 'minWords',
             component: 'IntegerField',
-            label: 'Min Words',
-            docLevel: 'basic'
+            label: 'Min Words'
+            // docLevel: 'basic' // Document once implemented
           },
           {
             name: 'maxWords',
             component: 'IntegerField',
-            label: 'Max Words',
-            docLevel: 'basic'
+            label: 'Max Words'
+            // docLevel: 'basic' // Document once implemented
           },
           {
             // TODO: define list of acceptable values
@@ -44,7 +44,8 @@ export default class TextField extends Field {
             name: 'invalidRegExp',
             component: 'TextField',
             label: 'Invalid RegExp',
-            docLevel: 'basic'
+            docLevel: 'basic',
+            help: 'Invalid if this regular expression matches, e.g. /foo/'
           },
           {
             name: 'multiline',
@@ -106,7 +107,11 @@ export default class TextField extends Field {
           this.setErr(`${minLength} characters or more`);
         } else if (maxLength !== null && value.length > maxLength) {
           this.setErr(`${maxLength} characters or less`);
-        } else if (invalidRegExp && new RegExp(invalidRegExp).test(value)) {
+        } else if (
+          invalidRegExp &&
+          utils.isRegExpString(invalidRegExp) &&
+          utils.toRegExp(invalidRegExp).test(value)
+        ) {
           this.setErr(`invalid`);
         }
       } else if (this._requireString) {

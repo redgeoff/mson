@@ -368,4 +368,15 @@ export default class Mapa extends events.EventEmitter {
   hasLast() {
     return this.has(this._lastKey);
   }
+
+  // // FUTURE: we could speed this up by creating an index for the indexes
+  // indexOf(key) {
+  //   let index = 0;
+  //   for (const entry of this.entries()) {
+  //     if (entry[0] === key) {
+  //       return index;
+  //     }
+  //     index++;
+  //   }
+  // }
 }
