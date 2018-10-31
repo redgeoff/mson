@@ -31,3 +31,26 @@ it('should set order to default when setting doc', () => {
   store._setDoc({ doc, order: undefined });
   expect(doc.order).toEqual(Reorder.DEFAULT_ORDER);
 });
+
+it('should get the user id', () => {
+  const store = new Store();
+  expect(store._getUserId()).toBeUndefined();
+
+  let session = null;
+  store._registrar = {
+    client: {
+      user: {
+        getSession: () => session
+      }
+    }
+  };
+
+  expect(store._getUserId()).toBeUndefined();
+
+  session = {
+    user: {
+      id: 'my-id'
+    }
+  };
+  expect(store._getUserId()).toEqual('my-id');
+});

@@ -102,10 +102,6 @@ it('should combine wheres', () => {
     $and: [where1, where2]
   });
 
-  // Should deep clone
-  combined.$and[1].baz.$ne = 'yaz1';
-  expect(where2.baz.$ne).toEqual('yaz');
-
   expect(utils.combineWheres(where1, null)).toEqual(where1);
   expect(utils.combineWheres(null, where2)).toEqual(where2);
 });

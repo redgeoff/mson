@@ -4,7 +4,6 @@ import Store from './store';
 import utils from '../utils';
 import uberUtils from '../uber-utils';
 import registrar from '../compiler/registrar';
-import globals from '../globals';
 import reorder, { Reorder } from './reorder';
 
 export default class RecordStore extends Store {
@@ -17,7 +16,6 @@ export default class RecordStore extends Store {
     super._create(props);
 
     // For mocking
-    this._globals = globals;
     this._uberUtils = uberUtils;
     this._registrar = registrar;
 
@@ -119,7 +117,7 @@ export default class RecordStore extends Store {
     order
   }) {
     const showArchivedWhere = this._getShowArchivedWhere(showArchived);
-    where = utils.combineWheres(showArchivedWhere, where);
+    where = utils.combineWheres(showArchivedWhere, where, this.get('where'));
 
     return this._request({
       form,
@@ -152,16 +150,13 @@ export default class RecordStore extends Store {
     });
   }
 
-  // TODO: how do we know what the "where" is??
-  // - A: configure a getWhere for store? But then can't be shared!
-  // - B: optionally pass where into updateDoc. Messy?
-  // - C: create a moveDoc? But then what about when creating and need to reorder? Maybe B is best?
   async _reorder({ form, id, order }) {
     let loop = true;
 
     const props = {
       first: this.constructor.ITEMS_PER_PAGE_DEFAULT,
-      order: [['order', 'asc']]
+      order: [['order', 'asc']],
+      where: this.get('where')
     };
 
     const itemsToReorder = [];

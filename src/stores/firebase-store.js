@@ -155,7 +155,8 @@ export default class FirebaseStore extends MemoryStore {
       order = this._numUnarchived();
     }
 
-    const doc = this._buildDoc({ fieldValues, id, order });
+    const userId = this._getUserId();
+    const doc = this._buildDoc({ fieldValues, id, order, userId });
 
     // Note: we need to update the underlying MemoryStore so that the data is there after this
     // function completes even though Firebase will emit an onWrite with the changed data.

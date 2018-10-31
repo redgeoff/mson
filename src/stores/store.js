@@ -37,6 +37,8 @@ import utils from '../utils';
 import uberUtils from '../uber-utils';
 import DateField from '../fields/date-field';
 import { Reorder } from './reorder';
+import globals from '../globals';
+import registrar from '../compiler/registrar';
 
 export default class Store extends Component {
   _className = 'Store';
@@ -44,8 +46,22 @@ export default class Store extends Component {
   _create(props) {
     super._create(props);
 
+    this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'where',
+            component: 'Field'
+          }
+        ]
+      }
+    });
+
     // For mocking
     this._access = access;
+    this._globals = globals;
+    this._registrar = registrar;
 
     if (!props || !props.muteDidLoad) {
       this._emitDidLoad();
@@ -192,5 +208,14 @@ export default class Store extends Component {
     }
 
     return doc;
+  }
+
+  _getUserId() {
+    if (this._registrar.client) {
+      const session = this._registrar.client.user.getSession();
+      if (session) {
+        return session.user.id;
+      }
+    }
   }
 }
