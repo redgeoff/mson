@@ -633,7 +633,7 @@ it('should handle show archived', () => {
   expect(field.get('showArchived')).toEqual(true);
 });
 
-const searchString = {
+const searchStringWhere = {
   $and: [
     {
       $or: [
@@ -649,7 +649,7 @@ it('should convert where to search string', () => {
   expect(field._toWhereFromSearchString()).toBeNull();
 
   field.set({ searchString: 'foo' });
-  expect(field._toWhereFromSearchString()).toEqual(searchString);
+  expect(field._toWhereFromSearchString()).toEqual(searchStringWhere);
 });
 
 it('should handle search string', async () => {
@@ -657,9 +657,11 @@ it('should handle search string', async () => {
 
   const clearAndGetAllSpy = jest.spyOn(field, '_clearAndGetAll');
 
+  expect(field._getWhere()).toBeUndefined();
+
   field._handleSearchStringFactory()('foo');
   expect(field.get('searchString')).toEqual('foo');
-  expect(field._getWhere()).toEqual(searchString);
+  expect(field._getWhere()).toEqual(searchStringWhere);
   expect(clearAndGetAllSpy).toHaveBeenCalledTimes(0);
 
   const didLoad = testUtils.once(field, 'didLoad');

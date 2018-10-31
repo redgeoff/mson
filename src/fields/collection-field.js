@@ -256,7 +256,11 @@ export default class CollectionField extends Field {
   }
 
   _getWhere() {
-    return this._toWhereFromSearchString();
+    if (this.get('searchString')) {
+      return this._toWhereFromSearchString();
+    } else {
+      return undefined;
+    }
   }
 
   _updateInfiniteLoader() {
