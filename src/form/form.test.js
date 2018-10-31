@@ -152,9 +152,9 @@ it('should clone listeners', async () => {
   // Make sure listeners cloned, but separate
   const form = createForm();
   const clonedForm = form.clone();
-  const receivedValues = testUtils.once(clonedForm, 'values');
+  const receivedValues = testUtils.once(clonedForm, 'value');
   let receivedNonClonedValues = false;
-  form.once('values', () => {
+  form.once('value', () => {
     receivedNonClonedValues = true;
   });
   clonedForm.setValues({

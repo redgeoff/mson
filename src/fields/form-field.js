@@ -33,7 +33,7 @@ export default class FormField extends Field {
 
     // We use _set() instead of set() so that a change from the form isn't passed back down to the
     // form
-    form.on('values', () => this._set('value', this.getValues()));
+    form.on('value', () => this._set('value', this.getValues()));
   }
 
   _setForm(form) {
