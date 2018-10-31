@@ -874,7 +874,7 @@ it('should get order', () => {
   const field = createField({ order: [['createdAt', 'ASC']] });
   expect(field._getOrder()).toEqual([['createdAt', 'ASC']]);
 
-  field.set({ forbidOrder: false });
+  field.set({ order: null });
   expect(field._getOrder()).toEqual([['order', 'ASC']]);
 });
 

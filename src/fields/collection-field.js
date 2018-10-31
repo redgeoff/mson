@@ -247,7 +247,7 @@ export default class CollectionField extends Field {
   }
 
   _getOrder() {
-    if (this.get('forbidOrder')) {
+    if (this.get('order')) {
       return this.get('order');
     } else {
       // Order by "order" as drag ordering is enabled
