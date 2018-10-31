@@ -174,6 +174,45 @@ it('should listen to store changes', async () => {
   expect(removeFormSpy).toHaveBeenCalledWith(value.value.id, muteChange);
 });
 
+it('should create and update', async () => {
+  const store = new MemoryStore();
+  const field = createField({ store, forbidOrder: false });
+
+  const created = {
+    id: 'id',
+    createdAt: new Date('2018-01-01').getTime(),
+    updatedAt: new Date('2018-01-01').getTime(),
+    order: 0,
+    userId: 'myId'
+  };
+
+  const updated = {
+    id: 'id',
+    createdAt: new Date('2018-01-01').getTime(),
+    updatedAt: new Date('2018-01-02').getTime(),
+    order: 1,
+    userId: 'myId'
+  };
+
+  // Mock
+  store.createDoc = async () => created;
+  store.updateDoc = async () => updated;
+
+  const form = field.get('form');
+
+  // Create
+  form.setValues({
+    firstName: 'Mos',
+    lastName: 'Def'
+  });
+  let mosForm = await field.save();
+  expect(mosForm.getValues()).toMatchObject(created);
+
+  // Update
+  mosForm = await field.save();
+  expect(mosForm.getValues()).toMatchObject(updated);
+});
+
 it('should not have side effects', async () => {
   const store = new MemoryStore();
   const field = createField({ store, forbidOrder: false });

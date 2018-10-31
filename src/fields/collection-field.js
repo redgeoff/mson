@@ -1014,7 +1014,8 @@ export default class CollectionField extends Field {
         id: record.id,
         createdAt: record.createdAt,
         updatedAt: record.updatedAt,
-        order: record.order
+        order: record.order,
+        userId: record.userId
       });
     } else if (creating) {
       // TODO: use the id from this._docs.set instead of this dummy id
