@@ -698,27 +698,6 @@ it('should submit', () => {
   expect(emitClickOnButtonSpy).toHaveBeenCalledWith(form.getField('submit'));
 });
 
-const NUM_COMPONENTS = 30;
-
-const CREATE_FORMS_TIMEOUT_MS = 500;
-it('should create many forms quickly', () => {
-  return testUtils.expectToFinishBefore(async () => {
-    for (let i = 0; i < NUM_COMPONENTS; i++) {
-      createForm();
-    }
-  }, CREATE_FORMS_TIMEOUT_MS);
-});
-
-const CLONE_FORMS_TIMEOUT_MS = 900;
-it('should clone many forms quickly', () => {
-  return testUtils.expectToFinishBefore(async () => {
-    const form = createForm();
-    for (let i = 0; i < NUM_COMPONENTS; i++) {
-      form.clone();
-    }
-  }, CLONE_FORMS_TIMEOUT_MS);
-});
-
 it('should clone fields', () => {
   const form1 = createForm({
     value: {
