@@ -29,13 +29,13 @@ export default class BaseComponent extends events.EventEmitter {
           // This field is just for the MSON definition
           name: 'component',
           component: 'TextField'
-          // required: true
         },
         {
           name: 'name',
           component: 'TextField',
           label: 'Name',
           docLevel: 'basic'
+          // Not required as a lot of components don't need to be named
           // required: true
         },
         {
@@ -240,7 +240,7 @@ export default class BaseComponent extends events.EventEmitter {
     throw new Error(propertyNames.join('.') + ' not found');
   }
 
-  _isComponent(property) {
+  isComponent(property) {
     return property instanceof BaseComponent || property instanceof Mapa;
   }
 
@@ -259,7 +259,7 @@ export default class BaseComponent extends events.EventEmitter {
     for (let i = 0; i < end; i++) {
       const nme = names[i];
       propertyNames.push(nme);
-      if (this._isComponent(property)) {
+      if (this.isComponent(property)) {
         if (!property.has(nme)) {
           this._throwPropertyNotFound(propertyNames);
         }
@@ -289,10 +289,10 @@ export default class BaseComponent extends events.EventEmitter {
     if (hasDot) {
       const { property, names } = this._getSubProperty(name, -1);
       const lastName = names[names.length - 1];
-      if (this._isComponent(property)) {
+      if (this.isComponent(property)) {
         if (
           property.has(lastName) &&
-          this._isComponent(property.get(lastName))
+          this.isComponent(property.get(lastName))
         ) {
           // The last property is a component so we assume that the value is a group of properties
           property.get(lastName).set(value);
@@ -792,21 +792,10 @@ export default class BaseComponent extends events.EventEmitter {
   buildSchemaForm(form, compiler) {
     const schemas = this.get('schema');
     schemas.forEach(schema => {
-      // Get the schema props and set them on the form. A previous design used componentToWrap to
-      // implement inheritance, but this causes problems as composition is something that is currently
-      // only supported during initialization.
       if (!compiler.isCompiled(schema)) {
-        // A previous design compiled the entire component, but this prohibits later schemas from
-        // having properties like fields.name.required=true as the inherited fields are not present.
-        delete schema.component;
-        compiler._instantiate(schema);
-        form.set(schema);
-      } else {
-        // We remove the value property as it can cause problems here and isn't needed.
-        const props = schema.get();
-        delete props.value;
-        form.set(props);
+        schema = compiler.newComponent(schema);
       }
+      form.copyFields(schema);
     });
   }
 

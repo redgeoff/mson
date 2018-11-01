@@ -25,7 +25,8 @@ export default class RecordStore extends Store {
         fields: [
           {
             name: 'storeName',
-            component: 'TextField'
+            component: 'TextField',
+            required: true
           }
         ]
       }

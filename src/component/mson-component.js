@@ -15,7 +15,8 @@ export default class MSONComponent extends WrappedComponent {
         fields: [
           {
             name: 'definition',
-            component: 'Field'
+            component: 'Field',
+            required: true
           }
         ]
       }

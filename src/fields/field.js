@@ -15,6 +15,11 @@ export default class Field extends Component {
         component: 'Form',
         fields: [
           {
+            // The name is required as it is needed by the form
+            name: 'name',
+            required: true
+          },
+          {
             name: 'label',
             component: 'TextField',
             label: 'Label',
@@ -127,10 +132,7 @@ export default class Field extends Component {
             name: 'autoHideLabel',
             component: 'BooleanField'
           }
-        ],
-
-        // The name is required as it is needed by the form
-        'fields.name.required': true
+        ]
       }
     });
 

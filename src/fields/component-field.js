@@ -12,7 +12,8 @@ export default class ComponentField extends Field {
         fields: [
           {
             name: 'content',
-            component: 'Field'
+            component: 'Field',
+            required: true
           }
         ]
       }

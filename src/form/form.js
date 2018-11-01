@@ -11,6 +11,7 @@ import ComponentFillerProps from '../component/component-filler-props';
 import ComponentField from '../fields/component-field';
 import FormField from '../fields/form-field';
 import FormErr from './form-err';
+import ExtendedField from '../fields/extended-field';
 
 export default class Form extends Component {
   _className = 'Form';
@@ -556,11 +557,23 @@ export default class Form extends Component {
     // Not a field? We have to use the existence of _isField instead of `instanceof Field` as a
     // wrapped field, e.g. a MSONComponent will fail the instanceof test, but is still a field.
     if (!field._isField) {
-      // Wrap the component in a ComponentField so that we can use any component in the form
-      field = new ComponentField({
-        name: field.get('name'),
-        content: field
-      });
+      if (this.isComponent(field)) {
+        // Wrap the component in a ComponentField so that we can use any component in the form
+        field = new ComponentField({
+          name: field.get('name'),
+          content: field
+        });
+      } else {
+        field = new ExtendedField({
+          name: field.name,
+          properties: Object.assign({}, field, { name: undefined })
+        });
+      }
+    }
+
+    if (field instanceof ExtendedField && this.hasField(field.get('name'))) {
+      this.getField(field.get('name')).set(field.get('properties'));
+      return;
     }
 
     if (field instanceof FormField && field.get('elevate')) {

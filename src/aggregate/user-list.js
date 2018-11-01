@@ -8,6 +8,11 @@ export default {
         name: 'baseFormFactory',
         component: 'Field',
         required: true
+      },
+      {
+        // Not required as baseFormFactory will populate formFactory
+        name: 'formFactory',
+        required: false
       }
     ]
   },

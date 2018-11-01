@@ -6,7 +6,8 @@ export default {
     fields: [
       {
         name: 'baseForm',
-        component: 'Field'
+        component: 'Field',
+        required: true
       },
       {
         name: 'label',

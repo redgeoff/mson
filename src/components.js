@@ -25,6 +25,7 @@ import DateField from './fields/date-field';
 import Email from './actions/email';
 import EmailField from './fields/email-field';
 import Emit from './actions/emit';
+import ExtendedField from './fields/extended-field';
 import Factory from './component/factory';
 import Field from './fields/field';
 import FirebaseStore from './stores/firebase-store';
@@ -116,6 +117,7 @@ export default {
   Email,
   EmailField,
   Emit,
+  ExtendedField,
   Factory,
   Field,
   FirebaseStore,

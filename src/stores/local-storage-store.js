@@ -31,7 +31,8 @@ export default class LocalStorageStore extends MemoryStore {
         fields: [
           {
             name: 'storeName',
-            component: 'TextField'
+            component: 'TextField',
+            required: true
           }
         ]
       }
