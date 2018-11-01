@@ -251,7 +251,7 @@ export class Compiler {
     delete this._components[name];
   }
 
-  validateDefinition(definition) {
+  createSchemaForm(definition) {
     const component = this.newComponent({
       component: definition.component
     });
@@ -269,6 +269,12 @@ export class Compiler {
 
       schemaForm.copyFields(topSchema);
     }
+
+    return schemaForm;
+  }
+
+  validateDefinition(definition) {
+    const schemaForm = this.createSchemaForm(definition);
 
     schemaForm.setValues(definition);
     schemaForm.validate();

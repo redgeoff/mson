@@ -199,7 +199,7 @@ it('should valiate schema', () => {
   ]);
 });
 
-it('should valid with a compiled schema', () => {
+it('should validate with a compiled schema', () => {
   const component = new BaseComponent();
 
   // Validation fails as foo not in schema

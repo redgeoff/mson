@@ -9,11 +9,22 @@ const newCompiler = () => {
   return new Compiler({ components: Object.assign({}, components) });
 };
 
-const expectDefinitionToBeValid = (definition, name) => {
+const expectDefinitionToBeValid = (definition, name, ignoreRequired) => {
   if (!name) {
     name = definition.name;
   }
-  const schemaForm = compiler.validateDefinition(definition);
+
+  const schemaForm = compiler.createSchemaForm(definition);
+
+  if (ignoreRequired) {
+    // Ignore the required fields. Useful for when we are sanity checking the validation of a
+    // definition and don't have actual property values
+    schemaForm.set({ required: false });
+  }
+
+  schemaForm.setValues(definition);
+  schemaForm.validate();
+
   expect([name, schemaForm.getErrs()]).toEqual([name, []]);
 };
 
@@ -549,7 +560,7 @@ it('should validate the definitions of all core components', () => {
 
   each(components, (component, name) => {
     if (!compiler.isCompiled(component)) {
-      expectDefinitionToBeValid(component, name);
+      expectDefinitionToBeValid(component, name, true);
     }
   });
 });

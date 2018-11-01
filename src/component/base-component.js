@@ -792,10 +792,21 @@ export default class BaseComponent extends events.EventEmitter {
   buildSchemaForm(form, compiler) {
     const schemas = this.get('schema');
     schemas.forEach(schema => {
+      // Get the schema props and set them on the form. A previous design used componentToWrap to
+      // implement inheritance, but this causes problems as composition is something that is currently
+      // only supported during initialization.
       if (!compiler.isCompiled(schema)) {
-        schema = compiler.newComponent(schema);
+        // A previous design compiled the entire component, but this prohibits later schemas from
+        // having properties like fields.name.required=true as the inherited fields are not present.
+        delete schema.component;
+        compiler._instantiate(schema);
+        form.set(schema);
+      } else {
+        // We remove the value property as it can cause problems here and isn't needed.
+        const props = schema.get();
+        delete props.value;
+        form.set(props);
       }
-      form.copyFields(schema);
     });
   }
 

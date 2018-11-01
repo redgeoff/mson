@@ -127,7 +127,10 @@ export default class Field extends Component {
             name: 'autoHideLabel',
             component: 'BooleanField'
           }
-        ]
+        ],
+
+        // The name is required as it is needed by the form
+        'fields.name.required': true
       }
     });
 
