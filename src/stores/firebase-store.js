@@ -107,19 +107,23 @@ export default class FirebaseStore extends MemoryStore {
           },
           {
             name: 'apiKey',
-            component: 'TextField'
+            component: 'TextField',
+            required: true
           },
           {
             name: 'authDomain',
-            component: 'TextField'
+            component: 'TextField',
+            required: true
           },
           {
             name: 'projectId',
-            component: 'TextField'
+            component: 'TextField',
+            required: true
           },
           {
             name: 'collection',
-            component: 'TextField'
+            component: 'TextField',
+            required: true
           }
         ]
       }

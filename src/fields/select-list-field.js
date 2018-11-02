@@ -12,6 +12,10 @@ export default class SelectListField extends ListField {
         component: 'Form',
         fields: [
           {
+            name: 'fieldFactory',
+            required: false
+          },
+          {
             name: 'options',
             // TODO: define and use a proper field
             component: 'Field',

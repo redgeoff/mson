@@ -30,7 +30,8 @@ export default class ListField extends CompositeField {
           },
           {
             name: 'fieldFactory',
-            component: 'Field'
+            component: 'Field',
+            required: true
           },
           {
             name: 'allowScalar',

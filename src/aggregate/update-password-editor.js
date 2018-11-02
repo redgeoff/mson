@@ -6,7 +6,13 @@ export default {
     fields: [
       {
         name: 'updatePasswordBaseForm',
-        component: 'Field'
+        component: 'Field',
+        required: true
+      },
+      {
+        // Not required as updatePasswordBaseForm will populate baseForm
+        name: 'baseForm',
+        required: false
       }
     ]
   },

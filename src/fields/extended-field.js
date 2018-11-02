@@ -1,7 +1,7 @@
-import Vault from './vault';
+import Field from './field';
 
-export default class ReCAPTCHAVault extends Vault {
-  _className = 'ReCAPTCHAVault';
+export default class ExtendedField extends Field {
+  _className = 'ExtendedField';
 
   _create(props) {
     super._create(props);
@@ -11,8 +11,8 @@ export default class ReCAPTCHAVault extends Vault {
         component: 'Form',
         fields: [
           {
-            name: 'secretKey',
-            component: 'TextField',
+            name: 'properties',
+            component: 'Field',
             required: true
           }
         ]

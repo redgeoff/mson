@@ -14,7 +14,6 @@ export default class ReCAPTCHAField extends Field {
           {
             // Name is not required
             name: 'name',
-            component: 'TextField',
             required: false
           }
         ]

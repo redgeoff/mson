@@ -18,8 +18,8 @@ export default {
       },
       {
         name: 'to',
-        component: 'TextField'
-        // required: true
+        component: 'TextField',
+        required: true
       },
       {
         name: 'subject',

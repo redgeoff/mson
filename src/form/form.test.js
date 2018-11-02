@@ -7,6 +7,7 @@ import FormField from '../fields/form-field';
 import Set from '../actions/set';
 import Text from '../text';
 import FormErr from './form-err';
+import ExtendedField from '../fields/extended-field';
 
 const createForm = props => {
   return new Form({
@@ -884,4 +885,41 @@ it('should add field before and after', () => {
     }
   });
   expect(names).toEqual(expectedNames);
+});
+
+it('should modify fields with properties', () => {
+  const form = new Form({
+    fields: [new TextField({ name: 'lastName', label: 'Last Name' })]
+  });
+
+  expect(form.getField('lastName').get('required')).toEqual(false);
+
+  form.set({
+    fields: [
+      {
+        name: 'lastName',
+        required: true
+      }
+    ]
+  });
+
+  expect(form.getField('lastName').get('required')).toEqual(true);
+
+  // Make sure label was preserved
+  expect(form.getField('lastName').get('label')).toEqual('Last Name');
+
+  // Add the extended field as there is nothing to actually extend
+  form.set({
+    fields: [
+      new ExtendedField({
+        name: 'firstName',
+        properties: {
+          label: 'First Name'
+        }
+      })
+    ]
+  });
+  expect(form.getField('firstName').get('properties')).toEqual({
+    label: 'First Name'
+  });
 });

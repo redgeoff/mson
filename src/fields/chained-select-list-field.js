@@ -14,6 +14,10 @@ export default class ChainedSelectListField extends ListField {
         component: 'Form',
         fields: [
           {
+            name: 'fieldFactory',
+            required: false
+          },
+          {
             name: 'options',
             component: 'Field',
             label: 'Options',

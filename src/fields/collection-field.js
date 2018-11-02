@@ -42,7 +42,8 @@ export default class CollectionField extends Field {
         fields: [
           {
             name: 'formFactory',
-            component: 'Field'
+            component: 'Field',
+            required: true
           },
           {
             // Note: this prop is automatically generated using the formFactory and can be read, but

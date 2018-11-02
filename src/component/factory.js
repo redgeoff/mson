@@ -10,7 +10,8 @@ export default class Factory extends Component {
         fields: [
           {
             name: 'product',
-            component: 'Field'
+            component: 'Field',
+            required: true
           },
           {
             name: 'properties',
