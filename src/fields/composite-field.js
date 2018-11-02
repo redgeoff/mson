@@ -99,8 +99,22 @@ export default class CompositeField extends Field {
     fields.forEach(field => this._addField(field));
   }
 
-  _setForAllFields(props) {
-    this.eachField(field => field.set(props));
+  _setForAllFields(props, names) {
+    let propsToSet = null;
+    if (names) {
+      propsToSet = {};
+      names.forEach(name => {
+        if (props[name] !== undefined) {
+          propsToSet[name] = props[name];
+        }
+      });
+    } else {
+      propsToSet = props;
+    }
+
+    if (!isEmpty(propsToSet)) {
+      this.eachField(field => field.set(propsToSet));
+    }
   }
 
   _setValue(value) {

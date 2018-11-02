@@ -15,6 +15,10 @@ export default class ReCAPTCHAField extends Field {
             // Name is not required
             name: 'name',
             required: false
+          },
+          {
+            name: 'label',
+            docLevel: null
           }
         ]
       }

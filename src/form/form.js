@@ -589,7 +589,7 @@ export default class Form extends Component {
     this._fields.delete(name);
 
     // Prevent a listener leak
-    field.removeAllListeners();
+    field.destroy();
   }
 
   removeFieldsExcept(names) {

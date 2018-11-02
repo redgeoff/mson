@@ -13,6 +13,7 @@ import ButtonField from './fields/button-field';
 import Card from './card';
 import ChainedSelectField from './fields/chained-select-field';
 import ChainedSelectListField from './fields/chained-select-list-field';
+import ChainedSelectOptionsField from './fields/chained-select-options-field';
 import CityField from './fields/city-field';
 import Component from './component/component';
 import CollectionField from './fields/collection-field';
@@ -50,6 +51,7 @@ import MoneyField from './fields/money-field';
 import MSONComponent from './component/mson-component';
 import NumberField from './fields/number-field';
 import ObjectForm from './object-form';
+import OptionsField from './fields/options-field';
 import PasswordField from './fields/password-field';
 import PersonFullNameField from './fields/person-full-name-field';
 import PersonNameField from './fields/person-name-field';
@@ -105,6 +107,7 @@ export default {
   Card,
   ChainedSelectField,
   ChainedSelectListField,
+  ChainedSelectOptionsField,
   CityField,
   CollectionField,
   Component,
@@ -140,6 +143,7 @@ export default {
   MSONComponent,
   NumberField,
   ObjectForm,
+  OptionsField,
   PasswordField,
   PersonFullNameField,
   PersonNameField,

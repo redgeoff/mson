@@ -34,7 +34,8 @@ export default class BaseComponent extends events.EventEmitter {
           name: 'name',
           component: 'TextField',
           label: 'Name',
-          docLevel: 'basic'
+          docLevel: 'basic',
+          help: 'A unique variable name'
           // Not required as a lot of components don't need to be named
           // required: true
         },
