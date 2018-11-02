@@ -12,6 +12,10 @@ export default class TextListField extends ListField {
         component: 'Form',
         fields: [
           {
+            name: 'fieldFactory',
+            required: false
+          },
+          {
             name: 'minLength',
             component: 'IntegerField',
             label: 'Min Length',
