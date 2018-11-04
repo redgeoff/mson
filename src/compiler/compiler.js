@@ -240,11 +240,14 @@ export class Compiler {
   }
 
   registerComponent(name, component) {
-    if (this._components[name]) {
-      throw new Error(`component ${name} already exists`);
-    } else {
-      this._components[name] = component;
-    }
+    // Reregistration is now allowed as it allows for things like hot reloading of changed
+    // definitions.
+    //
+    // if (this._components[name]) {
+    //   throw new Error(`component ${name} already exists`);
+    // } else {
+    this._components[name] = component;
+    // }
   }
 
   deregisterComponent(name) {
