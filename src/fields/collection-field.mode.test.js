@@ -100,14 +100,12 @@ it('should change modes', async () => {
 });
 
 it('should set current form', () => {
-  const form = field.get('form');
+  let form = field.get('form');
   const firstForm = field._forms.first();
-  const clearValues = jest.spyOn(form, 'clearValues');
-  const set = jest.spyOn(form, 'set');
   const prepareForm = jest.spyOn(field, '_prepareForm');
-  const setTouched = jest.spyOn(form, 'setTouched');
-  const clearErrs = jest.spyOn(form, 'clearErrs');
-  const setDirty = jest.spyOn(form, 'setDirty');
+  const destroy = jest.spyOn(form, 'destroy');
+  const generateForm = jest.spyOn(field, '_generateForm');
+  const copyValuesToCurrentForm = jest.spyOn(field, '_copyValuesToCurrentForm');
 
   // Mock
   const userId = 1;
@@ -121,23 +119,19 @@ it('should set current form', () => {
 
   // currentForm is null
   field._setCurrentForm(null);
-  expect(clearValues).toHaveBeenCalledTimes(1);
+  form = field.get('form');
   expect(prepareForm).toHaveBeenCalledTimes(1);
-  expect(setTouched).toHaveBeenCalledTimes(1);
-  expect(setTouched).toHaveBeenCalledWith(false);
-  expect(clearErrs).toHaveBeenCalledTimes(1);
-  expect(setDirty).toHaveBeenCalledTimes(1);
-  expect(setDirty).toHaveBeenCalledWith(false);
+  expect(destroy).toHaveBeenCalledTimes(1);
+  expect(generateForm).toHaveBeenCalledTimes(1);
 
   // currentForm is not null
-  clearValues.mockClear();
-  set.mockClear();
+  const set = jest.spyOn(form, 'set');
   prepareForm.mockClear();
   field._setCurrentForm(firstForm);
-  expect(clearValues).toHaveBeenCalledTimes(1);
   expect(set).toHaveBeenCalledWith({
     value: firstForm.getValues()
   });
+  expect(copyValuesToCurrentForm).toHaveBeenCalledWith(form, firstForm);
   expect(prepareForm).toHaveBeenCalledTimes(1);
 
   // currentForm is form
@@ -147,6 +141,31 @@ it('should set current form', () => {
   expect(set).toHaveBeenCalledWith({
     value: firstForm.getValues()
   });
+});
+
+it('should copy values to current form', () => {
+  const form = field.get('form');
+  const firstForm = field._forms.first();
+  const clearValues = jest.spyOn(form, 'clearValues');
+  const set = jest.spyOn(form, 'set');
+  field._copyValuesToCurrentForm(form, firstForm);
+  expect(clearValues).toHaveBeenCalledTimes(1);
+  expect(set).toHaveBeenCalledWith({
+    value: firstForm.getValues()
+  });
+});
+
+it('should prepare form', () => {
+  const form = field.get('form');
+  const setTouched = jest.spyOn(form, 'setTouched');
+  const clearErrs = jest.spyOn(form, 'clearErrs');
+  const setDirty = jest.spyOn(form, 'setDirty');
+  field._prepareForm(form);
+  expect(setTouched).toHaveBeenCalledTimes(1);
+  expect(setTouched).toHaveBeenCalledWith(false);
+  expect(clearErrs).toHaveBeenCalledTimes(1);
+  expect(setDirty).toHaveBeenCalledTimes(1);
+  expect(setDirty).toHaveBeenCalledWith(false);
 });
 
 it('should disableSubmit on parent', () => {

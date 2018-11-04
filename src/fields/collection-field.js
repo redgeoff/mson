@@ -798,14 +798,22 @@ export default class CollectionField extends Field {
     form.setDirty(false);
   }
 
+  _copyValuesToCurrentForm(form, currentForm) {
+    const values = currentForm.getValues();
+    form.clearValues();
+    form.set({ value: values });
+  }
+
   _setCurrentForm(currentForm) {
-    const form = this.get('form');
+    let form = this.get('form');
     if (currentForm === null) {
-      form.clearValues();
+      // Clean up previous form
+      form.destroy();
+
+      // Generate a new form so that we have any initial values and structure
+      form = this._generateForm(this.get('formFactory'));
     } else {
-      const values = currentForm.getValues();
-      form.clearValues();
-      form.set({ value: values });
+      this._copyValuesToCurrentForm(form, currentForm);
       this._set('currentForm', currentForm);
     }
     this._prepareForm(form);
@@ -898,6 +906,7 @@ export default class CollectionField extends Field {
     // Generate a form so that we have access to the field names, etc...
     const form = factory.produce();
     this.set({ form });
+    return form;
   }
 
   _setMaxColumns(maxColumns) {
