@@ -11,12 +11,6 @@ it('should validate', () => {
     [{}, [], 0, 1, 'foo'],
     'must be true or false'
   );
-
-  field.set({ required: true });
-
-  testUtils.expectValuesToBeValid(field, [true, false]);
-
-  testUtils.expectValuesToBeInvalid(field, [null]);
 });
 
 it('should get display value', () => {
