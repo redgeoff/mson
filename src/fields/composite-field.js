@@ -58,19 +58,24 @@ export default class CompositeField extends Field {
     });
   }
 
+  _setParentValue(field, value) {
+    // Clone the value as we don't want to modify this._value directly as we want set to be able
+    // to detect if the value is changing.
+    const clonedValue = !this._value ? {} : clone(this._value);
+    if (value === null) {
+      delete clonedValue[field.get('name')];
+    } else {
+      clonedValue[field.get('name')] = value;
+    }
+    this.setValue(isEmpty(clonedValue) ? null : clonedValue);
+  }
+
   _listenForChangesToField(field) {
     // Merge the value changes from the children into the parent value
-    field.on('value', value => {
-      // Clone the value as we don't want to modify this._value directly as we want set to be able
-      // to detect if the value is changing.
-      const clonedValue = !this._value ? {} : clone(this._value);
-      if (value === null) {
-        delete clonedValue[field.get('name')];
-      } else {
-        clonedValue[field.get('name')] = value;
-      }
-      this.setValue(isEmpty(clonedValue) ? null : clonedValue);
-    });
+    field.on('value', value => this._setParentValue(field, value));
+
+    // Field may already have a value
+    this._setParentValue(field, field.getValue());
 
     this._bubbleUpTouches(field);
   }

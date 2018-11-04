@@ -3,6 +3,7 @@ import TextField from './text-field';
 import compiler from '../compiler';
 import fieldTester from './field-tester';
 import testUtils from '../test-utils';
+import BooleanField from './boolean-field';
 
 const createField = () => {
   return new CompositeField({
@@ -148,4 +149,20 @@ it('should destroy', () => {
   expect(removeAllListenersSpy).toHaveBeenCalledTimes(1);
   expect(fieldSpies).toHaveLength(2);
   fieldSpies.forEach(spy => expect(spy).toHaveBeenCalledTimes(1));
+});
+
+it('should set parent with initial values', () => {
+  const field = new CompositeField({
+    name: 'fullName',
+    fields: [
+      new TextField({ name: 'firstName', value: 'Freddie' }),
+      new BooleanField({ name: 'foo' }),
+      new BooleanField({ name: 'baz', value: true })
+    ]
+  });
+
+  expect(field.getValue()).toEqual({
+    firstName: 'Freddie',
+    baz: true
+  });
 });
