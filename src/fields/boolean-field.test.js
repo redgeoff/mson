@@ -11,12 +11,6 @@ it('should validate', () => {
     [{}, [], 0, 1, 'foo'],
     'must be true or false'
   );
-
-  field.set({ required: true });
-
-  testUtils.expectValuesToBeValid(field, [true, false]);
-
-  testUtils.expectValuesToBeInvalid(field, [null]);
 });
 
 it('should get display value', () => {
@@ -26,4 +20,11 @@ it('should get display value', () => {
   expect(field.getDisplayValue()).toEqual('Yes');
   field.setValue(false);
   expect(field.getDisplayValue()).toEqual('No');
+});
+
+it('should not set required', () => {
+  const field = new BooleanField();
+  expect(field.get('required')).toEqual(false);
+  field.set({ required: true });
+  expect(field.get('required')).toEqual(false);
 });

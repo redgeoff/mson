@@ -35,4 +35,8 @@ export default class BooleanField extends Field {
     const value = this.get('value');
     return value ? 'Yes' : 'No';
   }
+
+  _setRequired(/* required */) {
+    // Do nothing as we don't want to report any errors as this prop doesn't apply
+  }
 }
