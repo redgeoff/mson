@@ -21,3 +21,10 @@ it('should get display value', () => {
   field.setValue(false);
   expect(field.getDisplayValue()).toEqual('No');
 });
+
+it('should not set required', () => {
+  const field = new BooleanField();
+  expect(field.get('required')).toEqual(false);
+  field.set({ required: true });
+  expect(field.get('required')).toEqual(false);
+});
