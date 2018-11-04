@@ -4,6 +4,7 @@ import globals from '../globals';
 import testUtils from '../test-utils';
 import each from 'lodash/each';
 import Action from '../actions/action';
+import Form from '../form';
 
 const newCompiler = () => {
   return new Compiler({ components: Object.assign({}, components) });
@@ -662,8 +663,10 @@ it('get component should throw if component missing', () => {
   expect(() => compiler.getComponent('AMissingComponent')).toThrow();
 });
 
-it('register component should throw if component exists', () => {
-  expect(() => compiler.registerComponent('Field')).toThrow();
+it('should allow reregistration', () => {
+  const form = new Form();
+  compiler.registerComponent('app.Account', form);
+  expect(compiler.getComponent('app.Account')).toEqual(form);
 });
 
 it('should get oldest compiled ancestor', () => {
