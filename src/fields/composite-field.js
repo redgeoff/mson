@@ -119,11 +119,13 @@ export default class CompositeField extends Field {
 
   _setValue(value) {
     super._setValue(value);
-    this.eachField(field =>
-      field.setValue(
-        value && value[field.get('name')] ? value[field.get('name')] : null
-      )
-    );
+    this.eachField(field => {
+      // only set the value if the field's name matches the value's field name
+      let fieldName = field.get('name');
+      if (value && value[fieldName]) {
+        field.setValue(value[fieldName]);
+      }
+    });
   }
 
   _setRequired(required) {
