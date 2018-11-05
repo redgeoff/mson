@@ -138,6 +138,9 @@ export default class FirebaseStore extends MemoryStore {
   async _docSet({ id, doc, options }) {
     // Don't actually connect to Firebase unless we specify an API Key
     if (this.get('apiKey')) {
+      // The Firebase API is not capable of storing undefined values so we remove them
+      doc = JSON.parse(JSON.stringify(doc));
+
       // Update the Firebase store
       return this._coll.doc(id).set(doc, options);
     }
