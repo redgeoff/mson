@@ -41,7 +41,6 @@ export default class ChainedSelectListField extends ListField {
   _newField(name) {
     return new ChainedSelectField({
       name,
-      required: this.get('required'),
       hideLabel: true,
       block: true,
       ...this.get([

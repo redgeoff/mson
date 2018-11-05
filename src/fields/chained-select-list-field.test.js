@@ -134,3 +134,14 @@ it('should clone', () => {
   expect(cars.getValue()).toEqual(myCars);
   expect(clonedCars2.getValue()).toEqual(myCars);
 });
+
+it('should not report error after valid set', () => {
+  const cars = createCarsField();
+
+  // USA - Telsa - Model S - Red
+  // Germany - BMW - i3
+  cars.setValue([[2, 5, 9, 10], [1, 3, 6]]);
+
+  cars.validate();
+  expect(cars.hasErr()).toEqual(false);
+});
