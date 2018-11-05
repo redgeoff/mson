@@ -340,7 +340,7 @@ export default class ListField extends CompositeField {
         }
       }
 
-      // TODO: allowDuplicates
+      // TODO: forbidDuplicates
     }
 
     if (errors.length > 0) {
@@ -383,8 +383,13 @@ export default class ListField extends CompositeField {
 
     field.set({
       name: index,
-      required: this.get('required'),
-      ...this.get(['block', 'fullWidth', 'useDisplayValue', 'editable'])
+      ...this.get([
+        'required',
+        'block',
+        'fullWidth',
+        'useDisplayValue',
+        'editable'
+      ])
     });
 
     return field;
