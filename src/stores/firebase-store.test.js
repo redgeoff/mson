@@ -333,3 +333,39 @@ it('should reorder', async () => {
     order: 1
   });
 });
+
+it('should strip undefined values when saving', async () => {
+  const firebase = new FirebaseMock();
+
+  const store = new FirebaseStore({
+    firebase,
+    apiKey: 'key'
+  });
+
+  const id = 1;
+
+  const setSpy = jest.spyOn(firebase._collection._docs, 'set');
+
+  await store._docSet({
+    id,
+    doc: {
+      firstName: 'Harry',
+      lastName: undefined,
+      nested: {
+        house: 'Gryffindor',
+        school: undefined
+      }
+    }
+  });
+
+  expect(setSpy).toHaveBeenCalledWith(id, {
+    firstName: 'Harry',
+    lastName: undefined,
+    nested: {
+      house: 'Gryffindor'
+    }
+  });
+  const doc = setSpy.mock.calls[0][1];
+  expect(doc.hasOwnProperty('lastName')).toEqual(false);
+  expect(doc.nested.hasOwnProperty('school')).toEqual(false);
+});
