@@ -364,3 +364,7 @@ Another important detail is that reordering is done in the front end so that the
 The reordering is performed in the store layer as the store layer has visibility of the entire set, something that is needed when reordering. Other front-end layers, like the CollectionField, may be viewing a smaller set of data, e.g. what is done during pagination.
 
 The DEFAULT_ORDER is set when ordering is turned off (being ignored) as it allows us to skip expensive calculations, like reordering, when the _order_ is not changing. Moreover, the DEFAULT_ORDER is used when a doc is archived and should be removed from the ordered list. The DEFAULT_ORDER is `-1` and not `null` because use of cursors translates to performing queries like `WHERE order>null`, which don't work as needed.
+
+## Why is the component constructor named __create_?
+
+By naming the constructor `_create`, we are able to wrap the constructor logic so that things can be executed before and after the constructor. For example, this allows the `BaseComponent` to emit a `create` event after the component has been created without requiring the extended component to explicitly perform the emit. In addition, it allows components to perform logic before running the super's `_create`, e.g. the compiler compiles JSON before creating a component. Or, when a member variable is needed before the initial call to `set()`. This would not be possible with a standard JS constructor as the first line in a constructor must be `super(...)`.
