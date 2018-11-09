@@ -774,7 +774,11 @@ export default class CollectionField extends Field {
   }
 
   eachForm(onForm) {
-    this._forms.each((form, id, last) => onForm(form, id, last));
+    this._forms.each(onForm);
+  }
+
+  mapForms(onForm) {
+    return this._forms.map(onForm);
   }
 
   _setForAllForms(props) {

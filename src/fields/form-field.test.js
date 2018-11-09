@@ -131,3 +131,11 @@ it('should bubble up change in value', async () => {
   const value = await afterValue;
   expect(value[0].firstName).toEqual('Jermaine');
 });
+
+it('should bubble up load events', async () => {
+  const field = createField();
+  const emitLoadSpy = jest.spyOn(field, 'emitLoad');
+  field.emitLoad();
+  expect(emitLoadSpy).toHaveBeenCalledTimes(1);
+  await field.resolveAfterLoad();
+});
