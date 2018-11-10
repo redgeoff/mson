@@ -42,16 +42,18 @@ beforeEach(() => {
 it('should get compiled component', () => {
   registerNameField();
 
-  const compileSpy = jest.spyOn(compiler, 'compile').mockImplementation();
+  const compileSpy = jest.spyOn(compiler, 'compile');
 
   // Get compiled component
-  const Component = compiler.getCompiledComponent('TextField');
+  let Component = compiler.getCompiledComponent('TextField');
   expect(compileSpy).toHaveBeenCalledTimes(0);
   expect(Component).toEqual(compiler.getComponent('TextField'));
+  expect(new Component().getClassName()).toEqual('TextField');
 
   // Get uncompiled component
-  compiler.getCompiledComponent('app.NameField');
+  Component = compiler.getCompiledComponent('app.NameField');
   expect(compileSpy).toHaveBeenCalledTimes(1);
+  expect(new Component().getClassName()).toEqual('app.NameField');
 });
 
 it('should get wrapped component class', () => {

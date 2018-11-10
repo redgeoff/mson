@@ -72,7 +72,7 @@ export class Compiler {
     }
   }
 
-  _getWrappedComponentClass(name, defaultProps, parentProps) {
+  _getWrappedComponentClass(name, defaultProps, parentProps, className) {
     const Component = this.getCompiledComponent(name, defaultProps);
 
     if (this._validateOnly) {
@@ -92,7 +92,7 @@ export class Compiler {
       // Class.prototype.name as this is overwritten by minifiers like UglifyJS. You can turn this
       // off with keep-classnames, but instead we’ll just use a custom _className so that we don’t
       // need to worry about custom configs for minifiers.
-      _className = name;
+      _className = className === undefined ? name : className;
 
       _create(props) {
         // Use the parentProps and props to fill
@@ -178,14 +178,20 @@ export class Compiler {
     if (this.isCompiled(Component)) {
       return Component;
     } else {
-      return this.compile(Component, parentProps);
+      // Note: we need to pass name to compile() so that the className is set properly
+      return this.compile(Component, parentProps, name);
     }
   }
 
   // The parentProps define values for the template parameters in props and allow us to make pieces
   // of our components dynamic.
-  compile(props, parentProps) {
-    return this._getWrappedComponentClass(props.component, props, parentProps);
+  compile(props, parentProps, className) {
+    return this._getWrappedComponentClass(
+      props.component,
+      props,
+      parentProps,
+      className
+    );
   }
 
   _instantiateComponent(Component, props) {
