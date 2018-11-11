@@ -406,7 +406,7 @@ export default class Form extends Component {
         clear: undefined,
         reset: undefined,
         fullWidth: undefined,
-        editable: undefined,
+        // editable: undefined, // TODO: should other props be removed as well?
         hidden: undefined,
         required: undefined,
         out: undefined,
@@ -986,6 +986,7 @@ export default class Form extends Component {
     return this.getField(fieldName).getValue();
   }
 
+  // TODO: refactor calls in this class to use setForEachField when possible
   setForEachField(props) {
     this._fields.each(field => field.set(props));
   }

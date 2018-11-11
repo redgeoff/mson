@@ -26,6 +26,8 @@ export default class FormField extends Field {
         ]
       }
     });
+
+    this._listenForLoad();
   }
 
   _listenToForm(form) {
@@ -34,6 +36,17 @@ export default class FormField extends Field {
     // We use _set() instead of set() so that a change from the form isn't passed back down to the
     // form
     form.on('value', () => this._set('value', this.getValues()));
+  }
+
+  _handleLoadFactory() {
+    return () => {
+      // Pass load event down to form
+      this.get('form').emitLoad();
+    };
+  }
+
+  _listenForLoad() {
+    this.on('load', this._handleLoadFactory());
   }
 
   _setForm(form) {

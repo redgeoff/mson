@@ -876,3 +876,12 @@ it('should get max size', () => {
   field.set({ forbidOrder: false });
   expect(field._getMaxSize()).toEqual(CollectionField.MAX_ITEMS_PER_PAGE);
 });
+
+it('should map forms', () => {
+  const field = createField();
+  fillDocs(field);
+  expect(field.mapForms(form => form.getValue('firstName'))).toEqual([
+    'Ella',
+    'Frank'
+  ]);
+});
