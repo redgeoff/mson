@@ -12,7 +12,11 @@ export default class Text extends Component {
         fields: [
           {
             name: 'text',
-            component: 'TextField'
+            component: 'TextField',
+            label: 'Text',
+            multiline: true,
+            docLevel: 'basic',
+            help: 'Any markdown. See markdownguide.org'
           }
         ]
       }

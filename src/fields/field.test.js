@@ -144,5 +144,5 @@ it('should get first error', () => {
 
 it('should identify as field', () => {
   const field = new Field();
-  expect(field._isField()).toEqual(true);
+  expect(field.isField()).toEqual(true);
 });

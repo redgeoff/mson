@@ -33,6 +33,7 @@ export default class FieldEditorForm extends Form {
     'SelectField',
     'SelectListField',
     'StateField',
+    'Text',
     'TextField',
     'TextListField',
     'TimeField',
