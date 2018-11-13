@@ -18,4 +18,12 @@ export default class Grid extends Component {
       }
     });
   }
+
+  set(props) {
+    if (props.items !== undefined) {
+      props.items.forEach(item => item.set({ parent: this }));
+    }
+
+    super.set(props);
+  }
 }

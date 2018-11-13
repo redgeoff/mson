@@ -42,4 +42,12 @@ export default class GridItem extends Component {
       }
     });
   }
+
+  set(props) {
+    if (props.content !== undefined) {
+      props.content.set({ parent: this });
+    }
+
+    super.set(props);
+  }
 }
