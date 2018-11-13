@@ -36,6 +36,8 @@ import FormField from './fields/form-field';
 import FormValidator from './form/form-validator';
 import GetDoc from './actions/get-doc';
 import GetDocs from './actions/get-docs';
+import Grid from './grid';
+import GridItem from './grid-item';
 import IdField from './fields/id-field';
 import IntegerField from './fields/integer-field';
 import Iterator from './actions/iterator';
@@ -129,6 +131,8 @@ export default {
   FormField,
   GetDoc,
   GetDocs,
+  Grid,
+  GridItem,
   IdField,
   IntegerField,
   Iterator,
