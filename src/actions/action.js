@@ -81,6 +81,12 @@ export default class Action extends Component {
     this._fillerProps = this._componentFillerProps.getFillerProps(props);
   }
 
+  _setWhereProps(where, props) {
+    // getWhereProps() resolves all the properties in the query and populates _whereProps. This
+    // allows us to dynamically query data in deeply nested components.
+    this._whereProps = this._componentFillerProps.getWhereProps(where, props);
+  }
+
   async run(props) {
     this._setFillerProps(props);
 
@@ -89,7 +95,8 @@ export default class Action extends Component {
     let actions = null;
 
     if (where) {
-      let sifted = sift(where, [this._fillerProps]);
+      this._setWhereProps(where, props);
+      let sifted = sift(where, [this._whereProps]);
       if (sifted.length === 0) {
         // Condition failed
         if (this.get('else')) {
