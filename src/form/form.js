@@ -554,9 +554,9 @@ export default class Form extends Component {
   }
 
   addField(field) {
-    // Not a field? We have to use the existence of _isField instead of `instanceof Field` as a
+    // Not a field? We have to use the existence of isField instead of `instanceof Field` as a
     // wrapped field, e.g. a MSONComponent will fail the instanceof test, but is still a field.
-    if (!field._isField) {
+    if (!field.isField) {
       if (this.isComponent(field)) {
         // Wrap the component in a ComponentField so that we can use any component in the form
         field = new ComponentField({

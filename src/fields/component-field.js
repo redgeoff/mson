@@ -1,4 +1,5 @@
 import Field from './field';
+import utils from '../utils';
 
 export default class ComponentField extends Field {
   _className = 'ComponentField';
@@ -19,6 +20,9 @@ export default class ComponentField extends Field {
       }
     });
 
-    this._setDefaults(props, { in: false, out: false });
+    // All fields must have a name
+    const name = props.name === undefined ? utils.uuid() : props.name;
+
+    this._setDefaults(props, { in: false, out: false, name });
   }
 }

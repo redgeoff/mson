@@ -334,7 +334,7 @@ export default class Field extends Component {
   }
 
   // Method used to determine if this component is a field, even if it is wrapped
-  _isField() {
+  isField() {
     return true;
   }
 }
