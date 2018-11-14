@@ -276,3 +276,37 @@ it('should branch', async () => {
   await set.run({ component: field });
   expect(field.getValue()).toEqual('Ella');
 });
+
+it('should filter by nested properties', async () => {
+  const action = new Set({
+    if: {
+      parent: {
+        parent: {
+          name: 'grandparent'
+        }
+      }
+    },
+    name: 'value',
+    value: 'Jack'
+  });
+
+  const field = new TextField({
+    name: 'firstName',
+    parent: new TextField({
+      name: 'parent',
+      parent: new TextField({ name: 'granddad' })
+    })
+  });
+
+  await action.run({
+    component: field
+  });
+  expect(field.getValue()).toBeUndefined();
+
+  field.set({ 'parent.parent.name': 'grandparent' });
+
+  await action.run({
+    component: field
+  });
+  expect(field.getValue()).toEqual('Jack');
+});

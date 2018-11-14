@@ -1,5 +1,23 @@
 import globals from '../globals';
 import registrar from '../compiler/registrar';
+import queryToProps from '../component/query-to-props';
+
+export class Getter {
+  constructor({ action, component }) {
+    this._action = action;
+    this._component = component;
+  }
+
+  get(name) {
+    const parts = name.split('.');
+    const firstName = parts[0];
+    if (firstName === 'action') {
+      return this._action ? this._action.get(name) : undefined;
+    } else if (['globals', 'arguments'].indexOf(firstName) === -1) {
+      return this._component ? this._component.get(name) : undefined;
+    }
+  }
+}
 
 export default class ComponentFillerProps {
   constructor() {
@@ -44,7 +62,9 @@ export default class ComponentFillerProps {
       if (props.parent) {
         // Inject the parent so that nested components, e.g. nested actions, have access to the
         // parent properties
-        fillerProps.parent = props.parent.get();
+        fillerProps.action = {
+          parent: props.parent.get()
+        };
       }
 
       fillerProps.arguments = props.arguments;
@@ -53,5 +73,23 @@ export default class ComponentFillerProps {
     fillerProps.globals = this._getGlobals();
 
     return fillerProps;
+  }
+
+  getWhereProps(where, props) {
+    let whereProps = {};
+
+    // Wrap in a Getter so that we expose a get() for queryToProps()
+    const component = new Getter({
+      action: props.parent,
+      component: props.component
+    });
+
+    whereProps = queryToProps(where, component);
+
+    whereProps.arguments = props.arguments;
+
+    whereProps.globals = this._getGlobals();
+
+    return whereProps;
   }
 }
