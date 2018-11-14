@@ -265,9 +265,9 @@ export default class BaseComponent extends events.EventEmitter {
           this._throwPropertyNotFound(propertyNames);
         }
         property = property.get(nme);
-        if (!property) {
-          this._throwPropertyNotFound(propertyNames);
-        }
+      } else if (property === undefined) {
+        propertyNames.pop();
+        this._throwPropertyNotFound(propertyNames);
       } else if (property[nme] === undefined) {
         this._throwPropertyNotFound(propertyNames);
       } else {
