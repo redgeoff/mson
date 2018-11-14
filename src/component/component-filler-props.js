@@ -2,7 +2,7 @@ import globals from '../globals';
 import registrar from '../compiler/registrar';
 import queryToProps from '../component/query-to-props';
 
-class Getter {
+export class Getter {
   constructor({ action, component }) {
     this._action = action;
     this._component = component;

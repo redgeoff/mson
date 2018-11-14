@@ -4,7 +4,6 @@ import LogOutOfApp from './log-out-of-app';
 import TextField from '../fields/text-field';
 import compiler from '../compiler';
 import Form from '../form';
-import Component from '../component';
 
 const createAction = () => {
   return new Set({
