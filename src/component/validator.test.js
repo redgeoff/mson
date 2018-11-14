@@ -1,27 +1,5 @@
 import Validator from './validator';
-
-it('should get template names', () => {
-  let validator = new Validator();
-  expect(validator._getTemplateName('{{foo}}')).toEqual('foo');
-  expect(validator._getTemplateName('{{foo}} ')).toEqual(undefined);
-  expect(validator._getTemplateName(' {{foo}} ')).toEqual(undefined);
-  expect(validator._getTemplateName('foo')).toEqual(undefined);
-});
-
-it('should get props', () => {
-  let validator = new Validator({
-    foo: 'bar',
-    value: {
-      name: {
-        firstName: 'Jane',
-        lastName: 'Doe'
-      }
-    }
-  });
-
-  expect(validator._getProp('foo')).toEqual('bar');
-  expect(validator._getProp('value.name.firstName')).toEqual('Jane');
-});
+import get from 'lodash/get';
 
 it('should fill props', () => {
   let validator = new Validator({
@@ -99,11 +77,23 @@ it('should fill where', () => {
   });
 });
 
+class ArrayGetter {
+  constructor(props) {
+    this.props = props;
+  }
+
+  get(name) {
+    return get(this.props, name);
+  }
+}
+
 it('should validate with rules', () => {
-  let validator = new Validator({
+  const getter = new ArrayGetter({
     length: 20,
     maxLength: 10
   });
+
+  let validator = new Validator(getter);
 
   let rules = [
     {
@@ -142,16 +132,18 @@ it('should validate with rules', () => {
   ]);
 
   // Simulate the user changing the length
-  validator._props.length = 10;
+  validator._props.props.length = 10;
   expect(validator._validateWithRule(rules[0])).toEqual(undefined);
 });
 
 it('should validate with escaped regex', () => {
   // console.log(/\d/.test('secret1'))
 
-  let validator = new Validator({
+  const getter = new ArrayGetter({
     password: 'secret'
   });
+
+  let validator = new Validator(getter);
 
   let rules = [
     {
@@ -171,7 +163,7 @@ it('should validate with escaped regex', () => {
   expect(validator.validate(rules)).toEqual(['must contain a number']);
 
   // Simulate the user changing the password
-  validator._props.fields = {
+  validator._props.props.fields = {
     password: 'secret1'
   };
   expect(validator.validate(rules)).toEqual([]);

@@ -174,3 +174,51 @@ it('should detect if blank', () => {
   field.setValue('foo');
   expect(field.isBlank()).toEqual(false);
 });
+
+it('should validate with validators', () => {
+  const field = new TextField({
+    validators: [
+      {
+        where: {
+          value: 'foo'
+        },
+        error: 'invalid'
+      },
+      {
+        where: {
+          length: {
+            $gt: 10
+          }
+        },
+        error: 'too long'
+      },
+      {
+        where: {
+          words: {
+            $gt: 3
+          }
+        },
+        error: 'too many words'
+      }
+    ]
+  });
+
+  field.validate();
+  expect(field.hasErr()).toEqual(false);
+
+  field.setValue('good value');
+  field.validate();
+  expect(field.hasErr()).toEqual(false);
+
+  field.setValue('foo');
+  field.validate();
+  expect(field.getErr()).toEqual('invalid');
+
+  field.setValue('fooly foo foo');
+  field.validate();
+  expect(field.getErr()).toEqual('too long');
+
+  field.setValue('1 2 3 4');
+  field.validate();
+  expect(field.getErr()).toEqual('too many words');
+});

@@ -5,6 +5,7 @@ import each from 'lodash/each';
 import difference from 'lodash/difference';
 import cloneDeepWith from 'lodash/cloneDeepWith';
 import Mapa from '../mapa';
+import PropertyNotDefinedError from './property-not-defined-error';
 
 let nextKey = 0;
 const getNextKey = () => {
@@ -228,7 +229,9 @@ export default class BaseComponent extends events.EventEmitter {
 
   _throwIfNotDefined(name) {
     if (!this.has(name)) {
-      throw new Error(this.getClassName() + ': ' + name + ' not defined');
+      throw new PropertyNotDefinedError(
+        this.getClassName() + ': ' + name + ' not defined'
+      );
     }
   }
 
@@ -238,7 +241,7 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   _throwPropertyNotFound(propertyNames) {
-    throw new Error(propertyNames.join('.') + ' not found');
+    throw new PropertyNotDefinedError(propertyNames.join('.') + ' not found');
   }
 
   isComponent(property) {

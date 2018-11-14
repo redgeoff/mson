@@ -84,12 +84,17 @@ export default class TextField extends Field {
   }
 
   _toValidatorProps() {
-    const value = this.get('value');
-
     return {
-      ...super._toValidatorProps(),
-      length: value.length,
-      words: value.split(/\s+/).length
+      get: name => {
+        switch (name) {
+          case 'length':
+            return this.get('value').length;
+          case 'words':
+            return this.get('value').split(/\s+/).length;
+          default:
+            return this.get(name);
+        }
+      }
     };
   }
 

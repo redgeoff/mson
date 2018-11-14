@@ -275,12 +275,7 @@ export default class Field extends Component {
   }
 
   _toValidatorProps() {
-    // TODO: should calc of these props be a little more dynamic? e.g. could make them a function so
-    // that only calculated when matched by validators
-    return {
-      ...this.get(),
-      value: this.get('value')
-    };
+    return this;
   }
 
   // TODO: also support _validators being function like at form layer?

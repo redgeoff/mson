@@ -14,17 +14,17 @@ export default {
     {
       component: 'Set',
       name: '{{name}}',
-      value: '{{action.parent.doc.fieldValues}}'
+      value: '{{action.doc.fieldValues}}'
     },
     {
       component: 'Set',
       name: '{{name}}',
       value: {
-        id: '{{action.parent.doc.id}}',
-        userId: '{{action.parent.doc.userId}}',
-        createdAt: '{{action.parent.doc.createdAt}}',
-        updatedAt: '{{action.parent.doc.updatedAt}}',
-        archivedAt: '{{action.parent.doc.archivedAt}}'
+        id: '{{action.doc.id}}',
+        userId: '{{action.doc.userId}}',
+        createdAt: '{{action.doc.createdAt}}',
+        updatedAt: '{{action.doc.updatedAt}}',
+        archivedAt: '{{action.doc.archivedAt}}'
       }
     }
   ]

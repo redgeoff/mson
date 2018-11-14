@@ -65,7 +65,7 @@ export default class Action extends Component {
 
   _getFilled(names) {
     let prop = super.get(names);
-    return this._fill(prop);
+    return prop === undefined ? undefined : this._fill(prop);
   }
 
   get(names) {
@@ -73,11 +73,8 @@ export default class Action extends Component {
   }
 
   _setFillerProps(props) {
-    // TODO: the process of generating the fillerProps is unnecessarily wasteful as it requires
-    // getting properties that will not be used. We need to generate these props for *each* action
-    // as a previous action may change a property on which the subsequent action depends. Instead,
-    // we should be able to just use component.get() with the dot notation. And, use a selectorFn
-    // with sift that uses component.get().
+    // getFillerProps() wraps the props in a Getter so that the values can be retrieved dynamically,
+    // allowing for things like retrieving data from deely nested components.
     this._fillerProps = this._componentFillerProps.getFillerProps(props);
   }
 

@@ -29,9 +29,8 @@ The best way to get started with MSON is to play with the [Getting Started App](
 
 After you have played with the Getting Started App you may find it useful to fire up the [MSON demo](https://redgeoff.github.io/mson-react):
 
-  - $ git clone https://github.com/redgeoff/mson-react
-  - $ cd mson-react
-  - $ yarn install
+  - $ git clone https://github.com/redgeoff/mson && cd mson && yarn install && yarn compile && yarn link && cd ..
+  - $ git clone https://github.com/redgeoff/mson-react && cd mson-react && yarn install && yarn link mson
   - $ yarn start
   - Visit http://localhost:3000 in a web browser
 

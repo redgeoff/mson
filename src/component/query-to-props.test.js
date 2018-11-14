@@ -1,5 +1,9 @@
-import queryToProps, { queryToPropNames } from './query-to-props';
+import queryToProps, {
+  queryToPropNames,
+  throwIfNotPropertyNotDefinedError
+} from './query-to-props';
 import get from 'lodash/get';
+import PropertyNotDefinedError from './property-not-defined-error';
 
 class MockComponent {
   constructor(props) {
@@ -102,4 +106,13 @@ it('should merge props when converting query', () => {
   );
 
   expect(props).toEqual(values);
+});
+
+it('should handle errors', () => {
+  // Should not throw
+  throwIfNotPropertyNotDefinedError(new PropertyNotDefinedError());
+
+  // Should throw error as not PropertyNotDefinedError
+  const err = new Error();
+  expect(() => throwIfNotPropertyNotDefinedError(err)).toThrow(err);
 });
