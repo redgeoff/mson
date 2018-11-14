@@ -432,6 +432,10 @@ it('should get with dot notation', () => {
         {
           name: 'person',
           component: 'Field'
+        },
+        {
+          name: 'child',
+          component: 'Field'
         }
       ]
     },
@@ -444,7 +448,10 @@ it('should get with dot notation', () => {
     person: {
       fullName,
       profession: 'Musician'
-    }
+    },
+    child: new TextField({
+      name: 'child'
+    })
   });
 
   expect(form.get('fields.firstName.label')).toEqual('First Name');
@@ -452,6 +459,10 @@ it('should get with dot notation', () => {
   expect(() => form.get('fields.missingField.value')).toThrow(
     'fields.missingField not found'
   );
+
+  // Nested component
+  expect(form.get('child.name')).toEqual('child');
+  expect(form.get('child.hidden')).toEqual(false);
 
   expect(() => form.get('foo.value')).toThrow('foo not found');
 
