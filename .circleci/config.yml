@@ -41,7 +41,6 @@ jobs:
       #     paths:
       #       - ../mson-server/node_modules
       #     key: mson-server-dependencies-{{ checksum "package.json" }}
-      # - run: cd ../mson-server && cp src/config.default.json src/config.json
       # - run: cd ../mson-server && yarn compile
 
       # - run: yarn setup
