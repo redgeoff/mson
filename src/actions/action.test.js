@@ -310,3 +310,52 @@ it('should filter by nested properties', async () => {
   });
   expect(field.getValue()).toEqual('Jack');
 });
+
+it('should get nested property', async () => {
+  const action = new Set({
+    name: 'value',
+    value: '{{parent.parent.name}}'
+  });
+
+  const field = new TextField({
+    name: 'firstName',
+    parent: new TextField({
+      name: 'parent',
+      parent: new TextField({ name: 'grandparent' })
+    })
+  });
+
+  await action.run({
+    component: field
+  });
+  expect(field.getValue()).toEqual('grandparent');
+});
+
+it('should retrieve parent properties', async () => {
+  const field = new TextField();
+
+  const action = new Set({
+    schema: {
+      component: 'Form',
+      fields: [
+        {
+          name: 'foo',
+          component: 'Field'
+        }
+      ]
+    },
+    actions: [
+      new Set({
+        name: 'value',
+        value: '{{action.foo}}'
+      })
+    ]
+  });
+
+  action.set({ foo: 'bar' });
+
+  await action.run({
+    component: field
+  });
+  expect(field.getValue()).toEqual('bar');
+});

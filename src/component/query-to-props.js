@@ -1,5 +1,6 @@
 import forEach from 'lodash/forEach';
 import set from 'lodash/set';
+import PropertyNotDefinedError from './property-not-defined-error';
 
 export const queryToPropNames = (query, names, parentName) => {
   if (query !== null && typeof query === 'object') {
@@ -21,6 +22,12 @@ export const queryToPropNames = (query, names, parentName) => {
   }
 };
 
+export const throwIfNotPropertyNotDefinedError = err => {
+  if (!(err instanceof PropertyNotDefinedError)) {
+    throw err;
+  }
+};
+
 // We analyze the MongoDB-style query to dynamically extract the properties from the component,
 // including properties in deeply nested components. A previous design called get() on the
 // components to return the values, but that does not always provide access to deeply nested
@@ -35,7 +42,13 @@ const queryToProps = (query, component) => {
   queryToPropNames(query, names);
 
   forEach(names, (value, name) => {
-    set(props, name, component.get(name));
+    try {
+      set(props, name, component.get(name));
+    } catch (err) {
+      // Swallow the error if the property is not defined. This allows us to do things like ignore
+      // outdated filters, e.g. a filter for a property, which has since been deleted.
+      throwIfNotPropertyNotDefinedError(err);
+    }
   });
 
   return props;

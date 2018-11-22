@@ -31,7 +31,7 @@ export default class Set extends Action {
     const value = thisValue === undefined ? props.arguments : thisValue;
 
     if (!name) {
-      // No name was specified to so pipe to next action
+      // No name was specified, pipe to next action
       return value;
     } else if (names[0] === 'globals' || names[0] === 'component') {
       const first = names.splice(0, 1)[0]; // Remove globals or component
