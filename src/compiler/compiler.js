@@ -256,6 +256,12 @@ export class Compiler {
     // }
   }
 
+  registerComponents(components) {
+    each(components, component =>
+      this.registerComponent(component.name, component)
+    );
+  }
+
   deregisterComponent(name) {
     delete this._components[name];
   }
