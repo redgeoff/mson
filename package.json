@@ -42,7 +42,7 @@
     "just-test": "react-scripts test --env=jsdom --maxWorkers=3 --testPathPattern='^((?!performance).)*test.js$'",
     "performance": "react-scripts test --env=jsdom --maxWorkers=1 --testPathPattern='performance.test.js$'",
     "test": "npm run lint && npm run just-test -- --coverage && CI=true npm run performance",
-    "copy-json": "copyfiles src/**/*.json lib",
+    "copy-json": "copyfiles -u 1 src/**/*.json lib",
     "compile": "NODE_ENV=production babel src --ignore '**/*.test.js' -d lib && npm run copy-json",
     "bundle": "webpack",
     "touch": "find src -exec touch {} \\;",
