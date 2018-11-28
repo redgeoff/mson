@@ -1,5 +1,6 @@
 import { Compiler } from './compiler';
 import components from '../components';
+import optionalComponents from '../optional-components';
 import globals from '../globals';
 import testUtils from '../test-utils';
 import each from 'lodash/each';
@@ -7,7 +8,9 @@ import Action from '../actions/action';
 import Form from '../form';
 
 const newCompiler = () => {
-  return new Compiler({ components: Object.assign({}, components) });
+  const compiler = new Compiler({ components: Object.assign({}, components) });
+  compiler.registerComponents(optionalComponents);
+  return compiler;
 };
 
 const expectDefinitionToBeValid = (definition, name, ignoreRequired) => {
@@ -556,14 +559,18 @@ it('should support schema props at the same layer', () => {
   });
 });
 
-it('should validate the definitions of all core components', () => {
-  setValidateOnly();
-
+const validateComponents = components => {
   each(components, (component, name) => {
     if (!compiler.isCompiled(component)) {
       expectDefinitionToBeValid(component, name, true);
     }
   });
+};
+
+it('should validate the definitions of all core components', () => {
+  setValidateOnly();
+  validateComponents(components);
+  validateComponents(optionalComponents);
 });
 
 it('should define className for all core components', () => {
