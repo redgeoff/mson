@@ -669,13 +669,17 @@ export default class Form extends Component {
         this.clearValues();
       } else {
         each(values, (value, name) => {
-          if (this.hasField(name)) {
-            this.getField(name).setValue(value);
-          } else if (this.get('reportUndefined')) {
-            this._extraErrors.push({
-              field: name,
-              error: 'undefined field'
-            });
+          // Not a nested field? Nested fields in the values aren't supported, but we need to ignore
+          // them as they are validate in component definitions
+          if (name.indexOf('.') === -1) {
+            if (this.hasField(name)) {
+              this.getField(name).setValue(value);
+            } else if (this.get('reportUndefined')) {
+              this._extraErrors.push({
+                field: name,
+                error: 'undefined field'
+              });
+            }
           }
         });
       }

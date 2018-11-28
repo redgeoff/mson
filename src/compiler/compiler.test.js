@@ -533,7 +533,10 @@ it('should validate schema', () => {
         name: 'firstName',
         badProperty: 'foo'
       }
-    ]
+    ],
+
+    // Note: nested fields like this are ignored
+    'fields.foo.value': 'bar'
   };
 
   const schemaForm = compiler.validateDefinition(def1);
@@ -639,6 +642,12 @@ const employees = {
   ]
 };
 
+const accountWithDefaultName = {
+  name: 'app.AccountWithDefaultName',
+  component: 'app.Account',
+  'fields.name.value': 'David Bowie'
+};
+
 it('should validate definitions with dynamic components', () => {
   setValidateOnly();
 
@@ -649,6 +658,8 @@ it('should validate definitions with dynamic components', () => {
   expectDefinitionToBeValid(employeeSignup);
 
   expectDefinitionToBeValid(employees);
+
+  expectDefinitionToBeValid(accountWithDefaultName);
 });
 
 const newComponentAndResolveAfterCreate = async definition => {
