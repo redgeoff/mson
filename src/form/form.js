@@ -521,10 +521,10 @@ export default class Form extends Component {
     // existing listeners when this happens?
 
     field.on('value', fieldValue => {
-      // We use _set() as if we used set() then we would trigger an infinite loop
+      // We use _setProperty() as if we used set() then we would trigger an infinite loop
       const value = this._value ? this._value : {};
       value[field.get('name')] = fieldValue;
-      this._set('value', value); // Doesn't trigger event as shallow compare
+      this._setProperty('value', value); // Doesn't trigger event
       this.emitChange('value', value);
 
       if (this.get('autoValidate')) {
