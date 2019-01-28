@@ -1,6 +1,6 @@
 {
   "name": "mson",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "MSON Lang: Generate an app from JSON",
   "author": "Geoff Cox",
   "license": "Apache-2.0",
