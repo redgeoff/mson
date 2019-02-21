@@ -5,7 +5,7 @@
   "author": "Geoff Cox",
   "license": "Apache-2.0",
   "dependencies": {
-    "@babel/runtime": "^7.1.2",
+    "@babel/runtime": "^7.3.1",
     "country-telephone-data": "^0.6.0",
     "date-fns": "^2.0.0-alpha.16",
     "events": "^3.0.0",
@@ -16,16 +16,18 @@
     "vanilla-text-mask": "^5.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.1.2",
-    "@babel/core": "^7.1.2",
-    "@babel/plugin-proposal-class-properties": "^7.1.0",
-    "@babel/plugin-transform-runtime": "^7.1.0",
-    "babel-loader": "^8.0.4",
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.3",
+    "@babel/plugin-proposal-class-properties": "^7.3.3",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "babel-loader": "^8.0.5",
     "copyfiles": "^2.1.0",
     "husky": "^1.1.0",
     "lint-staged": "^8.0.0",
     "prettier": "^1.14.2",
-    "react-scripts": "^2.0.3",
+    "react": "^16.8.2",
+    "react-dom": "^16.8.2",
+    "react-scripts": "^2.1.5",
     "webpack-bundle-analyzer": "^3.0.2",
     "webpack-cli": "^3.1.2"
   },
