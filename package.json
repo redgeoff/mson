@@ -29,7 +29,7 @@
     "react-dom": "^16.8.2",
     "react-scripts": "^2.1.5",
     "webpack-bundle-analyzer": "^3.0.2",
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.3.0"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,json,css}": [
