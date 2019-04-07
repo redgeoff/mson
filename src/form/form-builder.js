@@ -11,6 +11,16 @@ export default class FormBuilder extends Form {
     super._create(props);
 
     this.set({
+      schema: {
+        component: 'Form',
+        fields: [
+          {
+            name: 'mson',
+            component: 'Field'
+          }
+        ]
+      },
+
       fields: [
         new Tabs({
           name: 'tabs',
@@ -56,5 +66,41 @@ export default class FormBuilder extends Form {
         }
       ]
     });
+  }
+
+  _setMSON(mson) {
+    const fields = mson.fields.map(field => ({
+      ...field,
+      componentName: field.component
+    }));
+
+    this.get('fields.form.form.fields.fields').setValue(fields);
+  }
+
+  set(props) {
+    super.set({ ...props, mson: undefined });
+
+    if (props.mson !== undefined) {
+      this._setMSON(props.mson);
+    }
+  }
+
+  _getMSON() {
+    return {
+      component: 'Form',
+      fields: this.get('fields.form.form.fields.fields').mapForms(form => ({
+        ...form.getValues({ default: false }),
+        component: form.getValue('componentName'),
+        componentName: undefined
+      }))
+    };
+  }
+
+  getOne(name) {
+    if (name === 'mson') {
+      return this._getMSON();
+    }
+
+    return super.getOne(name);
   }
 }
