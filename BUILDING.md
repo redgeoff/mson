@@ -4,7 +4,7 @@
 
 Note: this must be run on Linux (we need the --parent option for cp)
 
-  - $ npm adduser
+  - $ npm login
   - $ git config credential.helper store
   - Modify the version in package.json
   - $ git diff # check that only the version has changed
