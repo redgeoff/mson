@@ -46,6 +46,9 @@ export default class DateField extends Field {
     if (value instanceof Date) {
       return value.getTime();
     } else if (typeof value === 'string') {
+      if (!isNaN(value)) {
+        value = parseInt(value);
+      }
       return new Date(value).getTime();
     } else {
       // We assume it is already epoch time
