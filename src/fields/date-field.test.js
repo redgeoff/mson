@@ -8,6 +8,13 @@ it('should convert dates to epoch time', () => {
   expect(date.getValue()).toEqual(now.getTime());
 });
 
+it('should handle string epoch time', () => {
+  const date = new DateField();
+  const now = new Date();
+  date.setValue(String(now.getTime()));
+  expect(date.getValue()).toEqual(now.getTime());
+});
+
 it('should set value to now', async () => {
   const date1 = new DateField({ now: true });
   await testUtils.sleepToEnsureDifferentTimestamps();
