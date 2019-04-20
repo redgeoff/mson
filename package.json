@@ -10,7 +10,7 @@
     "date-fns": "^2.0.0-alpha.16",
     "events": "^3.0.0",
     "lodash": "^4.17.10",
-    "sift": "^7.0.0",
+    "sift": "^8.2.0",
     "text-mask-addons": "^3.8.0",
     "uuid": "^3.3.2",
     "vanilla-text-mask": "^5.1.1"
