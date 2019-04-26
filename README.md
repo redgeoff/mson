@@ -21,9 +21,9 @@ You can read more about why I created MSON at [Creating a New Programming Langua
 
 ## Getting Started
 
-### Basic App on Codesandbox
+### Demo Apps on Codesandbox
 
-[Here's a basic app](https://codesandbox.io/s/y2r3klwzyj) that you can play with to test out MSON in real-time.
+Check out the [To Do List](https://codesandbox.io/s/o584w8k67z) and [Basic App](https://codesandbox.io/s/y2r3klwzyj), which will let you play with MSON in real-time.
 
 ### Getting Started App
 
