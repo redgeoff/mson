@@ -21,6 +21,10 @@ You can read more about why I created MSON at [Creating a New Programming Langua
 
 ## Getting Started
 
+### Basic App on Codesandbox
+
+[Here's a basic app](https://codesandbox.io/s/y2r3klwzyj) that you can play with to test out MSON in real-time.
+
 ### Getting Started App
 
 The best way to get started with MSON is to play with the [Getting Started App](https://github.com/redgeoff/mson-getting-started). In just a few lines of MSON, you'll generate an app that can list, edit, filter and sort a list of contacts. And, for extra fun, you can use Firebase to make it real-time capable.
