@@ -53,7 +53,7 @@ export default class Validator {
     const whereProps = this._getWhereProps(where);
 
     // Validation failed?
-    let sifted = sift(where, [whereProps]);
+    let sifted = [whereProps].filter(sift(where));
     if (sifted.length > 0) {
       return this._fillErrorProps(rule.error);
     }

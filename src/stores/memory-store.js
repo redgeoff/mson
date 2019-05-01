@@ -76,7 +76,7 @@ export default class MemoryStore extends Store {
     };
 
     for (const doc of this._docs.values()) {
-      const sifted = where === undefined ? null : sift(where, [doc]);
+      const sifted = where === undefined ? null : [doc].filter(sift(where));
       if (
         (showArchived === null ||
           showArchived === undefined ||
