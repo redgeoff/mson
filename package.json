@@ -7,7 +7,7 @@
   "dependencies": {
     "@babel/runtime": "^7.3.1",
     "country-telephone-data": "^0.6.0",
-    "date-fns": "^2.0.0-alpha.16",
+    "date-fns": "^2.0.0-alpha.31",
     "events": "^3.0.0",
     "lodash": "^4.17.10",
     "sift": "^8.3.3",
@@ -22,14 +22,14 @@
     "@babel/plugin-transform-runtime": "^7.2.0",
     "babel-loader": "^8.0.5",
     "copyfiles": "^2.1.0",
-    "husky": "^2.0.0",
-    "lint-staged": "^8.0.0",
-    "prettier": "^1.14.2",
+    "husky": "^2.4.0",
+    "lint-staged": "^8.2.0",
+    "prettier": "^1.18.2",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
-    "react-scripts": "^3.0.0",
+    "react-scripts": "^3.0.1",
     "webpack-bundle-analyzer": "^3.0.2",
-    "webpack-cli": "^3.3.0"
+    "webpack-cli": "^3.3.3"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,json,css}": [
