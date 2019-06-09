@@ -93,7 +93,7 @@ export default class Action extends Component {
 
     if (where) {
       this._setWhereProps(where, props);
-      let sifted = sift(where, [this._whereProps]);
+      let sifted = [this._whereProps].filter(sift(where));
       if (sifted.length === 0) {
         // Condition failed
         if (this.get('else')) {
