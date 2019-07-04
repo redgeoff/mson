@@ -11,6 +11,10 @@ export default class JSONStringify extends Action {
         component: 'Form',
         fields: [
           {
+            name: 'value',
+            component: 'Field'
+          },
+          {
             name: 'space',
             component: 'IntegerField'
           }
@@ -20,7 +24,8 @@ export default class JSONStringify extends Action {
   }
 
   async act(props) {
-    const value = props.arguments;
+    const thisValue = this.get('value');
+    const value = thisValue === undefined ? props.arguments : thisValue;
     return JSON.stringify(value, null, this.get('space'));
   }
 }

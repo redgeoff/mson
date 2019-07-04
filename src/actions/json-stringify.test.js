@@ -18,3 +18,17 @@ it('should stringify', async () => {
   await shouldStringify();
   await shouldStringify(2);
 });
+
+it('should stringify value', async () => {
+  const jsonStringify = new JSONStringify();
+
+  const obj = {
+    foo: 'bar'
+  };
+
+  jsonStringify.set({ value: obj });
+
+  const result = await jsonStringify.act();
+
+  expect(result).toEqual(JSON.stringify(obj));
+});
