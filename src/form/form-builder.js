@@ -3,6 +3,9 @@ import FormEditor from './form-editor';
 import Tabs from '../tabs';
 import FormField from '../fields/form-field';
 import Set from '../actions/set';
+import Emit from '../actions/emit';
+import JSONStringify from '../actions/json-stringify';
+import Text from '../text';
 
 export default class FormBuilder extends Form {
   _className = 'FormBuilder';
@@ -34,8 +37,18 @@ export default class FormBuilder extends Form {
               name: 'preview',
               label: 'Preview',
               icon: 'ViewCompact'
+            },
+            {
+              name: 'export',
+              label: 'Export',
+              icon: 'code'
             }
           ]
+        }),
+
+        new Text({
+          name: 'mson',
+          hidden: true
         }),
 
         new FormField({
@@ -51,6 +64,9 @@ export default class FormBuilder extends Form {
             new Set({
               name: 'fields.form.form.editable',
               value: true
+            }),
+            new Emit({
+              event: 'hideCode'
             })
           ]
         },
@@ -61,6 +77,57 @@ export default class FormBuilder extends Form {
             new Set({
               name: 'fields.form.form.editable',
               value: false
+            }),
+            new Emit({
+              event: 'hideCode'
+            })
+          ]
+        },
+
+        {
+          event: 'fields.tabs.content.export',
+          actions: [
+            new JSONStringify({
+              value: '{{mson}}',
+              space: 2
+            }),
+            new Set({
+              name: 'fields.mson.content.text',
+              value: '```js\n{{arguments}}\n```\n'
+            }),
+            new Emit({
+              event: 'setCodeHidden',
+              value: {
+                hideCode: false,
+                hideForm: true
+              }
+            })
+          ]
+        },
+
+        {
+          event: 'setCodeHidden',
+          actions: [
+            new Set({
+              name: 'fields.mson.content.hidden',
+              value: '{{arguments.hideCode}}'
+            }),
+            new Set({
+              name: 'fields.form.hidden',
+              value: '{{arguments.hideForm}}'
+            })
+          ]
+        },
+
+        {
+          event: 'hideCode',
+          actions: [
+            new Emit({
+              event: 'setCodeHidden',
+              value: {
+                hideCode: true,
+                hideForm: false
+              }
             })
           ]
         }
