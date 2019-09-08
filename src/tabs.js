@@ -1,6 +1,6 @@
-import Component from './component';
+import UIComponent from './ui-component';
 
-export default class Tabs extends Component {
+export default class Tabs extends UIComponent {
   _className = 'Tabs';
 
   _create(props) {

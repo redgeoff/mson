@@ -1,6 +1,6 @@
-import Component from './component';
+import UIComponent from './ui-component';
 
-export default class Card extends Component {
+export default class Card extends UIComponent {
   _className = 'Card';
 
   _create(props) {

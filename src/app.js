@@ -1,6 +1,6 @@
-import Component from './component';
+import UIComponent from './ui-component';
 
-export default class App extends Component {
+export default class App extends UIComponent {
   _className = 'App';
 
   _create(props) {

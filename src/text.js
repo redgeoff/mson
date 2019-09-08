@@ -1,6 +1,6 @@
-import Component from './component';
+import UIComponent from './ui-component';
 
-export default class Text extends Component {
+export default class Text extends UIComponent {
   _className = 'Text';
 
   _create(props) {

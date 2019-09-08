@@ -1,10 +1,10 @@
 // TODO: Should all components use set and get instead of raw attributes? This way can inherit
 // setter, getter logic
 
-import Component from '../component';
+import UIComponent from '../ui-component';
 import Validator from '../component/validator';
 
-export default class Field extends Component {
+export default class Field extends UIComponent {
   _className = 'Field';
 
   _create(props) {
@@ -52,12 +52,6 @@ export default class Field extends Component {
           {
             name: 'validators',
             component: 'Field'
-          },
-          {
-            name: 'hidden',
-            component: 'BooleanField',
-            label: 'Hidden',
-            docLevel: 'basic'
           },
           {
             name: 'block',

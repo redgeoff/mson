@@ -1,4 +1,4 @@
-import Component from '../component';
+import UIComponent from '../ui-component';
 import merge from 'lodash/merge';
 import each from 'lodash/each';
 import Validator from '../component/validator';
@@ -13,7 +13,7 @@ import FormField from '../fields/form-field';
 import FormErr from './form-err';
 import ExtendedField from '../fields/extended-field';
 
-export default class Form extends Component {
+export default class Form extends UIComponent {
   _className = 'Form';
 
   _formSetMSONSchema() {
