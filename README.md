@@ -45,7 +45,7 @@ The MSON code can be found in [components](https://github.com/redgeoff/mson-reac
   4. [Displaying Markdown](https://github.com/redgeoff/mson-react/blob/master/src/demo/components/home.js)
 
 ### Autogenerate forms in React and Material-UI with MSON
-Implementing great forms can be a real time-waster. With just a few lines of JSON, you can [use MSON to generate forms](https://medium.freecodecamp.org/how-to-autogenerate-forms-in-react-and-material-ui-with-mson-5771b1b7e739) that perform real-time validation and have a consistent layout.
+Implementing great forms can be a real time-waster. With just a few lines of JSON, you can [use MSON to generate forms](https://medium.com/free-code-camp/how-to-autogenerate-forms-in-react-and-material-ui-with-mson-5771b1b7e739) that perform real-time validation and have a consistent layout.
 
 ## Language Principles
 
