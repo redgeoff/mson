@@ -7,12 +7,12 @@
   "dependencies": {
     "@babel/runtime": "^7.6.0",
     "country-telephone-data": "^0.6.0",
-    "date-fns": "^2.0.0-alpha.31",
+    "date-fns": "^2.1.0",
     "events": "^3.0.0",
-    "lodash": "^4.17.10",
-    "sift": "^8.3.3",
+    "lodash": "^4.17.15",
+    "sift": "^8.5.0",
     "text-mask-addons": "^3.8.0",
-    "uuid": "^3.3.2",
+    "uuid": "^3.3.3",
     "vanilla-text-mask": "^5.1.1"
   },
   "devDependencies": {
@@ -22,15 +22,15 @@
     "@babel/plugin-transform-runtime": "^7.6.0",
     "@babel/preset-env": "^7.3.3",
     "babel-loader": "^8.0.6",
-    "copyfiles": "^2.1.0",
-    "husky": "^3.0.0",
-    "lint-staged": "^9.0.0",
+    "copyfiles": "^2.1.1",
+    "husky": "^3.0.5",
+    "lint-staged": "^9.2.5",
     "prettier": "^1.18.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-scripts": "^3.1.1",
-    "webpack-bundle-analyzer": "^3.0.2",
-    "webpack-cli": "^3.3.3"
+    "webpack-bundle-analyzer": "^3.4.1",
+    "webpack-cli": "^3.3.8"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,json,css}": [
