@@ -1,6 +1,6 @@
-import Component from './component';
+import UIComponent from './ui-component';
 
-export default class Grid extends Component {
+export default class Grid extends UIComponent {
   _className = 'Grid';
 
   _create(props) {

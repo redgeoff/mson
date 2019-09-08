@@ -1,4 +1,4 @@
-import Component from './component';
+import UIComponent from './ui-component';
 import each from 'lodash/each';
 import querystring from 'querystring';
 
@@ -24,7 +24,7 @@ import querystring from 'querystring';
 //     ]
 //   }
 // ]
-export default class Menu extends Component {
+export default class Menu extends UIComponent {
   _className = 'Menu';
 
   _create(props) {

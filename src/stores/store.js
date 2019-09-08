@@ -31,7 +31,7 @@
 // which result in beforeIds for docs that don't exist. This problematic beforeIds cause a great
 // deal of extra complexity.
 
-import Component from '../component';
+import UIComponent from '../ui-component';
 import access from '../access';
 import utils from '../utils';
 import uberUtils from '../uber-utils';
@@ -40,7 +40,7 @@ import { Reorder } from './reorder';
 import globals from '../globals';
 import registrar from '../compiler/registrar';
 
-export default class Store extends Component {
+export default class Store extends UIComponent {
   _className = 'Store';
 
   _create(props) {
