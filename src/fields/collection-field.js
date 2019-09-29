@@ -1330,13 +1330,4 @@ export default class CollectionField extends Field {
     const form = this.moveForm({ sourceIndex, destinationIndex, muteChange });
     return this._saveForm(form);
   }
-
-  static shouldShowDialog(mode) {
-    if (mode === CollectionField.MODES.ARCHIVE) {
-      // Don't show the dialog when restoring
-      return false;
-    } else {
-      return !!mode;
-    }
-  }
 }
