@@ -22,7 +22,7 @@ export default {
   },
   fields: [
     {
-      name: '{{name}}',
+      name: 'collection',
       label: '{{label}}',
       component: 'CollectionField',
       hideLabel: true,
