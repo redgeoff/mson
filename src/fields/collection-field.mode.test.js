@@ -106,7 +106,6 @@ it('should change modes when deleting', async () => {
   const setCurrentForm = jest.spyOn(field, '_setCurrentForm');
 
   // Begin Delete
-  setEditable.mockClear();
   let beginDelete = testUtils.once(form, 'beginDelete');
   let endDelete = testUtils.once(form, 'endDelete');
   field.set({ currentForm: firstForm, mode: CollectionField.MODES.DELETE });
