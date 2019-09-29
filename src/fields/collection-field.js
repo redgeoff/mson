@@ -26,6 +26,13 @@ export default class CollectionField extends Field {
   // This value is used to limit the amount of data received from the store in one page of data
   static MAX_ITEMS_PER_PAGE = 100;
 
+  static MODES = {
+    CREATE: 'create',
+    READ: 'read',
+    UPDATE: 'update',
+    DELETE: 'delete'
+  };
+
   _create(props) {
     super._create(props);
 
@@ -157,6 +164,22 @@ export default class CollectionField extends Field {
           },
           {
             name: 'includeExtraneous',
+            component: 'BooleanField'
+          },
+          {
+            name: 'preventCreate',
+            component: 'BooleanField'
+          },
+          {
+            name: 'preventRead',
+            component: 'BooleanField'
+          },
+          {
+            name: 'preventUpdate',
+            component: 'BooleanField'
+          },
+          {
+            name: 'preventDelete',
             component: 'BooleanField'
           }
         ]
@@ -823,34 +846,42 @@ export default class CollectionField extends Field {
     this._prepareForm(form);
   }
 
-  _readMode() {
+  _switchMode(eventName, editable, emitId) {
     const form = this.get('form');
-    form.emitChange('beginRead', form.getValue('id'));
-    form.setEditable(false);
+    form.emitChange(eventName, emitId ? form.getValue('id') : undefined);
+    form.setEditable(editable);
+  }
+
+  _readMode() {
+    this._switchMode('beginRead', false, true);
   }
 
   _createMode() {
-    const form = this.get('form');
-    form.emitChange('beginCreate');
-    form.setEditable(true);
+    this._switchMode('beginCreate', true);
   }
 
   _updateMode() {
-    const form = this.get('form');
-    form.emitChange('beginUpdate', form.getValue('id'));
-    form.setEditable(true);
+    this._switchMode('beginUpdate', true, true);
+  }
+
+  _deleteMode() {
+    this._switchMode('beginDelete', false, true);
   }
 
   _emitEndEvents() {
     const form = this.get('form');
     const id = form.getValue('id');
     switch (this._mode) {
-      case 'create':
+      case CollectionField.MODES.CREATE:
         form.emitChange('endCreate', id);
         break;
 
-      case 'update':
+      case CollectionField.MODES.UPDATE:
         form.emitChange('endUpdate', id);
+        break;
+
+      case CollectionField.MODES.DELETE:
+        form.emitChange('endDelete', id);
         break;
 
       default:
@@ -869,6 +900,44 @@ export default class CollectionField extends Field {
     }
   }
 
+  _transitionMode(mode) {
+    let preventAction = false;
+
+    switch (mode) {
+      case CollectionField.MODES.CREATE:
+        this._createMode();
+        preventAction = this.get('preventCreate');
+        break;
+
+      case CollectionField.MODES.READ:
+        this._readMode();
+        preventAction = this.get('preventRead');
+        break;
+
+      case CollectionField.MODES.UPDATE:
+        this._updateMode();
+        preventAction = this.get('preventUpdate');
+        break;
+
+      case CollectionField.MODES.DELETE:
+        this._deleteMode();
+        preventAction = this.get('preventUpdate');
+        break;
+
+      default:
+        // The dialog is being closed
+        this._setParentDisableSubmit(false);
+        break;
+    }
+
+    return preventAction;
+  }
+
+  _changeMode(form, mode) {
+    form.set({ mode });
+    this._set('mode', mode);
+  }
+
   _setMode(mode) {
     // Has a previous mode?
     if (this._mode) {
@@ -883,27 +952,12 @@ export default class CollectionField extends Field {
     const form = this.get('form');
     form.set({ parent: this });
 
-    switch (mode) {
-      case 'create':
-        this._createMode();
-        break;
+    const preventAction = this._transitionMode(mode);
 
-      case 'update':
-        this._updateMode();
-        break;
-
-      case 'read':
-        this._readMode();
-        break;
-
-      default:
-        // The dialog is being closed
-        this._setParentDisableSubmit(false);
-        break;
+    // Are custom actions being used?
+    if (!preventAction) {
+      this._changeMode(form, mode);
     }
-
-    form.set({ mode });
-    this._set('mode', mode);
   }
 
   _generateForm(factory) {
@@ -1104,7 +1158,7 @@ export default class CollectionField extends Field {
       //
       // TODO: create a prop called 'readAfterSave' that sets the mode to read instead of null
       //
-      // this.set({ currentForm: fieldForm, mode: 'read' });
+      // this.set({ currentForm: fieldForm, mode: CollectionField.MODES.READ });
       this.set({ currentForm: fieldForm, mode: null });
 
       return fieldForm;

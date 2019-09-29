@@ -99,6 +99,46 @@ it('should change modes', async () => {
   expect(setEditable).toHaveBeenCalledWith(true);
 });
 
+it('should change modes when deleting', async () => {
+  const form = field.get('form');
+  const firstForm = field._forms.first();
+  const setEditable = jest.spyOn(form, 'setEditable');
+  const setCurrentForm = jest.spyOn(field, '_setCurrentForm');
+
+  // Begin Delete
+  let beginDelete = testUtils.once(form, 'beginDelete');
+  let endDelete = testUtils.once(form, 'endDelete');
+  field.set({ currentForm: firstForm, mode: CollectionField.MODES.DELETE });
+  const beginDeleteArgs = await beginDelete;
+  expect(beginDeleteArgs[0]).toEqual('ray');
+  expect(setEditable).toHaveBeenCalledTimes(1);
+  expect(setEditable).toHaveBeenCalledWith(false);
+  expect(setCurrentForm).toHaveBeenCalledTimes(1);
+  expect(setCurrentForm).toHaveBeenCalledWith(firstForm);
+
+  // Delete
+  await field.archive(firstForm);
+  field.set({ mode: null });
+  const endDeleteArgs = await endDelete;
+  expect(endDeleteArgs[0]).toEqual('ray');
+  expect(field.get('mode')).toBeNull();
+});
+
+it('should allow and prevent actions', () => {
+  const form = field.get('form');
+  const changeMode = jest.spyOn(field, '_changeMode');
+
+  // Allow action
+  field.set({ preventCreate: true });
+  field.set({ mode: 'create' });
+  expect(changeMode).toHaveBeenCalledTimes(0);
+
+  // Prevent action
+  field.set({ preventCreate: false });
+  field.set({ mode: 'create' });
+  expect(changeMode).toHaveBeenCalledTimes(1);
+});
+
 it('should set current form', () => {
   let form = field.get('form');
   const firstForm = field._forms.first();
