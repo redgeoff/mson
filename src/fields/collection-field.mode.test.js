@@ -125,6 +125,21 @@ it('should change modes when deleting', async () => {
   expect(field.get('mode')).toBeNull();
 });
 
+it('should allow and prevent actions', () => {
+  const form = field.get('form');
+  const changeMode = jest.spyOn(field, '_changeMode');
+
+  // Allow action
+  field.set({ preventCreate: true });
+  field.set({ mode: 'create' });
+  expect(changeMode).toHaveBeenCalledTimes(0);
+
+  // Prevent action
+  field.set({ preventCreate: false });
+  field.set({ mode: 'create' });
+  expect(changeMode).toHaveBeenCalledTimes(1);
+});
+
 it('should set current form', () => {
   let form = field.get('form');
   const firstForm = field._forms.first();

@@ -900,20 +900,7 @@ export default class CollectionField extends Field {
     }
   }
 
-  _setMode(mode) {
-    // Has a previous mode?
-    if (this._mode) {
-      this._emitEndEvents();
-    } else {
-      // The dialog is being opened
-      this._setParentDisableSubmit(true);
-    }
-
-    // Note: we set the parent here instead of in set() as otherwise we create a circular
-    // dependency that the Compiler doesn't support.
-    const form = this.get('form');
-    form.set({ parent: this });
-
+  _transitionMode(mode) {
     let preventAction = false;
 
     switch (mode) {
@@ -943,10 +930,33 @@ export default class CollectionField extends Field {
         break;
     }
 
+    return preventAction;
+  }
+
+  _changeMode(form, mode) {
+    form.set({ mode });
+    this._set('mode', mode);
+  }
+
+  _setMode(mode) {
+    // Has a previous mode?
+    if (this._mode) {
+      this._emitEndEvents();
+    } else {
+      // The dialog is being opened
+      this._setParentDisableSubmit(true);
+    }
+
+    // Note: we set the parent here instead of in set() as otherwise we create a circular
+    // dependency that the Compiler doesn't support.
+    const form = this.get('form');
+    form.set({ parent: this });
+
+    const preventAction = this._transitionMode(mode);
+
     // Are custom actions being used?
     if (!preventAction) {
-      form.set({ mode });
-      this._set('mode', mode);
+      this._changeMode(form, mode);
     }
   }
 
