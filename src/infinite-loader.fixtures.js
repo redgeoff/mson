@@ -182,7 +182,11 @@ export const createMockedStore = () => {
         id: props.form.getValue('id')
       };
     },
-    // archiveDoc: asyncNoop,
+    archiveDoc: async props => {
+      return {
+        id: props.id
+      };
+    },
     // restoreDoc: asyncNoop,
     on: noop
   };

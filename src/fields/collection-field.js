@@ -30,7 +30,7 @@ export default class CollectionField extends Field {
     CREATE: 'create',
     READ: 'read',
     UPDATE: 'update',
-    ARCHIVE: 'archive'
+    DELETE: 'delete'
   };
 
   _create(props) {
@@ -864,7 +864,7 @@ export default class CollectionField extends Field {
     this._switchMode('beginUpdate', true, true);
   }
 
-  _archiveMode() {
+  _deleteMode() {
     this._switchMode('beginDelete', false, true);
   }
 
@@ -880,7 +880,7 @@ export default class CollectionField extends Field {
         form.emitChange('endUpdate', id);
         break;
 
-      case CollectionField.MODES.ARCHIVE:
+      case CollectionField.MODES.DELETE:
         form.emitChange('endDelete', id);
         break;
 
@@ -932,8 +932,8 @@ export default class CollectionField extends Field {
         preventAction = this.get('preventUpdate');
         break;
 
-      case CollectionField.MODES.ARCHIVE:
-        this._archiveMode();
+      case CollectionField.MODES.DELETE:
+        this._deleteMode();
         preventAction = this.get('preventUpdate');
         break;
 
