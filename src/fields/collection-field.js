@@ -167,11 +167,11 @@ export default class CollectionField extends Field {
             component: 'BooleanField'
           },
           {
-            name: 'preventCreate',
+            name: 'preventCreateAction',
             component: 'BooleanField'
           },
           {
-            name: 'preventRead',
+            name: 'preventReadAction',
             component: 'BooleanField'
           },
           {
@@ -179,7 +179,7 @@ export default class CollectionField extends Field {
             component: 'BooleanField'
           },
           {
-            name: 'preventDelete',
+            name: 'preventDeleteAction',
             component: 'BooleanField'
           }
         ]
@@ -906,12 +906,12 @@ export default class CollectionField extends Field {
     switch (mode) {
       case CollectionField.MODES.CREATE:
         this._createMode();
-        preventAction = this.get('preventCreate');
+        preventAction = this.get('preventCreateAction');
         break;
 
       case CollectionField.MODES.READ:
         this._readMode();
-        preventAction = this.get('preventRead');
+        preventAction = this.get('preventReadAction');
         break;
 
       case CollectionField.MODES.UPDATE:

@@ -129,12 +129,12 @@ it('should allow and prevent actions', () => {
   const changeMode = jest.spyOn(field, '_changeMode');
 
   // Allow action
-  field.set({ preventCreate: true });
+  field.set({ preventCreateAction: true });
   field.set({ mode: 'create' });
   expect(changeMode).toHaveBeenCalledTimes(0);
 
   // Prevent action
-  field.set({ preventCreate: false });
+  field.set({ preventCreateAction: false });
   field.set({ mode: 'create' });
   expect(changeMode).toHaveBeenCalledTimes(1);
 });
