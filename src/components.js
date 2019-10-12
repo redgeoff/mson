@@ -18,6 +18,7 @@ import CityField from './fields/city-field';
 import Component from './component/component';
 import CollectionField from './fields/collection-field';
 import ComponentField from './fields/component-field';
+import ComponentForm from './fields/component-form';
 import CompositeField from './fields/composite-field';
 import ConsoleLog from './actions/console-log';
 import ContactUs from './aggregate/contact-us';
@@ -115,6 +116,7 @@ export default {
   CollectionField,
   Component,
   ComponentField,
+  ComponentForm,
   CompositeField,
   ConsoleLog,
   ContactUs,
