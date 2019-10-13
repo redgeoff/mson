@@ -6,24 +6,21 @@ export default {
       component: 'LogInToApp'
     },
     {
-      if: {
-        globals: {
-          redirectAfterLogin: null
-        }
-      },
-      component: 'Redirect',
-      path: '/'
-    },
-    {
       component: 'Action',
       if: {
         globals: {
           redirectAfterLogin: {
-            $ne: null
+            $in: [null, undefined]
           }
         }
       },
       actions: [
+        {
+          component: 'Redirect',
+          path: '/'
+        }
+      ],
+      else: [
         {
           component: 'Redirect',
           path: '{{globals.redirectAfterLogin}}'
