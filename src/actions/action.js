@@ -55,7 +55,7 @@ export default class Action extends Component {
   _fill(prop) {
     const propFiller = new PropFiller(this._fillerProps);
 
-    // Fill with props from coponent first so that we define default values in the component like
+    // Fill with props from component first so that we define default values in the component like
     // {{fields.to.value}} that are then filled via the second fill.
     prop = propFiller.fill(prop);
     prop = propFiller.fill(prop); // Yes, this duplicate is needed!
