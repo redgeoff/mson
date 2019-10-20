@@ -1,5 +1,5 @@
 import Form from './form';
-import TextField from '../fields/text-field';
+import Field from '../fields/field';
 
 // Note: we use JS to define the component so that we can use `instanceof ComponentForm`
 export default class ComponentForm extends Form {
@@ -9,7 +9,8 @@ export default class ComponentForm extends Form {
     super._create(props);
 
     const fields = [
-      new TextField({
+      // A JSON blob defining the component
+      new Field({
         name: 'definition',
         label: 'Definition',
         required: true
