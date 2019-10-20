@@ -160,6 +160,7 @@ it('should set current form', () => {
   // currentForm is null
   field._setCurrentForm(null);
   form = field.get('form');
+  expect(form.isLoaded()).toBe(true); // didLoad event required for dynamic forms
   expect(prepareForm).toHaveBeenCalledTimes(1);
   expect(destroy).toHaveBeenCalledTimes(1);
   expect(generateForm).toHaveBeenCalledTimes(1);

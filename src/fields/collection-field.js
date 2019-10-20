@@ -224,17 +224,22 @@ export default class CollectionField extends Field {
     this._listenForScroll();
   }
 
+  _generateFormAndEmitLoad() {
+    this._generateForm(this.get('formFactory'));
+
+    // Emit load so that form can complete any listeners, e.g. taking snapshot
+    const form = this.get('form');
+    form.emitLoad();
+    return form;
+  }
+
   _listenForLoaded() {
     this.on('didLoad', async () => {
       // Wait for loaded event so that we have had a chance to load options, etc...
 
       if (this.get('formFactory')) {
         // Regenerate the form so that we have one that has any loaded data
-        this._generateForm(this.get('formFactory'));
-
-        // Emit load so that form can complete any listeners, e.g. taking snapshot
-        const form = this.get('form');
-        form.emitLoad();
+        this._generateFormAndEmitLoad();
       }
 
       this._resetInfiniteLoader();
@@ -838,7 +843,7 @@ export default class CollectionField extends Field {
       form.destroy();
 
       // Generate a new form so that we have any initial values and structure
-      form = this._generateForm(this.get('formFactory'));
+      form = this._generateFormAndEmitLoad();
     } else {
       this._copyValuesToCurrentForm(form, currentForm);
       this._set('currentForm', currentForm);
