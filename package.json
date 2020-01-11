@@ -8,7 +8,7 @@
     "@babel/runtime": "^7.6.0",
     "country-telephone-data": "^0.6.0",
     "date-fns": "^2.2.1",
-    "events": "^3.0.0",
+    "events": "^3.1.0",
     "lodash": "^4.17.15",
     "sift": "^9.0.0",
     "text-mask-addons": "^3.8.0",
@@ -23,13 +23,13 @@
     "@babel/preset-env": "^7.3.3",
     "babel-loader": "^8.0.6",
     "copyfiles": "^2.1.1",
-    "cross-env": "^6.0.0",
-    "husky": "^4.0.2",
-    "lint-staged": "^9.3.0",
-    "prettier": "^1.18.2",
+    "cross-env": "^6.0.3",
+    "husky": "^4.0.6",
+    "lint-staged": "^9.5.0",
+    "prettier": "^1.19.1",
     "react-scripts": "^3.1.2",
     "webpack-bundle-analyzer": "^3.5.1",
-    "webpack-cli": "^3.3.9"
+    "webpack-cli": "^3.3.10"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,json,css}": [
