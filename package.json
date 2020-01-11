@@ -7,7 +7,7 @@
   "dependencies": {
     "@babel/runtime": "^7.6.0",
     "country-telephone-data": "^0.6.0",
-    "date-fns": "^2.2.1",
+    "date-fns": "^2.9.0",
     "events": "^3.1.0",
     "lodash": "^4.17.15",
     "sift": "^9.0.0",
@@ -28,7 +28,7 @@
     "lint-staged": "^9.5.0",
     "prettier": "^1.19.1",
     "react-scripts": "^3.1.2",
-    "webpack-bundle-analyzer": "^3.5.1",
+    "webpack-bundle-analyzer": "^3.6.0",
     "webpack-cli": "^3.3.10"
   },
   "lint-staged": {
