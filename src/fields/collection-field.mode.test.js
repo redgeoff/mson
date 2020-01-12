@@ -125,7 +125,6 @@ it('should change modes when deleting', async () => {
 });
 
 it('should allow and prevent actions', () => {
-  const form = field.get('form');
   const changeMode = jest.spyOn(field, '_changeMode');
 
   // Allow action
