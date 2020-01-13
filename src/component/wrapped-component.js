@@ -61,11 +61,9 @@ export default class WrappedComponent extends BaseComponent {
         name.indexOf('__') === -1
       ) {
         const property = this._componentToWrap[name];
-        if (this._componentToWrap[name]) {
-          this[name] = (...args) => {
-            return property.apply(this._componentToWrap, args);
-          };
-        }
+        this[name] = (...args) => {
+          return property.apply(this._componentToWrap, args);
+        };
       }
     });
 
