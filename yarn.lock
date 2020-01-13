@@ -10420,10 +10420,10 @@ shellwords@^0.1.1:
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.1.tgz#d6b9181c1a48d397324c84871efbcfc73fc0654b"
   integrity sha512-vFwSUfQvqybiICwZY5+DAWIPLKsWO31Q91JSKl3UYv+K5c2QRPzn0qzec6QPu1Qc9eHYItiP3NdJqNVqetYAww==
 
-sift@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/sift/-/sift-9.0.0.tgz#6161a8a8c715fab28fb6044199137e8d3b521eae"
-  integrity sha512-jAd/cPlBHqfTORB0VV+Dilu+Vhw5Cmvp1C5lXPMce3V3jX5GW/9DpaV3HnGia2PUV+AQ5NRT0VDIQmsb72sE/g==
+sift@^11.0.0:
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/sift/-/sift-11.0.0.tgz#6816e0e02defec417a3bc00c471d621168c5add6"
+  integrity sha512-k+UWPzqFSfQoMZm0jEwRj5ps2spYAPF95/JntIprpUVLULtQM/Um0PAzldydq2Tqw2nXvxx3hu3zYhn2RsVAtA==
 
 signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"
