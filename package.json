@@ -23,7 +23,7 @@
     "@babel/preset-env": "^7.7.7",
     "babel-loader": "^8.0.6",
     "copyfiles": "^2.1.1",
-    "cross-env": "^6.0.3",
+    "cross-env": "^7.0.0",
     "husky": "^4.0.6",
     "lint-staged": "^9.5.0",
     "prettier": "^1.19.1",
