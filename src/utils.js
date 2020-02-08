@@ -43,7 +43,12 @@ export class Utils {
     const methods = [];
     while ((obj = Reflect.getPrototypeOf(obj))) {
       const keys = Reflect.ownKeys(obj);
-      keys.forEach(k => methods.push(k));
+      keys.forEach(k => {
+        // Prevent considering things like symbols
+        if (typeof obj[k] === 'function') {
+          methods.push(k);
+        }
+      });
     }
     return methods;
   }
