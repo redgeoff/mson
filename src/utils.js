@@ -41,14 +41,21 @@ export class Utils {
   // Source: https://stackoverflow.com/a/40577337/2831606
   getAllMethodNames(obj) {
     const methods = [];
-    while ((obj = Reflect.getPrototypeOf(obj))) {
-      const keys = Reflect.ownKeys(obj);
-      keys.forEach(k => {
+
+    // Note: this silly function is needed to prevent eslint from complaining about "Function
+    // declared in a loop contains unsafe references to variable(s)"
+    const fun = obj => {
+      return k => {
         // Prevent considering things like symbols
         if (typeof obj[k] === 'function') {
           methods.push(k);
         }
-      });
+      };
+    };
+
+    while ((obj = Reflect.getPrototypeOf(obj))) {
+      const keys = Reflect.ownKeys(obj);
+      keys.forEach(fun(obj));
     }
     return methods;
   }
