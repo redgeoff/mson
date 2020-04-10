@@ -1,7 +1,6 @@
 import reduce from 'lodash/reduce';
 import each from 'lodash/each';
-import uuid from 'uuid';
-
+import { v4 as uuidv4 } from 'uuid';
 export class Utils {
   constructor() {
     // For mocking
@@ -44,8 +43,8 @@ export class Utils {
 
     // Note: this silly function is needed to prevent eslint from complaining about "Function
     // declared in a loop contains unsafe references to variable(s)"
-    const fun = obj => {
-      return k => {
+    const fun = (obj) => {
+      return (k) => {
         // Prevent considering things like symbols
         if (typeof obj[k] === 'function') {
           methods.push(k);
@@ -74,7 +73,7 @@ export class Utils {
   combineWheres(...wheres) {
     const and = [];
 
-    wheres.forEach(where => {
+    wheres.forEach((where) => {
       if (where) {
         and.push(where);
       }
@@ -84,7 +83,7 @@ export class Utils {
       return and[0];
     } else {
       return {
-        $and: and
+        $and: and,
       };
     }
   }
@@ -101,33 +100,33 @@ export class Utils {
 
     const ands = [];
 
-    words.forEach(word => {
+    words.forEach((word) => {
       const ors = [];
-      attributes.forEach(attr => {
+      attributes.forEach((attr) => {
         ors.push({
           [attr]: {
             // We need to use iLike as like is not case sensitive with binary (like JSON) data
-            $iLike: word + '%'
-          }
+            $iLike: word + '%',
+          },
         });
       });
       ands.push({
-        $or: ors
+        $or: ors,
       });
     });
 
     return {
-      $and: ands
+      $and: ands,
     };
   }
 
   uuid() {
-    return uuid.v4();
+    return uuidv4();
   }
 
   once(emitter, evnt) {
-    return new Promise(function(resolve) {
-      emitter.once(evnt, function() {
+    return new Promise(function (resolve) {
+      emitter.once(evnt, function () {
         resolve(arguments);
       });
     });
