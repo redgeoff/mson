@@ -9,11 +9,11 @@ const createAction = () => {
   return new Set({
     if: {
       label: {
-        $eq: 'First Name'
-      }
+        $eq: 'First Name',
+      },
     },
     name: 'value',
-    value: 'Jack'
+    value: 'Jack',
   });
 };
 
@@ -22,13 +22,13 @@ const createActions = () => {
     actions: [
       new Set({
         name: 'value',
-        value: 'Jack'
+        value: 'Jack',
       }),
       new Set({
         name: 'hidden',
-        value: true
-      })
-    ]
+        value: true,
+      }),
+    ],
   });
 };
 
@@ -37,7 +37,7 @@ it('should act', async () => {
   const field = new TextField({ name: 'firstName ', label: 'First Name' }); // Note: trailing space on purpose
   const args = await action.run({
     arguments: 'foo',
-    component: field
+    component: field,
   });
   expect(field.getValue()).toEqual('Jack');
   expect(args).toEqual('foo');
@@ -48,7 +48,7 @@ it('should perform multiple actions', async () => {
   const field = new TextField({ name: 'firstName' });
   const args = await actions.run({
     arguments: 'foo',
-    component: field
+    component: field,
   });
   expect(field.getValue()).toEqual('Jack');
   expect(field.get('hidden')).toEqual(true);
@@ -67,7 +67,7 @@ it('should handle undefined props', async () => {
   await action.run();
 
   action = new Action({
-    actions: [logOutOfApp]
+    actions: [logOutOfApp],
   });
   await action.run();
 });
@@ -79,29 +79,29 @@ it('should filter by globals', async () => {
         session: {
           user: {
             roleNames: {
-              $in: ['admin']
-            }
-          }
-        }
-      }
+              $in: ['admin'],
+            },
+          },
+        },
+      },
     },
     name: 'value',
-    value: 'Jack'
+    value: 'Jack',
   });
 
   // Mock
   action._componentFillerProps._getSession = () => {
     return {
       user: {
-        roleNames: ['admin']
-      }
+        roleNames: ['admin'],
+      },
     };
   };
 
   const field = new TextField({ name: 'firstName' });
 
   await action.run({
-    component: field
+    component: field,
   });
   expect(field.getValue()).toEqual('Jack');
 });
@@ -115,40 +115,40 @@ it('should perform two-stage filling', async () => {
       fields: [
         {
           name: 'body',
-          component: 'TextField'
-        }
-      ]
+          component: 'TextField',
+        },
+      ],
     },
     fields: [
       {
         name: 'body',
-        component: 'TextField'
+        component: 'TextField',
       },
       {
         name: 'foo',
-        component: 'TextField'
-      }
-    ]
+        component: 'TextField',
+      },
+    ],
   });
   form.setValues({
-    body: 'body from field'
+    body: 'body from field',
   });
 
   const set = new Set({
     name: 'fields.foo.value',
-    value: '{{body}}'
+    value: '{{body}}',
   });
 
   // Value is set by default, e.g. {{fields.body.value}}
   await set.run({
-    component: form
+    component: form,
   });
   expect(form.getValue('foo')).toEqual('body from field');
 
   // Value is set by property
   form.set({ body: 'body from override' });
   await set.run({
-    component: form
+    component: form,
   });
   expect(form.getValue('foo')).toEqual('body from override');
 });
@@ -157,24 +157,24 @@ it('should filter by arguments', async () => {
   const action = new Set({
     if: {
       arguments: {
-        $ne: null
-      }
+        $ne: null,
+      },
     },
     name: 'value',
-    value: 'Jack'
+    value: 'Jack',
   });
 
   const field = new TextField({ name: 'firstName' });
 
   await action.run({
     component: field,
-    arguments: null
+    arguments: null,
   });
   expect(field.getValue()).toBeUndefined();
 
   await action.run({
     component: field,
-    arguments: {}
+    arguments: {},
   });
   expect(field.getValue()).toEqual('Jack');
 });
@@ -191,14 +191,14 @@ class SetNameAction extends Action {
         fields: [
           {
             name: 'thing',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'value',
-            component: 'TextField'
-          }
-        ]
-      }
+            component: 'TextField',
+          },
+        ],
+      },
     });
   }
 
@@ -219,12 +219,12 @@ it('should share components', async () => {
 
 it('should fill with any field property', async () => {
   const form = new Form({
-    fields: [new TextField({ name: 'firstName', useDisplayValue: false })]
+    fields: [new TextField({ name: 'firstName', useDisplayValue: false })],
   });
 
   const action = new Set({
     name: 'fields.firstName.value',
-    value: '{{fields.firstName.useDisplayValue}}'
+    value: '{{fields.firstName.useDisplayValue}}',
   });
 
   await action.run({ component: form });
@@ -237,20 +237,20 @@ it('should branch', async () => {
   // An action with actions and an else block
   const action = new Action({
     if: {
-      value: 'Nina'
+      value: 'Nina',
     },
     actions: [
       new Set({
         name: 'value',
-        value: 'Ella'
-      })
+        value: 'Ella',
+      }),
     ],
     else: [
       new Set({
         name: 'value',
-        value: 'Nina'
-      })
-    ]
+        value: 'Nina',
+      }),
+    ],
   });
 
   await action.run({ component: field });
@@ -262,10 +262,10 @@ it('should branch', async () => {
   // When the action doesn't have nested actions
   const set = new Set({
     if: {
-      value: 'Nina'
+      value: 'Nina',
     },
     name: 'value',
-    value: 'Ella'
+    value: 'Ella',
   });
 
   field.setValue('Billie');
@@ -282,31 +282,31 @@ it('should filter by nested properties', async () => {
     if: {
       parent: {
         parent: {
-          name: 'grandparent'
-        }
-      }
+          name: 'grandparent',
+        },
+      },
     },
     name: 'value',
-    value: 'Jack'
+    value: 'Jack',
   });
 
   const field = new TextField({
     name: 'firstName',
     parent: new TextField({
       name: 'parent',
-      parent: new TextField({ name: 'granddad' })
-    })
+      parent: new TextField({ name: 'granddad' }),
+    }),
   });
 
   await action.run({
-    component: field
+    component: field,
   });
   expect(field.getValue()).toBeUndefined();
 
   field.set({ 'parent.parent.name': 'grandparent' });
 
   await action.run({
-    component: field
+    component: field,
   });
   expect(field.getValue()).toEqual('Jack');
 });
@@ -314,19 +314,19 @@ it('should filter by nested properties', async () => {
 it('should get nested property', async () => {
   const action = new Set({
     name: 'value',
-    value: '{{parent.parent.name}}'
+    value: '{{parent.parent.name}}',
   });
 
   const field = new TextField({
     name: 'firstName',
     parent: new TextField({
       name: 'parent',
-      parent: new TextField({ name: 'grandparent' })
-    })
+      parent: new TextField({ name: 'grandparent' }),
+    }),
   });
 
   await action.run({
-    component: field
+    component: field,
   });
   expect(field.getValue()).toEqual('grandparent');
 });
@@ -340,22 +340,22 @@ it('should retrieve parent properties', async () => {
       fields: [
         {
           name: 'foo',
-          component: 'Field'
-        }
-      ]
+          component: 'Field',
+        },
+      ],
     },
     actions: [
       new Set({
         name: 'value',
-        value: '{{action.foo}}'
-      })
-    ]
+        value: '{{action.foo}}',
+      }),
+    ],
   });
 
   action.set({ foo: 'bar' });
 
   await action.run({
-    component: field
+    component: field,
   });
   expect(field.getValue()).toEqual('bar');
 });

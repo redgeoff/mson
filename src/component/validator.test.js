@@ -8,8 +8,8 @@ it('should fill props', () => {
     year: 2018,
     value: {
       firstName: 'Jane',
-      lastName: 'Doe'
-    }
+      lastName: 'Doe',
+    },
   });
 
   expect(validator._fillProps('{{foo}} {{yar}}')).toEqual('bar nar');
@@ -24,56 +24,56 @@ it('should fill where', () => {
   let validator = new Validator({
     length: 20,
     maxLength: 10,
-    value: 'foo'
+    value: 'foo',
   });
 
   let where1 = {
     length: {
-      $gt: '{{maxLength}}'
-    }
+      $gt: '{{maxLength}}',
+    },
   };
 
   validator._fillWhere(where1);
   expect(where1).toEqual({
     length: {
-      $gt: 10
-    }
+      $gt: 10,
+    },
   });
 
   let where2 = {
     value: {
-      $eq: '{{value}}'
-    }
+      $eq: '{{value}}',
+    },
   };
 
   validator._fillWhere(where2);
   expect(where2).toEqual({
     value: {
-      $eq: 'foo'
-    }
+      $eq: 'foo',
+    },
   });
 
   let where3 = {
     $or: {
       length: {
-        $gt: '{{maxLength}}'
+        $gt: '{{maxLength}}',
       },
       value: {
-        $eq: '{{value}}'
-      }
-    }
+        $eq: '{{value}}',
+      },
+    },
   };
 
   validator._fillWhere(where3);
   expect(where3).toEqual({
     $or: {
       length: {
-        $gt: 10
+        $gt: 10,
       },
       value: {
-        $eq: 'foo'
-      }
-    }
+        $eq: 'foo',
+      },
+    },
   });
 });
 
@@ -90,7 +90,7 @@ class ArrayGetter {
 it('should validate with rules', () => {
   const getter = new ArrayGetter({
     length: 20,
-    maxLength: 10
+    maxLength: 10,
   });
 
   let validator = new Validator(getter);
@@ -99,22 +99,22 @@ it('should validate with rules', () => {
     {
       where: {
         length: {
-          $gt: '{{maxLength}}'
-        }
+          $gt: '{{maxLength}}',
+        },
       },
-      error: '{{maxLength}} characters or less'
+      error: '{{maxLength}} characters or less',
     },
     {
       where: {
         length: {
-          $gt: '{{maxLength}}'
-        }
+          $gt: '{{maxLength}}',
+        },
       },
       error: {
         field: 'some-target',
-        error: '{{length}} is too many'
-      }
-    }
+        error: '{{length}} is too many',
+      },
+    },
   ];
 
   expect(validator._validateWithRule(rules[0])).toEqual(
@@ -127,8 +127,8 @@ it('should validate with rules', () => {
     '10 characters or less',
     {
       field: 'some-target',
-      error: '20 is too many'
-    }
+      error: '20 is too many',
+    },
   ]);
 
   // Simulate the user changing the length
@@ -140,7 +140,7 @@ it('should validate with escaped regex', () => {
   // console.log(/\d/.test('secret1'))
 
   const getter = new ArrayGetter({
-    password: 'secret'
+    password: 'secret',
   });
 
   let validator = new Validator(getter);
@@ -151,20 +151,20 @@ it('should validate with escaped regex', () => {
         fields: {
           password: {
             $not: {
-              $regex: '\\d'
-            }
-          }
-        }
+              $regex: '\\d',
+            },
+          },
+        },
       },
-      error: 'must contain a number'
-    }
+      error: 'must contain a number',
+    },
   ];
 
   expect(validator.validate(rules)).toEqual(['must contain a number']);
 
   // Simulate the user changing the password
   validator._props.props.fields = {
-    password: 'secret1'
+    password: 'secret1',
   };
   expect(validator.validate(rules)).toEqual([]);
 });

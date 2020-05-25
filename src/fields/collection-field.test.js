@@ -11,11 +11,11 @@ import Factory from '../component/factory';
 
 const formName = utils.uuid();
 
-const createForm = props => {
+const createForm = (props) => {
   return new Form({
     fields: [
       new TextField({ name: 'firstName', label: 'First Name', required: true }),
-      new TextField({ name: 'lastName', label: 'Last Name', required: true })
+      new TextField({ name: 'lastName', label: 'Last Name', required: true }),
     ],
 
     // Needed so that parent is populated in fillerProps
@@ -24,35 +24,35 @@ const createForm = props => {
         event: 'foo',
         actions: [
           new Emit({
-            event: 'didFoo'
-          })
-        ]
-      }
+            event: 'didFoo',
+          }),
+        ],
+      },
     ],
 
-    ...props
+    ...props,
   });
 };
 
-const createField = props => {
+const createField = (props) => {
   return new CollectionField({
     label: 'People',
     singularLabel: 'Person',
     formFactory: new Factory({
-      product: () => createForm()
+      product: () => createForm(),
     }),
-    ...props
+    ...props,
   });
 };
 
-const fillDocs = field => {
+const fillDocs = (field) => {
   field.addForm({
     values: { id: 1, firstName: 'Ella', lastName: 'Fitzgerald' },
-    synchronous: true
+    synchronous: true,
   });
   field.addForm({
     values: { id: 2, firstName: 'Frank', lastName: 'Sinatra' },
-    synchronous: true
+    synchronous: true,
   });
 };
 
@@ -62,13 +62,13 @@ beforeAll(() => {
     fields: [
       {
         name: 'firstName',
-        component: 'TextField'
+        component: 'TextField',
       },
       {
         name: 'lastName',
-        component: 'TextField'
-      }
-    ]
+        component: 'TextField',
+      },
+    ],
   });
 });
 
@@ -92,13 +92,13 @@ it('should get forms', async () => {
     ...defaults,
     id: 1,
     firstName: 'Ella',
-    lastName: 'Fitzgerald'
+    lastName: 'Fitzgerald',
   });
   expect(forms[1].getValues()).toEqual({
     ...defaults,
     id: 2,
     firstName: 'Frank',
-    lastName: 'Sinatra'
+    lastName: 'Sinatra',
   });
 });
 
@@ -109,13 +109,13 @@ it('should set and get value', async () => {
     {
       id: 1,
       firstName: 'John',
-      lastName: 'Legend'
+      lastName: 'Legend',
     },
     {
       id: 2,
       firstName: 'John',
-      lastName: 'Lennon'
-    }
+      lastName: 'Lennon',
+    },
   ];
 
   field.setValue(value);
@@ -125,12 +125,12 @@ it('should set and get value', async () => {
   expect(field.getValue()).toEqual([
     {
       ...defaults,
-      ...value[0]
+      ...value[0],
     },
     {
       ...defaults,
-      ...value[1]
-    }
+      ...value[1],
+    },
   ]);
 });
 
@@ -139,12 +139,12 @@ it('should clear errors for nested forms', async () => {
   await field.setValue([
     {
       firstName: null,
-      lastName: null
+      lastName: null,
     },
     {
       firstName: null,
-      lastName: null
-    }
+      lastName: null,
+    },
   ]);
   field.validate();
   expect(field.hasErr()).toBe(true);
@@ -159,7 +159,7 @@ it('should set properties for nested forms', () => {
     disabled: true,
     editable: true,
     touched: false,
-    pristine: true
+    pristine: true,
   };
 
   const field = createField();
@@ -179,7 +179,7 @@ it('should set properties for nested forms', () => {
 it('should bubble up properties', async () => {
   const properties = {
     dirty: true,
-    touched: true
+    touched: true,
   };
 
   const field = createField();
@@ -219,24 +219,24 @@ it('should report bad types', () => {
     [
       {
         firstName: 'Stevie',
-        lastName: 'Wonder'
-      }
+        lastName: 'Wonder',
+      },
     ],
     [],
-    null
+    null,
   ]);
 
   testUtils.expectValuesToBeInvalid(
     field,
     [
       {
-        foo: 'must not be object'
+        foo: 'must not be object',
       },
       ['must not be array'],
       false,
       1,
       1.0,
-      'must not be string'
+      'must not be string',
     ],
     [{ error: 'must be an array of objects' }]
   );
@@ -250,7 +250,7 @@ it('should clear props on unload', () => {
     order: null,
     mode: null,
     searchString: null,
-    showArchived: false
+    showArchived: false,
   });
 });
 
@@ -264,7 +264,7 @@ it('should set defaults', () => {
       'spacerHeight',
       'order',
       'mode',
-      'showArchived'
+      'showArchived',
     ])
   ).toEqual({
     scrollThreshold: CollectionField.SCROLLTHRESHOLD_DEFAULT,
@@ -273,7 +273,7 @@ it('should set defaults', () => {
     spacerHeight: 0,
     order: null,
     mode: null,
-    showArchived: false
+    showArchived: false,
   });
 });
 
@@ -290,11 +290,11 @@ it('save add form', async () => {
   const ella = { id: 1, firstName: 'Ella', lastName: 'Fitzgerald' };
   const form1 = field.addForm({
     form,
-    values: ella
+    values: ella,
   });
   expect(form1.getValues()).toEqual({
     ...testUtils.toDefaultFieldsObject(undefined),
-    ...ella
+    ...ella,
   });
   expect(addForm).toHaveBeenCalledTimes(1);
   expect(addFormSynchronous).toHaveBeenCalledTimes(0);
@@ -304,11 +304,11 @@ it('save add form', async () => {
   // Add asynchronously
   const ray = { id: 2, firstName: 'Ray', lastName: 'Charles' };
   const form2 = await field.addForm({
-    values: ray
+    values: ray,
   });
   expect(form2.getValues()).toEqual({
     ...testUtils.toDefaultFieldsObject(null),
-    ...ray
+    ...ray,
   });
   expect(addForm).toHaveBeenCalledTimes(2);
   expect(addFormSynchronous).toHaveBeenCalledTimes(0);
@@ -318,11 +318,11 @@ it('save add form', async () => {
   const frank = { id: 2, firstName: 'Frank', lastName: 'Sinatra' };
   const form3 = field.addForm({
     values: frank,
-    synchronous: true
+    synchronous: true,
   });
   expect(form3.getValues()).toEqual({
     ...testUtils.toDefaultFieldsObject(undefined),
-    ...frank
+    ...frank,
   });
   expect(addForm).toHaveBeenCalledTimes(3);
   expect(addFormSynchronous).toHaveBeenCalledTimes(1);
@@ -337,7 +337,7 @@ it('save update form', async () => {
   const ella = { id: 1, firstName: 'Ella', lastName: 'Fitzgerald' };
   const form1 = field.addForm({
     form,
-    values: ella
+    values: ella,
   });
 
   // Update
@@ -345,18 +345,18 @@ it('save update form', async () => {
   ella.lastName = 'Fitz';
   const form2 = field.updateForm({
     form: form1,
-    values: ella
+    values: ella,
   });
   expect(form2.getValues()).toEqual({
     ...testUtils.toDefaultFieldsObject(undefined),
-    ...ella
+    ...ella,
   });
   expect(calcValueSpy).toHaveBeenCalledTimes(1);
   expect(field.getValue()).toEqual([
     {
       ...testUtils.toDefaultFieldsObject(undefined),
-      ...ella
-    }
+      ...ella,
+    },
   ]);
 });
 
@@ -368,7 +368,7 @@ it('save remove form', async () => {
   const ella = { id: 1, firstName: 'Ella', lastName: 'Fitzgerald' };
   const form1 = field.addForm({
     form,
-    values: ella
+    values: ella,
   });
 
   // Remove
@@ -376,7 +376,7 @@ it('save remove form', async () => {
   const form2 = field.removeForm(form1.getValue('id'));
   expect(form2.getValues()).toEqual({
     ...testUtils.toDefaultFieldsObject(undefined),
-    ...ella
+    ...ella,
   });
   expect(calcValueSpy).toHaveBeenCalledTimes(1);
   expect(field.getValue()).toEqual([]);
@@ -401,7 +401,7 @@ it('save should handle errors', async () => {
   // No errors
   form.setValues({
     firstName: 'First',
-    lastName: 'Last'
+    lastName: 'Last',
   });
   await field.save();
   expect(saveFormSpy).toHaveBeenCalledTimes(1);
@@ -410,13 +410,13 @@ it('save should handle errors', async () => {
   expect(setSpy).toHaveBeenCalledWith({
     currentForm: createdForm,
     // mode: 'read'
-    mode: null
+    mode: null,
   });
 });
 
-const updateDocMock = () => async props => {
+const updateDocMock = () => async (props) => {
   return {
-    id: props.form.getValue('id')
+    id: props.form.getValue('id'),
   };
 };
 
@@ -425,11 +425,11 @@ it('should save', async () => {
 
   const store = {
     createDoc: async () => ({
-      id: 'myId'
+      id: 'myId',
     }),
     updateDoc: updateDocMock,
     on: () => {},
-    removeAllListeners: () => {}
+    removeAllListeners: () => {},
   };
 
   field.set({ store });
@@ -440,7 +440,7 @@ it('should save', async () => {
   const jack = {
     firstName: 'Jack',
     lastName: 'Johnson',
-    userId: 'myUserId'
+    userId: 'myUserId',
   };
 
   const form = field.get('form');
@@ -481,14 +481,14 @@ it('should archive', async () => {
   const store = {
     updateDoc: updateDocMock,
     archiveDoc: async () => ({
-      archivedAt: archivedAt.getValue()
+      archivedAt: archivedAt.getValue(),
     }),
     on: () => {},
-    removeAllListeners: () => {}
+    removeAllListeners: () => {},
   };
 
   field._globals = {
-    displaySnackbar: () => {}
+    displaySnackbar: () => {},
   };
 
   field.set({ store });
@@ -499,7 +499,7 @@ it('should archive', async () => {
   const jack = {
     id: 'jack',
     firstName: 'Jack',
-    lastName: 'Johnson'
+    lastName: 'Johnson',
   };
 
   const form = field.get('form');
@@ -515,7 +515,7 @@ it('should archive', async () => {
   expect(archiveSpy).toHaveBeenCalledWith({
     form,
     id: form.getValue('id'),
-    reorder: false
+    reorder: false,
   });
   expect(form.getValue('archivedAt')).toEqual(archivedAt.getValue());
   expect(field.getValue()).toHaveLength(0);
@@ -540,11 +540,11 @@ it('should restore', async () => {
     updateDoc: updateDocMock,
     restoreDoc: async () => {},
     on: () => {},
-    removeAllListeners: () => {}
+    removeAllListeners: () => {},
   };
 
   field._globals = {
-    displaySnackbar: () => {}
+    displaySnackbar: () => {},
   };
 
   field.set({ store });
@@ -556,7 +556,7 @@ it('should restore', async () => {
     id: 'jack',
     archivedAt,
     firstName: 'Jack',
-    lastName: 'Johnson'
+    lastName: 'Johnson',
   };
 
   const form = field.get('form');
@@ -572,7 +572,7 @@ it('should restore', async () => {
   expect(restoreSpy).toHaveBeenCalledWith({
     form,
     id: form.getValue('id'),
-    reorder: false
+    reorder: false,
   });
   expect(form.getValue('archivedAt')).toBeNull();
   expect(field.getValue()).toHaveLength(0);
@@ -618,10 +618,10 @@ const searchStringWhere = {
     {
       $or: [
         { 'fieldValues.firstName': { $iLike: 'foo%' } },
-        { 'fieldValues.lastName': { $iLike: 'foo%' } }
-      ]
-    }
-  ]
+        { 'fieldValues.lastName': { $iLike: 'foo%' } },
+      ],
+    },
+  ],
 };
 
 it('should convert where to search string', () => {
@@ -675,7 +675,7 @@ it('should handle scroll', async () => {
   const scrollY = 100;
 
   field._window = {
-    scrollY
+    scrollY,
   };
   const scrollSpy = jest.spyOn(field._infiniteLoader, 'scroll');
 
@@ -690,7 +690,7 @@ it('should reach max', async () => {
 
   const jack = {
     firstName: 'Jack',
-    lastName: 'Johnson'
+    lastName: 'Johnson',
   };
 
   const form = field.get('form');
@@ -732,10 +732,10 @@ it('should set maxColumns', () => {
   const field = new CollectionField();
 
   const allowed = [1, 2, 4, 6, 12];
-  allowed.forEach(maxColumns => field.set({ maxColumns }));
+  allowed.forEach((maxColumns) => field.set({ maxColumns }));
 
   const notAllowed = [0, 3, 13];
-  notAllowed.forEach(maxColumns =>
+  notAllowed.forEach((maxColumns) =>
     expect(() => field.set({ maxColumns })).toThrow()
   );
 });
@@ -745,12 +745,12 @@ it('should destroy', () => {
   fillDocs(field);
 
   const removeAllListenersSpy = jest.spyOn(field, 'removeAllListeners');
-  const formSpies = field._forms.map(form => jest.spyOn(form, 'destroy'));
+  const formSpies = field._forms.map((form) => jest.spyOn(form, 'destroy'));
 
   field.destroy();
   expect(removeAllListenersSpy).toHaveBeenCalledTimes(1);
   expect(formSpies).toHaveLength(2);
-  formSpies.forEach(spy => expect(spy).toHaveBeenCalledTimes(1));
+  formSpies.forEach((spy) => expect(spy).toHaveBeenCalledTimes(1));
 });
 
 it('should move and save form', async () => {
@@ -762,7 +762,7 @@ it('should move and save form', async () => {
   form.setValues({
     firstName: 'Mos',
     lastName: 'Def',
-    order: 0
+    order: 0,
   });
   let mosForm = await field.save();
 
@@ -771,19 +771,19 @@ it('should move and save form', async () => {
   form.setValues({
     firstName: 'Talib',
     lastName: 'Kweli',
-    order: 1
+    order: 1,
   });
   let talibForm = await field.save();
 
   // Move
   const movedForm = await field.moveAndSaveForm({
     sourceIndex: 0,
-    destinationIndex: 1
+    destinationIndex: 1,
   });
   expect(movedForm.getValues()).toMatchObject({
     firstName: 'Mos',
     lastName: 'Def',
-    order: 1
+    order: 1,
   });
 
   // Verify that form orders were updated
@@ -791,13 +791,13 @@ it('should move and save form', async () => {
   expect(updatedTalibForm.getValues()).toMatchObject({
     firstName: 'Talib',
     lastName: 'Kweli',
-    order: 1 // Still at 1 as store will update
+    order: 1, // Still at 1 as store will update
   });
   const updatedMosForm = field.getForm(mosForm.getValue('id'));
   expect(updatedMosForm.getValues()).toMatchObject({
     firstName: 'Mos',
     lastName: 'Def',
-    order: 1
+    order: 1,
   });
 });
 
@@ -810,7 +810,7 @@ it('should move', async () => {
   form.setValues({
     firstName: 'Mos',
     lastName: 'Def',
-    order: 0
+    order: 0,
   });
   await field.save();
 
@@ -819,7 +819,7 @@ it('should move', async () => {
   form.setValues({
     firstName: 'Talib',
     lastName: 'Kweli',
-    order: 1
+    order: 1,
   });
   await field.save();
 
@@ -827,29 +827,29 @@ it('should move', async () => {
 
   // Move down
   field.moveForm({ sourceIndex: 0, destinationIndex: 1 });
-  expect(field._forms.map(form => form.getValues())).toMatchObject([
+  expect(field._forms.map((form) => form.getValues())).toMatchObject([
     {
       firstName: 'Talib',
-      order: 1 // Still at 1 as the store will change this
+      order: 1, // Still at 1 as the store will change this
     },
     {
       firstName: 'Mos',
-      order: 1
-    }
+      order: 1,
+    },
   ]);
   expect(calcValueSpy).toHaveBeenCalledTimes(1);
 
   // Move up
   field.moveForm({ sourceIndex: 1, destinationIndex: 0 });
-  expect(field._forms.map(form => form.getValues())).toMatchObject([
+  expect(field._forms.map((form) => form.getValues())).toMatchObject([
     {
       firstName: 'Mos',
-      order: 0
+      order: 0,
     },
     {
       firstName: 'Talib',
-      order: 1 // Still at 1 as the store will change this
-    }
+      order: 1, // Still at 1 as the store will change this
+    },
   ]);
 });
 
@@ -880,8 +880,8 @@ it('should get max size', () => {
 it('should map forms', () => {
   const field = createField();
   fillDocs(field);
-  expect(field.mapForms(form => form.getValue('firstName'))).toEqual([
+  expect(field.mapForms((form) => form.getValue('firstName'))).toEqual([
     'Ella',
-    'Frank'
+    'Frank',
   ]);
 });

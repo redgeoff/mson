@@ -12,22 +12,22 @@ export default class MultipleValueField extends Field {
         fields: [
           {
             name: 'minSize',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'maxSize',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'field',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'allowScalar',
-            component: 'BooleanField'
-          }
-        ]
-      }
+            component: 'BooleanField',
+          },
+        ],
+      },
     });
   }
 
@@ -69,11 +69,11 @@ export default class MultipleValueField extends Field {
 
         if (minSize !== null && value.length < minSize) {
           errors.push({
-            error: `${minSize} or more`
+            error: `${minSize} or more`,
           });
         } else if (maxSize !== null && value.length > maxSize) {
           errors.push({
-            error: `${maxSize} or less`
+            error: `${maxSize} or less`,
           });
         }
       }

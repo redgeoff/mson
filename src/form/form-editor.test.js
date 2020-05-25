@@ -14,40 +14,40 @@ const definition = {
   fields: [
     {
       component: 'Text',
-      text: '# Foo'
+      text: '# Foo',
     },
     {
       name: 'firstName',
       component: 'TextField',
-      label: 'First Name'
+      label: 'First Name',
     },
     {
       name: 'birthday',
       component: 'DateField',
-      label: 'Birthday'
-    }
-  ]
+      label: 'Birthday',
+    },
+  ],
 };
 
-const getValues = withDefaults => ({
+const getValues = (withDefaults) => ({
   fields: [
     {
       componentName: 'Text',
-      text: '# Foo'
+      text: '# Foo',
     },
     {
       id: withDefaults ? 1 : undefined,
       name: 'firstName',
       componentName: 'TextField',
-      label: 'First Name'
+      label: 'First Name',
     },
     {
       id: withDefaults ? 2 : undefined,
       name: 'birthday',
       componentName: 'DateField',
-      label: 'Birthday'
-    }
-  ]
+      label: 'Birthday',
+    },
+  ],
 });
 
 it('should set definition', () => {

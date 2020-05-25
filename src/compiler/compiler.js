@@ -80,7 +80,7 @@ export class Compiler {
       // component that will never be supplied.
       defaultProps = Object.assign({}, defaultProps, {
         muteCreate: true,
-        disableSubEvents: true
+        disableSubEvents: true,
       });
     }
 
@@ -257,7 +257,7 @@ export class Compiler {
   }
 
   registerComponents(components) {
-    each(components, component =>
+    each(components, (component) =>
       this.registerComponent(component.name, component)
     );
   }
@@ -268,7 +268,7 @@ export class Compiler {
 
   createSchemaForm(definition) {
     const component = this.newComponent({
-      component: definition.component
+      component: definition.component,
     });
 
     const Form = this._components.Form;

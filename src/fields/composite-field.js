@@ -21,24 +21,24 @@ export default class CompositeField extends Field {
         fields: [
           {
             name: 'fields',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'change',
-            component: 'Field'
-          }
-        ]
-      }
+            component: 'Field',
+          },
+        ],
+      },
     });
   }
 
   _bubbleUpTouches(field) {
     // Bubble up the touched events from the children
-    field.on('touched', touched => {
+    field.on('touched', (touched) => {
       if (touched) {
         let allTouched = true;
 
-        this.eachField(field => {
+        this.eachField((field) => {
           if (!field.get('touched')) {
             allTouched = false;
             return false; // exit loop
@@ -72,7 +72,7 @@ export default class CompositeField extends Field {
 
   _listenForChangesToField(field) {
     // Merge the value changes from the children into the parent value
-    field.on('value', value => this._setParentValue(field, value));
+    field.on('value', (value) => this._setParentValue(field, value));
 
     // Field may already have a value
     this._setParentValue(field, field.getValue());
@@ -101,14 +101,14 @@ export default class CompositeField extends Field {
   }
 
   _setFields(fields) {
-    fields.forEach(field => this._addField(field));
+    fields.forEach((field) => this._addField(field));
   }
 
   _setForAllFields(props, names) {
     let propsToSet = null;
     if (names) {
       propsToSet = {};
-      names.forEach(name => {
+      names.forEach((name) => {
         if (props[name] !== undefined) {
           propsToSet[name] = props[name];
         }
@@ -118,13 +118,13 @@ export default class CompositeField extends Field {
     }
 
     if (!isEmpty(propsToSet)) {
-      this.eachField(field => field.set(propsToSet));
+      this.eachField((field) => field.set(propsToSet));
     }
   }
 
   _setValue(value) {
     super._setValue(value);
-    this.eachField(field =>
+    this.eachField((field) =>
       field.setValue(
         value && value[field.get('name')] ? value[field.get('name')] : null
       )
@@ -182,7 +182,7 @@ export default class CompositeField extends Field {
       this._setFields(props.fields);
     }
 
-    this.eachField(field => {
+    this.eachField((field) => {
       const name = field.get('name');
       this._setIfDefined(name, props[name]);
     });
@@ -217,7 +217,7 @@ export default class CompositeField extends Field {
 
   clearErr() {
     super.clearErr();
-    this.eachField(field => field.clearErr());
+    this.eachField((field) => field.clearErr());
   }
 
   _validateField(field /*, name, last */) {
@@ -235,7 +235,7 @@ export default class CompositeField extends Field {
     if (this.isBlank()) {
       return null;
     } else {
-      return this.mapFields(field => field.getDisplayValue());
+      return this.mapFields((field) => field.getDisplayValue());
     }
   }
 
@@ -250,6 +250,6 @@ export default class CompositeField extends Field {
 
   destroy() {
     super.destroy();
-    this.eachField(field => field.destroy());
+    this.eachField((field) => field.destroy());
   }
 }

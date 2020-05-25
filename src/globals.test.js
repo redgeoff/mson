@@ -13,7 +13,7 @@ it('should redirect', () => {
 
 it('should set and execute onNavigate', () => {
   const container = {
-    onNavigate: () => {}
+    onNavigate: () => {},
   };
 
   const callback = () => {};

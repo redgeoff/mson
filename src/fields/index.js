@@ -40,5 +40,5 @@ export {
   PersonNameField,
   SelectField,
   TextField,
-  TextListField
+  TextListField,
 };

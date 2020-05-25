@@ -19,8 +19,8 @@ it('should setFormErrorsFromAPIError', () => {
   const form = new Form({
     fields: [
       new TextField({ name: 'firstName' }),
-      new TextField({ name: 'lastName' })
-    ]
+      new TextField({ name: 'lastName' }),
+    ],
   });
 
   const err = new Error();
@@ -30,11 +30,11 @@ it('should setFormErrorsFromAPIError', () => {
         error: [
           {
             field: 'firstName',
-            error: 'required'
-          }
-        ]
-      })
-    }
+            error: 'required',
+          },
+        ],
+      }),
+    },
   ];
 
   uberUtils.setFormErrorsFromAPIError(err, form);

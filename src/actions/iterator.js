@@ -17,15 +17,15 @@ export default class Iterator extends Action {
           {
             name: 'iterator',
             component: 'Field',
-            required: true
+            required: true,
           },
           {
             name: 'return',
             component: 'Field',
-            required: true
-          }
-        ]
-      }
+            required: true,
+          },
+        ],
+      },
     });
   }
 
@@ -37,7 +37,7 @@ export default class Iterator extends Action {
     const iterator = this._getProp(props, this.get('iterator'));
     const clonedProps = clone(props);
     const filler = new PropFiller(props);
-    return map(iterator, item => {
+    return map(iterator, (item) => {
       // Inject item
       clonedProps.item = item;
       filler.setProps(clonedProps);

@@ -7,7 +7,7 @@ export default class LocalStorageStore extends MemoryStore {
     const store = this._localStorage.getItem(storeName);
     if (store !== null) {
       const docs = JSON.parse(store);
-      docs.forEach(doc => {
+      docs.forEach((doc) => {
         this._docs.set(doc.id, doc);
       });
     }
@@ -32,17 +32,17 @@ export default class LocalStorageStore extends MemoryStore {
           {
             name: 'storeName',
             component: 'TextField',
-            required: true
-          }
-        ]
-      }
+            required: true,
+          },
+        ],
+      },
     });
 
     this._loadDocs(props && props.storeName);
   }
 
   _saveDocs() {
-    const docs = this._docs.map(doc => doc);
+    const docs = this._docs.map((doc) => doc);
     this._localStorage.setItem(this.get('storeName'), JSON.stringify(docs));
   }
 

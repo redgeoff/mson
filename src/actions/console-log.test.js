@@ -7,7 +7,7 @@ it('should log message', async () => {
 
   // Mock
   consoleLogAction._console = {
-    log: () => {}
+    log: () => {},
   };
 
   const logSpy = jest.spyOn(consoleLogAction._console, 'log');
@@ -25,19 +25,19 @@ it('should log property', async () => {
         name: 'firstName',
         value: {
           firstName: 'Bob',
-          lastName: 'Dylan'
-        }
-      })
-    ]
+          lastName: 'Dylan',
+        },
+      }),
+    ],
   });
 
   const consoleLogAction = new ConsoleLog({
-    message: '{{fields.firstName.value}}'
+    message: '{{fields.firstName.value}}',
   });
 
   // Mock
   consoleLogAction._console = {
-    log: () => {}
+    log: () => {},
   };
 
   const logSpy = jest.spyOn(consoleLogAction._console, 'log');
@@ -47,7 +47,7 @@ it('should log property', async () => {
 
   expect(logSpy).toHaveBeenCalledWith({
     firstName: 'Bob',
-    lastName: 'Dylan'
+    lastName: 'Dylan',
   });
 
   consoleLogAction.set({ message: '{{name}}' });

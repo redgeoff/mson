@@ -10,18 +10,18 @@ import {
   records2,
   allRecords,
   onGetAllPeople,
-  onGetItemElementMock
+  onGetItemElementMock,
 } from './infinite-loader.fixtures';
 
-const onGetItemMock = id => {
+const onGetItemMock = (id) => {
   return allRecords.get(id);
 };
 
-const onGetItemCursorMock = item => {
+const onGetItemCursorMock = (item) => {
   return item.cursor;
 };
 
-const onGetItemIdMock = item => {
+const onGetItemIdMock = (item) => {
   return item.node.id;
 };
 
@@ -55,7 +55,7 @@ const noops = {
   onGetAll: noop,
   onResizeSpacer: noop,
   onSetBufferTopId: noop,
-  onSetIsLoading: noop
+  onSetIsLoading: noop,
 };
 
 it('_getAllDebounced should debounce', async () => {
@@ -69,7 +69,7 @@ it('_getAllDebounced should debounce', async () => {
   expect(onGetAll).toHaveBeenCalledWith({
     after: null,
     before: null,
-    foo: 'bar'
+    foo: 'bar',
   });
 
   // Should be ignored as a duplicate
@@ -90,7 +90,7 @@ it('should getAll', async () => {
     Object.assign({}, noops, {
       onGetAll: onGetAllPeople,
       onGetItemsPerPage: onGetItemsPerPageMock,
-      onGetWhere: () => where
+      onGetWhere: () => where,
     })
   );
 
@@ -115,7 +115,7 @@ it('should getAll', async () => {
     before: null,
     where,
     first: 2,
-    showArchived: false
+    showArchived: false,
   });
   expect(onAddItems).toHaveBeenCalledTimes(1);
   expect(onAddItems).toHaveBeenCalledWith([ray, ella], null);
@@ -149,7 +149,7 @@ it('should getAll', async () => {
     before: null,
     first: 2,
     showArchived: false,
-    where: null
+    where: null,
   });
   expect(onAddItems).toHaveBeenCalledTimes(1);
   expect(onAddItems).toHaveBeenCalledWith([stevie, sinatra], null);
@@ -175,7 +175,7 @@ it('should getAll', async () => {
     before: 'stevieCursor',
     last: 2,
     showArchived: false,
-    where: null
+    where: null,
   });
   expect(onAddItems).toHaveBeenCalledTimes(1);
   expect(onAddItems).toHaveBeenCalledWith([ray, ella], 'ray');
@@ -191,7 +191,7 @@ it('should resizeBuffer', async () => {
       onGetItem: onGetItemMock,
       onGetItemCursor: onGetItemCursorMock,
       onGetItemElement: onGetItemElementMock,
-      onGetItemsPerPage: onGetItemsPerPageMock
+      onGetItemsPerPage: onGetItemsPerPageMock,
     })
   );
 
@@ -225,7 +225,7 @@ it('should getMore', async () => {
     Object.assign({}, noops, {
       onGetAll: onGetAllPeople,
       onGetItemsPerPage: onGetItemsPerPageMock,
-      onGetMaxBufferPages: onGetMaxBufferPagesMock
+      onGetMaxBufferPages: onGetMaxBufferPagesMock,
     })
   );
 
@@ -300,7 +300,7 @@ it('should scroll', async () => {
   const infiniteLoader = new InfiniteLoader(
     Object.assign({}, noops, {
       onGetItemElement: onGetItemElementMock,
-      onGetScrollThreshold: onGetScrollThresholdMock
+      onGetScrollThreshold: onGetScrollThresholdMock,
     })
   );
 
@@ -381,7 +381,7 @@ it('should resize spacer', () => {
 
   infiniteLoader._onGetSpacerElement = () => ({
     offsetTop: 100,
-    offsetHeight: 100
+    offsetHeight: 100,
   });
 
   const onGetSpacerElementSpy = jest.spyOn(
@@ -399,7 +399,7 @@ it('should resize spacer', () => {
   expect(onGetSpacerElementSpy).toHaveBeenCalledTimes(0);
 
   infiniteLoader._onGetItemElement = () => ({
-    offsetTop: 200
+    offsetTop: 200,
   });
 
   // Where the change in height = 0
@@ -409,7 +409,7 @@ it('should resize spacer', () => {
 
   // Where the change in height > 0
   infiniteLoader._onGetItemElement = () => ({
-    offsetTop: 100
+    offsetTop: 100,
   });
   infiniteLoader.resizeSpacer();
   expect(infiniteLoader._spacerResizing).toEqual(true);
@@ -442,7 +442,7 @@ it('should remove item', async () => {
       onGetItemCursor: onGetItemCursorMock,
       onGetItems: (id, reverse) => {
         return allRecords.values(id, reverse);
-      }
+      },
     })
   );
 
@@ -480,19 +480,19 @@ it('should check if has more data', () => {
   expect(infiniteLoader._noMoreData()).toEqual(true);
   expect(
     infiniteLoader._noMoreData({
-      edges: []
+      edges: [],
     })
   ).toEqual(true);
   expect(
     infiniteLoader._noMoreData({
       pageInfo: {
-        hasNextPage: false
-      }
+        hasNextPage: false,
+      },
     })
   ).toEqual(true);
   expect(
     infiniteLoader._noMoreData({
-      edges: ['foo']
+      edges: ['foo'],
     })
   ).toEqual(false);
 });

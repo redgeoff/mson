@@ -13,10 +13,10 @@ export default class Snackbar extends Action {
           {
             name: 'message',
             component: 'TextField',
-            required: true
-          }
-        ]
-      }
+            required: true,
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, { layer: 'frontEnd' });

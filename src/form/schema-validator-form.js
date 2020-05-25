@@ -13,10 +13,10 @@ export default class SchemaValidatorForm extends Form {
           {
             name: 'compiler',
             component: 'Field',
-            required: true
-          }
-        ]
-      }
+            required: true,
+          },
+        ],
+      },
     });
   }
 
@@ -24,7 +24,7 @@ export default class SchemaValidatorForm extends Form {
     // Dynamically build this form based on the component
     const compiler = this.get('compiler');
     const field = compiler.newComponent({
-      component: values.component
+      component: values.component,
     });
     field.buildSchemaForm(this, compiler);
 

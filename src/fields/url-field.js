@@ -16,14 +16,14 @@ export default class URLField extends TextField {
             'minWords',
             'maxWords',
             'invalidRegExp',
-            'multiline'
+            'multiline',
           ]),
           {
             name: 'newWindow',
-            component: 'BooleanField'
-          }
-        ]
-      }
+            component: 'BooleanField',
+          },
+        ],
+      },
     });
   }
 }

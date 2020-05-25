@@ -12,7 +12,7 @@ export default class LogInToApp extends Action {
       await this._registrar.client.user.logInToApp({
         appId,
         username: values.username,
-        password: values.password
+        password: values.password,
       });
     } catch (err) {
       // Assume this is an "invalid username or password"

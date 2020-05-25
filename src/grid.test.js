@@ -4,7 +4,7 @@ import GridItem from './grid-item';
 it('should set parent', () => {
   const item = new GridItem();
   const grid = new Grid({
-    items: [item]
+    items: [item],
   });
   expect(item.get('parent')).toEqual(grid);
 });

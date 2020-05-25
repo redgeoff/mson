@@ -7,9 +7,9 @@ export default {
     fields: [
       {
         name: 'store',
-        component: 'Field'
-      }
-    ]
+        component: 'Field',
+      },
+    ],
   },
 
   fields: [
@@ -17,27 +17,27 @@ export default {
       component: 'TextField',
       name: 'token',
       label: 'Token',
-      hidden: true
+      hidden: true,
     },
     {
       component: 'PasswordField',
       name: 'password',
       label: 'New Password',
-      required: true
+      required: true,
     },
     {
       component: 'PasswordField',
       name: 'retypePassword',
       label: 'Retype Password',
-      required: true
+      required: true,
     },
     {
       component: 'ButtonField',
       type: 'submit',
       name: 'reset',
       label: 'Reset',
-      icon: 'Send'
-    }
+      icon: 'Send',
+    },
   ],
 
   validators: [
@@ -46,16 +46,16 @@ export default {
         fields: {
           retypePassword: {
             value: {
-              $ne: '{{fields.password.value}}'
-            }
-          }
-        }
+              $ne: '{{fields.password.value}}',
+            },
+          },
+        },
       },
       error: {
         field: 'retypePassword',
-        error: 'must match'
-      }
-    }
+        error: 'must match',
+      },
+    },
   ],
 
   listeners: [
@@ -64,9 +64,9 @@ export default {
       actions: [
         {
           component: 'ResetPassword',
-          token: '{{fields.token.value}}'
-        }
-      ]
+          token: '{{fields.token.value}}',
+        },
+      ],
     },
     {
       event: 'reset',
@@ -74,21 +74,21 @@ export default {
         {
           component: 'Set',
           name: 'fields.token.value',
-          value: '{{globals.route.parameters.token}}'
+          value: '{{globals.route.parameters.token}}',
         },
         {
           component: 'UpsertDoc',
-          store: '{{store}}'
+          store: '{{store}}',
         },
         {
           component: 'Snackbar',
-          message: 'Password updated'
+          message: 'Password updated',
         },
         {
           component: 'Redirect',
-          path: '/'
-        }
-      ]
-    }
-  ]
+          path: '/',
+        },
+      ],
+    },
+  ],
 };

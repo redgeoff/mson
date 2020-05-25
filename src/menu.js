@@ -46,55 +46,55 @@ export default class Menu extends UIComponent {
                     name: 'path',
                     component: 'TextField',
                     label: 'Path',
-                    required: true
+                    required: true,
                   },
                   {
                     name: 'label',
                     component: 'TextField',
                     label: 'Label',
-                    required: true
+                    required: true,
                   },
                   {
                     name: 'content',
                     component: 'Field',
                     label: 'Content',
-                    required: true
+                    required: true,
                   },
                   {
                     name: 'fullScreen',
                     component: 'BooleanField',
-                    label: 'Full Screen'
+                    label: 'Full Screen',
                   },
                   {
                     name: 'roles',
                     component: 'RolesField',
-                    label: 'Roles'
+                    label: 'Roles',
                   },
                   {
                     name: 'hidden',
                     component: 'BooleanField',
-                    label: 'Hidden'
-                  }
-                ]
-              }
-            }
-          }
-        ]
-      }
+                    label: 'Hidden',
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
     });
   }
 
   _toRegExpPath(path) {
     const paramNames = [];
 
-    const regExpPath = path.replace(/:([^/])*/g, match => {
+    const regExpPath = path.replace(/:([^/])*/g, (match) => {
       paramNames.push(match.substr(1));
       return '([^\\/]*)';
     });
 
     return {
       paramNames,
-      regExpPath: new RegExp('^' + regExpPath + '$')
+      regExpPath: new RegExp('^' + regExpPath + '$'),
     };
   }
 
@@ -106,23 +106,25 @@ export default class Menu extends UIComponent {
     this._itemsByPath[item.path] = { ...item, ...extras };
 
     if (item.items) {
-      item.items.forEach(item => this._indexItemByPath(item));
+      item.items.forEach((item) => this._indexItemByPath(item));
     }
   }
 
   _indexByPath() {
-    this._items.forEach(item => this._indexItemByPath(item));
+    this._items.forEach((item) => this._indexItemByPath(item));
   }
 
   _indexParentByPath(item, parentItem) {
     this._parentsByPath[item.path] = parentItem;
     if (item.items) {
-      item.items.forEach(childItem => this._indexParentByPath(childItem, item));
+      item.items.forEach((childItem) =>
+        this._indexParentByPath(childItem, item)
+      );
     }
   }
 
   _indexParentsByPath() {
-    this._items.forEach(item => this._indexParentByPath(item));
+    this._items.forEach((item) => this._indexParentByPath(item));
   }
 
   set(props) {
@@ -141,7 +143,7 @@ export default class Menu extends UIComponent {
     let itemFound = null;
     let params = {};
 
-    each(this._itemsByPath, item => {
+    each(this._itemsByPath, (item) => {
       if (item.path) {
         const match = path.match(item.regExpPath);
         if (match) {
@@ -154,7 +156,7 @@ export default class Menu extends UIComponent {
 
     return {
       item: itemFound,
-      params
+      params,
     };
   }
 
@@ -169,7 +171,7 @@ export default class Menu extends UIComponent {
     return {
       parameters,
       query,
-      hash
+      hash,
     };
   }
 

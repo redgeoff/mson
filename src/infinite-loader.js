@@ -50,7 +50,7 @@ export default class InfiniteLoader {
     onEmitChange,
     onSetIsLoading,
     onGetOrder,
-    onGetWhere
+    onGetWhere,
   }) {
     this._onGetAll = onGetAll;
     this._onGetItemsPerPage = onGetItemsPerPage;
@@ -309,8 +309,8 @@ export default class InfiniteLoader {
     const beginning = this.beginningLoaded();
     return (
       bufferTop &&
-      (scrollY < bufferTop.offsetTop + this._onGetScrollThreshold() &&
-        !beginning)
+      scrollY < bufferTop.offsetTop + this._onGetScrollThreshold() &&
+      !beginning
     );
   }
 

@@ -14,10 +14,10 @@ export default class ComponentField extends Field {
           {
             name: 'content',
             component: 'Field',
-            required: true
-          }
-        ]
-      }
+            required: true,
+          },
+        ],
+      },
     });
 
     // All fields must have a name

@@ -1,7 +1,7 @@
 export default {
   component: 'FormField',
   form: {
-    component: 'AddressForm'
+    component: 'AddressForm',
   },
-  elevate: true
+  elevate: true,
 };

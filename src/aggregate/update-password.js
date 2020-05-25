@@ -6,8 +6,8 @@ export default {
       component: 'PasswordField',
       name: 'retypePassword',
       label: 'Retype Password',
-      required: true
-    }
+      required: true,
+    },
   ],
   validators: [
     {
@@ -15,16 +15,16 @@ export default {
         fields: {
           retypePassword: {
             value: {
-              $ne: '{{fields.password.value}}'
-            }
-          }
-        }
+              $ne: '{{fields.password.value}}',
+            },
+          },
+        },
       },
       error: {
         field: 'retypePassword',
-        error: 'must match'
-      }
-    }
+        error: 'must match',
+      },
+    },
   ],
   listeners: [
     {
@@ -33,12 +33,12 @@ export default {
         {
           component: 'Set',
           name: 'hidden',
-          value: true
+          value: true,
         },
         {
           component: 'Set',
           name: 'out',
-          value: false
+          value: false,
         },
         {
           component: 'Set',
@@ -47,10 +47,10 @@ export default {
             'fields.password.hidden': false,
             'fields.password.out': true,
             'fields.password.required': true,
-            'fields.retypePassword.hidden': false
-          }
-        }
-      ]
-    }
-  ]
+            'fields.retypePassword.hidden': false,
+          },
+        },
+      ],
+    },
+  ],
 };

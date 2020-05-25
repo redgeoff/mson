@@ -6,7 +6,7 @@ it('should set prop', () => {
   const mapa = new CollectionMapa();
 
   const form = new Form({
-    fields: [new TextField({ name: 'lastName' })]
+    fields: [new TextField({ name: 'lastName' })],
   });
 
   mapa._setProp(form, 'lastName', 'Turing');

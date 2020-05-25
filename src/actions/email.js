@@ -12,31 +12,31 @@ export default class Email extends Action {
         fields: [
           {
             name: 'from',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'sender',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'replyTo',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'to',
             // Note: TextField as want to allow for multiple recipients
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'subject',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'body',
-            component: 'TextField'
-          }
-        ]
-      }
+            component: 'TextField',
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, { layer: 'backEnd' });

@@ -47,7 +47,7 @@ it('should set defaults', () => {
       'disabled',
       'editable',
       'in',
-      'out'
+      'out',
     ])
   ).toEqual({
     required: false,
@@ -57,7 +57,7 @@ it('should set defaults', () => {
     disabled: false,
     editable: true,
     in: true,
-    out: true
+    out: true,
   });
 });
 
@@ -113,11 +113,11 @@ it('should validate with validators', () => {
     validators: [
       {
         where: {
-          value: 'foo'
+          value: 'foo',
         },
-        error: 'invalid'
-      }
-    ]
+        error: 'invalid',
+      },
+    ],
   });
 
   field.validate();

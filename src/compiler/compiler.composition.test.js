@@ -5,7 +5,7 @@ beforeAll(() => {
   compiler.registerComponent('app.FirstNameField', {
     name: 'firstName',
     component: 'TextField',
-    maxLength: 10
+    maxLength: 10,
   });
 
   compiler.registerComponent('app.NameForm', {
@@ -13,9 +13,9 @@ beforeAll(() => {
     fields: [
       {
         name: 'firstName',
-        component: 'app.FirstNameField'
-      }
-    ]
+        component: 'app.FirstNameField',
+      },
+    ],
   });
 
   compiler.registerComponent('app.FooForm', {
@@ -25,10 +25,10 @@ beforeAll(() => {
       fields: [
         {
           name: 'foo',
-          component: 'TextField'
-        }
-      ]
-    }
+          component: 'TextField',
+        },
+      ],
+    },
   });
 
   compiler.registerComponent('app.Composition', {
@@ -38,10 +38,10 @@ beforeAll(() => {
       fields: [
         {
           name: 'yar',
-          component: 'TextField'
-        }
-      ]
-    }
+          component: 'TextField',
+        },
+      ],
+    },
   });
 
   compiler.registerComponent('app.PassedComposition', {
@@ -49,8 +49,8 @@ beforeAll(() => {
     fields: [
       {
         name: 'nar',
-        component: 'TextField'
-      }
+        component: 'TextField',
+      },
     ],
     foo: 'baz',
     listeners: [
@@ -60,11 +60,11 @@ beforeAll(() => {
           {
             component: 'Set',
             name: 'fields.yar.hidden',
-            value: true
-          }
-        ]
-      }
-    ]
+            value: true,
+          },
+        ],
+      },
+    ],
   });
 });
 
@@ -82,25 +82,25 @@ it('should compile a component with composition', async () => {
     componentToWrap: {
       component: 'TextField',
       name: 'firstName',
-      maxLength: 10
-    }
+      maxLength: 10,
+    },
   });
 
   const firstName = new FirstName();
   expect(firstName.get(['name', 'maxLength'])).toEqual({
     name: 'firstName',
-    maxLength: 10
+    maxLength: 10,
   });
   expect(firstName.getClassName()).toEqual('WrappedComponent');
 });
 
 it('should compile a component that extends a component with composition', () => {
   const Component = compiler.compile({
-    component: 'app.Composition'
+    component: 'app.Composition',
   });
 
   const component = new Component();
-  expect(component.mapFields(field => field.get('name'))).toEqual(
+  expect(component.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['yar'])
   );
   expect(component.getClassName()).toEqual('app.Composition');
@@ -110,14 +110,14 @@ it('should compile a component with composition as a reference', async () => {
   const FirstName = compiler.compile({
     component: 'WrappedComponent',
     componentToWrap: {
-      component: 'app.FirstNameField'
-    }
+      component: 'app.FirstNameField',
+    },
   });
 
   const firstName = new FirstName();
   expect(firstName.get(['name', 'maxLength'])).toEqual({
     name: 'firstName',
-    maxLength: 10
+    maxLength: 10,
   });
   expect(firstName.getClassName()).toEqual('WrappedComponent');
 });
@@ -126,10 +126,10 @@ it('should instantiate a component with composition', async () => {
   const component = compiler.newComponent({
     component: 'WrappedComponent',
     componentToWrap: {
-      component: 'app.NameForm'
-    }
+      component: 'app.NameForm',
+    },
   });
-  expect(component.mapFields(field => field.get('name'))).toEqual(
+  expect(component.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['firstName'])
   );
 });
@@ -142,13 +142,13 @@ it('should support composition with inner props', async () => {
       fields: [
         {
           name: 'nar',
-          component: 'TextField'
-        }
+          component: 'TextField',
+        },
       ],
-      foo: 'bar'
-    }
+      foo: 'bar',
+    },
   });
-  expect(component.mapFields(field => field.get('name'))).toEqual(
+  expect(component.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['nar'])
   );
   expect(component.get('foo')).toEqual('bar');
@@ -158,17 +158,17 @@ it('should support composition with outer props', async () => {
   const component = compiler.newComponent({
     component: 'WrappedComponent',
     componentToWrap: {
-      component: 'app.FooForm'
+      component: 'app.FooForm',
     },
     fields: [
       {
         name: 'nar',
-        component: 'TextField'
-      }
+        component: 'TextField',
+      },
     ],
-    foo: 'bar'
+    foo: 'bar',
   });
-  expect(component.mapFields(field => field.get('name'))).toEqual(
+  expect(component.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['nar'])
   );
   expect(component.get('foo')).toEqual('bar');
@@ -184,26 +184,26 @@ it('should support nested composition', async () => {
         fields: [
           {
             name: 'nar',
-            component: 'TextField'
-          }
-        ]
+            component: 'TextField',
+          },
+        ],
       },
       fields: [
         {
           name: 'yar',
-          component: 'TextField'
-        }
+          component: 'TextField',
+        },
       ],
-      foo: 'baz'
+      foo: 'baz',
     },
     fields: [
       {
         name: 'jar',
-        component: 'TextField'
-      }
-    ]
+        component: 'TextField',
+      },
+    ],
   });
-  expect(component.mapFields(field => field.get('name'))).toEqual(
+  expect(component.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['nar', 'yar', 'jar'])
   );
   expect(component.get('foo')).toEqual('baz');
@@ -215,12 +215,12 @@ it('should support inheritance of composition', async () => {
     fields: [
       {
         name: 'jar',
-        component: 'TextField'
-      }
+        component: 'TextField',
+      },
     ],
-    foo: 'baz'
+    foo: 'baz',
   });
-  expect(component.mapFields(field => field.get('name'))).toEqual(
+  expect(component.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['yar', 'jar'])
   );
   expect(component.get('foo')).toEqual('baz');
@@ -230,11 +230,11 @@ it('should support composition of reference', async () => {
   const component = compiler.newComponent({
     component: 'WrappedComponent',
     componentToWrap: {
-      component: 'app.Composition'
+      component: 'app.Composition',
     },
-    foo: 'baz'
+    foo: 'baz',
   });
-  expect(component.mapFields(field => field.get('name'))).toEqual(
+  expect(component.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['yar'])
   );
   expect(component.get('foo')).toEqual('baz');
@@ -244,10 +244,10 @@ it('should support passed composition', async () => {
   const component = compiler.newComponent({
     component: 'app.PassedComposition',
     componentToWrap: {
-      component: 'app.Composition'
-    }
+      component: 'app.Composition',
+    },
   });
-  expect(component.mapFields(field => field.get('name'))).toEqual(
+  expect(component.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['yar', 'nar'])
   );
   expect(component.get('foo')).toEqual('baz');
@@ -262,21 +262,21 @@ it('should not mutate original component when composing', async () => {
   compiler.newComponent({
     component: 'WrappedComponent',
     componentToWrap: {
-      component: 'app.FooForm'
+      component: 'app.FooForm',
     },
     fields: [
       {
         name: 'nar',
-        component: 'TextField'
-      }
-    ]
+        component: 'TextField',
+      },
+    ],
   });
 
   const component2 = compiler.newComponent({
-    component: 'app.FooForm'
+    component: 'app.FooForm',
   });
 
-  expect(component2.mapFields(field => field.get('name'))).toEqual(
+  expect(component2.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields
   );
 });
@@ -287,16 +287,16 @@ it('should not mutate original component when extending a composition', async ()
     fields: [
       {
         name: 'jar',
-        component: 'TextField'
-      }
-    ]
+        component: 'TextField',
+      },
+    ],
   });
 
   const component2 = compiler.newComponent({
-    component: 'app.Composition'
+    component: 'app.Composition',
   });
 
-  expect(component2.mapFields(field => field.get('name'))).toEqual(
+  expect(component2.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['yar'])
   );
 });

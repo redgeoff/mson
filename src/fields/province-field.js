@@ -1,4 +1,4 @@
 export default {
   component: 'TextFieldHiddenSchema',
-  maxLength: 60
+  maxLength: 60,
 };

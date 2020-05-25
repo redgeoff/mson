@@ -2,7 +2,7 @@ import BaseComponent from './component';
 
 it('should concat schemas', () => {
   const c = new BaseComponent({
-    schema: 'one'
+    schema: 'one',
   });
   c.set({ schema: 'two' });
   c.set({ schema: 'three' });
@@ -11,6 +11,6 @@ it('should concat schemas', () => {
     c._getWrappedComponentSchema(),
     'one',
     'two',
-    'three'
+    'three',
   ]);
 });

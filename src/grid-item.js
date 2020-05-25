@@ -12,34 +12,34 @@ export default class GridItem extends UIComponent {
         fields: [
           {
             name: 'hidden',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'content',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'xl',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'lg',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'md',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'sm',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'xs',
-            component: 'IntegerField'
-          }
-        ]
-      }
+            component: 'IntegerField',
+          },
+        ],
+      },
     });
   }
 

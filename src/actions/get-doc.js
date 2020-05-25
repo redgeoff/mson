@@ -12,20 +12,20 @@ export default class GetDoc extends Action {
         fields: [
           {
             name: 'store',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'where',
-            component: 'WhereField'
-          }
-        ]
-      }
+            component: 'WhereField',
+          },
+        ],
+      },
     });
   }
 
   async act(/* props */) {
     return this.get('store').getDoc({
-      where: this.get('where')
+      where: this.get('where'),
     });
   }
 }

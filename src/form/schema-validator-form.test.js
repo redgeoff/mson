@@ -8,7 +8,7 @@ it('should not mutate values when setting', () => {
 
   const values = {
     name: 'firstName',
-    component: 'TextField'
+    component: 'TextField',
   };
 
   const clonedValues = cloneDeep(values);

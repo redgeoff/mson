@@ -15,33 +15,33 @@ const mson = {
     {
       name: 'firstName',
       component: 'TextField',
-      label: 'First Name'
+      label: 'First Name',
     },
     {
       name: 'birthday',
       component: 'DateField',
-      label: 'Birthday'
-    }
-  ]
+      label: 'Birthday',
+    },
+  ],
 };
 
-const getValues = withDefaults => ({
+const getValues = (withDefaults) => ({
   form: {
     fields: [
       {
         id: withDefaults ? 1 : undefined,
         name: 'firstName',
         componentName: 'TextField',
-        label: 'First Name'
+        label: 'First Name',
       },
       {
         id: withDefaults ? 2 : undefined,
         name: 'birthday',
         componentName: 'DateField',
-        label: 'Birthday'
-      }
-    ]
-  }
+        label: 'Birthday',
+      },
+    ],
+  },
 });
 
 it('should set mson', () => {

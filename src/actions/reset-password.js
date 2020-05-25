@@ -12,10 +12,10 @@ export default class ResetPassword extends Action {
         fields: [
           {
             name: 'token',
-            component: 'TextField'
-          }
-        ]
-      }
+            component: 'TextField',
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, { layer: 'backEnd' });
@@ -29,7 +29,7 @@ export default class ResetPassword extends Action {
     return this._reset({
       context: props.context,
       component: props.component,
-      token: this.get('token')
+      token: this.get('token'),
     });
   }
 }

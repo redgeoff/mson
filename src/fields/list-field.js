@@ -18,55 +18,55 @@ export default class ListField extends CompositeField {
         fields: [
           {
             name: 'allowDelete',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'minSize',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'maxSize',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'fieldFactory',
             component: 'Field',
-            required: true
+            required: true,
           },
           {
             name: 'allowScalar',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'singularLabel',
             component: 'TextField',
             label: 'Singular Label',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'autoCreateFields',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'startWithField',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'canDeleteEmpty',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'hideDeleteButton',
-            component: 'BooleanField'
-          }
-        ]
-      }
+            component: 'BooleanField',
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, {
       allowDelete: true,
       startWithField: props.fieldFactory,
-      canDeleteEmpty: true
+      canDeleteEmpty: true,
     });
   }
 
@@ -86,7 +86,7 @@ export default class ListField extends CompositeField {
 
   _getValue() {
     let values = [];
-    this.eachField(field => {
+    this.eachField((field) => {
       const value = field.getValue();
       if (value) {
         values.push(value);
@@ -149,7 +149,7 @@ export default class ListField extends CompositeField {
   }
 
   _onFieldCreated(field /*, onDelete */) {
-    field.on('value', value => {
+    field.on('value', (value) => {
       this._calcValue();
     });
   }
@@ -159,7 +159,7 @@ export default class ListField extends CompositeField {
   }
 
   _handleDirtyFactory() {
-    return dirty => {
+    return (dirty) => {
       // Bubble up dirty event
       if (dirty) {
         this.set({ dirty: true });
@@ -267,7 +267,7 @@ export default class ListField extends CompositeField {
       }
 
       if (values !== null) {
-        values.forEach(val => {
+        values.forEach((val) => {
           let field = fields.next().value;
           if (!field) {
             field = this.createField();
@@ -283,19 +283,19 @@ export default class ListField extends CompositeField {
 
   _setDirty(dirty) {
     super._setDirty(dirty);
-    this.eachField(field => field.set({ dirty }));
+    this.eachField((field) => field.set({ dirty }));
   }
 
   setTouched(touched) {
     super.setTouched(touched);
-    this.eachField(field => field.setTouched(touched));
+    this.eachField((field) => field.setTouched(touched));
   }
 
   set(props) {
     super.set(props);
 
     if (props.block !== undefined) {
-      this.eachField(field => field.set({ block: props.block }));
+      this.eachField((field) => field.set({ block: props.block }));
     }
   }
 
@@ -317,7 +317,7 @@ export default class ListField extends CompositeField {
         if (field.hasErr()) {
           errors.push({
             field: field.get('name'),
-            error: field.getErr()
+            error: field.getErr(),
           });
         }
       }
@@ -331,11 +331,11 @@ export default class ListField extends CompositeField {
 
         if (minSize !== null && value.length < minSize) {
           errors.push({
-            error: `${minSize} or more`
+            error: `${minSize} or more`,
           });
         } else if (maxSize !== null && value.length > maxSize) {
           errors.push({
-            error: `${maxSize} or less`
+            error: `${maxSize} or less`,
           });
         }
       }
@@ -388,8 +388,8 @@ export default class ListField extends CompositeField {
         'block',
         'fullWidth',
         'useDisplayValue',
-        'editable'
-      ])
+        'editable',
+      ]),
     });
 
     return field;

@@ -8,7 +8,7 @@ fieldTester.shouldAll({ Field: TextField, exampleValue: 'foo' });
 
 it('should validate max length', () => {
   const field = new TextField({
-    maxLength: 5
+    maxLength: 5,
   });
 
   field.setValue('12345');
@@ -22,7 +22,7 @@ it('should validate max length', () => {
 
 it('should validate min length', () => {
   const field = new TextField({
-    minLength: 5
+    minLength: 5,
   });
 
   field.setValue('12345');
@@ -43,12 +43,12 @@ it('should report bad types', () => {
     field,
     [
       {
-        foo: 'must not be object'
+        foo: 'must not be object',
       },
       ['must not be array'],
       false,
       1,
-      1.0
+      1.0,
     ],
     'must be a string'
   );
@@ -61,22 +61,22 @@ it('should get schema form', () => {
 
   schemaForm.setValues({
     name: 'myField',
-    maxLength: 10
+    maxLength: 10,
   });
   schemaForm.validate();
   expect(schemaForm.hasErr()).toEqual(false);
 
   schemaForm.setValues({
     name: 'myField',
-    badParam: 10
+    badParam: 10,
   });
   schemaForm.validate();
   expect(schemaForm.hasErr()).toEqual(true);
   expect(schemaForm.getErrs()).toEqual([
     {
       field: 'badParam',
-      error: 'undefined field'
-    }
+      error: 'undefined field',
+    },
   ]);
 });
 
@@ -93,13 +93,13 @@ it('should format mask', () => {
   const field = new TextField();
 
   field.set({
-    mask: ['(', '/A/i']
+    mask: ['(', '/A/i'],
   });
 
   expect(field.get('mask')).toEqual(['(', /A/i]);
 
   field.set({
-    mask: '(.)'
+    mask: '(.)',
   });
 
   expect(field.get('mask')).toEqual(['(', /./, ')']);
@@ -126,8 +126,8 @@ it('should format display value using mask', () => {
       /\d/,
       /\d/,
       /\d/,
-      /\d/
-    ]
+      /\d/,
+    ],
   });
 
   expect(field.getValue()).toEqual('5551234444');
@@ -141,7 +141,7 @@ it('should unmask value', () => {
   expect(field.toUnmaskedValue('1,000.10')).toEqual('1,000.10');
 
   field.set({
-    unmask: '/[^\\d\\.]/g'
+    unmask: '/[^\\d\\.]/g',
   });
 
   expect(field.toUnmaskedValue('1,000.10')).toEqual('1000.10');
@@ -180,27 +180,27 @@ it('should validate with validators', () => {
     validators: [
       {
         where: {
-          value: 'foo'
+          value: 'foo',
         },
-        error: 'invalid'
+        error: 'invalid',
       },
       {
         where: {
           length: {
-            $gt: 10
-          }
+            $gt: 10,
+          },
         },
-        error: 'too long'
+        error: 'too long',
       },
       {
         where: {
           words: {
-            $gt: 3
-          }
+            $gt: 3,
+          },
         },
-        error: 'too many words'
-      }
-    ]
+        error: 'too many words',
+      },
+    ],
   });
 
   field.validate();

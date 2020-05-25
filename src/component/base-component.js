@@ -29,65 +29,65 @@ export default class BaseComponent extends events.EventEmitter {
         {
           // This field is just for the MSON definition
           name: 'component',
-          component: 'TextField'
+          component: 'TextField',
         },
         {
           name: 'name',
           component: 'TextField',
           label: 'Name',
           docLevel: 'basic',
-          help: 'A unique variable name'
+          help: 'A unique variable name',
           // Not required as a lot of components don't need to be named
           // required: true
         },
         {
           name: 'listeners',
           // TODO: proper schema
-          component: 'Field'
+          component: 'Field',
         },
         {
           name: 'schema',
           component: 'FormField',
           form: {
             // TODO: should there be a SchemaForm?
-            component: 'ObjectForm'
-          }
+            component: 'ObjectForm',
+          },
         },
         {
           name: 'isStore',
-          component: 'BooleanField'
+          component: 'BooleanField',
         },
         {
           name: 'didCreate',
-          component: 'BooleanField'
+          component: 'BooleanField',
         },
         {
           // True if the component should never be sent to the front end, e.g. if they contain
           // secrets
           name: 'backEndOnly',
-          component: 'BooleanField'
+          component: 'BooleanField',
         },
         {
           name: 'parent',
-          component: 'Field'
+          component: 'Field',
         },
         {
           name: 'muteCreate',
-          component: 'BooleanField'
+          component: 'BooleanField',
         },
         {
           name: 'disableSubEvents',
-          component: 'BooleanField'
+          component: 'BooleanField',
         },
         {
           name: 'docLevel',
           component: 'SelectField',
           options: [
             { value: 'basic', label: 'Basic' },
-            { value: 'advanced', label: 'Advanced' }
-          ]
-        }
-      ]
+            { value: 'advanced', label: 'Advanced' },
+          ],
+        },
+      ],
     };
   }
 
@@ -168,11 +168,11 @@ export default class BaseComponent extends events.EventEmitter {
     // simple objects until it instantiated. The problem with a lazy setting of the schema is how we
     // would allow schemas to be defined via MSON.
     this.set({
-      schema: this._getBaseComponentSchema()
+      schema: this._getBaseComponentSchema(),
     });
 
     this._setDefaults(props, {
-      docLevel: 'advanced'
+      docLevel: 'advanced',
     });
   }
 
@@ -280,7 +280,7 @@ export default class BaseComponent extends events.EventEmitter {
 
     return {
       property,
-      names
+      names,
     };
   }
 
@@ -302,7 +302,7 @@ export default class BaseComponent extends events.EventEmitter {
           property.get(lastName).set(value);
         } else {
           property.set({
-            [lastName]: value
+            [lastName]: value,
           });
         }
       } else {
@@ -391,7 +391,7 @@ export default class BaseComponent extends events.EventEmitter {
     // take care of the response so that we can reuse the same logic for all listeners. TODO: when
     // is this listener destroyed? Do we need a destroy() function in each component that can
     // release this?
-    property.on(subEvent, value => this.emitChange(event, value));
+    property.on(subEvent, (value) => this.emitChange(event, value));
   }
 
   _listenIfNewSubEvent(event) {
@@ -418,12 +418,12 @@ export default class BaseComponent extends events.EventEmitter {
     // do we need a construct to clear all previous listeners for an event?
     this._concat('listeners', listeners);
 
-    listeners.forEach(listener => {
+    listeners.forEach((listener) => {
       const events = Array.isArray(listener.event)
         ? listener.event
         : [listener.event];
 
-      events.forEach(event => {
+      events.forEach((event) => {
         this._listenIfSubEvent(event);
 
         // Register the event so that we can do a quick lookup later
@@ -454,7 +454,7 @@ export default class BaseComponent extends events.EventEmitter {
         event,
         component: this,
         arguments: args,
-        context
+        context,
       });
     }
   }
@@ -497,7 +497,7 @@ export default class BaseComponent extends events.EventEmitter {
 
             if (action.get('detached')) {
               // We don't wait for detached actions, but we want to log any errors
-              runAction.catch(err => {
+              runAction.catch((err) => {
                 return this._onDetachedActionErr(err);
               });
             } else {
@@ -549,9 +549,9 @@ export default class BaseComponent extends events.EventEmitter {
     // Push props so that we have a fast way of identifying the props for this component
     if (schema.fields) {
       // Uncompiled?
-      schema.fields.forEach(field => this._pushProp(field.name));
+      schema.fields.forEach((field) => this._pushProp(field.name));
     } else if (schema.eachField) {
-      schema.eachField(field => {
+      schema.eachField((field) => {
         if (!schema.isDefaultField(field.get('name'))) {
           this._pushProp(field.get('name'));
         }
@@ -597,7 +597,7 @@ export default class BaseComponent extends events.EventEmitter {
         parent: undefined,
         isStore: undefined,
         listeners: undefined,
-        muteCreate: undefined
+        muteCreate: undefined,
       })
     );
 
@@ -640,7 +640,7 @@ export default class BaseComponent extends events.EventEmitter {
     if (Array.isArray(names)) {
       // Get multiple props
       let values = {};
-      names.forEach(name => {
+      names.forEach((name) => {
         values[name] = this.getOne(name);
       });
       return values;
@@ -766,8 +766,8 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   _bubbleUpEvents(component, events) {
-    events.forEach(event => {
-      component.on(event, value => {
+    events.forEach((event) => {
+      component.on(event, (value) => {
         this.emitChange(event, value);
       });
     });
@@ -779,7 +779,7 @@ export default class BaseComponent extends events.EventEmitter {
 
   // Set properties on another component. Useful for nested components
   _setOn(component, props, propNames) {
-    propNames.forEach(name => {
+    propNames.forEach((name) => {
       if (props[name] !== undefined) {
         component.set({ [name]: props[name] });
       }
@@ -795,7 +795,7 @@ export default class BaseComponent extends events.EventEmitter {
 
   buildSchemaForm(form, compiler) {
     const schemas = this.get('schema');
-    schemas.forEach(schema => {
+    schemas.forEach((schema) => {
       if (!compiler.isCompiled(schema)) {
         schema = compiler.newComponent(schema);
       }
@@ -837,10 +837,10 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   getHiddenFieldDefinitions(names) {
-    return names.map(name => ({
+    return names.map((name) => ({
       name,
       component: 'Field',
-      hidden: true
+      hidden: true,
     }));
   }
 }

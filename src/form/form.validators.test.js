@@ -8,55 +8,55 @@ const createForm = () => {
       new TextField({
         name: 'middleName',
         label: 'Middle Name',
-        required: true
+        required: true,
       }),
-      new TextField({ name: 'lastName', label: 'Last Name', required: true })
+      new TextField({ name: 'lastName', label: 'Last Name', required: true }),
     ],
     validators: [
       {
         where: {
           fields: {
             firstName: {
-              value: 'Jim'
-            }
-          }
+              value: 'Jim',
+            },
+          },
         },
         error: {
           field: 'firstName',
-          error: 'cannot be {{fields.firstName.value}}'
-        }
+          error: 'cannot be {{fields.firstName.value}}',
+        },
       },
       {
         where: {
           fields: {
             lastName: {
               value: {
-                $eq: 'Jones'
-              }
-            }
-          }
+                $eq: 'Jones',
+              },
+            },
+          },
         },
         error: {
           field: 'lastName',
-          error: 'cannot be Jones'
-        }
+          error: 'cannot be Jones',
+        },
       },
       {
         where: {
           fields: {
             middleName: {
               value: {
-                $eq: '{{fields.firstName.value}}'
-              }
-            }
-          }
+                $eq: '{{fields.firstName.value}}',
+              },
+            },
+          },
         },
         error: {
           field: 'middleName',
-          error: 'cannot be same as {{fields.firstName.value}}'
-        }
-      }
-    ]
+          error: 'cannot be same as {{fields.firstName.value}}',
+        },
+      },
+    ],
   });
 };
 
@@ -66,40 +66,40 @@ it('should validate', () => {
   form.setValues({
     firstName: 'Jim',
     middleName: 'Slim',
-    lastName: 'Jones'
+    lastName: 'Jones',
   });
   form.validate();
   expect(form.getErrs()).toEqual([
     {
       field: 'firstName',
-      error: 'cannot be Jim'
-    }
+      error: 'cannot be Jim',
+    },
   ]);
 
   form.setValues({
     firstName: 'Jimmy',
     middleName: 'Slim',
-    lastName: 'Jones'
+    lastName: 'Jones',
   });
   form.validate();
   expect(form.getErrs()).toEqual([
     {
       field: 'lastName',
-      error: 'cannot be Jones'
-    }
+      error: 'cannot be Jones',
+    },
   ]);
 
   form.setValues({
     firstName: 'Jimmy',
     middleName: 'Jimmy',
-    lastName: 'Joneson'
+    lastName: 'Joneson',
   });
   form.validate();
   expect(form.getErrs()).toEqual([
     {
       field: 'middleName',
-      error: 'cannot be same as Jimmy'
-    }
+      error: 'cannot be same as Jimmy',
+    },
   ]);
 });
 
@@ -108,7 +108,7 @@ it('validate should adjust when fields removed', async () => {
   form1.removeField('middleName');
   form1.setValues({
     firstName: 'First',
-    lastName: 'Last'
+    lastName: 'Last',
   });
   form1.validate();
   expect(form1.getErrs()).toEqual([]);
@@ -117,7 +117,7 @@ it('validate should adjust when fields removed', async () => {
   form2.removeField('firstName');
   form2.setValues({
     middleName: 'Middle',
-    lastName: 'Last'
+    lastName: 'Last',
   });
   form2.validate();
   expect(form2.getErrs()).toEqual([]);
@@ -130,6 +130,6 @@ it('should auto validate', () => {
   expect(form.getErrs()).toEqual([
     { field: 'firstName', error: 'cannot be Jim' },
     { field: 'middleName', error: 'required' },
-    { field: 'lastName', error: 'required' }
+    { field: 'lastName', error: 'required' },
   ]);
 });

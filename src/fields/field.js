@@ -17,117 +17,117 @@ export default class Field extends UIComponent {
           {
             // The name is required as it is needed by the form
             name: 'name',
-            required: true
+            required: true,
           },
           {
             name: 'label',
             component: 'TextField',
             label: 'Label',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'value',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'err',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'required',
             component: 'BooleanField',
             label: 'Required',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'fullWidth',
             component: 'BooleanField',
             label: 'Full Width',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'touched',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'validators',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'block',
             component: 'BooleanField',
             label: 'Block',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'disabled',
             component: 'BooleanField',
             label: 'Disabled',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'editable',
             component: 'BooleanField',
-            label: 'Editable'
+            label: 'Editable',
             // docLevel: 'basic'
           },
           {
             name: 'dirty',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'help',
             component: 'TextField',
-            label: 'Help'
+            label: 'Help',
           },
           {
             name: 'in',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'out',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'before',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'after',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'showArchived',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'searchString',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'ignoreErrs',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'forbidSort',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'hideLabel',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'useDisplayValue',
             component: 'BooleanField',
             label: 'Use Display Value',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'autoHideLabel',
-            component: 'BooleanField'
-          }
-        ]
-      }
+            component: 'BooleanField',
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, {
@@ -139,7 +139,7 @@ export default class Field extends UIComponent {
       required: false,
       fullWidth: false,
       disabled: false,
-      autoHideLabel: true
+      autoHideLabel: true,
     });
   }
 
@@ -194,7 +194,7 @@ export default class Field extends UIComponent {
         touched: undefined,
         fullWidth: undefined,
         useDisplayValue: undefined,
-        hideLabel: undefined
+        hideLabel: undefined,
       })
     );
 
@@ -328,6 +328,6 @@ export default class Field extends UIComponent {
   }
 }
 
-Field.isValueBlank = value => {
+Field.isValueBlank = (value) => {
   return value === null || value === undefined;
 };

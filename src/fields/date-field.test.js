@@ -36,7 +36,7 @@ it('should get display value', () => {
   expect(toLocaleStringSpy).toHaveBeenCalledTimes(1);
 
   // Mock for same results regardless of environment
-  date._toLocaleString = date => {
+  date._toLocaleString = (date) => {
     return date.toLocaleString('en-US');
   };
 
@@ -53,7 +53,7 @@ it('should validate', () => {
     '2018-1-1',
     '2018-12-12 8:12 AM',
     '1/1/2018',
-    null
+    null,
   ]);
 
   field.set({ required: true });
@@ -62,19 +62,19 @@ it('should validate', () => {
     '1/1/-1',
     '2018-1-1 40:00 PM',
     '2018-1-1 10:00 ZM',
-    null
+    null,
   ]);
 
   field.set({
     minDate: '2018-01-01',
-    maxDate: '2018-12-31'
+    maxDate: '2018-12-31',
   });
 
   testUtils.expectValuesToBeValid(field, [
     '2018-01-01',
     '2018-12-31',
     '2018-02-01',
-    '2018-01-01 10:00 AM'
+    '2018-01-01 10:00 AM',
   ]);
 
   testUtils.expectValuesToBeInvalid(field, ['2017-01-01', '2019-01-01']);

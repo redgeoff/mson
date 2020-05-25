@@ -12,14 +12,14 @@ export default class Emit extends Action {
         fields: [
           {
             name: 'event',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'value',
-            component: 'Field'
-          }
-        ]
-      }
+            component: 'Field',
+          },
+        ],
+      },
     });
   }
 

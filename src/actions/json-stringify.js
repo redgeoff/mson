@@ -12,14 +12,14 @@ export default class JSONStringify extends Action {
         fields: [
           {
             name: 'value',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'space',
-            component: 'IntegerField'
-          }
-        ]
-      }
+            component: 'IntegerField',
+          },
+        ],
+      },
     });
   }
 

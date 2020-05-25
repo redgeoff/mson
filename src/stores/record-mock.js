@@ -11,8 +11,8 @@ export default class RecordMock {
     const doc = await this._docs._createDoc({ fieldValues, order });
     return {
       data: {
-        createRecord: doc
-      }
+        createRecord: doc,
+      },
     };
   }
 
@@ -21,8 +21,8 @@ export default class RecordMock {
       const doc = await this._docs.getDoc({ id, where });
       return {
         data: {
-          record: doc
-        }
+          record: doc,
+        },
       };
     } catch (err) {
       // if (err.message === 'value is missing for key ' + id) {
@@ -37,8 +37,8 @@ export default class RecordMock {
     const doc = await this._docs._updateDoc({ id, fieldValues, order });
     return {
       data: {
-        updateRecord: doc
-      }
+        updateRecord: doc,
+      },
     };
   }
 
@@ -46,8 +46,8 @@ export default class RecordMock {
     const doc = await this._docs.archiveDoc({ id });
     return {
       data: {
-        archiveRecord: doc
-      }
+        archiveRecord: doc,
+      },
     };
   }
 
@@ -55,8 +55,8 @@ export default class RecordMock {
     const doc = await this._docs.restoreDoc({ id });
     return {
       data: {
-        restoreRecord: doc
-      }
+        restoreRecord: doc,
+      },
     };
   }
 
@@ -69,10 +69,10 @@ export default class RecordMock {
 
           // TODO: this will probably need adjusted once our tests support pagination
           pageInfo: {
-            hasNextPage: false
-          }
-        }
-      }
+            hasNextPage: false,
+          },
+        },
+      },
     };
   }
 }

@@ -14,7 +14,7 @@ it('should validate', () => {
     '+44 1234 567890',
     '+441234567890',
     '+245-1-234567',
-    null
+    null,
   ]);
 
   testUtils.expectValuesToBeInvalid(
@@ -25,7 +25,7 @@ it('should validate', () => {
       '+44 1234 56789',
       '+44123456789',
       '646123456A',
-      '+999'
+      '+999',
     ],
     'invalid'
   );
@@ -35,7 +35,7 @@ it('should format default mask', () => {
   const field = new PhoneField();
 
   field.set({
-    defaultMask: '(.)'
+    defaultMask: '(.)',
   });
 
   expect(field.get('defaultMask')).toEqual(['(', /\d/, ')']);

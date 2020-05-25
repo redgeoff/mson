@@ -10,8 +10,8 @@ const createField = () => {
     name: 'fullName',
     fields: [
       new TextField({ name: 'firstName' }),
-      new TextField({ name: 'lastName' })
-    ]
+      new TextField({ name: 'lastName' }),
+    ],
   });
 };
 
@@ -23,23 +23,23 @@ compiler.registerComponent('app.PersonFullNameField', {
       name: 'firstName',
       label: 'First Name',
       component: 'TextField',
-      maxLength: 40
+      maxLength: 40,
     },
     {
       name: 'lastName',
       label: 'Last Name',
       component: 'TextField',
-      maxLength: 40
-    }
-  ]
+      maxLength: 40,
+    },
+  ],
 });
 
 fieldTester.shouldAll({
   Field: compiler.getCompiledComponent('app.PersonFullNameField'),
   exampleValue: {
     firstName: 'Frank',
-    lastName: 'Sinatra'
-  }
+    lastName: 'Sinatra',
+  },
 });
 
 compiler.deregisterComponent('app.PersonFullNameField');
@@ -63,7 +63,7 @@ it('should set via sub fields', () => {
   field.getField('lastName').setValue('Simone');
   expect(field.getValue()).toEqual({
     firstName: 'Nina',
-    lastName: 'Simone'
+    lastName: 'Simone',
   });
 });
 
@@ -71,20 +71,20 @@ it('should toggle disable', () => {
   const field = createField();
 
   field.set({ disabled: true });
-  field.eachField(field => expect(field.get('disabled')).toEqual(true));
+  field.eachField((field) => expect(field.get('disabled')).toEqual(true));
 
   field.set({ disabled: false });
-  field.eachField(field => expect(field.get('disabled')).toEqual(false));
+  field.eachField((field) => expect(field.get('disabled')).toEqual(false));
 });
 
 it('should toggle editable', () => {
   const field = createField();
 
   field.set({ editable: true });
-  field.eachField(field => expect(field.get('editable')).toEqual(true));
+  field.eachField((field) => expect(field.get('editable')).toEqual(true));
 
   field.set({ editable: false });
-  field.eachField(field => expect(field.get('editable')).toEqual(false));
+  field.eachField((field) => expect(field.get('editable')).toEqual(false));
 });
 
 it('should bubble up touches', async () => {
@@ -108,11 +108,11 @@ it('should set required', () => {
 
   field.set({ required: true });
   expect(field.get('required')).toEqual(true);
-  field.eachField(field => expect(field.get('required')).toEqual(true));
+  field.eachField((field) => expect(field.get('required')).toEqual(true));
 
   field.set({ required: false });
   expect(field.get('required')).toEqual(false);
-  field.eachField(field => expect(field.get('required')).toEqual(false));
+  field.eachField((field) => expect(field.get('required')).toEqual(false));
 });
 
 it('should set touched', () => {
@@ -120,11 +120,11 @@ it('should set touched', () => {
 
   field.set({ touched: true });
   expect(field.get('touched')).toEqual(true);
-  field.eachField(field => expect(field.get('touched')).toEqual(true));
+  field.eachField((field) => expect(field.get('touched')).toEqual(true));
 
   field.set({ touched: false });
   expect(field.get('touched')).toEqual(false);
-  field.eachField(field => expect(field.get('touched')).toEqual(false));
+  field.eachField((field) => expect(field.get('touched')).toEqual(false));
 });
 
 it('should set useDisplayValue', () => {
@@ -132,23 +132,27 @@ it('should set useDisplayValue', () => {
 
   field.set({ useDisplayValue: true });
   expect(field.get('useDisplayValue')).toEqual(true);
-  field.eachField(field => expect(field.get('useDisplayValue')).toEqual(true));
+  field.eachField((field) =>
+    expect(field.get('useDisplayValue')).toEqual(true)
+  );
 
   field.set({ useDisplayValue: false });
   expect(field.get('useDisplayValue')).toEqual(false);
-  field.eachField(field => expect(field.get('useDisplayValue')).toEqual(false));
+  field.eachField((field) =>
+    expect(field.get('useDisplayValue')).toEqual(false)
+  );
 });
 
 it('should destroy', () => {
   const field = createField();
 
   const removeAllListenersSpy = jest.spyOn(field, 'removeAllListeners');
-  const fieldSpies = field.mapFields(field => jest.spyOn(field, 'destroy'));
+  const fieldSpies = field.mapFields((field) => jest.spyOn(field, 'destroy'));
 
   field.destroy();
   expect(removeAllListenersSpy).toHaveBeenCalledTimes(1);
   expect(fieldSpies).toHaveLength(2);
-  fieldSpies.forEach(spy => expect(spy).toHaveBeenCalledTimes(1));
+  fieldSpies.forEach((spy) => expect(spy).toHaveBeenCalledTimes(1));
 });
 
 it('should set parent with initial values', () => {
@@ -157,12 +161,12 @@ it('should set parent with initial values', () => {
     fields: [
       new TextField({ name: 'firstName', value: 'Freddie' }),
       new BooleanField({ name: 'foo' }),
-      new BooleanField({ name: 'baz', value: true })
-    ]
+      new BooleanField({ name: 'baz', value: true }),
+    ],
   });
 
   expect(field.getValue()).toEqual({
     firstName: 'Freddie',
-    baz: true
+    baz: true,
   });
 });

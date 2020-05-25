@@ -7,8 +7,8 @@ it('should reset password', async () => {
 
   resetPassword._registrar = {
     resetPassword: {
-      resetPassword: () => {}
-    }
+      resetPassword: () => {},
+    },
   };
 
   const resetPasswordSpy = jest.spyOn(

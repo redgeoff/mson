@@ -28,14 +28,14 @@ export default class Form extends UIComponent {
             formFactory: {
               component: 'Factory',
               product: {
-                component: 'SchemaValidatorForm'
-              }
-            }
+                component: 'SchemaValidatorForm',
+              },
+            },
           },
           {
             // TODO: can't this be removed?
             name: 'form',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'validators',
@@ -43,20 +43,20 @@ export default class Form extends UIComponent {
             formFactory: {
               component: 'Factory',
               product: {
-                component: 'ValidatorForm'
-              }
-            }
+                component: 'ValidatorForm',
+              },
+            },
           },
           {
             name: 'access',
             component: 'FormField',
             form: {
-              component: 'AccessForm'
-            }
+              component: 'AccessForm',
+            },
           },
           {
             name: 'indexes',
-            component: 'Field'
+            component: 'Field',
             // component: 'CollectionField',
             // form: {
             //   // TODO: create and use IndexForm. Needs to verfiy that fields are present--see
@@ -66,121 +66,121 @@ export default class Form extends UIComponent {
           },
           {
             name: 'touched',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'err',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'dirty',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'pristine',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'autoValidate',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'reportUndefined',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'resetOnLoad',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'showArchived',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'searchString',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'cursor',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'snapshot',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'mode',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'isLoading',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'omitDefaultFields',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'value',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'clear',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'reset',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'fullWidth',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'editable',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'hidden',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'required',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'out',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'disabled',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'eachField',
-            component: 'Field'
+            component: 'Field',
           },
           {
             // Used to disable the submit action on the form so that when the user clicks a submit
             // button on a nested form, it doesn't also trigger a submit on the parent form. This
             // can occur when using type=submit when there are multiple forms.
             name: 'disableSubmit',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'useDisplayValue',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'change',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'clearErrs',
-            component: 'BooleanField'
-          }
-        ]
-      }
+            component: 'BooleanField',
+          },
+        ],
+      },
     });
   }
 
@@ -212,7 +212,7 @@ export default class Form extends UIComponent {
       resetOnLoad: true,
 
       // Only show non-archived
-      showArchived: false
+      showArchived: false,
     });
 
     this._listenForLoad();
@@ -244,7 +244,7 @@ export default class Form extends UIComponent {
       // this._setSubmitDisabled(true);
 
       // Pass load event down to fields
-      this._fields.each(field => field.emitLoad());
+      this._fields.each((field) => field.emitLoad());
     };
   }
 
@@ -258,14 +258,14 @@ export default class Form extends UIComponent {
       this.set({ showArchived: false, searchString: null });
 
       // Pass unload event down to fields
-      this._fields.each(field => field.emitUnload());
+      this._fields.each((field) => field.emitUnload());
     });
   }
 
   _handleShowArchivedFactory() {
-    return showArchived => {
+    return (showArchived) => {
       // Pass event down to fields
-      this._fields.each(field => field.set({ showArchived }));
+      this._fields.each((field) => field.set({ showArchived }));
     };
   }
 
@@ -274,9 +274,9 @@ export default class Form extends UIComponent {
   }
 
   _handleSearchStringFactory() {
-    return searchString => {
+    return (searchString) => {
       // Pass event down to fields
-      this._fields.each(field => field.set({ searchString }));
+      this._fields.each((field) => field.set({ searchString }));
     };
   }
 
@@ -285,12 +285,12 @@ export default class Form extends UIComponent {
   }
 
   _handleScrollFactory() {
-    return e => {
+    return (e) => {
       // Pass scroll event down to fields
       //
       // TODO: why isn't the following working?
       // this._fields.each(field => field.emit('scroll', e));
-      this._fields.each(field => {
+      this._fields.each((field) => {
         field.emit('scroll', e);
       });
     };
@@ -337,7 +337,7 @@ export default class Form extends UIComponent {
       new DateField({
         name: 'archivedAt',
         label: 'Archived At',
-        hidden: true
+        hidden: true,
       })
     );
 
@@ -348,12 +348,12 @@ export default class Form extends UIComponent {
   }
 
   _createDefaultFields() {
-    this._defaultFields.each(field => this.addField(field));
+    this._defaultFields.each((field) => this.addField(field));
   }
 
   copyFields(form, clone) {
     const fields = [];
-    form._fields.each(field => {
+    form._fields.each((field) => {
       if (!this.isDefaultField(field.get('name'))) {
         this.addField(clone ? field.clone() : field);
         fields.push(field);
@@ -370,7 +370,7 @@ export default class Form extends UIComponent {
     this.copyFields(form);
     this.set({
       validators: form.get('validators'),
-      listeners: form.get('listeners')
+      listeners: form.get('listeners'),
     });
   }
 
@@ -391,7 +391,7 @@ export default class Form extends UIComponent {
   set(props) {
     // Add fields before calling super.set so that listeners are added after the fields
     if (props.fields !== undefined) {
-      props.fields.forEach(field => {
+      props.fields.forEach((field) => {
         this.addField(field);
       });
       this._emitChangeToFields(props.fields);
@@ -412,13 +412,13 @@ export default class Form extends UIComponent {
         out: undefined,
         disabled: undefined,
         setForEachField: undefined,
-        useDisplayValue: undefined
+        useDisplayValue: undefined,
       })
     );
 
     if (props.validators !== undefined) {
       this._validators = [];
-      props.validators.forEach(validator => {
+      props.validators.forEach((validator) => {
         this.addValidator(validator);
       });
     }
@@ -504,7 +504,7 @@ export default class Form extends UIComponent {
   }
 
   _handleFieldTouchedFactory() {
-    return touched => {
+    return (touched) => {
       if (touched) {
         this.set({ touched: true });
       }
@@ -520,7 +520,7 @@ export default class Form extends UIComponent {
     // TODO: need to consider that field already exists. Also need to worry about cleaning up any
     // existing listeners when this happens?
 
-    field.on('value', fieldValue => {
+    field.on('value', (fieldValue) => {
       // We use _setProperty() as if we used set() then we would trigger an infinite loop
       const value = this._value ? this._value : {};
       value[field.get('name')] = fieldValue;
@@ -534,13 +534,13 @@ export default class Form extends UIComponent {
 
     field.on('touched', this._handleFieldTouchedFactory());
 
-    field.on('err', err => {
+    field.on('err', (err) => {
       if (err) {
         this.set({ err: true });
       }
     });
 
-    field.on('dirty', dirty => {
+    field.on('dirty', (dirty) => {
       if (dirty) {
         this.set({ dirty: true });
       }
@@ -561,12 +561,12 @@ export default class Form extends UIComponent {
         // Wrap the component in a ComponentField so that we can use any component in the form
         field = new ComponentField({
           name: field.get('name'),
-          content: field
+          content: field,
         });
       } else {
         field = new ExtendedField({
           name: field.name,
-          properties: Object.assign({}, field, { name: undefined })
+          properties: Object.assign({}, field, { name: undefined }),
         });
       }
     }
@@ -631,7 +631,7 @@ export default class Form extends UIComponent {
   getValues(props) {
     let values = {};
     props = props ? props : {};
-    this._fields.each(field => {
+    this._fields.each((field) => {
       const name = field.get('name');
       if (
         (props.in === undefined || props.in === !!field.get('in')) &&
@@ -677,7 +677,7 @@ export default class Form extends UIComponent {
             } else if (this.get('reportUndefined')) {
               this._extraErrors.push({
                 field: name,
-                error: 'undefined field'
+                error: 'undefined field',
               });
             }
           }
@@ -687,12 +687,12 @@ export default class Form extends UIComponent {
   }
 
   clearValues() {
-    this._fields.each(field => field.clearValue());
+    this._fields.each((field) => field.clearValue());
   }
 
   clearErrs() {
     this.set({ err: null });
-    this._fields.each(field => field.clearErr());
+    this._fields.each((field) => field.clearErr());
   }
 
   reset() {
@@ -711,7 +711,7 @@ export default class Form extends UIComponent {
       const validator = new Validator(this._toValidatorProps());
       const errors = validator.validate(this._validators);
       if (errors.length !== 0) {
-        errors.forEach(error => {
+        errors.forEach((error) => {
           this.getField(error.field).setErr(error.error);
         });
       }
@@ -736,7 +736,7 @@ export default class Form extends UIComponent {
   validate() {
     this.clearErrs();
 
-    this._fields.each(field => field.validate());
+    this._fields.each((field) => field.validate());
 
     // TODO: should we also support functional validators? Probably as more powerful when working
     // just with JS. Other option is to extend form and define new validate().
@@ -756,39 +756,39 @@ export default class Form extends UIComponent {
 
   setTouched(touched) {
     this.set({ touched });
-    this._fields.each(field => field.set({ touched }));
+    this._fields.each((field) => field.set({ touched }));
   }
 
   setRequired(required) {
-    this._fields.each(field => field.set({ required }));
+    this._fields.each((field) => field.set({ required }));
   }
 
   setDisabled(disabled) {
-    this._fields.each(field => field.set({ disabled }));
+    this._fields.each((field) => field.set({ disabled }));
   }
 
   setEditable(editable) {
-    this._fields.each(field => field.set({ editable }));
+    this._fields.each((field) => field.set({ editable }));
   }
 
   setHidden(hidden) {
-    this._fields.each(field => field.set({ hidden }));
+    this._fields.each((field) => field.set({ hidden }));
   }
 
   setOut(out) {
-    this._fields.each(field => field.set({ out }));
+    this._fields.each((field) => field.set({ out }));
   }
 
   setSnapshot(snapshot) {
     if (snapshot === 'restore') {
       if (this._snapshotFields) {
-        this._snapshotFields.forEach(field => {
+        this._snapshotFields.forEach((field) => {
           this.getField(field.name).set(field);
         });
       }
     } else {
       // Take
-      const fields = this.mapFields(field =>
+      const fields = this.mapFields((field) =>
         field.get(['name', 'hidden', 'required', 'out', 'in'])
       );
       this._snapshotFields = fields;
@@ -798,18 +798,18 @@ export default class Form extends UIComponent {
   // TODO: remove and use set({ pristine }) instead?
   setDirty(dirty) {
     this.set({ dirty });
-    this._fields.each(field => field.set({ dirty }));
+    this._fields.each((field) => field.set({ dirty }));
   }
 
   _setFullWidth(fullWidth) {
-    this._fields.each(field => field.set({ fullWidth }));
+    this._fields.each((field) => field.set({ fullWidth }));
   }
 
   clone() {
     // It is much faster to call field.clone() instead of doing a cloneDeep of field as
     // field.clone() can use field._cloneFast()
 
-    const clonedFields = this.mapFields(field => field.clone());
+    const clonedFields = this.mapFields((field) => field.clone());
 
     let opts = {};
     const canCloneFast = this._canCloneFast();
@@ -818,9 +818,9 @@ export default class Form extends UIComponent {
       // We exclude the fields from the deep clone and clone them manually
       opts = {
         defaultProps: {
-          fields: clonedFields
+          fields: clonedFields,
         },
-        excludeProps: ['fields']
+        excludeProps: ['fields'],
       };
     }
 
@@ -850,12 +850,12 @@ export default class Form extends UIComponent {
       // Only if there we haven't encountered errors during the last set do we want to calculate the
       // field errors as these set errors can often cause field errors and we want to focus on the
       // root cause.
-      this._fields.each(field => {
+      this._fields.each((field) => {
         const err = field.getErr();
         if (err) {
           errs.push({
             field: field.get('name'),
-            error: err
+            error: err,
           });
         }
       });
@@ -872,7 +872,7 @@ export default class Form extends UIComponent {
   // value is cached.
   hasErrorForTouchedField() {
     let hasErr = false;
-    this._fields.each(field => {
+    this._fields.each((field) => {
       if (field.get('touched') && field.getErr()) {
         hasErr = true;
         return false; // exit loop
@@ -885,7 +885,7 @@ export default class Form extends UIComponent {
   // value is cached.
   hasErrorForField() {
     let hasErr = false;
-    this._fields.each(field => {
+    this._fields.each((field) => {
       if (field.getErr()) {
         hasErr = true;
         return false; // exit loop
@@ -896,7 +896,7 @@ export default class Form extends UIComponent {
 
   _getSubmitButton() {
     let button = null;
-    this.eachField(field => {
+    this.eachField((field) => {
       if (field instanceof ButtonField && field.get('type') === 'submit') {
         button = field;
         return false; // exit loop
@@ -922,7 +922,7 @@ export default class Form extends UIComponent {
 
   isBlank() {
     let isBlank = true;
-    this._fields.each(field => {
+    this._fields.each((field) => {
       if (!field.isBlank()) {
         isBlank = false;
         return false; // exit loop
@@ -950,16 +950,16 @@ export default class Form extends UIComponent {
         const form = product();
         form.set({ compiler });
         return form;
-      }
+      },
     });
 
     // Monkey patch setValues so that we can dynamically set the fieldNames when validating the
     // access
     const origSetValues = form.setValues;
-    form.setValues = function(values) {
+    form.setValues = function (values) {
       let fieldNames = [];
       if (values.fields) {
-        values.fields.forEach(field => {
+        values.fields.forEach((field) => {
           // Was a name specified? It may not have been if there is an error in the fields def
           if (field.name) {
             fieldNames.push(field.name);
@@ -970,15 +970,12 @@ export default class Form extends UIComponent {
       if (values.component) {
         // Get inherited fields
         const extendedForm = compiler.newComponent({
-          component: values.component
+          component: values.component,
         });
-        extendedForm.eachField(field => fieldNames.push(field.get('name')));
+        extendedForm.eachField((field) => fieldNames.push(field.get('name')));
       }
 
-      form
-        .getField('access')
-        .getForm()
-        .set({ fieldNames });
+      form.getField('access').getForm().set({ fieldNames });
 
       origSetValues.apply(this, arguments);
     };
@@ -990,7 +987,7 @@ export default class Form extends UIComponent {
 
   // TODO: refactor calls in this class to use setForEachField when possible
   setForEachField(props) {
-    this._fields.each(field => field.set(props));
+    this._fields.each((field) => field.set(props));
   }
 
   setUseDisplayValue(useDisplayValue) {
@@ -999,7 +996,7 @@ export default class Form extends UIComponent {
 
   destroy() {
     super.destroy();
-    this.eachField(field => field.destroy());
+    this.eachField((field) => field.destroy());
   }
 
   setFieldErr(fieldName, err) {

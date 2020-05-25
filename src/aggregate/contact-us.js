@@ -6,34 +6,34 @@ export default {
     fields: [
       {
         name: 'from',
-        component: 'TextField'
+        component: 'TextField',
       },
       {
         name: 'sender',
-        component: 'TextField'
+        component: 'TextField',
       },
       {
         name: 'replyTo',
-        component: 'TextField'
+        component: 'TextField',
       },
       {
         name: 'to',
         component: 'TextField',
-        required: true
+        required: true,
       },
       {
         name: 'subject',
-        component: 'TextField'
+        component: 'TextField',
       },
       {
         name: 'body',
-        component: 'TextField'
+        component: 'TextField',
       },
       {
         name: 'store',
-        component: 'Field'
-      }
-    ]
+        component: 'Field',
+      },
+    ],
   },
   sender:
     '"{{fields.firstName.value}} {{fields.lastName.value}}" <{{fields.email.value}}>',
@@ -49,26 +49,26 @@ export default {
       name: 'firstName',
       label: 'First Name',
       required: true,
-      block: false
+      block: false,
     },
     {
       component: 'PersonNameField',
       name: 'lastName',
       label: 'Last Name',
-      required: true
+      required: true,
     },
     {
       component: 'EmailField',
       name: 'email',
       label: 'Email',
-      required: true
+      required: true,
     },
     {
       component: 'TextField',
       name: 'subject',
       label: 'Subject',
       required: true,
-      fullWidth: true
+      fullWidth: true,
     },
     {
       component: 'TextField',
@@ -78,24 +78,24 @@ export default {
       multiline: true,
       rows: 2,
       rowsMax: 20,
-      fullWidth: true
+      fullWidth: true,
     },
     {
-      component: 'ReCAPTCHAField'
+      component: 'ReCAPTCHAField',
     },
     {
       component: 'ButtonField',
       type: 'submit',
       name: 'submit',
       label: 'Send Message',
-      icon: 'Email'
+      icon: 'Email',
     },
     {
       component: 'ButtonField',
       name: 'cancel',
       label: 'Cancel',
-      icon: 'Cancel'
-    }
+      icon: 'Cancel',
+    },
   ],
   listeners: [
     {
@@ -103,23 +103,23 @@ export default {
       actions: [
         {
           component: 'UpsertDoc',
-          store: '{{store}}'
+          store: '{{store}}',
         },
         {
           component: 'Snackbar',
-          message: 'Message sent. Please expect a response shortly.'
+          message: 'Message sent. Please expect a response shortly.',
         },
         {
           // Set the form to pristine so that we don't get warned about discarding changes
           component: 'Set',
           name: 'pristine',
-          value: true
+          value: true,
         },
         {
           component: 'Redirect',
-          path: '/'
-        }
-      ]
+          path: '/',
+        },
+      ],
     },
     {
       event: 'createRecord',
@@ -134,18 +134,18 @@ export default {
           body: '{{body}}',
 
           // Detached so that user doesn't have to wait for email to send
-          detached: true
-        }
-      ]
+          detached: true,
+        },
+      ],
     },
     {
       event: 'cancel',
       actions: [
         {
           component: 'Redirect',
-          path: '/'
-        }
-      ]
-    }
-  ]
+          path: '/',
+        },
+      ],
+    },
+  ],
 };

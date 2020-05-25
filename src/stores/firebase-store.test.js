@@ -5,7 +5,7 @@ import {
   shouldGetAll,
   shouldMove,
   createDoc,
-  updateDoc
+  updateDoc,
 } from './store-test';
 import testUtils from '../test-utils';
 import { Reorder } from './reorder';
@@ -29,8 +29,8 @@ it('should listen to changes', async () => {
       updatedAt: new Date(),
       fieldValues: {
         id: '1',
-        firstName: 'Harry'
-      }
+        firstName: 'Harry',
+      },
     },
     {
       id: '2',
@@ -40,24 +40,24 @@ it('should listen to changes', async () => {
       updatedAt: new Date(),
       fieldValues: {
         id: '2',
-        firstName: 'Hermione'
-      }
-    }
+        firstName: 'Hermione',
+      },
+    },
   ];
 
   const firebaseMock = new FirebaseMock(
-    docs.map(doc => ({ value: doc, id: doc.id }))
+    docs.map((doc) => ({ value: doc, id: doc.id }))
   );
 
   const store = new FirebaseStore({
     firebase: firebaseMock,
-    apiKey: 'key'
+    apiKey: 'key',
   });
 
   // Verify initial load
   await testUtils.once(store, 'didLoad');
   const initialDocs = await store.getAllDocs({ showArchived: false });
-  expect(initialDocs.edges.map(doc => doc.node)).toEqual(docs);
+  expect(initialDocs.edges.map((doc) => doc.node)).toEqual(docs);
 
   // Use string to avoid race condition on comparing dates
   const createdAt = new Date().toISOString();
@@ -74,9 +74,9 @@ it('should listen to changes', async () => {
       updatedAt: createdAt,
       fieldValues: {
         id: '3',
-        firstName: 'Ron'
-      }
-    }
+        firstName: 'Ron',
+      },
+    },
   };
   firebaseMock.emitSnapshot([docToCreate]);
   const created = await afterCreate;
@@ -94,9 +94,9 @@ it('should listen to changes', async () => {
       updatedAt: createdAt,
       fieldValues: {
         id: '3',
-        firstName: 'Ronald'
-      }
-    }
+        firstName: 'Ronald',
+      },
+    },
   };
   firebaseMock.emitSnapshot([docToUpdate]);
   const updated = await afterUpdate;
@@ -114,9 +114,9 @@ it('should listen to changes', async () => {
       updatedAt: createdAt,
       fieldValues: {
         id: '3',
-        firstName: 'Ronald'
-      }
-    }
+        firstName: 'Ronald',
+      },
+    },
   };
   firebaseMock.emitSnapshot([docToDelete]);
   const deleted = await afterDelete;
@@ -138,7 +138,7 @@ it('should get firebase from global', () => {
   const store = new FirebaseStore();
   const firebaseMock = new FirebaseMock();
   store._global = {
-    firebase: firebaseMock
+    firebase: firebaseMock,
   };
   expect(store._getFirebase({})).toEqual(firebaseMock);
 });
@@ -152,9 +152,9 @@ it('should listen to changes with respect to order', async () => {
     updatedAt: new Date(),
     fieldValues: {
       id: 'ron',
-      firstName: 'Ron'
+      firstName: 'Ron',
     },
-    order: '1'
+    order: '1',
   };
 
   const doc2 = {
@@ -165,8 +165,8 @@ it('should listen to changes with respect to order', async () => {
     updatedAt: new Date(),
     fieldValues: {
       id: 'harry',
-      firstName: 'Harry'
-    }
+      firstName: 'Harry',
+    },
   };
 
   const doc3 = {
@@ -178,25 +178,25 @@ it('should listen to changes with respect to order', async () => {
     order: '1.9',
     fieldValues: {
       id: 'hermione',
-      firstName: 'Hermione'
-    }
+      firstName: 'Hermione',
+    },
   };
 
   const docs = [doc1, doc2, doc3];
 
   const firebaseMock = new FirebaseMock(
-    docs.map(doc => ({ value: doc, id: doc.id }))
+    docs.map((doc) => ({ value: doc, id: doc.id }))
   );
 
   const store = new FirebaseStore({
     firebase: firebaseMock,
-    apiKey: 'key'
+    apiKey: 'key',
   });
 
   // Verify initial load
   await testUtils.once(store, 'didLoad');
   const initialDocs = await store.getAllDocs({ showArchived: false });
-  expect(initialDocs.edges.map(doc => doc.node)).toEqual([doc1, doc3, doc2]);
+  expect(initialDocs.edges.map((doc) => doc.node)).toEqual([doc1, doc3, doc2]);
 });
 
 it('should only initialize app once', () => {
@@ -205,13 +205,13 @@ it('should only initialize app once', () => {
 
   new FirebaseStore({
     firebase,
-    apiKey: 'key'
+    apiKey: 'key',
   });
   expect(initializeAppSpy).toHaveBeenCalledTimes(1);
 
   new FirebaseStore({
     firebase,
-    apiKey: 'key'
+    apiKey: 'key',
   });
   expect(initializeAppSpy).toHaveBeenCalledTimes(1);
 });
@@ -219,27 +219,27 @@ it('should only initialize app once', () => {
 it('should reorder', async () => {
   const store = new FirebaseStore({
     firebase: new FirebaseMock(),
-    apiKey: 'key'
+    apiKey: 'key',
   });
 
   const harryFieldValues = {
     firstName: 'Harry',
-    lastName: 'Potter'
+    lastName: 'Potter',
   };
 
   const harryValues = {
     ...harryFieldValues,
-    order: 0
+    order: 0,
   };
 
   const hermioneFieldValues = {
     firstName: 'Hermione',
-    lastName: 'Granger'
+    lastName: 'Granger',
   };
 
   const hermioneValues = {
     ...hermioneFieldValues,
-    order: 0
+    order: 0,
   };
 
   const docSetSpy = jest.spyOn(store, '_docSet');
@@ -248,11 +248,11 @@ it('should reorder', async () => {
   const harry = await createDoc(store, harryValues);
   expect(await store.getDoc({ id: harry.id })).toMatchObject({
     fieldValues: harryFieldValues,
-    order: 0
+    order: 0,
   });
   expect(docSetSpy.mock.calls[0][0].doc).toMatchObject({
     fieldValues: harryFieldValues,
-    order: 0
+    order: 0,
   });
 
   // Create again
@@ -260,19 +260,19 @@ it('should reorder', async () => {
   const hermione = await createDoc(store, hermioneValues);
   expect(await store.getDoc({ id: hermione.id })).toMatchObject({
     fieldValues: hermioneFieldValues,
-    order: 0
+    order: 0,
   });
   expect(await store.getDoc({ id: harry.id })).toMatchObject({
     fieldValues: harryFieldValues,
-    order: 1
+    order: 1,
   });
   expect(docSetSpy.mock.calls[0][0].doc).toMatchObject({
     fieldValues: harryFieldValues,
-    order: 1
+    order: 1,
   });
   expect(docSetSpy.mock.calls[1][0].doc).toMatchObject({
     fieldValues: hermioneFieldValues,
-    order: 0
+    order: 0,
   });
 
   // Update
@@ -282,19 +282,19 @@ it('should reorder', async () => {
   await updateDoc(store, hermioneValues);
   expect(await store.getDoc({ id: harry.id })).toMatchObject({
     fieldValues: harryFieldValues,
-    order: 0
+    order: 0,
   });
   expect(await store.getDoc({ id: hermione.id })).toMatchObject({
     fieldValues: hermioneFieldValues,
-    order: 1
+    order: 1,
   });
   expect(docSetSpy.mock.calls[0][0].doc).toMatchObject({
     fieldValues: harryFieldValues,
-    order: 0
+    order: 0,
   });
   expect(docSetSpy.mock.calls[1][0].doc).toMatchObject({
     fieldValues: hermioneFieldValues,
-    order: 1
+    order: 1,
   });
 
   // Archive
@@ -302,19 +302,19 @@ it('should reorder', async () => {
   await store.archiveDoc({ id: harry.id, reorder: true });
   expect(await store.getDoc({ id: hermione.id })).toMatchObject({
     fieldValues: hermioneFieldValues,
-    order: 0
+    order: 0,
   });
   expect(await store.getDoc({ id: harry.id })).toMatchObject({
     fieldValues: harryFieldValues,
-    order: Reorder.DEFAULT_ORDER
+    order: Reorder.DEFAULT_ORDER,
   });
   expect(docSetSpy.mock.calls[0][0].doc).toMatchObject({
     fieldValues: hermioneFieldValues,
-    order: 0
+    order: 0,
   });
   expect(docSetSpy.mock.calls[1][0].doc).toMatchObject({
     fieldValues: harryFieldValues,
-    order: Reorder.DEFAULT_ORDER
+    order: Reorder.DEFAULT_ORDER,
   });
 
   // Restore
@@ -322,15 +322,15 @@ it('should reorder', async () => {
   await store.restoreDoc({ id: harry.id, reorder: true });
   expect(await store.getDoc({ id: hermione.id })).toMatchObject({
     fieldValues: hermioneFieldValues,
-    order: 0
+    order: 0,
   });
   expect(await store.getDoc({ id: harry.id })).toMatchObject({
     fieldValues: harryFieldValues,
-    order: 1
+    order: 1,
   });
   expect(docSetSpy.mock.calls[0][0].doc).toMatchObject({
     fieldValues: harryFieldValues,
-    order: 1
+    order: 1,
   });
 });
 
@@ -339,7 +339,7 @@ it('should strip undefined values when saving', async () => {
 
   const store = new FirebaseStore({
     firebase,
-    apiKey: 'key'
+    apiKey: 'key',
   });
 
   const id = 1;
@@ -353,17 +353,17 @@ it('should strip undefined values when saving', async () => {
       lastName: undefined,
       nested: {
         house: 'Gryffindor',
-        school: undefined
-      }
-    }
+        school: undefined,
+      },
+    },
   });
 
   expect(setSpy).toHaveBeenCalledWith(id, {
     firstName: 'Harry',
     lastName: undefined,
     nested: {
-      house: 'Gryffindor'
-    }
+      house: 'Gryffindor',
+    },
   });
   const doc = setSpy.mock.calls[0][1];
   expect(doc.hasOwnProperty('lastName')).toEqual(false);

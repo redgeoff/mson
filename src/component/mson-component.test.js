@@ -8,8 +8,8 @@ it('should build in constructor', () => {
     definition: {
       name: 'name',
       component: 'TextField',
-      label: 'Name'
-    }
+      label: 'Name',
+    },
   });
 
   component.setValue('Robert Plant');
@@ -20,8 +20,8 @@ it('should not preserve class name', () => {
   const component = new MSONComponent({
     definition: {
       name: 'name',
-      component: 'TextField'
-    }
+      component: 'TextField',
+    },
   });
 
   expect(component.getClassName()).toEqual('TextField');
@@ -42,7 +42,7 @@ it('should throw if compiler not registered', () => {
 
   expect(() =>
     component.set({
-      definition: null
+      definition: null,
     })
   ).toThrow();
 });

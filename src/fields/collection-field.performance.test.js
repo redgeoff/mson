@@ -9,11 +9,11 @@ import Factory from '../component/factory';
 
 const formName = utils.uuid();
 
-const createForm = props => {
+const createForm = (props) => {
   return new Form({
     fields: [
       new TextField({ name: 'firstName', label: 'First Name', required: true }),
-      new TextField({ name: 'lastName', label: 'Last Name', required: true })
+      new TextField({ name: 'lastName', label: 'Last Name', required: true }),
     ],
 
     // Needed so that parent is populated in fillerProps
@@ -22,24 +22,24 @@ const createForm = props => {
         event: 'foo',
         actions: [
           new Emit({
-            event: 'didFoo'
-          })
-        ]
-      }
+            event: 'didFoo',
+          }),
+        ],
+      },
     ],
 
-    ...props
+    ...props,
   });
 };
 
-const createField = props => {
+const createField = (props) => {
   return new CollectionField({
     label: 'People',
     singularLabel: 'Person',
     formFactory: new Factory({
-      product: () => createForm()
+      product: () => createForm(),
     }),
-    ...props
+    ...props,
   });
 };
 
@@ -49,13 +49,13 @@ beforeAll(() => {
     fields: [
       {
         name: 'firstName',
-        component: 'TextField'
+        component: 'TextField',
       },
       {
         name: 'lastName',
-        component: 'TextField'
-      }
-    ]
+        component: 'TextField',
+      },
+    ],
   });
 });
 
@@ -78,9 +78,9 @@ const shouldAddFormsQuickly = (field, milliseconds, synchronous) => {
       const result = field.addForm({
         values: {
           firstName: 'First ' + i,
-          lastName: 'Last ' + i
+          lastName: 'Last ' + i,
         },
-        synchronous
+        synchronous,
       });
       if (!synchronous) {
         await result;
@@ -110,13 +110,13 @@ const shouldAddFormsQuicklyUncompiledComponents = (timeout, synchronous) => {
             actions: [
               {
                 component: 'Emit',
-                event: 'didFoo'
-              }
-            ]
-          }
-        ]
-      }
-    }
+                event: 'didFoo',
+              },
+            ],
+          },
+        ],
+      },
+    },
   });
 
   return shouldAddFormsQuickly(field, timeout, synchronous);

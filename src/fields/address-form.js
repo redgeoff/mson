@@ -7,7 +7,7 @@ export default {
       label: 'Address Line 1',
       maxLength: 100,
       required: true,
-      hidden: true
+      hidden: true,
     },
     {
       name: 'addressLine2',
@@ -15,7 +15,7 @@ export default {
       label: 'Address Line 2',
       maxLength: 100,
       required: false,
-      hidden: true
+      hidden: true,
     },
     {
       name: 'city',
@@ -23,7 +23,7 @@ export default {
       label: 'City',
       required: true,
       block: false,
-      hidden: true
+      hidden: true,
     },
     {
       name: 'stateProvince',
@@ -31,21 +31,21 @@ export default {
       label: 'State/Province',
       required: true,
       block: false,
-      hidden: true
+      hidden: true,
     },
     {
       name: 'postalCode',
       component: 'PostalCodeField',
       label: 'Postal Code',
       required: true,
-      hidden: true
+      hidden: true,
     },
     {
       name: 'country',
       component: 'CountryField',
       label: 'Country',
-      required: true
-    }
+      required: true,
+    },
   ],
   listeners: [
     {
@@ -55,35 +55,35 @@ export default {
           component: 'Action',
           if: {
             'fields.country.value': {
-              $ne: null
-            }
+              $ne: null,
+            },
           },
           actions: [
             {
               component: 'Emit',
-              event: 'adjustFields'
+              event: 'adjustFields',
             },
             {
               component: 'Emit',
               event: 'setHidden',
-              value: false
-            }
+              value: false,
+            },
           ],
           else: [
             {
               component: 'Emit',
               event: 'setHidden',
-              value: true
+              value: true,
             },
             {
               // Avoid showing errors when the value is cleared
               component: 'Set',
               name: 'clearErrs',
-              value: true
-            }
-          ]
-        }
-      ]
+              value: true,
+            },
+          ],
+        },
+      ],
     },
     {
       event: 'setHidden',
@@ -96,10 +96,10 @@ export default {
             'fields.addressLine2.hidden': '{{arguments}}',
             'fields.city.hidden': '{{arguments}}',
             'fields.stateProvince.hidden': '{{arguments}}',
-            'fields.postalCode.hidden': '{{arguments}}'
-          }
-        }
-      ]
+            'fields.postalCode.hidden': '{{arguments}}',
+          },
+        },
+      ],
     },
     {
       event: 'adjustFields',
@@ -107,7 +107,7 @@ export default {
         {
           component: 'Action',
           if: {
-            'fields.country.value': 'US'
+            'fields.country.value': 'US',
           },
           actions: [
             {
@@ -116,21 +116,21 @@ export default {
               component: 'Action',
               if: {
                 'fields.stateProvince.value': {
-                  $ne: null
-                }
+                  $ne: null,
+                },
               },
               actions: [
                 {
                   component: 'Set',
-                  value: '{{fields.stateProvince.value}}'
-                }
+                  value: '{{fields.stateProvince.value}}',
+                },
               ],
               else: [
                 {
                   component: 'Set',
-                  value: null
-                }
-              ]
+                  value: null,
+                },
+              ],
             },
             {
               component: 'Set',
@@ -142,13 +142,13 @@ export default {
                     component: 'StateField',
                     label: 'State',
                     required: true,
-                    block: false
-                  }
+                    block: false,
+                  },
                 ],
                 'fields.stateProvince.value': '{{arguments}}',
-                'fields.postalCode.label': 'Zip Code'
-              }
-            }
+                'fields.postalCode.label': 'Zip Code',
+              },
+            },
           ],
           else: [
             {
@@ -157,21 +157,21 @@ export default {
               component: 'Action',
               if: {
                 'fields.stateProvince.value': {
-                  $ne: null
-                }
+                  $ne: null,
+                },
               },
               actions: [
                 {
                   component: 'Set',
-                  value: '{{fields.stateProvince.value}}'
-                }
+                  value: '{{fields.stateProvince.value}}',
+                },
               ],
               else: [
                 {
                   component: 'Set',
-                  value: null
-                }
-              ]
+                  value: null,
+                },
+              ],
             },
             {
               component: 'Set',
@@ -183,16 +183,16 @@ export default {
                     component: 'ProvinceField',
                     label: 'State/Province',
                     required: true,
-                    block: false
-                  }
+                    block: false,
+                  },
                 ],
                 'fields.stateProvince.value': '{{arguments}}',
-                'fields.postalCode.label': 'Postal Code'
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ]
+                'fields.postalCode.label': 'Postal Code',
+              },
+            },
+          ],
+        },
+      ],
+    },
+  ],
 };

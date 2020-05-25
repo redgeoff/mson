@@ -15,63 +15,63 @@ export default class TextField extends Field {
             name: 'minLength',
             component: 'IntegerField',
             label: 'Min Length',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'maxLength',
             component: 'IntegerField',
             label: 'Max Length',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'minWords',
             component: 'IntegerField',
-            label: 'Min Words'
+            label: 'Min Words',
             // docLevel: 'basic' // Document once implemented
           },
           {
             name: 'maxWords',
             component: 'IntegerField',
-            label: 'Max Words'
+            label: 'Max Words',
             // docLevel: 'basic' // Document once implemented
           },
           {
             // TODO: define list of acceptable values
             name: 'type',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'invalidRegExp',
             component: 'TextField',
             label: 'Invalid RegExp',
             docLevel: 'basic',
-            help: 'Invalid if this regular expression matches, e.g. /foo/'
+            help: 'Invalid if this regular expression matches, e.g. /foo/',
           },
           {
             name: 'multiline',
             component: 'BooleanField',
             label: 'Multiline',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'rows',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'rowsMax',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'mask',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'unmask',
-            component: 'RegExpField'
-          }
+            component: 'RegExpField',
+          },
         ],
-        hidden: this._hideTextFieldSchema
-      }
+        hidden: this._hideTextFieldSchema,
+      },
     });
   }
 
@@ -85,7 +85,7 @@ export default class TextField extends Field {
 
   _toValidatorProps() {
     return {
-      get: name => {
+      get: (name) => {
         switch (name) {
           case 'length':
             return this.get('value').length;
@@ -94,7 +94,7 @@ export default class TextField extends Field {
           default:
             return this.get(name);
         }
-      }
+      },
     };
   }
 
@@ -128,12 +128,12 @@ export default class TextField extends Field {
   }
 
   _stringToArrayMask(mask) {
-    return map(mask, item => (item === '.' ? /./ : item));
+    return map(mask, (item) => (item === '.' ? /./ : item));
   }
 
   _formatMask(mask) {
     if (Array.isArray(mask)) {
-      return mask.map(item => {
+      return mask.map((item) => {
         // Is the item a RegExp or a string that is not formatted as a RegExp?
         if (item instanceof RegExp || !utils.isRegExpString(item)) {
           return item;
@@ -172,7 +172,7 @@ export default class TextField extends Field {
 
   _conformToMask(value, mask) {
     var conformed = conformToMask(value, mask, {
-      guide: false
+      guide: false,
     });
     return conformed.conformedValue;
   }

@@ -22,7 +22,7 @@ it('should set, get & clear', () => {
   // Get
   expect(form.getValues()).toMatchObject({
     ...values1,
-    label: 'First Name'
+    label: 'First Name',
   });
 
   // Clear
@@ -35,7 +35,7 @@ it('should preserve values', () => {
     componentName: 'NumberField',
     name: 'age',
     label: 'Age',
-    maxValue: 100
+    maxValue: 100,
   };
 
   form.setValues(values);
@@ -47,6 +47,6 @@ it('should preserve values', () => {
   expect(form.getValues()).toMatchObject({
     componentName: 'TextField',
     name: 'age',
-    label: 'Age'
+    label: 'Age',
   });
 });

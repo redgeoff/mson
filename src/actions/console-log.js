@@ -16,10 +16,10 @@ export default class ConsoleLog extends Action {
         fields: [
           {
             name: 'message',
-            component: 'TextField'
-          }
-        ]
-      }
+            component: 'TextField',
+          },
+        ],
+      },
     });
   }
 

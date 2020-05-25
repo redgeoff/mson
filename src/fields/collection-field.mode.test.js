@@ -5,19 +5,19 @@ import Form from '../form';
 import Factory from '../component/factory';
 import {
   onGetItemElementMock,
-  createMockedStore
+  createMockedStore,
 } from '../infinite-loader.fixtures';
 
 const createForm = () => {
   return new Form({
-    fields: [new TextField({ name: 'name', label: 'Name', required: true })]
+    fields: [new TextField({ name: 'name', label: 'Name', required: true })],
   });
 };
 
-const createField = props => {
+const createField = (props) => {
   const field = new CollectionField({
     formFactory: new Factory({ product: () => createForm() }),
-    ...props
+    ...props,
   });
 
   // Mock as we aren't actually rendering
@@ -30,7 +30,7 @@ let field = null;
 
 beforeEach(async () => {
   field = createField({
-    store: createMockedStore()
+    store: createMockedStore(),
   });
 
   // Simulate the load event emitted by the UI, which will trigger the initial load
@@ -152,8 +152,8 @@ it('should set current form', () => {
   firstForm.set({
     value: {
       userId,
-      archivedAt
-    }
+      archivedAt,
+    },
   });
 
   // currentForm is null
@@ -169,7 +169,7 @@ it('should set current form', () => {
   prepareForm.mockClear();
   field._setCurrentForm(firstForm);
   expect(set).toHaveBeenCalledWith({
-    value: firstForm.getValues()
+    value: firstForm.getValues(),
   });
   expect(copyValuesToCurrentForm).toHaveBeenCalledWith(form, firstForm);
   expect(prepareForm).toHaveBeenCalledTimes(1);
@@ -179,7 +179,7 @@ it('should set current form', () => {
   field.set({ currentForm: firstForm });
   field._setCurrentForm(firstForm);
   expect(set).toHaveBeenCalledWith({
-    value: firstForm.getValues()
+    value: firstForm.getValues(),
   });
 });
 
@@ -191,7 +191,7 @@ it('should copy values to current form', () => {
   field._copyValuesToCurrentForm(form, firstForm);
   expect(clearValues).toHaveBeenCalledTimes(1);
   expect(set).toHaveBeenCalledWith({
-    value: firstForm.getValues()
+    value: firstForm.getValues(),
   });
 });
 

@@ -10,12 +10,12 @@ it('should validate', () => {
   expect(validator.getErrs()).toEqual([
     {
       field: 'where',
-      error: 'required'
+      error: 'required',
     },
     {
       field: 'error',
-      error: 'required'
-    }
+      error: 'required',
+    },
   ]);
 
   validator.setValues({
@@ -23,15 +23,15 @@ it('should validate', () => {
       fields: {
         retypePassword: {
           value: {
-            $ne: '{{fields.password.value}}'
-          }
-        }
-      }
+            $ne: '{{fields.password.value}}',
+          },
+        },
+      },
     },
     error: {
       field: 'retypePassword',
-      error: 'must match'
-    }
+      error: 'must match',
+    },
   });
 
   validator.validate();
@@ -42,15 +42,15 @@ it('should validate', () => {
       fields: {
         retypePassword: {
           value: {
-            $invalidOp: '{{fields.password.value}}'
-          }
-        }
-      }
+            $invalidOp: '{{fields.password.value}}',
+          },
+        },
+      },
     },
     error: {
       field: 'retypePassword',
-      error: 'must match'
-    }
+      error: 'must match',
+    },
   });
 
   validator.validate();
@@ -60,9 +60,9 @@ it('should validate', () => {
       field: 'where',
       error: [
         {
-          error: 'Unknown operation $invalidOp'
-        }
-      ]
-    }
+          error: 'Unknown operation $invalidOp',
+        },
+      ],
+    },
   ]);
 });

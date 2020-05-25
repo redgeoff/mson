@@ -19,9 +19,9 @@ export default class FormBuilder extends Form {
         fields: [
           {
             name: 'mson',
-            component: 'Field'
-          }
-        ]
+            component: 'Field',
+          },
+        ],
       },
 
       fields: [
@@ -31,30 +31,30 @@ export default class FormBuilder extends Form {
             {
               name: 'edit',
               label: 'Edit',
-              icon: 'Edit'
+              icon: 'Edit',
             },
             {
               name: 'preview',
               label: 'Preview',
-              icon: 'ViewCompact'
+              icon: 'ViewCompact',
             },
             {
               name: 'export',
               label: 'Export',
-              icon: 'code'
-            }
-          ]
+              icon: 'code',
+            },
+          ],
         }),
 
         new Text({
           name: 'mson',
-          hidden: true
+          hidden: true,
         }),
 
         new FormField({
           name: 'form',
-          form: new FormEditor()
-        })
+          form: new FormEditor(),
+        }),
       ],
 
       listeners: [
@@ -63,12 +63,12 @@ export default class FormBuilder extends Form {
           actions: [
             new Set({
               name: 'fields.form.form.editable',
-              value: true
+              value: true,
             }),
             new Emit({
-              event: 'hideCode'
-            })
-          ]
+              event: 'hideCode',
+            }),
+          ],
         },
 
         {
@@ -76,12 +76,12 @@ export default class FormBuilder extends Form {
           actions: [
             new Set({
               name: 'fields.form.form.editable',
-              value: false
+              value: false,
             }),
             new Emit({
-              event: 'hideCode'
-            })
-          ]
+              event: 'hideCode',
+            }),
+          ],
         },
 
         {
@@ -89,20 +89,20 @@ export default class FormBuilder extends Form {
           actions: [
             new JSONStringify({
               value: '{{mson}}',
-              space: 2
+              space: 2,
             }),
             new Set({
               name: 'fields.mson.content.text',
-              value: '```js\n{{arguments}}\n```\n'
+              value: '```js\n{{arguments}}\n```\n',
             }),
             new Emit({
               event: 'setCodeHidden',
               value: {
                 hideCode: false,
-                hideForm: true
-              }
-            })
-          ]
+                hideForm: true,
+              },
+            }),
+          ],
         },
 
         {
@@ -110,13 +110,13 @@ export default class FormBuilder extends Form {
           actions: [
             new Set({
               name: 'fields.mson.content.hidden',
-              value: '{{arguments.hideCode}}'
+              value: '{{arguments.hideCode}}',
             }),
             new Set({
               name: 'fields.form.hidden',
-              value: '{{arguments.hideForm}}'
-            })
-          ]
+              value: '{{arguments.hideForm}}',
+            }),
+          ],
         },
 
         {
@@ -126,19 +126,19 @@ export default class FormBuilder extends Form {
               event: 'setCodeHidden',
               value: {
                 hideCode: true,
-                hideForm: false
-              }
-            })
-          ]
-        }
-      ]
+                hideForm: false,
+              },
+            }),
+          ],
+        },
+      ],
     });
   }
 
   _setMSON(mson) {
-    const fields = mson.fields.map(field => ({
+    const fields = mson.fields.map((field) => ({
       ...field,
-      componentName: field.component
+      componentName: field.component,
     }));
 
     this.get('fields.form.form.fields.fields').setValue(fields);
@@ -155,11 +155,11 @@ export default class FormBuilder extends Form {
   _getMSON() {
     return {
       component: 'Form',
-      fields: this.get('fields.form.form.fields.fields').mapForms(form => ({
+      fields: this.get('fields.form.form.fields.fields').mapForms((form) => ({
         ...form.getValues({ default: false }),
         component: form.getValue('componentName'),
-        componentName: undefined
-      }))
+        componentName: undefined,
+      })),
     };
   }
 

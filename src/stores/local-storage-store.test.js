@@ -6,31 +6,31 @@ it('should CRUD', () =>
 
 it('should get all', () =>
   shouldGetAll(LocalStorageStore, {
-    storeName: 'local-storage-store-get-all'
+    storeName: 'local-storage-store-get-all',
   }));
 
 it('should move', () =>
   shouldMove(LocalStorageStore, {
-    storeName: 'local-storage-store-move'
+    storeName: 'local-storage-store-move',
   }));
 
 it('should loads docs when store exists', async () => {
   let fieldValues = {
     firstName: 'Ella',
-    lastName: 'Fitzgerald'
+    lastName: 'Fitzgerald',
   };
 
   const form = createForm({
-    value: fieldValues
+    value: fieldValues,
   });
 
   const store1 = new LocalStorageStore({
-    storeName: 'local-storage-store-exists'
+    storeName: 'local-storage-store-exists',
   });
   const ella = await store1.createDoc({ form });
 
   const store2 = new LocalStorageStore({
-    storeName: 'local-storage-store-exists'
+    storeName: 'local-storage-store-exists',
   });
   const doc = await store2.getDoc({ id: ella.id });
   // Use JSON.parse and JSON.stringify as the store converts dates to strings in this manner
@@ -48,8 +48,8 @@ it('should get local storage', () => {
   // Mock
   store._global = {
     window: {
-      localStorage
-    }
+      localStorage,
+    },
   };
 
   const storage2 = store._getLocalStorage();

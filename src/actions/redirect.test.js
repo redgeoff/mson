@@ -10,7 +10,7 @@ it('should redirect', async () => {
 
   // Mock
   redirect._globals = {
-    redirect: () => {}
+    redirect: () => {},
   };
 
   const redirectSpy = jest.spyOn(redirect._globals, 'redirect');

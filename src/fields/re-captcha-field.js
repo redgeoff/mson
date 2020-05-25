@@ -14,18 +14,18 @@ export default class ReCAPTCHAField extends Field {
           {
             // Name is not required
             name: 'name',
-            required: false
+            required: false,
           },
           {
             name: 'label',
-            docLevel: null
-          }
-        ]
-      }
+            docLevel: null,
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, {
-      required: true
+      required: true,
     });
   }
 }

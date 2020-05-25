@@ -9,18 +9,18 @@ it('should get doc', async () => {
   const form = new Form({
     fields: [
       new TextField({ name: 'firstName' }),
-      new TextField({ name: 'lastName' })
-    ]
+      new TextField({ name: 'lastName' }),
+    ],
   });
 
   const where = {
-    id: 'aretha'
+    id: 'aretha',
   };
 
   const doc = {
     id: 'aretha',
     firstName: 'Aretha',
-    lastName: 'Franklin'
+    lastName: 'Franklin',
   };
 
   // Mock data
@@ -35,6 +35,6 @@ it('should get doc', async () => {
   expect(values).toEqual(createdDoc);
 
   expect(getDocsSpy).toHaveBeenCalledWith({
-    where
+    where,
   });
 });

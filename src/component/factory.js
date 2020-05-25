@@ -11,14 +11,14 @@ export default class Factory extends Component {
           {
             name: 'product',
             component: 'Field',
-            required: true
+            required: true,
           },
           {
             name: 'properties',
-            component: 'Field'
-          }
-        ]
-      }
+            component: 'Field',
+          },
+        ],
+      },
     });
   }
 

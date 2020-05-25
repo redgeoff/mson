@@ -9,7 +9,7 @@ const MASK_PROPS = [
   'allowDecimal',
   'decimalSymbol',
   'decimalLimit',
-  'allowNegative'
+  'allowNegative',
 ];
 
 export default class NumberField extends TextFieldHiddenSchema {
@@ -29,55 +29,55 @@ export default class NumberField extends TextFieldHiddenSchema {
             component: 'NumberField',
             label: 'Min Value',
             docLevel: 'basic',
-            thousandsSeparatorSymbol: ','
+            thousandsSeparatorSymbol: ',',
           },
           {
             name: 'maxValue',
             component: 'NumberField',
             label: 'Max Value',
             docLevel: 'basic',
-            thousandsSeparatorSymbol: ','
+            thousandsSeparatorSymbol: ',',
           },
           {
             name: 'prefix',
             component: 'TextField',
             label: 'Prefix',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'suffix',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'includeThousandsSeparator',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'thousandsSeparatorSymbol',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'allowDecimal',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'decimalSymbol',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'decimalLimit',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'allowNegative',
-            component: 'BooleanField'
-          }
-        ]
-      }
+            component: 'BooleanField',
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, {
-      unmask: /[^\d\\.]/g
+      unmask: /[^\d\\.]/g,
     });
   }
 
@@ -108,7 +108,7 @@ export default class NumberField extends TextFieldHiddenSchema {
   _shouldCreateMask(props) {
     // Is a masked prop defined and it is changing?
     let shouldCreate = false;
-    MASK_PROPS.forEach(name => {
+    MASK_PROPS.forEach((name) => {
       if (
         props[name] !== undefined &&
         props[name] !== this._getProperty(name)
@@ -124,10 +124,10 @@ export default class NumberField extends TextFieldHiddenSchema {
       prefix: '', // override default of '$'
       allowDecimal: true,
       decimalLimit: null,
-      allowNegative: true
+      allowNegative: true,
     };
 
-    MASK_PROPS.forEach(name => {
+    MASK_PROPS.forEach((name) => {
       if (props[name] !== undefined) {
         maskOpts[name] = props[name];
       }

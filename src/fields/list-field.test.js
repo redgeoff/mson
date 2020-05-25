@@ -8,7 +8,7 @@ import Factory from '../component/factory';
 
 it('should validate max size', () => {
   const field = new TextListField({
-    maxSize: 2
+    maxSize: 2,
   });
 
   field.setValue(['red', 'green']);
@@ -22,7 +22,7 @@ it('should validate max size', () => {
 
 it('should validate min size', () => {
   const field = new TextListField({
-    minSize: 2
+    minSize: 2,
   });
 
   field.setValue(['red', 'green']);
@@ -40,10 +40,10 @@ it('should allow for fieldFactory property', () => {
       product: () =>
         new TextField({
           name: 'color',
-          label: 'Color'
-        })
+          label: 'Color',
+        }),
     }),
-    minSize: 2
+    minSize: 2,
   });
 
   field.setValue(['red', 'green']);
@@ -99,11 +99,11 @@ it('should set block', () => {
 
   field.set({ block: true });
   expect(field.get('block')).toEqual(true);
-  field.eachField(field => expect(field.get('block')).toEqual(true));
+  field.eachField((field) => expect(field.get('block')).toEqual(true));
 
   field.set({ block: false });
   expect(field.get('block')).toEqual(false);
-  field.eachField(field => expect(field.get('block')).toEqual(false));
+  field.eachField((field) => expect(field.get('block')).toEqual(false));
 });
 
 it('should set full width', () => {
@@ -111,11 +111,11 @@ it('should set full width', () => {
 
   field.set({ fullWidth: true });
   expect(field.get('fullWidth')).toEqual(true);
-  field.eachField(field => expect(field.get('fullWidth')).toEqual(true));
+  field.eachField((field) => expect(field.get('fullWidth')).toEqual(true));
 
   field.set({ fullWidth: false });
   expect(field.get('fullWidth')).toEqual(false);
-  field.eachField(field => expect(field.get('fullWidth')).toEqual(false));
+  field.eachField((field) => expect(field.get('fullWidth')).toEqual(false));
 });
 
 it('new field should throw when field not defined', () => {
@@ -137,24 +137,24 @@ it('should determine if blank', () => {
 it('should report errors in sub fields', () => {
   const field = new ListField({
     fieldFactory: new Factory({
-      product: () => new EmailField()
-    })
+      product: () => new EmailField(),
+    }),
   });
 
   testUtils.expectValuesToBeInvalid(field, [
     ['test@'],
-    ['test@example.com', 'test@']
+    ['test@example.com', 'test@'],
   ]);
 
   testUtils.expectValuesToBeValid(field, [
     ['test1@example.com', 'test2@example.com'],
     null,
-    []
+    [],
   ]);
 
   field.set({
     value: ['test@'],
-    touched: false
+    touched: false,
   });
   field.validate();
   expect(field.hasErr()).toEqual(true);
@@ -164,17 +164,17 @@ it('form should emit canSubmit when field deleted', async () => {
   const emails = new ListField({
     name: 'emails',
     fieldFactory: new Factory({
-      product: () => new EmailField()
-    })
+      product: () => new EmailField(),
+    }),
   });
 
   const form = new Form({
     fields: [emails],
-    autoValidate: true
+    autoValidate: true,
   });
 
   form.setValues({
-    emails: ['test1@example.com', 'test2@example.com']
+    emails: ['test1@example.com', 'test2@example.com'],
   });
 
   // Note: this is needed as it simulates what happens in the UI after data is first loaded.

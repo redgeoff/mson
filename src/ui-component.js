@@ -14,10 +14,10 @@ export default class UIComponent extends Component {
             name: 'hidden',
             component: 'BooleanField',
             label: 'Hidden',
-            docLevel: 'basic'
-          }
-        ]
-      }
+            docLevel: 'basic',
+          },
+        ],
+      },
     });
   }
 }

@@ -7,7 +7,7 @@ export default class RolesField extends TextListField {
   _create(props) {
     super._create(props);
     this.set({
-      invalidRegExp: '/^' + Object.keys(Roles.RESERVED).join('|') + '$/'
+      invalidRegExp: '/^' + Object.keys(Roles.RESERVED).join('|') + '$/',
     });
   }
 }

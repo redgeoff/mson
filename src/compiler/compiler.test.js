@@ -43,15 +43,15 @@ const registerComponents = () => {
         name: 'name',
         label: 'Name',
         required: true,
-        help: 'Enter a full name'
+        help: 'Enter a full name',
       },
       {
         component: 'EmailField',
         name: 'email',
         label: 'Email',
-        required: true
-      }
-    ]
+        required: true,
+      },
+    ],
   });
 
   // Inheritance
@@ -61,19 +61,19 @@ const registerComponents = () => {
       {
         component: 'ButtonField',
         name: 'save',
-        label: 'Save'
+        label: 'Save',
       },
       {
         component: 'ButtonField',
         name: 'cancel',
-        label: 'Cancel'
-      }
-    ]
+        label: 'Cancel',
+      },
+    ],
   });
 
   // Composition
   compiler.registerComponent('app.EditThing', {
-    component: 'WrappedComponent'
+    component: 'WrappedComponent',
   });
 
   // Dynamic composition
@@ -83,17 +83,17 @@ const registerComponents = () => {
       {
         component: 'ButtonField',
         name: 'edit',
-        label: 'Edit'
-      }
-    ]
+        label: 'Edit',
+      },
+    ],
   });
 
   // Dynamic composition in registration
   compiler.registerComponent('app.EditNestedRegistrationThing', {
     component: 'app.EditNestedThing',
     componentToWrap: {
-      component: 'app.EditAccount'
-    }
+      component: 'app.EditAccount',
+    },
   });
 
   // Note: no longer supported
@@ -110,11 +110,11 @@ const registerComponents = () => {
   // });
 
   compiler.registerComponent('app.EditAccount1', {
-    component: 'app.EditAccount'
+    component: 'app.EditAccount',
   });
 
   compiler.registerComponent('app.EditAccount2', {
-    component: 'app.EditAccount'
+    component: 'app.EditAccount',
   });
 
   compiler.registerComponent('app.EditAccount3', {
@@ -124,15 +124,15 @@ const registerComponents = () => {
         component: 'TextField',
         name: 'firstName',
         label: 'First Name',
-        before: 'save'
+        before: 'save',
       },
       {
         component: 'TextField',
         name: 'lastName',
         label: 'Last Name',
-        before: 'save'
-      }
-    ]
+        before: 'save',
+      },
+    ],
   });
 
   // Template parameters in listeners
@@ -143,9 +143,9 @@ const registerComponents = () => {
       fields: [
         {
           name: 'foo',
-          component: 'TextField'
-        }
-      ]
+          component: 'TextField',
+        },
+      ],
     },
     listeners: [
       {
@@ -154,13 +154,13 @@ const registerComponents = () => {
           {
             component: 'Snackbar',
             if: {
-              foo: 'bar'
+              foo: 'bar',
             },
-            message: '{{foo}} this'
-          }
-        ]
-      }
-    ]
+            message: '{{foo}} this',
+          },
+        ],
+      },
+    ],
   });
 
   compiler.registerComponent('app.Login', {
@@ -171,29 +171,29 @@ const registerComponents = () => {
         name: 'username',
         label: 'Email',
         required: true,
-        fullWidth: true
+        fullWidth: true,
       },
       {
         component: 'ButtonField',
         name: 'submit',
         label: 'Log In',
-        type: 'submit'
-      }
+        type: 'submit',
+      },
     ],
     listeners: [
       {
         event: 'submit',
         actions: [
           {
-            component: 'Action'
+            component: 'Action',
           },
           {
             component: 'Emit',
-            event: 'didSubmit'
-          }
-        ]
-      }
-    ]
+            event: 'didSubmit',
+          },
+        ],
+      },
+    ],
   });
 
   compiler.registerComponent('app.App', {
@@ -203,11 +203,11 @@ const registerComponents = () => {
       items: [
         {
           content: {
-            component: 'app.Login'
-          }
-        }
-      ]
-    }
+            component: 'app.Login',
+          },
+        },
+      ],
+    },
   });
 
   compiler.registerComponent('app.CustomProps', {
@@ -217,10 +217,10 @@ const registerComponents = () => {
       fields: [
         {
           name: 'foo',
-          component: 'TextField'
-        }
-      ]
-    }
+          component: 'TextField',
+        },
+      ],
+    },
   });
 };
 
@@ -251,7 +251,7 @@ afterEach(() => {
 
 it('should build & destroy', () => {
   const account = compiler.newComponent({
-    component: 'app.Account'
+    component: 'app.Account',
   });
   expect(account.get('fields').length()).toEqual(
     testUtils.defaultFields.length + 2
@@ -260,7 +260,7 @@ it('should build & destroy', () => {
 
 it('should implement inheritance', () => {
   const account = compiler.newComponent({
-    component: 'app.EditAccount'
+    component: 'app.EditAccount',
   });
   expect(account.get('fields').length()).toEqual(
     testUtils.defaultFields.length + 4
@@ -271,8 +271,8 @@ it('should implement composition', () => {
   const thing1 = compiler.newComponent({
     component: 'app.EditThing',
     componentToWrap: {
-      component: 'app.EditAccount'
-    }
+      component: 'app.EditAccount',
+    },
   });
   expect(thing1.get('fields').length()).toEqual(
     testUtils.defaultFields.length + 4
@@ -283,8 +283,8 @@ it('should implement composition', () => {
   const thing2 = compiler.newComponent({
     component: 'app.EditThing',
     componentToWrap: {
-      component: 'app.Account'
-    }
+      component: 'app.Account',
+    },
   });
   expect(thing2.get('fields').length()).toEqual(
     testUtils.defaultFields.length + 2
@@ -411,8 +411,8 @@ it('should implement dynamic composition', () => {
   const thing = compiler.newComponent({
     component: 'app.EditNestedThing',
     componentToWrap: {
-      component: 'app.EditAccount'
-    }
+      component: 'app.EditAccount',
+    },
   });
   expect(thing.get('fields').length()).toEqual(
     testUtils.defaultFields.length + 5
@@ -433,7 +433,7 @@ it('should implement dynamic composition', () => {
 
 it('should implement dynamic nested inheritance in registration', () => {
   let thing = compiler.newComponent({
-    component: 'app.EditNestedRegistrationThing'
+    component: 'app.EditNestedRegistrationThing',
   });
   expect(thing.get('fields').length()).toEqual(
     testUtils.defaultFields.length + 5
@@ -448,11 +448,11 @@ it('should implement dynamic nested inheritance in registration', () => {
 
 it('should not share components', () => {
   const account1 = compiler.newComponent({
-    component: 'app.EditAccount1'
+    component: 'app.EditAccount1',
   });
 
   const account2 = compiler.newComponent({
-    component: 'app.EditAccount2'
+    component: 'app.EditAccount2',
   });
 
   account1.setEditable(false);
@@ -466,7 +466,7 @@ it('should support template parameters in listeners', async () => {
   const snackbarDisplayed = testUtils.once(globals, 'snackbarMessage');
   compiler.newComponent({
     component: 'app.TemplatedListeners',
-    foo: 'bar'
+    foo: 'bar',
   });
   await snackbarDisplayed;
 
@@ -476,7 +476,7 @@ it('should support template parameters in listeners', async () => {
 
 it('should clone inherited component that uses before', () => {
   const account3 = compiler.newComponent({
-    component: 'app.EditAccount3'
+    component: 'app.EditAccount3',
   });
 
   account3.clone();
@@ -487,7 +487,7 @@ it('nested actions should have the correct references', async () => {
   // referencing a different form instance than the one referenced by the UI.
 
   const app = compiler.newComponent({
-    component: 'app.App'
+    component: 'app.App',
   });
 
   const login = app.get('menu').get('items')[0].content;
@@ -495,7 +495,7 @@ it('nested actions should have the correct references', async () => {
   // Spy on action
   let username = null;
   const listeners = login.get('listeners');
-  listeners[0].actions[0].act = props => {
+  listeners[0].actions[0].act = (props) => {
     username = props.component.getValue('username');
   };
 
@@ -509,7 +509,7 @@ it('nested actions should have the correct references', async () => {
 it('should support custom props', () => {
   const customProps = compiler.newComponent({
     component: 'app.CustomProps',
-    foo: 'bar'
+    foo: 'bar',
   });
   expect(customProps.get('foo')).toEqual('bar');
 });
@@ -531,12 +531,12 @@ it('should validate schema', () => {
       {
         component: 'TextField',
         name: 'firstName',
-        badProperty: 'foo'
-      }
+        badProperty: 'foo',
+      },
     ],
 
     // Note: nested fields like this are ignored
-    'fields.foo.value': 'bar'
+    'fields.foo.value': 'bar',
   };
 
   const schemaForm = compiler.validateDefinition(def1);
@@ -554,15 +554,15 @@ it('should support schema props at the same layer', () => {
       fields: [
         {
           name: 'foo',
-          component: 'Field'
-        }
-      ]
+          component: 'Field',
+        },
+      ],
     },
-    foo: 'bar'
+    foo: 'bar',
   });
 });
 
-const validateComponents = components => {
+const validateComponents = (components) => {
   each(components, (component, name) => {
     if (!compiler.isCompiled(component)) {
       expectDefinitionToBeValid(component, name, true);
@@ -581,7 +581,7 @@ it('should define className for all core components', () => {
 
   each(components, (component, name) => {
     const c = compiler.newComponent({
-      component: name
+      component: name,
     });
 
     expect(c._className).toEqual(name);
@@ -592,16 +592,16 @@ const changePassword = {
   name: 'app.ChangePassword',
   component: 'UpdatePasswordEditor',
   updatePasswordBaseForm: {
-    component: 'User'
+    component: 'User',
   },
   store: {
-    component: 'MemoryStore'
-  }
+    component: 'MemoryStore',
+  },
 };
 
 const editThingInstance = {
   name: 'app.EditThingInstance',
-  component: 'app.EditThing'
+  component: 'app.EditThing',
 };
 
 const employeeSignup = {
@@ -612,13 +612,13 @@ const employeeSignup = {
     fields: [
       {
         component: 'Field',
-        name: 'roles'
-      }
-    ]
+        name: 'roles',
+      },
+    ],
   },
   store: {
-    component: 'MemoryStore'
-  }
+    component: 'MemoryStore',
+  },
 };
 
 const employees = {
@@ -632,20 +632,20 @@ const employees = {
       baseFormFactory: {
         component: 'Factory',
         product: {
-          component: 'User'
-        }
+          component: 'User',
+        },
       },
       store: {
-        component: 'MemoryStore'
-      }
-    }
-  ]
+        component: 'MemoryStore',
+      },
+    },
+  ],
 };
 
 const accountWithDefaultName = {
   name: 'app.AccountWithDefaultName',
   component: 'app.Account',
-  'fields.name.value': 'David Bowie'
+  'fields.name.value': 'David Bowie',
 };
 
 it('should validate definitions with dynamic components', () => {
@@ -662,7 +662,7 @@ it('should validate definitions with dynamic components', () => {
   expectDefinitionToBeValid(accountWithDefaultName);
 });
 
-const newComponentAndResolveAfterCreate = async definition => {
+const newComponentAndResolveAfterCreate = async (definition) => {
   const component = compiler.newComponent(definition);
   await component.resolveAfterCreate();
 };
@@ -706,18 +706,18 @@ class FooIt extends Action {
         fields: [
           {
             name: 'theStore',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'expected',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'value',
-            component: 'Field'
-          }
-        ]
-      }
+            component: 'Field',
+          },
+        ],
+      },
     });
   }
 
@@ -738,9 +738,9 @@ it('should share template parameters', async () => {
       fields: [
         {
           name: 'store',
-          component: 'Field'
-        }
-      ]
+          component: 'Field',
+        },
+      ],
     },
     listeners: [
       {
@@ -750,25 +750,25 @@ it('should share template parameters', async () => {
             component: 'app.FooIt',
             theStore: '{{store}}',
             expected: 'bar',
-            value: 'baz'
+            value: 'baz',
           },
           {
             component: 'app.FooIt',
             theStore: '{{store}}',
             expected: 'baz',
-            value: 'naz'
-          }
-        ]
-      }
-    ]
+            value: 'naz',
+          },
+        ],
+      },
+    ],
   });
 
   const component = compiler.newComponent({
     component: 'app.SharedTemplateParameters',
     store: {
       component: 'app.CustomProps',
-      foo: 'bar'
-    }
+      foo: 'bar',
+    },
   });
 
   await component.runListeners('foo');

@@ -6,21 +6,21 @@ export default {
       {
         // Hide from docs as label doesn't apply
         name: 'label',
-        docLevel: null
-      }
-    ]
+        docLevel: null,
+      },
+    ],
   },
   fields: [
     {
       name: 'firstName',
       label: 'First Name',
       component: 'PersonNameField',
-      block: false
+      block: false,
     },
     {
       name: 'lastName',
       label: 'Last Name',
-      component: 'PersonNameField'
-    }
-  ]
+      component: 'PersonNameField',
+    },
+  ],
 };

@@ -21,14 +21,14 @@ class Song extends BaseComponent {
         fields: [
           {
             name: 'song',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'artist',
-            component: 'TextField'
-          }
-        ]
-      }
+            component: 'TextField',
+          },
+        ],
+      },
     });
   }
 }
@@ -40,7 +40,7 @@ class SongAction extends Action {
     // Wait until next tick
     await testUtils.timeout();
     this.acts.push({
-      event: props.event
+      event: props.event,
     });
 
     if (this._throwErr) {
@@ -74,13 +74,13 @@ it('should execute listeners', async () => {
     listeners: [
       {
         event: 'song',
-        actions: [action1, action2]
+        actions: [action1, action2],
       },
       {
         event: 'artist',
-        actions: [action1]
-      }
-    ]
+        actions: [action1],
+      },
+    ],
   });
 
   song.set({ song: "It Don't Mean a Thing", artist: 'Ella Fitzgerald' });
@@ -102,9 +102,9 @@ it('should execute listener with an array of events', async () => {
     listeners: [
       {
         event: ['song', 'artist'],
-        actions: [action]
-      }
-    ]
+        actions: [action],
+      },
+    ],
   });
 
   song.set({ song: "It Don't Mean a Thing", artist: 'Ella Fitzgerald' });
@@ -129,9 +129,9 @@ it('should emit errors for detached actions', async () => {
     listeners: [
       {
         event: 'artist',
-        actions: [action]
-      }
-    ]
+        actions: [action],
+      },
+    ],
   });
 
   const errThrown = testUtils.once(song, 'actionErr');
@@ -146,8 +146,8 @@ it('should log errors when action is detached', () => {
   const song = new Song();
   song._registrar = {
     log: {
-      error: () => {}
-    }
+      error: () => {},
+    },
   };
   const logSpy = jest.spyOn(song._registrar.log, 'error');
   const err = new Error();
@@ -168,34 +168,34 @@ it('should valiate schema', () => {
     listeners: [
       {
         event: 'myEvent',
-        actions: [new Action()]
-      }
+        actions: [new Action()],
+      },
     ],
     schema: {
       component: 'Form',
       fields: [
         {
           name: 'foo',
-          component: 'TextField'
-        }
-      ]
+          component: 'TextField',
+        },
+      ],
     },
-    isStore: true
+    isStore: true,
   });
   schemaForm.validate();
   expect(schemaForm.hasErr()).toEqual(false);
 
   schemaForm.setValues({
     name: 'myField',
-    badParam: 10
+    badParam: 10,
   });
   schemaForm.validate();
   expect(schemaForm.hasErr()).toEqual(true);
   expect(schemaForm.getErrs()).toEqual([
     {
       field: 'badParam',
-      error: 'undefined field'
-    }
+      error: 'undefined field',
+    },
   ]);
 });
 
@@ -207,7 +207,7 @@ it('should validate with a compiled schema', () => {
   component.buildSchemaForm(schemaForm, compiler);
   schemaForm.setValues({
     name: 'myName',
-    foo: 'bar'
+    foo: 'bar',
   });
   schemaForm.validate();
   expect(schemaForm.hasErr()).toEqual(true);
@@ -218,18 +218,18 @@ it('should validate with a compiled schema', () => {
     fields: [
       {
         name: 'foo',
-        component: 'TextField'
-      }
-    ]
+        component: 'TextField',
+      },
+    ],
   };
   component.set({
-    schema: compiler.newComponent(schema)
+    schema: compiler.newComponent(schema),
   });
   schemaForm = new Form();
   component.buildSchemaForm(schemaForm, compiler);
   schemaForm.setValues({
     name: 'myName',
-    foo: 'bar'
+    foo: 'bar',
   });
   schemaForm.validate();
   expect(schemaForm.hasErr()).toEqual(false);
@@ -244,14 +244,14 @@ it('should chain listeners', async () => {
         event: 'create',
         actions: [
           new Set({
-            value: name
+            value: name,
           }),
           new Set({
-            name: 'artist'
-          })
-        ]
-      }
-    ]
+            name: 'artist',
+          }),
+        ],
+      },
+    ],
   });
 
   await testUtils.once(song, 'didCreate');
@@ -268,9 +268,9 @@ it('should filter listeners based on layer', async () => {
     listeners: [
       {
         event: 'song',
-        actions: [action1, action2, action3]
-      }
-    ]
+        actions: [action1, action2, action3],
+      },
+    ],
   });
 
   // Simulate no layer
@@ -324,7 +324,7 @@ it('should emit create even when cloned', async () => {
 
 it('should clone', () => {
   const component = new BaseComponent({
-    name: 'a'
+    name: 'a',
   });
 
   const clonedComponent = component.clone();
@@ -350,7 +350,7 @@ it('cloneSlow should shallow clone parent', () => {
 it('should set with dot notation', () => {
   const fullName = {
     firstName: 'Tom',
-    lastName: 'Petty'
+    lastName: 'Petty',
   };
 
   const form = new Form({
@@ -359,34 +359,34 @@ it('should set with dot notation', () => {
       fields: [
         {
           name: 'foo',
-          component: 'Field'
+          component: 'Field',
         },
         {
           name: 'person',
-          component: 'Field'
-        }
-      ]
+          component: 'Field',
+        },
+      ],
     },
     fields: [
       new TextField({
         name: 'firstName',
-        label: 'First Name'
+        label: 'First Name',
       }),
       new PersonFullNameField({
-        name: 'fullName'
-      })
+        name: 'fullName',
+      }),
     ],
     person: {
       profile: {
-        fullName
+        fullName,
       },
-      profession: 'Musician'
-    }
+      profession: 'Musician',
+    },
   });
 
   expect(form.getField('firstName').get('label')).toEqual('First Name');
   form.set({
-    'fields.firstName.label': 'First Name Modified'
+    'fields.firstName.label': 'First Name Modified',
   });
   expect(form.getField('firstName').get('label')).toEqual(
     'First Name Modified'
@@ -404,21 +404,18 @@ it('should set with dot notation', () => {
   // The last property is a component
   form.set({
     'fields.fullName.firstName': {
-      label: 'First Name Modified'
-    }
+      label: 'First Name Modified',
+    },
   });
-  expect(
-    form
-      .getField('fullName')
-      .get('firstName')
-      .get('label')
-  ).toEqual('First Name Modified');
+  expect(form.getField('fullName').get('firstName').get('label')).toEqual(
+    'First Name Modified'
+  );
 });
 
 it('should get with dot notation', () => {
   const fullName = {
     firstName: 'Tom',
-    lastName: 'Petty'
+    lastName: 'Petty',
   };
 
   const form = new Form({
@@ -427,31 +424,31 @@ it('should get with dot notation', () => {
       fields: [
         {
           name: 'foo',
-          component: 'Field'
+          component: 'Field',
         },
         {
           name: 'person',
-          component: 'Field'
+          component: 'Field',
         },
         {
           name: 'child',
-          component: 'Field'
-        }
-      ]
+          component: 'Field',
+        },
+      ],
     },
     fields: [
       new TextField({
         name: 'firstName',
-        label: 'First Name'
-      })
+        label: 'First Name',
+      }),
     ],
     person: {
       fullName,
-      profession: 'Musician'
+      profession: 'Musician',
     },
     child: new TextField({
-      name: 'child'
-    })
+      name: 'child',
+    }),
   });
 
   expect(form.get('fields.firstName.label')).toEqual('First Name');
@@ -492,17 +489,17 @@ it('should listen to sub events on fields', async () => {
   const form = new Form({
     fields: [
       new TextField({ name: 'firstName' }),
-      new TextField({ name: 'lastName' })
+      new TextField({ name: 'lastName' }),
     ],
     listeners: [
       {
         event: 'fields.firstName.value',
         actions: [
           new Set({ name: 'fields.lastName.value' }),
-          new Emit({ event: 'didGetFirstName' })
-        ]
-      }
-    ]
+          new Emit({ event: 'didGetFirstName' }),
+        ],
+      },
+    ],
   });
 
   // Wait for sub event listeners to be created
@@ -510,12 +507,12 @@ it('should listen to sub events on fields', async () => {
 
   const didGetFirstName = testUtils.once(form, 'didGetFirstName');
   form.setValues({
-    firstName: 'Max'
+    firstName: 'Max',
   });
   await didGetFirstName;
   expect(form.getValues({ default: false })).toEqual({
     firstName: 'Max',
-    lastName: 'Max'
+    lastName: 'Max',
   });
 });
 
@@ -528,9 +525,9 @@ it('should listen to sub events on property', async () => {
       fields: [
         {
           name: 'store',
-          component: 'Field'
-        }
-      ]
+          component: 'Field',
+        },
+      ],
     },
     store,
     fields: [new TextField({ name: 'firstName' })],
@@ -540,16 +537,16 @@ it('should listen to sub events on property', async () => {
         actions: [
           new Set({
             name: 'fields.firstName.value',
-            value: '{{arguments.value.fieldValues.firstName}}'
+            value: '{{arguments.value.fieldValues.firstName}}',
           }),
-          new Emit({ event: 'didCreateDoc' })
-        ]
-      }
-    ]
+          new Emit({ event: 'didCreateDoc' }),
+        ],
+      },
+    ],
   });
 
   const form2 = new Form({
-    fields: [new TextField({ name: 'firstName', value: 'Max' })]
+    fields: [new TextField({ name: 'firstName', value: 'Max' })],
   });
 
   // Wait for sub event listeners to be created
@@ -559,7 +556,7 @@ it('should listen to sub events on property', async () => {
   await store.createDoc({ form: form2 });
   await didCreateDoc;
   expect(form.getValues({ default: false })).toEqual({
-    firstName: 'Max'
+    firstName: 'Max',
   });
 });
 
@@ -570,11 +567,11 @@ it('should not duplicate sub event listeners', () => {
       fields: [
         {
           name: 'store',
-          component: 'Field'
-        }
-      ]
+          component: 'Field',
+        },
+      ],
     },
-    store: new MemoryStore()
+    store: new MemoryStore(),
   });
   const listenToSubEventSpy = jest.spyOn(component, '_listenToSubEvent');
 

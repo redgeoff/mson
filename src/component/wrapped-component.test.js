@@ -7,8 +7,8 @@ it('should wrap component', () => {
   const component = new WrappedComponent({
     componentToWrap: new TextField({
       name: 'name',
-      label: 'Name'
-    })
+      label: 'Name',
+    }),
   });
 
   component.setValue('Jimmy Page');
@@ -20,31 +20,31 @@ it('should support nested wrapping', async () => {
     componentToWrap: new Form({
       fields: [
         new TextField({
-          name: 'firstName'
-        })
-      ]
-    })
+          name: 'firstName',
+        }),
+      ],
+    }),
   });
 
   const middle = new WrappedComponent({
     componentToWrap: first,
     fields: [
       new TextField({
-        name: 'middleName'
-      })
-    ]
+        name: 'middleName',
+      }),
+    ],
   });
 
   const last = new WrappedComponent({
     componentToWrap: middle,
     fields: [
       new TextField({
-        name: 'lastName'
-      })
-    ]
+        name: 'lastName',
+      }),
+    ],
   });
 
-  expect(last.mapFields(field => field.get('name'))).toEqual(
+  expect(last.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['firstName', 'middleName', 'lastName'])
   );
 

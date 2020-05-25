@@ -4,7 +4,7 @@ import {
   shouldGetAll,
   shouldMove,
   createDoc,
-  updateDoc
+  updateDoc,
 } from './store-test';
 import { Reorder } from './reorder';
 
@@ -25,40 +25,40 @@ it('should reorder', async () => {
 
   const harryFieldValues = {
     firstName: 'Harry',
-    lastName: 'Potter'
+    lastName: 'Potter',
   };
 
   const harryValues = {
     ...harryFieldValues,
-    order: 0
+    order: 0,
   };
 
   const hermioneFieldValues = {
     firstName: 'Hermione',
-    lastName: 'Granger'
+    lastName: 'Granger',
   };
 
   const hermioneValues = {
     ...hermioneFieldValues,
-    order: 0
+    order: 0,
   };
 
   // Create
   const harry = await createDoc(store, harryValues);
   expect(await store.getDoc({ id: harry.id })).toMatchObject({
     fieldValues: harryFieldValues,
-    order: 0
+    order: 0,
   });
 
   // Create again
   const hermione = await createDoc(store, hermioneValues);
   expect(await store.getDoc({ id: hermione.id })).toMatchObject({
     fieldValues: hermioneFieldValues,
-    order: 0
+    order: 0,
   });
   expect(await store.getDoc({ id: harry.id })).toMatchObject({
     fieldValues: harryFieldValues,
-    order: 1
+    order: 1,
   });
 
   // Update
@@ -67,32 +67,32 @@ it('should reorder', async () => {
   await updateDoc(store, hermioneValues);
   expect(await store.getDoc({ id: harry.id })).toMatchObject({
     fieldValues: harryFieldValues,
-    order: 0
+    order: 0,
   });
   expect(await store.getDoc({ id: hermione.id })).toMatchObject({
     fieldValues: hermioneFieldValues,
-    order: 1
+    order: 1,
   });
 
   // Archive
   await store.archiveDoc({ id: harry.id, order: null });
   expect(await store.getDoc({ id: hermione.id })).toMatchObject({
     fieldValues: hermioneFieldValues,
-    order: 0
+    order: 0,
   });
   expect(await store.getDoc({ id: harry.id })).toMatchObject({
     fieldValues: harryFieldValues,
-    order: Reorder.DEFAULT_ORDER
+    order: Reorder.DEFAULT_ORDER,
   });
 
   // Restore
   await store.restoreDoc({ id: harry.id, order: 1 });
   expect(await store.getDoc({ id: hermione.id })).toMatchObject({
     fieldValues: hermioneFieldValues,
-    order: 0
+    order: 0,
   });
   expect(await store.getDoc({ id: harry.id })).toMatchObject({
     fieldValues: harryFieldValues,
-    order: 1
+    order: 1,
   });
 });

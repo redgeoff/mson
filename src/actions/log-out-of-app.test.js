@@ -7,9 +7,9 @@ it('should log out of app', async () => {
   logOutOfApp._registrar = {
     client: {
       user: {
-        logOutOfApp: () => {}
-      }
-    }
+        logOutOfApp: () => {},
+      },
+    },
   };
 
   const logOutOfAppSpy = jest.spyOn(

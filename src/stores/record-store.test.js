@@ -17,8 +17,8 @@ class RecordStoreMock extends RecordStore {
     this._registrar.client = {
       record: new RecordMock(),
       user: {
-        getSession: () => null
-      }
+        getSession: () => null,
+      },
     };
   }
 }
@@ -27,7 +27,7 @@ beforeEach(() => {
   store = new RecordStoreMock({ storeName });
 
   store._globals = {
-    get: () => appId
+    get: () => appId,
   };
 });
 
@@ -35,23 +35,23 @@ const createForm = () => {
   return new Form({
     fields: [
       new TextField({ name: 'firstName' }),
-      new TextField({ name: 'lastName' })
+      new TextField({ name: 'lastName' }),
     ],
     value: {
       firstName: 'Jay',
-      lastName: 'Kay'
-    }
+      lastName: 'Kay',
+    },
   });
 };
 
 it('should request', async () => {
   store._uberUtils = {
     setFormErrorsFromAPIError: () => {},
-    displayError: () => {}
+    displayError: () => {},
   };
 
   const container = {
-    promiseFactory: async () => {}
+    promiseFactory: async () => {},
   };
 
   const promiseFactorySpy = jest.spyOn(container, 'promiseFactory');
@@ -99,7 +99,7 @@ it('should create', async () => {
   expect(created).toMatchObject({
     archivedAt: null,
     fieldValues: form.getValues({ default: false }),
-    order: Reorder.DEFAULT_ORDER
+    order: Reorder.DEFAULT_ORDER,
   });
   expect(created.createdAt).not.toBeFalsy();
   expect(created.updatedAt).not.toBeFalsy();
@@ -108,7 +108,7 @@ it('should create', async () => {
     appId,
     componentName: storeName,
     fieldValues: form.getValues({ default: false }),
-    order: Reorder.DEFAULT_ORDER
+    order: Reorder.DEFAULT_ORDER,
   });
 });
 
@@ -126,34 +126,34 @@ it('should update', async () => {
     ...created,
     fieldValues: form.getValues({ default: false }),
     order: Reorder.DEFAULT_ORDER,
-    updatedAt: updated.updatedAt
+    updatedAt: updated.updatedAt,
   });
 
   expect(updateSpy).toHaveBeenCalledWith({
     appId,
     id: created.id,
     componentName: storeName,
-    fieldValues: form.getValues({ default: false })
+    fieldValues: form.getValues({ default: false }),
   });
 });
 
 it('should archive', async () => {
   const archived = {
-    archivedAt: new Date()
+    archivedAt: new Date(),
   };
 
   const response = {
     data: {
-      archiveRecord: archived
-    }
+      archiveRecord: archived,
+    },
   };
 
   store._registrar = {
     client: {
       record: {
-        archive: async () => response
-      }
-    }
+        archive: async () => response,
+      },
+    },
   };
 
   const clearCacheSpy = jest.spyOn(store, '_clearCache');
@@ -165,27 +165,27 @@ it('should archive', async () => {
   expect(archiveSpy).toHaveBeenCalledWith({
     appId,
     componentName: storeName,
-    id
+    id,
   });
 });
 
 it('should restore', async () => {
   const restored = {
-    archivedAt: null
+    archivedAt: null,
   };
 
   const response = {
     data: {
-      restoreRecord: restored
-    }
+      restoreRecord: restored,
+    },
   };
 
   store._registrar = {
     client: {
       record: {
-        restore: async () => response
-      }
-    }
+        restore: async () => response,
+      },
+    },
   };
 
   const clearCacheSpy = jest.spyOn(store, '_clearCache');
@@ -197,14 +197,14 @@ it('should restore', async () => {
   expect(restoreSpy).toHaveBeenCalledWith({
     appId,
     componentName: storeName,
-    id
+    id,
   });
 });
 
 it('should get showArchived where', () => {
   expect(store._getShowArchivedWhere()).toEqual({ archivedAt: null });
   expect(store._getShowArchivedWhere(true)).toEqual({
-    archivedAt: { $ne: null }
+    archivedAt: { $ne: null },
   });
 });
 
@@ -213,16 +213,16 @@ it('should get all docs', async () => {
 
   const response = {
     data: {
-      records: all
-    }
+      records: all,
+    },
   };
 
   store._registrar = {
     client: {
       record: {
-        getAll: async () => response
-      }
-    }
+        getAll: async () => response,
+      },
+    },
   };
 
   const addToCacheSpy = jest.spyOn(store, '_addToCache');
@@ -237,13 +237,13 @@ it('should get all docs', async () => {
   expect(
     await store.getAllDocs({
       where: {
-        foo: 'bar'
+        foo: 'bar',
       },
       after,
       first,
       before,
       last,
-      order
+      order,
     })
   ).toEqual(all);
 
@@ -254,19 +254,19 @@ it('should get all docs', async () => {
     where: {
       $and: [
         {
-          archivedAt: null
+          archivedAt: null,
         },
         {
-          foo: 'bar'
-        }
-      ]
+          foo: 'bar',
+        },
+      ],
     },
     after,
     first,
     before,
     last,
     order,
-    bypassCache: true
+    bypassCache: true,
   };
 
   expect(addToCacheSpy).toHaveBeenCalledTimes(1);
@@ -275,13 +275,13 @@ it('should get all docs', async () => {
   expect(
     await store.getAllDocs({
       where: {
-        foo: 'bar'
+        foo: 'bar',
       },
       after,
       first,
       before,
       last,
-      order
+      order,
     })
   ).toEqual(all);
 
@@ -305,7 +305,7 @@ it('should upsert and get', async () => {
   expect(created).toMatchObject({
     archivedAt: null,
     fieldValues: form.getValues({ default: false }),
-    order: Reorder.DEFAULT_ORDER
+    order: Reorder.DEFAULT_ORDER,
   });
   expect(created.createdAt).not.toBeFalsy();
   expect(created.updatedAt).not.toBeFalsy();
@@ -314,7 +314,7 @@ it('should upsert and get', async () => {
     appId,
     componentName: storeName,
     fieldValues: form.getValues({ default: false }),
-    order: Reorder.DEFAULT_ORDER
+    order: Reorder.DEFAULT_ORDER,
   });
 
   // Get
@@ -327,13 +327,13 @@ it('should upsert and get', async () => {
     ...created,
     fieldValues: form.getValues({ default: false }),
     order: Reorder.DEFAULT_ORDER,
-    updatedAt: updated.updatedAt
+    updatedAt: updated.updatedAt,
   });
   expect(updateSpy).toHaveBeenCalledWith({
     appId,
     id: created.id,
     componentName: storeName,
-    fieldValues: form.getValues({ default: false })
+    fieldValues: form.getValues({ default: false }),
   });
 
   // Create with id
@@ -343,7 +343,7 @@ it('should upsert and get', async () => {
   expect(created2).toMatchObject({
     archivedAt: null,
     fieldValues: form2.getValues({ default: false }),
-    order: Reorder.DEFAULT_ORDER
+    order: Reorder.DEFAULT_ORDER,
   });
   expect(created2.createdAt).not.toBeFalsy();
   expect(created2.updatedAt).not.toBeFalsy();
@@ -352,7 +352,7 @@ it('should upsert and get', async () => {
     appId,
     componentName: storeName,
     fieldValues: form2.getValues({ default: false }),
-    order: Reorder.DEFAULT_ORDER
+    order: Reorder.DEFAULT_ORDER,
   });
 
   // Error other than "not found"

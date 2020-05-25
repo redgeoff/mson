@@ -15,9 +15,9 @@ beforeAll(() => {
     fields: [
       {
         name: 'firstName',
-        component: 'TextField'
-      }
-    ]
+        component: 'TextField',
+      },
+    ],
   });
 
   // Uses composition
@@ -26,9 +26,9 @@ beforeAll(() => {
     fields: [
       {
         name: 'middleName',
-        component: 'TextField'
-      }
-    ]
+        component: 'TextField',
+      },
+    ],
   });
 
   // Uses inheritance and supplies the componentToWrap dynamically
@@ -39,19 +39,19 @@ beforeAll(() => {
       fields: [
         {
           name: 'addLastNameWrappedComponent',
-          component: 'Field'
-        }
-      ]
+          component: 'Field',
+        },
+      ],
     },
     componentToWrap: {
-      component: firstName
+      component: firstName,
     },
     fields: [
       {
         name: 'lastName',
-        component: 'TextField'
-      }
-    ]
+        component: 'TextField',
+      },
+    ],
   });
 });
 
@@ -63,9 +63,9 @@ afterAll(() => {
 
 it('should support inherited composition', () => {
   const component = compiler.newComponent({
-    component: addLastName
+    component: addLastName,
   });
-  expect(component.mapFields(field => field.get('name'))).toEqual(
+  expect(component.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['firstName', 'middleName', 'lastName'])
   );
 });

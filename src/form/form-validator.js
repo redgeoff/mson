@@ -13,7 +13,7 @@ class ValidatorError extends Form {
       new TextField({
         name: 'field',
         label: 'Field',
-        required: true
+        required: true,
       })
     );
 
@@ -21,7 +21,7 @@ class ValidatorError extends Form {
       new TextField({
         name: 'error',
         label: 'error',
-        required: true
+        required: true,
       })
     );
   }
@@ -37,7 +37,7 @@ export default class FormValidator extends Form {
       new WhereField({
         name: 'where',
         label: 'Where',
-        required: true
+        required: true,
       })
     );
 
@@ -46,7 +46,7 @@ export default class FormValidator extends Form {
         name: 'error',
         label: 'Error',
         form: new ValidatorError(),
-        required: true
+        required: true,
       })
     );
   }

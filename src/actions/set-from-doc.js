@@ -6,15 +6,15 @@ export default {
     fields: [
       {
         name: 'doc',
-        component: 'Field'
-      }
-    ]
+        component: 'Field',
+      },
+    ],
   },
   actions: [
     {
       component: 'Set',
       name: '{{name}}',
-      value: '{{action.doc.fieldValues}}'
+      value: '{{action.doc.fieldValues}}',
     },
     {
       component: 'Set',
@@ -24,8 +24,8 @@ export default {
         userId: '{{action.doc.userId}}',
         createdAt: '{{action.doc.createdAt}}',
         updatedAt: '{{action.doc.updatedAt}}',
-        archivedAt: '{{action.doc.archivedAt}}'
-      }
-    }
-  ]
+        archivedAt: '{{action.doc.archivedAt}}',
+      },
+    },
+  ],
 };

@@ -8,9 +8,9 @@ export default {
       {
         name: 'action',
         component: 'Field',
-        label: 'Action'
-      }
-    ]
+        label: 'Action',
+      },
+    ],
   },
 
   fields: [
@@ -18,8 +18,8 @@ export default {
       name: 'email',
       component: 'EmailField',
       label: 'Email',
-      required: true
-    }
+      required: true,
+    },
   ],
 
   listeners: [
@@ -27,10 +27,10 @@ export default {
       event: 'createRecord',
       actions: [
         {
-          component: 'RequestPasswordReset'
+          component: 'RequestPasswordReset',
         },
-        '{{action}}'
-      ]
-    }
-  ]
+        '{{action}}',
+      ],
+    },
+  ],
 };

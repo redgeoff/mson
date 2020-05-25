@@ -19,7 +19,7 @@ it('should format display value using mask', () => {
     thousandsSeparatorSymbol: '.',
     decimalSymbol: ',',
     allowDecimal: true,
-    decimalLimit: 2
+    decimalLimit: 2,
   });
 
   expect(euros.getValue()).toEqual('1000000.10');

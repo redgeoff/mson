@@ -6,8 +6,8 @@ it('should create message', () => {
   const form = new Form({
     fields: [
       new TextField({ name: 'firstName', required: true }),
-      new TextField({ name: 'lastName', required: true })
-    ]
+      new TextField({ name: 'lastName', required: true }),
+    ],
   });
   form.validate();
 
@@ -18,13 +18,13 @@ it('should create message', () => {
       error: [
         {
           field: 'firstName',
-          error: 'required'
+          error: 'required',
         },
         {
           field: 'lastName',
-          error: 'required'
-        }
-      ]
+          error: 'required',
+        },
+      ],
     })
   );
 });

@@ -5,16 +5,16 @@ import testUtils from '../test-utils';
 const colors = [
   { value: 'red', label: 'Red' },
   { value: 'green', label: 'Green' },
-  { value: 'blue', label: 'Blue' }
+  { value: 'blue', label: 'Blue' },
 ];
 
 fieldTester.shouldAll({
   Field: SelectField,
   props: { options: colors },
-  exampleValue: 'red'
+  exampleValue: 'red',
 });
 
-const createField = props => {
+const createField = (props) => {
   return new SelectField({ ...props, options: colors });
 };
 
@@ -51,8 +51,8 @@ it('should ensure in list', () => {
   field.validate();
   expect(field.getErr()).toEqual([
     {
-      error: 'orange is not an option'
-    }
+      error: 'orange is not an option',
+    },
   ]);
 
   field.set({ multiple: true });
@@ -60,11 +60,11 @@ it('should ensure in list', () => {
   field.validate();
   expect(field.getErr()).toEqual([
     {
-      error: 'yellow is not an option'
+      error: 'yellow is not an option',
     },
     {
-      error: 'purple is not an option'
-    }
+      error: 'purple is not an option',
+    },
   ]);
 
   field = new SelectField({ ensureInList: false });
@@ -103,7 +103,7 @@ it('should validate', () => {
     ['green'],
     [],
     ['red', 'green'],
-    null
+    null,
   ]);
   testUtils.expectValuesToBeInvalid(field, [
     [''],
@@ -111,7 +111,7 @@ it('should validate', () => {
     ['red', null],
     ['red', ''],
     ['orange'],
-    ['purple', 'red']
+    ['purple', 'red'],
   ]);
 });
 

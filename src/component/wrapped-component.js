@@ -13,9 +13,9 @@ export default class WrappedComponent extends BaseComponent {
       fields: [
         {
           name: 'componentToWrap',
-          component: 'Field'
-        }
-      ]
+          component: 'Field',
+        },
+      ],
     };
   }
 
@@ -25,7 +25,7 @@ export default class WrappedComponent extends BaseComponent {
     this._preserveClassName = true;
 
     this.set({
-      schema: this._getWrappedComponentSchema()
+      schema: this._getWrappedComponentSchema(),
     });
 
     if (props.componentToWrap !== undefined) {
@@ -54,7 +54,7 @@ export default class WrappedComponent extends BaseComponent {
   _wrapComponent() {
     const names = this._getAllMethodOrFunctionNames();
 
-    names.forEach(name => {
+    names.forEach((name) => {
       // Skip system function names
       if (
         ['caller', 'callee', 'arguments', 'constructor'].indexOf(name) === -1 &&

@@ -19,18 +19,18 @@ it('should set and get', () => {
     key: 'a',
     nextKey: null,
     prevKey: null,
-    value: 1
+    value: 1,
   });
   expect(m._firstKey).toEqual('a');
   expect(m._lastKey).toEqual('a');
   expect(m._length).toEqual(1);
-  expect(m.map(value => value)).toEqual([1]);
+  expect(m.map((value) => value)).toEqual([1]);
   expect(m.nextKey('a')).toEqual(null);
   expect(m.previousKey('a')).toEqual(null);
   expect(emitChangeSpy).toHaveBeenCalledTimes(1);
   expect(emitChangeSpy.mock.calls[0]).toEqual([
     'create',
-    { key: 'a', nextKey: null, prevKey: null, value: 1 }
+    { key: 'a', nextKey: null, prevKey: null, value: 1 },
   ]);
 
   // Set 2nd item
@@ -39,18 +39,18 @@ it('should set and get', () => {
     key: 'a',
     nextKey: 'b',
     prevKey: null,
-    value: 1
+    value: 1,
   });
   expect(m._items['b']).toEqual({
     key: 'b',
     nextKey: null,
     prevKey: 'a',
-    value: '2'
+    value: '2',
   });
   expect(m._firstKey).toEqual('a');
   expect(m._lastKey).toEqual('b');
   expect(m._length).toEqual(2);
-  expect(m.map(value => value)).toEqual([1, '2']);
+  expect(m.map((value) => value)).toEqual([1, '2']);
   expect(m.nextKey('a')).toEqual('b');
   expect(m.previousKey('b')).toEqual('a');
 
@@ -60,24 +60,24 @@ it('should set and get', () => {
     key: 'a',
     nextKey: 'b',
     prevKey: null,
-    value: 1
+    value: 1,
   });
   expect(m._items['b']).toEqual({
     key: 'b',
     nextKey: 'c',
     prevKey: 'a',
-    value: '2'
+    value: '2',
   });
   expect(m._items['c']).toEqual({
     key: 'c',
     nextKey: null,
     prevKey: 'b',
-    value: { value: 3 }
+    value: { value: 3 },
   });
   expect(m._firstKey).toEqual('a');
   expect(m._lastKey).toEqual('c');
   expect(m._length).toEqual(3);
-  expect(m.map(value => value)).toEqual([1, '2', { value: 3 }]);
+  expect(m.map((value) => value)).toEqual([1, '2', { value: 3 }]);
 
   // Update 3rd item
   emitChangeSpy.mockReset();
@@ -86,28 +86,28 @@ it('should set and get', () => {
     key: 'a',
     nextKey: 'b',
     prevKey: null,
-    value: 1
+    value: 1,
   });
   expect(m._items['b']).toEqual({
     key: 'b',
     nextKey: 'c',
     prevKey: 'a',
-    value: '2'
+    value: '2',
   });
   expect(m._items['c']).toEqual({
     key: 'c',
     nextKey: null,
     prevKey: 'b',
-    value: 'c'
+    value: 'c',
   });
   expect(m._firstKey).toEqual('a');
   expect(m._lastKey).toEqual('c');
   expect(m._length).toEqual(3);
-  expect(m.map(value => value)).toEqual([1, '2', 'c']);
+  expect(m.map((value) => value)).toEqual([1, '2', 'c']);
   expect(emitChangeSpy).toHaveBeenCalledTimes(1);
   expect(emitChangeSpy.mock.calls[0]).toEqual([
     'update',
-    { key: 'c', nextKey: null, prevKey: 'b', value: 'c' }
+    { key: 'c', nextKey: null, prevKey: 'b', value: 'c' },
   ]);
 });
 
@@ -123,11 +123,11 @@ it('should delete', () => {
   expect(m._firstKey).toEqual(null);
   expect(m._lastKey).toEqual(null);
   expect(m._length).toEqual(0);
-  expect(m.map(value => value)).toEqual([]);
+  expect(m.map((value) => value)).toEqual([]);
   expect(emitChangeSpy).toHaveBeenCalledTimes(1);
   expect(emitChangeSpy.mock.calls[0]).toEqual([
     'delete',
-    { key: 'a', nextKey: null, prevKey: null, value: 1 }
+    { key: 'a', nextKey: null, prevKey: null, value: 1 },
   ]);
 
   // 2 items - delete 1st
@@ -140,14 +140,14 @@ it('should delete', () => {
     key: 'b',
     nextKey: null,
     prevKey: null,
-    value: 2
+    value: 2,
   });
   expect(m.has('a')).toEqual(false);
   expect(m.has('b')).toEqual(true);
   expect(m._firstKey).toEqual('b');
   expect(m._lastKey).toEqual('b');
   expect(m._length).toEqual(1);
-  expect(m.map(value => value)).toEqual([2]);
+  expect(m.map((value) => value)).toEqual([2]);
 
   // 2 items - delete 2nd
   m.clear();
@@ -158,7 +158,7 @@ it('should delete', () => {
     key: 'a',
     nextKey: null,
     prevKey: null,
-    value: 1
+    value: 1,
   });
   expect(m._items['b']).toBeUndefined();
   expect(m.has('a')).toEqual(true);
@@ -166,7 +166,7 @@ it('should delete', () => {
   expect(m._firstKey).toEqual('a');
   expect(m._lastKey).toEqual('a');
   expect(m._length).toEqual(1);
-  expect(m.map(value => value)).toEqual([1]);
+  expect(m.map((value) => value)).toEqual([1]);
 
   // 3 items - delete 2nd
   m.clear();
@@ -178,14 +178,14 @@ it('should delete', () => {
     key: 'a',
     nextKey: 'c',
     prevKey: null,
-    value: 1
+    value: 1,
   });
   expect(m._items['b']).toBeUndefined();
   expect(m._items['c']).toEqual({
     key: 'c',
     nextKey: null,
     prevKey: 'a',
-    value: 3
+    value: 3,
   });
   expect(m.has('a')).toEqual(true);
   expect(m.has('b')).toEqual(false);
@@ -193,7 +193,7 @@ it('should delete', () => {
   expect(m._firstKey).toEqual('a');
   expect(m._lastKey).toEqual('c');
   expect(m._length).toEqual(2);
-  expect(m.map(value => value)).toEqual([1, 3]);
+  expect(m.map((value) => value)).toEqual([1, 3]);
 
   expect(() => {
     m.delete('nope');
@@ -204,7 +204,7 @@ it('should map even when callback returns false', () => {
   const m = new Mapa();
   m.set('a', 1);
   m.set('b', 1);
-  expect(m.map(value => false)).toEqual([false, false]);
+  expect(m.map((value) => false)).toEqual([false, false]);
 });
 
 it('should loop for each', () => {
@@ -215,7 +215,7 @@ it('should loop for each', () => {
   let lastKey = null;
 
   // This implementation respects premature exits
-  const map = onValue => {
+  const map = (onValue) => {
     let values = [];
     m.forEach((value, key, last) => {
       const val = onValue(value, key);
@@ -230,12 +230,12 @@ it('should loop for each', () => {
     return values;
   };
 
-  expect(map(value => value)).toEqual([1, 2]);
+  expect(map((value) => value)).toEqual([1, 2]);
 
   expect(lastKey).toEqual('b');
 
   // Make sure returning false in onValue() exits loop prematurely
-  expect(map(value => false)).toEqual([false]);
+  expect(map((value) => false)).toEqual([false]);
 });
 
 it('should get previous', () => {
@@ -327,28 +327,42 @@ it('should get entries', () => {
   for (const entry of m.entries()) {
     entries.push(entry);
   }
-  expect(entries).toEqual([['a', 1], ['b', 2], ['c', 3]]);
+  expect(entries).toEqual([
+    ['a', 1],
+    ['b', 2],
+    ['c', 3],
+  ]);
 
   // Forward with key
   entries = [];
   for (const entry of m.entries('b')) {
     entries.push(entry);
   }
-  expect(entries).toEqual([['b', 2], ['c', 3]]);
+  expect(entries).toEqual([
+    ['b', 2],
+    ['c', 3],
+  ]);
 
   // Backward without key
   entries = [];
   for (const entry of m.entries(null, true)) {
     entries.push(entry);
   }
-  expect(entries).toEqual([['c', 3], ['b', 2], ['a', 1]]);
+  expect(entries).toEqual([
+    ['c', 3],
+    ['b', 2],
+    ['a', 1],
+  ]);
 
   // Backward with key
   entries = [];
   for (const entry of m.entries('b', true)) {
     entries.push(entry);
   }
-  expect(entries).toEqual([['b', 2], ['a', 1]]);
+  expect(entries).toEqual([
+    ['b', 2],
+    ['a', 1],
+  ]);
 });
 
 it('should allow for empty', () => {
@@ -368,12 +382,12 @@ it('should work with 0 key', () => {
   const m = new Mapa();
   m.set(0, 'a');
   m.set(1, 'b');
-  expect(m.map(value => value)).toEqual(['a', 'b']);
+  expect(m.map((value) => value)).toEqual(['a', 'b']);
 
   m.clear();
   m.set(-1, 'a');
   m.set(0, 'b');
-  expect(m.map(value => value)).toEqual(['a', 'b']);
+  expect(m.map((value) => value)).toEqual(['a', 'b']);
 });
 
 it('should not set with null or undefined key', () => {
@@ -407,13 +421,13 @@ it('should set before key when one item', () => {
     key: 'b',
     nextKey: 'a',
     prevKey: null,
-    value: 2
+    value: 2,
   });
   expect(m._items['a']).toEqual({
     key: 'a',
     nextKey: null,
     prevKey: 'b',
-    value: 1
+    value: 1,
   });
   expect(m._firstKey).toEqual('b');
   expect(m._lastKey).toEqual('a');
@@ -434,19 +448,19 @@ it('should set before key when two items', () => {
     key: 'c',
     nextKey: 'a',
     prevKey: null,
-    value: 3
+    value: 3,
   });
   expect(m._items['a']).toEqual({
     key: 'a',
     nextKey: 'b',
     prevKey: 'c',
-    value: 1
+    value: 1,
   });
   expect(m._items['b']).toEqual({
     key: 'b',
     nextKey: null,
     prevKey: 'a',
-    value: 2
+    value: 2,
   });
   expect(m._firstKey).toEqual('c');
   expect(m._lastKey).toEqual('b');
@@ -463,19 +477,19 @@ it('should set before key when two items', () => {
     key: 'a',
     nextKey: 'c',
     prevKey: null,
-    value: 1
+    value: 1,
   });
   expect(m._items['c']).toEqual({
     key: 'c',
     nextKey: 'b',
     prevKey: 'a',
-    value: 3
+    value: 3,
   });
   expect(m._items['b']).toEqual({
     key: 'b',
     nextKey: null,
     prevKey: 'c',
-    value: 2
+    value: 2,
   });
   expect(m._firstKey).toEqual('a');
   expect(m._lastKey).toEqual('b');
@@ -497,25 +511,25 @@ it('should set before key when three items', () => {
     key: 'd',
     nextKey: 'a',
     prevKey: null,
-    value: 4
+    value: 4,
   });
   expect(m._items['a']).toEqual({
     key: 'a',
     nextKey: 'b',
     prevKey: 'd',
-    value: 1
+    value: 1,
   });
   expect(m._items['b']).toEqual({
     key: 'b',
     nextKey: 'c',
     prevKey: 'a',
-    value: 2
+    value: 2,
   });
   expect(m._items['c']).toEqual({
     key: 'c',
     nextKey: null,
     prevKey: 'b',
-    value: 3
+    value: 3,
   });
   expect(m._firstKey).toEqual('d');
   expect(m._lastKey).toEqual('c');
@@ -533,25 +547,25 @@ it('should set before key when three items', () => {
     key: 'a',
     nextKey: 'd',
     prevKey: null,
-    value: 1
+    value: 1,
   });
   expect(m._items['d']).toEqual({
     key: 'd',
     nextKey: 'b',
     prevKey: 'a',
-    value: 4
+    value: 4,
   });
   expect(m._items['b']).toEqual({
     key: 'b',
     nextKey: 'c',
     prevKey: 'd',
-    value: 2
+    value: 2,
   });
   expect(m._items['c']).toEqual({
     key: 'c',
     nextKey: null,
     prevKey: 'b',
-    value: 3
+    value: 3,
   });
   expect(m._firstKey).toEqual('a');
   expect(m._lastKey).toEqual('c');
@@ -569,25 +583,25 @@ it('should set before key when three items', () => {
     key: 'a',
     nextKey: 'b',
     prevKey: null,
-    value: 1
+    value: 1,
   });
   expect(m._items['b']).toEqual({
     key: 'b',
     nextKey: 'd',
     prevKey: 'a',
-    value: 2
+    value: 2,
   });
   expect(m._items['d']).toEqual({
     key: 'd',
     nextKey: 'c',
     prevKey: 'b',
-    value: 4
+    value: 4,
   });
   expect(m._items['c']).toEqual({
     key: 'c',
     nextKey: null,
     prevKey: 'd',
-    value: 3
+    value: 3,
   });
   expect(m._firstKey).toEqual('a');
   expect(m._lastKey).toEqual('c');
@@ -606,19 +620,19 @@ it('should move before', () => {
       key: 'b',
       nextKey: 'a',
       prevKey: null,
-      value: 2
+      value: 2,
     });
     expect(m._items['a']).toEqual({
       key: 'a',
       nextKey: 'c',
       prevKey: 'b',
-      value: 1
+      value: 1,
     });
     expect(m._items['c']).toEqual({
       key: 'c',
       nextKey: null,
       prevKey: 'a',
-      value: 3
+      value: 3,
     });
     expect(m._firstKey).toEqual('b');
     expect(m._lastKey).toEqual('c');
@@ -667,13 +681,13 @@ it('should set after key when one item', () => {
     key: 'b',
     nextKey: null,
     prevKey: 'a',
-    value: 2
+    value: 2,
   });
   expect(m._items['a']).toEqual({
     key: 'a',
     nextKey: 'b',
     prevKey: null,
-    value: 1
+    value: 1,
   });
   expect(m._firstKey).toEqual('a');
   expect(m._lastKey).toEqual('b');
@@ -688,13 +702,13 @@ it('should set after key when one item', () => {
     key: 'b',
     nextKey: 'a',
     prevKey: null,
-    value: 2
+    value: 2,
   });
   expect(m._items['a']).toEqual({
     key: 'a',
     nextKey: null,
     prevKey: 'b',
-    value: 1
+    value: 1,
   });
   expect(m._firstKey).toEqual('b');
   expect(m._lastKey).toEqual('a');
@@ -715,19 +729,19 @@ it('should set after key when two items', () => {
     key: 'c',
     nextKey: 'b',
     prevKey: 'a',
-    value: 3
+    value: 3,
   });
   expect(m._items['a']).toEqual({
     key: 'a',
     nextKey: 'c',
     prevKey: null,
-    value: 1
+    value: 1,
   });
   expect(m._items['b']).toEqual({
     key: 'b',
     nextKey: null,
     prevKey: 'c',
-    value: 2
+    value: 2,
   });
   expect(m._firstKey).toEqual('a');
   expect(m._lastKey).toEqual('b');
@@ -744,19 +758,19 @@ it('should set after key when two items', () => {
     key: 'a',
     nextKey: 'b',
     prevKey: null,
-    value: 1
+    value: 1,
   });
   expect(m._items['c']).toEqual({
     key: 'c',
     nextKey: null,
     prevKey: 'b',
-    value: 3
+    value: 3,
   });
   expect(m._items['b']).toEqual({
     key: 'b',
     nextKey: 'c',
     prevKey: 'a',
-    value: 2
+    value: 2,
   });
   expect(m._firstKey).toEqual('a');
   expect(m._lastKey).toEqual('c');
@@ -778,25 +792,25 @@ it('should set after key when three items', () => {
     key: 'd',
     nextKey: 'b',
     prevKey: 'a',
-    value: 4
+    value: 4,
   });
   expect(m._items['a']).toEqual({
     key: 'a',
     nextKey: 'd',
     prevKey: null,
-    value: 1
+    value: 1,
   });
   expect(m._items['b']).toEqual({
     key: 'b',
     nextKey: 'c',
     prevKey: 'd',
-    value: 2
+    value: 2,
   });
   expect(m._items['c']).toEqual({
     key: 'c',
     nextKey: null,
     prevKey: 'b',
-    value: 3
+    value: 3,
   });
   expect(m._firstKey).toEqual('a');
   expect(m._lastKey).toEqual('c');
@@ -814,25 +828,25 @@ it('should set after key when three items', () => {
     key: 'a',
     nextKey: 'b',
     prevKey: null,
-    value: 1
+    value: 1,
   });
   expect(m._items['d']).toEqual({
     key: 'd',
     nextKey: 'c',
     prevKey: 'b',
-    value: 4
+    value: 4,
   });
   expect(m._items['b']).toEqual({
     key: 'b',
     nextKey: 'd',
     prevKey: 'a',
-    value: 2
+    value: 2,
   });
   expect(m._items['c']).toEqual({
     key: 'c',
     nextKey: null,
     prevKey: 'd',
-    value: 3
+    value: 3,
   });
   expect(m._firstKey).toEqual('a');
   expect(m._lastKey).toEqual('c');
@@ -850,25 +864,25 @@ it('should set after key when three items', () => {
     key: 'a',
     nextKey: 'b',
     prevKey: null,
-    value: 1
+    value: 1,
   });
   expect(m._items['b']).toEqual({
     key: 'b',
     nextKey: 'c',
     prevKey: 'a',
-    value: 2
+    value: 2,
   });
   expect(m._items['d']).toEqual({
     key: 'd',
     nextKey: null,
     prevKey: 'c',
-    value: 4
+    value: 4,
   });
   expect(m._items['c']).toEqual({
     key: 'c',
     nextKey: 'd',
     prevKey: 'b',
-    value: 3
+    value: 3,
   });
   expect(m._firstKey).toEqual('a');
   expect(m._lastKey).toEqual('d');
@@ -887,19 +901,19 @@ it('should move after', () => {
       key: 'b',
       nextKey: null,
       prevKey: 'c',
-      value: 2
+      value: 2,
     });
     expect(m._items['a']).toEqual({
       key: 'a',
       nextKey: 'c',
       prevKey: null,
-      value: 1
+      value: 1,
     });
     expect(m._items['c']).toEqual({
       key: 'c',
       nextKey: 'b',
       prevKey: 'a',
-      value: 3
+      value: 3,
     });
     expect(m._firstKey).toEqual('a');
     expect(m._lastKey).toEqual('b');

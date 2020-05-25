@@ -25,7 +25,7 @@ it('should create', () => {
     { id: 'a', order: 0 },
     { id: 'b', order: 1 },
     { id: 'c', order: 2 },
-    { id: 'd', order: 3 }
+    { id: 'd', order: 3 },
   ];
 
   // Reorder
@@ -40,7 +40,7 @@ it('should create', () => {
     { id: 'b', order: 1 },
     { id: 'e', order: 2 },
     { id: 'c', order: 3 },
-    { id: 'd', order: 4 }
+    { id: 'd', order: 4 },
   ]);
 });
 
@@ -51,7 +51,7 @@ it('should create when there were race conditions', () => {
     { id: 'c', order: 1 },
     { id: 'd', order: 1 },
     { id: 'e', order: 2 },
-    { id: 'f', order: 2 }
+    { id: 'f', order: 2 },
   ];
 
   // Reorder
@@ -68,7 +68,7 @@ it('should create when there were race conditions', () => {
     { id: 'g', order: 3 },
     { id: 'd', order: 4 },
     { id: 'e', order: 5 },
-    { id: 'f', order: 6 }
+    { id: 'f', order: 6 },
   ]);
 });
 
@@ -78,7 +78,7 @@ it('should move down', () => {
     { id: 'b', order: 1 },
     { id: 'c', order: 2 },
     { id: 'd', order: 3 },
-    { id: 'e', order: 4 }
+    { id: 'e', order: 4 },
   ];
 
   const result = reorder.reorder(items, 'd', 1, onReorder);
@@ -93,7 +93,7 @@ it('should move down', () => {
     { id: 'd', order: 1 },
     { id: 'b', order: 2 },
     { id: 'c', order: 3 },
-    { id: 'e', order: 4 }
+    { id: 'e', order: 4 },
   ]);
 });
 
@@ -104,7 +104,7 @@ it('should move down when there were race conditions', () => {
     { id: 'c', order: 1 },
     { id: 'd', order: 1 },
     { id: 'e', order: 2 },
-    { id: 'f', order: 2 }
+    { id: 'f', order: 2 },
   ];
 
   const result = reorder.reorder(items, 'c', 2, onReorder);
@@ -120,7 +120,7 @@ it('should move down when there were race conditions', () => {
     { id: 'c', order: 2 },
     { id: 'd', order: 3 },
     { id: 'e', order: 4 },
-    { id: 'f', order: 5 }
+    { id: 'f', order: 5 },
   ]);
 });
 
@@ -130,7 +130,7 @@ it('should move up', () => {
     { id: 'b', order: 1 },
     { id: 'c', order: 2 },
     { id: 'd', order: 3 },
-    { id: 'e', order: 4 }
+    { id: 'e', order: 4 },
   ];
 
   const result = reorder.reorder(items, 'b', 3, onReorder);
@@ -145,7 +145,7 @@ it('should move up', () => {
     { id: 'c', order: 1 },
     { id: 'd', order: 2 },
     { id: 'b', order: 3 },
-    { id: 'e', order: 4 }
+    { id: 'e', order: 4 },
   ]);
 });
 
@@ -156,7 +156,7 @@ it('should move up when there were race conditions', () => {
     { id: 'c', order: 1 },
     { id: 'd', order: 1 },
     { id: 'e', order: 2 },
-    { id: 'f', order: 2 }
+    { id: 'f', order: 2 },
   ];
 
   const result = reorder.reorder(items, 'e', 1, onReorder);
@@ -172,7 +172,7 @@ it('should move up when there were race conditions', () => {
     { id: 'b', order: 2 },
     { id: 'c', order: 3 },
     { id: 'd', order: 4 },
-    { id: 'f', order: 5 }
+    { id: 'f', order: 5 },
   ]);
 });
 
@@ -181,7 +181,7 @@ it('should archive', () => {
     { id: 'a', order: 0 },
     { id: 'b', order: 1 },
     { id: 'c', order: 2 },
-    { id: 'd', order: 3 }
+    { id: 'd', order: 3 },
   ];
 
   // Reorder. Note: we set the newOrder to null so that future reorderings don't require a change to
@@ -192,7 +192,7 @@ it('should archive', () => {
     { id: 'a', order: 0 },
     { id: 'b', order: null },
     { id: 'c', order: 1 },
-    { id: 'd', order: 2 }
+    { id: 'd', order: 2 },
   ]);
 });
 
@@ -201,7 +201,7 @@ it('should restore', () => {
     { id: 'a', order: 0 },
     { id: 'c', order: 1 },
     { id: 'd', order: 2 },
-    { id: 'b', order: null }
+    { id: 'b', order: null },
   ];
 
   // Reorder
@@ -211,7 +211,7 @@ it('should restore', () => {
     { id: 'a', order: 0 },
     { id: 'c', order: 2 },
     { id: 'd', order: 3 },
-    { id: 'b', order: 1 }
+    { id: 'b', order: 1 },
   ]);
 });
 
@@ -220,7 +220,7 @@ it('should delete', () => {
     { id: 'a', order: 0 },
     { id: 'b', order: 1 },
     { id: 'c', order: 2 },
-    { id: 'd', order: 3 }
+    { id: 'd', order: 3 },
   ];
 
   // Delete
@@ -232,7 +232,7 @@ it('should delete', () => {
   expect(items).toEqual([
     { id: 'a', order: 0 },
     { id: 'c', order: 1 },
-    { id: 'd', order: 2 }
+    { id: 'd', order: 2 },
   ]);
 });
 

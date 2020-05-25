@@ -37,18 +37,18 @@ export default class FieldEditorForm extends Form {
     'TextField',
     'TextListField',
     'TimeField',
-    'URLField'
+    'URLField',
   ];
 
   _namesToOptions() {
-    return this.constructor.componentNames.map(name => ({
+    return this.constructor.componentNames.map((name) => ({
       value: name,
-      label: name
+      label: name,
     }));
   }
 
   _clearFields() {
-    this.eachField(field => {
+    this.eachField((field) => {
       const name = field.get('name');
       if (!this.isDefaultField(name) && name !== 'componentName') {
         this.removeField(name);
@@ -59,7 +59,7 @@ export default class FieldEditorForm extends Form {
 
   _copySchemaFields(schema) {
     const fields = [];
-    schema.eachField(field => {
+    schema.eachField((field) => {
       const name = field.get('name');
       if (!schema.isDefaultField(name) && field.get('docLevel') === 'basic') {
         this.addField(field);
@@ -79,7 +79,7 @@ export default class FieldEditorForm extends Form {
       const compiler = this._registrar.compiler;
 
       this._component = compiler.newComponent({
-        component: values.componentName
+        component: values.componentName,
       });
 
       const schema = new Form();
@@ -103,9 +103,9 @@ export default class FieldEditorForm extends Form {
         new SelectField({
           name: 'componentName',
           label: 'Field',
-          options: this._namesToOptions()
-        })
-      ]
+          options: this._namesToOptions(),
+        }),
+      ],
     });
 
     // Adjust the fields when the componentName changes
@@ -123,7 +123,7 @@ export default class FieldEditorForm extends Form {
     ) {
       this._adjustFields(
         Object.assign({}, this.getValues(), {
-          componentName: values.componentName
+          componentName: values.componentName,
         })
       );
     }

@@ -11,12 +11,12 @@ class TestUtils {
     'createdAt',
     'updatedAt',
     'archivedAt',
-    'order'
+    'order',
   ];
 
   toDefaultFieldsObject(value) {
     const obj = {};
-    this.defaultFields.forEach(name => (obj[name] = value));
+    this.defaultFields.forEach((name) => (obj[name] = value));
     return obj;
   }
 
@@ -25,7 +25,7 @@ class TestUtils {
   }
 
   timeout(ms) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
   }
@@ -37,14 +37,14 @@ class TestUtils {
     maxSleep = maxSleep ? maxSleep : 5000;
     sleepMs = sleepMs ? sleepMs : 100;
 
-    return new Promise(function(resolve, reject) {
-      var waitFor = function() {
+    return new Promise(function (resolve, reject) {
+      var waitFor = function () {
         // Wrap in promise so that waitMore doesn't have to be a promise
         return Promise.resolve()
-          .then(function() {
+          .then(function () {
             return poll();
           })
-          .then(function(obj) {
+          .then(function (obj) {
             if (typeof obj === 'undefined') {
               if (totalSleep >= maxSleep) {
                 reject(new Error('waited for ' + totalSleep + ' ms'));
@@ -63,7 +63,7 @@ class TestUtils {
   }
 
   _expectValuesToHaveErr(field, values, haveErr, err) {
-    values.forEach(value => {
+    values.forEach((value) => {
       field.clearErr();
       field.setValue(value);
       field.validate();
@@ -71,10 +71,10 @@ class TestUtils {
       // Use object in expect so that errors are easy to immediately see
       expect({
         value,
-        hasErr: field.hasErr()
+        hasErr: field.hasErr(),
       }).toEqual({
         value,
-        hasErr: haveErr
+        hasErr: haveErr,
       });
 
       if (err) {
@@ -123,7 +123,7 @@ class TestUtils {
   // helper fn
   async expectToThrow(promiseFactory, errorNameOrError, errorMessage) {
     let err = {
-      name: 'NoError'
+      name: 'NoError',
     };
 
     try {

@@ -24,35 +24,35 @@ export default class ChainedSelectField extends ListField {
         fields: [
           {
             name: 'fieldFactory',
-            required: false
+            required: false,
           },
           {
             name: 'options',
             component: 'ChainedSelectOptionsField',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'blankString',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'multiline',
-            component: 'BooleanField'
-          }
-        ]
-      }
+            component: 'BooleanField',
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, {
       autoCreateFields: true,
-      startWithField: false
+      startWithField: false,
     });
   }
 
   _getValue() {
     // Go all the way down the chain until nothing selected
     let value = [];
-    this.eachField(field => {
+    this.eachField((field) => {
       const val = field.getValue();
       if (val) {
         value.push(val);
@@ -77,13 +77,13 @@ export default class ChainedSelectField extends ListField {
         'fullWidth',
         'hideLabel',
         'useDisplayValue',
-        'editable'
-      ])
+        'editable',
+      ]),
     });
   }
 
   _onFieldCreated(field, onDelete) {
-    field.on('value', value => {
+    field.on('value', (value) => {
       const index = field.get('name');
 
       if (value) {
@@ -108,10 +108,10 @@ export default class ChainedSelectField extends ListField {
     // The parentValue can only be null if the index is 0 or else we will get the root options when
     // it is not intended.
     // if (value !== null || index === 0) {
-    return this._indexedOptions.mapByParent(value, option => {
+    return this._indexedOptions.mapByParent(value, (option) => {
       return {
         value: option.id,
-        label: option.label
+        label: option.label,
       };
     });
     // } else {
@@ -151,11 +151,11 @@ export default class ChainedSelectField extends ListField {
 
   _indexOptions(options) {
     this._indexedOptions = new Hierarchy();
-    options.forEach(option => {
+    options.forEach((option) => {
       this._indexedOptions.add({
         id: option.value,
         parentId: option.parentValue,
-        label: option.label
+        label: option.label,
       });
     });
   }

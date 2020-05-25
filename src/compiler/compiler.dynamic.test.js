@@ -21,30 +21,30 @@ beforeAll(() => {
       fields: [
         {
           name: 'firstField',
-          component: 'Field'
+          component: 'Field',
         },
         {
           name: 'secondFieldName',
-          component: 'TextField'
-        }
-      ]
+          component: 'TextField',
+        },
+      ],
     },
     fields: [
       '{{firstField}}',
       {
         name: '{{secondFieldName}}',
-        component: 'TextField'
-      }
-    ]
+        component: 'TextField',
+      },
+    ],
   });
 
   compiler.registerComponent(dynamicFormExtendedName, {
     component: dynamicFormName,
     firstField: {
       component: 'TextField',
-      name: 'firstName'
+      name: 'firstName',
     },
-    secondFieldName: 'lastName'
+    secondFieldName: 'lastName',
   });
 
   compiler.registerComponent(dynamicCompositionFormName, {
@@ -52,9 +52,9 @@ beforeAll(() => {
     fields: [
       {
         component: 'TextField',
-        name: 'middleName'
-      }
-    ]
+        name: 'middleName',
+      },
+    ],
   });
 
   compiler.registerComponent(dynamicCompositionComponentName, {
@@ -64,20 +64,20 @@ beforeAll(() => {
       fields: [
         {
           name: 'baseForm',
-          component: 'Field'
-        }
-      ]
+          component: 'Field',
+        },
+      ],
     },
     componentToWrap: {
       component: dynamicCompositionFormName,
-      componentToWrap: '{{baseForm}}'
+      componentToWrap: '{{baseForm}}',
     },
     fields: [
       {
         component: 'TextField',
-        name: 'lastName'
-      }
-    ]
+        name: 'lastName',
+      },
+    ],
   });
 
   compiler.registerComponent(dynamicCompositionExtendedComponentName, {
@@ -85,9 +85,9 @@ beforeAll(() => {
     fields: [
       {
         component: 'TextField',
-        name: 'suffix'
-      }
-    ]
+        name: 'suffix',
+      },
+    ],
   });
 });
 
@@ -101,9 +101,9 @@ afterAll(() => {
 
 it('should support dynamic components', () => {
   const component = compiler.newComponent({
-    component: dynamicFormExtendedName
+    component: dynamicFormExtendedName,
   });
-  expect(component.mapFields(field => field.get('name'))).toEqual(
+  expect(component.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['firstName', 'lastName'])
   );
 });
@@ -116,12 +116,12 @@ it('should support dynamic composition', () => {
       fields: [
         {
           name: 'firstName',
-          component: 'TextField'
-        }
-      ]
-    }
+          component: 'TextField',
+        },
+      ],
+    },
   });
-  expect(component.mapFields(field => field.get('name'))).toEqual(
+  expect(component.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['firstName', 'middleName', 'lastName'])
   );
 });
@@ -134,17 +134,17 @@ it('should support inheritance of dynamic composition', () => {
       fields: [
         {
           name: 'firstName',
-          component: 'TextField'
-        }
-      ]
-    }
+          component: 'TextField',
+        },
+      ],
+    },
   });
-  expect(component.mapFields(field => field.get('name'))).toEqual(
+  expect(component.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat([
       'firstName',
       'middleName',
       'lastName',
-      'suffix'
+      'suffix',
     ])
   );
 });

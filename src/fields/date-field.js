@@ -13,28 +13,28 @@ export default class DateField extends Field {
         fields: [
           {
             name: 'now',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'includeTime',
             component: 'BooleanField',
             label: 'Include Time',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'minDate',
             component: 'DateField',
             label: 'Min Date',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'maxDate',
             component: 'DateField',
             label: 'Max Date',
-            docLevel: 'basic'
-          }
-        ]
-      }
+            docLevel: 'basic',
+          },
+        ],
+      },
     });
   }
 

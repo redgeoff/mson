@@ -40,7 +40,7 @@ export class Reorder {
     return {
       i,
       destinationKey,
-      afterReordered
+      afterReordered,
     };
   }
 
@@ -49,7 +49,7 @@ export class Reorder {
 
     let destinationKey = null;
 
-    items.forEach(item => {
+    items.forEach((item) => {
       const result = this.reorderItem(
         item,
         id,
@@ -63,7 +63,7 @@ export class Reorder {
     });
 
     return {
-      destinationKey
+      destinationKey,
     };
   }
 }

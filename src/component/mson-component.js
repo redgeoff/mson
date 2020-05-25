@@ -16,10 +16,10 @@ export default class MSONComponent extends WrappedComponent {
           {
             name: 'definition',
             component: 'Field',
-            required: true
-          }
-        ]
-      }
+            required: true,
+          },
+        ],
+      },
     });
 
     // We want the class name to be that of the wrapped component

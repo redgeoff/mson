@@ -9,5 +9,5 @@ export default {
   FormEditor,
   FormBuilder,
   GenerateUUID,
-  JSONStringify
+  JSONStringify,
 };

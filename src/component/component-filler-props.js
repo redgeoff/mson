@@ -76,7 +76,7 @@ export default class ComponentFillerProps {
   _getGlobals() {
     return {
       session: this._getSession(),
-      ...globals.get()
+      ...globals.get(),
     };
   }
 
@@ -86,7 +86,7 @@ export default class ComponentFillerProps {
       action: props && props.parent,
       component: props && props.component,
       args: props && props.arguments,
-      globals: this._getGlobals()
+      globals: this._getGlobals(),
     });
   }
 
@@ -96,7 +96,7 @@ export default class ComponentFillerProps {
       action: props.parent,
       component: props.component,
       args: props.arguments,
-      globals: this._getGlobals()
+      globals: this._getGlobals(),
     });
 
     return queryToProps(where, component);

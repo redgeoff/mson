@@ -12,15 +12,15 @@ it('should sanity check', () => {
       new TextField({
         name: 'name',
         label: 'Name',
-        required: true
-      })
-    ]
+        required: true,
+      }),
+    ],
   });
 
   const values = {
     username: 'username',
     password: 'secret123',
-    name: 'Full Name'
+    name: 'Full Name',
   };
 
   user.setValues(values);
@@ -28,12 +28,12 @@ it('should sanity check', () => {
   expect(user.getValues({ out: true })).toEqual({
     username: 'username',
     id: undefined,
-    name: 'Full Name'
+    name: 'Full Name',
   });
 
   expect(user.getValues()).toEqual({
     id: undefined,
-    ...values
+    ...values,
   });
 });
 
@@ -45,7 +45,7 @@ it('should validate schema', () => {
 
   schemaForm.setValues({
     name: 'myUser',
-    roles: ['owner']
+    roles: ['owner'],
   });
   schemaForm.validate();
   expect(schemaForm.hasErr()).toEqual(true);
@@ -55,9 +55,9 @@ it('should validate schema', () => {
       error: [
         {
           field: 0,
-          error: 'invalid'
-        }
-      ]
-    }
+          error: 'invalid',
+        },
+      ],
+    },
   ]);
 });

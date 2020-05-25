@@ -8,11 +8,11 @@ class SnapshotMock {
   }
 
   docChanges() {
-    return this._docs.map(doc => ({
+    return this._docs.map((doc) => ({
       type: doc.type,
       doc: {
-        data: () => doc.data
-      }
+        data: () => doc.data,
+      },
     }));
   }
 }
@@ -63,15 +63,15 @@ class CollectionMock {
 
     // Emit initial data
     this.emitSnapshot(
-      this._docs.map(doc => ({ type: 'added', data: doc.value }))
+      this._docs.map((doc) => ({ type: 'added', data: doc.value }))
     );
   }
 
   doc(id) {
     return {
-      set: async doc => {
+      set: async (doc) => {
         return this._docs.set(id, doc);
-      }
+      },
     };
   }
 }
@@ -81,13 +81,13 @@ export default class FirebaseMock {
     this._docs = new Mapa();
 
     if (docs) {
-      docs.forEach(doc => this._docs.set(doc.id, doc));
+      docs.forEach((doc) => this._docs.set(doc.id, doc));
     }
 
     this._collection = new CollectionMock(this._docs);
 
     this.apps = {
-      length: 0
+      length: 0,
     };
   }
 
@@ -98,7 +98,7 @@ export default class FirebaseMock {
   firestore() {
     return {
       settings: () => {},
-      collection: () => this._collection
+      collection: () => this._collection,
     };
   }
 

@@ -15,7 +15,7 @@ it('should bubble up load events', async () => {
 
   // Set content
   card.set({
-    content: form
+    content: form,
   });
 
   const didLoad = testUtils.once(form, 'didLoad');
