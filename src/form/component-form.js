@@ -13,8 +13,8 @@ export default class ComponentForm extends Form {
       new Field({
         name: 'definition',
         label: 'Definition',
-        required: true
-      })
+        required: true,
+      }),
     ];
 
     // By default, lock down access
@@ -23,13 +23,13 @@ export default class ComponentForm extends Form {
         create: 'admin',
         read: 'admin',
         update: 'admin',
-        archive: 'admin'
-      }
+        archive: 'admin',
+      },
     };
 
     this.set({
       access,
-      fields
+      fields,
     });
   }
 }

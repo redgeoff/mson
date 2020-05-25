@@ -47,7 +47,7 @@ export default class Hierarchy {
     if (!Array.isArray(items)) {
       items = [items];
     }
-    items.forEach(item => this._addItem(item));
+    items.forEach((item) => this._addItem(item));
   }
 
   get(id) {

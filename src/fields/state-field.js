@@ -5,9 +5,9 @@ export default {
     fields: [
       {
         name: 'options',
-        docLevel: null
-      }
-    ]
+        docLevel: null,
+      },
+    ],
   },
   options: [
     { value: 'AL', label: 'Alabama' },
@@ -60,6 +60,6 @@ export default {
     { value: 'WA', label: 'Washington' },
     { value: 'WV', label: 'West Virginia' },
     { value: 'WI', label: 'Wisconsin' },
-    { value: 'WY', label: 'Wyoming' }
-  ]
+    { value: 'WY', label: 'Wyoming' },
+  ],
 };

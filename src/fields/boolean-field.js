@@ -13,10 +13,10 @@ export default class BooleanField extends Field {
           {
             // Hide from docs as required doesn't make sense for a BooleanField
             name: 'required',
-            docLevel: null
-          }
-        ]
-      }
+            docLevel: null,
+          },
+        ],
+      },
     });
   }
 

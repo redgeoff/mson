@@ -12,16 +12,16 @@ export default class CreateDoc extends Action {
         fields: [
           {
             name: 'store',
-            component: 'Field'
-          }
-        ]
-      }
+            component: 'Field',
+          },
+        ],
+      },
     });
   }
 
   async act(props) {
     return this.get('store').createDoc({
-      form: props.component
+      form: props.component,
     });
   }
 }

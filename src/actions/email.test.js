@@ -7,29 +7,29 @@ it('should send email', async () => {
     fields: [
       {
         component: 'EmailField',
-        name: 'from'
+        name: 'from',
       },
       {
         component: 'EmailField',
-        name: 'sender'
+        name: 'sender',
       },
       {
         component: 'EmailField',
-        name: 'replyTo'
+        name: 'replyTo',
       },
       {
         component: 'EmailField',
-        name: 'to'
+        name: 'to',
       },
       {
         component: 'TextField',
-        name: 'subject'
+        name: 'subject',
       },
       {
         component: 'TextField',
-        name: 'body'
-      }
-    ]
+        name: 'body',
+      },
+    ],
   });
   form.setValues({
     from: 'from@example.com',
@@ -37,7 +37,7 @@ it('should send email', async () => {
     replyTo: 'reply-to@example.com',
     to: 'test@example.com',
     subject: 'My subject',
-    body: 'My body'
+    body: 'My body',
   });
 
   const email = new Email({
@@ -46,13 +46,13 @@ it('should send email', async () => {
     replyTo: '{{fields.replyTo.value}}',
     to: '{{fields.to.value}}',
     subject: '{{fields.subject.value}}',
-    body: '{{fields.body.value}}'
+    body: '{{fields.body.value}}',
   });
 
   email._registrar = {
     email: {
-      send: () => {}
-    }
+      send: () => {},
+    },
   };
 
   const sendEmailSpy = jest.spyOn(email._registrar.email, 'send');

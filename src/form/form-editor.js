@@ -15,9 +15,9 @@ export default class FormEditor extends Form {
         fields: [
           {
             name: 'definition',
-            component: 'Field'
-          }
-        ]
+            component: 'Field',
+          },
+        ],
       },
 
       fields: [
@@ -30,17 +30,17 @@ export default class FormEditor extends Form {
           includeExtraneous: true,
           forbidOrder: false,
           formFactory: new Factory({
-            product: () => new FieldEditorForm()
-          })
-        })
-      ]
+            product: () => new FieldEditorForm(),
+          }),
+        }),
+      ],
     });
   }
 
   _setDefinition(definition) {
-    const fields = definition.fields.map(field => ({
+    const fields = definition.fields.map((field) => ({
       ...field,
-      componentName: field.component
+      componentName: field.component,
     }));
 
     this.get('fields.fields').setValue(fields);
@@ -57,11 +57,11 @@ export default class FormEditor extends Form {
   _getDefinition() {
     return {
       component: 'Form',
-      fields: this.get('fields.fields').mapForms(form => ({
+      fields: this.get('fields.fields').mapForms((form) => ({
         ...form.getValues({ default: false }),
         component: form.getValue('componentName'),
-        componentName: undefined
-      }))
+        componentName: undefined,
+      })),
     };
   }
 

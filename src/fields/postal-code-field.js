@@ -1,4 +1,4 @@
 export default {
   component: 'TextField',
-  maxLength: 15
+  maxLength: 15,
 };

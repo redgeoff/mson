@@ -7,49 +7,49 @@ export default {
       name: 'username',
       label: 'Email',
       required: true,
-      fullWidth: true
+      fullWidth: true,
     },
     {
       component: 'PasswordField',
       name: 'password',
       label: 'Password',
       required: true,
-      fullWidth: true
+      fullWidth: true,
     },
     {
       component: 'ButtonField',
       name: 'submit',
       label: 'Log In',
       type: 'submit',
-      icon: 'PlayArrow'
+      icon: 'PlayArrow',
     },
     {
       component: 'ButtonField',
       name: 'signUp',
       label: 'Sign Up',
-      icon: 'CheckCircle'
+      icon: 'CheckCircle',
     },
     {
       component: 'ButtonField',
       name: 'forgotPassword',
       label: 'Password?',
-      icon: 'VpnKey'
+      icon: 'VpnKey',
     },
     {
       component: 'ButtonField',
       name: 'contact',
       label: 'Contact',
-      icon: 'LiveHelp'
-    }
+      icon: 'LiveHelp',
+    },
   ],
   listeners: [
     {
       event: 'submit',
       actions: [
         {
-          component: 'LogInToAppAndRedirect'
-        }
-      ]
-    }
-  ]
+          component: 'LogInToAppAndRedirect',
+        },
+      ],
+    },
+  ],
 };

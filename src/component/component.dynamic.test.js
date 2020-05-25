@@ -15,20 +15,20 @@ class DynamicForm extends Form {
         fields: [
           {
             name: 'firstField',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'secondFieldName',
-            component: 'TextField'
-          }
-        ]
+            component: 'TextField',
+          },
+        ],
       },
       fields: [
         props.firstField,
         new TextField({
-          name: props.secondFieldName
-        })
-      ]
+          name: props.secondFieldName,
+        }),
+      ],
     });
   }
 }
@@ -38,9 +38,9 @@ class DynamicFormExtended extends DynamicForm {
     super._create(
       Object.assign({}, props, {
         firstField: new TextField({
-          name: 'firstName'
+          name: 'firstName',
         }),
-        secondFieldName: 'lastName'
+        secondFieldName: 'lastName',
       })
     );
   }
@@ -53,9 +53,9 @@ class DynamicCompositionForm extends WrappedComponent {
     this.set({
       fields: [
         new TextField({
-          name: 'middleName'
-        })
-      ]
+          name: 'middleName',
+        }),
+      ],
     });
   }
 }
@@ -65,8 +65,8 @@ class DynamicCompositionComponent extends WrappedComponent {
     super._create(
       Object.assign({}, props, {
         componentToWrap: new DynamicCompositionForm({
-          componentToWrap: props.baseForm
-        })
+          componentToWrap: props.baseForm,
+        }),
       })
     );
 
@@ -76,15 +76,15 @@ class DynamicCompositionComponent extends WrappedComponent {
         fields: [
           {
             name: 'baseForm',
-            component: 'Field'
-          }
-        ]
+            component: 'Field',
+          },
+        ],
       },
       fields: [
         new TextField({
-          name: 'lastName'
-        })
-      ]
+          name: 'lastName',
+        }),
+      ],
     });
   }
 }
@@ -96,16 +96,16 @@ class DynamicCompositionExtendedComponent extends DynamicCompositionComponent {
     this.set({
       fields: [
         new TextField({
-          name: 'suffix'
-        })
-      ]
+          name: 'suffix',
+        }),
+      ],
     });
   }
 }
 
 it('should support dynamic components', () => {
   const component = new DynamicFormExtended();
-  expect(component.mapFields(field => field.get('name'))).toEqual(
+  expect(component.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['firstName', 'lastName'])
   );
 });
@@ -115,12 +115,12 @@ it('should support dynamic composition', () => {
     baseForm: new Form({
       fields: [
         new TextField({
-          name: 'firstName'
-        })
-      ]
-    })
+          name: 'firstName',
+        }),
+      ],
+    }),
   });
-  expect(component.mapFields(field => field.get('name'))).toEqual(
+  expect(component.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['firstName', 'middleName', 'lastName'])
   );
 });
@@ -130,17 +130,17 @@ it('should support inhertiance of dynamic composition', () => {
     baseForm: new Form({
       fields: [
         new TextField({
-          name: 'firstName'
-        })
-      ]
-    })
+          name: 'firstName',
+        }),
+      ],
+    }),
   });
-  expect(component.mapFields(field => field.get('name'))).toEqual(
+  expect(component.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat([
       'firstName',
       'middleName',
       'lastName',
-      'suffix'
+      'suffix',
     ])
   );
 });

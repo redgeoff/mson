@@ -7,18 +7,18 @@ export default {
       {
         name: 'baseFormFactory',
         component: 'Field',
-        required: true
+        required: true,
       },
       {
         name: 'label',
         component: 'TextField',
-        required: true
+        required: true,
       },
       {
         name: 'store',
-        component: 'Field'
-      }
-    ]
+        component: 'Field',
+      },
+    ],
   },
   fields: [
     {
@@ -28,9 +28,9 @@ export default {
       hideLabel: true,
       formFactory: {
         component: 'Factory',
-        product: '{{baseFormFactory}}'
+        product: '{{baseFormFactory}}',
       },
-      store: '{{store}}'
-    }
-  ]
+      store: '{{store}}',
+    },
+  ],
 };

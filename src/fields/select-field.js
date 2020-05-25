@@ -14,37 +14,37 @@ export default class SelectField extends MultipleValueField {
           {
             name: 'options',
             component: 'OptionsField',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'blankString',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'ensureInList',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'multiple',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'removeIfNotInList',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'autocomplete',
-            component: 'BooleanField'
-          }
-        ]
-      }
+            component: 'BooleanField',
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, {
       ensureInList: true,
       multiple: false,
       removeIfNotInList: true,
-      autocomplete: true
+      autocomplete: true,
     });
   }
 
@@ -73,7 +73,7 @@ export default class SelectField extends MultipleValueField {
     let label = null;
 
     if (this._options) {
-      this._options.forEach(option => {
+      this._options.forEach((option) => {
         if (option.value === value) {
           label = option.label;
         }
@@ -90,10 +90,10 @@ export default class SelectField extends MultipleValueField {
       const value = this.get('value');
       const values = this.get('multiple') ? value : [value];
       const errors = [];
-      values.forEach(val => {
+      values.forEach((val) => {
         if (this.getOptionLabel(val) === null) {
           errors.push({
-            error: `${val} is not an option`
+            error: `${val} is not an option`,
           });
         }
       });
@@ -131,7 +131,7 @@ export default class SelectField extends MultipleValueField {
     if (this.isBlank()) {
       return value;
     } else if (this.get('multiple')) {
-      return value.map(val => {
+      return value.map((val) => {
         return this.getOptionLabel(val);
       });
     } else {

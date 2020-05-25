@@ -3,34 +3,34 @@ export default {
   component: 'Action',
   actions: [
     {
-      component: 'LogInToApp'
+      component: 'LogInToApp',
     },
     {
       component: 'Action',
       if: {
         globals: {
           redirectAfterLogin: {
-            $in: [null, undefined]
-          }
-        }
+            $in: [null, undefined],
+          },
+        },
       },
       actions: [
         {
           component: 'Redirect',
-          path: '/'
-        }
+          path: '/',
+        },
       ],
       else: [
         {
           component: 'Redirect',
-          path: '{{globals.redirectAfterLogin}}'
+          path: '{{globals.redirectAfterLogin}}',
         },
         {
           component: 'Set',
           name: 'globals.redirectAfterLogin',
-          value: null
-        }
-      ]
-    }
-  ]
+          value: null,
+        },
+      ],
+    },
+  ],
 };

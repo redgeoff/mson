@@ -7,22 +7,22 @@ export default {
       {
         name: 'updatePasswordBaseForm',
         component: 'Field',
-        required: true
+        required: true,
       },
       {
         // Not required as updatePasswordBaseForm will populate baseForm
         name: 'baseForm',
-        required: false
-      }
-    ]
+        required: false,
+      },
+    ],
   },
   preview: false,
   label: 'Password',
   storeWhere: {
-    userId: '{{globals.session.user.id}}'
+    userId: '{{globals.session.user.id}}',
   },
   baseForm: {
     component: 'UpdatePassword',
-    componentToWrap: '{{updatePasswordBaseForm}}'
-  }
+    componentToWrap: '{{updatePasswordBaseForm}}',
+  },
 };

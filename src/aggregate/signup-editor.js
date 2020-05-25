@@ -8,8 +8,8 @@ export default {
       name: 'retypePassword',
       label: 'Retype Password',
       required: true,
-      out: false
-    }
+      out: false,
+    },
   ],
   validators: [
     {
@@ -17,16 +17,16 @@ export default {
         fields: {
           retypePassword: {
             value: {
-              $ne: '{{fields.password.value}}'
-            }
-          }
-        }
+              $ne: '{{fields.password.value}}',
+            },
+          },
+        },
       },
       error: {
         field: 'retypePassword',
-        error: 'must match'
-      }
-    }
+        error: 'must match',
+      },
+    },
   ],
   label: 'Signup',
   hideCancel: true,
@@ -45,18 +45,18 @@ export default {
             'fields.password.block': false,
             'fields.roles.hidden': true,
             'fields.save.label': 'Create Account',
-            'fields.save.icon': 'CheckCircle'
-          }
-        }
-      ]
+            'fields.save.icon': 'CheckCircle',
+          },
+        },
+      ],
     },
     {
       event: 'didSave',
       actions: [
         {
-          component: 'LogInToAppAndRedirect'
-        }
-      ]
-    }
-  ]
+          component: 'LogInToAppAndRedirect',
+        },
+      ],
+    },
+  ],
 };

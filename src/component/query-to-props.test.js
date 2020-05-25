@@ -1,6 +1,6 @@
 import queryToProps, {
   queryToPropNames,
-  throwIfNotPropertyNotDefinedError
+  throwIfNotPropertyNotDefinedError,
 } from './query-to-props';
 import get from 'lodash/get';
 import PropertyNotDefinedError from './property-not-defined-error';
@@ -33,12 +33,12 @@ it('should get prop names from query', () => {
     {
       $and: [
         {
-          name: 'foo'
+          name: 'foo',
         },
         {
-          label: 'Foo'
-        }
-      ]
+          label: 'Foo',
+        },
+      ],
     },
     names
   );
@@ -50,12 +50,12 @@ it('should get prop names from query', () => {
     {
       $and: [
         {
-          name: 'foo'
+          name: 'foo',
         },
         {
-          location: { $in: ['Costa Rica', 'Brazil'] }
-        }
-      ]
+          location: { $in: ['Costa Rica', 'Brazil'] },
+        },
+      ],
     },
     names
   );
@@ -67,9 +67,9 @@ it('should get prop names from query', () => {
     {
       'foo.nar': {
         jar: {
-          kar: 'dar'
-        }
-      }
+          kar: 'dar',
+        },
+      },
     },
     names
   );
@@ -86,8 +86,8 @@ it('should merge props when converting query', () => {
   const values = {
     name: 'bar',
     child: {
-      name: 'baz'
-    }
+      name: 'baz',
+    },
   };
   const component = new MockComponent(values);
 
@@ -95,12 +95,12 @@ it('should merge props when converting query', () => {
     {
       $and: [
         {
-          name: 'foo'
+          name: 'foo',
         },
         {
-          'child.name': 'foo'
-        }
-      ]
+          'child.name': 'foo',
+        },
+      ],
     },
     component
   );

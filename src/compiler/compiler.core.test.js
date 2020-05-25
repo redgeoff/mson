@@ -7,7 +7,7 @@ let compiler = null;
 const registerNameField = () => {
   compiler.registerComponent('app.NameField', {
     component: 'TextField',
-    minLength: 5
+    minLength: 5,
   });
 };
 
@@ -17,9 +17,9 @@ const registerPersonName = () => {
     fields: [
       {
         name: 'firstName',
-        component: 'TextField'
-      }
-    ]
+        component: 'TextField',
+      },
+    ],
   });
 };
 
@@ -29,9 +29,9 @@ const registerPersonFullName = () => {
     fields: [
       {
         name: 'lastName',
-        component: 'TextField'
-      }
-    ]
+        component: 'TextField',
+      },
+    ],
   });
 };
 
@@ -58,7 +58,7 @@ it('should get compiled component', () => {
 
 it('should get wrapped component class', () => {
   const Component = compiler._getWrappedComponentClass('TextField', {
-    maxLength: 5
+    maxLength: 5,
   });
 
   const component = new Component();
@@ -69,7 +69,7 @@ it('should get wrapped component class', () => {
 it('should compile basic component', () => {
   const Component = compiler.compile({
     component: 'TextField',
-    maxLength: 5
+    maxLength: 5,
   });
 
   const component = new Component();
@@ -84,13 +84,13 @@ it('should compile component with nested component', () => {
       {
         component: 'TextField',
         name: 'firstName',
-        maxLength: 5
-      }
-    ]
+        maxLength: 5,
+      },
+    ],
   });
 
   const component = new Component();
-  expect(component.mapFields(field => field.get('name'))).toEqual(
+  expect(component.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['firstName'])
   );
   expect(component.getField('firstName').get('maxLength')).toEqual(5);
@@ -103,14 +103,14 @@ it('should get wrapped component class for uncompiled component', () => {
 
   const FirstName = compiler._getWrappedComponentClass('app.NameField', {
     name: 'firstName',
-    maxLength: 10
+    maxLength: 10,
   });
 
   const firstName = new FirstName();
   expect(firstName.get(['name', 'maxLength', 'minLength'])).toEqual({
     name: 'firstName',
     maxLength: 10,
-    minLength: 5
+    minLength: 5,
   });
 
   // Uncompiled components take the name of the wrapping class
@@ -121,7 +121,7 @@ it('should compile', () => {
   registerPersonName();
 
   const Person = compiler.compile({
-    component: 'app.Person'
+    component: 'app.Person',
   });
 
   expect(typeof Person).toEqual('function');
@@ -137,11 +137,11 @@ it('should instantiate uncompiled component', () => {
     fields: [
       {
         component: 'TextField',
-        name: 'lastName'
-      }
-    ]
+        name: 'lastName',
+      },
+    ],
   });
-  expect(person.mapFields(field => field.get('name'))).toEqual(
+  expect(person.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['firstName', 'lastName'])
   );
   expect(person.getClassName()).toEqual('app.Person');
@@ -151,7 +151,7 @@ it('should set class name of compiled component', () => {
   registerNameField();
 
   const name = compiler.newComponent({
-    component: 'TextField'
+    component: 'TextField',
   });
   expect(name.getClassName()).toEqual('TextField');
 });
@@ -160,7 +160,7 @@ it('should set class name of uncompiled component', () => {
   registerNameField();
 
   const name = compiler.newComponent({
-    component: 'app.NameField'
+    component: 'app.NameField',
   });
   expect(name.getClassName()).toEqual('app.NameField');
 });
@@ -170,9 +170,9 @@ it('should instantiate extended component', () => {
   registerPersonFullName();
 
   const personFullName = compiler.newComponent({
-    component: 'app.PersonFullName'
+    component: 'app.PersonFullName',
   });
-  expect(personFullName.mapFields(field => field.get('name'))).toEqual(
+  expect(personFullName.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['firstName', 'lastName'])
   );
   expect(personFullName.getClassName()).toEqual('app.PersonFullName');
@@ -222,26 +222,26 @@ it('should clone data when necessary', () => {
       {
         component: 'EmailField',
         name: 'email',
-        label: 'Email'
-      }
+        label: 'Email',
+      },
     ],
     listeners: [
       {
         event: 'foo',
         actions: [
           {
-            component: 'Action'
-          }
-        ]
-      }
-    ]
+            component: 'Action',
+          },
+        ],
+      },
+    ],
   };
 
   const component1 = compiler.newComponent(definition);
   const component2 = compiler.newComponent(definition);
 
   component1.setValues({
-    email: 'dylan@example.com'
+    email: 'dylan@example.com',
   });
   expect(component1.getValue('email')).toEqual('dylan@example.com');
   expect(component2.getValue('email')).toBeUndefined();

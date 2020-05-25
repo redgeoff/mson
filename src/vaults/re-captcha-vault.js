@@ -13,10 +13,10 @@ export default class ReCAPTCHAVault extends Vault {
           {
             name: 'secretKey',
             component: 'TextField',
-            required: true
-          }
-        ]
-      }
+            required: true,
+          },
+        ],
+      },
     });
   }
 }

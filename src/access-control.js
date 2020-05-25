@@ -30,7 +30,7 @@ export default class AccessControl {
 
     let has = false;
 
-    each(access, role => {
+    each(access, (role) => {
       if (
         indexedRoles[role] ||
         (isOwner && (role === Roles.ID_OWNER || role === Roles.OWNER))

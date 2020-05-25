@@ -14,7 +14,7 @@ export class UberUtils {
   setFormErrorsFromAPIError(err, form) {
     try {
       const message = JSON.parse(err.graphQLErrors[0].message);
-      message.error.forEach(err => {
+      message.error.forEach((err) => {
         form.getField(err.field).setErr(err.error);
       });
     } catch (_err) {

@@ -15,24 +15,24 @@ export default class ButtonField extends Field {
             component: 'SelectField',
             label: 'Type',
             options: [{ value: 'submit', label: 'Submit' }],
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             // TODO: create IconListField (with preview) and use it here
             name: 'icon',
             component: 'TextField',
             label: 'Icon',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'variant',
             component: 'TextField',
             // Hidden as it may not be portable to have a variant type and this may be better to
             // configure at the theme layer
-            hidden: true
-          }
-        ]
-      }
+            hidden: true,
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, { block: false, out: false });

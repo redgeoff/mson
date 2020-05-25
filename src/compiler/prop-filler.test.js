@@ -6,8 +6,8 @@ it('should fill props', () => {
     foo: 'bar',
     nar: {
       yar: 'tar',
-      sar: 1
-    }
+      sar: 1,
+    },
   };
   const filler = new PropFiller(props);
 
@@ -27,8 +27,8 @@ it('should fill props', () => {
       three: '{{nar.sar}}',
       four: props.nar,
       five: {
-        a: '{{foo}}'
-      }
+        a: '{{foo}}',
+      },
     })
   ).toEqual({
     one: 'bar',
@@ -36,8 +36,8 @@ it('should fill props', () => {
     three: 1,
     four: props.nar,
     five: {
-      a: 'bar'
-    }
+      a: 'bar',
+    },
   });
 });
 
@@ -45,8 +45,8 @@ it('should handle circular references', () => {
   const props = {
     foo: 'bar',
     nar: {
-      yar: 'tar'
-    }
+      yar: 'tar',
+    },
   };
 
   // Define circular reference
@@ -54,9 +54,9 @@ it('should handle circular references', () => {
 
   const items = {
     a: {
-      v: '{{foo}}'
+      v: '{{foo}}',
     },
-    v: '{{nar.yar}}'
+    v: '{{nar.yar}}',
   };
 
   // Define circular reference

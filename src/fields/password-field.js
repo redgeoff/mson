@@ -8,29 +8,29 @@ export default {
       where: {
         value: {
           $not: {
-            $regex: '\\d'
-          }
-        }
+            $regex: '\\d',
+          },
+        },
       },
-      error: 'must contain a number'
+      error: 'must contain a number',
     },
     {
       where: {
         value: {
           $not: {
-            $regex: '[a-zA-Z]'
-          }
-        }
+            $regex: '[a-zA-Z]',
+          },
+        },
       },
-      error: 'must contain a letter'
+      error: 'must contain a letter',
     },
     {
       where: {
         value: {
-          $regex: '[^a-zA-Z0-9\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)\\_\\+]'
-        }
+          $regex: '[^a-zA-Z0-9\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)\\_\\+]',
+        },
       },
-      error: 'contains an invalid character'
-    }
-  ]
+      error: 'contains an invalid character',
+    },
+  ],
 };

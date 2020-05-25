@@ -7,9 +7,9 @@ export default {
     fields: [
       {
         name: 'store',
-        component: 'Field'
-      }
-    ]
+        component: 'Field',
+      },
+    ],
   },
 
   fields: [
@@ -18,14 +18,14 @@ export default {
       type: 'submit',
       name: 'reset',
       label: 'Reset',
-      icon: 'LockOpen'
+      icon: 'LockOpen',
     },
     {
       component: 'ButtonField',
       name: 'cancel',
       label: 'Cancel',
-      icon: 'Cancel'
-    }
+      icon: 'Cancel',
+    },
   ],
 
   listeners: [
@@ -34,26 +34,26 @@ export default {
       actions: [
         {
           component: 'UpsertDoc',
-          store: '{{store}}'
+          store: '{{store}}',
         },
         {
           component: 'Snackbar',
-          message: 'Please expect an email shortly'
+          message: 'Please expect an email shortly',
         },
         {
           component: 'Redirect',
-          path: '/'
-        }
-      ]
+          path: '/',
+        },
+      ],
     },
     {
       event: 'cancel',
       actions: [
         {
           component: 'Redirect',
-          path: '/'
-        }
-      ]
-    }
-  ]
+          path: '/',
+        },
+      ],
+    },
+  ],
 };

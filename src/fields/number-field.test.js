@@ -13,7 +13,7 @@ it('should validate format', () => {
     '+111',
     '0',
     '.1',
-    '1.'
+    '1.',
   ]);
 
   testUtils.expectValuesToBeInvalid(field, [
@@ -23,7 +23,7 @@ it('should validate format', () => {
     'aaa0.111',
     '123-',
     '0.123-',
-    '123+'
+    '123+',
     // '+',
     // '0123'
   ]);
@@ -50,7 +50,7 @@ it('should validate lengths', () => {
 
 it('should format display value using mask', () => {
   const field = new NumberField({
-    includeThousandsSeparator: true
+    includeThousandsSeparator: true,
   });
 
   field.setValue('1000000');
@@ -67,7 +67,7 @@ it('should convert from UI value', () => {
 
   field.set({
     decimalSymbol: ',',
-    thousandsSeparatorSymbol: '.'
+    thousandsSeparatorSymbol: '.',
   });
 
   expect(field.fromUIValue('1000,10')).toEqual('1000.10');

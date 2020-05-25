@@ -5,9 +5,9 @@ export default {
     fields: [
       {
         name: 'options',
-        docLevel: null
-      }
-    ]
+        docLevel: null,
+      },
+    ],
   },
   options: [
     { value: 'AF', label: 'Afghanistan' },
@@ -246,7 +246,7 @@ export default {
     { value: 'AE', label: 'United Arab Emirates' },
     {
       value: 'GB',
-      label: 'United Kingdom of Great Britain and Northern Ireland'
+      label: 'United Kingdom of Great Britain and Northern Ireland',
     },
     { value: 'US', label: 'United States of America' },
     { value: 'UM', label: 'United States Minor Outlying Islands' },
@@ -261,6 +261,6 @@ export default {
     { value: 'EH', label: 'Western Sahara' },
     { value: 'YE', label: 'Yemen' },
     { value: 'ZM', label: 'Zambia' },
-    { value: 'ZW', label: 'Zimbabwe' }
-  ]
+    { value: 'ZW', label: 'Zimbabwe' },
+  ],
 };

@@ -26,26 +26,26 @@ export default class Action extends Component {
         fields: [
           {
             name: 'if',
-            component: 'WhereField'
+            component: 'WhereField',
           },
           {
             name: 'actions',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'else',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'layer',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'detached',
-            component: 'BooleanField'
-          }
-        ]
-      }
+            component: 'BooleanField',
+          },
+        ],
+      },
     });
   }
 
@@ -121,7 +121,7 @@ export default class Action extends Component {
             ...props,
             arguments: args,
             parent: this,
-            context: props && props.context
+            context: props && props.context,
           });
         }
         return args;

@@ -13,50 +13,50 @@ export default class TextListField extends ListField {
         fields: [
           {
             name: 'fieldFactory',
-            required: false
+            required: false,
           },
           {
             name: 'minLength',
             component: 'IntegerField',
             label: 'Min Length',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'maxLength',
             component: 'IntegerField',
             label: 'Max Length',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'minWords',
             component: 'IntegerField',
             label: 'Min Words',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'maxWords',
             component: 'IntegerField',
             label: 'Max Words',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'invalidRegExp',
             component: 'TextField',
             label: 'Invalid RegExp',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'multiline',
             component: 'BooleanField',
             label: 'Multiline',
-            docLevel: 'basic'
-          }
-        ]
-      }
+            docLevel: 'basic',
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, {
-      startWithField: true
+      startWithField: true,
     });
   }
 
@@ -72,8 +72,8 @@ export default class TextListField extends ListField {
         'minWords',
         'maxWords',
         'invalidRegExp',
-        'multiline'
-      ])
+        'multiline',
+      ]),
     });
   }
 
@@ -85,7 +85,7 @@ export default class TextListField extends ListField {
       'minWords',
       'maxWords',
       'invalidRegExp',
-      'multiline'
+      'multiline',
     ]);
   }
 }

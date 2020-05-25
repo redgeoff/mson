@@ -13,35 +13,35 @@ export default class SelectListField extends ListField {
         fields: [
           {
             name: 'fieldFactory',
-            required: false
+            required: false,
           },
           {
             name: 'options',
             component: 'OptionsField',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'blankString',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'ensureInList',
-            component: 'BooleanField'
-          }
-        ]
-      }
+            component: 'BooleanField',
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, {
       autoCreateFields: true,
       canDeleteEmpty: false,
       startWithField: true,
-      hideDeleteButton: true
+      hideDeleteButton: true,
     });
   }
 
   _onFieldCreated(field, onDelete) {
-    field.on('value', value => {
+    field.on('value', (value) => {
       // Don't delete the last field
       if (!value && !this._isLastField(field)) {
         onDelete();
@@ -67,8 +67,8 @@ export default class SelectListField extends ListField {
         'fullWidth',
         'options',
         'useDisplayValue',
-        'editable'
-      ])
+        'editable',
+      ]),
     });
   }
 

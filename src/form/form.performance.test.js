@@ -2,18 +2,18 @@ import Form from './form';
 import TextField from '../fields/text-field';
 import testUtils from '../test-utils';
 
-const createForm = props => {
+const createForm = (props) => {
   return new Form({
     fields: [
       new TextField({ name: 'firstName', label: 'First Name', required: true }),
       new TextField({
         name: 'middleName',
         label: 'Middle Name',
-        required: true
+        required: true,
       }),
-      new TextField({ name: 'lastName', label: 'Last Name', required: true })
+      new TextField({ name: 'lastName', label: 'Last Name', required: true }),
     ],
-    ...props
+    ...props,
   });
 };
 

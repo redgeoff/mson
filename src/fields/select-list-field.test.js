@@ -3,16 +3,16 @@ import SelectListField from './select-list-field';
 const options = [
   { label: 'Red', value: 'red' },
   { label: 'Green', value: 'green' },
-  { label: 'Blue', value: 'blue' }
+  { label: 'Blue', value: 'blue' },
 ];
 
-const createColors = props => {
+const createColors = (props) => {
   return new SelectListField({
     label: 'Colors',
     required: true,
     blankString: 'None',
     options,
-    ...props
+    ...props,
   });
 };
 
@@ -87,11 +87,11 @@ it('should set ensureInList', () => {
 
   field.set({ ensureInList: true });
   expect(field.get('ensureInList')).toEqual(true);
-  field.eachField(field => expect(field.get('ensureInList')).toEqual(true));
+  field.eachField((field) => expect(field.get('ensureInList')).toEqual(true));
 
   field.set({ ensureInList: false });
   expect(field.get('ensureInList')).toEqual(false);
-  field.eachField(field => expect(field.get('ensureInList')).toEqual(false));
+  field.eachField((field) => expect(field.get('ensureInList')).toEqual(false));
 });
 
 it('should not remove the last field', () => {

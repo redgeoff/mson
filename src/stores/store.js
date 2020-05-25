@@ -52,10 +52,10 @@ export default class Store extends UIComponent {
         fields: [
           {
             name: 'where',
-            component: 'Field'
-          }
-        ]
-      }
+            component: 'Field',
+          },
+        ],
+      },
     });
 
     // For mocking
@@ -80,7 +80,7 @@ export default class Store extends UIComponent {
     return this._tryAndHandleError(() => {
       // Omit values based on access
       const fieldValues = this._access.valuesCanCreate(props.form, {
-        default: false
+        default: false,
       });
 
       const id = props.form.getValue('id');
@@ -140,7 +140,7 @@ export default class Store extends UIComponent {
     return this._tryAndHandleError(() => {
       // Omit values based on access
       const fieldValues = this._access.valuesCanUpdate(props.form, {
-        default: false
+        default: false,
       });
 
       const id = props.form.getValue('id');
@@ -183,7 +183,7 @@ export default class Store extends UIComponent {
       updatedAt: createdAt,
       userId: userId ? userId : null,
       order,
-      fieldValues
+      fieldValues,
     };
   }
 

@@ -13,18 +13,18 @@ export default class FormField extends Field {
           {
             name: 'form',
             component: 'Field',
-            required: true
+            required: true,
           },
           {
             name: 'pristine',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'elevate',
-            component: 'BooleanField'
-          }
-        ]
-      }
+            component: 'BooleanField',
+          },
+        ],
+      },
     });
 
     this._listenForLoad();
@@ -65,7 +65,7 @@ export default class FormField extends Field {
 
   set(props) {
     const clonedProps = Object.assign({}, props, {
-      form: undefined
+      form: undefined,
     });
 
     super.set(clonedProps);
@@ -89,7 +89,7 @@ export default class FormField extends Field {
         'touched',
         'pristine',
         'useDisplayValue',
-        'fullWidth'
+        'fullWidth',
       ]);
     }
   }
@@ -100,7 +100,7 @@ export default class FormField extends Field {
       'disabled',
       'editable',
       'touched',
-      'pristine'
+      'pristine',
     ]);
     if (value !== undefined) {
       return value;

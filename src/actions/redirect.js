@@ -13,10 +13,10 @@ export default class Redirect extends Action {
           {
             name: 'path',
             component: 'TextField',
-            required: true
-          }
-        ]
-      }
+            required: true,
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, { layer: 'frontEnd' });

@@ -100,15 +100,15 @@ export default class StoreMapa extends Mapa {
 
   _reorder(id, item, newOrder, onReorder) {
     const items = {
-      forEach: callback => {
+      forEach: (callback) => {
         this.forEach((item, id) => {
           callback({
             id,
             order: this._getProp(item, 'order'),
-            archivedAt: this._getProp(item, 'archivedAt')
+            archivedAt: this._getProp(item, 'archivedAt'),
           });
         });
-      }
+      },
     };
 
     const handleReorder = (item, newOrder) => {

@@ -8,21 +8,21 @@ import FormField from '../fields/form-field';
 import ListField from '../fields/list-field';
 import Factory from '../component/factory';
 
-const createForm = formFactoryProps => {
+const createForm = (formFactoryProps) => {
   const nameForm = new Form({
     fields: [
       new TextField({
         name: 'firstName',
         label: 'First Name',
         required: true,
-        maxLength: 10
+        maxLength: 10,
       }),
       new TextField({
         name: 'lastName',
         label: 'Last Name',
-        required: true
-      })
-    ]
+        required: true,
+      }),
+    ],
   });
 
   const formFactory = new Factory({
@@ -32,12 +32,12 @@ const createForm = formFactoryProps => {
           new TextField({
             name: 'email',
             label: 'Email',
-            required: true
-          })
+            required: true,
+          }),
         ],
-        ...formFactoryProps
+        ...formFactoryProps,
       });
-    }
+    },
   });
 
   const form = new Form({
@@ -46,13 +46,13 @@ const createForm = formFactoryProps => {
         name: 'fullName',
         label: 'Full Name',
         required: true,
-        form: nameForm
+        form: nameForm,
       }),
 
       new TextField({
         name: 'title',
         label: 'Title',
-        maxLength: 10
+        maxLength: 10,
       }),
 
       new CollectionField({
@@ -60,7 +60,7 @@ const createForm = formFactoryProps => {
         label: 'Emails',
         formFactory,
         required: true,
-        maxSize: 2
+        maxSize: 2,
       }),
 
       new ListField({
@@ -73,12 +73,12 @@ const createForm = formFactoryProps => {
               name: 'phone',
               label: 'Phone',
               required: true,
-              maxLength: 14
-            })
+              maxLength: 14,
+            }),
         }),
-        maxSize: 2
-      })
-    ]
+        maxSize: 2,
+      }),
+    ],
   });
 
   return form;
@@ -90,18 +90,18 @@ it('should set and get nested values', async () => {
   form.setValues({
     fullName: {
       firstName: 'Ella',
-      lastName: 'Fitzgerald'
+      lastName: 'Fitzgerald',
     },
     title: 'Founder',
     emails: [
       {
-        email: 'ella1@example.com'
+        email: 'ella1@example.com',
       },
       {
-        email: 'ella2@example.com'
-      }
+        email: 'ella2@example.com',
+      },
     ],
-    phoneNumbers: ['(206) 111-1111', '(206) 222-2222']
+    phoneNumbers: ['(206) 111-1111', '(206) 222-2222'],
   });
 
   const defaults = testUtils.toDefaultFieldsObject(undefined);
@@ -111,53 +111,47 @@ it('should set and get nested values', async () => {
     fullName: {
       ...defaults,
       firstName: 'Ella',
-      lastName: 'Fitzgerald'
+      lastName: 'Fitzgerald',
     },
     title: 'Founder',
     emails: [
       {
         ...defaults,
-        email: 'ella1@example.com'
+        email: 'ella1@example.com',
       },
       {
         ...defaults,
-        email: 'ella2@example.com'
-      }
+        email: 'ella2@example.com',
+      },
     ],
-    phoneNumbers: ['(206) 111-1111', '(206) 222-2222']
+    phoneNumbers: ['(206) 111-1111', '(206) 222-2222'],
   });
 
-  form
-    .getField('emails')
-    .getForm(0)
-    .setValues({ email: 'ella3@example.com' });
+  form.getField('emails').getForm(0).setValues({ email: 'ella3@example.com' });
 
   form.getField('fullName').setValues({ lastName: 'Fitz' });
 
-  form
-    .getField('phoneNumbers')
-    .getField(0)
-    .setValue('(206) 333-3333');
+  form.getField('phoneNumbers').getField(0).setValue('(206) 333-3333');
 
   expect(form.getValues()).toEqual({
     ...defaults,
     fullName: {
       ...defaults,
       firstName: 'Ella',
-      lastName: 'Fitz'
+      lastName: 'Fitz',
     },
     title: 'Founder',
     emails: [
       {
         ...defaults,
-        email: 'ella3@example.com'
+        email: 'ella3@example.com',
       },
       {
         ...defaults,
-        email: 'ella2@example.com'
-      }
+        email: 'ella2@example.com',
+      },
     ],
-    phoneNumbers: ['(206) 333-3333', '(206) 222-2222']
+    phoneNumbers: ['(206) 333-3333', '(206) 222-2222'],
   });
 });
 
@@ -168,20 +162,20 @@ it('should validate nested values', async () => {
   form.setValues({
     fullName: {
       firstName: 'Ella',
-      lastName: 'Fitzgerald'
+      lastName: 'Fitzgerald',
     },
     title: 'Founder',
     emails: [
       {
         id: '1',
-        email: 'ella1@example.com'
+        email: 'ella1@example.com',
       },
       {
         id: '2',
-        email: 'ella2@example.com'
-      }
+        email: 'ella2@example.com',
+      },
     ],
-    phoneNumbers: ['(206) 111-1111', '(206) 222-2222']
+    phoneNumbers: ['(206) 111-1111', '(206) 222-2222'],
   });
 
   form.validate();
@@ -191,28 +185,28 @@ it('should validate nested values', async () => {
   form.setValues({
     fullName: {
       firstName: null,
-      lastName: 'Fitzgerald'
+      lastName: 'Fitzgerald',
     },
     title: 'Founder of Things',
     emails: [
       {
         id: '1',
-        email: 'ella1@example.com'
+        email: 'ella1@example.com',
       },
       {
         id: '2',
-        email: 'ella2@example.com'
+        email: 'ella2@example.com',
       },
       {
         id: '3',
-        email: 'ella3@example.com'
+        email: 'ella3@example.com',
       },
       {
         id: '4',
-        email: null
-      }
+        email: null,
+      },
     ],
-    phoneNumbers: ['(206) 111-1111 x123', '(206) 222-2222']
+    phoneNumbers: ['(206) 111-1111 x123', '(206) 222-2222'],
   });
   form.validate();
   expect(form.hasErr()).toBe(true);
@@ -225,15 +219,15 @@ it('should validate nested values', async () => {
     error: [
       {
         field: 'firstName',
-        error: 'required'
-      }
-    ]
+        error: 'required',
+      },
+    ],
   });
 
   // Title too long
   expect(errs[1]).toEqual({
     field: 'title',
-    error: '10 characters or less'
+    error: '10 characters or less',
   });
 
   // Too many emails
@@ -246,14 +240,14 @@ it('should validate nested values', async () => {
         error: [
           {
             field: 'email',
-            error: 'required'
-          }
-        ]
+            error: 'required',
+          },
+        ],
       },
       {
-        error: '2 or less'
-      }
-    ]
+        error: '2 or less',
+      },
+    ],
   });
 
   // Phone number is too long
@@ -262,9 +256,9 @@ it('should validate nested values', async () => {
     error: [
       {
         field: 0,
-        error: '14 characters or less'
-      }
-    ]
+        error: '14 characters or less',
+      },
+    ],
   });
 });
 
@@ -273,7 +267,7 @@ it('should require nested values', () => {
 
   // Missing required fields
   form.setValues({
-    title: 'Founder'
+    title: 'Founder',
   });
   form.validate();
   expect(form.hasErr()).toBe(true);
@@ -283,31 +277,28 @@ it('should require nested values', () => {
   // Missing fullName
   expect(errs[0]).toEqual({
     field: 'fullName',
-    error: 'required'
+    error: 'required',
   });
 
   // Missing emails
   expect(errs[1]).toEqual({
     field: 'emails',
-    error: 'required'
+    error: 'required',
   });
 
   // Missing phone numbers
   expect(errs[2]).toEqual({
     field: 'phoneNumbers',
-    error: [{ error: 'required', field: 0 }]
+    error: [{ error: 'required', field: 0 }],
   });
 
   // Set required states of 1st layer of fields to false and test
   form.getField('fullName').set({ required: false });
-  form
-    .getField('fullName')
-    .getForm()
-    .setRequired(false);
+  form.getField('fullName').getForm().setRequired(false);
   form.getField('emails').set({ required: false });
   form.getField('phoneNumbers').set({ required: false });
   form.setValues({
-    title: 'Founder'
+    title: 'Founder',
   });
   form.validate();
   expect(form.hasErr()).toBe(false);
@@ -320,16 +311,16 @@ it('should validate nested form validators', async () => {
         where: {
           fields: {
             email: {
-              value: 'scott@example.com'
-            }
-          }
+              value: 'scott@example.com',
+            },
+          },
         },
         error: {
           field: 'email',
-          error: 'cannot be {{fields.email.value}}'
-        }
-      }
-    ]
+          error: 'cannot be {{fields.email.value}}',
+        },
+      },
+    ],
   });
 
   form
@@ -341,32 +332,32 @@ it('should validate nested form validators', async () => {
           where: {
             fields: {
               firstName: {
-                value: 'F. Scott'
-              }
-            }
+                value: 'F. Scott',
+              },
+            },
           },
           error: {
             field: 'firstName',
-            error: 'cannot be {{fields.firstName.value}}'
-          }
-        }
-      ]
+            error: 'cannot be {{fields.firstName.value}}',
+          },
+        },
+      ],
     });
 
   // No errors
   form.setValues({
     fullName: {
       firstName: 'Ella',
-      lastName: 'Fitzgerald'
+      lastName: 'Fitzgerald',
     },
     title: 'Founder',
     emails: [
       {
         id: '1',
-        email: 'ella1@example.com'
-      }
+        email: 'ella1@example.com',
+      },
     ],
-    phoneNumbers: ['(206) 111-1111']
+    phoneNumbers: ['(206) 111-1111'],
   });
 
   form.validate();
@@ -376,16 +367,16 @@ it('should validate nested form validators', async () => {
   form.setValues({
     fullName: {
       firstName: 'F. Scott',
-      lastName: 'Fitzgerald'
+      lastName: 'Fitzgerald',
     },
     title: 'Founder',
     emails: [
       {
         id: '1',
-        email: 'scott@example.com'
-      }
+        email: 'scott@example.com',
+      },
     ],
-    phoneNumbers: ['(206) 111-1111']
+    phoneNumbers: ['(206) 111-1111'],
   });
 
   form.validate();
@@ -399,9 +390,9 @@ it('should validate nested form validators', async () => {
     error: [
       {
         field: 'firstName',
-        error: 'cannot be F. Scott'
-      }
-    ]
+        error: 'cannot be F. Scott',
+      },
+    ],
   });
 
   // email error
@@ -413,11 +404,11 @@ it('should validate nested form validators', async () => {
         error: [
           {
             field: 'email',
-            error: 'cannot be scott@example.com'
-          }
-        ]
-      }
-    ]
+            error: 'cannot be scott@example.com',
+          },
+        ],
+      },
+    ],
   });
 });
 
@@ -429,9 +420,9 @@ it('should report bad types', () => {
     title: 'Founder',
     emails: {
       id: '1',
-      email: 'ella1@example.com'
+      email: 'ella1@example.com',
     },
-    phoneNumbers: '(206) 111-1111'
+    phoneNumbers: '(206) 111-1111',
   });
   form.validate();
   expect(form.hasErr()).toBe(true);
@@ -441,19 +432,19 @@ it('should report bad types', () => {
   // Invalid fullName
   expect(errs[0]).toEqual({
     field: 'fullName',
-    error: [{ error: 'must be an object' }]
+    error: [{ error: 'must be an object' }],
   });
 
   // Invalid emails
   expect(errs[1]).toEqual({
     field: 'emails',
-    error: [{ error: 'must be an array of objects' }]
+    error: [{ error: 'must be an array of objects' }],
   });
 
   // Invalid phoneNumbers
   expect(errs[2]).toEqual({
     field: 'phoneNumbers',
-    error: [{ error: 'must be an array' }]
+    error: [{ error: 'must be an array' }],
   });
 });
 
@@ -464,18 +455,18 @@ it('should report extra fields', async () => {
     fullName: {
       firstName: 'Ella',
       middleName: 'Jane',
-      lastName: 'Fitzgerald'
+      lastName: 'Fitzgerald',
     },
     title: 'Founder',
     emails: [
       {
         id: '1',
         email: 'ella1@example.com',
-        url: 'ella.com'
-      }
+        url: 'ella.com',
+      },
     ],
     phoneNumbers: ['(206) 111-1111'],
-    label: 'Universal'
+    label: 'Universal',
   });
   form.validate();
   expect(form.hasErr()).toBe(true);
@@ -485,16 +476,16 @@ it('should report extra fields', async () => {
   expect(errs).toEqual([
     {
       field: 'label',
-      error: 'undefined field'
+      error: 'undefined field',
     },
     {
       field: 'fullName',
       error: [
         {
           field: 'middleName',
-          error: 'undefined field'
-        }
-      ]
+          error: 'undefined field',
+        },
+      ],
     },
     {
       field: 'emails',
@@ -504,11 +495,11 @@ it('should report extra fields', async () => {
           error: [
             {
               field: 'url',
-              error: 'undefined field'
-            }
-          ]
-        }
-      ]
-    }
+              error: 'undefined field',
+            },
+          ],
+        },
+      ],
+    },
   ]);
 });

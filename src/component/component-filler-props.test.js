@@ -8,9 +8,9 @@ it('should get session when client has been registered', () => {
   filler._registrar = {
     client: {
       user: {
-        getSession: () => session
-      }
-    }
+        getSession: () => session,
+      },
+    },
   };
 
   expect(filler._getSession()).toEqual(session);
@@ -24,7 +24,7 @@ it('should get', () => {
 
   // Action when _action
   getter._action = {
-    get: () => 'bar'
+    get: () => 'bar',
   };
   expect(getter.get('action.foo')).toEqual('bar');
 
@@ -33,7 +33,7 @@ it('should get', () => {
 
   // Component when _component
   getter._component = {
-    get: () => 'baz'
+    get: () => 'baz',
   };
   expect(getter.get('foo')).toEqual('baz');
 

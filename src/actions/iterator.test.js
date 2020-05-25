@@ -5,8 +5,8 @@ it('should iterate', async () => {
     iterator: 'arguments.items',
     return: {
       id: '{{item.id}}',
-      name: '{{item.firstName}} {{item.lastName}}'
-    }
+      name: '{{item.firstName}} {{item.lastName}}',
+    },
   });
 
   const result = await iterator.act({
@@ -15,25 +15,25 @@ it('should iterate', async () => {
         {
           id: '1',
           firstName: 'Ella',
-          lastName: 'Fitzgerald'
+          lastName: 'Fitzgerald',
         },
         {
           id: '2',
           firstName: 'Johnny',
-          lastName: 'Cash'
-        }
-      ]
-    }
+          lastName: 'Cash',
+        },
+      ],
+    },
   });
 
   expect(result).toEqual([
     {
       id: '1',
-      name: 'Ella Fitzgerald'
+      name: 'Ella Fitzgerald',
     },
     {
       id: '2',
-      name: 'Johnny Cash'
-    }
+      name: 'Johnny Cash',
+    },
   ]);
 });

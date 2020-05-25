@@ -12,16 +12,16 @@ export default class Grid extends UIComponent {
         fields: [
           {
             name: 'items',
-            component: 'Field'
-          }
-        ]
-      }
+            component: 'Field',
+          },
+        ],
+      },
     });
   }
 
   set(props) {
     if (props.items !== undefined) {
-      props.items.forEach(item => item.set({ parent: this }));
+      props.items.forEach((item) => item.set({ parent: this }));
     }
 
     super.set(props);

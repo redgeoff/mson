@@ -6,13 +6,13 @@ import { TextField } from './fields';
 let myRoles = [];
 let sessionRoles = {};
 
-const mockRegistrar = access => {
+const mockRegistrar = (access) => {
   access._registrar = {
     client: {
       user: {
-        hasRole: roles => {
+        hasRole: (roles) => {
           let has = false;
-          roles.forEach(role => {
+          roles.forEach((role) => {
             if (myRoles.indexOf(role) !== -1) {
               has = true;
             }
@@ -23,12 +23,12 @@ const mockRegistrar = access => {
         getSession: () => {
           return {
             user: {
-              roles: sessionRoles
-            }
+              roles: sessionRoles,
+            },
           };
-        }
-      }
-    }
+        },
+      },
+    },
   };
 };
 
@@ -59,9 +59,9 @@ it('should check access', () => {
         create: '1',
         read: ['1'],
         update: '1',
-        archive: '1'
-      }
-    }
+        archive: '1',
+      },
+    },
   });
 
   // Access denied as missing role
@@ -85,11 +85,11 @@ it('should get fields and values', () => {
   const form = new Form({
     fields: [
       new TextField({ name: 'firstName' }),
-      new TextField({ name: 'lastName' })
+      new TextField({ name: 'lastName' }),
     ],
     value: {
       firstName: 'Robert',
-      lastName: 'Plant'
+      lastName: 'Plant',
     },
     access: {
       fields: {
@@ -97,36 +97,36 @@ it('should get fields and values', () => {
           create: '100',
           read: ['100', '200'],
           update: '100',
-          archive: '100'
-        }
-      }
-    }
+          archive: '100',
+        },
+      },
+    },
   });
 
   expect(access.fieldsCanCreate(form)).toEqual({
     ...testUtils.toDefaultFieldsObject('create'),
-    lastName: 'create'
+    lastName: 'create',
   });
   expect(access.fieldsCanRead(form)).toEqual({
     ...testUtils.toDefaultFieldsObject('read'),
-    lastName: 'read'
+    lastName: 'read',
   });
   expect(access.fieldsCanUpdate(form)).toEqual({
     ...testUtils.toDefaultFieldsObject('update'),
-    lastName: 'update'
+    lastName: 'update',
   });
 
   expect(access.valuesCanCreate(form)).toEqual({
     id: undefined,
-    lastName: 'Plant'
+    lastName: 'Plant',
   });
   expect(access.valuesCanRead(form)).toEqual({
     id: undefined,
-    lastName: 'Plant'
+    lastName: 'Plant',
   });
   expect(access.valuesCanUpdate(form)).toEqual({
     id: undefined,
-    lastName: 'Plant'
+    lastName: 'Plant',
   });
 
   sessionRoles['id100'] = { name: '100' };
@@ -134,33 +134,33 @@ it('should get fields and values', () => {
   expect(access.fieldsCanCreate(form)).toEqual({
     ...testUtils.toDefaultFieldsObject('create'),
     firstName: 'create',
-    lastName: 'create'
+    lastName: 'create',
   });
   expect(access.fieldsCanRead(form)).toEqual({
     ...testUtils.toDefaultFieldsObject('read'),
     firstName: 'read',
-    lastName: 'read'
+    lastName: 'read',
   });
   expect(access.fieldsCanUpdate(form)).toEqual({
     ...testUtils.toDefaultFieldsObject('update'),
     firstName: 'update',
-    lastName: 'update'
+    lastName: 'update',
   });
 
   expect(access.valuesCanCreate(form)).toEqual({
     id: undefined,
     firstName: 'Robert',
-    lastName: 'Plant'
+    lastName: 'Plant',
   });
   expect(access.valuesCanRead(form)).toEqual({
     id: undefined,
     firstName: 'Robert',
-    lastName: 'Plant'
+    lastName: 'Plant',
   });
   expect(access.valuesCanUpdate(form)).toEqual({
     id: undefined,
     firstName: 'Robert',
-    lastName: 'Plant'
+    lastName: 'Plant',
   });
 
   sessionRoles = { id200: { name: '200' } };
@@ -173,12 +173,12 @@ it('should get fields and values', () => {
   access._registrar = {
     client: {
       user: {
-        getSession: () => null
-      }
-    }
+        getSession: () => null,
+      },
+    },
   };
   expect(access.fieldsCanCreate(form)).toEqual({
     ...testUtils.toDefaultFieldsObject('create'),
-    lastName: 'create'
+    lastName: 'create',
   });
 });

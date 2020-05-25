@@ -7,14 +7,14 @@ export default {
       {
         name: 'baseFormFactory',
         component: 'Field',
-        required: true
+        required: true,
       },
       {
         // Not required as baseFormFactory will populate formFactory
         name: 'formFactory',
-        required: false
-      }
-    ]
+        required: false,
+      },
+    ],
   },
   hideLabel: true,
   formFactory: {
@@ -27,8 +27,8 @@ export default {
           name: 'setPassword',
           label: 'Set Password',
           hidden: true,
-          icon: 'VpnKey'
-        }
+          icon: 'VpnKey',
+        },
       ],
       listeners: [
         {
@@ -37,9 +37,9 @@ export default {
             {
               component: 'Set',
               name: 'snapshot',
-              value: 'take'
-            }
-          ]
+              value: 'take',
+            },
+          ],
         },
         {
           event: 'beginCreate',
@@ -50,10 +50,10 @@ export default {
               value: {
                 'fields.password.hidden': false,
                 'fields.password.required': true,
-                'fields.password.out': true
-              }
-            }
-          ]
+                'fields.password.out': true,
+              },
+            },
+          ],
         },
         {
           event: 'endCreate',
@@ -61,9 +61,9 @@ export default {
             {
               component: 'Set',
               name: 'snapshot',
-              value: 'restore'
-            }
-          ]
+              value: 'restore',
+            },
+          ],
         },
         {
           event: 'beginRead',
@@ -71,9 +71,9 @@ export default {
             {
               component: 'Set',
               name: 'fields.setPassword.hidden',
-              value: false
-            }
-          ]
+              value: false,
+            },
+          ],
         },
         {
           event: 'endRead',
@@ -81,9 +81,9 @@ export default {
             {
               component: 'Set',
               name: 'fields.setPassword.hidden',
-              value: true
-            }
-          ]
+              value: true,
+            },
+          ],
         },
         {
           event: 'endUpdate',
@@ -91,9 +91,9 @@ export default {
             {
               component: 'Set',
               name: 'snapshot',
-              value: 'restore'
-            }
-          ]
+              value: 'restore',
+            },
+          ],
         },
         {
           event: 'setPassword',
@@ -101,12 +101,12 @@ export default {
             {
               component: 'Set',
               name: 'out',
-              value: false
+              value: false,
             },
             {
               component: 'Set',
               name: 'hidden',
-              value: true
+              value: true,
             },
             {
               component: 'Set',
@@ -117,29 +117,29 @@ export default {
                 'fields.password.out': true,
 
                 // Clear any previous value set when changing the password
-                'fields.password.value': null
-              }
+                'fields.password.value': null,
+              },
             },
             {
               component: 'Set',
               name: 'pristine',
-              value: true
+              value: true,
             },
             {
               component: 'Set',
               name: 'parent.mode',
-              value: 'update'
-            }
-          ]
-        }
+              value: 'update',
+            },
+          ],
+        },
       ],
       access: {
         fields: {
           setPassword: {
-            read: 'admin'
-          }
-        }
-      }
-    }
-  }
+            read: 'admin',
+          },
+        },
+      },
+    },
+  },
 };

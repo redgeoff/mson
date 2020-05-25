@@ -26,10 +26,10 @@ export default class RecordStore extends Store {
           {
             name: 'storeName',
             component: 'TextField',
-            required: true
-          }
-        ]
-      }
+            required: true,
+          },
+        ],
+      },
     });
   }
 
@@ -72,14 +72,14 @@ export default class RecordStore extends Store {
 
     const response = await this._request({
       form,
-      promiseFactory: appId => {
+      promiseFactory: (appId) => {
         return this._registrar.client.record.create({
           appId,
           componentName: this.get('storeName'),
           fieldValues,
-          order
+          order,
         });
-      }
+      },
     });
 
     return response.data.createRecord;
@@ -115,14 +115,14 @@ export default class RecordStore extends Store {
     first,
     before,
     last,
-    order
+    order,
   }) {
     const showArchivedWhere = this._getShowArchivedWhere(showArchived);
     where = utils.combineWheres(showArchivedWhere, where, this.get('where'));
 
     return this._request({
       form,
-      promiseFactory: async appId => {
+      promiseFactory: async (appId) => {
         const opts = {
           appId,
           componentName: this.get('storeName'),
@@ -132,7 +132,7 @@ export default class RecordStore extends Store {
           first: first,
           before: before,
           last: last,
-          order: order
+          order: order,
         };
 
         // The built-in apollo client cache cannot automatically accomodate the mutations so we use a
@@ -147,7 +147,7 @@ export default class RecordStore extends Store {
 
         const response = await this._registrar.client.record.getAll(opts);
         return response.data.records;
-      }
+      },
     });
   }
 
@@ -157,7 +157,7 @@ export default class RecordStore extends Store {
     const props = {
       first: this.constructor.ITEMS_PER_PAGE_DEFAULT,
       order: [['order', 'asc']],
-      where: this.get('where')
+      where: this.get('where'),
     };
 
     const itemsToReorder = [];
@@ -211,22 +211,22 @@ export default class RecordStore extends Store {
     }
 
     return {
-      lastOrder: i
+      lastOrder: i,
     };
   }
 
   async _requestUpdate({ form, id, fieldValues, order }) {
     const response = await this._request({
       form,
-      promiseFactory: appId => {
+      promiseFactory: (appId) => {
         return this._registrar.client.record.update({
           appId,
           componentName: this.get('storeName'),
           id,
           fieldValues,
-          order
+          order,
         });
-      }
+      },
     });
 
     return response.data.updateRecord;
@@ -243,14 +243,14 @@ export default class RecordStore extends Store {
   async _getDoc({ form, id, where }) {
     const response = await this._request({
       form,
-      promiseFactory: appId => {
+      promiseFactory: (appId) => {
         return this._registrar.client.record.get({
           appId,
           componentName: this.get('storeName'),
           id,
-          where
+          where,
         });
-      }
+      },
     });
 
     return response.data.record;
@@ -292,13 +292,13 @@ export default class RecordStore extends Store {
 
     const response = await this._request({
       form,
-      promiseFactory: appId => {
+      promiseFactory: (appId) => {
         return this._registrar.client.record.archive({
           appId,
           componentName: this.get('storeName'),
-          id
+          id,
         });
-      }
+      },
     });
 
     if (reorder) {
@@ -321,7 +321,7 @@ export default class RecordStore extends Store {
         id,
         order: Reorder.DEFAULT_ORDER,
         reorder: true,
-        fieldValues: {}
+        fieldValues: {},
       });
     }
 
@@ -333,13 +333,13 @@ export default class RecordStore extends Store {
 
     const response = await this._request({
       form,
-      promiseFactory: appId => {
+      promiseFactory: (appId) => {
         return this._registrar.client.record.restore({
           appId,
           componentName: this.get('storeName'),
-          id
+          id,
         });
-      }
+      },
     });
 
     if (this._shouldSetToLastOrder(order, reorder)) {
@@ -350,7 +350,7 @@ export default class RecordStore extends Store {
         id,
         fieldValues: {},
         order: result.lastOrder,
-        reorder: false
+        reorder: false,
       });
     }
 

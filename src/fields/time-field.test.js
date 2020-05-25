@@ -21,7 +21,7 @@ it('should get display value', () => {
   expect(toLocaleTimeStringSpy).toHaveBeenCalledTimes(2);
 
   // Mock for same results regardless of environment
-  date._toLocaleString = date => {
+  date._toLocaleString = (date) => {
     return date.toLocaleTimeString('en-US');
   };
 
@@ -38,7 +38,7 @@ it('should validate', () => {
     '2018-12-12 8:12 AM',
     '2018-12-12 12:00 PM',
     '2018-12-12 22:00',
-    null
+    null,
   ]);
 
   field.set({ required: true });
@@ -46,6 +46,6 @@ it('should validate', () => {
   testUtils.expectValuesToBeInvalid(field, [
     '2018-12-12 40:00 PM',
     '2018-12-12 10:00 ZM',
-    null
+    null,
   ]);
 });

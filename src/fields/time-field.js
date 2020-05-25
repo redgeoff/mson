@@ -16,10 +16,10 @@ export default class TimeField extends Field {
             name: 'showSeconds',
             component: 'BooleanField',
             label: 'Show Seconds',
-            docLevel: 'basic'
-          }
-        ]
-      }
+            docLevel: 'basic',
+          },
+        ],
+      },
     });
   }
 
@@ -45,7 +45,7 @@ export default class TimeField extends Field {
     if (!this.get('showSeconds')) {
       options = {
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
       };
     }
     return date.toLocaleTimeString(currentLocale, options);

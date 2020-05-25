@@ -10,16 +10,16 @@ it('should set properties in nested form', async () => {
   const options = [
     { value: 'red', label: 'Red' },
     { value: 'green', label: 'Green' },
-    { value: 'blue', label: 'Blue' }
+    { value: 'blue', label: 'Blue' },
   ];
 
   const field = new CollectionField({
     formFactory: new Factory({
       product: () => {
         return new Form({
-          fields: [new SelectField({ name: 'color' })]
+          fields: [new SelectField({ name: 'color' })],
         });
-      }
+      },
     }),
     listeners: [
       {
@@ -27,17 +27,17 @@ it('should set properties in nested form', async () => {
         actions: [
           // Simulate reading options from API call
           new Set({
-            value: options
+            value: options,
           }),
           new Set({
             name: 'formFactory.properties',
             value: {
-              'fields.color.options': '{{arguments}}'
-            }
-          })
-        ]
-      }
-    ]
+              'fields.color.options': '{{arguments}}',
+            },
+          }),
+        ],
+      },
+    ],
   });
 
   field.emitLoad();
@@ -47,21 +47,21 @@ it('should set properties in nested form', async () => {
 
   field.setValue([
     {
-      color: 'red'
+      color: 'red',
     },
     {
-      color: 'blue'
-    }
+      color: 'blue',
+    },
   ]);
   expect(field.getValue()).toEqual([
     {
       ...testUtils.toDefaultFieldsObject(undefined),
-      color: 'red'
+      color: 'red',
     },
     {
       ...testUtils.toDefaultFieldsObject(undefined),
-      color: 'blue'
-    }
+      color: 'blue',
+    },
   ]);
 });
 
@@ -69,7 +69,7 @@ it('should set properties in dynamic nested form', async () => {
   const options = [
     { value: 'red', label: 'Red' },
     { value: 'green', label: 'Green' },
-    { value: 'blue', label: 'Blue' }
+    { value: 'blue', label: 'Blue' },
   ];
 
   const component = compiler.newComponent({
@@ -85,17 +85,17 @@ it('should set properties in dynamic nested form', async () => {
             actions: [
               {
                 component: 'Set',
-                value: options
+                value: options,
               },
               {
                 component: 'Set',
                 name: 'formFactory.properties',
                 value: {
-                  'fields.color.options': '{{arguments}}'
-                }
-              }
-            ]
-          }
+                  'fields.color.options': '{{arguments}}',
+                },
+              },
+            ],
+          },
         ],
         baseFormFactory: {
           component: 'Factory',
@@ -104,13 +104,13 @@ it('should set properties in dynamic nested form', async () => {
             fields: [
               {
                 name: 'color',
-                component: 'SelectField'
-              }
-            ]
-          }
-        }
-      }
-    ]
+                component: 'SelectField',
+              },
+            ],
+          },
+        },
+      },
+    ],
   });
 
   const field = component.getField('colors');
@@ -121,20 +121,20 @@ it('should set properties in dynamic nested form', async () => {
 
   field.setValue([
     {
-      color: 'red'
+      color: 'red',
     },
     {
-      color: 'blue'
-    }
+      color: 'blue',
+    },
   ]);
   expect(field.getValue()).toEqual([
     {
       ...testUtils.toDefaultFieldsObject(undefined),
-      color: 'red'
+      color: 'red',
     },
     {
       ...testUtils.toDefaultFieldsObject(undefined),
-      color: 'blue'
-    }
+      color: 'blue',
+    },
   ]);
 });

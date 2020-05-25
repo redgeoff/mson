@@ -19,7 +19,7 @@ export class Globals extends Component {
             // The current path. This path is changed whenever the URL changes in the
             // browser bar, including when the user hits the back or forward buttons.
             name: 'path',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             // A temporary prop used to hold the redirectPath until the redirect is initiated by the
@@ -27,38 +27,38 @@ export class Globals extends Component {
             // redirects to the same route are considered unique, e.g. if / routes to /somepage and
             // then the user hits back.
             name: 'redirectPath',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'snackbarMessage',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'appId',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'confirmation',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'searchString',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'redirectAfterLogin',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'reCAPTCHASiteKey',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'route',
-            component: 'Field'
-          }
-        ]
-      }
+            component: 'Field',
+          },
+        ],
+      },
     });
   }
 

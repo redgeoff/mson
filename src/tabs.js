@@ -22,36 +22,36 @@ export default class Tabs extends UIComponent {
                     name: 'name',
                     component: 'TextField',
                     label: 'Name',
-                    required: true
+                    required: true,
                   },
                   {
                     name: 'label',
                     component: 'TextField',
                     label: 'Label',
-                    required: true
+                    required: true,
                   },
                   {
                     // TODO: create IconListField (with preview) and use it here
                     name: 'icon',
                     component: 'TextField',
                     label: 'Icon',
-                    docLevel: 'basic'
-                  }
-                ]
-              }
-            }
+                    docLevel: 'basic',
+                  },
+                ],
+              },
+            },
           },
           {
             name: 'value',
             component: 'NumberField',
-            help: 'The index of the tab selected'
-          }
-        ]
-      }
+            help: 'The index of the tab selected',
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, {
-      value: 0
+      value: 0,
     });
   }
 }

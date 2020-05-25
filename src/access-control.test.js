@@ -25,7 +25,7 @@ it('has access', () => {
 
 it('can access field', () => {
   const indexedRoles = {
-    100: true
+    100: true,
   };
 
   // Can access at field layer
@@ -34,13 +34,13 @@ it('can access field', () => {
       'create',
       {
         form: {
-          create: '200'
+          create: '200',
         },
         fields: {
           firstName: {
-            create: '100'
-          }
-        }
+            create: '100',
+          },
+        },
       },
       indexedRoles,
       'firstName'
@@ -53,13 +53,13 @@ it('can access field', () => {
       'create',
       {
         form: {
-          create: '100'
+          create: '100',
         },
         fields: {
           firstName: {
-            create: '200'
-          }
-        }
+            create: '200',
+          },
+        },
       },
       indexedRoles,
       'firstName'
@@ -72,8 +72,8 @@ it('can access field', () => {
       'create',
       {
         form: {
-          create: '100'
-        }
+          create: '100',
+        },
       },
       indexedRoles,
       'firstName'
@@ -86,8 +86,8 @@ it('can access field', () => {
       'create',
       {
         form: {
-          create: '200'
-        }
+          create: '200',
+        },
       },
       indexedRoles,
       'firstName'
@@ -105,8 +105,8 @@ it('can access field', () => {
       'create',
       {
         form: {
-          create: Roles.ID_OWNER
-        }
+          create: Roles.ID_OWNER,
+        },
       },
       indexedRoles,
       'firstName',
@@ -121,9 +121,9 @@ it('can access field', () => {
       {
         fields: {
           firstName: {
-            create: Roles.ID_OWNER
-          }
-        }
+            create: Roles.ID_OWNER,
+          },
+        },
       },
       indexedRoles,
       'firstName',
@@ -139,9 +139,9 @@ it('can access field', () => {
         fields: {
           firstName: {
             read: ['100', '200'],
-            update: '200'
-          }
-        }
+            update: '200',
+          },
+        },
       },
       indexedRoles,
       'firstName',
@@ -158,9 +158,9 @@ it('can access field', () => {
         fields: {
           firstName: {
             read: '200',
-            update: '200'
-          }
-        }
+            update: '200',
+          },
+        },
       },
       indexedRoles,
       'firstName',
@@ -173,14 +173,14 @@ it('can access field', () => {
 it('can access', () => {
   const access = {
     form: {
-      create: '1'
+      create: '1',
     },
 
     fields: {
       firstName: {
-        create: '2'
-      }
-    }
+        create: '2',
+      },
+    },
   };
 
   expect(
@@ -188,11 +188,11 @@ it('can access', () => {
       access,
       {
         1: true,
-        2: true
+        2: true,
       },
       {
         firstName: null,
-        lastName: null
+        lastName: null,
       }
     )
   ).toEqual([]);
@@ -201,11 +201,11 @@ it('can access', () => {
     control.canCreate(
       access,
       {
-        2: true
+        2: true,
       },
       {
         firstName: null,
-        lastName: null
+        lastName: null,
       }
     )
   ).toEqual(['lastName']);
@@ -214,11 +214,11 @@ it('can access', () => {
     control.canCreate(
       access,
       {
-        3: true
+        3: true,
       },
       {
         firstName: null,
-        lastName: null
+        lastName: null,
       }
     )
   ).toEqual(['firstName', 'lastName']);
@@ -228,12 +228,12 @@ it('should access', () => {
   // Just a sanity test
 
   let indexedRoles = {
-    2: true
+    2: true,
   };
 
   const fieldValues = {
     firstName: null,
-    lastName: null
+    lastName: null,
   };
 
   const access = {
@@ -241,7 +241,7 @@ it('should access', () => {
       create: '2',
       read: ['1', '2'],
       update: ['1', '2'],
-      archive: '2'
+      archive: '2',
     },
 
     fields: {
@@ -249,9 +249,9 @@ it('should access', () => {
         create: '2',
         read: ['1', '2'],
         update: '2',
-        archive: '2'
-      }
-    }
+        archive: '2',
+      },
+    },
   };
 
   expect(control.canCreate(access, indexedRoles, fieldValues)).toHaveLength(0);
@@ -260,7 +260,7 @@ it('should access', () => {
   expect(control.canArchive(access, indexedRoles, fieldValues)).toHaveLength(0);
 
   indexedRoles = {
-    1: true
+    1: true,
   };
 
   expect(control.canCreate(access, indexedRoles, fieldValues)).toHaveLength(2);
@@ -273,26 +273,26 @@ it('can access fields', () => {
   // Sanity test as different permutations tested by 'can access field'
 
   let indexedRoles = {
-    100: true
+    100: true,
   };
 
   const fieldValues = {
     firstName: 'First',
     middleName: 'Middle',
-    lastName: 'Last'
+    lastName: 'Last',
   };
 
   const access = {
     fields: {
       firstName: {
         read: ['100', '200'],
-        update: '200'
+        update: '200',
       },
       middleName: {
         read: '200',
-        update: '200'
-      }
-    }
+        update: '200',
+      },
+    },
   };
 
   expect(

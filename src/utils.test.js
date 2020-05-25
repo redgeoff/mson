@@ -7,13 +7,13 @@ it('should execute promises sequentially', async () => {
 
   let i = 0;
 
-  const snooze = async ms => {
+  const snooze = async (ms) => {
     await testUtils.timeout(ms);
     observed.push(ms);
     return i++ === 1 ? undefined : ms;
   };
 
-  const results = await utils.sequential(sleeps, async ms => {
+  const results = await utils.sequential(sleeps, async (ms) => {
     return await snooze(ms);
   });
 
@@ -33,45 +33,45 @@ it('should create where from search string', () => {
         $or: [
           {
             attr1: {
-              $iLike: 'word1%'
-            }
+              $iLike: 'word1%',
+            },
           },
           {
             attr2: {
-              $iLike: 'word1%'
-            }
-          }
-        ]
+              $iLike: 'word1%',
+            },
+          },
+        ],
       },
       {
         $or: [
           {
             attr1: {
-              $iLike: 'word2%'
-            }
+              $iLike: 'word2%',
+            },
           },
           {
             attr2: {
-              $iLike: 'word2%'
-            }
-          }
-        ]
+              $iLike: 'word2%',
+            },
+          },
+        ],
       },
       {
         $or: [
           {
             attr1: {
-              $iLike: 'word3%'
-            }
+              $iLike: 'word3%',
+            },
           },
           {
             attr2: {
-              $iLike: 'word3%'
-            }
-          }
-        ]
-      }
-    ]
+              $iLike: 'word3%',
+            },
+          },
+        ],
+      },
+    ],
   });
 });
 
@@ -79,7 +79,7 @@ it('should detect if in browser', () => {
   const utils = new Utils();
 
   utils._global = {
-    window: true
+    window: true,
   };
 
   expect(utils.inBrowser()).toEqual(true);
@@ -90,16 +90,16 @@ it('should detect if in browser', () => {
 
 it('should combine wheres', () => {
   const where1 = {
-    foo: 'bar'
+    foo: 'bar',
   };
   const where2 = {
     baz: {
-      $ne: 'yaz'
-    }
+      $ne: 'yaz',
+    },
   };
   const combined = utils.combineWheres(where1, where2);
   expect(combined).toEqual({
-    $and: [where1, where2]
+    $and: [where1, where2],
   });
 
   expect(utils.combineWheres(where1, null)).toEqual(where1);
@@ -108,7 +108,7 @@ it('should combine wheres', () => {
 
 it('should convert to RegExp', () => {
   const items = ['/[1-9]AB/i', '/[1-9]AB/', '/\\/[1-9]AB\\//', /[1-9]AB/i];
-  items.forEach(item =>
+  items.forEach((item) =>
     expect(utils.toRegExp(item).toString()).toEqual(item.toString())
   );
 

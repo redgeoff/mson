@@ -16,10 +16,10 @@ export default class Text extends UIComponent {
             label: 'Text',
             multiline: true,
             docLevel: 'basic',
-            help: 'Any markdown. See markdownguide.org'
-          }
-        ]
-      }
+            help: 'Any markdown. See markdownguide.org',
+          },
+        ],
+      },
     });
   }
 }

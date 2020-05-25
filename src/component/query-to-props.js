@@ -5,7 +5,7 @@ import PropertyNotDefinedError from './property-not-defined-error';
 export const queryToPropNames = (query, names, parentName) => {
   if (query !== null && typeof query === 'object') {
     if (Array.isArray(query)) {
-      query.forEach(item => queryToPropNames(item, names, parentName));
+      query.forEach((item) => queryToPropNames(item, names, parentName));
     } else {
       forEach(query, (item, name) => {
         // Not operator? TODO: actually check operators so that we support variables that begin with
@@ -22,7 +22,7 @@ export const queryToPropNames = (query, names, parentName) => {
   }
 };
 
-export const throwIfNotPropertyNotDefinedError = err => {
+export const throwIfNotPropertyNotDefinedError = (err) => {
   if (!(err instanceof PropertyNotDefinedError)) {
     throw err;
   }

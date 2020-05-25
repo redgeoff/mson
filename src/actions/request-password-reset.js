@@ -15,7 +15,7 @@ export default class RequestPasswordReset extends Action {
   async act(props) {
     return this._requestReset({
       context: props.context,
-      component: props.component
+      component: props.component,
     });
   }
 }

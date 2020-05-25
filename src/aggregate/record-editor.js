@@ -7,29 +7,29 @@ export default {
       {
         name: 'baseForm',
         component: 'Field',
-        required: true
+        required: true,
       },
       {
         name: 'label',
-        component: 'TextField'
+        component: 'TextField',
       },
       {
         name: 'store',
-        component: 'Field'
+        component: 'Field',
       },
       {
         name: 'storeWhere',
-        component: 'WhereField'
+        component: 'WhereField',
       },
       {
         name: 'preview',
-        component: 'BooleanField'
+        component: 'BooleanField',
       },
       {
         name: 'hideCancel',
-        component: 'BooleanField'
-      }
-    ]
+        component: 'BooleanField',
+      },
+    ],
   },
   componentToWrap: '{{baseForm}}',
   fields: [
@@ -38,22 +38,22 @@ export default {
       name: 'edit',
       label: 'Edit',
       icon: 'Edit',
-      hidden: true
+      hidden: true,
     },
     {
       component: 'ButtonField',
       type: 'submit',
       name: 'save',
       label: 'Save',
-      icon: 'Save'
+      icon: 'Save',
     },
     {
       component: 'ButtonField',
       name: 'cancel',
       label: 'Cancel',
       icon: 'Cancel',
-      hidden: true
-    }
+      hidden: true,
+    },
   ],
   listeners: [
     {
@@ -62,60 +62,60 @@ export default {
         {
           component: 'Set',
           name: 'isLoading',
-          value: true
+          value: true,
         },
         {
           component: 'Action',
           if: {
             storeWhere: {
-              $ne: null
-            }
+              $ne: null,
+            },
           },
           actions: [
             {
               component: 'GetDoc',
               store: '{{store}}',
-              where: '{{storeWhere}}'
+              where: '{{storeWhere}}',
             },
             {
               component: 'SetFromDoc',
               if: {
                 arguments: {
-                  $ne: null
-                }
+                  $ne: null,
+                },
               },
               name: 'value',
-              doc: '{{arguments}}'
-            }
-          ]
+              doc: '{{arguments}}',
+            },
+          ],
         },
         {
           component: 'Set',
           name: 'pristine',
-          value: true
+          value: true,
         },
         {
           if: {
             preview: {
-              $ne: false
-            }
+              $ne: false,
+            },
           },
           component: 'Emit',
-          event: 'read'
+          event: 'read',
         },
         {
           if: {
-            preview: false
+            preview: false,
           },
           component: 'Emit',
-          event: 'edit'
+          event: 'edit',
         },
         {
           component: 'Set',
           name: 'isLoading',
-          value: false
-        }
-      ]
+          value: false,
+        },
+      ],
     },
     {
       event: 'read',
@@ -123,12 +123,12 @@ export default {
         {
           component: 'Set',
           name: 'mode',
-          value: 'read'
+          value: 'read',
         },
         {
           component: 'Set',
           name: 'editable',
-          value: false
+          value: false,
         },
         {
           component: 'Set',
@@ -136,14 +136,14 @@ export default {
           value: {
             'fields.save.hidden': true,
             'fields.edit.hidden': false,
-            'fields.cancel.hidden': true
-          }
+            'fields.cancel.hidden': true,
+          },
         },
         {
           component: 'Emit',
-          event: 'didRead'
-        }
-      ]
+          event: 'didRead',
+        },
+      ],
     },
     {
       event: 'edit',
@@ -151,12 +151,12 @@ export default {
         {
           component: 'Set',
           name: 'mode',
-          value: 'update'
+          value: 'update',
         },
         {
           component: 'Set',
           name: 'editable',
-          value: true
+          value: true,
         },
         {
           component: 'Set',
@@ -164,24 +164,24 @@ export default {
           value: {
             'fields.save.hidden': false,
             'fields.save.disabled': true,
-            'fields.edit.hidden': true
-          }
+            'fields.edit.hidden': true,
+          },
         },
         {
           if: {
             hideCancel: {
-              $ne: true
-            }
+              $ne: true,
+            },
           },
           component: 'Set',
           name: 'fields.cancel.hidden',
-          value: false
+          value: false,
         },
         {
           component: 'Emit',
-          event: 'didEdit'
-        }
-      ]
+          event: 'didEdit',
+        },
+      ],
     },
     {
       event: 'canSubmit',
@@ -189,13 +189,13 @@ export default {
         {
           component: 'Set',
           name: 'fields.save.disabled',
-          value: false
+          value: false,
         },
         {
           component: 'Emit',
-          event: 'didCanSubmit'
-        }
-      ]
+          event: 'didCanSubmit',
+        },
+      ],
     },
     {
       event: 'cannotSubmit',
@@ -203,59 +203,59 @@ export default {
         {
           component: 'Set',
           name: 'fields.save.disabled',
-          value: true
+          value: true,
         },
         {
           component: 'Emit',
-          event: 'didCannotSubmit'
-        }
-      ]
+          event: 'didCannotSubmit',
+        },
+      ],
     },
     {
       event: 'save',
       actions: [
         {
           component: 'UpsertDoc',
-          store: '{{store}}'
+          store: '{{store}}',
         },
         {
           // Needed or else will be prompted to discard changes
           component: 'Set',
           name: 'pristine',
-          value: true
+          value: true,
         },
         {
           component: 'Snackbar',
-          message: '{{label}} saved'
+          message: '{{label}} saved',
         },
         {
           // Needed to restore read data/format as it may be different than that for updating
           if: {
             preview: {
-              $ne: false
-            }
+              $ne: false,
+            },
           },
           component: 'Emit',
-          event: 'load'
+          event: 'load',
         },
         {
           component: 'Emit',
-          event: 'didSave'
-        }
-      ]
+          event: 'didSave',
+        },
+      ],
     },
     {
       event: 'cancel',
       actions: [
         {
           component: 'Emit',
-          event: 'load'
+          event: 'load',
         },
         {
           component: 'Emit',
-          event: 'didCancel'
-        }
-      ]
+          event: 'didCancel',
+        },
+      ],
     },
     {
       // Get real-time updates from store
@@ -264,16 +264,16 @@ export default {
         {
           component: 'SetFromDoc',
           name: 'value',
-          doc: '{{arguments.value}}'
+          doc: '{{arguments.value}}',
         },
         {
           // Disable the save button so that a save, followed by an immediate updateDoc, e.g.
           // Firebase, keeps the save button disabled.
           component: 'Set',
           name: 'fields.save.disabled',
-          value: true
-        }
-      ]
-    }
-  ]
+          value: true,
+        },
+      ],
+    },
+  ],
 };

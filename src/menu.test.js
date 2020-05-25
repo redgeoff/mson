@@ -17,27 +17,27 @@ it('should index by path', () => {
           items: [
             {
               path: 'light-light-red',
-              label: 'Light Light Red'
-            }
-          ]
+              label: 'Light Light Red',
+            },
+          ],
         },
         {
           path: 'dark-red',
-          label: 'Dark Red'
+          label: 'Dark Red',
         },
         {
           path: 'dark-red/user/:userId/blog/:blogId',
-          label: 'Dark Red Blog'
+          label: 'Dark Red Blog',
         },
         {
-          label: 'Medium Red'
-        }
-      ]
+          label: 'Medium Red',
+        },
+      ],
     },
     {
       path: 'green',
-      label: 'Green'
-    }
+      label: 'Green',
+    },
   ];
 
   const menu = new Menu({ items: colors });
@@ -58,7 +58,7 @@ it('should index by path', () => {
   const item = menu.getItemAndParsePath('dark-red/user/myUserId/blog/myBlogId');
   expect(item.params).toEqual({
     userId: 'myUserId',
-    blogId: 'myBlogId'
+    blogId: 'myBlogId',
   });
 
   expectItemToEqual(
@@ -91,16 +91,16 @@ it('should validate schema', () => {
                     {
                       name: 'firstName',
                       component: 'TextField',
-                      label: 'First Name'
-                    }
-                  ]
-                }
-              }
-            }
-          ]
-        }
-      }
-    ]
+                      label: 'First Name',
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+      },
+    ],
   });
 });
 
@@ -108,7 +108,7 @@ it('should convert to route', () => {
   const menu = new Menu();
 
   const parameters = {
-    foo: 'bar'
+    foo: 'bar',
   };
 
   const hash = 'myHash';
@@ -116,15 +116,15 @@ it('should convert to route', () => {
   const route = menu.toRoute({
     parameters,
     queryString: 'yar=nar&star=jar',
-    hash
+    hash,
   });
 
   expect(route).toEqual({
     parameters,
     query: {
       yar: 'nar',
-      star: 'jar'
+      star: 'jar',
     },
-    hash
+    hash,
   });
 });

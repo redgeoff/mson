@@ -13,9 +13,9 @@ class FirstNameForm extends Form {
     this.set({
       fields: [
         new TextField({
-          name: 'firstName'
-        })
-      ]
+          name: 'firstName',
+        }),
+      ],
     });
   }
 }
@@ -28,9 +28,9 @@ class AddMiddleNameForm extends WrappedComponent {
     this.set({
       fields: [
         new TextField({
-          name: 'middleName'
-        })
-      ]
+          name: 'middleName',
+        }),
+      ],
     });
   }
 }
@@ -40,23 +40,23 @@ class AddLastNameForm extends AddMiddleNameForm {
   _create(props) {
     super._create(
       Object.assign({}, props, {
-        componentToWrap: new FirstNameForm()
+        componentToWrap: new FirstNameForm(),
       })
     );
 
     this.set({
       fields: [
         new TextField({
-          name: 'lastName'
-        })
-      ]
+          name: 'lastName',
+        }),
+      ],
     });
   }
 }
 
 it('should support inherited composition', () => {
   const component = new AddLastNameForm();
-  expect(component.mapFields(field => field.get('name'))).toEqual(
+  expect(component.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['firstName', 'middleName', 'lastName'])
   );
 });

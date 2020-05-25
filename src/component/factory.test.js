@@ -8,11 +8,11 @@ const createForm = () => {
   return new Form({
     fields: [
       new TextField({ name: 'firstName' }),
-      new TextField({ name: 'middleName' })
+      new TextField({ name: 'middleName' }),
     ],
     value: {
-      firstName: 'Jack'
-    }
+      firstName: 'Jack',
+    },
   });
 };
 
@@ -20,8 +20,8 @@ it('should create factory', () => {
   const factory = new Factory({
     product: () => createForm(),
     properties: {
-      fields: [new TextField({ name: 'lastName' })]
-    }
+      fields: [new TextField({ name: 'lastName' })],
+    },
   });
 
   expect(
@@ -29,7 +29,7 @@ it('should create factory', () => {
       ...testUtils.toDefaultFieldsObject(null),
       firstName: 'Jack',
       middleName: 'Hody',
-      lastName: 'Johnson'
+      lastName: 'Johnson',
     })
   );
 });
@@ -38,46 +38,46 @@ it('should wrap a factory', () => {
   const first = new Factory({
     product: () => {
       return new Form({
-        fields: [new TextField({ name: 'firstName' })]
+        fields: [new TextField({ name: 'firstName' })],
       });
-    }
+    },
   });
 
   const middle = new Factory({
     product: () => {
       const form = first.produce();
       form.set({
-        fields: [new TextField({ name: 'lastName' })]
+        fields: [new TextField({ name: 'lastName' })],
       });
       return form;
-    }
+    },
   });
 
   let form = middle.produce();
-  expect(form.mapFields(field => field.get('name'))).toEqual(
+  expect(form.mapFields((field) => field.get('name'))).toEqual(
     testUtils.defaultFields.concat(['firstName', 'lastName'])
   );
 
   form.setValues({
     firstName: 'Ada',
-    lastName: 'Lovelace'
+    lastName: 'Lovelace',
   });
 
   const form2 = middle.produce();
   form2.setValues({
     firstName: 'Alan',
-    lastName: 'Turing'
+    lastName: 'Turing',
   });
 
   expect(form.getValues()).toEqual({
     ...testUtils.toDefaultFieldsObject(undefined),
     firstName: 'Ada',
-    lastName: 'Lovelace'
+    lastName: 'Lovelace',
   });
   expect(form2.getValues()).toEqual({
     ...testUtils.toDefaultFieldsObject(undefined),
     firstName: 'Alan',
-    lastName: 'Turing'
+    lastName: 'Turing',
   });
 });
 
@@ -85,15 +85,15 @@ it('should set properties for nested component', () => {
   const factory = new Factory({
     product: () => createForm(),
     properties: {
-      'fields.middleName.value': 'Hody'
-    }
+      'fields.middleName.value': 'Hody',
+    },
   });
 
   const form = factory.produce();
   expect(form.getValues()).toEqual({
     ...testUtils.toDefaultFieldsObject(undefined),
     firstName: 'Jack',
-    middleName: 'Hody'
+    middleName: 'Hody',
   });
 });
 
@@ -105,17 +105,17 @@ it('should set properties for nested component via listener', async () => {
         event: 'load',
         actions: [
           new Set({
-            value: 'Hody'
+            value: 'Hody',
           }),
           new Set({
             name: 'properties',
             value: {
-              'fields.middleName.value': '{{arguments}}'
-            }
-          })
-        ]
-      }
-    ]
+              'fields.middleName.value': '{{arguments}}',
+            },
+          }),
+        ],
+      },
+    ],
   });
 
   factory.emitLoad();
@@ -124,6 +124,6 @@ it('should set properties for nested component via listener', async () => {
   expect(form.getValues()).toEqual({
     ...testUtils.toDefaultFieldsObject(undefined),
     firstName: 'Jack',
-    middleName: 'Hody'
+    middleName: 'Hody',
   });
 });

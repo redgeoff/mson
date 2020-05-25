@@ -12,6 +12,6 @@ it('should support invalid reg exp', () => {
     ['red', 'blue'],
     ['red', 'green'],
     ['red', null],
-    ['red', '']
+    ['red', ''],
   ]);
 });

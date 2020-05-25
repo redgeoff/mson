@@ -38,7 +38,7 @@ it('should validate schema', () => {
     schemaForm.setValues({
       name: 'myField',
       label: 'My Field',
-      required: true
+      required: true,
       // TODO: ...
     });
     schemaForm.validate();
@@ -46,15 +46,15 @@ it('should validate schema', () => {
 
     schemaForm.setValues({
       name: 'myField',
-      foo: 'bar'
+      foo: 'bar',
     });
     schemaForm.validate();
     expect(schemaForm.hasErr()).toEqual(true);
     expect(schemaForm.getErrs()).toEqual([
       {
         field: 'foo',
-        error: 'undefined field'
-      }
+        error: 'undefined field',
+      },
     ]);
   }, VALIDATE_TIMEOUT_MS);
 });

@@ -30,7 +30,7 @@ export default class CollectionField extends Field {
     CREATE: 'create',
     READ: 'read',
     UPDATE: 'update',
-    DELETE: 'delete'
+    DELETE: 'delete',
   };
 
   _create(props) {
@@ -50,140 +50,140 @@ export default class CollectionField extends Field {
           {
             name: 'formFactory',
             component: 'Field',
-            required: true
+            required: true,
           },
           {
             // Note: this prop is automatically generated using the formFactory and can be read, but
             // should not be be set
             name: 'form',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'forbidCreate',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'forbidUpdate',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'forbidDelete',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'forbidViewArchived',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'forbidSearch',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'forbidSort',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'forbidOrder',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'minSize',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'maxSize',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'singularLabel',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'store',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'scrollThreshold',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'itemsPerPage',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'maxBufferPages',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'spacerHeight',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'spacerId',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'bufferTopId',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'isLoading',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'order',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'currentForm',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'mode',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'noResults',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'pristine',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'change',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'maxColumns',
-            component: 'IntegerField'
+            component: 'IntegerField',
           },
           {
             name: 'skipRead',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'includeExtraneous',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'preventCreateAction',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'preventReadAction',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'preventUpdate',
-            component: 'BooleanField'
+            component: 'BooleanField',
           },
           {
             name: 'preventDeleteAction',
-            component: 'BooleanField'
-          }
-        ]
-      }
+            component: 'BooleanField',
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, {
@@ -205,7 +205,7 @@ export default class CollectionField extends Field {
       maxColumns: 2,
 
       // By default, don't allow the user to order the items by dragging them
-      forbidOrder: true
+      forbidOrder: true,
     });
 
     this._createInfiniteLoader();
@@ -256,7 +256,7 @@ export default class CollectionField extends Field {
       order: null,
       mode: null,
       showArchived: false,
-      searchString: null
+      searchString: null,
     });
 
     if (this.get('formFactory')) {
@@ -319,10 +319,10 @@ export default class CollectionField extends Field {
                 id: vv.id,
                 archivedAt: vv.archivedAt,
                 userId: vv.userId,
-                order: vv.order
+                order: vv.order,
               },
               muteChange,
-              cursor: vv.cursor
+              cursor: vv.cursor,
             });
           }
           break;
@@ -369,7 +369,7 @@ export default class CollectionField extends Field {
   }
 
   _handleShowArchivedFactory() {
-    return async showArchived => {
+    return async (showArchived) => {
       this.set({ showArchived });
 
       await this._clearAndGetAll();
@@ -384,7 +384,7 @@ export default class CollectionField extends Field {
     if (this.get('searchString')) {
       const form = this.get('form');
       const fieldNames = [];
-      form.eachField(field => {
+      form.eachField((field) => {
         // TODO: is it really best to filter by hidden? Better to filter by default? Or, by hidden is
         // good and expect user to specify fields if different?
         if (!field.get('hidden') && !form.isDefaultField(field.get('name'))) {
@@ -401,7 +401,7 @@ export default class CollectionField extends Field {
   }
 
   _handleSearchStringFactory() {
-    return async searchString => {
+    return async (searchString) => {
       this.set({ searchString });
 
       // Is the component still loaded? We want to prevent issuing a new query when the searchString
@@ -417,7 +417,7 @@ export default class CollectionField extends Field {
   }
 
   _handleOrderFactory() {
-    return async order => {
+    return async (order) => {
       this.set({ order });
 
       // Is the component still loaded? We want to prevent issuing a new query when the order
@@ -497,7 +497,7 @@ export default class CollectionField extends Field {
     if (surplus !== 0) {
       this._window.scrollBy({
         top: surplus,
-        behavior: 'instant'
+        behavior: 'instant',
       });
     }
   }
@@ -538,11 +538,11 @@ export default class CollectionField extends Field {
 
   _createInfiniteLoader() {
     this._infiniteLoader = new InfiniteLoader({
-      onGetAll: props => this._onGetAll(props),
+      onGetAll: (props) => this._onGetAll(props),
       onGetItemsPerPage: () => this._getItemsPerPage(),
       onGetScrollThreshold: () => this.get('scrollThreshold'),
       onGetMaxBufferPages: () => this.get('maxBufferPages'),
-      onGetItemElement: id =>
+      onGetItemElement: (id) =>
         this._document.getElementById(this.getUniqueItemId(id)),
       onGetSpacerElement: () =>
         this._document.getElementById(this.get('spacerId')),
@@ -550,22 +550,22 @@ export default class CollectionField extends Field {
       onGetItems: (id, reverse) => this._forms.values(id, reverse),
       onResizeSpacer: (dHeight, height) =>
         this._onResizeSpacer(dHeight, height),
-      onSetBufferTopId: bufferTopId => this.set({ bufferTopId }),
-      onGetItem: id => this._forms.get(id),
-      onGetItemId: form => form.getValue('id'),
-      onGetItemCursor: form => form.get('cursor'),
+      onSetBufferTopId: (bufferTopId) => this.set({ bufferTopId }),
+      onGetItem: (id) => this._forms.get(id),
+      onGetItemId: (form) => form.getValue('id'),
+      onGetItemCursor: (form) => form.get('cursor'),
       onAddItems: (edges, beforeKey) => this._onAddItems(edges, beforeKey),
-      onEmitChange: records => this.set({ change: records }),
-      onSetIsLoading: isLoading => this.set({ isLoading }),
+      onEmitChange: (records) => this.set({ change: records }),
+      onSetIsLoading: (isLoading) => this.set({ isLoading }),
       onGetOrder: () => this._getOrder(),
-      onGetWhere: () => this._getWhere()
+      onGetWhere: () => this._getWhere(),
     });
   }
 
   _listenToForm(form) {
     const props = ['dirty', 'touched'];
-    props.forEach(prop => {
-      form.on(prop, value => {
+    props.forEach((prop) => {
+      form.on(prop, (value) => {
         if (value === true) {
           // We only set the parent value when it is true as want to avoid infinite recursion
           this.set({ [prop]: value });
@@ -673,7 +673,7 @@ export default class CollectionField extends Field {
         createdAt: node.createdAt,
         updatedAt: node.updatedAt,
         archivedAt: node.archivedAt,
-        order: node.order
+        order: node.order,
       };
       const form = forms[i];
 
@@ -690,7 +690,7 @@ export default class CollectionField extends Field {
         values,
         muteChange,
         cursor: edge.cursor,
-        beforeKey
+        beforeKey,
       });
     }
   }
@@ -730,7 +730,7 @@ export default class CollectionField extends Field {
   }
 
   _clearAllFormListeners() {
-    this.eachForm(form => form.removeAllListeners());
+    this.eachForm((form) => form.removeAllListeners());
   }
 
   _validateValueType(value) {
@@ -765,7 +765,7 @@ export default class CollectionField extends Field {
         // design principle of MSON). In other words, we don't wait for the didCreate or didLoad
         // events when creating the form.
         const synchronous = true;
-        value.forEach(values => this.addForm({ values, synchronous }));
+        value.forEach((values) => this.addForm({ values, synchronous }));
       }
 
       // Emit change so that UI is notified
@@ -810,11 +810,11 @@ export default class CollectionField extends Field {
   }
 
   _setForAllForms(props) {
-    this.eachForm(form => form.set(props));
+    this.eachForm((form) => form.set(props));
   }
 
   _setOnAllForms(props, propNames, expValue) {
-    propNames.forEach(name => {
+    propNames.forEach((name) => {
       if (
         props[name] !== undefined &&
         (expValue === undefined || props[name] === expValue)
@@ -990,7 +990,7 @@ export default class CollectionField extends Field {
         currentForm: undefined,
         mode: undefined,
         store: undefined,
-        maxColumns: undefined
+        maxColumns: undefined,
       })
     );
 
@@ -1021,7 +1021,7 @@ export default class CollectionField extends Field {
   }
 
   _getValue() {
-    return this._forms.map(form => {
+    return this._forms.map((form) => {
       return form.getValues();
     });
   }
@@ -1087,14 +1087,14 @@ export default class CollectionField extends Field {
         values,
         muteChange,
         cursor,
-        beforeKey
+        beforeKey,
       });
     } else {
       return this.addForm({
         values,
         muteChange,
         cursor,
-        beforeKey
+        beforeKey,
       });
     }
   }
@@ -1124,7 +1124,7 @@ export default class CollectionField extends Field {
         createdAt: record.createdAt,
         updatedAt: record.updatedAt,
         order: record.order,
-        userId: record.userId
+        userId: record.userId,
       });
     } else if (creating) {
       // TODO: use the id from this._docs.set instead of this dummy id
@@ -1136,7 +1136,7 @@ export default class CollectionField extends Field {
       form,
       values: form.getValues(),
       muteChange: false,
-      cursor: form.get('cursor')
+      cursor: form.get('cursor'),
     });
 
     form.emitChange(
@@ -1176,7 +1176,7 @@ export default class CollectionField extends Field {
       const record = await store.archiveDoc({
         form,
         id: form.getValue('id'),
-        reorder: !this.get('forbidOrder')
+        reorder: !this.get('forbidOrder'),
       });
       form.setValues({ archivedAt: record.archivedAt });
     }
@@ -1202,7 +1202,7 @@ export default class CollectionField extends Field {
       await store.restoreDoc({
         form,
         id: form.getValue('id'),
-        reorder: !this.get('forbidOrder')
+        reorder: !this.get('forbidOrder'),
       });
     }
 
@@ -1239,7 +1239,7 @@ export default class CollectionField extends Field {
       if (form.hasErr()) {
         errors.push({
           id: form.getField('id').getValue(),
-          error: form.getErrs()
+          error: form.getErrs(),
         });
       }
     }
@@ -1251,11 +1251,11 @@ export default class CollectionField extends Field {
 
     if (minSize !== null && numForms < minSize) {
       errors.push({
-        error: `${minSize} or more`
+        error: `${minSize} or more`,
       });
     } else if (maxSize !== null && numForms > maxSize) {
       errors.push({
-        error: `${maxSize} or less`
+        error: `${maxSize} or less`,
       });
     }
 
@@ -1308,7 +1308,7 @@ export default class CollectionField extends Field {
 
   destroy() {
     super.destroy();
-    this.eachForm(form => form.destroy());
+    this.eachForm((form) => form.destroy());
   }
 
   moveForm({ sourceIndex, destinationIndex, muteChange }) {

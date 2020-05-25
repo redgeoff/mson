@@ -12,22 +12,22 @@ export default {
           label: 'Label',
           component: 'TextField',
           required: true,
-          block: false
+          block: false,
         },
         {
           name: 'value',
           label: 'Value',
           component: 'TextField',
           required: true,
-          block: false
+          block: false,
         },
         {
           // TODO: make this a drop down based on the options already filled in
           name: 'parentValue',
           label: 'Parent Value',
-          component: 'TextField'
-        }
-      ]
-    }
-  }
+          component: 'TextField',
+        },
+      ],
+    },
+  },
 };

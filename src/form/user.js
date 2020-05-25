@@ -15,9 +15,9 @@ export default class User extends Form {
           component: 'EmailField',
           name: 'username',
           label: 'Email',
-          required: true
+          required: true,
           // in: false,
-        }
+        },
       }),
       new MSONComponent({
         definition: {
@@ -28,9 +28,9 @@ export default class User extends Form {
           in: false,
           out: false,
           hidden: true,
-          forbidSort: true
-        }
-      })
+          forbidSort: true,
+        },
+      }),
     ];
 
     const schema = {
@@ -38,9 +38,9 @@ export default class User extends Form {
       fields: [
         {
           name: 'roles',
-          component: 'RolesField'
-        }
-      ]
+          component: 'RolesField',
+        },
+      ],
     };
 
     // By default, lock down access
@@ -49,14 +49,14 @@ export default class User extends Form {
         create: 'admin',
         read: 'admin',
         update: 'admin',
-        archive: 'admin'
-      }
+        archive: 'admin',
+      },
     };
 
     this.set({
       schema,
       access,
-      fields
+      fields,
     });
   }
 }

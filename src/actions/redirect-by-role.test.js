@@ -9,11 +9,11 @@ it('should redirect by role', async () => {
   const routes = [
     {
       roles: ['admin', 'manager'],
-      path: '/employees'
+      path: '/employees',
     },
     {
-      path: '/account'
-    }
+      path: '/account',
+    },
   ];
 
   const redirectByRole = new RedirectByRole({ routes });
@@ -24,20 +24,20 @@ it('should redirect by role', async () => {
   redirectByRole._registrar = {
     client: {
       user: {
-        hasRole: roles => {
+        hasRole: (roles) => {
           let has = false;
-          roles.forEach(role => {
+          roles.forEach((role) => {
             if (myRoles.indexOf(role) !== -1) {
               has = true;
             }
           });
           return has;
-        }
-      }
-    }
+        },
+      },
+    },
   };
   redirectByRole._globals = {
-    redirect: () => {}
+    redirect: () => {},
   };
 
   const redirectSpy = jest.spyOn(redirectByRole._globals, 'redirect');

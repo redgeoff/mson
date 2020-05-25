@@ -9,18 +9,18 @@ import Text from '../text';
 import FormErr from './form-err';
 import ExtendedField from '../fields/extended-field';
 
-const createForm = props => {
+const createForm = (props) => {
   return new Form({
     fields: [
       new TextField({ name: 'firstName', label: 'First Name', required: true }),
       new TextField({
         name: 'middleName',
         label: 'Middle Name',
-        required: true
+        required: true,
       }),
-      new TextField({ name: 'lastName', label: 'Last Name', required: true })
+      new TextField({ name: 'lastName', label: 'Last Name', required: true }),
     ],
-    ...props
+    ...props,
   });
 };
 
@@ -34,32 +34,32 @@ it('should set, get and clear', () => {
     ...defaults,
     firstName: null,
     middleName: null,
-    lastName: null
+    lastName: null,
   });
 
   form.setValues({
     id: 1,
     firstName: 'Ray',
-    lastName: 'Charles'
+    lastName: 'Charles',
   });
   expect(form.getValues()).toEqual({
     ...defaults,
     id: 1,
     firstName: 'Ray',
     middleName: null,
-    lastName: 'Charles'
+    lastName: 'Charles',
   });
 
   form.setValues({
     middleName: 'Charles',
-    lastName: 'Robinson'
+    lastName: 'Robinson',
   });
   expect(form.getValues()).toEqual({
     ...defaults,
     id: 1,
     firstName: 'Ray',
     middleName: 'Charles',
-    lastName: 'Robinson'
+    lastName: 'Robinson',
   });
 
   form.setValues(null);
@@ -68,7 +68,7 @@ it('should set, get and clear', () => {
     id: null,
     firstName: null,
     middleName: null,
-    lastName: null
+    lastName: null,
   });
 });
 
@@ -77,13 +77,13 @@ it('should get null when only set some', () => {
 
   form.setValues({
     firstName: 'Ray',
-    lastName: 'Charles'
+    lastName: 'Charles',
   });
   expect(form.getValues()).toEqual({
     id: undefined,
     firstName: 'Ray',
     middleName: undefined,
-    lastName: 'Charles'
+    lastName: 'Charles',
   });
 });
 
@@ -93,7 +93,7 @@ it('should clone', () => {
   form.setValues({
     firstName: 'Ray',
     middleName: null,
-    lastName: 'Charles'
+    lastName: 'Charles',
   });
 
   const clonedForm = form.clone();
@@ -102,27 +102,27 @@ it('should clone', () => {
     id: undefined,
     firstName: 'Ray',
     middleName: null,
-    lastName: 'Charles'
+    lastName: 'Charles',
   });
 
   clonedForm.setValues({
     firstName: 'Ray',
     middleName: 'Charles',
-    lastName: 'Robinson'
+    lastName: 'Robinson',
   });
 
   expect(clonedForm.getValues()).toEqual({
     id: undefined,
     firstName: 'Ray',
     middleName: 'Charles',
-    lastName: 'Robinson'
+    lastName: 'Robinson',
   });
 
   expect(form.getValues()).toEqual({
     id: undefined,
     firstName: 'Ray',
     middleName: null,
-    lastName: 'Charles'
+    lastName: 'Charles',
   });
 
   form.validate();
@@ -145,7 +145,7 @@ it('should clone', () => {
     firstName: 'Ray',
     middleName: null,
     lastName: 'Charles',
-    suffix: undefined
+    suffix: undefined,
   });
 });
 
@@ -159,7 +159,7 @@ it('should clone listeners', async () => {
     receivedNonClonedValues = true;
   });
   clonedForm.setValues({
-    firstName: 'Raymond'
+    firstName: 'Raymond',
   });
   await receivedValues;
   expect(receivedNonClonedValues).toEqual(false);
@@ -171,18 +171,18 @@ it('should remove fields', async () => {
     id: null,
     firstName: 'First',
     middleName: 'Middle',
-    lastName: 'Last'
+    lastName: 'Last',
   });
   form.removeField('middleName');
   expect(form.getValues()).toEqual({
     id: null,
     firstName: 'First',
-    lastName: 'Last'
+    lastName: 'Last',
   });
 
   form.removeFieldsExcept(['firstName']);
   expect(form.getValues()).toEqual({
-    firstName: 'First'
+    firstName: 'First',
   });
 });
 
@@ -193,12 +193,12 @@ it('should report bad types', () => {
     {
       firstName: 'Stevie',
       middleName: 'Hardaway',
-      lastName: 'Wonder'
+      lastName: 'Wonder',
     },
-    {}
+    {},
   ];
 
-  validValues.forEach(value => {
+  validValues.forEach((value) => {
     form.setValues(value);
     form.validate();
     expect(form.hasErr()).toEqual(false);
@@ -209,10 +209,10 @@ it('should report bad types', () => {
     false,
     1,
     1.0,
-    'must not be string'
+    'must not be string',
   ];
 
-  invalidValues.forEach(value => {
+  invalidValues.forEach((value) => {
     form.setValues(value);
     form.validate();
     expect(form.hasErr()).toEqual(true);
@@ -228,13 +228,13 @@ it('should report extra fields', () => {
     firstName: 'Stevie',
     middleName: 'Hardaway',
     lastName: 'Wonder',
-    suffix: 'Maestro'
+    suffix: 'Maestro',
   });
   form.validate();
   expect(form.hasErr()).toEqual(true);
   expect(form.getErrs()).toEqual([
     { field: 'prefix', error: 'undefined field' },
-    { field: 'suffix', error: 'undefined field' }
+    { field: 'suffix', error: 'undefined field' },
   ]);
 });
 
@@ -252,40 +252,40 @@ it('should validate schema', () => {
         name: 'name',
         label: 'Name',
         required: true,
-        help: 'Enter a full name'
+        help: 'Enter a full name',
       },
       {
         component: 'EmailField',
         name: 'email',
         label: 'Email',
-        required: true
-      }
+        required: true,
+      },
     ],
     access: {
       form: {
-        create: 'role1'
+        create: 'role1',
       },
       fields: {
         email: {
-          create: 'role2'
-        }
-      }
+          create: 'role2',
+        },
+      },
     },
     validators: [
       {
         where: {
           fields: {
             name: {
-              value: 'F. Scott Fitzgerald'
-            }
-          }
+              value: 'F. Scott Fitzgerald',
+            },
+          },
         },
         error: {
           field: 'name',
-          error: 'cannot be {{fields.firstName.value}}'
-        }
-      }
-    ]
+          error: 'cannot be {{fields.firstName.value}}',
+        },
+      },
+    ],
     // TODO: listeners
   });
 
@@ -296,24 +296,24 @@ it('should validate schema', () => {
     fields: [
       {
         component: 'TextField',
-        badProperty: 'name'
-      }
+        badProperty: 'name',
+      },
     ],
     access: {
       fields: {
         email: {
-          create: 'role2'
-        }
-      }
+          create: 'role2',
+        },
+      },
     },
     validators: [
       {
         error: {
           field: 'name',
-          error: 'cannot be {{fields.firstName.value}}'
-        }
-      }
-    ]
+          error: 'cannot be {{fields.firstName.value}}',
+        },
+      },
+    ],
   });
 
   schemaForm.validate();
@@ -327,24 +327,24 @@ it('should validate schema', () => {
           error: [
             {
               field: 'badProperty',
-              error: 'undefined field'
+              error: 'undefined field',
             },
             {
               field: 'name',
-              error: 'required'
-            }
-          ]
-        }
-      ]
+              error: 'required',
+            },
+          ],
+        },
+      ],
     },
     {
       field: 'validators',
       error: [
         {
           id: undefined,
-          error: [{ error: 'required', field: 'where' }]
-        }
-      ]
+          error: [{ error: 'required', field: 'where' }],
+        },
+      ],
     },
     {
       field: 'access',
@@ -354,12 +354,12 @@ it('should validate schema', () => {
           error: [
             {
               field: 'email',
-              error: 'undefined field'
-            }
-          ]
-        }
-      ]
-    }
+              error: 'undefined field',
+            },
+          ],
+        },
+      ],
+    },
   ]);
 });
 
@@ -369,7 +369,7 @@ it('should auto validate', () => {
 
   // Auto validate should be off by default as it incurs a lot of extra overhead
   form.setValues({
-    firstName: 'Ella'
+    firstName: 'Ella',
   });
   form.getField('lastName').setValue('Fitzgerald');
   expect(spy).toHaveBeenCalledTimes(0);
@@ -382,8 +382,8 @@ it('should auto validate', () => {
   expect(form.getErrs()).toEqual([
     {
       field: 'middleName',
-      error: 'required'
-    }
+      error: 'required',
+    },
   ]);
 });
 
@@ -391,7 +391,7 @@ it('should remove blank fields', () => {
   const name = {
     firstName: 'First',
     middleName: 'Middle',
-    lastName: 'Last'
+    lastName: 'Last',
   };
 
   const form = createForm();
@@ -408,17 +408,17 @@ it('should remove blank fields', () => {
   expect(form.getValues()).toEqual({
     firstName: 'First',
     middleName: null,
-    lastName: null
+    lastName: null,
   });
 
   expect(form.getValues({ blank: false })).toEqual({
-    firstName: 'First'
+    firstName: 'First',
   });
 
   form.removeBlankFields();
 
   expect(form.getValues()).toEqual({
-    firstName: 'First'
+    firstName: 'First',
   });
 });
 
@@ -428,16 +428,16 @@ it('should merge access', () => {
   const access1 = {
     form: {
       read: ['admin', 'employee'],
-      update: 'employee'
+      update: 'employee',
     },
     fields: {
       firstName: {
-        create: 'admin'
+        create: 'admin',
       },
       middleName: {
-        update: 'employee'
-      }
-    }
+        update: 'employee',
+      },
+    },
   };
 
   form.set({ access: access1 });
@@ -448,37 +448,37 @@ it('should merge access', () => {
     access: {
       form: {
         create: ['admin'],
-        update: ['admin', 'employee']
+        update: ['admin', 'employee'],
       },
       fields: {
         firstName: {
-          update: 'admin'
+          update: 'admin',
         },
         lastName: {
-          create: 'admin'
-        }
-      }
-    }
+          create: 'admin',
+        },
+      },
+    },
   });
 
   expect(form.get('access')).toEqual({
     form: {
       create: ['admin'],
       read: ['admin', 'employee'],
-      update: ['admin', 'employee']
+      update: ['admin', 'employee'],
     },
     fields: {
       firstName: {
         create: 'admin',
-        update: 'admin'
+        update: 'admin',
       },
       middleName: {
-        update: 'employee'
+        update: 'employee',
       },
       lastName: {
-        create: 'admin'
-      }
-    }
+        create: 'admin',
+      },
+    },
   });
 });
 
@@ -517,10 +517,10 @@ it('should handle scroll', () => {
   const e = {};
 
   const spies = [];
-  form.eachField(field => spies.push(jest.spyOn(field, 'emit')));
+  form.eachField((field) => spies.push(jest.spyOn(field, 'emit')));
 
   form._handleScrollFactory()(e);
-  spies.forEach(spy => expect(spy).toHaveBeenCalledWith('scroll', e));
+  spies.forEach((spy) => expect(spy).toHaveBeenCalledWith('scroll', e));
 });
 
 it('should take snapshot', () => {
@@ -532,7 +532,7 @@ it('should take snapshot', () => {
     hidden: true,
     required: true,
     out: true,
-    in: true
+    in: true,
   };
 
   firstName.set(setValues);
@@ -548,7 +548,7 @@ it('should take snapshot', () => {
     hidden: false,
     required: false,
     out: false,
-    in: false
+    in: false,
   });
 
   form.set({ snapshot: 'restore' });
@@ -561,8 +561,8 @@ it('should clear values', () => {
     value: {
       firstName: 'First',
       middleName: 'Middle',
-      lastName: 'Last'
-    }
+      lastName: 'Last',
+    },
   });
 
   form.set({ clear: false });
@@ -570,7 +570,7 @@ it('should clear values', () => {
     id: undefined,
     firstName: 'First',
     middleName: 'Middle',
-    lastName: 'Last'
+    lastName: 'Last',
   });
 
   form.set({ clear: true });
@@ -578,7 +578,7 @@ it('should clear values', () => {
     ...testUtils.toDefaultFieldsObject(null),
     firstName: null,
     middleName: null,
-    lastName: null
+    lastName: null,
   });
 });
 
@@ -617,7 +617,7 @@ it('should auto validate on touch', async () => {
   expect(form.getErrs()).toEqual([
     { field: 'firstName', error: 'required' },
     { field: 'middleName', error: 'required' },
-    { field: 'lastName', error: 'required' }
+    { field: 'lastName', error: 'required' },
   ]);
 
   expect(validateSpy).toHaveBeenCalledTimes(1);
@@ -632,24 +632,24 @@ it('should get values', () => {
   const firstName = new TextField({
     name: 'firstName',
     label: 'First Name',
-    required: true
+    required: true,
   });
 
   const form = new Form({
     fields: [firstName],
     value: {
-      firstName: 'firstName'
-    }
+      firstName: 'firstName',
+    },
   });
 
   const defaults = {
-    id: undefined
+    id: undefined,
   };
 
   expect(form.getValues()).toEqual({ ...defaults, firstName: 'firstName' });
   expect(form.getValues({ in: true })).toEqual({
     ...defaults,
-    firstName: 'firstName'
+    firstName: 'firstName',
   });
   expect(form.getValues({ in: false })).toEqual({ ...defaults });
 
@@ -658,13 +658,13 @@ it('should get values', () => {
   expect(form.getValues()).toEqual({ ...defaults, firstName: 'firstName' });
   expect(form.getValues({ in: false })).toEqual({
     ...defaults,
-    firstName: 'firstName'
+    firstName: 'firstName',
   });
   expect(form.getValues({ in: true })).toEqual({ ...defaults });
 
   expect(form.getValues({ default: true })).toEqual({ ...defaults });
   expect(form.getValues({ default: false })).toEqual({
-    firstName: 'firstName'
+    firstName: 'firstName',
   });
 });
 
@@ -696,7 +696,7 @@ it('should submit', () => {
   expect(emitClickOnButtonSpy).toHaveBeenCalledTimes(0);
 
   form.set({
-    fields: [new ButtonField({ name: 'submit', type: 'submit' })]
+    fields: [new ButtonField({ name: 'submit', type: 'submit' })],
   });
 
   form.submit();
@@ -708,8 +708,8 @@ it('should clone fields', () => {
     value: {
       firstName: 'Augusta',
       middleName: 'Ada',
-      lastName: 'King'
-    }
+      lastName: 'King',
+    },
   });
 
   const form2 = new Form();
@@ -718,22 +718,22 @@ it('should clone fields', () => {
     value: {
       firstName: 'Ada',
       middleName: null,
-      lastName: 'Lovelace'
-    }
+      lastName: 'Lovelace',
+    },
   });
 
   expect(form1.getValues()).toEqual({
     ...testUtils.toDefaultFieldsObject(undefined),
     firstName: 'Augusta',
     middleName: 'Ada',
-    lastName: 'King'
+    lastName: 'King',
   });
 
   expect(form2.getValues()).toEqual({
     ...testUtils.toDefaultFieldsObject(undefined),
     firstName: 'Ada',
     middleName: null,
-    lastName: 'Lovelace'
+    lastName: 'Lovelace',
   });
 });
 
@@ -743,52 +743,54 @@ it('should set for each field', () => {
   const props = {
     hidden: true,
     editable: false,
-    useDisplayValue: true
+    useDisplayValue: true,
   };
 
   form.set({ eachField: props });
 
   const keys = Object.keys(props);
-  form.eachField(field => expect(field.get(keys)).toEqual(props));
+  form.eachField((field) => expect(field.get(keys)).toEqual(props));
 });
 
 it('should set useDisplayValue', () => {
   const form = createForm();
-  form.eachField(field => expect(field.get('useDisplayValue')).toBeUndefined());
+  form.eachField((field) =>
+    expect(field.get('useDisplayValue')).toBeUndefined()
+  );
 
   form.set({ useDisplayValue: true });
-  form.eachField(field => expect(field.get('useDisplayValue')).toEqual(true));
+  form.eachField((field) => expect(field.get('useDisplayValue')).toEqual(true));
 });
 
 it('should elevate', async () => {
   const personNameForm = new Form({
     fields: [
       new TextField({ name: 'firstName' }),
-      new TextField({ name: 'lastName' })
+      new TextField({ name: 'lastName' }),
     ],
     validators: [
       {
         where: {
           fields: {
             lastName: {
-              value: 'Vader'
-            }
-          }
+              value: 'Vader',
+            },
+          },
         },
         error: {
           field: 'lastName',
-          error: 'nope'
-        }
-      }
+          error: 'nope',
+        },
+      },
     ],
     listeners: [
       {
         event: 'create',
         actions: [
-          new Set({ name: 'fields.firstName.label', value: 'First Name' })
-        ]
-      }
-    ]
+          new Set({ name: 'fields.firstName.label', value: 'First Name' }),
+        ],
+      },
+    ],
   });
 
   // Used to make sure default fields are not elevated
@@ -799,20 +801,20 @@ it('should elevate', async () => {
       new FormField({
         name: 'fullName',
         form: personNameForm,
-        elevate: true
-      })
-    ]
+        elevate: true,
+      }),
+    ],
   });
 
   form.setValues({
     firstName: 'Darth',
-    lastName: 'Vader'
+    lastName: 'Vader',
   });
 
   expect(form.getValues()).toEqual({
     ...testUtils.toDefaultFieldsObject(undefined),
     firstName: 'Darth',
-    lastName: 'Vader'
+    lastName: 'Vader',
   });
 
   form.validate();
@@ -828,19 +830,19 @@ it('should clear errors', () => {
   expect(form.getField('firstName').hasErr()).toEqual(true);
 
   form.set({ clearErrs: true });
-  form.eachField(field => expect(field.hasErr()).toEqual(false));
+  form.eachField((field) => expect(field.hasErr()).toEqual(false));
 });
 
 it('should destroy', () => {
   const form = createForm();
 
   const removeAllListenersSpy = jest.spyOn(form, 'removeAllListeners');
-  const fieldSpies = form.mapFields(field => jest.spyOn(field, 'destroy'));
+  const fieldSpies = form.mapFields((field) => jest.spyOn(field, 'destroy'));
 
   form.destroy();
   expect(removeAllListenersSpy).toHaveBeenCalledTimes(1);
   expect(fieldSpies).toHaveLength(testUtils.defaultFields.length + 3);
-  fieldSpies.forEach(spy => expect(spy).toHaveBeenCalledTimes(1));
+  fieldSpies.forEach((spy) => expect(spy).toHaveBeenCalledTimes(1));
 });
 
 it('should add non-field', () => {
@@ -848,7 +850,7 @@ it('should add non-field', () => {
   form.addField(
     new Text({
       name: 'text',
-      text: 'Wecome'
+      text: 'Wecome',
     })
   );
   expect(form.getField('text').getClassName()).toEqual('ComponentField');
@@ -865,20 +867,20 @@ it('should set field err and throw', () => {
 
 it('should add field before and after', () => {
   const form = new Form({
-    fields: [new TextField({ name: 'lastName' })]
+    fields: [new TextField({ name: 'lastName' })],
   });
 
   form.set({
     fields: [
       new TextField({ name: 'firstName', before: 'lastName' }),
-      new TextField({ name: 'middleName', after: 'firstName' })
-    ]
+      new TextField({ name: 'middleName', after: 'firstName' }),
+    ],
   });
 
   const expectedNames = ['firstName', 'middleName', 'lastName'];
 
   const names = [];
-  form.eachField(field => {
+  form.eachField((field) => {
     const name = field.get('name');
     if (expectedNames.indexOf(name) !== -1) {
       names.push(name);
@@ -889,7 +891,7 @@ it('should add field before and after', () => {
 
 it('should modify fields with properties', () => {
   const form = new Form({
-    fields: [new TextField({ name: 'lastName', label: 'Last Name' })]
+    fields: [new TextField({ name: 'lastName', label: 'Last Name' })],
   });
 
   expect(form.getField('lastName').get('required')).toEqual(false);
@@ -898,9 +900,9 @@ it('should modify fields with properties', () => {
     fields: [
       {
         name: 'lastName',
-        required: true
-      }
-    ]
+        required: true,
+      },
+    ],
   });
 
   expect(form.getField('lastName').get('required')).toEqual(true);
@@ -914,12 +916,12 @@ it('should modify fields with properties', () => {
       new ExtendedField({
         name: 'firstName',
         properties: {
-          label: 'First Name'
-        }
-      })
-    ]
+          label: 'First Name',
+        },
+      }),
+    ],
   });
   expect(form.getField('firstName').get('properties')).toEqual({
-    label: 'First Name'
+    label: 'First Name',
   });
 });

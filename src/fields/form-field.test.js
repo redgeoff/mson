@@ -13,15 +13,15 @@ const createField = () => {
         new TextField({
           name: 'firstName',
           label: 'First Name',
-          required: true
+          required: true,
         }),
         new TextField({
           name: 'lastName',
           label: 'Last Name',
-          required: true
-        })
-      ]
-    })
+          required: true,
+        }),
+      ],
+    }),
   });
 };
 
@@ -30,13 +30,13 @@ it('should set and pass through properties', async () => {
     value: {
       id: null,
       firstName: null,
-      lastName: null
+      lastName: null,
     },
     dirty: true,
     disabled: true,
     editable: true,
     touched: true,
-    pristine: true
+    pristine: true,
   };
 
   const field = createField();
@@ -68,7 +68,7 @@ it('should bubble up events', async () => {
   const field = createField();
   const eventSpy = jest.fn();
 
-  properties.forEach(prop => {
+  properties.forEach((prop) => {
     field.once(prop, eventSpy);
 
     field.getField('firstName').set({ [prop]: true });
@@ -84,7 +84,7 @@ it('should clear errors for nested form', () => {
   const field = createField();
   field.setValue({
     firstName: null,
-    lastName: null
+    lastName: null,
   });
   field.validate();
   expect(field.hasErr()).toBe(true);
@@ -99,9 +99,9 @@ it('should report bad types', () => {
   testUtils.expectValuesToBeValid(field, [
     {
       firstName: 'Stevie',
-      lastName: 'Wonder'
+      lastName: 'Wonder',
     },
-    {}
+    {},
   ]);
 
   testUtils.expectValuesToBeInvalid(
@@ -117,7 +117,7 @@ it('should clean up any previous form', () => {
   const form = field.get('form');
   const removeAllListenersSpy = jest.spyOn(form, 'removeAllListeners');
   field.set({
-    form: new Form()
+    form: new Form(),
   });
 
   expect(removeAllListenersSpy).toHaveBeenCalledTimes(1);

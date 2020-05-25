@@ -8,7 +8,7 @@ export default class PhoneField extends TextFieldHiddenSchema {
   _className = 'PhoneField';
 
   _stringToArrayMask(mask) {
-    return map(mask, item => (item === '.' ? /\d/ : item));
+    return map(mask, (item) => (item === '.' ? /\d/ : item));
   }
 
   static getCountriesByCode() {
@@ -16,7 +16,7 @@ export default class PhoneField extends TextFieldHiddenSchema {
       this.constructor._countriesByCode = {};
       const countriesByCode = this.constructor._countriesByCode;
       countryTelephoneData.allCountries.forEach(
-        country => (countriesByCode[country.dialCode] = country)
+        (country) => (countriesByCode[country.dialCode] = country)
       );
     }
     return this.constructor._countriesByCode;
@@ -70,15 +70,15 @@ export default class PhoneField extends TextFieldHiddenSchema {
             name: 'defaultMask',
             component: 'TextField',
             label: 'Default Mask',
-            docLevel: 'basic'
-          }
-        ]
-      }
+            docLevel: 'basic',
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, {
-      mask: value => this._getMask(value),
-      defaultMask: this._stringToArrayMask('(...) ...-....')
+      mask: (value) => this._getMask(value),
+      defaultMask: this._stringToArrayMask('(...) ...-....'),
     });
   }
 

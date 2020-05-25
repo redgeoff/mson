@@ -14,10 +14,10 @@ export default class IdField extends TextField {
             'minWords',
             'maxWords',
             'invalidRegExp',
-            'multiline'
-          ])
-        ]
-      }
+            'multiline',
+          ]),
+        ],
+      },
     });
   }
 }

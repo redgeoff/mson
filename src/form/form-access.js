@@ -54,10 +54,10 @@ class AccessFields extends Form {
         fields: [
           {
             name: 'fieldNames',
-            component: 'Field' // TODO: properly define
-          }
-        ]
-      }
+            component: 'Field', // TODO: properly define
+          },
+        ],
+      },
     });
   }
 
@@ -65,11 +65,11 @@ class AccessFields extends Form {
     super.set(props);
     if (props.fieldNames !== undefined) {
       this.removeFieldsExcept();
-      props.fieldNames.forEach(fieldName => {
+      props.fieldNames.forEach((fieldName) => {
         this.addField(
           new FormField({
             name: fieldName,
-            form: new AccessNode()
+            form: new AccessNode(),
           })
         );
       });
@@ -89,17 +89,17 @@ export default class FormAccess extends Form {
         fields: [
           {
             name: 'fieldNames',
-            component: 'Field' // TODO: properly define
-          }
-        ]
-      }
+            component: 'Field', // TODO: properly define
+          },
+        ],
+      },
     });
 
     this.addField(
       new FormField({
         name: 'form',
         label: 'Form',
-        form: new AccessNode()
+        form: new AccessNode(),
       })
     );
 
@@ -107,7 +107,7 @@ export default class FormAccess extends Form {
       new FormField({
         name: 'fields',
         label: 'Fields',
-        form: new AccessFields()
+        form: new AccessFields(),
       })
     );
   }
@@ -115,9 +115,7 @@ export default class FormAccess extends Form {
   set(props) {
     super.set(props);
     if (props.fieldNames !== undefined) {
-      this.getField('fields')
-        .getForm()
-        .set({ fieldNames: props.fieldNames });
+      this.getField('fields').getForm().set({ fieldNames: props.fieldNames });
     }
   }
 }

@@ -24,8 +24,8 @@ const createCarField = () => {
       { value: 9, parentValue: 5, label: 'Model S' },
 
       { value: 10, parentValue: 9, label: 'Red' },
-      { value: 11, parentValue: 9, label: 'Blue' }
-    ]
+      { value: 11, parentValue: 9, label: 'Blue' },
+    ],
   });
 };
 
@@ -60,7 +60,7 @@ it('should adjust options for subsequent fields', () => {
   expect(car.getValue()).toEqual([1]);
   expect(car._getField(1).get('options')).toEqual([
     { value: 3, label: 'BMW' },
-    { value: 4, label: 'Mercedes' }
+    { value: 4, label: 'Mercedes' },
   ]);
 });
 
@@ -79,9 +79,9 @@ it('should clear subsequent fields', () => {
   expect(car._getField(3).get('hidden')).toEqual(true);
 });
 
-const numNonHiddenFields = fields => {
+const numNonHiddenFields = (fields) => {
   let num = 0;
-  fields.each(item => {
+  fields.each((item) => {
     if (!item.get('hidden')) {
       num++;
     }

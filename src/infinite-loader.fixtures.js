@@ -10,16 +10,16 @@ export const ray = {
     id: 'ray',
     fieldValues: {
       ...defaults,
-      name: 'Ray'
-    }
+      name: 'Ray',
+    },
   },
-  cursor: 'rayCursor'
+  cursor: 'rayCursor',
 };
 
 export const rayFlat = {
   ...defaults,
   id: 'ray',
-  name: 'Ray'
+  name: 'Ray',
 };
 
 export const ella = {
@@ -27,20 +27,20 @@ export const ella = {
     id: 'ella',
     fieldValues: {
       ...defaults,
-      name: 'Ella'
-    }
+      name: 'Ella',
+    },
   },
-  cursor: 'ellaCursor'
+  cursor: 'ellaCursor',
 };
 
 export const ellaFlat = {
   ...defaults,
   id: 'ella',
-  name: 'Ella'
+  name: 'Ella',
 };
 
 export const records1 = {
-  edges: [ray, ella]
+  edges: [ray, ella],
 };
 
 export const stevie = {
@@ -48,16 +48,16 @@ export const stevie = {
     id: 'stevie',
     fieldValues: {
       ...defaults,
-      name: 'Stevie'
-    }
+      name: 'Stevie',
+    },
   },
-  cursor: 'stevieCursor'
+  cursor: 'stevieCursor',
 };
 
 export const stevieFlat = {
   ...defaults,
   id: 'stevie',
-  name: 'Stevie'
+  name: 'Stevie',
 };
 
 export const sinatra = {
@@ -65,20 +65,20 @@ export const sinatra = {
     id: 'sinatra',
     fieldValues: {
       ...defaults,
-      name: 'Sinatra'
-    }
+      name: 'Sinatra',
+    },
   },
-  cursor: 'sinatraCursor'
+  cursor: 'sinatraCursor',
 };
 
 export const sinatraFlat = {
   ...defaults,
   id: 'sinatra',
-  name: 'Sinatra'
+  name: 'Sinatra',
 };
 
 export const records2 = {
-  edges: [stevie, sinatra]
+  edges: [stevie, sinatra],
 };
 
 export const michael = {
@@ -86,16 +86,16 @@ export const michael = {
     id: 'michael',
     fieldValues: {
       ...defaults,
-      name: 'Michael'
-    }
+      name: 'Michael',
+    },
   },
-  cursor: 'michaelCursor'
+  cursor: 'michaelCursor',
 };
 
 export const michaelFlat = {
   ...defaults,
   id: 'michael',
-  name: 'Michael'
+  name: 'Michael',
 };
 
 export const bowie = {
@@ -103,27 +103,27 @@ export const bowie = {
     id: 'bowie',
     fieldValues: {
       ...defaults,
-      name: 'Bowie'
-    }
+      name: 'Bowie',
+    },
   },
-  cursor: 'bowieCursor'
+  cursor: 'bowieCursor',
 };
 
 export const bowieFlat = {
   ...defaults,
   id: 'bowie',
-  name: 'Bowie'
+  name: 'Bowie',
 };
 
 export const records3 = {
-  edges: [michael, bowie]
+  edges: [michael, bowie],
 };
 
 const noEdges = {
   pageInfo: {
-    hasNextPage: false
+    hasNextPage: false,
   },
-  edges: []
+  edges: [],
 };
 
 export const allRecords = new Mapa();
@@ -134,7 +134,7 @@ allRecords.set(records2.edges[1].node.id, { i: 3, ...records2.edges[1] });
 allRecords.set(records3.edges[0].node.id, { i: 4, ...records3.edges[0] });
 allRecords.set(records3.edges[1].node.id, { i: 5, ...records3.edges[1] });
 
-export const onGetAllPeople = async props => {
+export const onGetAllPeople = async (props) => {
   if (!props.before) {
     switch (props.after) {
       case records1.edges[1].cursor:
@@ -161,11 +161,11 @@ export const onGetAllPeople = async props => {
   }
 };
 
-export const onGetItemElementMock = id => {
+export const onGetItemElementMock = (id) => {
   const i = allRecords.get(id).i;
   return {
     offsetTop: i * 100,
-    offsetHeight: 100
+    offsetHeight: 100,
   };
 };
 
@@ -173,21 +173,21 @@ export const onGetItemElementMock = id => {
 
 export const createMockedStore = () => {
   return {
-    getAllDocs: async props => {
+    getAllDocs: async (props) => {
       return await onGetAllPeople(props);
     },
     // createDoc: asyncNoop,
-    updateDoc: async props => {
+    updateDoc: async (props) => {
       return {
-        id: props.form.getValue('id')
+        id: props.form.getValue('id'),
       };
     },
-    archiveDoc: async props => {
+    archiveDoc: async (props) => {
       return {
-        id: props.id
+        id: props.id,
       };
     },
     // restoreDoc: asyncNoop,
-    on: noop
+    on: noop,
   };
 };

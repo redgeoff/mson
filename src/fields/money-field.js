@@ -10,7 +10,7 @@ export default class MoneyField extends NumberField {
       prefix,
       thousandsSeparatorSymbol,
       allowDecimal,
-      decimalLimit
+      decimalLimit,
     } = props;
 
     // Note: we cannot use setDefaults as we need to utilize inherited logic in set()
@@ -19,7 +19,7 @@ export default class MoneyField extends NumberField {
       thousandsSeparatorSymbol:
         thousandsSeparatorSymbol !== undefined ? thousandsSeparatorSymbol : ',',
       allowDecimal: allowDecimal !== undefined ? allowDecimal : true,
-      decimalLimit: decimalLimit !== undefined ? decimalLimit : 2
+      decimalLimit: decimalLimit !== undefined ? decimalLimit : 2,
     });
   }
 }

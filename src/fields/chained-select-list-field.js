@@ -15,26 +15,26 @@ export default class ChainedSelectListField extends ListField {
         fields: [
           {
             name: 'fieldFactory',
-            required: false
+            required: false,
           },
           {
             name: 'options',
             component: 'ChainedSelectOptionsField',
-            docLevel: 'basic'
+            docLevel: 'basic',
           },
           {
             name: 'blankString',
-            component: 'TextField'
-          }
-        ]
-      }
+            component: 'TextField',
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, {
       allowDelete: true,
       autoCreateFields: true,
       canDeleteEmpty: false,
-      startWithField: true
+      startWithField: true,
     });
   }
 
@@ -48,8 +48,8 @@ export default class ChainedSelectListField extends ListField {
         'fullWidth',
         'options',
         'useDisplayValue',
-        'editable'
-      ])
+        'editable',
+      ]),
     });
   }
 
@@ -59,7 +59,7 @@ export default class ChainedSelectListField extends ListField {
   }
 
   _onFieldCreated(field /* onDelete */) {
-    field.on('value', value => {
+    field.on('value', (value) => {
       // Create last field if the last field is not blank and we are allowed to add more fields
       if (!this._isLastFieldBlank() && this.canAddMoreFields(value)) {
         this.createField();
@@ -74,7 +74,7 @@ export default class ChainedSelectListField extends ListField {
     this._setFieldOptions(0);
 
     // Set options for all fields
-    this.eachField(field => field.set({ options }));
+    this.eachField((field) => field.set({ options }));
   }
 
   set(props) {

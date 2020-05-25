@@ -14,10 +14,10 @@ export default class RedirectByRole extends Action {
           {
             name: 'routes',
             component: 'Field',
-            required: true
-          }
-        ]
-      }
+            required: true,
+          },
+        ],
+      },
     });
 
     this._setDefaults(props, { layer: 'frontEnd' });
@@ -25,7 +25,7 @@ export default class RedirectByRole extends Action {
 
   async act() {
     const routes = this.get('routes');
-    each(routes, route => {
+    each(routes, (route) => {
       if (!route.roles || this._registrar.client.user.hasRole(route.roles)) {
         this._globals.redirect(route.path);
         return false; // exit loop

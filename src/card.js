@@ -12,24 +12,24 @@ export default class Card extends UIComponent {
           {
             name: 'title',
             component: 'TextField',
-            label: 'Title'
+            label: 'Title',
           },
           {
             name: 'content',
             component: 'Field',
             label: 'Content',
-            required: true
+            required: true,
           },
           {
             name: 'searchString',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'dirty',
-            component: 'BooleanField'
-          }
-        ]
-      }
+            component: 'BooleanField',
+          },
+        ],
+      },
     });
 
     this._bubbleUpLoad();

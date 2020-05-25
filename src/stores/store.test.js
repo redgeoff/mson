@@ -5,7 +5,7 @@ it('should build doc', () => {
   const store = new Store();
   const fieldValues = {
     firstName: 'Ron',
-    lastName: 'Weasley'
+    lastName: 'Weasley',
   };
   const userId = '1';
 
@@ -16,7 +16,7 @@ it('should build doc', () => {
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
     userId,
-    fieldValues
+    fieldValues,
   });
 
   // When userId is null
@@ -40,17 +40,17 @@ it('should get the user id', () => {
   store._registrar = {
     client: {
       user: {
-        getSession: () => session
-      }
-    }
+        getSession: () => session,
+      },
+    },
   };
 
   expect(store._getUserId()).toBeUndefined();
 
   session = {
     user: {
-      id: 'my-id'
-    }
+      id: 'my-id',
+    },
   };
   expect(store._getUserId()).toEqual('my-id');
 });

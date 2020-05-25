@@ -6,15 +6,15 @@ it('should request password reset', async () => {
   const email = 'test@example.com';
 
   const form = new Form({
-    fields: [new EmailField({ name: 'email', value: email })]
+    fields: [new EmailField({ name: 'email', value: email })],
   });
 
   const requestPasswordReset = new RequestPasswordReset();
 
   requestPasswordReset._registrar = {
     resetPassword: {
-      requestReset: () => {}
-    }
+      requestReset: () => {},
+    },
   };
 
   const requestResetSpy = jest.spyOn(

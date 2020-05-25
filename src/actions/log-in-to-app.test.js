@@ -8,18 +8,18 @@ it('should log in to app', async () => {
     fields: [
       {
         component: 'EmailField',
-        name: 'username'
+        name: 'username',
       },
       {
         component: 'PasswordField',
-        name: 'password'
-      }
-    ]
+        name: 'password',
+      },
+    ],
   });
 
   const fieldValues = {
     username: 'test@example.com',
-    password: 'secret'
+    password: 'secret',
   };
 
   form.setValues(fieldValues);
@@ -30,12 +30,12 @@ it('should log in to app', async () => {
   logInToApp._registrar = {
     client: {
       user: {
-        logInToApp: () => {}
-      }
-    }
+        logInToApp: () => {},
+      },
+    },
   };
   logInToApp._globals = {
-    get: () => 'appId'
+    get: () => 'appId',
   };
 
   const logInToAppSpy = jest.spyOn(
@@ -44,12 +44,12 @@ it('should log in to app', async () => {
   );
 
   await logInToApp.act({
-    component: form
+    component: form,
   });
 
   expect(logInToAppSpy).toHaveBeenCalledWith({
     appId: 'appId',
-    ...fieldValues
+    ...fieldValues,
   });
 
   // Simulate error
@@ -59,17 +59,17 @@ it('should log in to app', async () => {
       user: {
         logInToApp: async () => {
           throw err;
-        }
-      }
-    }
+        },
+      },
+    },
   };
 
   await testUtils.expectToThrow(() => {
     return logInToApp.act({
-      component: form
+      component: form,
     });
   }, err);
   expect(form.getErrs()).toEqual([
-    { field: 'password', error: 'invalid email or password' }
+    { field: 'password', error: 'invalid email or password' },
   ]);
 });

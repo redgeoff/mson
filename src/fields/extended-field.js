@@ -13,10 +13,10 @@ export default class ExtendedField extends Field {
           {
             name: 'properties',
             component: 'Field',
-            required: true
-          }
-        ]
-      }
+            required: true,
+          },
+        ],
+      },
     });
   }
 }

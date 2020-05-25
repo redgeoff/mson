@@ -11,19 +11,19 @@ import {
   michaelFlat,
   bowieFlat,
   onGetItemElementMock,
-  createMockedStore
+  createMockedStore,
 } from '../infinite-loader.fixtures';
 
 const createForm = () => {
   return new Form({
-    fields: [new TextField({ name: 'name', label: 'Name', required: true })]
+    fields: [new TextField({ name: 'name', label: 'Name', required: true })],
   });
 };
 
-const createField = props => {
+const createField = (props) => {
   const field = new CollectionField({
     formFactory: new Factory({ product: () => createForm() }),
-    ...props
+    ...props,
   });
 
   // Mock as we aren't actually rendering
@@ -32,8 +32,8 @@ const createField = props => {
   return field;
 };
 
-const getItems = field => {
-  return field._forms.map(form => form.getValues());
+const getItems = (field) => {
+  return field._forms.map((form) => form.getValues());
 };
 
 it('should infinite scroll', async () => {
@@ -41,7 +41,7 @@ it('should infinite scroll', async () => {
     store: createMockedStore(),
     itemsPerPage: 2,
     maxBufferPages: 2,
-    scrollThreshold: 100
+    scrollThreshold: 100,
   });
 
   // Simulate the load event emitted by the UI, which will trigger the initial load
@@ -64,7 +64,7 @@ it('should infinite scroll', async () => {
     stevieFlat,
     sinatraFlat,
     michaelFlat,
-    bowieFlat
+    bowieFlat,
   ]);
 
   // Load previous page and reset buffer
@@ -82,7 +82,7 @@ it('should resize spacer', () => {
   const field = createField();
 
   field._window = {
-    scrollBy: () => {}
+    scrollBy: () => {},
   };
 
   const setSpy = jest.spyOn(field, 'set');
@@ -110,7 +110,7 @@ it('should get spacer element', () => {
   const field = createField();
 
   field._document = {
-    getElementById: () => {}
+    getElementById: () => {},
   };
 
   const getElementByIdSpy = jest.spyOn(field._document, 'getElementById');

@@ -43,7 +43,7 @@ export default class MemoryStore extends Store {
   }
 
   _toSiftWhere(where) {
-    return cloneDeepWith(where, doc => {
+    return cloneDeepWith(where, (doc) => {
       if (doc && doc.$iLike) {
         return { $regex: '^' + doc.$iLike.replace(/%/, ''), $options: 'i' };
       }
@@ -70,9 +70,9 @@ export default class MemoryStore extends Store {
       // TODO: hasNextPage will need to change once we support pagination via after, first, etc...
       // depending on if there is still more data to get
       pageInfo: {
-        hasNextPage: false
+        hasNextPage: false,
       },
-      edges: []
+      edges: [],
     };
 
     for (const doc of this._docs.values()) {
@@ -84,7 +84,7 @@ export default class MemoryStore extends Store {
         (where === undefined || sifted.length !== 0)
       ) {
         docs.edges.push({
-          node: doc
+          node: doc,
         });
       }
     }
@@ -93,7 +93,7 @@ export default class MemoryStore extends Store {
       // Order by properties
       const names = [];
       const orders = [];
-      order.forEach(order => {
+      order.forEach((order) => {
         names.push('node.' + order[0]);
         orders.push(order[1].toLowerCase());
       });
@@ -121,7 +121,7 @@ export default class MemoryStore extends Store {
     doc = this._setDoc({
       doc,
       archivedAt: this._now(),
-      order: Reorder.DEFAULT_ORDER
+      order: Reorder.DEFAULT_ORDER,
     });
 
     this._docs.set(id, doc, undefined, undefined, true);

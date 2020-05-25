@@ -9,32 +9,32 @@ it('should get docs', async () => {
   const form = new Form({
     fields: [
       new TextField({ name: 'firstName' }),
-      new TextField({ name: 'lastName' })
-    ]
+      new TextField({ name: 'lastName' }),
+    ],
   });
 
   const where = {
     $or: [
       {
-        id: 'aretha'
+        id: 'aretha',
       },
       {
-        id: 'tom'
-      }
-    ]
+        id: 'tom',
+      },
+    ],
   };
 
   const docs = [
     {
       id: 'aretha',
       firstName: 'Aretha',
-      lastName: 'Franklin'
+      lastName: 'Franklin',
     },
     {
       id: 'tom',
       firstName: 'Tom',
-      lastName: 'Petty'
-    }
+      lastName: 'Petty',
+    },
   ];
 
   const createdDocs = [];
@@ -54,14 +54,14 @@ it('should get docs', async () => {
   const values = await getDocs.act();
   expect(values.edges).toEqual([
     {
-      node: createdDocs[0]
+      node: createdDocs[0],
     },
     {
-      node: createdDocs[1]
-    }
+      node: createdDocs[1],
+    },
   ]);
 
   expect(getAllDocsSpy).toHaveBeenCalledWith({
-    where
+    where,
   });
 });

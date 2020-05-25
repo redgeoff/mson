@@ -20,8 +20,8 @@ class MockStore extends MemoryStore {
       fieldValues: {
         name: 'Miles Davis',
         email: 'miles@example.com',
-        password: 'miles12345'
-      }
+        password: 'miles12345',
+      },
     });
   }
 
@@ -39,22 +39,22 @@ beforeAll(() => {
         component: 'PersonNameField',
         name: 'name',
         label: 'Name',
-        required: true
+        required: true,
       },
       {
         component: 'EmailField',
         name: 'email',
         label: 'Email',
-        required: true
+        required: true,
       },
       {
         component: 'PasswordField',
         name: 'password',
         label: 'New Password',
         in: false,
-        out: false
-      }
-    ]
+        out: false,
+      },
+    ],
   });
 
   compiler.registerComponent('app.MyStore', MockStore);
@@ -62,15 +62,15 @@ beforeAll(() => {
   compiler.registerComponent('app.EditAccount', {
     component: 'RecordEditor',
     baseForm: {
-      component: 'app.Account'
+      component: 'app.Account',
     },
     label: 'Account',
     storeWhere: {
-      id: '1'
+      id: '1',
     },
     store: {
-      component: 'app.MyStore'
-    }
+      component: 'app.MyStore',
+    },
   });
 
   compiler.registerComponent('app.ChangePasswordForm', {
@@ -80,8 +80,8 @@ beforeAll(() => {
         component: 'PasswordField',
         name: 'retypePassword',
         label: 'Retype Password',
-        required: true
-      }
+        required: true,
+      },
     ],
     validators: [
       {
@@ -89,16 +89,16 @@ beforeAll(() => {
           fields: {
             retypePassword: {
               value: {
-                $ne: '{{password.value}}'
-              }
-            }
-          }
+                $ne: '{{password.value}}',
+              },
+            },
+          },
         },
         error: {
           field: 'retypePassword',
-          error: 'must match'
-        }
-      }
+          error: 'must match',
+        },
+      },
     ],
     listeners: [
       {
@@ -107,57 +107,57 @@ beforeAll(() => {
           {
             component: 'Set',
             name: 'hidden',
-            value: true
+            value: true,
           },
           {
             component: 'Set',
             name: 'out',
-            value: false
+            value: false,
           },
           {
             component: 'Set',
             name: 'required',
-            value: false
+            value: false,
           },
           {
             component: 'Set',
             name: 'fields.password.hidden',
-            value: false
+            value: false,
           },
           {
             component: 'Set',
             name: 'fields.password.required',
-            value: true
+            value: true,
           },
           {
             component: 'Set',
             name: 'fields.password.out',
-            value: true
+            value: true,
           },
           {
             component: 'Set',
             name: 'fields.retypePassword.hidden',
-            value: false
+            value: false,
           },
           {
             component: 'Set',
             name: 'fields.retypePassword.required',
-            value: true
-          }
-        ]
-      }
-    ]
+            value: true,
+          },
+        ],
+      },
+    ],
   });
 
   compiler.registerComponent('app.ChangePassword', {
     component: 'RecordEditor',
     baseForm: {
-      component: 'app.ChangePasswordForm'
+      component: 'app.ChangePasswordForm',
     },
     label: 'Password',
     store: {
-      component: 'MemoryStore'
-    }
+      component: 'MemoryStore',
+    },
   });
 });
 
@@ -178,17 +178,17 @@ beforeEach(() => {
 });
 
 const mockActions = (actions, spyOnAct) => {
-  actions.forEach(action => {
+  actions.forEach((action) => {
     const actions = action._actions;
     if (actions) {
       mockActions(actions, spyOnAct);
     } else {
       if (spyOnAct) {
         const origAct = action.act;
-        action.act = function() {
+        action.act = function () {
           acts.push({
             name: action.getClassName(),
-            props: action.get()
+            props: action.get(),
           });
           return origAct.apply(this, arguments);
         };
@@ -199,13 +199,13 @@ const mockActions = (actions, spyOnAct) => {
 
 const mockRecordEditor = (recordEditor, event) => {
   const listeners = recordEditor.get('listeners');
-  listeners.forEach(listener => {
+  listeners.forEach((listener) => {
     const spyOnAct = listener.event === event;
     mockActions(listener.actions, spyOnAct);
   });
 };
 
-const expectActsToContain = expActs => {
+const expectActsToContain = (expActs) => {
   expect(acts).toHaveLength(expActs.length);
   expActs.forEach((expAct, i) => {
     const act = acts[i];
@@ -220,14 +220,14 @@ const expectActsToContain = expActs => {
 
 it('should auto validate', async () => {
   const changePassword = compiler.newComponent({
-    component: 'app.ChangePassword'
+    component: 'app.ChangePassword',
   });
   await testUtils.once(changePassword, 'didCreate');
   changePassword.set({ autoValidate: true });
   changePassword.getField('password').setValue('secret123');
   changePassword.getField('retypePassword').setValue('secret1234');
   expect(changePassword.getErrs()).toEqual([
-    { field: 'retypePassword', error: 'must match' }
+    { field: 'retypePassword', error: 'must match' },
   ]);
 });
 
@@ -239,7 +239,7 @@ const emitLoadAndWait = async () => {
 const beforeEachLoadTest = (event, props) => {
   editAccount = compiler.newComponent({
     component: 'app.EditAccount',
-    ...props
+    ...props,
   });
   mockRecordEditor(editAccount, event);
 };
@@ -253,16 +253,16 @@ it('should load with preview and storeWhere', async () => {
       name: 'Set',
       props: {
         name: 'isLoading',
-        value: true
-      }
+        value: true,
+      },
     },
     {
       name: 'GetDoc',
       props: {
         where: {
-          id: '1'
-        }
-      }
+          id: '1',
+        },
+      },
     },
     {
       name: 'Set',
@@ -271,9 +271,9 @@ it('should load with preview and storeWhere', async () => {
         value: {
           email: 'miles@example.com',
           name: 'Miles Davis',
-          password: 'miles12345'
-        }
-      }
+          password: 'miles12345',
+        },
+      },
     },
     {
       name: 'Set',
@@ -284,30 +284,30 @@ it('should load with preview and storeWhere', async () => {
           userId: '1',
           archivedAt: 1537475650372,
           createdAt: 1537475590372,
-          updatedAt: 1537475710372
-        }
-      }
+          updatedAt: 1537475710372,
+        },
+      },
     },
     {
       name: 'Set',
       props: {
         name: 'pristine',
-        value: true
-      }
+        value: true,
+      },
     },
     {
       name: 'Emit',
       props: {
-        event: 'read'
-      }
+        event: 'read',
+      },
     },
     {
       name: 'Set',
       props: {
         name: 'isLoading',
-        value: false
-      }
-    }
+        value: false,
+      },
+    },
   ]);
 
   // Sanity test
@@ -319,14 +319,14 @@ it('should load with preview and storeWhere', async () => {
     email: 'miles@example.com',
     archivedAt: 1537475650372,
     createdAt: 1537475590372,
-    updatedAt: 1537475710372
+    updatedAt: 1537475710372,
   });
 });
 
 it('should load without preview and storeWhere', async () => {
   beforeEachLoadTest('load', {
     preview: false,
-    storeWhere: null
+    storeWhere: null,
   });
   await emitLoadAndWait();
 
@@ -335,29 +335,29 @@ it('should load without preview and storeWhere', async () => {
       name: 'Set',
       props: {
         name: 'isLoading',
-        value: true
-      }
+        value: true,
+      },
     },
     {
       name: 'Set',
       props: {
         name: 'pristine',
-        value: true
-      }
+        value: true,
+      },
     },
     {
       name: 'Emit',
       props: {
-        event: 'edit'
-      }
+        event: 'edit',
+      },
     },
     {
       name: 'Set',
       props: {
         name: 'isLoading',
-        value: false
-      }
-    }
+        value: false,
+      },
+    },
   ]);
 });
 
@@ -372,15 +372,15 @@ it('should read', async () => {
       name: 'Set',
       props: {
         name: 'mode',
-        value: 'read'
-      }
+        value: 'read',
+      },
     },
     {
       name: 'Set',
       props: {
         name: 'editable',
-        value: false
-      }
+        value: false,
+      },
     },
     {
       name: 'Set',
@@ -389,34 +389,34 @@ it('should read', async () => {
         value: {
           'fields.save.hidden': true,
           'fields.edit.hidden': false,
-          'fields.cancel.hidden': true
-        }
-      }
+          'fields.cancel.hidden': true,
+        },
+      },
     },
     {
       name: 'Emit',
       props: {
-        event: 'didRead'
-      }
-    }
+        event: 'didRead',
+      },
+    },
   ]);
 });
 
-const getEditActs = hideCancel => {
+const getEditActs = (hideCancel) => {
   let acts = [
     {
       name: 'Set',
       props: {
         name: 'mode',
-        value: 'update'
-      }
+        value: 'update',
+      },
     },
     {
       name: 'Set',
       props: {
         name: 'editable',
-        value: true
-      }
+        value: true,
+      },
     },
     {
       name: 'Set',
@@ -425,10 +425,10 @@ const getEditActs = hideCancel => {
         value: {
           'fields.save.hidden': false,
           'fields.save.disabled': true,
-          'fields.edit.hidden': true
-        }
-      }
-    }
+          'fields.edit.hidden': true,
+        },
+      },
+    },
   ];
 
   if (hideCancel !== true) {
@@ -436,8 +436,8 @@ const getEditActs = hideCancel => {
       name: 'Set',
       props: {
         name: 'fields.cancel.hidden',
-        value: false
-      }
+        value: false,
+      },
     });
   }
 
@@ -445,9 +445,9 @@ const getEditActs = hideCancel => {
     {
       name: 'Emit',
       props: {
-        event: 'didEdit'
-      }
-    }
+        event: 'didEdit',
+      },
+    },
   ]);
 };
 
@@ -480,15 +480,15 @@ it('canSubmit', async () => {
       name: 'Set',
       props: {
         name: 'fields.save.disabled',
-        value: false
-      }
+        value: false,
+      },
     },
     {
       name: 'Emit',
       props: {
-        event: 'didCanSubmit'
-      }
-    }
+        event: 'didCanSubmit',
+      },
+    },
   ]);
 });
 
@@ -503,45 +503,45 @@ it('cannotSubmit', async () => {
       name: 'Set',
       props: {
         name: 'fields.save.disabled',
-        value: true
-      }
+        value: true,
+      },
     },
     {
       name: 'Emit',
       props: {
-        event: 'didCannotSubmit'
-      }
-    }
+        event: 'didCannotSubmit',
+      },
+    },
   ]);
 });
 
-const getSaveActs = preview => {
+const getSaveActs = (preview) => {
   let acts = [
     {
       name: 'UpsertDoc',
-      props: {}
+      props: {},
     },
     {
       name: 'Set',
       props: {
         name: 'pristine',
-        value: true
-      }
+        value: true,
+      },
     },
     {
       name: 'Snackbar',
       props: {
-        message: 'Account saved'
-      }
-    }
+        message: 'Account saved',
+      },
+    },
   ];
 
   if (preview !== false) {
     acts.push({
       name: 'Emit',
       props: {
-        event: 'load'
-      }
+        event: 'load',
+      },
     });
   }
 
@@ -549,9 +549,9 @@ const getSaveActs = preview => {
     {
       name: 'Emit',
       props: {
-        event: 'didSave'
-      }
-    }
+        event: 'didSave',
+      },
+    },
   ]);
 };
 
@@ -583,15 +583,15 @@ it('should cancel', async () => {
     {
       name: 'Emit',
       props: {
-        event: 'load'
-      }
+        event: 'load',
+      },
     },
     {
       name: 'Emit',
       props: {
-        event: 'didCancel'
-      }
-    }
+        event: 'didCancel',
+      },
+    },
   ]);
 });
 
@@ -602,7 +602,7 @@ it('should support the change password scenario', async () => {
     component: 'app.ChangePassword',
     preview: false,
     store: new MockStore(),
-    storeWhere: null
+    storeWhere: null,
   });
 
   // Wait for all the create listeners to run before mocking so that we have a predictable baseline
@@ -617,7 +617,7 @@ it('should support the change password scenario', async () => {
 
   changePassword.setValues({
     password: 'secret12345',
-    retypePassword: 'secret12345'
+    retypePassword: 'secret12345',
   });
   const didSave = testUtils.once(changePassword, 'didSave');
   changePassword.getField('save').emitClick();
@@ -625,6 +625,6 @@ it('should support the change password scenario', async () => {
 
   expect(docsCreated).toHaveLength(1);
   expect(docsCreated[0].fieldValues).toEqual({
-    password: 'secret12345'
+    password: 'secret12345',
   });
 });

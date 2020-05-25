@@ -3,7 +3,7 @@ import testUtils from '../test-utils';
 
 it('should validate max size', () => {
   const field = new MultipleValueField({
-    maxSize: 2
+    maxSize: 2,
   });
 
   field.setValue(['red', 'green']);
@@ -17,7 +17,7 @@ it('should validate max size', () => {
 
 it('should validate min size', () => {
   const field = new MultipleValueField({
-    minSize: 2
+    minSize: 2,
   });
 
   field.setValue(['red', 'green']);

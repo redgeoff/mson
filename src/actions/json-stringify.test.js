@@ -1,12 +1,12 @@
 import JSONStringify from './json-stringify';
 
-const shouldStringify = async space => {
+const shouldStringify = async (space) => {
   const jsonStringify = new JSONStringify({
-    space
+    space,
   });
 
   const obj = {
-    foo: 'bar'
+    foo: 'bar',
   };
 
   const result = await jsonStringify.act({ arguments: obj });
@@ -23,7 +23,7 @@ it('should stringify value', async () => {
   const jsonStringify = new JSONStringify();
 
   const obj = {
-    foo: 'bar'
+    foo: 'bar',
   };
 
   jsonStringify.set({ value: obj });

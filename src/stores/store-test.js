@@ -3,24 +3,24 @@ import { TextField } from '../fields';
 import testUtils from '../test-utils';
 import { Reorder } from './reorder';
 
-export const createForm = props => {
+export const createForm = (props) => {
   return new Form({
     fields: [
       new TextField({ name: 'firstName' }),
-      new TextField({ name: 'lastName' })
+      new TextField({ name: 'lastName' }),
     ],
-    ...props
+    ...props,
   });
 };
 
 export const shouldCRUD = async (Store, props) => {
   let fieldValues = {
     firstName: 'Ella',
-    lastName: 'Fitzgerald'
+    lastName: 'Fitzgerald',
   };
 
   const form = createForm({
-    value: fieldValues
+    value: fieldValues,
   });
 
   const store = new Store(props);
@@ -42,7 +42,7 @@ export const shouldCRUD = async (Store, props) => {
 
   form.setValues({
     id: created.id,
-    firstName: 'F. Scott'
+    firstName: 'F. Scott',
   });
 
   // Make sure timestamps aren't the same
@@ -58,9 +58,9 @@ export const shouldCRUD = async (Store, props) => {
     userId: null,
     fieldValues: {
       firstName: 'F. Scott',
-      lastName: 'Fitzgerald'
+      lastName: 'Fitzgerald',
     },
-    order: Reorder.DEFAULT_ORDER
+    order: Reorder.DEFAULT_ORDER,
   });
   expect(updated.updatedAt).not.toEqual(created.updatedAt);
 
@@ -75,7 +75,7 @@ export const shouldCRUD = async (Store, props) => {
     Object.assign({}, updated, {
       archivedAt: archived.archivedAt,
       updatedAt: archived.updatedAt,
-      order: Reorder.DEFAULT_ORDER
+      order: Reorder.DEFAULT_ORDER,
     })
   );
   expect(archived.archivedAt).not.toBeFalsy();
@@ -89,7 +89,7 @@ export const shouldCRUD = async (Store, props) => {
   expect(restored).toEqual(
     Object.assign({}, updated, {
       updatedAt: restored.updatedAt,
-      order: Reorder.DEFAULT_ORDER
+      order: Reorder.DEFAULT_ORDER,
     })
   );
   expect(restored.archivedAt).toBeNull();
@@ -101,25 +101,25 @@ export const createDoc = async (store, fieldValues) => {
   return store.createDoc({ form, reorder: true });
 };
 
-const createDocs = async store => {
+const createDocs = async (store) => {
   const harryValues = {
     firstName: 'Harry',
     lastName: 'Potter',
-    order: 0
+    order: 0,
   };
   const harry = await createDoc(store, harryValues);
 
   const hermioneValues = {
     firstName: 'Hermione',
     lastName: 'Granger',
-    order: 1
+    order: 1,
   };
   let hermione = await createDoc(store, hermioneValues);
   hermione = await store.archiveDoc({ id: hermione.id });
 
   const ronValues = {
     firstName: 'Ron',
-    lastName: 'Weasley'
+    lastName: 'Weasley',
   };
   const ron = await createDoc(store, ronValues);
 
@@ -136,7 +136,7 @@ const searchDefaults = {
   before: null,
   first: null,
   order: null,
-  showArchived: null
+  showArchived: null,
 };
 
 export const shouldGetAll = async (Store, props) => {
@@ -146,19 +146,19 @@ export const shouldGetAll = async (Store, props) => {
 
   const all = {
     pageInfo: {
-      hasNextPage: false
+      hasNextPage: false,
     },
     edges: [
       {
-        node: harry
+        node: harry,
       },
       {
-        node: ron
+        node: ron,
       },
       {
-        node: hermione
-      }
-    ]
+        node: hermione,
+      },
+    ],
   };
 
   // Default props
@@ -175,11 +175,11 @@ export const shouldGetAll = async (Store, props) => {
           {
             $or: [
               { 'fieldValues.firstName': { $iLike: 'h%' } },
-              { 'fieldValues.lastName': { $iLike: 'h%' } }
-            ]
-          }
-        ]
-      }
+              { 'fieldValues.lastName': { $iLike: 'h%' } },
+            ],
+          },
+        ],
+      },
     })
   ).toEqual(
     Object.assign({}, all, { edges: [{ node: harry }, { node: hermione }] })
@@ -189,13 +189,13 @@ export const shouldGetAll = async (Store, props) => {
   expect(
     await store.getAllDocs({
       ...searchDefaults,
-      showArchived: true
+      showArchived: true,
     })
   ).toEqual(Object.assign({}, all, { edges: [{ node: hermione }] }));
   expect(
     await store.getAllDocs({
       ...searchDefaults,
-      showArchived: false
+      showArchived: false,
     })
   ).toEqual(
     Object.assign({}, all, { edges: [{ node: harry }, { node: ron }] })
@@ -205,25 +205,25 @@ export const shouldGetAll = async (Store, props) => {
   expect(
     await store.getAllDocs({
       ...searchDefaults,
-      order: [['fieldValues.firstName', 'DESC']]
+      order: [['fieldValues.firstName', 'DESC']],
     })
   ).toEqual(
     Object.assign({}, all, {
-      edges: [{ node: ron }, { node: hermione }, { node: harry }]
+      edges: [{ node: ron }, { node: hermione }, { node: harry }],
     })
   );
 };
 
 const expectDocsToEqual = (docs, items) => {
   const edges = [];
-  items.forEach(item => {
+  items.forEach((item) => {
     edges.push({
       node: {
         fieldValues: {
-          firstName: item.firstName
+          firstName: item.firstName,
         },
-        order: item.order
-      }
+        order: item.order,
+      },
     });
   });
 
@@ -237,19 +237,19 @@ export const shouldMove = async (Store, props) => {
 
   const all = {
     pageInfo: {
-      hasNextPage: false
+      hasNextPage: false,
     },
     edges: [
       {
-        node: harry
+        node: harry,
       },
       {
-        node: ron
+        node: ron,
       },
       {
-        node: hermione
-      }
-    ]
+        node: hermione,
+      },
+    ],
   };
 
   // Initial ordering
@@ -259,26 +259,26 @@ export const shouldMove = async (Store, props) => {
   const ginnyValues = {
     firstName: 'Ginny',
     lastName: 'Weasley',
-    order: 1
+    order: 1,
   };
   const ginny = await createDoc(store, ginnyValues);
   expectDocsToEqual(await store.getAllDocs(searchDefaults), [
     {
       firstName: 'Harry',
-      order: 0
+      order: 0,
     },
     {
       firstName: 'Ginny',
-      order: 1
+      order: 1,
     },
     {
       firstName: 'Ron',
-      order: 2
+      order: 2,
     },
     {
       firstName: 'Hermione',
-      order: Reorder.DEFAULT_ORDER
-    }
+      order: Reorder.DEFAULT_ORDER,
+    },
   ]);
 
   // Move up
@@ -289,20 +289,20 @@ export const shouldMove = async (Store, props) => {
   expectDocsToEqual(await store.getAllDocs(searchDefaults), [
     {
       firstName: 'Ron',
-      order: 0
+      order: 0,
     },
     {
       firstName: 'Harry',
-      order: 1
+      order: 1,
     },
     {
       firstName: 'Ginny',
-      order: 2
+      order: 2,
     },
     {
       firstName: 'Hermione',
-      order: Reorder.DEFAULT_ORDER
-    }
+      order: Reorder.DEFAULT_ORDER,
+    },
   ]);
 
   // Move to end of ordered list
@@ -313,20 +313,20 @@ export const shouldMove = async (Store, props) => {
   expectDocsToEqual(await store.getAllDocs(searchDefaults), [
     {
       firstName: 'Ron',
-      order: 0
+      order: 0,
     },
     {
       firstName: 'Ginny',
-      order: 1
+      order: 1,
     },
     {
       firstName: 'Harry',
-      order: 2
+      order: 2,
     },
     {
       firstName: 'Hermione',
-      order: Reorder.DEFAULT_ORDER
-    }
+      order: Reorder.DEFAULT_ORDER,
+    },
   ]);
 
   // Archive
@@ -334,20 +334,20 @@ export const shouldMove = async (Store, props) => {
   expectDocsToEqual(await store.getAllDocs(searchDefaults), [
     {
       firstName: 'Ron',
-      order: 0
+      order: 0,
     },
     {
       firstName: 'Harry',
-      order: 1
+      order: 1,
     },
     {
       firstName: 'Hermione',
-      order: Reorder.DEFAULT_ORDER
+      order: Reorder.DEFAULT_ORDER,
     },
     {
       firstName: 'Ginny',
-      order: Reorder.DEFAULT_ORDER
-    }
+      order: Reorder.DEFAULT_ORDER,
+    },
   ]);
 
   // Restore
@@ -355,19 +355,19 @@ export const shouldMove = async (Store, props) => {
   expectDocsToEqual(await store.getAllDocs(searchDefaults), [
     {
       firstName: 'Ron',
-      order: 0
+      order: 0,
     },
     {
       firstName: 'Harry',
-      order: 1
+      order: 1,
     },
     {
       firstName: 'Ginny',
-      order: 2
+      order: 2,
     },
     {
       firstName: 'Hermione',
-      order: Reorder.DEFAULT_ORDER
-    }
+      order: Reorder.DEFAULT_ORDER,
+    },
   ]);
 };

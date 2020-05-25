@@ -8,18 +8,18 @@ it('should create doc', async () => {
     fields: [
       {
         component: 'TextField',
-        name: 'firstName'
+        name: 'firstName',
       },
       {
         component: 'TextField',
-        name: 'lastName'
-      }
-    ]
+        name: 'lastName',
+      },
+    ],
   });
 
   const fieldValues = {
     firstName: 'Aretha',
-    lastName: 'Franklin'
+    lastName: 'Franklin',
   };
 
   form.setValues(fieldValues);
@@ -31,7 +31,7 @@ it('should create doc', async () => {
   const createSpy = jest.spyOn(store, 'createDoc');
 
   await createDoc.act({
-    component: form
+    component: form,
   });
 
   expect(createSpy).toHaveBeenCalledWith({ form });

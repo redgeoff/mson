@@ -18,8 +18,8 @@ export default class FirebaseStore extends MemoryStore {
     // documents." We can only order by a single attribute (unless we create an index) so we'll pick
     // the order.
     this._coll.orderBy('createdAt').onSnapshot(
-      snapshot => {
-        snapshot.docChanges().forEach(change => {
+      (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
           const data = change.doc.data();
           if (change.type === 'removed') {
             this._docs.delete(data.id);
@@ -36,7 +36,7 @@ export default class FirebaseStore extends MemoryStore {
           });
         }
       },
-      err => {
+      (err) => {
         this._emitError(err);
       }
     );
@@ -60,7 +60,7 @@ export default class FirebaseStore extends MemoryStore {
       this._fb.initializeApp({
         apiKey: props.apiKey,
         authDomain: props.authDomain,
-        projectId: props.projectId
+        projectId: props.projectId,
       });
     }
   }
@@ -89,7 +89,7 @@ export default class FirebaseStore extends MemoryStore {
       Object.assign({}, props, {
         // Mute didLoad in the base classes as we need to emit didLoad after all the docs have been
         // loaded asynchronously
-        muteDidLoad: true
+        muteDidLoad: true,
       })
     );
 
@@ -103,30 +103,30 @@ export default class FirebaseStore extends MemoryStore {
           {
             // For mocking
             name: 'firebase',
-            component: 'Field'
+            component: 'Field',
           },
           {
             name: 'apiKey',
             component: 'TextField',
-            required: true
+            required: true,
           },
           {
             name: 'authDomain',
             component: 'TextField',
-            required: true
+            required: true,
           },
           {
             name: 'projectId',
             component: 'TextField',
-            required: true
+            required: true,
           },
           {
             name: 'collection',
             component: 'TextField',
-            required: true
-          }
-        ]
-      }
+            required: true,
+          },
+        ],
+      },
     });
 
     // Don't actually connect to Firebase unless we specify an API Key
@@ -152,8 +152,8 @@ export default class FirebaseStore extends MemoryStore {
       id,
       doc,
       options: {
-        merge: true // allow for partial updates
-      }
+        merge: true, // allow for partial updates
+      },
     });
   };
 
@@ -172,7 +172,7 @@ export default class FirebaseStore extends MemoryStore {
     await this._docSet({
       id: doc.id,
       doc,
-      order: doc.order
+      order: doc.order,
     });
 
     return doc;
@@ -187,7 +187,7 @@ export default class FirebaseStore extends MemoryStore {
       doc,
       fieldValues,
       archivedAt,
-      order
+      order,
     });
 
     // Note: we need to update the underlying MemoryStore so that the data is there after this
@@ -200,8 +200,8 @@ export default class FirebaseStore extends MemoryStore {
       id: doc.id,
       doc,
       options: {
-        merge: true // allow for partial updates
-      }
+        merge: true, // allow for partial updates
+      },
     });
 
     return doc;
@@ -215,7 +215,7 @@ export default class FirebaseStore extends MemoryStore {
     return this._modifyDoc({
       ...props,
       archivedAt: this._now(),
-      order: Reorder.DEFAULT_ORDER
+      order: Reorder.DEFAULT_ORDER,
     });
   }
 
@@ -227,7 +227,7 @@ export default class FirebaseStore extends MemoryStore {
     return this._modifyDoc({
       ...props,
       archivedAt: null,
-      order
+      order,
     });
   }
 
