@@ -136,10 +136,15 @@ export default class FormBuilder extends Form {
   }
 
   _setMSON(mson) {
-    const fields = mson.fields.map((field) => ({
-      ...field,
-      componentName: field.component,
-    }));
+    const fields = mson.fields.map((field) => {
+      // Use componentName instead of component
+      const value = {
+        ...field,
+        componentName: field.component,
+      };
+      delete value.component;
+      return value;
+    });
 
     this.get('fields.form.form.fields.fields').setValue(fields);
   }
@@ -149,6 +154,12 @@ export default class FormBuilder extends Form {
 
     if (props.mson !== undefined) {
       this._setMSON(props.mson);
+    }
+
+    // We also allow the MSON to be set via the value so that both the MSON and other values, like
+    // id & userId, can be set simultaneously
+    if (props.value !== undefined && props.value.mson !== undefined) {
+      this._setMSON(props.value.mson);
     }
   }
 
