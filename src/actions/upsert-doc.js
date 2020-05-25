@@ -12,16 +12,21 @@ export default class UpsertDoc extends Action {
         fields: [
           {
             name: 'store',
-            component: 'Field'
-          }
-        ]
-      }
+            component: 'Field',
+          },
+          {
+            name: 'form',
+            component: 'Field',
+          },
+        ],
+      },
     });
   }
 
   async act(props) {
+    const form = this.get('form');
     return this.get('store').upsertDoc({
-      form: props.component
+      form: form ? form : props.component,
     });
   }
 }
