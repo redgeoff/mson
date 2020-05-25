@@ -20,12 +20,6 @@ export default class GenerateComponent extends Action {
     });
   }
 
-  _generateForm(factory) {
-    const form = factory.produce();
-    this.set({ form });
-    return form;
-  }
-
   async act(props) {
     const factory = this.get('componentFactory');
     return factory.produce();
