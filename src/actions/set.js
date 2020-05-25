@@ -12,14 +12,18 @@ export default class Set extends Action {
         fields: [
           {
             name: 'name',
-            component: 'TextField'
+            component: 'TextField',
           },
           {
             name: 'value',
-            component: 'Field'
-          }
-        ]
-      }
+            component: 'Field',
+          },
+          {
+            name: 'target',
+            component: 'Field',
+          },
+        ],
+      },
     });
   }
 
@@ -30,6 +34,9 @@ export default class Set extends Action {
     const thisValue = this.get('value');
     const value = thisValue === undefined ? props.arguments : thisValue;
 
+    const thisTarget = this.get('target');
+    const target = thisTarget === undefined ? props.component : thisTarget;
+
     if (!name) {
       // No name was specified, pipe to next action
       return value;
@@ -37,14 +44,14 @@ export default class Set extends Action {
       const first = names.splice(0, 1)[0]; // Remove globals or component
       if (first === 'globals') {
         this._globals.set({
-          [names.join('.')]: value
+          [names.join('.')]: value,
         });
       } else {
-        props.component.set(value);
+        target.set(value);
       }
     } else {
-      props.component.set({
-        [name]: value
+      target.set({
+        [name]: value,
       });
     }
 
