@@ -9,9 +9,9 @@ const createFields = () => {
   return [
     compiler.newComponent({
       component: 'PersonFullNameField',
-      name: 'name'
+      name: 'name',
     }),
-    new ButtonField({ name: 'save' })
+    new ButtonField({ name: 'save' }),
   ];
 };
 
@@ -27,13 +27,13 @@ const createForm = () => {
             value: {
               name: {
                 firstName: 'Michael',
-                lastName: 'Jackson'
-              }
-            }
-          })
-        ]
-      }
-    ]
+                lastName: 'Jackson',
+              },
+            },
+          }),
+        ],
+      },
+    ],
   });
 };
 
@@ -41,10 +41,7 @@ it('should set', async () => {
   const form = createForm();
   form.getField('save').emitClick();
   await testUtils.waitFor(() => {
-    return form
-      .getField('name')
-      .get('lastName')
-      .getValue() === 'Jackson'
+    return form.getField('name').get('lastName').getValue() === 'Jackson'
       ? true
       : undefined;
   });
@@ -52,9 +49,9 @@ it('should set', async () => {
     id: undefined,
     name: {
       firstName: 'Michael',
-      lastName: 'Jackson'
+      lastName: 'Jackson',
     },
-    save: undefined
+    save: undefined,
   });
 });
 
@@ -67,11 +64,11 @@ const createFormNestedSet = () => {
         actions: [
           new Set({
             name: 'fields.name.lastName.value',
-            value: 'Jackson'
-          })
-        ]
-      }
-    ]
+            value: 'Jackson',
+          }),
+        ],
+      },
+    ],
   });
 };
 
@@ -79,35 +76,32 @@ it('should set nested components', async () => {
   const form = createFormNestedSet();
   form.getField('save').emitClick();
   await testUtils.waitFor(() => {
-    return form
-      .getField('name')
-      .get('lastName')
-      .getValue() === 'Jackson'
+    return form.getField('name').get('lastName').getValue() === 'Jackson'
       ? true
       : undefined;
   });
   expect(form.getValues()).toEqual({
     id: undefined,
     name: {
-      lastName: 'Jackson'
+      lastName: 'Jackson',
     },
-    save: undefined
+    save: undefined,
   });
 });
 
 it('should set globals', async () => {
   const set = new Set({
     name: 'globals.redirectAfterLogin',
-    value: '/account'
+    value: '/account',
   });
 
   let propsSet = null;
 
   // Mock
   set._globals = {
-    set: props => {
+    set: (props) => {
       propsSet = props;
-    }
+    },
   };
 
   await set.run({ arguments: null });
@@ -117,33 +111,30 @@ it('should set globals', async () => {
 it('should set using arguments when value is undefined', async () => {
   const form = createForm();
   const set = new Set({
-    name: 'fields.name.lastName.value'
+    name: 'fields.name.lastName.value',
   });
   await set.run({ arguments: 'Fooerson', component: form });
-  expect(
-    form
-      .getField('name')
-      .get('lastName')
-      .get('value')
-  ).toEqual('Fooerson');
+  expect(form.getField('name').get('lastName').get('value')).toEqual(
+    'Fooerson'
+  );
 });
 
 it('should set nested value of property', async () => {
   const component = new Factory({
-    product: () => createForm()
+    product: () => createForm(),
   });
 
   const set = new Set({
     name: 'properties',
     value: {
-      'fields.lastName.value': '{{arguments}}'
-    }
+      'fields.lastName.value': '{{arguments}}',
+    },
   });
 
   await set.run({ arguments: 'Jackson', component });
 
   expect(component.get('properties')).toEqual({
-    'fields.lastName.value': 'Jackson'
+    'fields.lastName.value': 'Jackson',
   });
 });
 
@@ -153,11 +144,27 @@ it('should set with component', async () => {
   const set = new Set({
     name: 'component',
     value: {
-      'fields.name.lastName.value': '{{arguments}}'
-    }
+      'fields.name.lastName.value': '{{arguments}}',
+    },
   });
 
   await set.run({ arguments: 'Jackson', component });
 
   expect(component.get('fields.name.lastName.value')).toEqual('Jackson');
+});
+
+it('should set target', async () => {
+  const component = createForm();
+
+  const set = new Set({
+    target: component,
+    name: 'fields.name.value',
+    value: {
+      firstName: 'Peter',
+    },
+  });
+
+  await set.run({ arguments: null });
+
+  expect(component.get('fields.name.firstName.value')).toEqual('Peter');
 });
