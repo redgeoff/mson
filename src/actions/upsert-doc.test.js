@@ -2,24 +2,24 @@ import UpsertDoc from './upsert-doc';
 import compiler from '../compiler';
 import MemoryStore from '../stores/memory-store';
 
-it('should upsert doc', async () => {
+const shouldUpsertDoc = async (specifyForm) => {
   const form = compiler.newComponent({
     component: 'Form',
     fields: [
       {
         component: 'TextField',
-        name: 'firstName'
+        name: 'firstName',
       },
       {
         component: 'TextField',
-        name: 'lastName'
-      }
-    ]
+        name: 'lastName',
+      },
+    ],
   });
 
   const fieldValues = {
     firstName: 'Aretha',
-    lastName: 'Franklin'
+    lastName: 'Franklin',
   };
 
   form.setValues(fieldValues);
@@ -32,21 +32,36 @@ it('should upsert doc', async () => {
   const updateSpy = jest.spyOn(store, 'updateDoc');
 
   // Create
-  const createdDoc = await upsertDoc.act({
-    component: form
-  });
+  let createdDoc;
+
+  if (specifyForm) {
+    upsertDoc.set({ form });
+    createdDoc = await upsertDoc.act();
+  } else {
+    createdDoc = await upsertDoc.act({
+      component: form,
+    });
+  }
   expect(createSpy).toHaveBeenCalledWith({
-    form
+    form,
   });
 
   // Update
   const id = createdDoc.id;
   form.setValues({ id });
   await upsertDoc.act({
-    component: form
+    component: form,
   });
   expect(updateSpy).toHaveBeenCalledWith({
     id,
-    form
+    form,
   });
+};
+
+it('should upsert doc', async () => {
+  await shouldUpsertDoc();
+});
+
+it('should upsert doc when form specified', async () => {
+  await shouldUpsertDoc(true);
 });
