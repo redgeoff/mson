@@ -35,6 +35,7 @@ import Form from './form';
 import FormAccess from './form/form-access';
 import FormField from './fields/form-field';
 import FormValidator from './form/form-validator';
+import GenerateComponent from './actions/generate-component';
 import GetDoc from './actions/get-doc';
 import GetDocs from './actions/get-docs';
 import Grid from './grid';
@@ -131,6 +132,7 @@ export default {
   FirebaseStore,
   Form,
   FormField,
+  GenerateComponent,
   GetDoc,
   GetDocs,
   Grid,
@@ -194,5 +196,5 @@ export default {
   UserList,
   Vault,
   WhereField,
-  WrappedComponent
+  WrappedComponent,
 };
