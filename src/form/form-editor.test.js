@@ -9,40 +9,44 @@ beforeEach(() => {
   editor = new FormEditor();
 });
 
-const definition = {
+const getDefinition = (withIds) => ({
   component: 'Form',
   fields: [
     {
+      id: withIds ? '1' : undefined,
       component: 'Text',
       text: '# Foo',
     },
     {
+      id: withIds ? '2' : undefined,
       name: 'firstName',
       component: 'TextField',
       label: 'First Name',
     },
     {
+      id: withIds ? '3' : undefined,
       name: 'birthday',
       component: 'DateField',
       label: 'Birthday',
     },
   ],
-};
+});
 
-const getValues = (withDefaults) => ({
+const getValues = () => ({
   fields: [
     {
+      id: '1',
       componentName: 'Text',
       text: '# Foo',
     },
     {
-      id: withDefaults ? 1 : undefined,
+      id: '2',
       name: 'firstName',
       componentName: 'TextField',
       label: 'First Name',
     },
     {
-      id: withDefaults ? 2 : undefined,
+      id: '3',
       name: 'birthday',
       componentName: 'DateField',
       label: 'Birthday',
@@ -51,13 +55,13 @@ const getValues = (withDefaults) => ({
 });
 
 it('should set definition', () => {
-  editor.set({ definition });
-  expect(editor.getValues()).toEqual(getValues(false));
+  editor.set({ definition: getDefinition(true) });
+  expect(editor.getValues()).toEqual(getValues());
 });
 
 it('should get definition', () => {
   expect(editor.get('definition')).toEqual({ component: 'Form', fields: [] });
 
-  editor.setValues(getValues(true));
-  expect(editor.get('definition')).toEqual(definition);
+  editor.setValues(getValues());
+  expect(editor.get('definition')).toEqual(getDefinition());
 });

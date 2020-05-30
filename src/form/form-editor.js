@@ -31,9 +31,8 @@ export default class FormEditor extends Form {
           includeExtraneous: true,
           forbidOrder: false,
           formFactory: new Factory({
-            // Generate a unique id so that the UI has a key when displaying a list of items. TODO:
-            // is this the best place to generate the id? We don't want the rendering layer adding
-            // the ids so probably.
+            // Generate a unique id so that the UI has a key when displaying a list of items. We
+            // generate the id here as we don't want the rendering layer adding the ids.
             product: () => new FieldEditorForm({ value: { id: utils.uuid() } }),
           }),
         }),
