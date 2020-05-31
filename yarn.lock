@@ -4497,10 +4497,10 @@ cosmiconfig@^6.0.0:
     path-type "^4.0.0"
     yaml "^1.7.2"
 
-country-telephone-data@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/country-telephone-data/-/country-telephone-data-0.6.0.tgz#98711d3b2a692f7558f6ec74f88314c060daf39d"
-  integrity sha512-cscLBeYt+Xo3VNc2H22oJz1oAGMBGP7ymWRSRUzl2oDZSIhjuhSF59RcpWtsz1nCsocrHSpH9dRrf0UiQiISeg==
+country-telephone-data@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/country-telephone-data/-/country-telephone-data-0.6.2.tgz#591a82a4ec605a2ab72537425c59a537c10b1990"
+  integrity sha512-DWlv73QKnPLSyGX3lmWVnn7ZIeM/z+Mv1v1pR0fsUMka0/ICDxwAzC2MRsUaNWQKS5a/J5MOm5GcLomDhWJ3Yg==
 
 create-ecdh@^4.0.0:
   version "4.0.3"
@@ -4836,10 +4836,10 @@ data-urls@^1.0.0, data-urls@^1.1.0:
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
 
-date-fns@^2.12.0:
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.12.0.tgz#01754c8a2f3368fc1119cf4625c3dad8c1845ee6"
-  integrity sha512-qJgn99xxKnFgB1qL4jpxU7Q2t0LOn1p8KMIveef3UZD7kqjT3tpFNNdXJelEHhE+rUgffriXriw/sOSU+cS1Hw==
+date-fns@^2.14.0:
+  version "2.14.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.14.0.tgz#359a87a265bb34ef2e38f93ecf63ac453f9bc7ba"
+  integrity sha512-1zD+68jhFgDIM0rF05rcwYO8cExdNqxjq4xP1QKM60Q45mnO6zaMWB4tOzrIr4M4GSLntsKeE4c9Bdl2jhL/yw==
 
 date-now@^0.1.4:
   version "0.1.4"
