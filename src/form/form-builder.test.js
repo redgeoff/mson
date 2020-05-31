@@ -51,6 +51,12 @@ it('should set mson', () => {
   expect(builder.getValues()).toEqual(getValues());
 });
 
+it('should set mson via value', () => {
+  const mson = getMSON(true);
+  builder.set({ value: { mson } });
+  expect(builder.getValues()).toEqual({ ...getValues(), mson });
+});
+
 it('should get mson', () => {
   expect(builder.get('mson')).toEqual({ component: 'Form', fields: [] });
 
