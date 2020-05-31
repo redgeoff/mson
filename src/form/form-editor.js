@@ -2,6 +2,7 @@ import Form from './form';
 import CollectionField from '../fields/collection-field';
 import Factory from '../component/factory';
 import FieldEditorForm from './field-editor-form';
+import utils from '../utils';
 
 export default class FormEditor extends Form {
   _className = 'FormEditor';
@@ -30,7 +31,9 @@ export default class FormEditor extends Form {
           includeExtraneous: true,
           forbidOrder: false,
           formFactory: new Factory({
-            product: () => new FieldEditorForm(),
+            // Generate a unique id so that the UI has a key when displaying a list of items. We
+            // generate the id here as we don't want the rendering layer adding the ids.
+            product: () => new FieldEditorForm({ value: { id: utils.uuid() } }),
           }),
         }),
       ],

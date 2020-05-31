@@ -9,33 +9,35 @@ beforeEach(() => {
   builder = new FormBuilder();
 });
 
-const mson = {
+const getMSON = (withIds) => ({
   component: 'Form',
   fields: [
     {
+      id: withIds ? '1' : undefined,
       name: 'firstName',
       component: 'TextField',
       label: 'First Name',
     },
     {
+      id: withIds ? '2' : undefined,
       name: 'birthday',
       component: 'DateField',
       label: 'Birthday',
     },
   ],
-};
+});
 
-const getValues = (withDefaults) => ({
+const getValues = () => ({
   form: {
     fields: [
       {
-        id: withDefaults ? 1 : undefined,
+        id: '1',
         name: 'firstName',
         componentName: 'TextField',
         label: 'First Name',
       },
       {
-        id: withDefaults ? 2 : undefined,
+        id: '2',
         name: 'birthday',
         componentName: 'DateField',
         label: 'Birthday',
@@ -45,13 +47,19 @@ const getValues = (withDefaults) => ({
 });
 
 it('should set mson', () => {
-  builder.set({ mson });
-  expect(builder.getValues()).toEqual(getValues(false));
+  builder.set({ mson: getMSON(true) });
+  expect(builder.getValues()).toEqual(getValues());
+});
+
+it('should set mson via value', () => {
+  const mson = getMSON(true);
+  builder.set({ value: { mson } });
+  expect(builder.getValues()).toEqual({ ...getValues(), mson });
 });
 
 it('should get mson', () => {
   expect(builder.get('mson')).toEqual({ component: 'Form', fields: [] });
 
-  builder.setValues(getValues(true));
-  expect(builder.get('mson')).toEqual(mson);
+  builder.setValues(getValues());
+  expect(builder.get('mson')).toEqual(getMSON());
 });

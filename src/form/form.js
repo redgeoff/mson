@@ -670,7 +670,7 @@ export default class Form extends UIComponent {
       } else {
         each(values, (value, name) => {
           // Not a nested field? Nested fields in the values aren't supported, but we need to ignore
-          // them as they are validate in component definitions
+          // them as they are valid in component definitions
           if (name.indexOf('.') === -1) {
             if (this.hasField(name)) {
               this.getField(name).setValue(value);
