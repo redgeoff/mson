@@ -9,7 +9,7 @@ beforeEach(() => {
   builder = new FormBuilder();
 });
 
-const getMSON = (withIds) => ({
+const getDefinition = (withIds) => ({
   component: 'Form',
   fields: [
     {
@@ -46,20 +46,20 @@ const getValues = () => ({
   },
 });
 
-it('should set mson', () => {
-  builder.set({ mson: getMSON(true) });
+it('should set definition', () => {
+  builder.set({ definition: getDefinition(true) });
   expect(builder.getValues()).toEqual(getValues());
 });
 
-it('should set mson via value', () => {
-  const mson = getMSON(true);
-  builder.set({ value: { mson } });
-  expect(builder.getValues()).toEqual({ ...getValues(), mson });
+it('should set definition via value', () => {
+  const definition = getDefinition(true);
+  builder.set({ value: { definition } });
+  expect(builder.getValues()).toEqual({ ...getValues(), definition });
 });
 
-it('should get mson', () => {
-  expect(builder.get('mson')).toEqual({ component: 'Form', fields: [] });
+it('should get definition', () => {
+  expect(builder.get('definition')).toEqual({ component: 'Form', fields: [] });
 
   builder.setValues(getValues());
-  expect(builder.get('mson')).toEqual(getMSON());
+  expect(builder.get('definition')).toEqual(getDefinition());
 });

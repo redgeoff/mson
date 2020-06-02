@@ -18,7 +18,7 @@ export default class FormBuilder extends Form {
         component: 'Form',
         fields: [
           {
-            name: 'mson',
+            name: 'definition',
             component: 'Field',
           },
         ],
@@ -47,7 +47,7 @@ export default class FormBuilder extends Form {
         }),
 
         new Text({
-          name: 'mson',
+          name: 'definition',
           hidden: true,
         }),
 
@@ -88,11 +88,11 @@ export default class FormBuilder extends Form {
           event: 'fields.tabs.content.export',
           actions: [
             new JSONStringify({
-              value: '{{mson}}',
+              value: '{{definition}}',
               space: 2,
             }),
             new Set({
-              name: 'fields.mson.content.text',
+              name: 'fields.definition.content.text',
               value: '```js\n{{arguments}}\n```\n',
             }),
             new Emit({
@@ -109,7 +109,7 @@ export default class FormBuilder extends Form {
           event: 'setCodeHidden',
           actions: [
             new Set({
-              name: 'fields.mson.content.hidden',
+              name: 'fields.definition.content.hidden',
               value: '{{arguments.hideCode}}',
             }),
             new Set({
@@ -135,8 +135,8 @@ export default class FormBuilder extends Form {
     });
   }
 
-  _setMSON(mson) {
-    const fields = mson.fields.map((field) => {
+  _setDefinition(definition) {
+    const fields = definition.fields.map((field) => {
       // Use componentName instead of component
       const value = {
         ...field,
@@ -150,20 +150,20 @@ export default class FormBuilder extends Form {
   }
 
   set(props) {
-    super.set({ ...props, mson: undefined });
+    super.set({ ...props, definition: undefined });
 
-    if (props.mson !== undefined) {
-      this._setMSON(props.mson);
+    if (props.definition !== undefined) {
+      this._setDefinition(props.definition);
     }
 
-    // We also allow the MSON to be set via the value so that both the MSON and other values, like
-    // id & userId, can be set simultaneously
-    if (props.value !== undefined && props.value.mson !== undefined) {
-      this._setMSON(props.value.mson);
+    // We also allow the definition to be set via the value so that both the definition and other
+    // values, like id & userId, can be set simultaneously
+    if (props.value !== undefined && props.value.definition !== undefined) {
+      this._setDefinition(props.value.definition);
     }
   }
 
-  _getMSON() {
+  _getDefinition() {
     return {
       component: 'Form',
       fields: this.get('fields.form.form.fields.fields').mapForms((form) => ({
@@ -175,8 +175,8 @@ export default class FormBuilder extends Form {
   }
 
   getOne(name) {
-    if (name === 'mson') {
-      return this._getMSON();
+    if (name === 'definition') {
+      return this._getDefinition();
     }
 
     return super.getOne(name);
