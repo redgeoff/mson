@@ -310,16 +310,11 @@ export default class Field extends UIComponent {
   }
 
   getFirstErr() {
-    const err = this.get('err');
-    if (Array.isArray(err)) {
-      if (Array.isArray(err[0].error)) {
-        return err[0].error[0].error;
-      } else {
-        return err[0].error;
-      }
-    } else {
-      return err;
+    let err = this.get('err');
+    while (Array.isArray(err)) {
+      err = err[0].error;
     }
+    return err;
   }
 
   // Method used to determine if this component is a field, even if it is wrapped
