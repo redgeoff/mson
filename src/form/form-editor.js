@@ -33,7 +33,7 @@ export default class FormEditor extends Form {
           formFactory: new Factory({
             // Generate a unique id so that the UI has a key when displaying a list of items. We
             // generate the id here as we don't want the rendering layer adding the ids.
-            product: () => new FieldEditorForm({ value: { id: utils.uuid() } }),
+            // product: () => new FieldEditorForm({ value: { id: utils.uuid() } }),
             // product: () => new FieldEditorForm({
             //   value: { id: utils.uuid() },
             //   validators: [
@@ -64,7 +64,7 @@ export default class FormEditor extends Form {
                             $and: [
                               {
                                 id: {
-                                  $ne: '{{fields.name.id}}',
+                                  $ne: '{{fields.id.value}}',
                                 },
                               },
                               { name: '{{fields.name.value}}' },

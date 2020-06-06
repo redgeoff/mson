@@ -76,6 +76,59 @@ it('should get prop names from query', () => {
   expect(names).toEqual({ 'foo.nar.jar.kar': true });
 });
 
+it('should get prop names from query for NEW CASE', () => {
+  let names = {};
+  // TODO: why is this case different?
+
+  // queryToPropNames({
+  //   parent: {
+  //     value: {
+  //       id: {
+  //         value: 'foo'
+  //       }
+  //     },
+  //   },
+  // }, names);
+
+  // queryToPropNames({
+  //   parent: {
+  //     value: {
+  //       $elemMatch: {
+  //         $and: [
+  //           {id: '1'},
+  //           {name: 'foo'}
+  //         ]
+  //       },
+  //     },
+  //   },
+  // }, names);
+
+  queryToPropNames(
+    {
+      parent: {
+        value: {
+          $elemMatch: {
+            $and: [
+              {
+                id: {
+                  $ne: '{{fields.id.value}}',
+                },
+              },
+              { name: '{{fields.name.value}}' },
+            ],
+          },
+        },
+      },
+    },
+    names
+  );
+  // PROBLEM: returns names = { 'parent.value.id': true, 'parent.value.name': true }, but the position of the array element isn't actually known so cannot then get value from component!!
+  // => Should it just be names = { 'parent.value': true } => YES, SEEMS TO WORK!!
+
+  console.log(names);
+  // expect(names).toEqual({ 'foo.nar.jar.kar': true });
+});
+
 it('should convert simple query', () => {
   const component = new MockComponent({ name: 'bar' });
   const props = queryToProps({ name: 'foo' }, component);
