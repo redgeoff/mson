@@ -311,8 +311,16 @@ export default class Field extends UIComponent {
 
   getFirstErr() {
     let err = this.get('err');
+    let i = 0;
+    const MAX_DEPTH = 2;
     while (Array.isArray(err)) {
-      err = err[0].error;
+      if (i++ == MAX_DEPTH) {
+        // We don't expect this much nesting so stringify the result so that the UI reveals details
+        // that will help to identify the root problem
+        return JSON.stringify(err);
+      } else {
+        err = err[0].error;
+      }
     }
     return err;
   }
