@@ -101,6 +101,9 @@ it('should get first error', () => {
 
   field.set({ err: [{ error: [{ error: '3rd layer' }] }] });
   expect(field.getFirstErr()).toEqual('3rd layer');
+
+  field.set({ err: [{ error: [{ error: [{ error: '4th layer' }] }] }] });
+  expect(field.getFirstErr()).toEqual(JSON.stringify([{ error: '4th layer' }]));
 });
 
 it('should identify as field', () => {
