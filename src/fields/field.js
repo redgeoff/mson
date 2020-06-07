@@ -315,8 +315,8 @@ export default class Field extends UIComponent {
     const MAX_DEPTH = 2;
     while (Array.isArray(err)) {
       if (i++ == MAX_DEPTH) {
-        // We don't expect this much nesting so stringify the result so that the UI reveals details
-        // that will help to identify the root problem
+        // We don't expect this much nesting, therefore we will stringify the result to allow the UI
+        // to reveal details that will help to identify the root problem
         return JSON.stringify(err);
       } else {
         err = err[0].error;
