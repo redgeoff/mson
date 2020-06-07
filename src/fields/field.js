@@ -310,16 +310,19 @@ export default class Field extends UIComponent {
   }
 
   getFirstErr() {
-    const err = this.get('err');
-    if (Array.isArray(err)) {
-      if (Array.isArray(err[0].error)) {
-        return err[0].error[0].error;
+    let err = this.get('err');
+    let i = 0;
+    const MAX_DEPTH = 2;
+    while (Array.isArray(err)) {
+      if (i++ == MAX_DEPTH) {
+        // We don't expect this much nesting, therefore we will stringify the result to allow the UI
+        // to reveal details that will help to identify the root problem
+        return JSON.stringify(err);
       } else {
-        return err[0].error;
+        err = err[0].error;
       }
-    } else {
-      return err;
     }
+    return err;
   }
 
   // Method used to determine if this component is a field, even if it is wrapped
