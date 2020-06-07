@@ -8,13 +8,23 @@ export const queryToPropNames = (query, names, parentName) => {
       query.forEach((item) => queryToPropNames(item, names, parentName));
     } else {
       forEach(query, (item, name) => {
+        let itemParentName = parentName;
+
         // Not operator? TODO: actually check operators so that we support variables that begin with
         // $
         if (name.charAt(0) !== '$') {
-          parentName =
+          itemParentName =
             parentName === undefined ? name : parentName + '.' + name;
         }
-        queryToPropNames(item, names, parentName);
+
+        if (name === '$elemMatch') {
+          // We want to set the parent item and then skip the rest of the current tree so that the
+          // query can scan the entire array. We cannot determine which array element will be chosen
+          // until the query is run.
+          names[itemParentName] = true;
+        } else {
+          queryToPropNames(item, names, itemParentName);
+        }
       });
     }
   } else {

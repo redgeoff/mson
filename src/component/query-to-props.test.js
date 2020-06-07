@@ -76,57 +76,44 @@ it('should get prop names from query', () => {
   expect(names).toEqual({ 'foo.nar.jar.kar': true });
 });
 
-it('should get prop names from query for NEW CASE', () => {
+it('should get prop names from query for when multiple sibling props', () => {
   let names = {};
-  // TODO: why is this case different?
-
-  // queryToPropNames({
-  //   parent: {
-  //     value: {
-  //       id: {
-  //         value: 'foo'
-  //       }
-  //     },
-  //   },
-  // }, names);
-
-  // queryToPropNames({
-  //   parent: {
-  //     value: {
-  //       $elemMatch: {
-  //         $and: [
-  //           {id: '1'},
-  //           {name: 'foo'}
-  //         ]
-  //       },
-  //     },
-  //   },
-  // }, names);
 
   queryToPropNames(
     {
-      parent: {
-        value: {
+      id: '1',
+      name: 'foo',
+    },
+    names
+  );
+
+  expect(names).toEqual({ id: true, name: true });
+});
+
+it('should get prop names from query for when using $elemMatch', () => {
+  let names = {};
+
+  queryToPropNames(
+    {
+      // Nesting the values to ensure that we preserve the nesting when short circuiting on the
+      // array with elemMatch
+      nested: {
+        items: {
           $elemMatch: {
-            $and: [
-              {
-                id: {
-                  $ne: '{{fields.id.value}}',
-                },
-              },
-              { name: '{{fields.name.value}}' },
-            ],
+            id: 'foo',
           },
         },
+
+        // Including an extra attribute to ensure that we don't skip it
+        handle: 'Harper',
       },
     },
     names
   );
-  // PROBLEM: returns names = { 'parent.value.id': true, 'parent.value.name': true }, but the position of the array element isn't actually known so cannot then get value from component!!
-  // => Should it just be names = { 'parent.value': true } => YES, SEEMS TO WORK!!
 
-  console.log(names);
-  // expect(names).toEqual({ 'foo.nar.jar.kar': true });
+  // We want `items` and not `items.id` to be set so that the query can scan the entire array. We
+  // cannot determine which array element will be chosen until the query is run.
+  expect(names).toEqual({ 'nested.items': true, 'nested.handle': true });
 });
 
 it('should convert simple query', () => {
