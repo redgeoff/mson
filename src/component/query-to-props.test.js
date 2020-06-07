@@ -76,6 +76,46 @@ it('should get prop names from query', () => {
   expect(names).toEqual({ 'foo.nar.jar.kar': true });
 });
 
+it('should get prop names from query for when multiple sibling props', () => {
+  let names = {};
+
+  queryToPropNames(
+    {
+      id: '1',
+      name: 'foo',
+    },
+    names
+  );
+
+  expect(names).toEqual({ id: true, name: true });
+});
+
+it('should get prop names from query for when using $elemMatch', () => {
+  let names = {};
+
+  queryToPropNames(
+    {
+      // Nesting the values to ensure that we preserve the nesting when short circuiting on the
+      // array with elemMatch
+      nested: {
+        items: {
+          $elemMatch: {
+            id: 'foo',
+          },
+        },
+
+        // Including an extra attribute to ensure that we don't skip it
+        handle: 'Harper',
+      },
+    },
+    names
+  );
+
+  // We want `items` and not `items.id` to be set so that the query can scan the entire array. We
+  // cannot determine which array element will be chosen until the query is run.
+  expect(names).toEqual({ 'nested.items': true, 'nested.handle': true });
+});
+
 it('should convert simple query', () => {
   const component = new MockComponent({ name: 'bar' });
   const props = queryToProps({ name: 'foo' }, component);
