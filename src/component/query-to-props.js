@@ -50,7 +50,6 @@ const queryToProps = (query, component) => {
   const names = {};
 
   queryToPropNames(query, names);
-  names['parent.value'] = true;
 
   forEach(names, (value, name) => {
     try {

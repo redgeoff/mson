@@ -30,31 +30,15 @@ export default class FormEditor extends Form {
           skipRead: true,
           includeExtraneous: true,
           forbidOrder: false,
+
           formFactory: new Factory({
-            // Generate a unique id so that the UI has a key when displaying a list of items. We
-            // generate the id here as we don't want the rendering layer adding the ids.
-            // product: () => new FieldEditorForm({ value: { id: utils.uuid() } }),
-            // product: () => new FieldEditorForm({
-            //   value: { id: utils.uuid() },
-            //   validators: [
-            //     {
-            //       where: {
-            //         fields: {
-            //           name: {
-            //             value: 'foo'
-            //           }
-            //         }
-            //       },
-            //       error: {
-            //         field: 'name',
-            //         error: 'must not be foo'
-            //       }
-            //     }
-            //   ]
-            // }),
             product: () =>
               new FieldEditorForm({
-                value: { id: utils.uuid() },
+                value: {
+                  // Generate a unique id so that the UI has a key when displaying a list of items.
+                  // We generate the id here as we don't want the rendering layer adding the ids.
+                  id: utils.uuid(),
+                },
                 validators: [
                   {
                     where: {
@@ -72,18 +56,6 @@ export default class FormEditor extends Form {
                           },
                         },
                       },
-
-                      // parent: {
-                      //   value: 'foo'
-                      // }
-
-                      // parent {
-                      //   fields: {
-                      //     name: {
-                      //       value: 'foo'
-                      //     }
-                      //   }
-                      // }
                     },
                     error: {
                       field: 'name',
