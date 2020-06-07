@@ -96,6 +96,7 @@ import UpsertDoc from './actions/upsert-doc';
 import URLField from './fields/url-field';
 import User from './form/user';
 import UserList from './aggregate/user-list';
+import UUIDField from './fields/uuid-field';
 import Vault from './vaults/vault';
 import WhereField from './fields/where-field';
 import WrappedComponent from './component/wrapped-component';
@@ -194,6 +195,7 @@ export default {
   URLField,
   User,
   UserList,
+  UUIDField,
   Vault,
   WhereField,
   WrappedComponent,
