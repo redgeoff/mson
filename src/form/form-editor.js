@@ -30,10 +30,40 @@ export default class FormEditor extends Form {
           skipRead: true,
           includeExtraneous: true,
           forbidOrder: false,
+
           formFactory: new Factory({
-            // Generate a unique id so that the UI has a key when displaying a list of items. We
-            // generate the id here as we don't want the rendering layer adding the ids.
-            product: () => new FieldEditorForm({ value: { id: utils.uuid() } }),
+            product: () =>
+              new FieldEditorForm({
+                value: {
+                  // Generate a unique id so that the UI has a key when displaying a list of items.
+                  // We generate the id here as we don't want the rendering layer adding the ids.
+                  id: utils.uuid(),
+                },
+                validators: [
+                  {
+                    where: {
+                      parent: {
+                        value: {
+                          $elemMatch: {
+                            $and: [
+                              {
+                                id: {
+                                  $ne: '{{fields.id.value}}',
+                                },
+                              },
+                              { name: '{{fields.name.value}}' },
+                            ],
+                          },
+                        },
+                      },
+                    },
+                    error: {
+                      field: 'name',
+                      error: 'must be unique',
+                    },
+                  },
+                ],
+              }),
           }),
         }),
       ],
@@ -41,10 +71,15 @@ export default class FormEditor extends Form {
   }
 
   _setDefinition(definition) {
-    const fields = definition.fields.map((field) => ({
-      ...field,
-      componentName: field.component,
-    }));
+    const fields = definition.fields.map((field) => {
+      // Use componentName instead of component
+      const value = {
+        ...field,
+        componentName: field.component,
+      };
+      delete value.component;
+      return value;
+    });
 
     this.get('fields.fields').setValue(fields);
   }
