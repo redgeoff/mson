@@ -65,3 +65,30 @@ it('should get definition', () => {
   editor.setValues(getValues());
   expect(editor.get('definition')).toEqual(getDefinition());
 });
+
+it('should prevent duplicate field names', () => {
+  const definition = {
+    component: 'Form',
+    fields: [
+      {
+        name: 'name',
+        component: 'TextField',
+        label: 'Name',
+      },
+      {
+        name: 'name',
+        component: 'PersonFullNameField',
+      },
+    ],
+  };
+  editor.set({ definition });
+
+  editor.validate();
+  const errs = editor.getErrs();
+  expect(errs[0].error[0].error).toEqual([
+    {
+      field: 'name',
+      error: 'must be unique',
+    },
+  ]);
+});

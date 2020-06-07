@@ -71,10 +71,15 @@ export default class FormEditor extends Form {
   }
 
   _setDefinition(definition) {
-    const fields = definition.fields.map((field) => ({
-      ...field,
-      componentName: field.component,
-    }));
+    const fields = definition.fields.map((field) => {
+      // Use componentName instead of component
+      const value = {
+        ...field,
+        componentName: field.component,
+      };
+      delete value.component;
+      return value;
+    });
 
     this.get('fields.fields').setValue(fields);
   }
