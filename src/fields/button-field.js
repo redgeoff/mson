@@ -31,6 +31,12 @@ export default class ButtonField extends Field {
             // configure at the theme layer
             hidden: true,
           },
+          {
+            name: 'tooltip',
+            component: 'TextField',
+            label: 'Tooltip',
+            docLevel: 'basic',
+          },
         ],
       },
     });
