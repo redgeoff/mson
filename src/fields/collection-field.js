@@ -182,6 +182,10 @@ export default class CollectionField extends Field {
             name: 'preventDeleteAction',
             component: 'BooleanField',
           },
+          {
+            name: 'buttons',
+            component: 'Field',
+          },
         ],
       },
     });
