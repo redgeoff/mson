@@ -35,6 +35,7 @@ import Form from './form';
 import FormAccess from './form/form-access';
 import FormField from './fields/form-field';
 import FormValidator from './form/form-validator';
+import Fragment from './fragment';
 import GenerateComponent from './actions/generate-component';
 import GetDoc from './actions/get-doc';
 import GetDocs from './actions/get-docs';
@@ -133,6 +134,7 @@ export default {
   FirebaseStore,
   Form,
   FormField,
+  Fragment,
   GenerateComponent,
   GetDoc,
   GetDocs,
