@@ -22,11 +22,14 @@ export default class Factory extends Component {
     });
   }
 
-  produce() {
+  produce(props) {
     const component = this.get('product')();
     const properties = this.get('properties');
     if (properties) {
       component.set(properties);
+    }
+    if (props) {
+      component.set(props);
     }
     return component;
   }

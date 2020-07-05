@@ -127,7 +127,10 @@ it('should set and get nested values', async () => {
     phoneNumbers: ['(206) 111-1111', '(206) 222-2222'],
   });
 
-  form.getField('emails').getForm(0).setValues({ email: 'ella3@example.com' });
+  form
+    .getField('emails')
+    ._forms.first()
+    .setValues({ email: 'ella3@example.com' });
 
   form.getField('fullName').setValues({ lastName: 'Fitz' });
 

@@ -182,6 +182,10 @@ export default class CollectionField extends Field {
             name: 'preventDeleteAction',
             component: 'BooleanField',
           },
+          {
+            name: 'buttonsFactory',
+            component: 'Field',
+          },
         ],
       },
     });
@@ -215,6 +219,12 @@ export default class CollectionField extends Field {
     // Specifically, we use a CollectionStore as it maintains the order of the forms, because there
     // is no guarantee that the underlying store will be ordered.
     this._forms = new CollectionMapa();
+
+    // We use an associative array to store extra info that accompanies the forms, e.g. a
+    // buttonFactory to customize the buttons on the form card. In the future, it may be better to
+    // store this info directly in the _forms collection, but this could lead to extra complexity for
+    // things like generators that access the forms and introduce inefficiencies.
+    this._formExtras = {};
 
     this._listenForLoaded();
     this._listenForUnload();
@@ -355,11 +365,16 @@ export default class CollectionField extends Field {
     }
   }
 
+  _clearForms() {
+    this._forms.clear();
+    this._formExtras = {};
+  }
+
   async _clearAndGetAll() {
     // Clear any existing forms. TODO: it would be more efficient to just record ids of all
     // existing items and then use getAll() result to determine if item needs to be inserted or
     // removed (if current id missing)
-    this._forms.clear();
+    this._clearForms();
 
     this._resetInfiniteLoader();
 
@@ -595,25 +610,43 @@ export default class CollectionField extends Field {
     }
   }
 
+  _createFormExtras(form) {
+    const buttonsFactory = this.get('buttonsFactory');
+    let buttons = null;
+    if (buttonsFactory) {
+      buttons = buttonsFactory.produce({ parent: form });
+    }
+
+    return {
+      buttons,
+    };
+  }
+
+  _getFormKey(form) {
+    const id = form.getField('id');
+    if (id.isBlank()) {
+      // The id value is blank so use the unique id of the form. This provides a reliable way of
+      // getting formExtras for a form.
+      return form.getUniqueId();
+    } else {
+      return id.getValue();
+    }
+  }
+
   _addForm({ form, values, muteChange, cursor, beforeKey }) {
     form.setValues(values);
 
     form.set({ parent: this, cursor });
 
-    const id = form.getField('id');
-    let key = 0;
-    if (id.isBlank()) {
-      // The id value is blank so use the current _forms length as the key
-      key = this._forms.length();
-    } else {
-      key = id.getValue();
-    }
+    const key = this._getFormKey(form);
 
     // Set noResults to false as we now have results
     this.set({ noResults: false });
 
     // Add form to mapa
     this._forms.set(key, form, beforeKey);
+
+    this._formExtras[key] = this._createFormExtras(form);
 
     this._listenToForm(form);
 
@@ -758,7 +791,7 @@ export default class CollectionField extends Field {
       // up recreating the forms each time. Would it be better to just use index to set and if there
       // are indexes that are in the current forms, but not in values then just delete?
       this._clearAllFormListeners(); // prevent listener leaks
-      this._forms.clear();
+      this._clearForms();
 
       if (value && value.length > 0) {
         // Note: we add the form synchronously because set() and get() must remain synchronous (core
@@ -783,6 +816,7 @@ export default class CollectionField extends Field {
     const form = this._forms.get(id);
     form.removeAllListeners();
     this._forms.delete(id);
+    delete this._formExtras[id];
 
     this._calcValue();
 
@@ -799,6 +833,11 @@ export default class CollectionField extends Field {
 
   getForm(id) {
     return this._forms.get(id);
+  }
+
+  getFormExtras(form) {
+    const key = this._getFormKey(form);
+    return this._formExtras[key];
   }
 
   eachForm(onForm) {
