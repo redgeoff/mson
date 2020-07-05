@@ -625,8 +625,9 @@ export default class CollectionField extends Field {
   _getFormKey(form) {
     const id = form.getField('id');
     if (id.isBlank()) {
-      // The id value is blank so use the current _forms length as the key
-      return this._forms.length();
+      // The id value is blank so use the unique id of the form. This provides a reliable way of
+      // getting formExtras for a form.
+      return form.getUniqueId();
     } else {
       return id.getValue();
     }
