@@ -24,25 +24,25 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - dependencies-v1-{{ checksum "package.json" }}
-          - dependencies-v1-
+          - dependencies-v2-{{ checksum "package.json" }}
+          - dependencies-v2-
       - run: yarn install
       - save_cache:
           paths:
             - node_modules
-          key: dependencies-v1-{{ checksum "package.json" }}
+          key: dependencies-v2-{{ checksum "package.json" }}
 
       # Download private dependencies
       # - run: git clone ssh://git@bitbucket.org/redgeoff/mson-server ../mson-server
       # - restore_cache:
       #     keys:
-      #     - mson-server-dependencies-v1-{{ checksum "package.json" }}
-      #     - mson-server-dependencies-v1-
+      #     - mson-server-dependencies-v2-{{ checksum "package.json" }}
+      #     - mson-server-dependencies-v2-
       # - run: cd ../mson-server && yarn install
       # - save_cache:
       #     paths:
       #       - ../mson-server/node_modules
-      #     key: mson-server-dependencies-v1-{{ checksum "package.json" }}
+      #     key: mson-server-dependencies-v2-{{ checksum "package.json" }}
       # - run: cd ../mson-server && yarn compile
 
       # - run: yarn setup
