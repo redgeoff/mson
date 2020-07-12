@@ -5,31 +5,31 @@
   "author": "Geoff Cox",
   "license": "Apache-2.0",
   "dependencies": {
-    "@babel/runtime": "^7.7.7",
+    "@babel/runtime": "^7.10.4",
     "country-telephone-data": "^0.6.2",
     "date-fns": "^2.14.0",
     "events": "^3.1.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "sift": "^9.0.0",
     "text-mask-addons": "^3.8.0",
-    "uuid": "^8.1.0",
+    "uuid": "^8.2.0",
     "vanilla-text-mask": "^5.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.7.7",
-    "@babel/core": "^7.7.7",
-    "@babel/plugin-proposal-class-properties": "^7.7.4",
-    "@babel/plugin-transform-runtime": "^7.7.6",
-    "@babel/preset-env": "^7.7.7",
+    "@babel/cli": "^7.10.4",
+    "@babel/core": "^7.10.4",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-transform-runtime": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
     "babel-loader": "^8.1.0",
     "copyfiles": "^2.3.0",
     "cross-env": "^7.0.2",
     "husky": "^4.2.5",
-    "lint-staged": "^10.2.7",
+    "lint-staged": "^10.2.11",
     "prettier": "^2.0.5",
     "react-scripts": "^3.4.1",
     "webpack-bundle-analyzer": "^3.8.0",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.12"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,json,css}": [
