@@ -24,9 +24,9 @@
     "babel-loader": "^8.1.0",
     "copyfiles": "^2.3.0",
     "cross-env": "^7.0.2",
-    "husky": "^4.2.5",
-    "lint-staged": "^10.2.11",
-    "prettier": "^2.0.5",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.3.0",
+    "prettier": "^2.1.1",
     "react-scripts": "^3.4.1",
     "webpack-bundle-analyzer": "^3.8.0",
     "webpack-cli": "^3.3.12"
