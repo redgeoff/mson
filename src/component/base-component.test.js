@@ -593,10 +593,7 @@ it('should emit error when running listeners', async () => {
 
   const onActionErrSpy = jest.spyOn(component, '_onActionErr');
 
-  await testUtils.expectToThrow(
-    () => component._runListenersAndEmitError(),
-    err
-  );
+  await component._runListenersAndEmitError();
   expect(onActionErrSpy).toHaveBeenCalledWith(err);
 });
 
