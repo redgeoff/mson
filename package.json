@@ -39,8 +39,6 @@
   },
   "scripts": {
     "lint": "eslint --max-warnings=0 src",
-    "test-server-start": "cross-env NODE_ENV=production ./node_modules/@babel/node/bin/babel-node.js ../mson-server/bin/test-server.js --port=4002 --prefix=mson_test_ --CORE_TEST &",
-    "test-server-stop": "pkill -f --signal=SIGINT CORE_TEST & exit 0",
     "just-test": "react-scripts test --env=jsdom --maxWorkers=3 --testPathPattern='^((?!performance).)*test.js$'",
     "test:performance": "react-scripts test --env=jsdom --maxWorkers=1 --testPathPattern='performance.test.js$'",
     "test:coverage": "npm run just-test -- --coverage",
