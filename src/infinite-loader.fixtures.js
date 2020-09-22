@@ -187,7 +187,11 @@ export const createMockedStore = () => {
         id: props.id,
       };
     },
-    // restoreDoc: asyncNoop,
+    restoreDoc: async (props) => {
+      return {
+        id: props.id,
+      };
+    },
     on: noop,
   };
 };

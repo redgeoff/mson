@@ -31,6 +31,7 @@ export default class CollectionField extends Field {
     READ: 'read',
     UPDATE: 'update',
     DELETE: 'delete',
+    RESTORE: 'restore',
   };
 
   _create(props) {
@@ -912,6 +913,13 @@ export default class CollectionField extends Field {
     this._switchMode('beginDelete', false, true);
   }
 
+  async _restoreMode() {
+    this._switchMode('beginRestore', false, true);
+    const form = this.get('form');
+    await this.restore(form);
+    this.set({ mode: null });
+  }
+
   _emitEndEvents() {
     const form = this.get('form');
     const id = form.getValue('id');
@@ -926,6 +934,10 @@ export default class CollectionField extends Field {
 
       case CollectionField.MODES.DELETE:
         form.emitChange('endDelete', id);
+        break;
+
+      case CollectionField.MODES.RESTORE:
+        form.emitChange('endRestore', id);
         break;
 
       default:
@@ -965,6 +977,11 @@ export default class CollectionField extends Field {
 
       case CollectionField.MODES.DELETE:
         this._deleteMode();
+        preventAction = this.get('preventUpdate');
+        break;
+
+      case CollectionField.MODES.RESTORE:
+        this._restoreMode();
         preventAction = this.get('preventUpdate');
         break;
 

@@ -99,7 +99,7 @@ it('should change modes', async () => {
   expect(setEditable).toHaveBeenCalledWith(true);
 });
 
-it('should change modes when deleting', async () => {
+it('should change modes when deleting and restoring', async () => {
   const form = field.get('form');
   const firstForm = field._forms.first();
   const setEditable = jest.spyOn(form, 'setEditable');
@@ -121,6 +121,26 @@ it('should change modes when deleting', async () => {
   field.set({ mode: null });
   const endDeleteArgs = await endDelete;
   expect(endDeleteArgs[0]).toEqual('ray');
+  expect(field.get('mode')).toBeNull();
+
+  // Begin Restore
+  setEditable.mockClear();
+  setCurrentForm.mockClear();
+  let beginRestore = testUtils.once(form, 'beginRestore');
+  let endRestore = testUtils.once(form, 'endRestore');
+  field.set({ currentForm: firstForm, mode: CollectionField.MODES.RESTORE });
+  const beginRestoreArgs = await beginRestore;
+  expect(beginRestoreArgs[0]).toEqual('ray');
+  expect(setEditable).toHaveBeenCalledTimes(1);
+  expect(setEditable).toHaveBeenCalledWith(false);
+  expect(setCurrentForm).toHaveBeenCalledTimes(1);
+  expect(setCurrentForm).toHaveBeenCalledWith(firstForm);
+
+  // Restore
+  await field.restore(firstForm);
+  field.set({ mode: null });
+  const endRestoreArgs = await endRestore;
+  expect(endRestoreArgs[0]).toEqual('ray');
   expect(field.get('mode')).toBeNull();
 });
 
