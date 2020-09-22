@@ -936,7 +936,7 @@ export default class CollectionField extends Field {
         form.emitChange('endDelete', id);
         break;
 
-      case CollectionField.MODES.DELETE:
+      case CollectionField.MODES.RESTORE:
         form.emitChange('endRestore', id);
         break;
 
