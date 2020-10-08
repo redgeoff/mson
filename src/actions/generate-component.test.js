@@ -37,5 +37,3 @@ it('should generate component', async () => {
   const generatedForm = await generateComponent.run({ arguments: 'Form' });
   expect(generatedForm.getValue('name')).toEqual('Harriet');
 });
-
-// TODO: example with just MSON
