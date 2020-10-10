@@ -38,6 +38,8 @@ export default class GenerateComponent extends Action {
     // return factory.produce();
 
     const definition = this.get('definition');
+
+    // Note: we use this._registrar.compiler to avoid a circular dependency
     return this._registrar.compiler.newComponent(JSON.parse(definition));
   }
 }
