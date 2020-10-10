@@ -69,3 +69,34 @@ it('should handle circular references', () => {
   clonedItems.v = 'tar';
   expect(filler.fillAll(items)).toEqual(clonedItems);
 });
+
+it('should handle JSON strings', () => {
+  const props = {
+    foo: 'bar',
+  };
+  const filler = new PropFiller(props);
+
+  const form = {
+    component: 'Form',
+    fields: [
+      {
+        name: 'definition',
+        component: 'Field',
+      },
+    ],
+    value: {
+      id: '{{foo}}',
+      definition: '{{foo}}',
+    },
+  };
+
+  expect(filler.fill(JSON.stringify(form))).toEqual(
+    JSON.stringify({
+      ...form,
+      value: {
+        id: 'bar',
+        definition: 'bar',
+      },
+    })
+  );
+});
