@@ -1,4 +1,5 @@
 import Action from './action';
+import compiler from '../compiler';
 
 export default class GenerateComponent extends Action {
   _className = 'GenerateComponent';
@@ -10,9 +11,22 @@ export default class GenerateComponent extends Action {
       schema: {
         component: 'Form',
         fields: [
+          // Note: we are no longer using a componentFactory, as we now opt to generate the
+          // component from a string. This in turn, allows us to make any aspect of the component
+          // dynamic, including the component type.
+          //
+          // In the future, we may want to bring back the componentFactory functionality, but for
+          // now, we are opting to keep things simple and provide a single way to generate
+          // components--one that works for all use cases.
+          //
+          // {
+          //   name: 'componentFactory', component: 'Field', required: true,
+          // },
+
           {
-            name: 'componentFactory',
-            component: 'Field',
+            // Use a string instead of object so that we can dynamically change any detail
+            name: 'definition',
+            component: 'TextField',
             required: true,
           },
         ],
@@ -20,8 +34,11 @@ export default class GenerateComponent extends Action {
     });
   }
 
-  async act(props) {
-    const factory = this.get('componentFactory');
-    return factory.produce();
+  async act(/* props */) {
+    // const factory = this.get('componentFactory');
+    // return factory.produce();
+
+    const definition = this.get('definition');
+    return compiler.newComponent(JSON.parse(definition));
   }
 }
