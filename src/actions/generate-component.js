@@ -1,5 +1,4 @@
 import Action from './action';
-import compiler from '../compiler';
 
 export default class GenerateComponent extends Action {
   _className = 'GenerateComponent';
@@ -39,6 +38,6 @@ export default class GenerateComponent extends Action {
     // return factory.produce();
 
     const definition = this.get('definition');
-    return compiler.newComponent(JSON.parse(definition));
+    return this._registrar.compiler.newComponent(JSON.parse(definition));
   }
 }
