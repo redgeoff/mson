@@ -1,6 +1,7 @@
 import GenerateComponent from './generate-component';
 // import Form from '../form';
 // import Factory from '../component/factory';
+import compiler from '../compiler';
 
 it('should generate component', async () => {
   // let form;
@@ -33,6 +34,7 @@ it('should generate component', async () => {
       ],
     }),
   });
+  generateComponent._registrar.compiler = compiler;
 
   const generatedForm = await generateComponent.run({ arguments: 'Form' });
   expect(generatedForm.getValue('name')).toEqual('Harriet');
