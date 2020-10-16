@@ -307,7 +307,7 @@ it('save add form', async () => {
     values: ray,
   });
   expect(form2.getValues()).toEqual({
-    ...testUtils.toDefaultFieldsObject(null),
+    ...testUtils.toDefaultFieldsObject(undefined),
     ...ray,
   });
   expect(addForm).toHaveBeenCalledTimes(2);

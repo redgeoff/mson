@@ -3,7 +3,7 @@ import Mapa from './mapa';
 
 export const noop = () => {};
 
-const defaults = testUtils.toDefaultFieldsObject(null);
+const defaults = testUtils.toDefaultFieldsObject(undefined);
 
 export const ray = {
   node: {
