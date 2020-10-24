@@ -11,6 +11,7 @@ beforeEach(() => {
 
 const getDefinition = (withIds) => ({
   component: 'Form',
+  name: 'FormName',
   fields: [
     {
       id: withIds ? '1' : undefined,
@@ -60,6 +61,7 @@ it('should set definition via value', () => {
 it('should get definition', () => {
   expect(builder.get('definition')).toEqual({ component: 'Form', fields: [] });
 
+  builder.set({ formName: 'FormName' });
   builder.setValues(getValues());
   expect(builder.get('definition')).toEqual(getDefinition());
 });
