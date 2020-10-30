@@ -22,6 +22,14 @@ export class Globals extends Component {
             component: 'TextField',
           },
           {
+            name: 'pathHash',
+            component: 'TextField',
+          },
+          {
+            name: 'pathSearch',
+            component: 'TextField',
+          },
+          {
             // A temporary prop used to hold the redirectPath until the redirect is initiated by the
             // UI. This value should be cleared after the redirect is initiated so that back-to-back
             // redirects to the same route are considered unique, e.g. if / routes to /somepage and
