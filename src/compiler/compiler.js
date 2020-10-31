@@ -11,6 +11,7 @@ import PropFiller from './prop-filler';
 import registrar from './registrar';
 import each from 'lodash/each';
 import cloneDeep from 'lodash/cloneDeep';
+import MissingComponentError from './missing-component-error';
 
 export class Compiler {
   constructor(props) {
@@ -38,7 +39,7 @@ export class Compiler {
     if (this.exists(name)) {
       return this._components[name];
     } else {
-      throw new Error('missing component ' + name);
+      throw new MissingComponentError('missing component ' + name);
     }
   }
 
