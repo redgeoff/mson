@@ -95,22 +95,20 @@ export default {
           value: true,
         },
         {
-          component: 'Action',
+          if: {
+            preview: {
+              $ne: false,
+            },
+          },
+          component: 'Emit',
+          event: 'read',
+        },
+        {
           if: {
             preview: false,
           },
-          actions: [
-            {
-              component: 'Emit',
-              event: 'edit',
-            },
-          ],
-          else: [
-            {
-              component: 'Emit',
-              event: 'read',
-            },
-          ],
+          component: 'Emit',
+          event: 'edit',
         },
         {
           component: 'Set',
