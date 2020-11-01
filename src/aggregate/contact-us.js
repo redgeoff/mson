@@ -110,9 +110,9 @@ export default {
           message: 'Message sent. Please expect a response shortly.',
         },
         {
-          // Set the form to pristine so that we don't get warned about discarding changes
+          // Clear the values and mark as pristine so that the form is empty if we return to it later
           component: 'Set',
-          name: 'pristine',
+          name: 'reset',
           value: true,
         },
         {
