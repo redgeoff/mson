@@ -18,6 +18,12 @@ export default class FormBuilder extends Form {
         component: 'Form',
         fields: [
           {
+            // This name is needed so that we can make sure to relay the value to the backend or any
+            // front-end component cache
+            name: 'formName',
+            component: 'TextField',
+          },
+          {
             name: 'definition',
             component: 'Field',
           },
@@ -147,6 +153,7 @@ export default class FormBuilder extends Form {
     });
 
     this.get('fields.form.form.fields.fields').setValue(fields);
+    this.set({ formName: definition.name });
   }
 
   set(props) {
@@ -165,6 +172,7 @@ export default class FormBuilder extends Form {
 
   _getDefinition() {
     return {
+      name: this.get('formName'),
       component: 'Form',
       fields: this.get('fields.form.form.fields.fields').mapForms((form) => ({
         ...form.getValues({ default: false }),

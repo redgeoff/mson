@@ -31,6 +31,7 @@ export default class CollectionField extends Field {
     READ: 'read',
     UPDATE: 'update',
     DELETE: 'delete',
+    RESTORE: 'restore',
   };
 
   _create(props) {
@@ -890,9 +891,11 @@ export default class CollectionField extends Field {
     this._prepareForm(form);
   }
 
-  _switchMode(eventName, editable, emitId) {
+  _switchMode(eventName, editable, emitValues) {
     const form = this.get('form');
-    form.emitChange(eventName, emitId ? form.getValue('id') : undefined);
+    // Note: we used to just emit an id here, but now we emit all the form values so that listeners
+    // can more easily perform actions without having to first perform a lookup.
+    form.emitChange(eventName, emitValues ? form.getValues() : undefined);
     form.setEditable(editable);
   }
 
@@ -912,25 +915,36 @@ export default class CollectionField extends Field {
     this._switchMode('beginDelete', false, true);
   }
 
+  async _restoreMode() {
+    this._switchMode('beginRestore', false, true);
+    const form = this.get('form');
+    await this.restore(form);
+    this.set({ mode: null });
+  }
+
   _emitEndEvents() {
     const form = this.get('form');
-    const id = form.getValue('id');
+    const values = form.getValues();
     switch (this._mode) {
       case CollectionField.MODES.CREATE:
-        form.emitChange('endCreate', id);
+        form.emitChange('endCreate', values);
         break;
 
       case CollectionField.MODES.UPDATE:
-        form.emitChange('endUpdate', id);
+        form.emitChange('endUpdate', values);
         break;
 
       case CollectionField.MODES.DELETE:
-        form.emitChange('endDelete', id);
+        form.emitChange('endDelete', values);
+        break;
+
+      case CollectionField.MODES.RESTORE:
+        form.emitChange('endRestore', values);
         break;
 
       default:
         // case 'read':
-        form.emitChange('endRead', id);
+        form.emitChange('endRead', values);
         break;
     }
   }
@@ -965,6 +979,11 @@ export default class CollectionField extends Field {
 
       case CollectionField.MODES.DELETE:
         this._deleteMode();
+        preventAction = this.get('preventUpdate');
+        break;
+
+      case CollectionField.MODES.RESTORE:
+        this._restoreMode();
         preventAction = this.get('preventUpdate');
         break;
 
@@ -1180,7 +1199,7 @@ export default class CollectionField extends Field {
 
     form.emitChange(
       creating ? 'didCreateRecord' : 'didUpdateRecord',
-      id.getValue()
+      form.getValues()
     );
 
     return fieldForm;
@@ -1229,7 +1248,7 @@ export default class CollectionField extends Field {
 
     // }
 
-    form.emitChange('didArchiveRecord', form.getValue('id'));
+    form.emitChange('didArchiveRecord', form.getValues());
 
     this._globals.displaySnackbar(this.getSingularLabel() + ' deleted');
   }
@@ -1252,7 +1271,7 @@ export default class CollectionField extends Field {
     // the form being removed. TODO: make this configurable via a param to restore?
     this.removeFormIfExists(form.getValue('id'));
 
-    form.emitChange('didRestoreRecord', form.getValue('id'));
+    form.emitChange('didRestoreRecord', form.getValues());
 
     this._globals.displaySnackbar(this.getSingularLabel() + ' restored');
   }

@@ -14,7 +14,7 @@ export default class PropFiller {
   _getTemplateName(str) {
     // Note: we use a format like {{name}} instead of ${name} as some linters report errors when
     // template strings are found in regular strings.
-    let matches = str.match(/^{{([^{]*)}}$/);
+    let matches = str.match(/^{{([^{}]*)}}$/);
     if (matches) {
       return matches[1];
     }
@@ -65,7 +65,7 @@ export default class PropFiller {
         // Replace with the raw prop so that numbers are not converted to strings by replace()
         return this._getPropOrOriginalString(name, obj);
       } else {
-        return obj.replace(/{{([^{]*)}}/g, (match, name) => {
+        return obj.replace(/{{([^{}]*)}}/g, (match, name) => {
           return this._getPropOrOriginalString(name, match);
         });
       }

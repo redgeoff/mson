@@ -89,10 +89,6 @@ export default class Form extends UIComponent {
             component: 'BooleanField',
           },
           {
-            name: 'resetOnLoad',
-            component: 'BooleanField',
-          },
-          {
             name: 'showArchived',
             component: 'BooleanField',
           },
@@ -208,9 +204,6 @@ export default class Form extends UIComponent {
       // Whether or not to report errors when an undefined (extra) field is specified
       reportUndefined: true,
 
-      // If true, the form is reset on load
-      resetOnLoad: true,
-
       // Only show non-archived
       showArchived: false,
     });
@@ -231,11 +224,6 @@ export default class Form extends UIComponent {
 
   _handleLoadFactory() {
     return () => {
-      if (this.get('resetOnLoad')) {
-        // Clear any previous values
-        this.reset();
-      }
-
       // Note: this is probably more trouble than its worth as when the user is first filling in the
       // form there are no errors until a field is touched and in turn it is probably best to
       // provide the user with something to click that will give them feedback about the error.

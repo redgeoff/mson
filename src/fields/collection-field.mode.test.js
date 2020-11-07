@@ -59,9 +59,9 @@ it('should change modes', async () => {
   let endRead = testUtils.once(form, 'endRead');
   field.set({ currentForm: firstForm, mode: 'read' });
   const endCreateArgs = await endCreate;
-  expect(endCreateArgs[0]).toEqual('ray');
+  expect(endCreateArgs[0].id).toEqual('ray');
   const beginReadArgs = await beginRead;
-  expect(beginReadArgs[0]).toEqual('ray');
+  expect(beginReadArgs[0].id).toEqual('ray');
   expect(setEditable).toHaveBeenCalledTimes(1);
   expect(setEditable).toHaveBeenCalledWith(false);
   expect(setCurrentForm).toHaveBeenCalledTimes(1);
@@ -73,16 +73,16 @@ it('should change modes', async () => {
   let endUpdate = testUtils.once(form, 'endUpdate');
   field.set({ mode: 'update' });
   const endReadArgs = await endRead;
-  expect(endReadArgs[0]).toEqual('ray');
+  expect(endReadArgs[0].id).toEqual('ray');
   const beginUpdateArgs = await beginUpdate;
-  expect(beginUpdateArgs[0]).toEqual('ray');
+  expect(beginUpdateArgs[0].id).toEqual('ray');
   expect(setEditable).toHaveBeenCalledTimes(1);
   expect(setEditable).toHaveBeenCalledWith(true);
 
   // Save
   await field.save();
   const endUpdateArgs = await endUpdate;
-  expect(endUpdateArgs[0]).toEqual('ray');
+  expect(endUpdateArgs[0].id).toEqual('ray');
   // expect(field.get('mode')).toEqual('read');
   expect(field.get('mode')).toBeNull();
 
@@ -99,7 +99,7 @@ it('should change modes', async () => {
   expect(setEditable).toHaveBeenCalledWith(true);
 });
 
-it('should change modes when deleting', async () => {
+it('should change modes when deleting and restoring', async () => {
   const form = field.get('form');
   const firstForm = field._forms.first();
   const setEditable = jest.spyOn(form, 'setEditable');
@@ -110,7 +110,7 @@ it('should change modes when deleting', async () => {
   let endDelete = testUtils.once(form, 'endDelete');
   field.set({ currentForm: firstForm, mode: CollectionField.MODES.DELETE });
   const beginDeleteArgs = await beginDelete;
-  expect(beginDeleteArgs[0]).toEqual('ray');
+  expect(beginDeleteArgs[0].id).toEqual('ray');
   expect(setEditable).toHaveBeenCalledTimes(1);
   expect(setEditable).toHaveBeenCalledWith(false);
   expect(setCurrentForm).toHaveBeenCalledTimes(1);
@@ -120,7 +120,27 @@ it('should change modes when deleting', async () => {
   await field.archive(firstForm);
   field.set({ mode: null });
   const endDeleteArgs = await endDelete;
-  expect(endDeleteArgs[0]).toEqual('ray');
+  expect(endDeleteArgs[0].id).toEqual('ray');
+  expect(field.get('mode')).toBeNull();
+
+  // Begin Restore
+  setEditable.mockClear();
+  setCurrentForm.mockClear();
+  let beginRestore = testUtils.once(form, 'beginRestore');
+  let endRestore = testUtils.once(form, 'endRestore');
+  field.set({ currentForm: firstForm, mode: CollectionField.MODES.RESTORE });
+  const beginRestoreArgs = await beginRestore;
+  expect(beginRestoreArgs[0].id).toEqual('ray');
+  expect(setEditable).toHaveBeenCalledTimes(1);
+  expect(setEditable).toHaveBeenCalledWith(false);
+  expect(setCurrentForm).toHaveBeenCalledTimes(1);
+  expect(setCurrentForm).toHaveBeenCalledWith(firstForm);
+
+  // Restore
+  await field.restore(firstForm);
+  field.set({ mode: null });
+  const endRestoreArgs = await endRestore;
+  expect(endRestoreArgs[0].id).toEqual('ray');
   expect(field.get('mode')).toBeNull();
 });
 

@@ -25,4 +25,17 @@ export default {
     component: 'UpdatePassword',
     componentToWrap: '{{updatePasswordBaseForm}}',
   },
+  listeners: [
+    {
+      event: ['didSave', 'cancel'],
+      actions: [
+        {
+          // Clear the values so that the form is empty if we return to it later
+          component: 'Set',
+          name: 'reset',
+          value: true,
+        },
+      ],
+    },
+  ],
 };

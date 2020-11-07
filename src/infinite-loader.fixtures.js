@@ -3,7 +3,7 @@ import Mapa from './mapa';
 
 export const noop = () => {};
 
-const defaults = testUtils.toDefaultFieldsObject(null);
+const defaults = testUtils.toDefaultFieldsObject(undefined);
 
 export const ray = {
   node: {
@@ -187,7 +187,11 @@ export const createMockedStore = () => {
         id: props.id,
       };
     },
-    // restoreDoc: asyncNoop,
+    restoreDoc: async (props) => {
+      return {
+        id: props.id,
+      };
+    },
     on: noop,
   };
 };
