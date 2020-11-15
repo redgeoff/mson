@@ -11,7 +11,7 @@ The MSON compiler allows you to generate apps from JSON. The ultimate goal of MS
 
   - The MSON library can also be used without any UI dependecies, which makes it great for things like data validation in both the front and back ends.
 
-You can read more about why I created MSON at [Creating a New Programming Language That Will Allow Anyone to Make Software](https://hackernoon.com/creating-a-new-programming-language-that-will-allow-anyone-to-make-software-7a8c73238dc2).
+You can read more about why I created MSON at [Creating a New Programming Language That Will Allow Anyone to Make Software](https://redgeoff.com/posts/everyone-can-make-software/).
 
 **Stability Disclaimer:** MSON is still an evolving project and should not be considered stable. The project has 100% code coverage and the API has already gone through several iterations, but the details may change. There is also limited documentation for now, so you may be required to dive into the code to gain a deeper understanding. PRs are very welcome.
 
@@ -29,6 +29,9 @@ Check out the [To Do List](https://codesandbox.io/s/o584w8k67z) and [Basic App](
 
 The best way to get started with MSON is to play with the [Getting Started App](https://github.com/redgeoff/mson-getting-started). In just a few lines of MSON, you'll generate an app that can list, edit, filter and sort a list of contacts. And, for extra fun, you can use Firebase to make it real-time capable.
 
+### Autogenerate forms in React and Material-UI with MSON
+Implementing great forms can be a real time-waster. With just a few lines of JSON, you can [use MSON to generate forms](https://redgeoff.com/posts/mson-react-material-ui-form/) that perform real-time validation and have a consistent layout.
+
 ### MSON Demo
 
 After you have played with the Getting Started App you may find it useful to fire up the [MSON demo](https://redgeoff.github.io/mson-react):
@@ -43,9 +46,6 @@ The MSON code can be found in [components](https://github.com/redgeoff/mson-reac
   2. [Editing with a RecordEditor](https://github.com/redgeoff/mson-react/blob/master/src/demo/components/edit-contact.js)
   3. [List of Fields](https://github.com/redgeoff/mson-react/blob/master/src/demo/components/fields.js)
   4. [Displaying Markdown](https://github.com/redgeoff/mson-react/blob/master/src/demo/components/home.js)
-
-### Autogenerate forms in React and Material-UI with MSON
-Implementing great forms can be a real time-waster. With just a few lines of JSON, you can [use MSON to generate forms](https://medium.com/free-code-camp/how-to-autogenerate-forms-in-react-and-material-ui-with-mson-5771b1b7e739) that perform real-time validation and have a consistent layout.
 
 ## Language Principles
 
