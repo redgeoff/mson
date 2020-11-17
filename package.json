@@ -29,6 +29,7 @@
     "lint-staged": "^10.3.0",
     "prettier": "^2.1.1",
     "react-scripts": "^3.4.3",
+    "semantic-release": "^17.2.3",
     "webpack-bundle-analyzer": "^3.8.0",
     "webpack-cli": "^3.3.12"
   },
@@ -47,7 +48,9 @@
     "compile": "cross-env NODE_ENV=production babel src --ignore '**/*.test.js' -d lib && npm run copy-json",
     "bundle": "webpack",
     "touch": "find src -exec touch {} \\;",
-    "analyze-bundle": "webpack --profile --json > ./dist/stats.json && webpack-bundle-analyzer ./dist/stats.json"
+    "analyze-bundle": "webpack --profile --json > ./dist/stats.json && webpack-bundle-analyzer ./dist/stats.json",
+    "prepublishOnly": "yarn compile && yarn bundle",
+    "semantic-release": "semantic-release"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -66,6 +69,10 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redgeoff/mson.git"
   },
   "browserslist": [
     ">0.2%",
