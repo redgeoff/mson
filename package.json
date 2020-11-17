@@ -49,7 +49,8 @@
     "bundle": "webpack",
     "touch": "find src -exec touch {} \\;",
     "analyze-bundle": "webpack --profile --json > ./dist/stats.json && webpack-bundle-analyzer ./dist/stats.json",
-    "prepublishOnly": "yarn compile && yarn bundle"
+    "prepublishOnly": "yarn compile && yarn bundle",
+    "semantic-release": "semantic-release"
   },
   "jest": {
     "collectCoverageFrom": [
