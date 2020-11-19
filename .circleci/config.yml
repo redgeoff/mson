@@ -35,11 +35,11 @@ jobs:
     steps:
       - checkout
       - run:
-        name: install
-        command: yarn install
+          name: install
+          command: yarn install
       - run:
-        name: release
-        command: npm run semantic-release || true
+          name: release
+          command: npm run semantic-release || true
 
 workflows:
   version: 2
