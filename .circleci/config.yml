@@ -21,7 +21,7 @@ jobs:
             - node_modules
           key: dependencies-v2-{{ checksum "package.json" }}
 
-      - run: CI=true yarn test
+      - run: yarn test
 
       # Check bundle size
       - run: yarn bundle && ./scripts/bundle-size.sh
