@@ -75,14 +75,8 @@ it('should handle undefined props', async () => {
 it('should filter by globals', async () => {
   const action = new Set({
     if: {
-      globals: {
-        session: {
-          user: {
-            roleNames: {
-              $in: ['admin'],
-            },
-          },
-        },
+      'globals.session.user.roleNames': {
+        $in: ['admin'],
       },
     },
     name: 'value',

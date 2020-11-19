@@ -21,10 +21,8 @@ it('should validate', () => {
   validator.setValues({
     where: {
       fields: {
-        retypePassword: {
-          value: {
-            $ne: '{{fields.password.value}}',
-          },
+        'retypePassword.value': {
+          $ne: '{{fields.password.value}}',
         },
       },
     },
@@ -39,12 +37,8 @@ it('should validate', () => {
 
   validator.setValues({
     where: {
-      fields: {
-        retypePassword: {
-          value: {
-            $invalidOp: '{{fields.password.value}}',
-          },
-        },
+      'fields.retypePassword.value': {
+        $invalidOp: '{{fields.password.value}}',
       },
     },
     error: {
@@ -60,7 +54,7 @@ it('should validate', () => {
       field: 'where',
       error: [
         {
-          error: 'Unknown operation $invalidOp',
+          error: 'Unsupported operation: $invalidOp',
         },
       ],
     },

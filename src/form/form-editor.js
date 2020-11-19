@@ -42,18 +42,16 @@ export default class FormEditor extends Form {
                 validators: [
                   {
                     where: {
-                      parent: {
-                        value: {
-                          $elemMatch: {
-                            $and: [
-                              {
-                                id: {
-                                  $ne: '{{fields.id.value}}',
-                                },
+                      'parent.value': {
+                        $elemMatch: {
+                          $and: [
+                            {
+                              id: {
+                                $ne: '{{fields.id.value}}',
                               },
-                              { name: '{{fields.name.value}}' },
-                            ],
-                          },
+                            },
+                            { name: '{{fields.name.value}}' },
+                          ],
                         },
                       },
                     },
