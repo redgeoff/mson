@@ -1,8 +1,7 @@
 version: 2
 
 jobs:
-  build:
-    # Change working directory so that mson-server scripts have reference back to mson
+  test:
     working_directory: ~/mson
 
     docker:
@@ -10,17 +9,7 @@ jobs:
       # - image: circleci/node:stretch-browsers
       - image: circleci/node:10-stretch-browsers
 
-      # Fix MySQL at version 5.7 so that it is compatible with AWS Aurora
-      # - image: circleci/mysql:5.7
-      #   environment:
-      #     MYSQL_ROOT_PASSWORD: secret
-      #     MYSQL_ROOT_HOST: '%'
-
-      # - image: redis
-
     steps:
-      - run: echo 127.0.0.1 node.dev | sudo tee -a /etc/hosts
-
       - checkout
       - restore_cache:
           keys:
@@ -32,31 +21,34 @@ jobs:
             - node_modules
           key: dependencies-v2-{{ checksum "package.json" }}
 
-      # Download private dependencies
-      # - run: git clone ssh://git@bitbucket.org/redgeoff/mson-server ../mson-server
-      # - restore_cache:
-      #     keys:
-      #     - mson-server-dependencies-v2-{{ checksum "package.json" }}
-      #     - mson-server-dependencies-v2-
-      # - run: cd ../mson-server && yarn install
-      # - save_cache:
-      #     paths:
-      #       - ../mson-server/node_modules
-      #     key: mson-server-dependencies-v2-{{ checksum "package.json" }}
-      # - run: cd ../mson-server && yarn compile
-
-      # - run: yarn setup
-
-      # Wait for MySQL to be ready
-      # - run: ./node_modules/wait-on/bin/wait-on tcp:3306
-
-      # Wait for Redis to be ready
-      # - run: ./node_modules/wait-on/bin/wait-on tcp:6379
-
-      - run: CI=true yarn test
+      - run: yarn test
 
       # Check bundle size
       - run: yarn bundle && ./scripts/bundle-size.sh
 
       # Sanity check compilation as compilation uses custom babel settings
       - run: yarn compile
+
+  publish:
+    docker:
+      - image: 'circleci/node:latest'
+    steps:
+      - checkout
+      - run:
+          name: install
+          command: yarn install
+      - run:
+          name: release
+          command: npm run semantic-release || true
+
+workflows:
+  version: 2
+  test_and_publish:
+    jobs:
+      - test
+      - publish:
+          requires:
+            - test
+          filters:
+            branches:
+              only: release
