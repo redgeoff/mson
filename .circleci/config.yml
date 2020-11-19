@@ -51,4 +51,4 @@ workflows:
             - test
           filters:
             branches:
-              only: next
+              only: release
