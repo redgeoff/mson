@@ -98,10 +98,8 @@ For example, you can prevent the user from entering _nope@example.com_:
   validators: [
     {
       where: {
-        fields: {
-          email: {
-            value: 'nope@example.com'
-          }
+        'fields.email.value': {
+          value: 'nope@example.com'
         }
       },
       error: {
@@ -115,12 +113,8 @@ For example, you can prevent the user from entering _nope@example.com_:
 Template parameters like `{{fields.email.value}}` can be used to inject the values of fields. And, you can use any [MongoDB-style query](https://docs.mongodb.com/manual/reference/operator/query/) in the `where`. For example, if you had `password` and `retypePassword` fields, you could ensure that they are equivalent with:
 ```js
 where: {
-  retypePassword: {
-    fields: {
-      value: {
-        $ne: '{{fields.password.value}}'
-      }
-    }
+  'retypePassword.fields.value': {
+    $ne: '{{fields.password.value}}'
   },
   error: ...
 }
@@ -160,17 +154,15 @@ listeners: [
       {
         component: 'Set',
         if: {
-          fields: {
-            email: {
-              $or: [
-                {
-                  value: null
-                },
-                {
-                  value: ''
-                }
-              ]
-            }
+          'fields.email': {
+            $or: [
+              {
+                value: null
+              },
+              {
+                value: ''
+              }
+            ]
           }
         },
         name: 'fields.email.value',
@@ -189,17 +181,15 @@ listeners: [
       {
         component: 'Action',
         if: {
-          fields: {
-            email: {
-              $or: [
-                {
-                  value: null
-                },
-                {
-                  value: ''
-                }
-              ]
-            }
+          'fields.email': {
+            $or: [
+              {
+                value: null
+              },
+              {
+                value: ''
+              }
+            ]
           }
         },
         actions: [

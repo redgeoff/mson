@@ -274,11 +274,7 @@ it('should branch', async () => {
 it('should filter by nested properties', async () => {
   const action = new Set({
     if: {
-      parent: {
-        parent: {
-          name: 'grandparent',
-        },
-      },
+      'parent.parent.name': 'grandparent',
     },
     name: 'value',
     value: 'Jack',

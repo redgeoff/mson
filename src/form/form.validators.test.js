@@ -15,9 +15,7 @@ const createForm = () => {
     validators: [
       {
         where: {
-          'fields.firstName': {
-            value: 'Jim',
-          },
+          'fields.firstName.value': 'Jim',
         },
         error: {
           field: 'firstName',

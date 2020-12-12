@@ -274,11 +274,7 @@ it('should validate schema', () => {
     validators: [
       {
         where: {
-          fields: {
-            name: {
-              value: 'F. Scott Fitzgerald',
-            },
-          },
+          'fields.name.value': 'F. Scott Fitzgerald',
         },
         error: {
           field: 'name',
@@ -758,11 +754,7 @@ it('should elevate', async () => {
     validators: [
       {
         where: {
-          fields: {
-            lastName: {
-              value: 'Vader',
-            },
-          },
+          'fields.lastName.value': 'Vader',
         },
         error: {
           field: 'lastName',
