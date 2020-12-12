@@ -194,9 +194,7 @@ it('should create and update', async () => {
     userId: 'myId',
   };
 
-  // Mock
-  store.createDoc = async () => created;
-  store.updateDoc = async () => updated;
+  jest.spyOn(store, 'upsertDoc').mockImplementation(() => created);
 
   const form = field.get('form');
 
@@ -208,9 +206,30 @@ it('should create and update', async () => {
   let mosForm = await field.save();
   expect(mosForm.getValues()).toMatchObject(created);
 
+  jest.spyOn(store, 'upsertDoc').mockImplementation(() => updated);
+
   // Update
   mosForm = await field.save();
   expect(mosForm.getValues()).toMatchObject(updated);
+});
+
+// Ensure that even when a new form has an id that it is created and not updated
+it('should create with id', async () => {
+  const store = new MemoryStore();
+  const field = createField({ store, forbidOrder: false });
+
+  const form = field.get('form');
+
+  const createDocSpy = jest.spyOn(store, 'createDoc');
+
+  // Create
+  form.setValues({
+    id: 'id',
+    firstName: 'Mos',
+    lastName: 'Def',
+  });
+  await field.save();
+  expect(createDocSpy).toHaveBeenCalledTimes(1);
 });
 
 it('should not have side effects', async () => {

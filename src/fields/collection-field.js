@@ -1170,13 +1170,8 @@ export default class CollectionField extends Field {
 
       let record = null;
 
-      // New?
-      if (creating) {
-        record = await store.createDoc({ form, reorder });
-      } else {
-        // Existing
-        record = await store.updateDoc({ form, reorder });
-      }
+      record = await store.upsertDoc({ form, reorder });
+
       form.setValues({
         id: record.id,
         createdAt: record.createdAt,
