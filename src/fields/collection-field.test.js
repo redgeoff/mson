@@ -428,6 +428,13 @@ it('should save', async () => {
       id: 'myId',
     }),
     updateDoc: updateDocMock,
+    upsertDoc: async (props) => {
+      if (props.form.getValue('id')) {
+        return store.updateDoc(props);
+      } else {
+        return store.createDoc(props);
+      }
+    },
     on: () => {},
     removeAllListeners: () => {},
   };
@@ -479,7 +486,7 @@ it('should archive', async () => {
   const archivedAt = new DateField({ now: true });
 
   const store = {
-    updateDoc: updateDocMock,
+    upsertDoc: updateDocMock,
     archiveDoc: async () => ({
       archivedAt: archivedAt.getValue(),
     }),
@@ -537,7 +544,7 @@ it('should restore', async () => {
   const archivedAt = new Date();
 
   const store = {
-    updateDoc: updateDocMock,
+    upsertDoc: updateDocMock,
     restoreDoc: async () => {},
     on: () => {},
     removeAllListeners: () => {},
