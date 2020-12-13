@@ -176,14 +176,6 @@ beforeEach(() => {
   docsCreated = [];
 });
 
-const mockRecordEditor = (recordEditor, event) => {
-  const listeners = recordEditor.get('listeners');
-  listeners.forEach((listener) => {
-    const spyOnAct = listener.event === event;
-    testUtils.mockActions(listener.actions, spyOnAct, acts);
-  });
-};
-
 it('should auto validate', async () => {
   const changePassword = compiler.newComponent({
     component: 'app.ChangePassword',
@@ -207,7 +199,7 @@ const beforeEachLoadTest = (event, props) => {
     component: 'app.EditAccount',
     ...props,
   });
-  mockRecordEditor(editAccount, event);
+  testUtils.mockComponentListeners(editAccount, acts, event);
 };
 
 it('should load with preview and storeWhere', async () => {
@@ -574,7 +566,7 @@ it('should support the change password scenario', async () => {
   // Wait for all the create listeners to run before mocking so that we have a predictable baseline
   await changePassword.resolveAfterCreate();
 
-  mockRecordEditor(changePassword);
+  testUtils.mockComponentListeners(changePassword, acts);
 
   changePassword.emitLoad();
   await changePassword.resolveAfterLoad();

@@ -185,6 +185,14 @@ class TestUtils {
       expect(actualAct).toEqual(expAct);
     });
   }
+
+  mockComponentListeners(component, acts, event) {
+    const listeners = component.get('listeners');
+    listeners.forEach((listener) => {
+      const spyOnAct = listener.event === event;
+      this.mockActions(listener.actions, spyOnAct, acts);
+    });
+  }
 }
 
 export default new TestUtils();
