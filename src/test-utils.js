@@ -190,7 +190,10 @@ class TestUtils {
       each(expAct.props, (value, name) => {
         actualProps[name] = act.props[name];
       });
-      const actualAct = { name: act.name, props: actualProps };
+      const actualAct = { name: act.name };
+      if (expAct.props !== undefined) {
+        actualAct.props = actualProps;
+      }
       expect(actualAct).toEqual(expAct);
     });
   }

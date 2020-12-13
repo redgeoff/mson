@@ -7,7 +7,7 @@ beforeEach(() => {
   acts = [];
 });
 
-it('should log in to app and redirect', async () => {
+it('should log in to app and redirect when no redirectAfterLogin', async () => {
   const logInToAppAndRedirect = compiler.newComponent({
     component: 'LogInToAppAndRedirect',
   });
@@ -27,4 +27,20 @@ it('should log in to app and redirect', async () => {
     ...logInToAppSpy.mock.calls[0][0],
     component: form,
   });
+
+  testUtils.expectActsToContain(acts, [
+    {
+      name: 'LogInToApp',
+    },
+    {
+      name: 'Redirect',
+      props: {
+        path: '/',
+      },
+    },
+  ]);
 });
+
+// TODO
+// it('should log in to app and redirect when redirectAfterLogin', async () => {
+// });
