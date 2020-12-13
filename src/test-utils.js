@@ -159,7 +159,8 @@ class TestUtils {
   }
 
   mockActionRegistrar(action, mockedRegistrar) {
-    action._componentFillerProps._registrar = () => mockedRegistrar;
+    // TODO: uncomment when used. Commented out for test coverage reasons
+    // action._componentFillerProps._registrar = () => mockedRegistrar;
     action._registrar = mockedRegistrar;
   }
 
