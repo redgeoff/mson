@@ -153,11 +153,17 @@ class TestUtils {
     return this.timeout(2);
   }
 
-  mockActions(actions, acts, stub) {
+  mockActions(actions, acts, stub, mockedGlobals) {
     actions.forEach((action) => {
       const actions = action._actions;
-      if (actions) {
-        this.mockActions(actions, acts, stub);
+      const elseActions = action._else;
+      if (actions || elseActions) {
+        if (actions) {
+          this.mockActions(actions, acts, stub, mockedGlobals);
+        }
+        if (elseActions) {
+          this.mockActions(elseActions, acts, stub, mockedGlobals);
+        }
       } else {
         const origAct = action.act;
         const spy = jest.fn();
@@ -175,11 +181,15 @@ class TestUtils {
           }
         };
       }
+
+      if (mockedGlobals) {
+        this.mockActionGlobals(action, mockedGlobals);
+      }
     });
   }
 
-  mockAction(action, acts, stub) {
-    this.mockActions([action], acts, stub);
+  mockAction(action, acts, stub, mockedGlobals) {
+    this.mockActions([action], acts, stub, mockedGlobals);
   }
 
   expectActsToContain(acts, expActs) {
@@ -205,6 +215,11 @@ class TestUtils {
         this.mockActions(listener.actions, acts, false);
       }
     });
+  }
+
+  mockActionGlobals(action, mockedGlobals) {
+    action._componentFillerProps._getGlobals = () => mockedGlobals;
+    action._globals = mockedGlobals;
   }
 }
 
