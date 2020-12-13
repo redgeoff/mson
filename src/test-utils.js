@@ -153,16 +153,32 @@ class TestUtils {
     return this.timeout(2);
   }
 
-  mockActions(actions, acts, stub, mockedGlobals) {
+  mockActionGlobals(action, mockedGlobals) {
+    action._componentFillerProps._getGlobals = () => mockedGlobals;
+    action._globals = mockedGlobals;
+  }
+
+  mockActionRegistrar(action, mockedRegistrar) {
+    action._componentFillerProps._registrar = () => mockedRegistrar;
+    action._registrar = mockedRegistrar;
+  }
+
+  mockActions(actions, acts, stub, mockedGlobals, mockedRegistrar) {
     actions.forEach((action) => {
       const actions = action._actions;
       const elseActions = action._else;
       if (actions || elseActions) {
         // if (actions) { // TODO: uncomment if needed
-        this.mockActions(actions, acts, stub, mockedGlobals);
+        this.mockActions(actions, acts, stub, mockedGlobals, mockedRegistrar);
         // }
         if (elseActions) {
-          this.mockActions(elseActions, acts, stub, mockedGlobals);
+          this.mockActions(
+            elseActions,
+            acts,
+            stub,
+            mockedGlobals,
+            mockedRegistrar
+          );
         }
       } else {
         const origAct = action.act;
@@ -185,11 +201,14 @@ class TestUtils {
       if (mockedGlobals) {
         this.mockActionGlobals(action, mockedGlobals);
       }
+      if (mockedRegistrar) {
+        this.mockActionRegistrar(action, mockedRegistrar);
+      }
     });
   }
 
-  mockAction(action, acts, stub, mockedGlobals) {
-    this.mockActions([action], acts, stub, mockedGlobals);
+  mockAction(action, acts, stub, mockedGlobals, mockedRegistrar) {
+    this.mockActions([action], acts, stub, mockedGlobals, mockedRegistrar);
   }
 
   expectActsToContain(acts, expActs) {
@@ -208,18 +227,26 @@ class TestUtils {
     });
   }
 
-  mockComponentListeners(component, acts, event) {
+  mockComponentListeners(
+    component,
+    acts,
+    event,
+    stub,
+    mockedGlobals,
+    mockedRegistrar
+  ) {
     const listeners = component.get('listeners');
     listeners.forEach((listener) => {
-      if (listener.event === event) {
-        this.mockActions(listener.actions, acts, false);
+      if (!event || listener.event === event) {
+        this.mockActions(
+          listener.actions,
+          acts,
+          stub,
+          mockedGlobals,
+          mockedRegistrar
+        );
       }
     });
-  }
-
-  mockActionGlobals(action, mockedGlobals) {
-    action._componentFillerProps._getGlobals = () => mockedGlobals;
-    action._globals = mockedGlobals;
   }
 }
 
