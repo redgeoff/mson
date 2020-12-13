@@ -1,13 +1,17 @@
 import compiler from '../compiler';
+import MemoryStore from '../stores/memory-store';
 import testUtils from '../test-utils';
 
 let acts;
 let editor;
 
+const store = new MemoryStore();
+
 beforeEach(() => {
   acts = [];
   editor = compiler.newComponent({
     component: 'ResetPasswordEditor',
+    store,
   });
 });
 
@@ -48,6 +52,44 @@ it('should createRecord', async () => {
   });
 });
 
-// it('should reset password', async () => {
+it('should reset password', async () => {
+  const mockedGlobals = {
+    route: {
+      parameters: {
+        token: 'token123',
+      },
+    },
+  };
 
-// });
+  testUtils.mockComponentListeners(editor, acts, false, true, mockedGlobals);
+
+  await editor.runListeners('reset');
+
+  testUtils.expectActsToContain(acts, [
+    {
+      name: 'Set',
+      props: {
+        name: 'fields.token.value',
+        value: 'token123',
+      },
+    },
+    {
+      name: 'UpsertDoc',
+      props: {
+        store,
+      },
+    },
+    {
+      name: 'Snackbar',
+      props: {
+        message: 'Password updated',
+      },
+    },
+    {
+      name: 'Redirect',
+      props: {
+        path: '/',
+      },
+    },
+  ]);
+});
