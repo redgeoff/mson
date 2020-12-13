@@ -3,6 +3,7 @@
 import compiler from './compiler';
 import Form from './form';
 import utils from './utils';
+import each from 'lodash/each';
 
 class TestUtils {
   defaultFields = [
@@ -150,6 +151,39 @@ class TestUtils {
   async sleepToEnsureDifferentTimestamps() {
     // Sleep for 2 milliseconds as timestamps can be the same with 1 millisecond
     return this.timeout(2);
+  }
+
+  mockActions(actions, spyOnAct, acts) {
+    actions.forEach((action) => {
+      const actions = action._actions;
+      if (actions) {
+        this.mockActions(actions, spyOnAct, acts);
+      } else {
+        if (spyOnAct) {
+          const origAct = action.act;
+          action.act = function () {
+            acts.push({
+              name: action.getClassName(),
+              props: action.get(),
+            });
+            return origAct.apply(this, arguments);
+          };
+        }
+      }
+    });
+  }
+
+  expectActsToContain(acts, expActs) {
+    expect(acts).toHaveLength(expActs.length);
+    expActs.forEach((expAct, i) => {
+      const act = acts[i];
+      const actualProps = {};
+      each(expAct.props, (value, name) => {
+        actualProps[name] = act.props[name];
+      });
+      const actualAct = { name: act.name, props: actualProps };
+      expect(actualAct).toEqual(expAct);
+    });
   }
 }
 
