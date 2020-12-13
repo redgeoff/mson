@@ -158,9 +158,9 @@ class TestUtils {
       const actions = action._actions;
       const elseActions = action._else;
       if (actions || elseActions) {
-        if (actions) {
-          this.mockActions(actions, acts, stub, mockedGlobals);
-        }
+        // if (actions) { // TODO: uncomment if needed
+        this.mockActions(actions, acts, stub, mockedGlobals);
+        // }
         if (elseActions) {
           this.mockActions(elseActions, acts, stub, mockedGlobals);
         }
