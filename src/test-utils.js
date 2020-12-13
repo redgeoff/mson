@@ -153,24 +153,33 @@ class TestUtils {
     return this.timeout(2);
   }
 
-  mockActions(actions, spyOnAct, acts) {
+  mockActions(actions, acts, stub) {
     actions.forEach((action) => {
       const actions = action._actions;
       if (actions) {
-        this.mockActions(actions, spyOnAct, acts);
+        this.mockActions(actions, acts, stub);
       } else {
-        if (spyOnAct) {
-          const origAct = action.act;
-          action.act = function () {
-            acts.push({
-              name: action.getClassName(),
-              props: action.get(),
-            });
+        const origAct = action.act;
+        const spy = jest.fn();
+        action.act = function () {
+          acts.push({
+            name: action.getClassName(),
+            props: action.get(),
+            spy,
+          });
+
+          spy.apply(spy, arguments);
+
+          if (!stub) {
             return origAct.apply(this, arguments);
-          };
-        }
+          }
+        };
       }
     });
+  }
+
+  mockAction(action, acts, stub) {
+    this.mockActions([action], acts, stub);
   }
 
   expectActsToContain(acts, expActs) {
@@ -189,8 +198,9 @@ class TestUtils {
   mockComponentListeners(component, acts, event) {
     const listeners = component.get('listeners');
     listeners.forEach((listener) => {
-      const spyOnAct = listener.event === event;
-      this.mockActions(listener.actions, spyOnAct, acts);
+      if (listener.event === event) {
+        this.mockActions(listener.actions, acts, false);
+      }
     });
   }
 }
