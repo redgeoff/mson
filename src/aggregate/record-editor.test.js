@@ -1,7 +1,6 @@
 import compiler from '../compiler';
 import testUtils from '../test-utils';
 import MemoryStore from '../stores/memory-store';
-import each from 'lodash/each';
 
 let acts = null;
 let editAccount = null;
@@ -177,47 +176,6 @@ beforeEach(() => {
   docsCreated = [];
 });
 
-const mockActions = (actions, spyOnAct) => {
-  actions.forEach((action) => {
-    const actions = action._actions;
-    if (actions) {
-      mockActions(actions, spyOnAct);
-    } else {
-      if (spyOnAct) {
-        const origAct = action.act;
-        action.act = function () {
-          acts.push({
-            name: action.getClassName(),
-            props: action.get(),
-          });
-          return origAct.apply(this, arguments);
-        };
-      }
-    }
-  });
-};
-
-const mockRecordEditor = (recordEditor, event) => {
-  const listeners = recordEditor.get('listeners');
-  listeners.forEach((listener) => {
-    const spyOnAct = listener.event === event;
-    mockActions(listener.actions, spyOnAct);
-  });
-};
-
-const expectActsToContain = (expActs) => {
-  expect(acts).toHaveLength(expActs.length);
-  expActs.forEach((expAct, i) => {
-    const act = acts[i];
-    const actualProps = {};
-    each(expAct.props, (value, name) => {
-      actualProps[name] = act.props[name];
-    });
-    const actualAct = { name: act.name, props: actualProps };
-    expect(actualAct).toEqual(expAct);
-  });
-};
-
 it('should auto validate', async () => {
   const changePassword = compiler.newComponent({
     component: 'app.ChangePassword',
@@ -241,14 +199,14 @@ const beforeEachLoadTest = (event, props) => {
     component: 'app.EditAccount',
     ...props,
   });
-  mockRecordEditor(editAccount, event);
+  testUtils.mockComponentListeners(editAccount, acts, event);
 };
 
 it('should load with preview and storeWhere', async () => {
   beforeEachLoadTest('load');
   await emitLoadAndWait();
 
-  expectActsToContain([
+  testUtils.expectActsToContain(acts, [
     {
       name: 'Set',
       props: {
@@ -330,7 +288,7 @@ it('should load without preview and storeWhere', async () => {
   });
   await emitLoadAndWait();
 
-  expectActsToContain([
+  testUtils.expectActsToContain(acts, [
     {
       name: 'Set',
       props: {
@@ -367,7 +325,7 @@ it('should read', async () => {
   await editAccount.emitChange('read');
   await didRead;
 
-  expectActsToContain([
+  testUtils.expectActsToContain(acts, [
     {
       name: 'Set',
       props: {
@@ -457,7 +415,7 @@ it('should edit', async () => {
   await editAccount.emitChange('edit');
   await didEdit;
 
-  expectActsToContain(getEditActs());
+  testUtils.expectActsToContain(acts, getEditActs());
 });
 
 it('should edit with hideCancel', async () => {
@@ -466,7 +424,7 @@ it('should edit with hideCancel', async () => {
   await editAccount.emitChange('edit');
   await didEdit;
 
-  expectActsToContain(getEditActs(true));
+  testUtils.expectActsToContain(acts, getEditActs(true));
 });
 
 it('canSubmit', async () => {
@@ -475,7 +433,7 @@ it('canSubmit', async () => {
   await editAccount.emitChange('canSubmit');
   await didCanSubmit;
 
-  expectActsToContain([
+  testUtils.expectActsToContain(acts, [
     {
       name: 'Set',
       props: {
@@ -498,7 +456,7 @@ it('cannotSubmit', async () => {
   await editAccount.emitChange('cannotSubmit');
   await didCannotSubmit;
 
-  expectActsToContain([
+  testUtils.expectActsToContain(acts, [
     {
       name: 'Set',
       props: {
@@ -561,7 +519,7 @@ it('should save', async () => {
   await editAccount.emitChange('save');
   await didSave;
 
-  expectActsToContain(getSaveActs());
+  testUtils.expectActsToContain(acts, getSaveActs());
 });
 
 it('should save without preview', async () => {
@@ -570,7 +528,7 @@ it('should save without preview', async () => {
   await editAccount.emitChange('save');
   await didSave;
 
-  expectActsToContain(getSaveActs(false));
+  testUtils.expectActsToContain(acts, getSaveActs(false));
 });
 
 it('should cancel', async () => {
@@ -579,7 +537,7 @@ it('should cancel', async () => {
   await editAccount.emitChange('cancel');
   await didCancel;
 
-  expectActsToContain([
+  testUtils.expectActsToContain(acts, [
     {
       name: 'Emit',
       props: {
@@ -608,7 +566,7 @@ it('should support the change password scenario', async () => {
   // Wait for all the create listeners to run before mocking so that we have a predictable baseline
   await changePassword.resolveAfterCreate();
 
-  mockRecordEditor(changePassword);
+  testUtils.mockComponentListeners(changePassword, acts);
 
   changePassword.emitLoad();
   await changePassword.resolveAfterLoad();

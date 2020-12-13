@@ -3,6 +3,7 @@
 import compiler from './compiler';
 import Form from './form';
 import utils from './utils';
+import each from 'lodash/each';
 
 class TestUtils {
   defaultFields = [
@@ -150,6 +151,75 @@ class TestUtils {
   async sleepToEnsureDifferentTimestamps() {
     // Sleep for 2 milliseconds as timestamps can be the same with 1 millisecond
     return this.timeout(2);
+  }
+
+  mockActions(actions, acts, stub, mockedGlobals) {
+    actions.forEach((action) => {
+      const actions = action._actions;
+      const elseActions = action._else;
+      if (actions || elseActions) {
+        // if (actions) { // TODO: uncomment if needed
+        this.mockActions(actions, acts, stub, mockedGlobals);
+        // }
+        if (elseActions) {
+          this.mockActions(elseActions, acts, stub, mockedGlobals);
+        }
+      } else {
+        const origAct = action.act;
+        const spy = jest.fn();
+        action.act = function () {
+          acts.push({
+            name: action.getClassName(),
+            props: action.get(),
+            spy,
+          });
+
+          spy.apply(spy, arguments);
+
+          if (!stub) {
+            return origAct.apply(this, arguments);
+          }
+        };
+      }
+
+      if (mockedGlobals) {
+        this.mockActionGlobals(action, mockedGlobals);
+      }
+    });
+  }
+
+  mockAction(action, acts, stub, mockedGlobals) {
+    this.mockActions([action], acts, stub, mockedGlobals);
+  }
+
+  expectActsToContain(acts, expActs) {
+    expect(acts).toHaveLength(expActs.length);
+    expActs.forEach((expAct, i) => {
+      const act = acts[i];
+      const actualProps = {};
+      each(expAct.props, (value, name) => {
+        actualProps[name] = act.props[name];
+      });
+      const actualAct = { name: act.name };
+      if (expAct.props !== undefined) {
+        actualAct.props = actualProps;
+      }
+      expect(actualAct).toEqual(expAct);
+    });
+  }
+
+  mockComponentListeners(component, acts, event) {
+    const listeners = component.get('listeners');
+    listeners.forEach((listener) => {
+      if (listener.event === event) {
+        this.mockActions(listener.actions, acts, false);
+      }
+    });
+  }
+
+  mockActionGlobals(action, mockedGlobals) {
+    action._componentFillerProps._getGlobals = () => mockedGlobals;
+    action._globals = mockedGlobals;
   }
 }
 
