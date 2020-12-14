@@ -62,3 +62,20 @@ it('should initialize', async () => {
     },
   ]);
 });
+
+it('should save', async () => {
+  await editor.resolveAfterCreate();
+
+  testUtils.mockComponentListeners(editor, acts, false, true);
+
+  await editor.runListeners('didSave');
+
+  testUtils.expectActsToContain(acts, [
+    {
+      name: 'LogInToApp',
+    },
+    {
+      name: 'Redirect',
+    },
+  ]);
+});
