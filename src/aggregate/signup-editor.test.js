@@ -1,22 +1,18 @@
 import compiler from '../compiler';
+import testUtils from '../test-utils';
 
 let acts;
 let editor;
 
 const baseForm = {
-  component: 'Form',
+  component: 'User',
   fields: [
     {
-      component: 'PasswordField',
-      name: 'password',
-      label: 'New Password',
-      required: true,
-    },
-    {
-      component: 'PasswordField',
-      name: 'retypePassword',
-      label: 'Retype Password',
-      required: true,
+      component: 'SelectField',
+      name: 'roles',
+      label: 'Roles',
+      multiple: true,
+      options: [{ value: 'admin', label: 'Admin' }],
     },
   ],
 };
@@ -26,14 +22,43 @@ beforeEach(() => {
   editor = compiler.newComponent({
     component: 'SignupEditor',
     baseForm,
+    store: {
+      component: 'MemoryStore',
+    },
   });
 });
 
 it('should auto validate', async () => {
   editor.set({ autoValidate: true });
-  editor.getField('password').setValue('secret123');
-  editor.getField('retypePassword').setValue('secret1234');
+  editor.setValues({
+    username: 'test@example.com',
+    password: 'secret123',
+    retypePassword: 'secret1234',
+  });
   expect(editor.getErrs()).toEqual([
     { field: 'retypePassword', error: 'must match' },
+  ]);
+});
+
+it('should initialize', async () => {
+  testUtils.mockComponentListeners(editor, acts, false);
+
+  await editor.resolveAfterCreate();
+
+  testUtils.expectActsToContain(acts, [
+    {
+      name: 'Set',
+      props: {
+        value: {
+          'fields.username.out': true,
+          'fields.password.hidden': false,
+          'fields.password.out': true,
+          'fields.password.block': false,
+          'fields.roles.hidden': true,
+          'fields.save.label': 'Create Account',
+          'fields.save.icon': 'CheckCircle',
+        },
+      },
+    },
   ]);
 });
