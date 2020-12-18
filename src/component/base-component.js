@@ -92,11 +92,18 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   _emitCreate() {
-    this.emitChange('create');
+    // Due to a race condition, we may attempt to fire a duplicate 'create' event whenever we wrap a
+    // component. Currently, the BaseComponent constructor fires 'create', which due to a race
+    // condition, can be emitted on either the wrapping component or wrapped component. TODO: is
+    // there another way to silence duplicates?
+    if (!this._emittedCreate) {
+      this._emittedCreate = true;
+      this.emitChange('create');
 
-    if (!this._hasListenerForEvent('create')) {
-      // There are no create listeners so emit a created event
-      this._emitDidCreate();
+      if (!this._hasListenerForEvent('create')) {
+        // There are no create listeners so emit a created event
+        this._emitDidCreate();
+      }
     }
   }
 
@@ -129,6 +136,7 @@ export default class BaseComponent extends events.EventEmitter {
     this._subEvents = {};
 
     this._isLoaded = false;
+    this._emittedCreate = false;
     this._resolveAfterCreate = utils.once(this, 'didCreate');
     this._resolveAfterLoad = utils.once(this, 'didLoad');
 
