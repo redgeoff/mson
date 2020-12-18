@@ -69,7 +69,7 @@ it('should avoid emitting duplicate create events', async () => {
     component.resolveAfterCreate(),
 
     // Allow extra time to make sure create not emitted twice
-    testUtils.timeout(100),
+    testUtils.timeout(10),
   ]);
 
   // Ensure that duplicate "create" events aren't emitted, as triggered by the constructors of both
