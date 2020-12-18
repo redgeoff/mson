@@ -52,3 +52,29 @@ it('should support nested wrapping', async () => {
   // wrapping
   expect(last.getClassName()).toEqual('WrappedComponent');
 });
+
+it('should avoid emitting duplicate create events', async () => {
+  const field = new TextField({
+    name: 'name',
+    label: 'Name',
+  });
+
+  const component = new WrappedComponent({
+    componentToWrap: field,
+  });
+
+  const spy = jest.spyOn(field, 'emitChange');
+
+  await Promise.all([
+    component.resolveAfterCreate(),
+
+    // Allow extra time to make sure create not emitted twice
+    testUtils.timeout(10),
+  ]);
+
+  // Ensure that duplicate "create" events aren't emitted, as triggered by the constructors of both
+  // the wrapping and wrapped components
+  expect(spy).toHaveBeenCalledTimes(2);
+  expect(spy).toHaveBeenCalledWith('create');
+  expect(spy).toHaveBeenCalledWith('didCreate', true);
+});
