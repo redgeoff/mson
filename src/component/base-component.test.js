@@ -297,6 +297,9 @@ it('should filter listeners based on layer', async () => {
 it('should set layer', () => {
   BaseComponent.setLayer('frontEnd');
   expect(BaseComponent.getLayer()).toEqual('frontEnd');
+
+  // Restore the default so that we don't affect any other tests
+  BaseComponent.setLayer(null);
 });
 
 it('set should throw error if props is not an object', () => {
