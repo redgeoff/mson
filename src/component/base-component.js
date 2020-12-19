@@ -520,6 +520,17 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
+  static _throwActionErrors = false;
+
+  static setThrowActionErrors(throwErrs) {
+    BaseComponent._throwActionErrors = throwErrs;
+  }
+
+  // Provides a way of mocking for tests
+  _shouldThrowActionErrors() {
+    return BaseComponent._throwActionErrors;
+  }
+
   async _runListenersAndEmitError(event, value) {
     try {
       await this.runListeners(event, value);
@@ -532,6 +543,9 @@ export default class BaseComponent extends events.EventEmitter {
       // causes recent versions of React to bomb out with an "unhandled promise" error. We choose
       // not to console log the error here as these errors can be expected in some flows and we may
       // opt for them to be ignored.
+      if (this._shouldThrowActionErrors()) {
+        throw err;
+      }
     }
   }
 
