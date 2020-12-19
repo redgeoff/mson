@@ -588,6 +588,16 @@ it('should not duplicate sub event listeners', () => {
 it('should emit error when running listeners', async () => {
   const component = new BaseComponent();
 
+  // Sanity check for the test coverage
+  expect(component._shouldThrowActionErrors()).toEqual(
+    BaseComponent._throwActionErrors
+  );
+
+  // Mock so that our test ignores the value of BaseComponent._throwActionErrors
+  jest
+    .spyOn(component, '_shouldThrowActionErrors')
+    .mockImplementation(() => true);
+
   // Mock
   const err = new Error();
   component.runListeners = async () => {
@@ -596,6 +606,14 @@ it('should emit error when running listeners', async () => {
 
   const onActionErrSpy = jest.spyOn(component, '_onActionErr');
 
+  await expect(component._runListenersAndEmitError()).rejects.toThrowError(err);
+  expect(onActionErrSpy).toHaveBeenCalledWith(err);
+
+  // Now expect not to throw
+  jest
+    .spyOn(component, '_shouldThrowActionErrors')
+    .mockImplementation(() => false);
+  onActionErrSpy.mockReset();
   await component._runListenersAndEmitError();
   expect(onActionErrSpy).toHaveBeenCalledWith(err);
 });
