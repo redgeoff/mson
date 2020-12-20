@@ -12565,9 +12565,10 @@ side-channel@^1.0.2:
     es-abstract "^1.17.0-next.1"
     object-inspect "^1.7.0"
 
-sift@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/sift/-/sift-9.0.0.tgz#6161a8a8c715fab28fb6044199137e8d3b521eae"
+sift@^13.4.0:
+  version "13.4.0"
+  resolved "https://registry.yarnpkg.com/sift/-/sift-13.4.0.tgz#859741aa76421dadc6cf07c0634088cbb120d0d3"
+  integrity sha512-sJAs3ujQjx6QVzWPKmqK1LhTAnpEiP2Q7zJi4VSmRYGAuz9SmlyAzo8w4jJQrrGXJb/QNUd0iJvD17dRezzfAA==
 
 signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"

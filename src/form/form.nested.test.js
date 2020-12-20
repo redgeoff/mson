@@ -312,11 +312,7 @@ it('should validate nested form validators', async () => {
     validators: [
       {
         where: {
-          fields: {
-            email: {
-              value: 'scott@example.com',
-            },
-          },
+          'fields.email.value': 'scott@example.com',
         },
         error: {
           field: 'email',
@@ -333,11 +329,7 @@ it('should validate nested form validators', async () => {
       validators: [
         {
           where: {
-            fields: {
-              firstName: {
-                value: 'F. Scott',
-              },
-            },
+            'fields.firstName.value': 'F. Scott',
           },
           error: {
             field: 'firstName',

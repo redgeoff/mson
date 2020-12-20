@@ -15,11 +15,7 @@ const createForm = () => {
     validators: [
       {
         where: {
-          fields: {
-            firstName: {
-              value: 'Jim',
-            },
-          },
+          'fields.firstName.value': 'Jim',
         },
         error: {
           field: 'firstName',
@@ -28,12 +24,8 @@ const createForm = () => {
       },
       {
         where: {
-          fields: {
-            lastName: {
-              value: {
-                $eq: 'Jones',
-              },
-            },
+          'fields.lastName.value': {
+            $eq: 'Jones',
           },
         },
         error: {
@@ -43,12 +35,8 @@ const createForm = () => {
       },
       {
         where: {
-          fields: {
-            middleName: {
-              value: {
-                $eq: '{{fields.firstName.value}}',
-              },
-            },
+          'fields.middleName.value': {
+            $eq: '{{fields.firstName.value}}',
           },
         },
         error: {

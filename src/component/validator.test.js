@@ -148,11 +148,9 @@ it('should validate with escaped regex', () => {
   let rules = [
     {
       where: {
-        fields: {
-          password: {
-            $not: {
-              $regex: '\\d',
-            },
+        'fields.password': {
+          $not: {
+            $regex: '\\d',
           },
         },
       },

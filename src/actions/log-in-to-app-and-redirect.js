@@ -8,10 +8,8 @@ export default {
     {
       component: 'Action',
       if: {
-        globals: {
-          redirectAfterLogin: {
-            $in: [null, undefined],
-          },
+        'globals.redirectAfterLogin': {
+          $in: [null, undefined],
         },
       },
       actions: [

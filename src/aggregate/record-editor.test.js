@@ -85,12 +85,8 @@ beforeAll(() => {
     validators: [
       {
         where: {
-          fields: {
-            retypePassword: {
-              value: {
-                $ne: '{{password.value}}',
-              },
-            },
+          'fields.retypePassword.value': {
+            $ne: '{{password.value}}',
           },
         },
         error: {
