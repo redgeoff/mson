@@ -1,4 +1,4 @@
-export default {
+const personFullNameField = {
   component: 'CompositeField',
   schema: {
     component: 'Form',
@@ -24,3 +24,5 @@ export default {
     },
   ],
 };
+
+export default personFullNameField;

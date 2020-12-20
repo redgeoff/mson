@@ -1,4 +1,4 @@
-export default {
+const countryField = {
   component: 'SelectField',
   schema: {
     component: 'Form',
@@ -264,3 +264,5 @@ export default {
     { value: 'ZW', label: 'Zimbabwe' },
   ],
 };
+
+export default countryField;

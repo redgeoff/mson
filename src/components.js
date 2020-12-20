@@ -102,7 +102,7 @@ import Vault from './vaults/vault';
 import WhereField from './fields/where-field';
 import WrappedComponent from './component/wrapped-component';
 
-export default {
+const components = {
   AccessForm: FormAccess,
   Action,
   AddressField,
@@ -202,3 +202,5 @@ export default {
   WhereField,
   WrappedComponent,
 };
+
+export default components;

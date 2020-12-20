@@ -1,4 +1,4 @@
-export default {
+const signupEditor = {
   name: 'SignupEditor',
   component: 'RecordEditor',
   preview: false,
@@ -56,3 +56,5 @@ export default {
     },
   ],
 };
+
+export default signupEditor;

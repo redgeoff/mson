@@ -1,4 +1,4 @@
-export default {
+const recoverPassword = {
   name: 'RecoverPassword',
   component: 'Form',
 
@@ -34,3 +34,5 @@ export default {
     },
   ],
 };
+
+export default recoverPassword;

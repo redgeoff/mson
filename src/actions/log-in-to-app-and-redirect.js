@@ -1,4 +1,4 @@
-export default {
+const logInToAppAndRedirect = {
   name: 'LogInToAppAndRedirect',
   component: 'Action',
   actions: [
@@ -32,3 +32,5 @@ export default {
     },
   ],
 };
+
+export default logInToAppAndRedirect;

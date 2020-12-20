@@ -1,4 +1,4 @@
-export default {
+const recoverPasswordEditor = {
   name: 'RecoverPasswordEditor',
   component: 'RecoverPassword',
 
@@ -57,3 +57,5 @@ export default {
     },
   ],
 };
+
+export default recoverPasswordEditor;

@@ -1,4 +1,4 @@
-export default {
+const stateField = {
   component: 'SelectField',
   schema: {
     component: 'Form',
@@ -63,3 +63,5 @@ export default {
     { value: 'WY', label: 'Wyoming' },
   ],
 };
+
+export default stateField;

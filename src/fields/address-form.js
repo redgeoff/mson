@@ -1,4 +1,4 @@
-export default {
+const addressForm = {
   component: 'Form',
   fields: [
     {
@@ -196,3 +196,5 @@ export default {
     },
   ],
 };
+
+export default addressForm;

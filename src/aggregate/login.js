@@ -1,4 +1,4 @@
-export default {
+const login = {
   name: 'Login',
   component: 'Form',
   fields: [
@@ -53,3 +53,5 @@ export default {
     },
   ],
 };
+
+export default login;

@@ -1,4 +1,4 @@
-export default {
+const optionsField = {
   component: 'CollectionField',
   label: 'Options',
   forbidOrder: false,
@@ -24,3 +24,5 @@ export default {
     },
   },
 };
+
+export default optionsField;

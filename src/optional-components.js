@@ -4,10 +4,12 @@ import FormBuilder from './form/form-builder';
 import JSONStringify from './actions/json-stringify';
 import GenerateUUID from './actions/generate-uuid';
 
-export default {
+const optionalComponents = {
   FieldEditorForm,
   FormEditor,
   FormBuilder,
   GenerateUUID,
   JSONStringify,
 };
+
+export default optionalComponents;
