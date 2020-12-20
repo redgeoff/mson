@@ -98,9 +98,7 @@ For example, you can prevent the user from entering _nope@example.com_:
   validators: [
     {
       where: {
-        'fields.email.value': {
-          value: 'nope@example.com'
-        }
+        'fields.email.value': 'nope@example.com'
       },
       error: {
         field: 'email',
