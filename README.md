@@ -113,8 +113,7 @@ Template parameters like `{{fields.email.value}}` can be used to inject the valu
 where: {
   'retypePassword.fields.value': {
     $ne: '{{fields.password.value}}'
-  },
-  error: ...
+  }
 }
 ```
 
