@@ -1,4 +1,4 @@
-export default {
+const passwordField = {
   component: 'TextFieldHiddenSchema',
   type: 'password',
   minLength: 8,
@@ -34,3 +34,5 @@ export default {
     },
   ],
 };
+
+export default passwordField;

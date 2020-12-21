@@ -1,4 +1,4 @@
-export default {
+const recordEditor = {
   name: 'RecordEditor',
   component: 'Form',
   schema: {
@@ -277,3 +277,5 @@ export default {
     },
   ],
 };
+
+export default recordEditor;

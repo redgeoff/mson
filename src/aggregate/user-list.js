@@ -1,4 +1,4 @@
-export default {
+const userList = {
   name: 'UserList',
   component: 'CollectionField',
   schema: {
@@ -143,3 +143,5 @@ export default {
     },
   },
 };
+
+export default userList;

@@ -1,4 +1,4 @@
-export default {
+const setFromDoc = {
   name: 'SetFromDoc',
   component: 'Action',
   schema: {
@@ -29,3 +29,5 @@ export default {
     },
   ],
 };
+
+export default setFromDoc;

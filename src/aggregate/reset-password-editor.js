@@ -1,4 +1,4 @@
-export default {
+const resetPasswordEditor = {
   name: 'ResetPasswordEditor',
   component: 'Form',
 
@@ -88,3 +88,5 @@ export default {
     },
   ],
 };
+
+export default resetPasswordEditor;

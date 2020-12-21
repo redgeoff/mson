@@ -1,4 +1,4 @@
-export default {
+const chainedSelectOptionsField = {
   component: 'CollectionField',
   label: 'Options',
   forbidOrder: false,
@@ -31,3 +31,5 @@ export default {
     },
   },
 };
+
+export default chainedSelectOptionsField;

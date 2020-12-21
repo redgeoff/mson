@@ -1,4 +1,4 @@
-export default {
+const contactUs = {
   name: 'ContactUs',
   component: 'Form',
   schema: {
@@ -149,3 +149,5 @@ export default {
     },
   ],
 };
+
+export default contactUs;

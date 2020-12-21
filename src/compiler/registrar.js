@@ -7,4 +7,5 @@
 // without compiling it as we cannot properly configure babel plugins. (I tried using
 // react-app-rewired, but that didn't work)
 
-export default {};
+const registrar = {};
+export default registrar;

@@ -1,4 +1,4 @@
-export default {
+const recordList = {
   name: 'RecordList',
   component: 'Form',
   schema: {
@@ -34,3 +34,5 @@ export default {
     },
   ],
 };
+
+export default recordList;

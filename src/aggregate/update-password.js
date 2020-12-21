@@ -1,4 +1,4 @@
-export default {
+const updatePassword = {
   name: 'UpdatePassword',
   component: 'Form',
   fields: [
@@ -63,3 +63,5 @@ export default {
     },
   ],
 };
+
+export default updatePassword;

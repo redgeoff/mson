@@ -1,4 +1,4 @@
-export default {
+const updatePasswordEditor = {
   name: 'UpdatePasswordEditor',
   component: 'RecordEditor',
   schema: {
@@ -39,3 +39,5 @@ export default {
     },
   ],
 };
+
+export default updatePasswordEditor;

@@ -1,4 +1,4 @@
-export default {
+const authenticatedContactUs = {
   name: 'AuthenticatedContactUs',
   component: 'ContactUs',
   listeners: [
@@ -39,3 +39,5 @@ export default {
     },
   ],
 };
+
+export default authenticatedContactUs;

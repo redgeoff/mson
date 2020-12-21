@@ -1,4 +1,4 @@
-export default {
+const emailField = {
   component: 'TextFieldHiddenSchema',
   maxLength: '50',
   validators: [
@@ -14,3 +14,5 @@ export default {
     },
   ],
 };
+
+export default emailField;
