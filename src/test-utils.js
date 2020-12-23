@@ -4,11 +4,11 @@ import compiler from './compiler';
 import Form from './form';
 import utils from './utils';
 import each from 'lodash/each';
-import BaseComponent from './component/base-component';
+import Component from './component/component';
 
 // Throw action errors as we should not receive them in our test environment. Note: we cannot toggle
 // this option in a globalSetup as the scope in a globalSetup is not shared with the tests.
-BaseComponent.setThrowActionErrors(true);
+Component.setThrowActionErrors(true);
 
 class TestUtils {
   defaultFields = [

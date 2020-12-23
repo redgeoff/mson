@@ -523,12 +523,12 @@ export default class BaseComponent extends events.EventEmitter {
   static _throwActionErrors = false;
 
   static setThrowActionErrors(throwErrs) {
-    BaseComponent._throwActionErrors = throwErrs;
+    this.constructor._throwActionErrors = throwErrs;
   }
 
   // Provides a way of mocking for tests
   _shouldThrowActionErrors() {
-    return BaseComponent._throwActionErrors;
+    return this.constructor._throwActionErrors;
   }
 
   async _runListenersAndEmitError(event, value) {
