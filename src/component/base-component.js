@@ -557,12 +557,39 @@ export default class BaseComponent extends events.EventEmitter {
     });
   }
 
+  // This function adds a getter for the property so that we can use a notation like
+  // `fields.firstName.value` to access properties. This unlocks the ability to use JS in template
+  // parameters as we can then use this dot notation directly in the JS, without needing to
+  // transform the JS. The dot notation was introduced before MSON supported JS in template
+  // parameters and we want to preserve this shorthand as the alternate notation of
+  // `fields.get('firstName.value')` is verbose.
+  //
+  // Note: JS has a powerful convention called Proxy (https://stackoverflow.com/a/51177586/2831606)
+  // that can be used to create a single getter that can dynamically determine whether to issue
+  // this.get(name) or preserve the native getter. Unfortunately, using Proxy in this way is
+  // terribly inefficient. Specifically, it results in the performance tests taking 50% longer to
+  // complete. Therefore, we opt to explicitly define a getter for each property, which prevents
+  // adding latency to native gets. This being said, through our performance tests we observed that
+  // even adding explicit getters for props adds about a 4% latency, but the power it unlocks with
+  // JS in template parameters makes it worth the latency.
+  _addGetter(name) {
+    // Is a function already defined for this name? As a safeguard don't overwrite it
+    if (this[name] === undefined) {
+      Object.defineProperty(this, name, {
+        get: function () {
+          return this.get(name);
+        },
+      });
+    }
+  }
+
   _pushProp(name) {
     // Is the prop missing? The prop may already exist if we are overloading the type in a dervied
     // component
     if (!this.has(name)) {
       this._propNames.push(name);
       this._indexedPropNames[name] = true;
+      this._addGetter(name);
     }
   }
 

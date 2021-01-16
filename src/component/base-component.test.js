@@ -632,3 +632,24 @@ it('should parent class name', () => {
   const personFullNameField = new PersonFullNameField();
   expect(personFullNameField.getParentClassName()).toEqual('CompositeField');
 });
+
+it('should support getters', () => {
+  const schema = {
+    component: 'Form',
+    fields: [
+      {
+        name: 'foo',
+        component: 'Field',
+      },
+    ],
+  };
+
+  const innerComponent = new BaseComponent({ schema });
+
+  const outerComponent = new BaseComponent({ schema });
+
+  innerComponent.set({ foo: 'bar' });
+  outerComponent.set({ foo: innerComponent });
+  expect(outerComponent.get('foo.foo')).toEqual('bar');
+  expect(outerComponent.foo.foo).toEqual('bar');
+});
