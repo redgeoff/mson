@@ -15,9 +15,23 @@
 import events from 'events';
 
 export default class Mapa extends events.EventEmitter {
+  _proxy() {
+    return new Proxy(this, {
+      // Intercept all gets to support a shorthand notation, like `m.a`, instead of `m.get('a')`
+      get: (target, key) => {
+        if (key in this) {
+          return Reflect.get(target, key);
+        } else {
+          return this.get(key);
+        }
+      },
+    });
+  }
+
   constructor() {
     super();
     this.clear();
+    return this._proxy();
   }
 
   clear() {

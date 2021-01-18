@@ -940,3 +940,9 @@ it('should throw if both beforeKey and afterKey are defined', () => {
   expect(() => m.set('a', 1, 'b', null)).toThrow(err);
   expect(() => m.set('a', 1, null, null)).toThrow(err);
 });
+
+it('should support getters', () => {
+  const m = new Mapa();
+  m.set('a', 1);
+  expect(m.a).toEqual(1);
+});
