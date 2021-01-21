@@ -50,7 +50,7 @@
     "compile": "cross-env NODE_ENV=production babel src --ignore '**/*.test.js' -d lib && npm run copy-json",
     "bundle": "webpack",
     "touch": "find src -exec touch {} \\;",
-    "analyze-bundle": "webpack --profile --json > ./dist/stats.json && webpack-bundle-analyzer ./dist/stats.json",
+    "analyze-bundle": "webpack --json > ./dist/stats.json && webpack-bundle-analyzer ./dist/stats.json",
     "prepublishOnly": "yarn compile && yarn bundle",
     "semantic-release": "semantic-release"
   },
