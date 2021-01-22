@@ -13,6 +13,32 @@ import each from 'lodash/each';
 import cloneDeep from 'lodash/cloneDeep';
 import MissingComponentError from './missing-component-error';
 
+import { Aggregator } from 'mingo/aggregator';
+import 'mingo/init/system';
+
+const collection = [
+  {
+    foo: true,
+  },
+];
+
+let agg = new Aggregator([
+  {
+    $project: {
+      bar: {
+        $not: '$foo',
+      },
+    },
+  },
+]);
+
+// return an iterator for streaming results
+// let stream = agg.stream(collection);
+
+// return all results. same as `stream.all()`
+let result = agg.run(collection);
+console.log(result);
+
 export class Compiler {
   constructor(props) {
     this._components = props.components;
