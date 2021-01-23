@@ -349,3 +349,41 @@ it('should retrieve parent properties', async () => {
   });
   expect(field.getValue()).toEqual('bar');
 });
+
+// it('should support mongo query in template parameters', async () => {
+//   const action = new Set({
+//     name: 'value',
+//     value: {
+//       $cond: [
+//         {
+//           $eq: [
+//             "{{value}}",
+//             'Jack'
+//           ]
+//         },
+//         "is Jack",
+//         "is Jill"
+//       ]
+//     }
+//   });
+
+//   const jack = new TextField({
+//     name: 'firstName',
+//     label: 'First Name',
+//     value: 'Jack',
+//   });
+//   await action.run({
+//     component: field,
+//   });
+//   expect(jack.getValue()).toEqual('is Jack');
+
+//   const jill = new TextField({
+//     name: 'firstName',
+//     label: 'First Name',
+//     value: 'Jill',
+//   });
+//   await action.run({
+//     component: field,
+//   });
+//   expect(jill.getValue()).toEqual('is Jill');
+// });
