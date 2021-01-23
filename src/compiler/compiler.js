@@ -14,7 +14,8 @@ import cloneDeep from 'lodash/cloneDeep';
 import MissingComponentError from './missing-component-error';
 
 import { Aggregator } from 'mingo/aggregator';
-import 'mingo/init/system';
+// import 'mingo/init/system';
+import 'mingo/init/basic';
 
 const collection = [
   {
