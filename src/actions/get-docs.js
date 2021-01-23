@@ -25,7 +25,7 @@ export default class GetDocs extends Action {
 
   async act(/* props */) {
     return this.get('store').getAllDocs({
-      where: this.get('where'),
+      where: this.get('where', true),
     });
   }
 }

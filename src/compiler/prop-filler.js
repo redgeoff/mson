@@ -115,7 +115,9 @@ export default class PropFiller {
   // TODO: move pieces to "query" layer
   _resolveAnyQuery(obj) {
     const firstKey = this._getFirstKey(obj);
+    // TODO: this can cause problems with a where clause!
     if (firstKey !== undefined && this._isOperator(firstKey)) {
+      console.log({ obj });
       const agg = new Aggregator([
         {
           $project: {
@@ -136,16 +138,20 @@ export default class PropFiller {
     }
   }
 
-  fill(obj) {
+  fill(obj, prohibitQuery) {
     if (typeof obj === 'string') {
       return this.fillString(obj);
     } else {
       const filledObj = this.fillAll(obj);
 
-      // We choose to execute the Mongo query in this layer instead of BaseComponent._setProperty()
-      // as BaseComponent._setProperty() is called far more frequently and we want to avoid the
-      // unneeded overhead.
-      return this._resolveAnyQuery(filledObj);
+      if (prohibitQuery) {
+        return filledObj;
+      } else {
+        // We choose to execute the Mongo query in this layer instead of BaseComponent._setProperty()
+        // as BaseComponent._setProperty() is called far more frequently and we want to avoid the
+        // unneeded overhead.
+        return this._resolveAnyQuery(filledObj);
+      }
     }
   }
 }
