@@ -14,8 +14,13 @@ import cloneDeep from 'lodash/cloneDeep';
 import MissingComponentError from './missing-component-error';
 
 import { Aggregator } from 'mingo/aggregator';
-// import 'mingo/init/system';
-import 'mingo/init/basic';
+
+import 'mingo/init/system';
+
+// import 'mingo/init/basic';
+// import { useOperators, OperatorType } from "mingo/core";
+// import { $cond } from "mingo/operators/expression";
+// useOperators(OperatorType.EXPRESSION, { $cond });
 
 const collection = [
   {
@@ -39,6 +44,24 @@ let agg = new Aggregator([
 // return all results. same as `stream.all()`
 let result = agg.run(collection);
 console.log(result);
+
+agg = new Aggregator([
+  {
+    $project: {
+      bar: {
+        $cond: [
+          {
+            $eq: ['$foo', true],
+          },
+          'fooed',
+          'not fooed',
+        ],
+      },
+    },
+  },
+]);
+const result2 = agg.run(collection);
+console.log({ result2 });
 
 export class Compiler {
   constructor(props) {
