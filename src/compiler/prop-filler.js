@@ -111,10 +111,27 @@ export default class PropFiller {
     return typeof key === 'string' && key[0] === '$';
   }
 
+  _isAggegation(obj) {
+    // Is the first key in the object an operator? e.g.
+    // {
+    //   $cond: [
+    //     {
+    //       $eq: ['{{value}}', 'Jack']
+    //     },
+    //     'is Jack',
+    //     'is Jill'
+    //   ]
+    // }
+    //
+    // We use this to determine if obj is an aggregation. An alternative to this would be
+    // to accept values like `{ mongo: <query> }`, but that adds a lot of bloat.
+    const firstKey = this._getFirstKey(obj);
+    return firstKey !== undefined && this._isOperator(firstKey);
+  }
+
   // TODO: move pieces to "query" layer
   _resolveAnyAggregation(obj) {
-    const firstKey = this._getFirstKey(obj);
-    if (firstKey !== undefined && this._isOperator(firstKey)) {
+    if (this._isAggegation(obj)) {
       const agg = new Aggregator([
         {
           $project: {
