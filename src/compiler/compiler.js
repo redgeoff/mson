@@ -13,56 +13,6 @@ import each from 'lodash/each';
 import cloneDeep from 'lodash/cloneDeep';
 import MissingComponentError from './missing-component-error';
 
-// import { Aggregator } from 'mingo/aggregator';
-
-// import 'mingo/init/system';
-
-// // import 'mingo/init/basic';
-// // import { useOperators, OperatorType } from "mingo/core";
-// // import { $cond } from "mingo/operators/expression";
-// // useOperators(OperatorType.EXPRESSION, { $cond });
-
-// const collection = [
-//   {
-//     foo: true,
-//   },
-// ];
-
-// let agg = new Aggregator([
-//   {
-//     $project: {
-//       bar: {
-//         $not: '$foo',
-//       },
-//     },
-//   },
-// ]);
-
-// // return an iterator for streaming results
-// // let stream = agg.stream(collection);
-
-// // return all results. same as `stream.all()`
-// let result = agg.run(collection);
-// console.log(result);
-
-// agg = new Aggregator([
-//   {
-//     $project: {
-//       bar: {
-//         $cond: [
-//           {
-//             $eq: ['$foo', true],
-//           },
-//           'fooed',
-//           'not fooed',
-//         ],
-//       },
-//     },
-//   },
-// ]);
-// const result2 = agg.run(collection);
-// console.log({ result2 });
-
 export class Compiler {
   constructor(props) {
     this._components = props.components;

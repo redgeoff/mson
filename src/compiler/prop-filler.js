@@ -61,7 +61,6 @@ export default class PropFiller {
   }
 
   fillString(obj) {
-    // console.log('fillString', { obj })
     // Is obj a string?
     if (typeof obj === 'string') {
       // Is the string just a template string?
