@@ -1,4 +1,3 @@
-import each from 'lodash/each';
 import { Aggregator } from 'mingo/aggregator';
 import 'mingo/init/system';
 
@@ -13,13 +12,9 @@ import 'mingo/init/system';
 // useOperators(OperatorType.EXPRESSION, { $cond });
 
 const getFirstKey = (obj) => {
-  // TODO: this should be faster than `Object.keys(obj)[0]`, but we should test this assumption.
-  let firstKey = undefined;
-  each(obj, (value, key) => {
-    firstKey = key;
-    return false; // Exit loop
-  });
-  return firstKey;
+  // Note: https://gist.github.com/redgeoff/13e3cb9c9e5a0982529ea3a8cd755382 proves that using
+  // Object.keys() is faster than lodash's each with a short circuit
+  return Object.keys(obj)[0];
 };
 
 const isOperator = (key) => {
