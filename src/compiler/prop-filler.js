@@ -1,11 +1,7 @@
 // TODO: move from compiler directory as used by multiple modules
 
 import cloneDeepWith from 'lodash/cloneDeepWith';
-import each from 'lodash/each';
-
-import { Aggregator } from 'mingo/aggregator';
-import 'mingo/init/system';
-
+import { resolveAnyAggregation } from './query';
 export default class PropFiller {
   constructor(props) {
     this.setProps(props);
@@ -92,66 +88,6 @@ export default class PropFiller {
     });
   }
 
-  // TODO: move
-  _getFirstKey(obj) {
-    // TODO: this should be faster than `Object.keys(obj)[0]`, but we should test this assumption.
-    let firstKey = undefined;
-    each(obj, (value, key) => {
-      firstKey = key;
-      return false; // Exit loop
-    });
-    return firstKey;
-  }
-
-  // TODO: move
-  _isOperator(key) {
-    // If the key starts with $ then assume it is an operator. This is the same method that mingo
-    // uses:
-    // https://github.com/kofrasa/mingo/blob/924e8f5d1411a5879983de6c986dfdaf12bcb459/src/util.ts#L890
-    return typeof key === 'string' && key[0] === '$';
-  }
-
-  _isAggegation(obj) {
-    // Is the first key in the object an operator? e.g.
-    // {
-    //   $cond: [
-    //     {
-    //       $eq: ['{{value}}', 'Jack']
-    //     },
-    //     'is Jack',
-    //     'is Jill'
-    //   ]
-    // }
-    //
-    // We use this to determine if obj is an aggregation. An alternative to this would be
-    // to accept values like `{ mongo: <query> }`, but that adds a lot of bloat.
-    const firstKey = this._getFirstKey(obj);
-    return firstKey !== undefined && this._isOperator(firstKey);
-  }
-
-  // TODO: move pieces to "query" layer
-  _resolveAnyAggregation(obj) {
-    if (this._isAggegation(obj)) {
-      const agg = new Aggregator([
-        {
-          $project: {
-            value: obj,
-          },
-        },
-      ]);
-
-      // We use an empty collection as substitution of parameters is handled by MSON's template
-      // parameters, which are swapped out before the mingo query is run
-      const collection = [{}];
-
-      const result = agg.run(collection);
-
-      return result && result[0] && result[0].value;
-    } else {
-      return obj;
-    }
-  }
-
   fill(obj, preventAggregation) {
     if (typeof obj === 'string') {
       return this.fillString(obj);
@@ -164,7 +100,7 @@ export default class PropFiller {
         // We choose to execute the Mongo query in this layer instead of BaseComponent._setProperty()
         // as BaseComponent._setProperty() is called far more frequently and we want to avoid the
         // unneeded overhead.
-        return this._resolveAnyAggregation(filledObj);
+        return resolveAnyAggregation(filledObj);
       }
     }
   }
