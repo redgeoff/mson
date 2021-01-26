@@ -1,5 +1,5 @@
 import FormField from '../fields/form-field';
-import sift from 'sift';
+import { validateQuery } from '../compiler/query';
 import ObjectForm from '../object-form';
 
 class ValidatorWhere extends ObjectForm {
@@ -9,7 +9,7 @@ class ValidatorWhere extends ObjectForm {
     if (this._valueSet) {
       try {
         // Use sift to validate the where
-        sift(this._valueSet);
+        validateQuery(this._valueSet);
       } catch (err) {
         this._errorFromSet = err.message;
         this.set({ err: true });

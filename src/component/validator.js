@@ -1,6 +1,6 @@
 import each from 'lodash/each';
 import cloneDeep from 'lodash/cloneDeep';
-import sift from 'sift';
+import { filter } from '../compiler/query';
 import PropFiller from '../compiler/prop-filler';
 import queryToProps from '../component/query-to-props';
 
@@ -53,7 +53,7 @@ export default class Validator {
     const whereProps = this._getWhereProps(where);
 
     // Validation failed?
-    let sifted = [whereProps].filter(sift(where));
+    let sifted = filter([whereProps], where);
     if (sifted.length > 0) {
       return this._fillErrorProps(rule.error);
     }

@@ -43,8 +43,8 @@ export const throwIfNotPropertyNotDefinedError = (err) => {
 // components to return the values, but that does not always provide access to deeply nested
 // components.
 //
-// TODO: is there a more efficient way of extracting these values via a callback in the sift() call?
-// The selectorFn parameter does not work this way so it would probably require a change to sift.
+// TODO: is there a more efficient way of extracting these values via a callback in the query?
+// The selectorFn parameter does not work this way so it would probably require a change to sift/mingo.
 const queryToProps = (query, component) => {
   const props = {};
   const names = {};

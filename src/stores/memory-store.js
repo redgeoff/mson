@@ -3,7 +3,7 @@ import StoreMapa from './store-mapa';
 import cloneDeepWith from 'lodash/cloneDeepWith';
 import cloneDeep from 'lodash/cloneDeep';
 import orderBy from 'lodash/orderBy';
-import sift from 'sift';
+import { filter } from '../compiler/query';
 import { Reorder } from './reorder';
 
 export default class MemoryStore extends Store {
@@ -76,7 +76,7 @@ export default class MemoryStore extends Store {
     };
 
     for (const doc of this._docs.values()) {
-      const sifted = where === undefined ? null : [doc].filter(sift(where));
+      const sifted = where === undefined ? null : filter([doc], where);
       if (
         (showArchived === null ||
           showArchived === undefined ||

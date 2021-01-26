@@ -1,5 +1,6 @@
 import { Aggregator } from 'mingo/aggregator';
 import 'mingo/init/system';
+import sift from 'sift';
 
 // We can support tree shaking and cherry pick operators, but all the operators in Mingo are useful,
 // depending on your use case. Moreover, the largeness of Mingo's bundle size is mostly due to its
@@ -62,4 +63,12 @@ export const resolveAnyAggregation = (obj) => {
   } else {
     return obj;
   }
+};
+
+export const filter = (collection, query) => {
+  return collection.filter(sift(query));
+};
+
+export const validateQuery = (query) => {
+  sift(query);
 };
