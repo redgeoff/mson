@@ -76,6 +76,11 @@ export const filter = (collection, query) => {
   return cursor.all();
 };
 
+// export const validateQuery = (query) => {
+//   sift(query);
+// };
 export const validateQuery = (query) => {
-  sift(query);
+  // console.log({ query })
+  const q = new mingo.Query(query);
+  q.test([]);
 };

@@ -54,7 +54,8 @@ it('should validate', () => {
       field: 'where',
       error: [
         {
-          error: 'Unsupported operation: $invalidOp',
+          // error: 'Unsupported operation: $invalidOp', // sift
+          error: 'unknown operator $invalidOp', // mingo
         },
       ],
     },
