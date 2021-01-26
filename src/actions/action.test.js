@@ -313,9 +313,7 @@ it('should handle operators in top level of if', async () => {
       // Note: we intentionally want this entry to have a root property that is an operator as this
       // is what is used to determine whether or not the object is an aggregation that needs to be
       // resolved.
-      $not: {
-        value: 'Nina',
-      },
+      value: { $ne: 'Nina' },
     },
     actions: [
       new Set({

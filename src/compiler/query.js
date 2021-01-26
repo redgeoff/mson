@@ -1,5 +1,6 @@
 import { Aggregator } from 'mingo/aggregator';
 import 'mingo/init/system';
+import mingo from 'mingo';
 import sift from 'sift';
 
 // We can support tree shaking and cherry pick operators, but all the operators in Mingo are useful,
@@ -65,8 +66,14 @@ export const resolveAnyAggregation = (obj) => {
   }
 };
 
+// export const filter = (collection, query) => {
+//   return collection.filter(sift(query));
+// };
 export const filter = (collection, query) => {
-  return collection.filter(sift(query));
+  // console.log({ collection: JSON.stringify(collection), query: JSON.stringify(query) })
+  const q = new mingo.Query(query);
+  const cursor = q.find(collection);
+  return cursor.all();
 };
 
 export const validateQuery = (query) => {
