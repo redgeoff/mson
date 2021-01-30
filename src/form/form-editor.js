@@ -44,14 +44,10 @@ export default class FormEditor extends Form {
                     where: {
                       'parent.value': {
                         $elemMatch: {
-                          $and: [
-                            {
-                              id: {
-                                $ne: '{{fields.id.value}}',
-                              },
-                            },
-                            { name: '{{fields.name.value}}' },
-                          ],
+                          id: {
+                            $ne: '{{fields.id.value}}',
+                          },
+                          name: '{{fields.name.value}}',
                         },
                       },
                     },
