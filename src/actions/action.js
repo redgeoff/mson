@@ -95,7 +95,7 @@ export default class Action extends Component {
 
     if (where) {
       this._setWhereProps(where, props);
-      let filtered = filter([this._whereProps], where);
+      const filtered = filter([this._whereProps], where);
       if (filtered.length === 0) {
         // Condition failed
         if (this.get('else')) {
