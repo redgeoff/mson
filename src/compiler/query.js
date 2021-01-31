@@ -1,4 +1,3 @@
-import { Aggregator } from 'mingo/aggregator';
 import 'mingo/init/system';
 import mingo from 'mingo';
 
