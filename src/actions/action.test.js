@@ -301,6 +301,32 @@ it('should filter by nested properties', async () => {
   expect(field.getValue()).toEqual('Jack');
 });
 
+it('should handle operators in top level of if', async () => {
+  // This test provides a sanity check to make sure that the if clause isn't considered an
+  // aggregation.
+
+  const field = new TextField({ value: 'Nina' });
+
+  // An action with actions and an else block
+  const action = new Action({
+    if: {
+      // Note: we intentionally want this entry to have a root property that is an operator as this
+      // is what is used to determine whether or not the object is an aggregation that needs to be
+      // resolved.
+      value: { $ne: 'Nina' },
+    },
+    actions: [
+      new Set({
+        name: 'value',
+        value: 'Ella',
+      }),
+    ],
+  });
+
+  await action.run({ component: field });
+  expect(field.getValue()).toEqual('Nina');
+});
+
 it('should get nested property', async () => {
   const action = new Set({
     name: 'value',
@@ -348,4 +374,39 @@ it('should retrieve parent properties', async () => {
     component: field,
   });
   expect(field.getValue()).toEqual('bar');
+});
+
+it('should support mongo query in template parameters', async () => {
+  const action = new Set({
+    name: 'value',
+    value: {
+      $cond: [
+        {
+          $eq: ['{{value}}', 'Jack'],
+        },
+        'is Jack',
+        'is Jill',
+      ],
+    },
+  });
+
+  const jack = new TextField({
+    name: 'firstName',
+    label: 'First Name',
+    value: 'Jack',
+  });
+  await action.run({
+    component: jack,
+  });
+  expect(jack.getValue()).toEqual('is Jack');
+
+  const jill = new TextField({
+    name: 'firstName',
+    label: 'First Name',
+    value: 'Jill',
+  });
+  await action.run({
+    component: jill,
+  });
+  expect(jill.getValue()).toEqual('is Jill');
 });
