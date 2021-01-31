@@ -1,5 +1,5 @@
 import Component from '../component';
-import sift from 'sift';
+import { filter } from '../compiler/query';
 import PropFiller from '../compiler/prop-filler';
 import ComponentFillerProps from '../component/component-filler-props';
 import registrar from '../compiler/registrar';
@@ -93,8 +93,8 @@ export default class Action extends Component {
 
     if (where) {
       this._setWhereProps(where, props);
-      let sifted = [this._whereProps].filter(sift(where));
-      if (sifted.length === 0) {
+      const filtered = filter([this._whereProps], where);
+      if (filtered.length === 0) {
         // Condition failed
         if (this.get('else')) {
           actions = this.get('else');

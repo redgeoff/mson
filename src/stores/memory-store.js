@@ -3,7 +3,7 @@ import StoreMapa from './store-mapa';
 import cloneDeepWith from 'lodash/cloneDeepWith';
 import cloneDeep from 'lodash/cloneDeep';
 import orderBy from 'lodash/orderBy';
-import sift from 'sift';
+import { filter } from '../compiler/query';
 import { Reorder } from './reorder';
 
 export default class MemoryStore extends Store {
@@ -42,7 +42,7 @@ export default class MemoryStore extends Store {
     return doc;
   }
 
-  _toSiftWhere(where) {
+  _toMongoWhere(where) {
     return cloneDeepWith(where, (doc) => {
       if (doc && doc.$iLike) {
         return { $regex: '^' + doc.$iLike.replace(/%/, ''), $options: 'i' };
@@ -62,8 +62,8 @@ export default class MemoryStore extends Store {
     // TODO: after, first, before, last and cursors in results
 
     if (where) {
-      // Convert to a sift expression and then filter
-      where = this._toSiftWhere(where);
+      // Convert to a mongo expression and then filter
+      where = this._toMongoWhere(where);
     }
 
     const docs = {
@@ -76,12 +76,12 @@ export default class MemoryStore extends Store {
     };
 
     for (const doc of this._docs.values()) {
-      const sifted = where === undefined ? null : [doc].filter(sift(where));
+      const filtered = where === undefined ? null : filter([doc], where);
       if (
         (showArchived === null ||
           showArchived === undefined ||
           !!doc.archivedAt === showArchived) &&
-        (where === undefined || sifted.length !== 0)
+        (where === undefined || filtered.length !== 0)
       ) {
         docs.edges.push({
           node: doc,

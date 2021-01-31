@@ -1,6 +1,6 @@
 import each from 'lodash/each';
 import cloneDeep from 'lodash/cloneDeep';
-import sift from 'sift';
+import { filter } from '../compiler/query';
 import PropFiller from '../compiler/prop-filler';
 import queryToProps from '../component/query-to-props';
 
@@ -14,7 +14,7 @@ export default class Validator {
     return this._propFiller.fillString(str);
   }
 
-  // Performs in place fill to prepare for sift query
+  // Performs in place fill to prepare for query
   _fillWhere(where) {
     each(where, (node, name) => {
       // Leaf node?
@@ -53,8 +53,8 @@ export default class Validator {
     const whereProps = this._getWhereProps(where);
 
     // Validation failed?
-    let sifted = [whereProps].filter(sift(where));
-    if (sifted.length > 0) {
+    const filtered = filter([whereProps], where);
+    if (filtered.length > 0) {
       return this._fillErrorProps(rule.error);
     }
   }
