@@ -383,7 +383,7 @@ The DEFAULT_ORDER is set when ordering is turned off (being ignored) as it allow
 
 By naming the constructor `_create`, we are able to wrap the constructor logic so that things can be executed before and after the constructor. For example, this allows the `BaseComponent` to emit a `create` event after the component has been created without requiring the extended component to explicitly perform the emit. In addition, it allows components to perform logic before running the super's `_create`, e.g. the compiler compiles JSON before creating a component. Or, when a member variable is needed before the initial call to `set()`. This would not be possible with a standard JS constructor as the first line in a constructor must be `super(...)`.
 
-## Template parameter queries
+## Template Queries
 
 It is possible to chain together a series of actions to accomplish almost anything. The downside to this approach is that your code can quickly become bloated and you may be required to create a number of custom actions. Consider an example where we want to increment the value of a counter if the counter is not null. Assume that we have a custom component called `Increment`, which increments values and does not work with null values:
 
@@ -430,7 +430,7 @@ It is possible to chain together a series of actions to accomplish almost anythi
 }
 ```
 
-Instead, with Template Parameter Queries, we can use [Mongo aggregation operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#expression-operators) to accomplish this functionality in fewer lines of code:
+Instead, with Template Queries, we can use [Mongo aggregation operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#expression-operators) to accomplish this functionality in fewer lines of code:
 
 ```js
 {
