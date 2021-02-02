@@ -528,4 +528,4 @@ Here are some ways that this could be accomplished:
 
 1. Render a list of name/value pairs for all components and pass it to the interpreter. For deeply nested access however, including access to parent attributes (and their parent's, etc...) would be a __very__ expensive operation
 
-1. Require JS to be in another, explicit format, e.g. ``props.component.get('foo.value') + '123'``. Variation: require variables to be wrapped in {{}}, e.g. ``{{fields.foo.value}} + '123'``
+1. Require JS to be in another, explicit format, e.g. ``#props.component.get('foo.value') + '123'#``. Variation: require variables to be wrapped in `{{` and `}}`, e.g. `#{{fields.foo.value}} + '123'#`
