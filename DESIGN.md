@@ -8,19 +8,19 @@ There is parity between compiled and uncompiled components so that the same feat
 
 ### Compilation by instantiation
 
-Components are _compiled_ into JS objects by simply instantiating a JS object and setting the props dynamically. This method of _compilation_ allows us to avoid a transpilation step and makes it much easier to dynamically modify components on the fly.
+Components are _compiled_ into JS objects by simply instantiating a JS object and setting the props dynamically. This method of _compilation_ allows us to avoid a transpilation step and makes it much easier to dynamically modify components.
 
 ### Serialization & deserialization without `eval()`
 
-Components can be serialized using `JSON.stringfy()` and stored practically anywhere. Moreover, components can be deserialized by dynamically compiling the result of `JSON.parse()`. As a result, raw JS as a string, including JS template literals, are not supported as deserializing such JS would require the use of `eval()` or `new Function()`, which would expose a [XSS vulnerability](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_eval!) and add significant performance issues.
+Components can be serialized using `JSON.stringfy()` and stored practically anywhere. Moreover, components can be deserialized by dynamically compiling the result of `JSON.parse()`. As a result, raw JS (in a string), including JS template literals, are not supported as deserializing such JS would require the use of `eval()` or `new Function()`, which would expose a [XSS vulnerability](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_eval!) and add significant performance issues.
 
 ### Simplicity through Synchrony
 
-Nearly every operation results in calling set and get on a component. If set and get were made asynchronous, every function would become asynchronous and this would lead to convoluted code. Instead, asynchronous logic is handled by pub/sub.
+Nearly every operation results in calling `set()` and `get()` on a component. If `set()` and `get()` were made asynchronous, every function would become asynchronous and this would lead to convoluted code. Instead, asynchronous logic is handled by pub/sub.
 
 ### Template Parameters
 
-Compiled components are those where MSON is executed in the constructor. As such, parentProps can be passed to replace template parameters in the MSON before compiling. This provides parity with how components are dynamically instantiated in compiled components.
+Compiled components are those where MSON is executed in the constructor. As such, parent props can be passed to replace template parameters in the MSON before compiling. This provides parity with how components are dynamically instantiated in compiled components.
 
 ## Wrapping vs High Order Components
 
@@ -385,9 +385,9 @@ By naming the constructor `_create`, we are able to wrap the constructor logic s
 
 ## Template parameter queries
 
-It is possible to chain together a series of actions to accomplish almost anything. The downside is that your code can quickly become bloated and it may require you to create a number of custom actions. Consider an example where we want to increment the value of counter if the counter is not null. Assume we have a custom component called `Increment` that increments values and does not work with null values:
+It is possible to chain together a series of actions to accomplish almost anything. The downside to this approach is that your code can quickly become bloated and you may be required to create a number of custom actions. Consider an example where we want to increment the value of a counter if the counter is not null. Assume that we have a custom component called `Increment`, which increments values and does not work with null values:
 
-```
+```js
 {
   name: 'MyForm',
   component: 'Component',
@@ -395,6 +395,7 @@ It is possible to chain together a series of actions to accomplish almost anythi
     component: 'Form',
     fields: [
       { name: 'counter', component: 'IntegerField' }
+      { name: 'submit', component: 'ButtonField' }
     ]
   },
   listeners: [
@@ -429,9 +430,9 @@ It is possible to chain together a series of actions to accomplish almost anythi
 }
 ```
 
-Instead, with Template Parameter Queries, we can use [Mongo aggregation operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#expression-operators) to accomplish this functionality in far less lines of code:
+Instead, with Template Parameter Queries, we can use [Mongo aggregation operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#expression-operators) to accomplish this functionality in fewer lines of code:
 
-```
+```js
 {
   name: 'MyForm',
   component: 'Component',
@@ -457,76 +458,74 @@ Instead, with Template Parameter Queries, we can use [Mongo aggregation operator
 
 ### Why doesn't MSON support custom JS in template parameters?
 
-To support custom JS in template parameters would require breaking two of MSON's core design principles:
+To support custom JS in template parameters, would require breaking two of MSON's core design principles:
 1. [Compilation by instantiation](DESIGN.md#compilation-by-instantiation)
-1. [Serialization & deserialization without `eval()`](DESIGN.md#serialization-&-deserialization-without-eval())
+1. [Serialization & deserialization without `eval()`](DESIGN.md#serialization--deserialization-without-eval)
 
 That being said, let's take a walk through some of the possibilities here to investigate the tradeoffs:
 
-### Support Mongo aggregations via Mingo
+#### Support Mongo aggregations via Mingo
+
+Note: this design was chosen an implemented in MSON.
 
 [Mingo](https://github.com/kofrasa/mingo) is a library that has comprehensive support for [Mongo aggregation operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#expression-operators). The syntax is bit more verbose than custom JS, but it can be deserialized without using `eval()`. Moreover, the query syntax is declarative and should therefore be easier to configure via a UI generator. As of Jan, 2020, Mingo adds 70KB (uncompressed) to the MSON bundle, but provides an enormous amount of functionality.
 
 #### Convert string to JS on the fly:
 
 e.g.
+```js
+value: "p.get('fields.foo.value').join(',') + 'some string'"
 ```
-value: 'p.get('fields.foo.value').join(',') + "some string"'
-```
 
-To support this, you’d need to use `new Function()` (or `eval()`), which are unsafe as they allow for [injection hacking where arbitrary JS](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_eval!) can be run. You can permit this with `unsafe-eval`, but it is not recommended
+To evaluate the string as JS, you’d need to use `new Function()` (or `eval()`), which are unsafe as they allow for [injection hacking](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_eval!), where arbitrary JS can be run. You can permit this with `unsafe-eval`, but it is strongly discouraged.
 
-This even includes JS functions as values, e.g.
-{
-  value: a => `myValue=${p.get('fields.foo.value').join(',')}`
-}
-
-#### Convert the string to JS with a build step
+#### Transpile the string to JS with a build step
 
 e.g.
-```
+```js
 value: '{{foo.value + "bar"}}'
 ```
 becomes
-```
+```js
 value: () => `${p.get('foo.value') + "bar"}`
 ```
 
+This option is much safer than using `eval()` and is how a lot of templating languages, like [JSX](https://reactjs.org/docs/introducing-jsx.html), work. That being said, introducing a transpilation step, creates a significant barrier for applications wishing to seamlessly deserialize components.
 
-#### Use a JS interpreter like acorn
+#### Use a JS parser like acorn
 
-JS interpreters like [Acorn](https://github.com/acornjs/acorn), [Esprima](https://esprima.org/) & [Meriyah](https://github.com/meriyah/meriyah) could be used to dynamically interpret JS code. They are wonderful tools, but they typically implement most, if not all, JS constructs making them very large dependencies. It also feels a bit strange to add a JS interpreter in the MSON run-time when the run-time itself is running on a JS interpreter, e.g. Node/browser. At this point, it could perhaps just be better to introduce a transpilation step.
+JS parsers like [Acorn](https://github.com/acornjs/acorn), [Esprima](https://esprima.org/), and [Meriyah](https://github.com/meriyah/meriyah) could be used to dynamically parse JS code into an Abstract Syntax Tree (AST). A custom evaluator could then be written to evaluate the parsed AST. These parsers are wonderful tools, but they typically implement most, if not all, JS constructs making them very large dependencies. It also feels a bit redundant to add a JS interpreter in the MSON run-time when the run-time itself is running on a JS interpreter, e.g. Node/browser. Moreover, it would be nearly impossible to create a JS interpreter that runs in JS that is faster than lowest-level JS interpreter. At this point, it would perhaps just be better to introduce a transpilation step.
 
 Uncompressed increases to the MSON bundle size:
 1. Acorn: 105KB
 1. Esprima: 135KB
 1. Meriyah: 100KB
+
 #### Use a parsing toolkit like ohm-js to create a custom interpreter
 
 We can use something like [ohm-js](https://github.com/harc/ohm) to create a interpreter and even scale back the language capabilities. The issue here is that we'd be reinventing the wheel on writing a JS interpreter and we'd be bringing in a large dependency to MSON.
 
 #### Write a custom JS interpreter
 
-There are nice article like [this](https://www.codeproject.com/Articles/345888/How-to-Write-a-Simple-Interpreter-in-JavaScript) that provide examples on how to write simple JS-like interpreters. If the JS feature-set was minimized to support something like `(a + b - c * d / e) + (f && g == 3 || h >= 1? !i : 'j') + "k"` then the code would not add much bloat to MSON. The downside is that this effort can be significant and it is likely that there will always be the desire to add yet another piece of JS functionality, until you are left reimplementing a complete JS interpreter.
-
+There are nice articles, like [How to Write a Simple Interpreter](https://www.codeproject.com/Articles/345888/How-to-Write-a-Simple-Interpreter-in-JavaScript), that provide examples on how to write simple JS-like interpreters. If the JS feature set was minimized to support something like, `(a + b - c * d / e) + (f && g == 3 || h >= 1? !i : 'j') + "k"`, the custom interpreter code would not add much of a footprint to MSON. The downside is that this effort would be somewhat significant and it is likely that there will always be the desire to add yet another piece of JS functionality, until you are left reimplementing a complete JS interpreter.
 
 #### Property naming considerations
 
 If we were to enable a custom JS interpreter we'd probably need to consider what it would take a to preserve the existing dot name notation that is currently supported by MSON. For example we'd want to be able to use:
-```
+```js
 {{foo.value + 'bar'}}
 ```
 Instead of what is already supported in the JS layer of MSON:
-```
+```js
 {{component.get('value') + 'bar'}}
 ```
 
 Here are some ways that this could be accomplished:
 
-1. Define JS getters/setters (and Proxy) on the components. Proof of concept at https://github.com/redgeoff/mson/pull/300
+1. Define JS getters/setters (and use Proxy) on the components. [Proof of concept](https://github.com/redgeoff/mson/pull/300)
 
-1. Parse JS into Abstract Syntax Tree (AST), and then create a custom evaluation layer so that it can dynamically retrieve values from the components
+1. Parse the JS into an Abstract Syntax Tree (AST), and then create a custom evaluation layer so that it can dynamically retrieve values from the components
 
-1. Render a list of name/value pairs for all components and pass it to the interpreter. For deeply nested access however, including access to parent attributes (and their parent's, etc...) this would be a __very__ expensive operation
+1. Render a list of name/value pairs for all components and pass it to the interpreter. For deeply nested access however, including access to parent attributes (and their parent's, etc...) would be a __very__ expensive operation
 
-1. Require JS to be in another, explicit format and require user to use JS constructs, e.g. `` props.component.get(‘foo.value’) + '123' ``. Variation: require variables to be wrapped in {{}}, e.g. ``{{fields.foo.value}} + '123'``
+1. Require JS to be in another, explicit format, e.g. ``props.component.get('foo.value') + '123'``. Variation: require variables to be wrapped in {{}}, e.g. ``{{fields.foo.value}} + '123'``
