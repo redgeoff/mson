@@ -117,7 +117,7 @@ where: {
 }
 ```
 
-## Events & Listeners
+### Events & Listeners
 
 Changes to properties in a component generate events and you can create listeners that respond to these events with actions. There are basic actions that set, emit, email, contact APIs, etc… and custom actions can also be built using JavaScript.
 
@@ -206,6 +206,81 @@ listeners: [
   }
 ]
 ```
+
+### Template Queries
+
+It is possible to chain together a series of actions to accomplish almost anything. The downside to this approach is that your code can quickly become bloated and you may be required to create a number of custom actions. Consider an example where we want to increment the value of a counter if the counter is not null. Assume that we have a custom component called `Increment`, which increments values and does not work with null values:
+
+```js
+{
+  name: 'MyForm',
+  component: 'Component',
+  schema: {
+    component: 'Form',
+    fields: [
+      { name: 'counter', component: 'IntegerField' }
+      { name: 'submit', component: 'ButtonField' }
+    ]
+  },
+  listeners: [
+    {
+      event: 'submit',
+      if: {
+        'fields.counter.value': null
+      },
+      actions: [
+        {
+          // The counter is null so assume it is now 1
+          component: 'Set',
+          name: 'fields.counter.value',
+          value: 1
+        }
+      ],
+      else: [
+        {
+          // Assume Increment doesn't work with null values
+          component: 'Increment',
+          value: '{{fields.counter.value}}
+        },
+        {
+          component: 'Set',
+          name: 'fields.counter.value',
+          // Output of the Increment action above is available at {{arguments}}
+          value: '{{arguments}}
+        }
+      ]
+    }
+  ]
+}
+```
+
+Instead, with Template Queries, we can use [Mongo aggregation operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#expression-operators) to accomplish this functionality in fewer lines of code:
+
+```js
+{
+  name: 'MyForm',
+  component: 'Component',
+  schema: ...,
+  listeners: [
+    {
+      event: 'submit',
+      actions: [
+        component: 'Set',
+        name: 'fields.counter.value',
+        value: {
+          $cond: [
+            { $eq: ['{{fields.counter.value}}', null] },
+            1, // Initial increment
+            { $add: ['{{fields.counter.value}}', 1] } // Subsequent increment
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+You can use Template Queries to execute custom routines with many other [useful operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#expression-operators) like `$add`, `$multiply`, `$filter` and `$map`. And, you can make these routines reusable by wrapping them in a custom Action.
 
 ### Access Control
 
