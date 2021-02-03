@@ -265,14 +265,16 @@ Instead, with Template Queries, we can use [Mongo aggregation operators](https:/
     {
       event: 'submit',
       actions: [
-        component: 'Set',
-        name: 'fields.counter.value',
-        value: {
-          $cond: [
-            { $eq: ['{{fields.counter.value}}', null] },
-            1, // Initial increment
-            { $add: ['{{fields.counter.value}}', 1] } // Subsequent increment
-          ]
+        {
+          component: 'Set',
+          name: 'fields.counter.value',
+          value: {
+            $cond: [
+              { $eq: ['{{fields.counter.value}}', null] },
+              1, // Initial increment
+              { $add: ['{{fields.counter.value}}', 1] } // Subsequent increment
+            ]
+          }
         }
       ]
     }
