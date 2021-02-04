@@ -240,13 +240,13 @@ It is possible to chain together a series of actions to accomplish almost anythi
         {
           // Assume Increment doesn't work with null values
           component: 'Increment',
-          value: '{{fields.counter.value}}
+          value: '{{fields.counter.value}}'
         },
         {
           component: 'Set',
           name: 'fields.counter.value',
           // Output of the Increment action above is available at {{arguments}}
-          value: '{{arguments}}
+          value: '{{arguments}}'
         }
       ]
     }
