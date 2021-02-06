@@ -282,7 +282,7 @@ Instead, with Template Queries, we can use [Mongo aggregation operators](https:/
 }
 ```
 
-You can use Template Queries to execute custom routines with many other [useful operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#expression-operators) like `$add`, `$multiply`, `$filter` and `$map`. And, you can make these routines reusable by wrapping them in a custom Action.
+You can use Template Queries to execute custom routines with many other [useful operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#expression-operators) like `$add`, `$multiply`, `$filter` and `$map`. And, you can make these routines reusable by wrapping them in a [custom Action](https://github.com/redgeoff/mson/wiki/Reusable-Custom-Actions).
 
 ### Access Control
 
