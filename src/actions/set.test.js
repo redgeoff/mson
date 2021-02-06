@@ -27,7 +27,7 @@ const createForm = () => {
             value: {
               name: {
                 firstName: 'Michael',
-                lastName: 'Jackson',
+                lastName: 'Jordan',
               },
             },
           }),
@@ -41,7 +41,7 @@ it('should set', async () => {
   const form = createForm();
   form.getField('save').emitClick();
   await testUtils.waitFor(() => {
-    return form.getField('name').get('lastName').getValue() === 'Jackson'
+    return form.getField('name').get('lastName').getValue() === 'Jordan'
       ? true
       : undefined;
   });
@@ -49,7 +49,7 @@ it('should set', async () => {
     id: undefined,
     name: {
       firstName: 'Michael',
-      lastName: 'Jackson',
+      lastName: 'Jordan',
     },
     save: undefined,
   });
@@ -64,7 +64,7 @@ const createFormNestedSet = () => {
         actions: [
           new Set({
             name: 'fields.name.lastName.value',
-            value: 'Jackson',
+            value: 'Jordan',
           }),
         ],
       },
@@ -76,14 +76,14 @@ it('should set nested components', async () => {
   const form = createFormNestedSet();
   form.getField('save').emitClick();
   await testUtils.waitFor(() => {
-    return form.getField('name').get('lastName').getValue() === 'Jackson'
+    return form.getField('name').get('lastName').getValue() === 'Jordan'
       ? true
       : undefined;
   });
   expect(form.getValues()).toEqual({
     id: undefined,
     name: {
-      lastName: 'Jackson',
+      lastName: 'Jordan',
     },
     save: undefined,
   });
@@ -131,10 +131,10 @@ it('should set nested value of property', async () => {
     },
   });
 
-  await set.run({ arguments: 'Jackson', component });
+  await set.run({ arguments: 'Jordan', component });
 
   expect(component.get('properties')).toEqual({
-    'fields.lastName.value': 'Jackson',
+    'fields.lastName.value': 'Jordan',
   });
 });
 
@@ -148,9 +148,9 @@ it('should set with component', async () => {
     },
   });
 
-  await set.run({ arguments: 'Jackson', component });
+  await set.run({ arguments: 'Jordan', component });
 
-  expect(component.get('fields.name.lastName.value')).toEqual('Jackson');
+  expect(component.get('fields.name.lastName.value')).toEqual('Jordan');
 });
 
 it('should set target', async () => {
@@ -167,4 +167,28 @@ it('should set target', async () => {
   await set.run({ arguments: null });
 
   expect(component.get('fields.name.firstName.value')).toEqual('Peter');
+});
+
+it('should set nested values with template query', async () => {
+  const component = createForm();
+
+  const set = new Set({
+    target: component,
+    name: 'fields.name.value',
+    value: {
+      firstName: {
+        $concat: ['Mic', 'hael'],
+      },
+      lastName: {
+        $add: [10, 13],
+      },
+    },
+  });
+
+  await set.run({ arguments: null });
+
+  expect(component.get('fields.name.value')).toEqual({
+    firstName: 'Michael',
+    lastName: 23,
+  });
 });

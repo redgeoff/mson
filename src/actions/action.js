@@ -52,26 +52,29 @@ export default class Action extends Component {
   // Abstract method
   // async act(/* props */) {}
 
-  _fill(prop, preventAggregation) {
+  _fill(prop, preventQuery) {
     const propFiller = new PropFiller(this._fillerProps);
 
     // Fill with props from component first so that we define default values in the component like
     // {{fields.to.value}} that are then filled via the second fill.
-    prop = propFiller.fill(prop, preventAggregation);
-    prop = propFiller.fill(prop, preventAggregation); // Yes, this duplicate is needed!
+    prop = propFiller.fill(prop, preventQuery);
+    prop = propFiller.fill(prop, preventQuery); // Yes, this duplicate is needed!
 
     return prop;
   }
 
-  _getFilled(names, preventAggregation) {
-    let prop = super.get(names);
-    return prop === undefined
-      ? undefined
-      : this._fill(prop, preventAggregation);
+  _getFilled(names, preventQuery) {
+    const prop = super.get(names);
+
+    // When names are undefined, we need to prevent props being considered a query as a nested "if"
+    // attribute is likely to contain an operator
+    const prevQuery = names === undefined ? true : preventQuery;
+
+    return prop === undefined ? undefined : this._fill(prop, prevQuery);
   }
 
-  get(names, preventAggregation) {
-    return this._getFilled(names, preventAggregation);
+  get(names, preventQuery) {
+    return this._getFilled(names, preventQuery);
   }
 
   _setFillerProps(props) {
