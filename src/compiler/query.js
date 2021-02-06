@@ -25,7 +25,7 @@ const isOperator = (key) => {
   return typeof key === 'string' && key[0] === '$';
 };
 
-const isAggregation = (obj) => {
+const isQuery = (obj) => {
   // Is the first key in the object an operator? e.g.
   // {
   //   $cond: [
@@ -43,8 +43,8 @@ const isAggregation = (obj) => {
   return firstKey !== undefined && isOperator(firstKey);
 };
 
-export const resolveAnyAggregation = (obj) => {
-  if (isAggregation(obj)) {
+export const resolveAnyQuery = (obj) => {
+  if (isQuery(obj)) {
     const agg = new Aggregator([
       {
         $project: {

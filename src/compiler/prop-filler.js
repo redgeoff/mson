@@ -1,7 +1,7 @@
 // TODO: move from compiler directory as used by multiple modules
 
 import cloneDeepWith from 'lodash/cloneDeepWith';
-import { resolveAnyAggregation } from './query';
+import { resolveAnyQuery } from './query';
 export default class PropFiller {
   constructor(props) {
     this.setProps(props);
@@ -88,19 +88,19 @@ export default class PropFiller {
     });
   }
 
-  fill(obj, preventAggregation) {
+  fill(obj, preventQuery) {
     if (typeof obj === 'string') {
       return this.fillString(obj);
     } else {
       const filledObj = this.fillAll(obj);
 
-      if (preventAggregation) {
+      if (preventQuery) {
         return filledObj;
       } else {
         // We choose to execute the Mongo query in this layer instead of BaseComponent._setProperty()
         // as BaseComponent._setProperty() is called far more frequently and we want to avoid the
         // unneeded overhead.
-        return resolveAnyAggregation(filledObj);
+        return resolveAnyQuery(filledObj);
       }
     }
   }
