@@ -168,3 +168,27 @@ it('should set target', async () => {
 
   expect(component.get('fields.name.firstName.value')).toEqual('Peter');
 });
+
+it('should set nested values with template query', async () => {
+  const component = createForm();
+
+  const set = new Set({
+    target: component,
+    name: 'fields.name.value',
+    value: {
+      firstName: {
+        $concat: ['Mic', 'hael'],
+      },
+      lastName: {
+        $add: [10, 13],
+      },
+    },
+  });
+
+  await set.run({ arguments: null });
+
+  expect(component.get('fields.name.value')).toEqual({
+    firstName: 'Michael',
+    lastName: 23,
+  });
+});

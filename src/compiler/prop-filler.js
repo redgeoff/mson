@@ -1,7 +1,7 @@
 // TODO: move from compiler directory as used by multiple modules
 
 import cloneDeepWith from 'lodash/cloneDeepWith';
-import { resolveAnyQuery } from './query';
+import { resolveQuery, isOperator } from './query';
 export default class PropFiller {
   constructor(props) {
     this.setProps(props);
@@ -75,9 +75,17 @@ export default class PropFiller {
     }
   }
 
-  fillAll(items) {
+  _fillAllInner(items, preventQuery) {
+    let isQuery = false;
+
     // Recursively dive into objects and fill any strings
-    return cloneDeepWith(items, (item) => {
+    const obj = cloneDeepWith(items, (item, name) => {
+      if (!preventQuery && !isQuery && isOperator(name)) {
+        // We need to check all attribute names as the operator may be nested
+        // e.g. `{ x: $add: [1, 2], y: 3 }`
+        isQuery = true;
+      }
+
       if (item && item._className) {
         // The item is a component, therefore we should not clone it. TODO: is there a better way to
         // determine this?
@@ -86,21 +94,30 @@ export default class PropFiller {
         return this.fillString(item);
       }
     });
+
+    return {
+      obj,
+      isQuery,
+    };
+  }
+
+  fillAll(items) {
+    return this._fillAllInner(items).obj;
   }
 
   fill(obj, preventQuery) {
     if (typeof obj === 'string') {
       return this.fillString(obj);
     } else {
-      const filledObj = this.fillAll(obj);
+      const filled = this._fillAllInner(obj, preventQuery);
 
-      if (preventQuery) {
-        return filledObj;
-      } else {
+      if (preventQuery || !filled.isQuery) {
+        return filled.obj;
+      } else if (filled.isQuery) {
         // We choose to execute the Mongo query in this layer instead of BaseComponent._setProperty()
         // as BaseComponent._setProperty() is called far more frequently and we want to avoid the
         // unneeded overhead.
-        return resolveAnyQuery(filledObj);
+        return resolveQuery(filled.obj);
       }
     }
   }
