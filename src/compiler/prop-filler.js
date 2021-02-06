@@ -113,7 +113,7 @@ export default class PropFiller {
 
       if (preventQuery || !filled.isQuery) {
         return filled.obj;
-      } else if (filled.isQuery) {
+      } else {
         // We choose to execute the Mongo query in this layer instead of BaseComponent._setProperty()
         // as BaseComponent._setProperty() is called far more frequently and we want to avoid the
         // unneeded overhead.
