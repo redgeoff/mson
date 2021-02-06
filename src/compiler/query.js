@@ -19,7 +19,7 @@ export const isOperator = (key) => {
   return typeof key === 'string' && key[0] === '$';
 };
 
-export const resolveQuery = (obj) => {
+export const executeQuery = (obj) => {
   const agg = new Aggregator([
     {
       $project: {

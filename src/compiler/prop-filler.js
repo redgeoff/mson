@@ -1,7 +1,7 @@
 // TODO: move from compiler directory as used by multiple modules
 
 import cloneDeepWith from 'lodash/cloneDeepWith';
-import { resolveQuery, isOperator } from './query';
+import { executeQuery, isOperator } from './query';
 export default class PropFiller {
   constructor(props) {
     this.setProps(props);
@@ -117,7 +117,7 @@ export default class PropFiller {
         // We choose to execute the Mongo query in this layer instead of BaseComponent._setProperty()
         // as BaseComponent._setProperty() is called far more frequently and we want to avoid the
         // unneeded overhead.
-        return resolveQuery(filled.obj);
+        return executeQuery(filled.obj);
       }
     }
   }
