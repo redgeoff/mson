@@ -64,8 +64,13 @@ export default class Action extends Component {
   }
 
   _getFilled(names, preventQuery) {
-    let prop = super.get(names);
-    return prop === undefined ? undefined : this._fill(prop, preventQuery);
+    const prop = super.get(names);
+
+    // When names are undefined, we need to prevent props being considered a query as a nested "if"
+    // attribute is likely to contain an operator
+    const prevQuery = names === undefined ? true : preventQuery;
+
+    return prop === undefined ? undefined : this._fill(prop, prevQuery);
   }
 
   get(names, preventQuery) {
