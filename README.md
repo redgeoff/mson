@@ -23,7 +23,7 @@ You can read more about why I created MSON at [Creating a New Programming Langua
 
 ### Demo Apps on Codesandbox
 
-Check out the [To Do List](https://codesandbox.io/s/o584w8k67z) and [Basic App](https://codesandbox.io/s/y2r3klwzyj), which will let you play with MSON in real-time.
+Check out the [To Do List](https://codesandbox.io/s/mson-to-do-list-qcn7p) and [Basic App](https://codesandbox.io/s/mson-basic-app-x0d3z), which will let you play with MSON in real-time.
 
 ### Getting Started App
 
