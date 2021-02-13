@@ -110,7 +110,7 @@ export default class PropFiller {
       return this.fillString(obj);
     } else if (typeof item === 'function') {
       // e.g. JavaScript action
-      return item;
+      return obj;
     } else {
       const filled = this._fillAllInner(obj, preventQuery);
 
