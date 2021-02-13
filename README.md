@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/redgeoff/mson/master/mson.png" alt="MSON" width="30" height="30" /> MSON
+# <img src="https://raw.githubusercontent.com/redgeoff/mson/main/mson.png" alt="MSON" width="30" height="30" /> MSON
 [![Circle CI](https://circleci.com/gh/redgeoff/mson.svg?style=svg&circle-token=b9d60eb532e4d995350700256d946e833b07cdda)](https://circleci.com/gh/redgeoff/mson)
 
 The MSON compiler allows you to generate apps from JSON. The ultimate goal of MSON is to allow anyone to develop software visually, but you can also use pieces of MSON to turbo charge your development:
