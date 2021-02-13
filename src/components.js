@@ -44,6 +44,7 @@ import GridItem from './grid-item';
 import IdField from './fields/id-field';
 import IntegerField from './fields/integer-field';
 import Iterator from './actions/iterator';
+import JavaScript from './actions/java-script';
 import ListField from './fields/list-field';
 import LocalStorageStore from './stores/local-storage-store';
 import Login from './aggregate/login';
@@ -143,6 +144,7 @@ const components = {
   IdField,
   IntegerField,
   Iterator,
+  JavaScript,
   ListField,
   LocalStorageStore,
   Login,
