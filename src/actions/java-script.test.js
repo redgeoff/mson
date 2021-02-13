@@ -27,8 +27,7 @@ it('should execute function', async () => {
 
   expect(output.globals.get('path')).toEqual('https://example.com');
   expect(output.session.user.roleNames).toEqual(['admin']);
-
-  // TODO: also test self
+  expect(output.self).toEqual(script);
 });
 
 it('should execute async function', async () => {
