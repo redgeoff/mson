@@ -517,6 +517,8 @@ export default class BaseComponent extends events.EventEmitter {
       }
 
       this._emitAfterListenerEvents(event);
+
+      return output;
     }
   }
 
