@@ -194,11 +194,12 @@ it('should create and update', async () => {
     userId: 'myId',
   };
 
-  jest.spyOn(store, 'upsertDoc').mockImplementation(() => created);
+  jest.spyOn(store, 'createDoc').mockImplementation(() => created);
 
   const form = field.get('form');
 
   // Create
+  form.set({ new: true });
   form.setValues({
     firstName: 'Mos',
     lastName: 'Def',
@@ -206,7 +207,7 @@ it('should create and update', async () => {
   let mosForm = await field.save();
   expect(mosForm.getValues()).toMatchObject(created);
 
-  jest.spyOn(store, 'upsertDoc').mockImplementation(() => updated);
+  jest.spyOn(store, 'updateDoc').mockImplementation(() => updated);
 
   // Update
   mosForm = await field.save();
@@ -223,6 +224,7 @@ it('should create with id', async () => {
   const createDocSpy = jest.spyOn(store, 'createDoc');
 
   // Create
+  form.set({ new: true });
   form.setValues({
     id: 'id',
     firstName: 'Mos',
@@ -239,6 +241,7 @@ it('should not have side effects', async () => {
   const form = field.get('form');
 
   // Create
+  form.set({ new: true });
   form.setValues({
     firstName: 'Mos',
     lastName: 'Def',
@@ -278,6 +281,7 @@ it('should not have side effects', async () => {
 
   // Create again so that we can move
   form.clearValues();
+  form.set({ new: true });
   form.setValues({
     firstName: 'Talib',
     lastName: 'Kweli',

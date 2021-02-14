@@ -177,16 +177,16 @@ export const createMockedStore = () => {
       return await onGetAllPeople(props);
     },
     // createDoc: asyncNoop,
-    // updateDoc: async (props) => {
-    //   return {
-    //     id: props.form.getValue('id'),
-    //   };
-    // },
-    upsertDoc: async (props) => {
+    updateDoc: async (props) => {
       return {
         id: props.form.getValue('id'),
       };
     },
+    // upsertDoc: async (props) => {
+    //   return {
+    //     id: props.form.getValue('id'),
+    //   };
+    // },
     archiveDoc: async (props) => {
       return {
         id: props.id,

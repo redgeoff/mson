@@ -428,13 +428,13 @@ it('should save', async () => {
       id: 'myId',
     }),
     updateDoc: updateDocMock,
-    upsertDoc: async (props) => {
-      if (props.form.getValue('id')) {
-        return store.updateDoc(props);
-      } else {
-        return store.createDoc(props);
-      }
-    },
+    // upsertDoc: async (props) => {
+    //   if (props.form.getValue('id')) {
+    //     return store.updateDoc(props);
+    //   } else {
+    //     return store.createDoc(props);
+    //   }
+    // },
     on: () => {},
     removeAllListeners: () => {},
   };
@@ -449,6 +449,12 @@ it('should save', async () => {
     lastName: 'Johnson',
     userId: 'myUserId',
   };
+
+  // Simulate the user clicking the new button
+  field.set({
+    currentForm: null,
+    mode: CollectionField.MODES.CREATE,
+  });
 
   const form = field.get('form');
 
@@ -486,7 +492,8 @@ it('should archive', async () => {
   const archivedAt = new DateField({ now: true });
 
   const store = {
-    upsertDoc: updateDocMock,
+    // upsertDoc: updateDocMock,
+    updateDoc: updateDocMock,
     archiveDoc: async () => ({
       archivedAt: archivedAt.getValue(),
     }),
@@ -544,7 +551,8 @@ it('should restore', async () => {
   const archivedAt = new Date();
 
   const store = {
-    upsertDoc: updateDocMock,
+    // upsertDoc: updateDocMock,
+    updateDoc: updateDocMock,
     restoreDoc: async () => {},
     on: () => {},
     removeAllListeners: () => {},
