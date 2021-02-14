@@ -884,6 +884,9 @@ export default class CollectionField extends Field {
 
       // Generate a new form so that we have any initial values and structure
       form = this._generateFormAndEmitLoad();
+
+      // The record is new as it hasn't been saved yet
+      form.set({ new: true });
     } else {
       this._copyValuesToCurrentForm(form, currentForm);
       this._set('currentForm', currentForm);
@@ -1170,7 +1173,11 @@ export default class CollectionField extends Field {
 
       let record = null;
 
-      record = await store.upsertDoc({ form, reorder });
+      if (form.get('new')) {
+        record = await store.createDoc({ form, reorder });
+      } else {
+        record = await store.updateDoc({ form, reorder });
+      }
 
       form.setValues({
         id: record.id,
@@ -1183,6 +1190,9 @@ export default class CollectionField extends Field {
       // TODO: use the id from this._docs.set instead of this dummy id
       id.setValue(utils.uuid());
     }
+
+    // The record has now been saved so it is no longer new
+    form.set({ new: false });
 
     fieldForm = this.upsertForm({
       // Specify the form so that we don't have to generate another one
