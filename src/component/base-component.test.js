@@ -46,6 +46,8 @@ class SongAction extends Action {
     if (this._throwErr) {
       throw this._throwErr;
     }
+
+    return 'play';
   }
 }
 
@@ -114,6 +116,22 @@ it('should execute listener with an array of events', async () => {
   });
 
   expect(action.acts).toEqual([{ event: 'song' }, { event: 'artist' }]);
+});
+
+it('should return last output when running listeners', async () => {
+  const action = new SongAction();
+
+  const song = new Song({
+    listeners: [
+      {
+        event: 'song',
+        actions: [action],
+      },
+    ],
+  });
+
+  const output = await song.runListeners('song');
+  expect(output).toEqual('play');
 });
 
 it('should run listeners when there are none', async () => {
