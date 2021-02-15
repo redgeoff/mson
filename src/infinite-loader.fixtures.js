@@ -39,7 +39,15 @@ export const ellaFlat = {
   name: 'Ella',
 };
 
+const defaultPageInfo = {
+  pageInfo: {
+    hasNextPage: true,
+    hasPreviousPage: true,
+  },
+};
+
 export const records1 = {
+  ...defaultPageInfo,
   edges: [ray, ella],
 };
 
@@ -78,6 +86,7 @@ export const sinatraFlat = {
 };
 
 export const records2 = {
+  ...defaultPageInfo,
   edges: [stevie, sinatra],
 };
 
@@ -116,6 +125,7 @@ export const bowieFlat = {
 };
 
 export const records3 = {
+  ...defaultPageInfo,
   edges: [michael, bowie],
 };
 
