@@ -283,22 +283,20 @@ it('should getMore', async () => {
   await infiniteLoader._getMore({ previous: true });
   expect(infiniteLoader._bufferBottomId).toEqual('bowie');
   expect(infiniteLoader._bufferBottomCursor).toEqual('bowieCursor');
-  expect(infiniteLoader._bufferTopId).toEqual('ray');
-  expect(infiniteLoader._bufferTopCursor).toEqual('rayCursor');
+  // Note: bufferTopId and bufferTopCursor don't move as this is the first page and we want to be
+  // able to use the same cursor to get the same data. Some data stores like DynamoDB don't support
+  // cursors on the first and last pages.
+  expect(infiniteLoader._bufferTopId).toEqual('stevie');
+  expect(infiniteLoader._bufferTopCursor).toEqual('stevieCursor');
   expect(resizeBuffer).toHaveBeenCalledTimes(3);
 
-  // Try to get previous page (which doesn't exist)
+  // Try to get previous page and make sure it is debounced
   onGetAll.mockReset();
   await infiniteLoader._getMore({ previous: true });
-  expect(infiniteLoader._bufferTopId).toEqual('ray');
-  expect(infiniteLoader._bufferTopCursor).toEqual('rayCursor');
+  expect(infiniteLoader._bufferTopId).toEqual('stevie');
+  expect(infiniteLoader._bufferTopCursor).toEqual('stevieCursor');
   expect(resizeBuffer).toHaveBeenCalledTimes(3);
-  expect(onGetAll).toHaveBeenCalledTimes(1);
-
-  // Try to get previous page again make sure debounced
-  await infiniteLoader._getMore({ previous: true });
-  expect(resizeBuffer).toHaveBeenCalledTimes(3);
-  expect(onGetAll).toHaveBeenCalledTimes(1);
+  expect(onGetAll).toHaveBeenCalledTimes(0);
 });
 
 it('should scroll', async () => {

@@ -39,15 +39,11 @@ export const ellaFlat = {
   name: 'Ella',
 };
 
-const defaultPageInfo = {
+export const records1 = {
   pageInfo: {
     hasNextPage: true,
-    hasPreviousPage: true,
+    hasPreviousPage: false,
   },
-};
-
-export const records1 = {
-  ...defaultPageInfo,
   edges: [ray, ella],
 };
 
@@ -86,7 +82,10 @@ export const sinatraFlat = {
 };
 
 export const records2 = {
-  ...defaultPageInfo,
+  pageInfo: {
+    hasNextPage: true,
+    hasPreviousPage: true,
+  },
   edges: [stevie, sinatra],
 };
 
@@ -125,12 +124,16 @@ export const bowieFlat = {
 };
 
 export const records3 = {
-  ...defaultPageInfo,
+  pageInfo: {
+    hasNextPage: true,
+    hasPreviousPage: true,
+  },
   edges: [michael, bowie],
 };
 
-const noEdges = {
+const lastPage = {
   pageInfo: {
+    hasPreviousPage: true,
     hasNextPage: false,
   },
   edges: [],
@@ -152,7 +155,7 @@ export const onGetAllPeople = async (props) => {
       case records2.edges[1].cursor:
         return records3;
       case records3.edges[1].cursor:
-        return noEdges;
+        return lastPage;
       default:
         return records1;
     }

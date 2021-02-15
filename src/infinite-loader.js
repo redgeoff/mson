@@ -268,8 +268,8 @@ export default class InfiniteLoader {
           // occurs we want to avoid updating the _bufferTopCursor so that duplicate calls to
           // getAll() can be ignored.
           this._bufferTopCursor = this._beginCursor;
+          this._bufferTopId = this._beginId;
         }
-        this._bufferTopId = this._beginId;
 
         // Resize the spacer to account for the inserted items after the DOM has been upated. Note:
         // we cannot call _onResizeSpacer() directly as our items may have yet to be rendered and
@@ -283,8 +283,8 @@ export default class InfiniteLoader {
           // occurs we want to avoid updating the _bufferBottomCursor so that duplicate calls to
           // getAll() can be ignored.
           this._bufferBottomCursor = this._endCursor;
+          this._bufferBottomId = this._endId;
         }
-        this._bufferBottomId = this._endId;
       }
 
       // Has our buffer reached its max size?
