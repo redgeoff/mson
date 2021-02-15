@@ -303,6 +303,10 @@ export default class CollectionField extends Field {
     }
   }
 
+  _getSearchString() {
+    return this.get('searchString');
+  }
+
   _updateInfiniteLoader() {
     // TODO: refactor to use getters like _getOrder() so that always using the latest showArchived,
     // etc...?
@@ -575,6 +579,7 @@ export default class CollectionField extends Field {
       onSetIsLoading: (isLoading) => this.set({ isLoading }),
       onGetOrder: () => this._getOrder(),
       onGetWhere: () => this._getWhere(),
+      onGetSearchString: () => this._getSearchString(),
     });
   }
 
