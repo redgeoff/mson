@@ -125,13 +125,13 @@ export const bowieFlat = {
 
 export const records3 = {
   pageInfo: {
-    hasNextPage: true,
+    hasNextPage: false,
     hasPreviousPage: true,
   },
   edges: [michael, bowie],
 };
 
-const lastPage = {
+const noEdges = {
   pageInfo: {
     hasPreviousPage: true,
     hasNextPage: false,
@@ -155,7 +155,7 @@ export const onGetAllPeople = async (props) => {
       case records2.edges[1].cursor:
         return records3;
       case records3.edges[1].cursor:
-        return lastPage;
+        return noEdges;
       default:
         return records1;
     }
