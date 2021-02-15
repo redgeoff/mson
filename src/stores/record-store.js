@@ -116,6 +116,7 @@ export default class RecordStore extends Store {
     before,
     last,
     order,
+    searchString,
   }) {
     const showArchivedWhere = this._getShowArchivedWhere(showArchived);
     where = utils.combineWheres(showArchivedWhere, where, this.get('where'));
@@ -128,11 +129,13 @@ export default class RecordStore extends Store {
           componentName: this.get('storeName'),
           asArray: true,
           where,
-          after: after,
-          first: first,
-          before: before,
-          last: last,
-          order: order,
+          after,
+          first,
+          before,
+          last,
+          order,
+          showArchived,
+          searchString,
         };
 
         // The built-in apollo client cache cannot automatically accomodate the mutations so we use a

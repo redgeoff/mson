@@ -51,6 +51,7 @@ export default class InfiniteLoader {
     onSetIsLoading,
     onGetOrder,
     onGetWhere,
+    onGetSearchString,
   }) {
     this._onGetAll = onGetAll;
     this._onGetItemsPerPage = onGetItemsPerPage;
@@ -66,6 +67,7 @@ export default class InfiniteLoader {
     this._onSetIsLoading = onSetIsLoading;
     this._onGetOrder = onGetOrder;
     this._onGetWhere = onGetWhere;
+    this._onGetSearchString = onGetSearchString;
 
     this._onGetItemId = onGetItemId;
     this._onGetItemCursor = onGetItemCursor;
@@ -150,6 +152,10 @@ export default class InfiniteLoader {
 
     if (this._onGetWhere) {
       props.where = this._onGetWhere();
+    }
+
+    if (this._onGetSearchString) {
+      props.searchString = this._onGetSearchString();
     }
 
     if (this._onGetOrder) {
