@@ -252,7 +252,7 @@ it('should getMore', async () => {
   // Note: bufferTopId and bufferTopCursor don't move as this is the first page and we want to be
   // able to use the same cursor to get the same data. Some data stores like DynamoDB don't support
   // cursors on the first and last pages.
-  expect(infiniteLoader._bufferBottomId).toEqual('sinatra');
+  expect(infiniteLoader._bufferBottomId).toEqual('bowie');
   expect(infiniteLoader._bufferBottomCursor).toEqual('sinatraCursor');
   expect(resizeBuffer).toHaveBeenCalledTimes(1);
   expect(resizeBuffer).toHaveBeenCalledWith({ previous: false });
@@ -260,7 +260,7 @@ it('should getMore', async () => {
   // Try to get next page and make sure debounced
   const onGetAll = jest.spyOn(infiniteLoader, '_onGetAll');
   await infiniteLoader._getMore({ previous: false });
-  expect(infiniteLoader._bufferBottomId).toEqual('sinatra');
+  expect(infiniteLoader._bufferBottomId).toEqual('bowie');
   expect(infiniteLoader._bufferBottomCursor).toEqual('sinatraCursor');
   expect(resizeBuffer).toHaveBeenCalledTimes(1);
   expect(onGetAll).toHaveBeenCalledTimes(0);
@@ -271,7 +271,7 @@ it('should getMore', async () => {
 
   // Get previous (2nd) page
   await infiniteLoader._getMore({ previous: true });
-  expect(infiniteLoader._bufferBottomId).toEqual('sinatra');
+  expect(infiniteLoader._bufferBottomId).toEqual('bowie');
   expect(infiniteLoader._bufferBottomCursor).toEqual('sinatraCursor');
   expect(infiniteLoader._bufferTopId).toEqual('stevie');
   expect(infiniteLoader._bufferTopCursor).toEqual('stevieCursor');
@@ -279,19 +279,19 @@ it('should getMore', async () => {
 
   // Get previous (1st) page
   await infiniteLoader._getMore({ previous: true });
-  expect(infiniteLoader._bufferBottomId).toEqual('sinatra');
+  expect(infiniteLoader._bufferBottomId).toEqual('bowie');
   expect(infiniteLoader._bufferBottomCursor).toEqual('sinatraCursor');
   // Note: bufferTopId and bufferTopCursor don't move as this is the first page and we want to be
   // able to use the same cursor to get the same data. Some data stores like DynamoDB don't support
   // cursors on the first and last pages.
-  expect(infiniteLoader._bufferTopId).toEqual('stevie');
+  expect(infiniteLoader._bufferTopId).toEqual('ray');
   expect(infiniteLoader._bufferTopCursor).toEqual('stevieCursor');
   expect(resizeBuffer).toHaveBeenCalledTimes(3);
 
   // Try to get previous page and make sure it is debounced
   onGetAll.mockReset();
   await infiniteLoader._getMore({ previous: true });
-  expect(infiniteLoader._bufferTopId).toEqual('stevie');
+  expect(infiniteLoader._bufferTopId).toEqual('ray');
   expect(infiniteLoader._bufferTopCursor).toEqual('stevieCursor');
   expect(resizeBuffer).toHaveBeenCalledTimes(3);
   expect(onGetAll).toHaveBeenCalledTimes(0);

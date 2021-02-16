@@ -267,14 +267,18 @@ export default class InfiniteLoader {
           // Some data stores, like DynamoDB, don't return a cursor on the first page. When this
           // occurs we want to avoid updating the _bufferTopCursor so that duplicate calls to
           // getAll() can be ignored.
+          //
+          // Note: the bufferTopId intentionally becomes out of sync with bufferTopCursor as
+          // bufferTopId is modified so that buffer can be resized appropriately.
           this._bufferTopCursor = this._beginCursor;
-          this._bufferTopId = this._beginId;
         }
 
-        // Resize the spacer to account for the inserted items after the DOM has been upated. Note:
-        // we cannot call _onResizeSpacer() directly as our items may have yet to be rendered and
-        // therefore we would have no way of knowing how much to adjust our spacer as the size of
-        // our items is variable.
+        this._bufferTopId = this._beginId;
+
+        // Resize the spacer to account for the inserted items after the DOM has been updated.
+        // Note: we cannot call _onResizeSpacer() directly as our items may have yet to be
+        // rendered and therefore we would have no way of knowing how much to adjust our spacer as
+        // the size of our items is variable.
         this._onSetBufferTopId(oldBufferTopId);
       } else {
         // Move buffer pointers down
@@ -282,9 +286,13 @@ export default class InfiniteLoader {
           // Some data stores, like DynamoDB, don't return a cursor on the last page. When this
           // occurs we want to avoid updating the _bufferBottomCursor so that duplicate calls to
           // getAll() can be ignored.
+          //
+          // Note: the bufferBottomId intentionally becomes out of sync with bufferBottomCursor as
+          // bufferBottomId is modified so that buffer can be resized appropriately.
           this._bufferBottomCursor = this._endCursor;
-          this._bufferBottomId = this._endId;
         }
+
+        this._bufferBottomId = this._endId;
       }
 
       // Has our buffer reached its max size?
