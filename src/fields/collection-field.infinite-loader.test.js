@@ -50,7 +50,7 @@ it('should infinite scroll', async () => {
   await changed;
   expect(getItems(field)).toEqual([rayFlat, ellaFlat]);
 
-  // Similate load of next page
+  // Simulate load of next page
   changed = testUtils.once(field, 'change');
   await field._infiniteLoader.scroll({ scrollY: 150 });
   await changed;

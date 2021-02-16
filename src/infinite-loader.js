@@ -242,12 +242,6 @@ export default class InfiniteLoader {
   }
 
   async _getMore({ previous }) {
-    // FUTURE: we may want to use the previous hasNextPage to determine whether to attempt to get
-    // the next page. This will prevent us from trying to get another page when we know there is no
-    // other page. If we make this change then we'll need to worry about updating this status once
-    // we implement subscriptions and we detect that more data has been added. For now, we let the
-    // debounce logic prevent duplicate API requests.
-
     const props = {};
 
     if (previous) {
@@ -269,17 +263,35 @@ export default class InfiniteLoader {
         const oldBufferTopId = this._bufferTopId;
 
         // Move buffer pointers up
-        this._bufferTopCursor = this._beginCursor;
+        if (records.pageInfo.hasPreviousPage) {
+          // Some data stores, like DynamoDB, don't return a cursor on the first page. When this
+          // occurs we want to avoid updating the _bufferTopCursor so that duplicate calls to
+          // getAll() can be ignored.
+          //
+          // Note: the bufferTopId intentionally becomes out of sync with bufferTopCursor as
+          // bufferTopId is modified so that buffer can be resized appropriately.
+          this._bufferTopCursor = this._beginCursor;
+        }
+
         this._bufferTopId = this._beginId;
 
-        // Resize the spacer to account for the inserted items after the DOM has been upated. Note:
-        // we cannot call _onResizeSpacer() directly as our items may have yet to be rendered and
-        // therefore we would have no way of knowing how much to adjust our spacer as the size of
-        // our items is variable.
+        // Resize the spacer to account for the inserted items after the DOM has been updated.
+        // Note: we cannot call _onResizeSpacer() directly as our items may have yet to be
+        // rendered and therefore we would have no way of knowing how much to adjust our spacer as
+        // the size of our items is variable.
         this._onSetBufferTopId(oldBufferTopId);
       } else {
         // Move buffer pointers down
-        this._bufferBottomCursor = this._endCursor;
+        if (records.pageInfo.hasNextPage) {
+          // Some data stores, like DynamoDB, don't return a cursor on the last page. When this
+          // occurs we want to avoid updating the _bufferBottomCursor so that duplicate calls to
+          // getAll() can be ignored.
+          //
+          // Note: the bufferBottomId intentionally becomes out of sync with bufferBottomCursor as
+          // bufferBottomId is modified so that buffer can be resized appropriately.
+          this._bufferBottomCursor = this._endCursor;
+        }
+
         this._bufferBottomId = this._endId;
       }
 
