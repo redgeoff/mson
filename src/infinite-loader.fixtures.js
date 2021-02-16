@@ -131,13 +131,13 @@ export const records3 = {
   edges: [michael, bowie],
 };
 
-const noEdges = {
-  pageInfo: {
-    hasPreviousPage: true,
-    hasNextPage: false,
-  },
-  edges: [],
-};
+// const noEdges = {
+//   pageInfo: {
+//     hasPreviousPage: true,
+//     hasNextPage: false,
+//   },
+//   edges: [],
+// };
 
 export const allRecords = new Mapa();
 allRecords.set(records1.edges[0].node.id, { i: 0, ...records1.edges[0] });
@@ -154,8 +154,8 @@ export const onGetAllPeople = async (props) => {
         return records2;
       case records2.edges[1].cursor:
         return records3;
-      case records3.edges[1].cursor:
-        return noEdges;
+      // case records3.edges[1].cursor:
+      //   return noEdges;
       default:
         return records1;
     }
