@@ -33,6 +33,14 @@ export default class DateField extends Field {
             label: 'Max Date',
             docLevel: 'basic',
           },
+          {
+            name: 'format',
+            component: 'TextField',
+            label: 'Format',
+            docLevel: 'basic',
+            help:
+              'Customize date format, e.g. "yyyy-MM-dd" or "d MMM yyyy". See https://date-fns.org/',
+          },
         ],
       },
     });
