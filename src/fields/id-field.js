@@ -6,6 +6,9 @@ export default class IdField extends TextField {
   _create(props) {
     super._create(props);
 
+    // Ids can also be a number. TODO: mixin validation/functionality from the NumberField?
+    this._requireString = false;
+
     this.set({
       schema: {
         component: 'Form',
@@ -19,5 +22,16 @@ export default class IdField extends TextField {
         ],
       },
     });
+  }
+
+  validate() {
+    super.validate();
+
+    if (!this.isBlank()) {
+      const value = this.getValue();
+      if (['string', 'number'].indexOf(typeof value) === -1) {
+        this.setErr(`must be a string or number`);
+      }
+    }
   }
 }
