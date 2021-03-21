@@ -13,8 +13,6 @@ The MSON compiler allows you to generate apps from JSON. The ultimate goal of MS
 
 You can read more about why I created MSON at [Creating a New Programming Language That Will Allow Anyone to Make Software](https://redgeoff.com/posts/everyone-can-make-software/).
 
-**Stability Disclaimer:** MSON is still an evolving project and should not be considered stable. The project has 100% code coverage and the API has already gone through several iterations, but the details may change. There is also limited documentation for now, so you may be required to dive into the code to gain a deeper understanding. PRs are very welcome.
-
 ## Live Demo
 
 <a href="https://redgeoff.github.io/mson-react"><img src="https://raw.githubusercontent.com/redgeoff/mson-react/master/demo.png" alt="MSON Demo" /></a>
