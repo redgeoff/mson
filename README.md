@@ -252,7 +252,7 @@ It is possible to chain together a series of actions to accomplish almost anythi
 }
 ```
 
-Instead, with Template Queries, we can use [Mongo aggregation operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#expression-operators) to accomplish this functionality in fewer lines of code:
+Instead, with Template Queries, we can use [MongoDB-style aggregation operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#expression-operators) to accomplish this functionality in fewer lines of code:
 
 ```js
 {
@@ -279,6 +279,8 @@ Instead, with Template Queries, we can use [Mongo aggregation operators](https:/
   ]
 }
 ```
+
+Note: MSON just uses the same syntax as MongoDB, but does not require or depend on MongoDB.
 
 You can use Template Queries to execute custom routines with many other [useful operators](https://docs.mongodb.com/manual/reference/operator/aggregation/#expression-operators) like `$add`, `$multiply`, `$filter` and `$map`. And, you can make these routines reusable by wrapping them in a [custom Action](https://github.com/redgeoff/mson/wiki/Reusable-Custom-Actions).
 
