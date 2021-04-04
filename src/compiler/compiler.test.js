@@ -1,4 +1,5 @@
 import { Compiler } from './compiler';
+import register from './register';
 import components from '../components';
 import optionalComponents from '../optional-components';
 import globals from '../globals';
@@ -55,7 +56,8 @@ const registerComponents = () => {
   });
 
   // Inheritance
-  compiler.registerComponent('app.EditAccount', {
+  register({
+    name: 'app.EditAccount',
     component: 'app.Account',
     fields: [
       {

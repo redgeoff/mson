@@ -4,6 +4,7 @@
   "description": "MSON Lang: Generate an app from JSON",
   "author": "Geoff Cox",
   "license": "Apache-2.0",
+  "main": "lib/index.js",
   "dependencies": {
     "@babel/runtime": "^7.12.5",
     "country-telephone-data": "^0.6.3",
