@@ -1,5 +1,5 @@
 import PropFiller from './prop-filler';
-import { cloneDeep } from '../utils/deep-clone';
+import { deepClone } from '../utils/deep-clone';
 
 it('should fill props', () => {
   const props = {
@@ -8,6 +8,7 @@ it('should fill props', () => {
       yar: 'tar',
       sar: 1,
     },
+    notDefined: undefined,
   };
   const filler = new PropFiller(props);
 
@@ -17,6 +18,7 @@ it('should fill props', () => {
   expect(filler.fillString('{{nar.sar}}')).toEqual(1);
   expect(filler.fillString('foo')).toEqual('foo');
   expect(filler.fillString(props.nar)).toEqual(props.nar);
+  expect(filler.fillString('{{notDefined}}')).toEqual(undefined);
   expect(filler.fillString('{{missing}}')).toEqual('{{missing}}');
   expect(filler.fillString('{{missing}} here')).toEqual('{{missing}} here');
 
@@ -64,7 +66,7 @@ it('should handle circular references', () => {
 
   const filler = new PropFiller(props);
 
-  const clonedItems = cloneDeep(items);
+  const clonedItems = deepClone(items);
   clonedItems.a.v = 'bar';
   clonedItems.v = 'tar';
   expect(filler.fillAll(items)).toEqual(clonedItems);
