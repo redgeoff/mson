@@ -225,6 +225,29 @@ it('should fill with any field property', async () => {
   expect(form.getValue('firstName')).toEqual(false);
 });
 
+it('should fill with undefined', async () => {
+  const form = new Form({
+    fields: [
+      new TextField({ name: 'firstName', value: 'Frederick' }),
+      new TextField({ name: 'lastName' }),
+    ],
+  });
+
+  const action = new Set({
+    value: {
+      firstName: '{{fields.firstName.value}}',
+      lastName: '{{fields.lastName.value}}',
+    },
+  });
+
+  const value = await action.run({ component: form });
+  // console.log({ value })
+  expect(value).toEqual({
+    firstName: 'Frederick',
+    lastName: undefined,
+  });
+});
+
 it('should branch', async () => {
   const field = new TextField();
 

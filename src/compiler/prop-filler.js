@@ -1,6 +1,6 @@
 // TODO: move from compiler directory as used by multiple modules
 
-import { cloneDeepWith } from '../utils/deep-clone';
+import { deepCloneWith } from '../utils/deep-clone';
 import { executeQuery, isOperator } from './query';
 export default class PropFiller {
   constructor(props) {
@@ -21,6 +21,9 @@ export default class PropFiller {
   }
 
   _getPropFromObj(obj, name) {
+    let hasProperty = false;
+    let value = undefined;
+
     try {
       let names = name.split('.');
       let nestedObj;
@@ -28,32 +31,45 @@ export default class PropFiller {
       // Getter?
       if (obj.get && typeof obj.get === 'function') {
         nestedObj = obj.get(names[0]);
+        hasProperty = true;
       } else {
         nestedObj = obj[names[0]];
+        hasProperty = obj.hasOwnProperty(names[0]);
       }
 
       if (names.length > 1) {
         names.shift(); // remove 1st name
-        return this._getPropFromObj(nestedObj, names.join('.'));
+        value = this._getPropFromObj(nestedObj, names.join('.')).value;
       } else {
-        return nestedObj;
+        value = nestedObj;
       }
     } catch (err) {
-      // This can occur when there is no nested value in props
-      return undefined;
+      // This can occur when there is no nested value in props. We swallow this and return the
+      // defaults for hasProperty and value.
     }
+
+    return {
+      value,
+      hasProperty,
+    };
   }
 
   _getProp(name) {
     return this._getPropFromObj(this._props, name);
   }
 
-  // We leave the original template parameter strings intact if there isn't a match as the template
-  // parameter may match at a secondary layer, e.g. the template parameter is not for the MSON
-  // object, but in a validator.
   _getPropOrOriginalString(name, str) {
-    const value = this._getProp(name);
-    return value === undefined ? str : value;
+    const { value, hasProperty } = this._getProp(name);
+    // We need to analyze hasProperty as the property may exist but the value is undefined, e.g.
+    // `{foo: undefined }`
+    if (hasProperty) {
+      return value;
+    } else {
+      // We leave the original template parameter strings intact if there isn't a match as the template
+      // parameter may match at a secondary layer, e.g. the template parameter is not for the MSON
+      // object, but in a validator.
+      return str;
+    }
   }
 
   fillString(obj) {
@@ -79,23 +95,33 @@ export default class PropFiller {
     let isQuery = false;
 
     // Recursively dive into objects and fill any strings
-    const obj = cloneDeepWith(items, (item, name) => {
+    const obj = deepCloneWith(items, (item, name) => {
       if (!preventQuery && !isQuery && isOperator(name)) {
         // We need to check all attribute names as the operator may be nested
         // e.g. `{ x: $add: [1, 2], y: 3 }`
         isQuery = true;
       }
 
+      let performDefaultClone = false;
+      let clonedObject = undefined;
+
       if (item && item._className) {
         // The item is a component, therefore we should not clone it. TODO: is there a better way to
         // determine this?
-        return item;
+        clonedObject = item;
       } else if (typeof item === 'string') {
-        return this.fillString(item);
+        clonedObject = this.fillString(item);
       } else if (typeof item === 'function') {
         // e.g. JavaScript action
-        return item;
+        clonedObject = item;
+      } else {
+        performDefaultClone = true;
       }
+
+      return {
+        performDefaultClone,
+        clonedObject,
+      };
     });
 
     return {
