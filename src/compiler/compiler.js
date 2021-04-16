@@ -10,7 +10,7 @@ import components from '../components';
 import PropFiller from './prop-filler';
 import registrar from './registrar';
 import each from 'lodash/each';
-import cloneDeep from 'lodash/cloneDeep';
+import { cloneDeep } from '../utils/deep-clone';
 import MissingComponentError from './missing-component-error';
 
 export class Compiler {

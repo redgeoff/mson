@@ -1,6 +1,6 @@
 // TODO: move from compiler directory as used by multiple modules
 
-import cloneDeepWith from 'lodash/cloneDeepWith';
+import { cloneDeepWith } from '../utils/deep-clone';
 import { executeQuery, isOperator } from './query';
 export default class PropFiller {
   constructor(props) {
