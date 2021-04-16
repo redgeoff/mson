@@ -1,7 +1,6 @@
 import Store from './store';
 import StoreMapa from './store-mapa';
-import cloneDeepWith from 'lodash/cloneDeepWith';
-import cloneDeep from 'lodash/cloneDeep';
+import { cloneDeep, cloneDeepWith } from '../utils/deep-clone';
 import orderBy from 'lodash/orderBy';
 import { filter } from '../compiler/query';
 import { Reorder } from './reorder';

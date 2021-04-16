@@ -1,4 +1,9 @@
-import { deepCloneWith, deepClone } from './deep-clone';
+import {
+  deepCloneWith,
+  deepClone,
+  cloneDeepWith,
+  cloneDeep,
+} from './deep-clone';
 
 it('should deep clone primitive types', () => {
   expect(deepClone(null)).toEqual(null);
@@ -30,15 +35,18 @@ it('should deep clone array', () => {
 });
 
 it('should deep clone complex object', () => {
-  const object = { foo: ['bar'] };
+  const fun1 = () => {};
+  const fun2 = () => {};
+  const object = { foo: ['bar'], fun: fun1 };
   const clonedObject = deepClone(object);
-  expect(clonedObject).toEqual({ foo: ['bar'] });
+  expect(clonedObject).toEqual({ foo: ['bar'], fun: fun1 });
 
   // Mutate clone and make sure it doesn't change the original
   clonedObject.foo.push('buzz');
-  expect(object).toEqual({ foo: ['bar'] });
+  clonedObject.fun = fun2;
+  expect(object).toEqual({ foo: ['bar'], fun: fun1 });
   clonedObject.bar = 'nar';
-  expect(object).toEqual({ foo: ['bar'] });
+  expect(object).toEqual({ foo: ['bar'], fun: fun1 });
 });
 
 it('should deep clone nested null and undefined', () => {
@@ -100,6 +108,34 @@ it('should deep clone with conditional onNode', () => {
   // Mutate the part that wasn't actually cloned and make sure the original changes
   clonedObject.foo.push('buzz');
   expect(object).toEqual({ foo: ['bar', 'buzz'] });
+});
+
+it('should clone deep with conditional customizer', () => {
+  const customizer = (object, key) => {
+    if (key === 'foo') {
+      // Don't actually clone
+      return object;
+    }
+  };
+
+  const object = { foo: ['bar'] };
+  const clonedObject = cloneDeepWith(object, customizer);
+  expect(clonedObject).toEqual({ foo: ['bar'] });
+
+  // Mutate clone and make sure it doesn't change the original
+  clonedObject.bar = 'nar';
+  expect(object).toEqual({ foo: ['bar'] });
+
+  // Mutate the part that wasn't actually cloned and make sure the original changes
+  clonedObject.foo.push('buzz');
+  expect(object).toEqual({ foo: ['bar', 'buzz'] });
+});
+
+// Just a sanity check as the coverage is handled via the deepClone tests
+it('should clone deep object', () => {
+  const object = { foo: 'bar' };
+  const clonedObject = cloneDeep(object);
+  expect(clonedObject).toEqual({ foo: 'bar' });
 });
 
 // NOTE: Do not remove this comment as it provides useful context

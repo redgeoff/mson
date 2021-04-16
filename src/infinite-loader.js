@@ -1,4 +1,4 @@
-import cloneDeep from 'lodash/cloneDeep';
+import { cloneDeep } from './utils/deep-clone';
 import isEqual from 'lodash/isEqual';
 
 // TODO: improve the loading when scrolling up so that the user can "jump" to previous pages.

@@ -1,5 +1,5 @@
 import PropFiller from './prop-filler';
-import cloneDeep from 'lodash/cloneDeep';
+import { cloneDeep } from '../utils/deep-clone';
 
 it('should fill props', () => {
   const props = {

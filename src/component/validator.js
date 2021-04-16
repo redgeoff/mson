@@ -1,5 +1,5 @@
 import each from 'lodash/each';
-import cloneDeep from 'lodash/cloneDeep';
+import { cloneDeep } from '../utils/deep-clone';
 import { filter } from '../compiler/query';
 import PropFiller from '../compiler/prop-filler';
 import queryToProps from '../component/query-to-props';

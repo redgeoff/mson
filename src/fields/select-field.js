@@ -1,5 +1,5 @@
 import MultipleValueField from './multiple-value-field';
-import cloneDeep from 'lodash/cloneDeep';
+import { cloneDeep } from '../utils/deep-clone';
 
 export default class SelectField extends MultipleValueField {
   _className = 'SelectField';
