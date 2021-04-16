@@ -102,6 +102,8 @@ it('should deep clone with conditional onNode', () => {
   expect(object).toEqual({ foo: ['bar', 'buzz'] });
 });
 
+// NOTE: Do not remove this comment as it provides useful context
+//
 // Benchmark with N=100000:
 // - cloneDeepWith: 574ms
 // - deepCloneWith: 219ms
