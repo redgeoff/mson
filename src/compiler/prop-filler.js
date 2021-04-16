@@ -68,7 +68,7 @@ export default class PropFiller {
       // We leave the original template parameter strings intact if there isn't a match as the template
       // parameter may match at a secondary layer, e.g. the template parameter is not for the MSON
       // object, but in a validator.
-      return value === undefined ? str : value;
+      return str;
     }
   }
 
