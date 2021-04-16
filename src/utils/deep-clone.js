@@ -16,7 +16,12 @@ const deepCloneWithInner = (object, onNode, key, stack) => {
   let clonedVal = object;
 
   if (onNode) {
-    const { performDefaultClone, clonedObject } = onNode(object, key);
+    const { performDefaultClone, clonedObject } = onNode(
+      object,
+      key,
+      object,
+      stack
+    );
     doClone = performDefaultClone;
     if (!doClone) {
       clonedVal = clonedObject;
@@ -49,3 +54,22 @@ export const deepCloneWith = (object, onNode) =>
 
 export const deepClone = (object) =>
   deepCloneWithInner(object, undefined, undefined, []);
+
+// Drop-in replacement for Lodash's cloneDeepWith()
+export const cloneDeepWith = (object, customizer) =>
+  deepCloneWith(object, (value, key, object, stack) => {
+    const clonedObject = customizer(value, key, object, stack);
+    if (clonedObject === undefined) {
+      return {
+        performDefaultClone: true,
+      };
+    } else {
+      return {
+        performDefaultClone: false,
+        clonedObject,
+      };
+    }
+  });
+
+// Drop-in replacement for Lodash's cloneDeepWith()
+export const cloneDeep = (object) => deepClone(object);
