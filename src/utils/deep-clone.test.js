@@ -35,15 +35,18 @@ it('should deep clone array', () => {
 });
 
 it('should deep clone complex object', () => {
-  const object = { foo: ['bar'] };
+  const fun1 = () => {};
+  const fun2 = () => {};
+  const object = { foo: ['bar'], fun: fun1 };
   const clonedObject = deepClone(object);
-  expect(clonedObject).toEqual({ foo: ['bar'] });
+  expect(clonedObject).toEqual({ foo: ['bar'], fun: fun1 });
 
   // Mutate clone and make sure it doesn't change the original
   clonedObject.foo.push('buzz');
-  expect(object).toEqual({ foo: ['bar'] });
+  clonedObject.fun = fun2;
+  expect(object).toEqual({ foo: ['bar'], fun: fun1 });
   clonedObject.bar = 'nar';
-  expect(object).toEqual({ foo: ['bar'] });
+  expect(object).toEqual({ foo: ['bar'], fun: fun1 });
 });
 
 it('should deep clone nested null and undefined', () => {
