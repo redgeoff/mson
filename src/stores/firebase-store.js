@@ -4,7 +4,7 @@
 // firestore DB so that we have the option of working with larger datasets.
 
 import MemoryStore from './memory-store';
-import cloneDeep from 'lodash/cloneDeep';
+import { cloneDeep } from '../utils/deep-clone';
 import { Reorder } from './reorder';
 
 export default class FirebaseStore extends MemoryStore {

@@ -1,6 +1,6 @@
 import SchemaValidatorForm from './schema-validator-form';
 import compiler from '../compiler';
-import cloneDeep from 'lodash/cloneDeep';
+import { cloneDeep } from '../utils/deep-clone';
 
 it('should not mutate values when setting', () => {
   const form = new SchemaValidatorForm();
