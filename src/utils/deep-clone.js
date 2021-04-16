@@ -32,17 +32,18 @@ const deepCloneWithInner = (object, onNode, key, stack) => {
     if (object === null) {
       return null;
     } else if (Array.isArray(object)) {
+      stack.push(object);
       clonedVal = object.map((value, key) =>
-        deepCloneWithInner(value, onNode, key, [...stack, object])
+        deepCloneWithInner(value, onNode, key, stack)
       );
+      stack.pop();
     } else if (typeof object === 'object') {
+      stack.push(object);
       clonedVal = {};
       for (let key in object) {
-        clonedVal[key] = deepCloneWithInner(object[key], onNode, key, [
-          ...stack,
-          object,
-        ]);
+        clonedVal[key] = deepCloneWithInner(object[key], onNode, key, stack);
       }
+      stack.pop();
     }
   }
 
