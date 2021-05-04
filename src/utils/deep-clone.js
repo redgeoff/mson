@@ -6,6 +6,10 @@
 //   but:
 //     cloneDeep({ foo: undefined }) = {}
 
+const isClass = (object) => {
+  return object.constructor && object.constructor.name !== 'Object';
+};
+
 const deepCloneWithInner = (object, onNode, key, stack) => {
   if (stack.indexOf(object) !== -1) {
     // Bail if we find a circular reference
@@ -39,7 +43,17 @@ const deepCloneWithInner = (object, onNode, key, stack) => {
       stack.pop();
     } else if (typeof object === 'object') {
       stack.push(object);
-      clonedVal = {};
+
+      if (isClass(object)) {
+        // Note: this works for both classes and other objects, but it is much slower than `clonedVal = {}`
+        clonedVal = Object.assign(
+          Object.create(Object.getPrototypeOf(object)),
+          object
+        );
+      } else {
+        clonedVal = {};
+      }
+
       for (let key in object) {
         clonedVal[key] = deepCloneWithInner(object[key], onNode, key, stack);
       }
@@ -72,5 +86,5 @@ export const cloneDeepWith = (object, customizer) =>
     }
   });
 
-// Drop-in replacement for Lodash's cloneDeepWith()
+// Drop-in replacement for Lodash's cloneDeep()
 export const cloneDeep = (object) => deepClone(object);

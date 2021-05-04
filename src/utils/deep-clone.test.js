@@ -34,6 +34,52 @@ it('should deep clone array', () => {
   expect(object).toEqual(['foo']);
 });
 
+it('should clone functions', () => {
+  const arrowFun = () => 'bar';
+  const fun = function () {
+    return 'bar';
+  };
+  const object = {
+    arrowFun,
+    fun,
+  };
+  const clonedObject = deepClone(object);
+  expect(object.arrowFun()).toEqual('bar');
+  expect(object.fun()).toEqual('bar');
+  expect(clonedObject.arrowFun()).toEqual('bar');
+  expect(clonedObject.fun()).toEqual('bar');
+});
+
+it('should clone classes', () => {
+  class MyClass {
+    foo() {
+      return 'bar';
+    }
+  }
+  const object = new MyClass();
+  const clonedObject = deepClone(object);
+  expect(object.foo()).toEqual('bar');
+  expect(clonedObject.foo()).toEqual('bar');
+});
+
+it('should clone classes with nested data', () => {
+  class MyClass {
+    items = [];
+
+    add(item) {
+      this.items.push(item);
+    }
+  }
+  const object = new MyClass();
+  object.add('foo');
+  const clonedObject = deepClone(object);
+  clonedObject.add('bar');
+  expect(clonedObject.items).toEqual(['foo', 'bar']);
+
+  // Make sure original items didn't change
+  expect(object.items).toEqual(['foo']);
+});
+
 it('should deep clone complex object', () => {
   const fun1 = () => {};
   const fun2 = () => {};
@@ -145,7 +191,7 @@ it('should clone deep object', () => {
 // - deepCloneWith: 219ms
 // Summary: deepCloneWith() is more than 2 times faster than Lodash's cloneDeepWith()!
 //
-// import cloneDeepWith from 'lodash/cloneDeepWith';
+// import lodashCloneDeepWith from 'lodash/cloneDeepWith';
 //
 // const obj = {
 //   foo: {
@@ -162,13 +208,13 @@ it('should clone deep object', () => {
 //
 // const N = 100000;
 //
-// it('should cloneDeepWith quickly', () => {
+// it.only('should cloneDeepWith quickly', () => {
 //   for (let i = 0; i < N; i++) {
-//     cloneDeepWith(obj, () => undefined);
+//     lodashCloneDeepWith(obj, () => undefined);
 //   }
 // });
 //
-// it('should deepCloneWith quickly', () => {
+// it.only('should deepCloneWith quickly', () => {
 //   for (let i = 0; i < N; i++) {
 //     deepCloneWith(obj, () => ({ performDefaultClone: true }));
 //   }

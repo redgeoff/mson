@@ -3,7 +3,7 @@ import registrar from '../compiler/registrar';
 import utils from '../utils';
 import each from 'lodash/each';
 import difference from 'lodash/difference';
-import cloneDeepWith from 'lodash/cloneDeepWith';
+import { cloneDeepWith } from '../utils/deep-clone';
 import Mapa from '../mapa';
 import PropertyNotDefinedError from './property-not-defined-error';
 
