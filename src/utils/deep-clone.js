@@ -39,7 +39,13 @@ const deepCloneWithInner = (object, onNode, key, stack) => {
       stack.pop();
     } else if (typeof object === 'object') {
       stack.push(object);
-      clonedVal = {};
+
+      // Note: this works for both classes and other objects
+      clonedVal = Object.assign(
+        Object.create(Object.getPrototypeOf(object)),
+        object
+      );
+
       for (let key in object) {
         clonedVal[key] = deepCloneWithInner(object[key], onNode, key, stack);
       }
@@ -72,5 +78,5 @@ export const cloneDeepWith = (object, customizer) =>
     }
   });
 
-// Drop-in replacement for Lodash's cloneDeepWith()
+// Drop-in replacement for Lodash's cloneDeep()
 export const cloneDeep = (object) => deepClone(object);
