@@ -191,7 +191,7 @@ it('should clone deep object', () => {
 // - deepCloneWith: 219ms
 // Summary: deepCloneWith() is more than 2 times faster than Lodash's cloneDeepWith()!
 //
-// import cloneDeepWith from 'lodash/cloneDeepWith';
+// import lodashCloneDeepWith from 'lodash/cloneDeepWith';
 //
 // const obj = {
 //   foo: {
@@ -208,13 +208,13 @@ it('should clone deep object', () => {
 //
 // const N = 100000;
 //
-// it('should cloneDeepWith quickly', () => {
+// it.only('should cloneDeepWith quickly', () => {
 //   for (let i = 0; i < N; i++) {
-//     cloneDeepWith(obj, () => undefined);
+//     lodashCloneDeepWith(obj, () => undefined);
 //   }
 // });
 //
-// it('should deepCloneWith quickly', () => {
+// it.only('should deepCloneWith quickly', () => {
 //   for (let i = 0; i < N; i++) {
 //     deepCloneWith(obj, () => ({ performDefaultClone: true }));
 //   }
