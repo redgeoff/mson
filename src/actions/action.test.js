@@ -433,3 +433,28 @@ it('should support mongo query in template parameters', async () => {
   });
   expect(jill.getValue()).toEqual('is Jill');
 });
+
+it('should fill with self', async () => {
+  const field = new TextField();
+
+  const action = new Set({
+    schema: {
+      component: 'Form',
+      fields: [
+        {
+          name: 'x',
+          component: 'Field',
+        },
+      ],
+    },
+    name: 'value',
+    value: '{{self.x}}',
+  });
+
+  action.set({ x: 'foo' });
+
+  await action.run({
+    component: field,
+  });
+  expect(field.getValue()).toEqual('foo');
+});
