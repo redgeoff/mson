@@ -80,13 +80,19 @@ export default class Action extends Component {
   _setFillerProps(props) {
     // getFillerProps() wraps the props in a Getter so that the values can be retrieved dynamically,
     // allowing for things like retrieving data from deely nested components.
-    this._fillerProps = this._componentFillerProps.getFillerProps(props);
+    this._fillerProps = this._componentFillerProps.getFillerProps({
+      ...props,
+      self: this,
+    });
   }
 
   _setWhereProps(where, props) {
     // getWhereProps() resolves all the properties in the query and populates _whereProps. This
     // allows us to dynamically query data in deeply nested components.
-    this._whereProps = this._componentFillerProps.getWhereProps(where, props);
+    this._whereProps = this._componentFillerProps.getWhereProps(where, {
+      ...props,
+      self: this,
+    });
   }
 
   async run(props) {

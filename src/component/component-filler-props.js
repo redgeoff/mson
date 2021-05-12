@@ -4,11 +4,12 @@ import queryToProps from '../component/query-to-props';
 import get from 'lodash/get';
 
 export class Getter {
-  constructor({ action, component, args, globals }) {
+  constructor({ action, component, args, globals, self }) {
     this._action = action;
     this._component = component;
     this._args = args;
     this._globals = globals;
+    this._self = self;
   }
 
   get(name) {
@@ -28,6 +29,10 @@ export class Getter {
 
       case 'globals':
         item = this._globals;
+        break;
+
+      case 'self':
+        item = this._self;
         break;
 
       default:
@@ -87,6 +92,7 @@ export default class ComponentFillerProps {
       component: props && props.component,
       args: props && props.arguments,
       globals: this._getGlobals(),
+      self: props && props.self,
     });
   }
 
@@ -97,6 +103,7 @@ export default class ComponentFillerProps {
       component: props.component,
       args: props.arguments,
       globals: this._getGlobals(),
+      self: props && props.self,
     });
 
     return queryToProps(where, component);
