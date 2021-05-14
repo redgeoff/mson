@@ -458,3 +458,38 @@ it('should fill with self', async () => {
   });
   expect(field.getValue()).toEqual('foo');
 });
+
+it('should fill with customizer', async () => {
+  const customizer = (obj) => `${obj}bar`;
+
+  class FillCustomizedAction extends Action {
+    _create(props) {
+      super._create(props);
+
+      this.set({
+        name: 'FillCustomizedAction',
+        schema: {
+          component: 'Form',
+          fields: [
+            {
+              name: 'x',
+              component: 'TextField',
+            },
+            {
+              name: 'y',
+              component: 'TextField',
+            },
+          ],
+        },
+      });
+    }
+
+    async act(/* props */) {
+      return this.get('y', null, customizer);
+    }
+  }
+
+  const action = new FillCustomizedAction({ x: 'foo', y: '{{self.x}}' });
+
+  expect(await action.run()).toEqual('foobar');
+});
