@@ -102,3 +102,47 @@ it('should handle JSON strings', () => {
     })
   );
 });
+
+it('should fill with customizer', () => {
+  const props = {
+    fizz: 'fizzy',
+    foo: {
+      buzz: 'bizz',
+    },
+    nar: {
+      sar: 6,
+    },
+    thing: {
+      x: {
+        y: 1,
+      },
+    },
+  };
+  const filler = new PropFiller(props);
+
+  const customizer = jest.fn().mockImplementation((obj) => {
+    if (typeof obj === 'number') {
+      return obj + 1;
+    } else if (typeof obj === 'string') {
+      return obj + '_customized';
+    } else {
+      return obj;
+    }
+  });
+
+  const obj = {
+    foo: '{{fizz}}-{{foo.buzz}}',
+    bar: {
+      x: '{{nar.sar}}',
+    },
+    ob: '{{thing}}',
+  };
+
+  expect(filler.fill(obj, null, customizer)).toEqual({
+    foo: 'fizzy_customized-bizz_customized',
+    bar: { x: 7 },
+    ob: { x: { y: 1 } },
+  });
+
+  expect(customizer).toHaveBeenCalledTimes(4);
+});
