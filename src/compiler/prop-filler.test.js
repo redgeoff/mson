@@ -18,6 +18,12 @@ it('should fill props', () => {
   expect(filler.fillString('{{nar.sar}}')).toEqual(1);
   expect(filler.fillString('foo')).toEqual('foo');
   expect(filler.fillString(props.nar)).toEqual(props.nar);
+  expect(
+    filler.fillString(props.nar, (obj) => ({ ...obj, yar: obj.yar + '2' }))
+  ).toEqual({
+    yar: 'tar2',
+    sar: 1,
+  });
   expect(filler.fillString('{{notDefined}}')).toEqual(undefined);
   expect(filler.fillString('{{missing}}')).toEqual('{{missing}}');
   expect(filler.fillString('{{missing}} here')).toEqual('{{missing}} here');

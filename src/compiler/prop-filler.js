@@ -86,7 +86,8 @@ export default class PropFiller {
         });
       }
     } else {
-      // We only fill strings so just return the original object
+      // We only fill strings so just return the original object TODO: remove this branch? Is it
+      // really needed? Shouldn't obj always be a string?
       return customizer ? customizer(obj) : obj;
     }
   }
