@@ -58,12 +58,12 @@ export default class PropFiller {
     return this._getPropFromObj(this._props, name);
   }
 
-  _getPropOrOriginalString(name, str) {
+  _getPropOrOriginalString(name, str, customizer) {
     const { value, hasProperty } = this._getProp(name);
     // We need to analyze hasProperty as the property may exist but the value is undefined, e.g.
     // `{foo: undefined }`
     if (hasProperty) {
-      return value;
+      return customizer ? customizer(value) : value;
     } else {
       // We leave the original template parameter strings intact if there isn't a match as the template
       // parameter may match at a secondary layer, e.g. the template parameter is not for the MSON
@@ -72,26 +72,27 @@ export default class PropFiller {
     }
   }
 
-  fillString(obj) {
+  fillString(obj, customizer) {
     // Is obj a string?
     if (typeof obj === 'string') {
       // Is the string just a template string?
       let name = this._getTemplateName(obj);
       if (name !== undefined) {
         // Replace with the raw prop so that numbers are not converted to strings by replace()
-        return this._getPropOrOriginalString(name, obj);
+        return this._getPropOrOriginalString(name, obj, customizer);
       } else {
         return obj.replace(/{{([^{}]*)}}/g, (match, name) => {
-          return this._getPropOrOriginalString(name, match);
+          return this._getPropOrOriginalString(name, match, customizer);
         });
       }
     } else {
-      // We only fill strings so just return the original object
-      return obj;
+      // We only fill strings so just return the original object TODO: remove this branch? Is it
+      // really needed? Shouldn't obj always be a string?
+      return customizer ? customizer(obj) : obj;
     }
   }
 
-  _fillAllInner(items, preventQuery) {
+  _fillAllInner(items, preventQuery, customizer) {
     let isQuery = false;
 
     // Recursively dive into objects and fill any strings
@@ -110,7 +111,7 @@ export default class PropFiller {
         // determine this?
         clonedObject = item;
       } else if (typeof item === 'string') {
-        clonedObject = this.fillString(item);
+        clonedObject = this.fillString(item, customizer);
       } else if (typeof item === 'function') {
         // e.g. JavaScript action
         clonedObject = item;
@@ -134,11 +135,11 @@ export default class PropFiller {
     return this._fillAllInner(items).obj;
   }
 
-  fill(obj, preventQuery) {
+  fill(obj, preventQuery, customizer) {
     if (typeof obj === 'string') {
-      return this.fillString(obj);
+      return this.fillString(obj, customizer);
     } else {
-      const filled = this._fillAllInner(obj, preventQuery);
+      const filled = this._fillAllInner(obj, preventQuery, customizer);
 
       if (preventQuery || !filled.isQuery) {
         return filled.obj;
