@@ -54,7 +54,7 @@
     "analyze-bundle": "webpack --json > ./dist/stats.json && webpack-bundle-analyzer ./dist/stats.json",
     "prepublishOnly": "yarn compile && yarn bundle",
     "semantic-release": "semantic-release",
-    "postinstall": "git config core.hooksPath ./git-hooks"
+    "prepare": "git config core.hooksPath ./git-hooks"
   },
   "jest": {
     "collectCoverageFrom": [
