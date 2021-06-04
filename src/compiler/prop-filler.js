@@ -34,7 +34,10 @@ export default class PropFiller {
         hasProperty = true;
       } else {
         nestedObj = obj[names[0]];
-        hasProperty = obj.hasOwnProperty(names[0]);
+
+        // We cannot just use `obj.hasOwnProperty()` here as obj may have a null prototype, e.g.
+        // `obj = Object.create(null)`
+        Object.prototype.hasOwnProperty.call(obj, names[0]);
       }
 
       if (names.length > 1) {
