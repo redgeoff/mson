@@ -34,9 +34,8 @@ Implementing great forms can be a real time-waster. With just a few lines of JSO
 
 After you have played with the Getting Started App you may find it useful to fire up the [MSON demo](https://redgeoff.github.io/mson-react):
 
-  - $ git clone https://github.com/redgeoff/mson && cd mson && yarn install && yarn compile && yarn link && cd ..
-  - $ git clone https://github.com/redgeoff/mson-react && cd mson-react && yarn install && yarn link mson
-  - $ yarn start
+  - $ `git clone https://github.com/redgeoff/mson-react && cd mson-react && yarn install`
+  - $ `yarn start`
   - Visit http://localhost:3000 in a web browser
 
 The MSON code can be found in [components](https://github.com/redgeoff/mson-react/tree/master/src/demo/components). Here are some highlights:
