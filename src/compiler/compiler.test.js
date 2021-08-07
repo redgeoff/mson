@@ -586,7 +586,7 @@ it('should define className for all core components', () => {
       component: name,
     });
 
-    expect(c._className).toEqual(name);
+    expect(c.getClassName()).toEqual(name);
   });
 });
 
