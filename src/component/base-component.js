@@ -694,7 +694,7 @@ export default class BaseComponent extends events.EventEmitter {
     //
     // _className has been deprecated, use className instead.
     //
-    return this._className == undefined ? this.className : this._className;
+    return this._className === undefined ? this.className : this._className;
   }
 
   getParentClassName() {
