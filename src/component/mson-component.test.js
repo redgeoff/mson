@@ -19,12 +19,12 @@ it('should build in constructor', () => {
 it('should not preserve class name', () => {
   const component = new MSONComponent({
     definition: {
-      name: 'name',
+      name: 'MyField',
       component: 'TextField',
     },
   });
 
-  expect(component.getClassName()).toEqual('TextField');
+  expect(component.getClassName()).toEqual('MyField');
 });
 
 it('should set and get compiler', () => {
