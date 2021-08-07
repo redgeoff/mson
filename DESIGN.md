@@ -143,8 +143,8 @@ And the compiled counterpart looks like:
 
 ```js
 class AddMiddleName extends Form {
-  _create(props) {
-    super._create(Object.assign({}, props, { componentToWrap: props.componentToWrap }));
+  create(props) {
+    super.create(Object.assign({}, props, { componentToWrap: props.componentToWrap }));
 
     this.set({
       fields: [

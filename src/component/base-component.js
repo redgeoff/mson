@@ -170,7 +170,7 @@ export default class BaseComponent extends events.EventEmitter {
     this._key = getNextKey();
   }
 
-  _create(props) {
+  create(props) {
     // TODO: would it be better if the schema was loaded dynamically and on demand instead of
     // whenever the component is created? In some ways we already have this the schema exists as
     // simple objects until it instantiated. The problem with a lazy setting of the schema is how we
@@ -182,6 +182,11 @@ export default class BaseComponent extends events.EventEmitter {
     this._setDefaults(props, {
       docLevel: 'advanced',
     });
+  }
+
+  // Deprecated: use create instead
+  _create(props) {
+    this.create(props);
   }
 
   emitChange(name, value) {

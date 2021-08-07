@@ -527,8 +527,8 @@ import { TextField } from 'mson/lib/fields';
 import moment from 'moment';
 
 class MyComponent extends Component {
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       // Define a currentDay property
@@ -558,8 +558,8 @@ import Form from 'mson/lib/form';
 import { TextField } from 'mson/lib/fields';
 
 class MyAction extends Action {
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: new Form(
@@ -620,8 +620,8 @@ import Form from 'mson/lib/form';
 import { TextField, Email } from 'mson/lib/fields';
 
 class MyAccount extends Form {
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
     this.set({
       fields: [
         new TextField({
