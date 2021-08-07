@@ -3,7 +3,7 @@
 ## 100% Coverage
 
 This project implements 100% test coverage as it allows us to:
-  1. Use tools like [greenkeeper](https://greenkeeper.io/)
+  1. Use tools like dependabot's version updating
   2. Refactor/optimize without breaking anything
 
 ## Testing
