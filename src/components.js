@@ -92,6 +92,7 @@ import TextField from './fields/text-field';
 import TextFieldHiddenSchema from './fields/text-field-hidden-schema';
 import TextListField from './fields/text-list-field';
 import TimeField from './fields/time-field';
+import UIComponent from './ui-component';
 import UpdatePasswordEditor from './aggregate/update-password-editor';
 import UpdatePassword from './aggregate/update-password';
 import UpsertDoc from './actions/upsert-doc';
@@ -193,6 +194,7 @@ const components = {
   TextListField,
   TimeField,
   ValidatorForm: FormValidator,
+  UIComponent,
   UpdatePasswordEditor,
   UpdatePassword,
   UpsertDoc,
