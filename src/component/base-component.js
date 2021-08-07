@@ -20,7 +20,7 @@ const getNextKey = () => {
 // - We attempted to require all access to all props via get() and set(), but this can cause
 //   infinite recursion, e.g. when a get() calls itself either directly or via some inherited logic.
 export default class BaseComponent extends events.EventEmitter {
-  _className = 'Component';
+  className = 'Component';
 
   _getBaseComponentSchema() {
     return {
@@ -692,7 +692,9 @@ export default class BaseComponent extends events.EventEmitter {
     //   return this.constructor.name;
     // }
     //
-    return this._className;
+    // _className has been deprecated, use className instead.
+    //
+    return this._className === undefined ? this.className : this._className;
   }
 
   getParentClassName() {

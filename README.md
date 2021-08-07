@@ -620,6 +620,8 @@ import Form from 'mson/lib/form';
 import { TextField, Email } from 'mson/lib/fields';
 
 class MyAccount extends Form {
+  className = 'MyAccount';
+
   create(props) {
     super.create(props);
     this.set({
