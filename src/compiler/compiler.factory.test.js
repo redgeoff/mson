@@ -64,7 +64,7 @@ it('should compile when factory is in the root of the definition', () => {
 
   factoryShouldCreateUniqueForms(formFactory);
 
-  expect(formFactory.getClassName()).toEqual('app.FormFactory');
+  expect(formFactory.getClassName()).toEqual('Factory');
 });
 
 it('should handle template parameters in a nested factory', () => {
