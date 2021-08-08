@@ -2,7 +2,7 @@ import Action from './action';
 import each from 'lodash/each';
 
 export default class RedirectByRole extends Action {
-  _className = 'RedirectByRole';
+  className = 'RedirectByRole';
 
   _create(props) {
     super._create(props);

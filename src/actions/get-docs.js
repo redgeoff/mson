@@ -1,7 +1,7 @@
 import Action from './action';
 
 export default class GetDocs extends Action {
-  _className = 'GetDocs';
+  className = 'GetDocs';
 
   _create(props) {
     super._create(props);

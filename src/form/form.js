@@ -14,7 +14,7 @@ import FormErr from './form-err';
 import ExtendedField from '../fields/extended-field';
 
 export default class Form extends UIComponent {
-  _className = 'Form';
+  className = 'Form';
 
   _formSetMSONSchema() {
     this.set({

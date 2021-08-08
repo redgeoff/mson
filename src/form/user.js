@@ -2,7 +2,7 @@ import Form from './form';
 import MSONComponent from '../component/mson-component';
 
 export default class User extends Form {
-  _className = 'User';
+  className = 'User';
 
   _create(props) {
     super._create(props);

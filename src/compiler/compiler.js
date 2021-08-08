@@ -91,9 +91,9 @@ export class Compiler {
     class MyComponent extends Component {
       // If the name is a class then we use the inherited name. Note: we cannot use
       // Class.prototype.name as this is overwritten by minifiers like UglifyJS. You can turn this
-      // off with keep-classnames, but instead we’ll just use a custom _className so that we don’t
+      // off with keep-classnames, but instead we’ll just use a custom className so that we don’t
       // need to worry about custom configs for minifiers.
-      _className = className === undefined ? name : className;
+      className = className === undefined ? name : className;
 
       _create(props) {
         // Use the parentProps and props to fill

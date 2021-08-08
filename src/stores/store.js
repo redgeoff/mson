@@ -41,7 +41,7 @@ import globals from '../globals';
 import registrar from '../compiler/registrar';
 
 export default class Store extends UIComponent {
-  _className = 'Store';
+  className = 'Store';
 
   _create(props) {
     super._create(props);

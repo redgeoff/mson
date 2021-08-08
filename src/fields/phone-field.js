@@ -5,7 +5,7 @@ import countryTelephoneData from 'country-telephone-data';
 const EMPTY_MASK = [/./, /./, /./, /./];
 
 export default class PhoneField extends TextFieldHiddenSchema {
-  _className = 'PhoneField';
+  className = 'PhoneField';
 
   _stringToArrayMask(mask) {
     return map(mask, (item) => (item === '.' ? /\d/ : item));

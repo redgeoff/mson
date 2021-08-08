@@ -1,7 +1,7 @@
 import Field from './field';
 
 export default class ButtonField extends Field {
-  _className = 'ButtonField';
+  className = 'ButtonField';
 
   _create(props) {
     super._create(props);

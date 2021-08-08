@@ -19,7 +19,7 @@ import Action from './action';
 // Behind the scenes, we'd probably want to convert these inline functions in JavaScript action
 // objects so that they plug into the existing action constructs
 export default class JavaScript extends Action {
-  _className = 'JavaScript';
+  className = 'JavaScript';
 
   _create(props) {
     super._create(props);

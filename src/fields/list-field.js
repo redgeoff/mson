@@ -5,7 +5,7 @@ import CompositeField from './composite-field';
 import utils from '../utils';
 
 export default class ListField extends CompositeField {
-  _className = 'ListField';
+  className = 'ListField';
 
   _create(props) {
     super._create(props);

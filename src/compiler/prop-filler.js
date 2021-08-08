@@ -109,7 +109,7 @@ export default class PropFiller {
       let performDefaultClone = false;
       let clonedObject = undefined;
 
-      if (item && (item._className || item.className)) {
+      if (item && item.className) {
         // The item is a component, therefore we should not clone it. TODO: is there a better way to
         // determine this?
         clonedObject = item;

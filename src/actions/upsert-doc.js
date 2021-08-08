@@ -1,7 +1,7 @@
 import Action from './action';
 
 export default class UpsertDoc extends Action {
-  _className = 'UpsertDoc';
+  className = 'UpsertDoc';
 
   _create(props) {
     super._create(props);

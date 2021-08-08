@@ -1,7 +1,7 @@
 import Action from './action';
 
 export default class RequestPasswordReset extends Action {
-  _className = 'RequestPasswordReset';
+  className = 'RequestPasswordReset';
 
   _create(props) {
     super._create(props);

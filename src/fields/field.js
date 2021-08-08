@@ -5,7 +5,7 @@ import UIComponent from '../ui-component';
 import Validator from '../component/validator';
 
 export default class Field extends UIComponent {
-  _className = 'Field';
+  className = 'Field';
 
   _create(props) {
     super._create(props);

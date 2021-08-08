@@ -2,7 +2,7 @@ import Field from './field';
 import isValid from 'date-fns/isValid';
 
 export default class DateField extends Field {
-  _className = 'DateField';
+  className = 'DateField';
 
   _create(props) {
     super._create(props);
@@ -38,8 +38,7 @@ export default class DateField extends Field {
             component: 'TextField',
             label: 'Format',
             docLevel: 'basic',
-            help:
-              'Customize date format, e.g. "yyyy-MM-dd" or "d MMM yyyy". See https://date-fns.org/',
+            help: 'Customize date format, e.g. "yyyy-MM-dd" or "d MMM yyyy". See https://date-fns.org/',
           },
         ],
       },

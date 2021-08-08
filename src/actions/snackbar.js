@@ -1,7 +1,7 @@
 import Action from './action';
 
 export default class Snackbar extends Action {
-  _className = 'Snackbar';
+  className = 'Snackbar';
 
   _create(props) {
     super._create(props);

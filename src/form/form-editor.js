@@ -5,7 +5,7 @@ import FieldEditorForm from './field-editor-form';
 import utils from '../utils';
 
 export default class FormEditor extends Form {
-  _className = 'FormEditor';
+  className = 'FormEditor';
 
   _create(props) {
     super._create(props);

@@ -2,7 +2,7 @@ import Action from './action';
 
 // Can be used to debug MSON component actions
 export default class ConsoleLog extends Action {
-  _className = 'ConsoleLog';
+  className = 'ConsoleLog';
 
   _create(props) {
     super._create(props);

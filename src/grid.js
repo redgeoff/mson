@@ -1,7 +1,7 @@
 import UIComponent from './ui-component';
 
 export default class Grid extends UIComponent {
-  _className = 'Grid';
+  className = 'Grid';
 
   _create(props) {
     super._create(props);

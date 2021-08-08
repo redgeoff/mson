@@ -13,7 +13,7 @@ const MASK_PROPS = [
 ];
 
 export default class NumberField extends TextFieldHiddenSchema {
-  _className = 'NumberField';
+  className = 'NumberField';
 
   _create(props) {
     super._create(props);

@@ -5,7 +5,7 @@
 import Component from '../component';
 
 export default class Vault extends Component {
-  _className = 'Vault';
+  className = 'Vault';
 
   _create(props) {
     super._create(props);

@@ -4,7 +4,7 @@ import clone from 'lodash/clone';
 import isEmpty from 'lodash/isEmpty';
 
 export default class CompositeField extends Field {
-  _className = 'CompositeField';
+  className = 'CompositeField';
 
   _create(props) {
     // We use a Mapa instead of an array as sometimes we need to reference the fields via keys that

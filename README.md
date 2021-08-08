@@ -620,6 +620,7 @@ import Form from 'mson/lib/form';
 import { TextField, Email } from 'mson/lib/fields';
 
 class MyAccount extends Form {
+  // className is needed as JS minification strips the constructor name
   className = 'MyAccount';
 
   create(props) {

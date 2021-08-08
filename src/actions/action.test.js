@@ -174,7 +174,7 @@ it('should filter by arguments', async () => {
 });
 
 class SetNameAction extends Action {
-  _className = 'SetNameAction';
+  className = 'SetNameAction';
 
   _create(props) {
     super._create(props);

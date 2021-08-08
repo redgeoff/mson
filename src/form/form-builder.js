@@ -8,7 +8,7 @@ import JSONStringify from '../actions/json-stringify';
 import Text from '../text';
 
 export default class FormBuilder extends Form {
-  _className = 'FormBuilder';
+  className = 'FormBuilder';
 
   _create(props) {
     super._create(props);

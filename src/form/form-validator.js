@@ -4,7 +4,7 @@ import FormField from '../fields/form-field';
 import WhereField from '../fields/where-field';
 
 class ValidatorError extends Form {
-  _className = 'ValidatorError';
+  className = 'ValidatorError';
 
   _create(props) {
     super._create(props);
@@ -28,7 +28,7 @@ class ValidatorError extends Form {
 }
 
 export default class FormValidator extends Form {
-  _className = 'FormValidator';
+  className = 'FormValidator';
 
   _create(props) {
     super._create(props);

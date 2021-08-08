@@ -3,7 +3,7 @@ import SelectField from '../fields/select-field';
 import each from 'lodash/each';
 
 export default class FieldEditorForm extends Form {
-  _className = 'FieldEditorForm';
+  className = 'FieldEditorForm';
 
   static componentNames = [
     'AddressField',

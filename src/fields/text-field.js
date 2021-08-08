@@ -4,7 +4,7 @@ import { conformToMask } from 'vanilla-text-mask';
 import map from 'lodash/map';
 
 export default class TextField extends Field {
-  _className = 'TextField';
+  className = 'TextField';
 
   _setTextFieldSchema() {
     this.set({

@@ -25,7 +25,7 @@ import querystring from 'querystring';
 //   }
 // ]
 export default class Menu extends UIComponent {
-  _className = 'Menu';
+  className = 'Menu';
 
   _create(props) {
     super._create(props);

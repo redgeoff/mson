@@ -1,7 +1,7 @@
 import Action from './action';
 
 export default class GenerateComponent extends Action {
-  _className = 'GenerateComponent';
+  className = 'GenerateComponent';
 
   _create(props) {
     super._create(props);

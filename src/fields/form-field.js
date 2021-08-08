@@ -1,7 +1,7 @@
 import Field from './field';
 
 export default class FormField extends Field {
-  _className = 'FormField';
+  className = 'FormField';
 
   _create(props) {
     super._create(props);

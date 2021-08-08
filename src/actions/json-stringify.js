@@ -1,7 +1,7 @@
 import Action from './action';
 
 export default class JSONStringify extends Action {
-  _className = 'JSONStringify';
+  className = 'JSONStringify';
 
   _create(props) {
     super._create(props);

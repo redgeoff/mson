@@ -1,7 +1,7 @@
 import Action from './action';
 
 export default class LogOutOfApp extends Action {
-  _className = 'LogOutOfApp';
+  className = 'LogOutOfApp';
 
   _logOutOfApp() {
     return this._registrar.client.user.logOutOfApp();

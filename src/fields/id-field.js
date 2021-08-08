@@ -1,7 +1,7 @@
 import TextField from './text-field';
 
 export default class IdField extends TextField {
-  _className = 'IdField';
+  className = 'IdField';
 
   _create(props) {
     super._create(props);

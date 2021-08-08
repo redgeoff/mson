@@ -7,7 +7,7 @@ import registrar from '../compiler/registrar';
 import reorder, { Reorder } from './reorder';
 
 export default class RecordStore extends Store {
-  _className = 'RecordStore';
+  className = 'RecordStore';
 
   // Used to paginate the data when reordering so that we break up our batches
   static ITEMS_PER_PAGE_DEFAULT = 50;

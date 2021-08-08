@@ -2,7 +2,7 @@ import Field from './field';
 import utils from '../utils';
 
 export default class ComponentField extends Field {
-  _className = 'ComponentField';
+  className = 'ComponentField';
 
   _create(props) {
     super._create(props);

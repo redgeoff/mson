@@ -2,7 +2,7 @@ import MultipleValueField from './multiple-value-field';
 import { cloneDeep } from '../utils/deep-clone';
 
 export default class SelectField extends MultipleValueField {
-  _className = 'SelectField';
+  className = 'SelectField';
 
   _create(props) {
     super._create(props);

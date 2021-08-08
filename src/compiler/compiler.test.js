@@ -697,7 +697,7 @@ it('should get oldest compiled ancestor', () => {
 });
 
 class FooIt extends Action {
-  _className = 'FooIt';
+  className = 'FooIt';
 
   _create(props) {
     super._create(props);

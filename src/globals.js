@@ -4,7 +4,7 @@
 import Component from './component';
 
 export class Globals extends Component {
-  _className = 'Globals';
+  className = 'Globals';
 
   _onNavigate = null;
 

@@ -2,7 +2,7 @@ import ListField from './list-field';
 import SelectField from './select-field';
 
 export default class SelectListField extends ListField {
-  _className = 'SelectListField';
+  className = 'SelectListField';
 
   _create(props) {
     super._create(props);

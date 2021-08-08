@@ -1,17 +1,13 @@
 import NumberField from './number-field';
 
 export default class MoneyField extends NumberField {
-  _className = 'MoneyField';
+  className = 'MoneyField';
 
   _create(props) {
     super._create(props);
 
-    const {
-      prefix,
-      thousandsSeparatorSymbol,
-      allowDecimal,
-      decimalLimit,
-    } = props;
+    const { prefix, thousandsSeparatorSymbol, allowDecimal, decimalLimit } =
+      props;
 
     // Note: we cannot use setDefaults as we need to utilize inherited logic in set()
     this.set({

@@ -685,16 +685,13 @@ export default class BaseComponent extends events.EventEmitter {
     // Note: we cannot use Class.prototype.name as this is overwritten by minifiers like UglifyJS.
     //
     // The compiler now uses Object.defineProperty to dynamically set the class name
-    // if (this._className) {
+    // if (this.className) {
     //   // The component was generated via MSON and so the contructor.name is inaccurate
-    //   return this._className;
+    //   return this.className;
     // } else {
     //   return this.constructor.name;
     // }
-    //
-    // _className has been deprecated, use className instead.
-    //
-    return this._className === undefined ? this.className : this._className;
+    return this.className;
   }
 
   getParentClassName() {

@@ -1,7 +1,7 @@
 import Field from './field';
 
 export default class ExtendedField extends Field {
-  _className = 'ExtendedField';
+  className = 'ExtendedField';
 
   _create(props) {
     super._create(props);
