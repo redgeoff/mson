@@ -527,6 +527,9 @@ import { TextField } from 'mson/lib/fields';
 import moment from 'moment';
 
 class MyComponent extends Component {
+  // className is needed as JS minification strips the constructor name
+  className = 'MyComponent';
+
   create(props) {
     super.create(props);
 
@@ -558,6 +561,8 @@ import Form from 'mson/lib/form';
 import { TextField } from 'mson/lib/fields';
 
 class MyAction extends Action {
+  className = 'MyAction';
+
   create(props) {
     super.create(props);
 
