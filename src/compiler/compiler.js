@@ -187,9 +187,6 @@ export class Compiler {
   // The parentProps define values for the template parameters in props and allow us to make pieces
   // of our components dynamic.
   compile(props, parentProps, className) {
-    if (className === undefined && props.name !== undefined) {
-      className = props.name;
-    }
     return this._getWrappedComponentClass(
       props.component,
       props,
