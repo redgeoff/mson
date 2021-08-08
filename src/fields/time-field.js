@@ -3,7 +3,7 @@ import DateField from './date-field';
 import isValid from 'date-fns/isValid';
 
 export default class TimeField extends Field {
-  _className = 'TimeField';
+  className = 'TimeField';
 
   _create(props) {
     super._create(props);

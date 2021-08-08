@@ -6,7 +6,7 @@ import { filter } from '../compiler/query';
 import { Reorder } from './reorder';
 
 export default class MemoryStore extends Store {
-  _className = 'MemoryStore';
+  className = 'MemoryStore';
 
   _create(props) {
     super._create(props);

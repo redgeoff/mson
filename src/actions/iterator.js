@@ -5,7 +5,7 @@ import map from 'lodash/map';
 import PropFiller from '../compiler/prop-filler';
 
 export default class Iterator extends Action {
-  _className = 'Iterator';
+  className = 'Iterator';
 
   _create(props) {
     super._create(props);

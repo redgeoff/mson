@@ -1,7 +1,7 @@
 import MemoryStore from './memory-store';
 
 export default class LocalStorageStore extends MemoryStore {
-  _className = 'LocalStorageStore';
+  className = 'LocalStorageStore';
 
   _loadDocs(storeName) {
     const store = this._localStorage.getItem(storeName);

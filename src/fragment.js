@@ -1,7 +1,7 @@
 import UIComponent from './ui-component';
 
 export default class Fragment extends UIComponent {
-  _className = 'Fragment';
+  className = 'Fragment';
 
   _create(props) {
     super._create(props);

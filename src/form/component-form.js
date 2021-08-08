@@ -2,11 +2,11 @@ import Form from './form';
 import Field from '../fields/field';
 
 class ComponentDefinitionField extends Field {
-  // Leave _className with the inherited value of "Field" so that the UI knows how to render (hide)
+  // Leave className with the inherited value of "Field" so that the UI knows how to render (hide)
   // it. FUTURE: we may want to define something like a HiddenField that the we can use to represent
   // a Field that should not be rendered.
   //
-  // _className = 'ComponentDefinitionField';
+  // className = 'ComponentDefinitionField';
 
   _setValue(value) {
     if (value !== null) {
@@ -24,7 +24,7 @@ class ComponentDefinitionField extends Field {
 
 // Note: we use JS to define the component so that we can use `instanceof ComponentForm`
 export default class ComponentForm extends Form {
-  _className = 'ComponentForm';
+  className = 'ComponentForm';
 
   _create(props) {
     super._create(props);

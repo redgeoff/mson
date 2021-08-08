@@ -1,7 +1,7 @@
-import BaseComponent from './component';
+import Component from './component';
 
 it('should concat schemas', () => {
-  const c = new BaseComponent({
+  const c = new Component({
     schema: 'one',
   });
   c.set({ schema: 'two' });

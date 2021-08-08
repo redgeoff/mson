@@ -1,7 +1,7 @@
 import UIComponent from './ui-component';
 
 export default class Card extends UIComponent {
-  _className = 'Card';
+  className = 'Card';
 
   _create(props) {
     super._create(props);

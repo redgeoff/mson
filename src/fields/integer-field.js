@@ -1,7 +1,7 @@
 import NumberField from './number-field';
 
 export default class IntegerField extends NumberField {
-  _className = 'IntegerField';
+  className = 'IntegerField';
 
   validate() {
     super.validate();

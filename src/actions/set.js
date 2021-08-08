@@ -1,7 +1,7 @@
 import Action from './action';
 
 export default class Set extends Action {
-  _className = 'Set';
+  className = 'Set';
 
   _create(props) {
     super._create(props);

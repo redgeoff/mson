@@ -5,7 +5,7 @@ import utils from '../utils';
 // essentially exposes componentToWrap, which means that mutating the wrapped component mutates
 // componentToWrap.
 export default class WrappedComponent extends BaseComponent {
-  _className = 'WrappedComponent';
+  className = 'WrappedComponent';
 
   _getWrappedComponentSchema() {
     return {

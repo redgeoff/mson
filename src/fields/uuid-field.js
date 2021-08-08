@@ -2,7 +2,7 @@ import IdField from './id-field';
 import utils from '../utils';
 
 export default class UUIDField extends IdField {
-  _className = 'UUIDField';
+  className = 'UUIDField';
 
   _create(props) {
     super._create(props);

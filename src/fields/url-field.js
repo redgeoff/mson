@@ -1,7 +1,7 @@
 import TextField from './text-field';
 
 export default class URLField extends TextField {
-  _className = 'URLField';
+  className = 'URLField';
 
   _create(props) {
     super._create(props);

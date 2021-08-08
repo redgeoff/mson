@@ -1,7 +1,7 @@
 import Vault from './vault';
 
 export default class ReCAPTCHAVault extends Vault {
-  _className = 'ReCAPTCHAVault';
+  className = 'ReCAPTCHAVault';
 
   _create(props) {
     super._create(props);

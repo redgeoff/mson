@@ -2,7 +2,7 @@ import Form from './form';
 
 // A generic object without any required structure
 export default class ObjectForm extends Form {
-  _className = 'ObjectForm';
+  className = 'ObjectForm';
 
   constructor(props) {
     super(props);

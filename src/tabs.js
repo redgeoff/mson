@@ -1,7 +1,7 @@
 import UIComponent from './ui-component';
 
 export default class Tabs extends UIComponent {
-  _className = 'Tabs';
+  className = 'Tabs';
 
   _create(props) {
     super._create(props);

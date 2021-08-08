@@ -4,7 +4,7 @@ import registrar from '../compiler/registrar';
 // Allows you to define to a component in MSON, which isn't built until the component is
 // instantiated
 export default class MSONComponent extends WrappedComponent {
-  _className = 'MSONComponent';
+  className = 'MSONComponent';
 
   _create(props) {
     super._create(props);

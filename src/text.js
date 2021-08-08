@@ -1,7 +1,7 @@
 import UIComponent from './ui-component';
 
 export default class Text extends UIComponent {
-  _className = 'Text';
+  className = 'Text';
 
   _create(props) {
     super._create(props);

@@ -13,7 +13,7 @@ import each from 'lodash/each';
 // however, you have to account for the store being asynchronous, and therefore all manipulation of
 // the data should go through the store.
 export default class CollectionField extends Field {
-  _className = 'CollectionField';
+  className = 'CollectionField';
 
   static SCROLLTHRESHOLD_DEFAULT = 2000;
 

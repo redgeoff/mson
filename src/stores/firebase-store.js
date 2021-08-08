@@ -8,7 +8,7 @@ import { cloneDeep } from '../utils/deep-clone';
 import { Reorder } from './reorder';
 
 export default class FirebaseStore extends MemoryStore {
-  _className = 'FirebaseStore';
+  className = 'FirebaseStore';
 
   // React to real-time changes made remotely
   async _listenToChanges() {

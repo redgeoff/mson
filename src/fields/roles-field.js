@@ -2,7 +2,7 @@ import TextListField from './text-list-field';
 import Roles from '../roles';
 
 export default class RolesField extends TextListField {
-  _className = 'RolesField';
+  className = 'RolesField';
 
   _create(props) {
     super._create(props);
