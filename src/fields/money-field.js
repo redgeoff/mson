@@ -3,8 +3,8 @@ import NumberField from './number-field';
 export default class MoneyField extends NumberField {
   className = 'MoneyField';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     const { prefix, thousandsSeparatorSymbol, allowDecimal, decimalLimit } =
       props;

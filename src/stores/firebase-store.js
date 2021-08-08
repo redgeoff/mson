@@ -84,8 +84,8 @@ export default class FirebaseStore extends MemoryStore {
     // await this._loadDocs();
   }
 
-  _create(props) {
-    super._create(
+  create(props) {
+    super.create(
       Object.assign({}, props, {
         // Mute didLoad in the base classes as we need to emit didLoad after all the docs have been
         // loaded asynchronously

@@ -3,8 +3,8 @@ import Field from './field';
 export default class ExtendedField extends Field {
   className = 'ExtendedField';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

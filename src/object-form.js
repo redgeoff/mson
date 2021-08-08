@@ -9,8 +9,8 @@ export default class ObjectForm extends Form {
     this._errorFromSet = null;
   }
 
-  _create(props) {
-    super._create(Object.assign(props, { omitDefaultFields: true }));
+  create(props) {
+    super.create(Object.assign(props, { omitDefaultFields: true }));
 
     // The fields are dynamic so we need to disable the undefined check
     this._set('reportUndefined', false);

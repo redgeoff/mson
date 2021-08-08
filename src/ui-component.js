@@ -3,8 +3,8 @@ import Component from './component';
 export default class UIComponent extends Component {
   className = 'UIComponent';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

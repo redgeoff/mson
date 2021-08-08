@@ -12,8 +12,8 @@ export default class RecordStore extends Store {
   // Used to paginate the data when reordering so that we break up our batches
   static ITEMS_PER_PAGE_DEFAULT = 50;
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     // For mocking
     this._uberUtils = uberUtils;

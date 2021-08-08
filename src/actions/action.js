@@ -9,8 +9,8 @@ import access from '../access';
 export default class Action extends Component {
   className = 'Action';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     // For mocking
     this._registrar = registrar;

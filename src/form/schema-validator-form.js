@@ -3,8 +3,8 @@ import Form from './form';
 export default class SchemaValidatorForm extends Form {
   className = 'SchemaValidatorForm';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

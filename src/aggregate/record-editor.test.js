@@ -7,8 +7,8 @@ let editAccount = null;
 let docsCreated = null;
 
 class MockStore extends MemoryStore {
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this._docs.set('1', {
       id: '1',

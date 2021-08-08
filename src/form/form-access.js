@@ -24,16 +24,16 @@ import FormField from '../fields/form-field';
 class AccessRolesField extends Field {
   className = 'AccessRolesField';
 
-  _create(props) {
-    super._create(Object.assign({}, props, { allowScalar: true }));
+  create(props) {
+    super.create(Object.assign({}, props, { allowScalar: true }));
   }
 }
 
 class AccessNode extends Form {
   className = 'AccessNode';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.addField(new AccessRolesField({ name: 'create', label: 'Create' }));
     this.addField(new AccessRolesField({ name: 'read', label: 'Create' }));
@@ -45,8 +45,8 @@ class AccessNode extends Form {
 class AccessFields extends Form {
   className = 'AccessFields';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {
@@ -80,8 +80,8 @@ class AccessFields extends Form {
 export default class FormAccess extends Form {
   className = 'FormAccess';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

@@ -7,8 +7,8 @@ import testUtils from '../test-utils';
 
 // Uses inheritance
 class FirstNameForm extends Form {
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       fields: [
@@ -22,8 +22,8 @@ class FirstNameForm extends Form {
 
 // Uses composition
 class AddMiddleNameForm extends WrappedComponent {
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       fields: [
@@ -37,8 +37,8 @@ class AddMiddleNameForm extends WrappedComponent {
 
 // Uses inheritance and supplies the componentToWrap dynamically
 class AddLastNameForm extends AddMiddleNameForm {
-  _create(props) {
-    super._create(
+  create(props) {
+    super.create(
       Object.assign({}, props, {
         componentToWrap: new FirstNameForm(),
       })

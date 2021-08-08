@@ -1,8 +1,8 @@
 import Component from './component';
 
 export default class Factory extends Component {
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

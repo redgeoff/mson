@@ -5,9 +5,9 @@ import TextField from './text-field';
 export default class TextFieldHiddenSchema extends TextField {
   className = 'TextFieldHiddenSchema';
 
-  _create(props) {
+  create(props) {
     this._hideTextFieldSchema = true;
 
-    super._create(props);
+    super.create(props);
   }
 }

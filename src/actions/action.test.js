@@ -176,8 +176,8 @@ it('should filter by arguments', async () => {
 class SetNameAction extends Action {
   className = 'SetNameAction';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {
@@ -463,8 +463,8 @@ it('should fill with customizer', async () => {
   const customizer = (obj) => `${obj}bar`;
 
   class FillCustomizedAction extends Action {
-    _create(props) {
-      super._create(props);
+    create(props) {
+      super.create(props);
 
       this.set({
         name: 'FillCustomizedAction',

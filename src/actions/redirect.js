@@ -3,8 +3,8 @@ import Action from './action';
 export default class Redirect extends Action {
   className = 'Redirect';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

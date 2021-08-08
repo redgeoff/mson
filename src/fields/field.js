@@ -7,8 +7,8 @@ import Validator from '../component/validator';
 export default class Field extends UIComponent {
   className = 'Field';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

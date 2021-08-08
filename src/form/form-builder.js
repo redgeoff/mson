@@ -10,8 +10,8 @@ import Text from '../text';
 export default class FormBuilder extends Form {
   className = 'FormBuilder';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

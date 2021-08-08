@@ -95,7 +95,7 @@ export class Compiler {
       // need to worry about custom configs for minifiers.
       className = className === undefined ? name : className;
 
-      _create(props) {
+      create(props) {
         // Use the parentProps and props to fill
         const propFiller = new PropFiller(
           Object.assign({}, parentProps, props)
@@ -110,19 +110,19 @@ export class Compiler {
         // Remove these properties as they are no longer needed
         delete defaultProps.component;
 
-        // Instantiate defaultProps. We do this in _create() so that we have a fresh instance of all
+        // Instantiate defaultProps. We do this in create() so that we have a fresh instance of all
         // the child components
         self._instantiate(defaultProps);
 
         // props may also contain items that need to be instantiated
         self._instantiate(props);
 
-        // The default props and props need to be passed to _create() so that parent has a chance to
-        // act on these props. E.G. componentToWrap needs to be set via _create() before any other
+        // The default props and props need to be passed to create() so that parent has a chance to
+        // act on these props. E.G. componentToWrap needs to be set via create() before any other
         // action is taken.
         const propsAndDefaultProps = Object.assign({}, defaultProps, props);
 
-        super._create(propsAndDefaultProps);
+        super.create(propsAndDefaultProps);
 
         // Are we wrapping a component? Clear the componentToWrap
         if (defaultProps.componentToWrap) {
@@ -131,7 +131,7 @@ export class Compiler {
 
         // Set the defaultProps, which essentially customizes the component based on the
         // defaultProps. This would be similar to how you set properties in a
-        // constructor()/_create() if you were to build the component in JS.
+        // constructor()/create() if you were to build the component in JS.
         this.set(defaultProps);
       }
     }

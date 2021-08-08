@@ -4,8 +4,8 @@ import TextField from './text-field';
 export default class TextListField extends ListField {
   className = 'TextListField';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

@@ -6,8 +6,8 @@ import ChainedSelectField from './chained-select-field';
 export default class ChainedSelectListField extends ListField {
   className = 'ChainedSelectListField';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

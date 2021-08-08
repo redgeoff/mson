@@ -191,8 +191,8 @@ export default class Form extends UIComponent {
     });
   }
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this._componentFillerProps = new ComponentFillerProps();
     this._fields = new Mapa();

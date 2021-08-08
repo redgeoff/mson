@@ -4,8 +4,8 @@ import each from 'lodash/each';
 export default class RedirectByRole extends Action {
   className = 'RedirectByRole';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

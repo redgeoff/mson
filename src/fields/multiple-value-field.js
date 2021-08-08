@@ -3,8 +3,8 @@ import Field from './field';
 export default class MultipleValueField extends Field {
   className = 'MultipleValueField';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

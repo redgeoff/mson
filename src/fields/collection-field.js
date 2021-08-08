@@ -34,8 +34,8 @@ export default class CollectionField extends Field {
     RESTORE: 'restore',
   };
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     const c = this.constructor;
 

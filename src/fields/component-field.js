@@ -4,8 +4,8 @@ import utils from '../utils';
 export default class ComponentField extends Field {
   className = 'ComponentField';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {
