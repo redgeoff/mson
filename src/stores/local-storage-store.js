@@ -18,8 +18,8 @@ export default class LocalStorageStore extends MemoryStore {
     return this._global.window.localStorage;
   }
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     // For mocking
     this._global = global;

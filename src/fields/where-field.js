@@ -20,8 +20,8 @@ class ValidatorWhere extends ObjectForm {
 export default class WhereField extends FormField {
   className = 'WhereField';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this._setDefaults(props, { form: new ValidatorWhere() });
   }

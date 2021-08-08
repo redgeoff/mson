@@ -7,8 +7,8 @@ import utils from '../utils';
 export default class FormEditor extends Form {
   className = 'FormEditor';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

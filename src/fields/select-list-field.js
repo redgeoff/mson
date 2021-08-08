@@ -4,8 +4,8 @@ import SelectField from './select-field';
 export default class SelectListField extends ListField {
   className = 'SelectListField';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

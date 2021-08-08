@@ -4,8 +4,8 @@ import utils from '../utils';
 export default class UUIDField extends IdField {
   className = 'UUIDField';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this._setDefaults(props, {
       value: utils.uuid(),

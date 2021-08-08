@@ -4,8 +4,8 @@ import isValid from 'date-fns/isValid';
 export default class DateField extends Field {
   className = 'DateField';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

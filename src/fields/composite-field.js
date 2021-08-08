@@ -6,14 +6,14 @@ import isEmpty from 'lodash/isEmpty';
 export default class CompositeField extends Field {
   className = 'CompositeField';
 
-  _create(props) {
+  create(props) {
     // We use a Mapa instead of an array as sometimes we need to reference the fields via keys that
     // don't change even when fields are deleted. With arrays, the keys change when we slice the
     // array. We cannot use just a basic object as our fields must preseve order. We cannot use a
     // Map as we need to be able to iterate through the fields beginning with any given field.
     this._fields = new Mapa();
 
-    super._create(props);
+    super.create(props);
 
     this.set({
       schema: {

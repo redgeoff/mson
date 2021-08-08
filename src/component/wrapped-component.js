@@ -19,8 +19,8 @@ export default class WrappedComponent extends BaseComponent {
     };
   }
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this._preserveClassName = true;
 

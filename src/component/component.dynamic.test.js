@@ -6,8 +6,8 @@ import { TextField } from '../fields';
 import WrappedComponent from './wrapped-component';
 
 class DynamicForm extends Form {
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {
@@ -34,8 +34,8 @@ class DynamicForm extends Form {
 }
 
 class DynamicFormExtended extends DynamicForm {
-  _create(props) {
-    super._create(
+  create(props) {
+    super.create(
       Object.assign({}, props, {
         firstField: new TextField({
           name: 'firstName',
@@ -47,8 +47,8 @@ class DynamicFormExtended extends DynamicForm {
 }
 
 class DynamicCompositionForm extends WrappedComponent {
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       fields: [
@@ -61,8 +61,8 @@ class DynamicCompositionForm extends WrappedComponent {
 }
 
 class DynamicCompositionComponent extends WrappedComponent {
-  _create(props) {
-    super._create(
+  create(props) {
+    super.create(
       Object.assign({}, props, {
         componentToWrap: new DynamicCompositionForm({
           componentToWrap: props.baseForm,
@@ -90,8 +90,8 @@ class DynamicCompositionComponent extends WrappedComponent {
 }
 
 class DynamicCompositionExtendedComponent extends DynamicCompositionComponent {
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       fields: [

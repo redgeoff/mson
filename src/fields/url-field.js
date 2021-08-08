@@ -3,8 +3,8 @@ import TextField from './text-field';
 export default class URLField extends TextField {
   className = 'URLField';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

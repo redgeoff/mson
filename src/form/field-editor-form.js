@@ -95,8 +95,8 @@ export default class FieldEditorForm extends Form {
     }
   }
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       fields: [

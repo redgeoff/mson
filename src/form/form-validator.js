@@ -6,8 +6,8 @@ import WhereField from '../fields/where-field';
 class ValidatorError extends Form {
   className = 'ValidatorError';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.addField(
       new TextField({
@@ -30,8 +30,8 @@ class ValidatorError extends Form {
 export default class FormValidator extends Form {
   className = 'FormValidator';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.addField(
       new WhereField({

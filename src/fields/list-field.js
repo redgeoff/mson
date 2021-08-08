@@ -7,8 +7,8 @@ import utils from '../utils';
 export default class ListField extends CompositeField {
   className = 'ListField';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this._nextFieldName = 0;
 
@@ -74,7 +74,7 @@ export default class ListField extends CompositeField {
     super(props);
 
     if (this.get('startWithField')) {
-      // Create the first field. We do this here and not in _create() as we may need the schema and
+      // Create the first field. We do this here and not in create() as we may need the schema and
       // properties.
       this._createNewField();
     }

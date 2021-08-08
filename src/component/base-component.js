@@ -156,7 +156,7 @@ export default class BaseComponent extends events.EventEmitter {
       this._setProperty('name', props.name);
     }
 
-    this._create(props === undefined ? {} : props);
+    this.create(props === undefined ? {} : props);
     this.set(props === undefined ? {} : props);
 
     this._emitCreateIfNotMuted();
@@ -182,11 +182,6 @@ export default class BaseComponent extends events.EventEmitter {
     this._setDefaults(props, {
       docLevel: 'advanced',
     });
-  }
-
-  // Deprecated: use create instead
-  _create(props) {
-    this.create(props);
   }
 
   emitChange(name, value) {

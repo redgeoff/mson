@@ -26,8 +26,8 @@ class ComponentDefinitionField extends Field {
 export default class ComponentForm extends Form {
   className = 'ComponentForm';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     const fields = [
       // A JSON blob defining the component. We define a ComponentDefinitionField so that we can

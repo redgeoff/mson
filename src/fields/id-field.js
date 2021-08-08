@@ -3,8 +3,8 @@ import TextField from './text-field';
 export default class IdField extends TextField {
   className = 'IdField';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     // Ids can also be a number. TODO: mixin validation/functionality from the NumberField?
     this._requireString = false;

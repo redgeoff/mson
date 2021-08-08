@@ -8,8 +8,8 @@ import { Reorder } from './reorder';
 export default class MemoryStore extends Store {
   className = 'MemoryStore';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this._docs = new StoreMapa();
 

@@ -59,8 +59,8 @@ export default class PhoneField extends TextFieldHiddenSchema {
     return EMPTY_MASK;
   }
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

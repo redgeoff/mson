@@ -3,8 +3,8 @@ import UIComponent from './ui-component';
 export default class Tabs extends UIComponent {
   className = 'Tabs';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

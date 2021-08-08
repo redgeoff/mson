@@ -4,8 +4,8 @@ import { cloneDeep } from '../utils/deep-clone';
 export default class SelectField extends MultipleValueField {
   className = 'SelectField';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     this.set({
       schema: {

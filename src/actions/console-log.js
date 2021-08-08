@@ -4,8 +4,8 @@ import Action from './action';
 export default class ConsoleLog extends Action {
   className = 'ConsoleLog';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     // For mocking
     this._console = console;

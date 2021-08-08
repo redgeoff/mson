@@ -4,8 +4,8 @@ import MSONComponent from '../component/mson-component';
 export default class User extends Form {
   className = 'User';
 
-  _create(props) {
-    super._create(props);
+  create(props) {
+    super.create(props);
 
     // Note: we use MSONComponents as EmailField and PasswordField are uncompiled and importing from
     // ../fields would create a circular dependency.
