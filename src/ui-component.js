@@ -16,6 +16,12 @@ export default class UIComponent extends Component {
             label: 'Hidden',
             docLevel: 'basic',
           },
+          {
+            name: 'render',
+            component: 'Field',
+            label: 'Render',
+            docLevel: 'basic',
+          },
         ],
       },
     });
