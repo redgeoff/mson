@@ -74,7 +74,7 @@ const registerComponents = () => {
   });
 
   // Composition
-  compiler.registerComponent('app.EditThing', {
+  register('app.EditThing', {
     component: 'WrappedComponent',
   });
 
