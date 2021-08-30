@@ -17,10 +17,9 @@ beforeEach(() => {
   compiler = new Compiler({ components: { ...components } });
 });
 
-it('should support instances as components', () => {
+it('should support class as component', () => {
   const name = compiler.newComponent({
     component: NameField,
   });
-  expect(name.getClassName()).toEqual('app.NameField');
   expect(name.get('minLength')).toEqual(5);
 });
