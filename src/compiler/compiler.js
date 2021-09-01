@@ -36,7 +36,7 @@ export class Compiler {
   }
 
   getComponent(componentOrName) {
-    if (this.isCompiled(componentOrName)) {
+    if (typeof componentOrName !== 'string') {
       return componentOrName;
     } else if (this.exists(componentOrName)) {
       return this._components[componentOrName];
