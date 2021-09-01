@@ -656,12 +656,12 @@ Since all MSON code can be compiled to JS code, you can use MSON components in a
 import compiler from 'mson/lib/compiler';
 
 // Compile the MyAccount component
-const MyAccount = compiler.compile({
-  component: 'MyAccount'
+const CompiledMyAccount = compiler.compile({
+  component: MyAccount
 });
 
 // Instantiate the JS class with a default value
-const myAccount = new MyAccount({
+const myAccount = new CompiledMyAccount({
   // Default values
   value: {
     firstName: 'Bob'
@@ -681,6 +681,29 @@ if (myAccount.hasErr()) {
 }
 ```
 In other words, you can use MSON in your existing JS code to save time writing complex code. By declaring components in MSON, you’ll remove a lot of boilerplate code and reduce the possibility of bugs. You’ll also have code that has a standard structure and is framework agnostic. And this code doesn’t add any unneeded frameworks or back-end dependencies to your codebase.
+
+### Component as a Class or Compiled Component
+
+In the above example, we used:
+```js
+const CompiledMyAccount = compiler.compile({
+  component: MyAccount
+});
+```
+whereby, `MyAccount` is actually a class (compiled component). This can be handy as it means that we didn't have to register `MyAccount` with the compiler and we can import components using the native constructs present in JavaScript. On the other hand, our definition:
+```js
+{
+  component: MyAccount
+}
+```
+can no longer be serialized into a JSON string as it references a JavaScript class. JSON serialization could be a requirement if, for example, we want to store our definitions in a database. MSON gives you the freedom to make this decision as you can always use the following instead:
+```js
+compiler.registerComponent('MyAccount', MyAccount);
+
+const CompiledMyAccount = compiler.compile({
+  component: 'MyAccount'
+});
+```
 
 ### Reusing MSON Code Throughout the Full Stack
 
