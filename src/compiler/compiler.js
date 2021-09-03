@@ -35,11 +35,13 @@ export class Compiler {
     return !!this._components[name];
   }
 
-  getComponent(name) {
-    if (this.exists(name)) {
-      return this._components[name];
+  getComponent(componentOrName) {
+    if (typeof componentOrName !== 'string') {
+      return componentOrName;
+    } else if (this.exists(componentOrName)) {
+      return this._components[componentOrName];
     } else {
-      throw new MissingComponentError('missing component ' + name);
+      throw new MissingComponentError(`missing component ${componentOrName}`);
     }
   }
 
