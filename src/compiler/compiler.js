@@ -260,8 +260,8 @@ export class Compiler {
   }
 
   registerComponents(components) {
-    each(components, (component) =>
-      this.registerComponent(component.name, component)
+    Object.keys(components).forEach((name) =>
+      this.registerComponent(name, components[name])
     );
   }
 
