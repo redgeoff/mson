@@ -79,6 +79,11 @@ export default class Menu extends UIComponent {
               },
             },
           },
+          {
+            name: 'header',
+            component: 'Field',
+            label: 'Header',
+          },
         ],
       },
     });

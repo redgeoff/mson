@@ -74,7 +74,7 @@ const registerComponents = () => {
   });
 
   // Composition
-  compiler.registerComponent('app.EditThing', {
+  register('app.EditThing', {
     component: 'WrappedComponent',
   });
 
@@ -774,4 +774,12 @@ it('should share template parameters', async () => {
   });
 
   await component.runListeners('foo');
+});
+
+it('should register components with index name', async () => {
+  const components = {
+    'app.FooIt': FooIt,
+  };
+  compiler.registerComponents(components);
+  expect(compiler.exists('app.FooIt')).toEqual(true);
 });
