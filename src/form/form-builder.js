@@ -6,6 +6,8 @@ import Set from '../actions/set';
 import Emit from '../actions/emit';
 import JSONStringify from '../actions/json-stringify';
 import Text from '../text';
+import Fragment from '../fragment';
+import Field from '../fields/field';
 
 export default class FormBuilder extends Form {
   className = 'FormBuilder';
@@ -52,9 +54,16 @@ export default class FormBuilder extends Form {
           ],
         }),
 
-        new Text({
-          name: 'definition',
+        // Note: Fragment is not a field so it will be wrapped with a field and accessible at
+        // `fields.export.content`
+        new Fragment({
+          name: 'export',
           hidden: true,
+          items: [
+            new Field({ name: 'header' }),
+            new Text({ name: 'definition' }),
+            new Field({ name: 'footer' }),
+          ],
         }),
 
         new FormField({
@@ -98,7 +107,8 @@ export default class FormBuilder extends Form {
               space: 2,
             }),
             new Set({
-              name: 'fields.definition.content.text',
+              // TODO: Can this be 'fields.export.content.items.definition.text' instead?
+              name: 'fields.export.content.items.1.text',
               value: '```js\n{{arguments}}\n```\n',
             }),
             new Emit({
@@ -115,7 +125,7 @@ export default class FormBuilder extends Form {
           event: 'setCodeHidden',
           actions: [
             new Set({
-              name: 'fields.definition.content.hidden',
+              name: 'fields.export.content.hidden',
               value: '{{arguments.hideCode}}',
             }),
             new Set({
