@@ -7,6 +7,7 @@ import Action from './actions/action';
 import AddressField from './fields/address-field';
 import AddressForm from './fields/address-form';
 import AuthenticatedContactUs from './aggregate/authenticated-contact-us';
+import Alert from './alert';
 import App from './app';
 import BooleanField from './fields/boolean-field';
 import ButtonField from './fields/button-field';
@@ -111,6 +112,7 @@ const components = {
   AddressField,
   AddressForm,
   AuthenticatedContactUs,
+  Alert,
   App,
   BooleanField,
   ButtonField,

@@ -1,6 +1,5 @@
 import UIComponent from './ui-component';
 import Mapa from './mapa';
-import Component from './component/component';
 
 export default class Fragment extends UIComponent {
   className = 'Fragment';
