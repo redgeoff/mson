@@ -7,7 +7,7 @@ import Emit from '../actions/emit';
 import JSONStringify from '../actions/json-stringify';
 import Text from '../text';
 import Fragment from '../fragment';
-import Field from '../fields/field';
+import Container from '../container';
 
 export default class FormBuilder extends Form {
   className = 'FormBuilder';
@@ -54,15 +54,15 @@ export default class FormBuilder extends Form {
           ],
         }),
 
-        // Note: Fragment is not a field so it will be wrapped with a field and accessible at
-        // `fields.export.content`
+        // Note: Fragment is not a field so it will be automatically wrapped with a field and
+        // accessible at `fields.export.content`
         new Fragment({
           name: 'export',
           hidden: true,
           items: [
-            new Field({ name: 'header' }),
+            new Container({ name: 'header' }),
             new Text({ name: 'definition' }),
-            new Field({ name: 'footer' }),
+            new Container({ name: 'footer' }),
           ],
         }),
 
@@ -107,8 +107,7 @@ export default class FormBuilder extends Form {
               space: 2,
             }),
             new Set({
-              // TODO: Can this be 'fields.export.content.items.definition.text' instead?
-              name: 'fields.export.content.items.1.text',
+              name: 'fields.export.content.items.definition.text',
               value: '```js\n{{arguments}}\n```\n',
             }),
             new Emit({

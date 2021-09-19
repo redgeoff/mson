@@ -22,6 +22,7 @@ import ComponentForm from './form/component-form';
 import CompositeField from './fields/composite-field';
 import ConsoleLog from './actions/console-log';
 import ContactUs from './aggregate/contact-us';
+import Container from './container';
 import CountryField from './fields/country-field';
 import DateField from './fields/date-field';
 import Email from './actions/email';
@@ -125,6 +126,7 @@ const components = {
   CompositeField,
   ConsoleLog,
   ContactUs,
+  Container,
   CountryField,
   DateField,
   Email,
