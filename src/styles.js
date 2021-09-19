@@ -44,6 +44,24 @@ export default class Styles extends Component {
             label: 'Margin Top',
             docLevel: 'basic',
           },
+          {
+            name: 'marginRight',
+            component: 'NumberField',
+            label: 'Margin Right',
+            docLevel: 'basic',
+          },
+          {
+            name: 'marginBottom',
+            component: 'NumberField',
+            label: 'Margin Bottom',
+            docLevel: 'basic',
+          },
+          {
+            name: 'marginLeft',
+            component: 'NumberField',
+            label: 'Margin Left',
+            docLevel: 'basic',
+          },
         ],
       },
     });
