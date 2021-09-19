@@ -22,6 +22,12 @@ export default class UIComponent extends Component {
             label: 'Render',
             docLevel: 'basic',
           },
+          {
+            name: 'styles',
+            component: 'Field',
+            label: 'Styles',
+            docLevel: 'basic',
+          },
         ],
       },
     });
