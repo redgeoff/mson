@@ -6,9 +6,10 @@ export default class Fragment extends UIComponent {
 
   setNamedItems(items) {
     this._items.clear();
-    items.forEach((item) => {
+    items.forEach((item, index) => {
       item.set({ parent: this });
-      this._items.set(item.get('name'), item);
+      const key = item.get('name') ? item.get('name') : index;
+      this._items.set(key, item);
     });
   }
 
