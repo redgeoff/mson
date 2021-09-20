@@ -88,7 +88,7 @@ import Set from './actions/set';
 import SignupEditor from './aggregate/signup-editor';
 import Snackbar from './actions/snackbar';
 import StateField from './fields/state-field';
-import Styles from './styles';
+import Styles from './component/styles';
 import Tabs from './tabs';
 import Text from './text';
 import TextField from './fields/text-field';
