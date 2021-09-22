@@ -55,7 +55,7 @@ it('should set definition', () => {
 it('should set definition via value', () => {
   const definition = getDefinition(true);
   builder.set({ value: { definition } });
-  expect(builder.getValues()).toEqual({ ...getValues(), definition });
+  expect(builder.getValues()).toEqual(getValues());
 });
 
 it('should get definition', () => {
