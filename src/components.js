@@ -6,8 +6,9 @@
 import Action from './actions/action';
 import AddressField from './fields/address-field';
 import AddressForm from './fields/address-form';
-import AuthenticatedContactUs from './aggregate/authenticated-contact-us';
+import Alert from './alert';
 import App from './app';
+import AuthenticatedContactUs from './aggregate/authenticated-contact-us';
 import BooleanField from './fields/boolean-field';
 import ButtonField from './fields/button-field';
 import Card from './card';
@@ -15,13 +16,14 @@ import ChainedSelectField from './fields/chained-select-field';
 import ChainedSelectListField from './fields/chained-select-list-field';
 import ChainedSelectOptionsField from './fields/chained-select-options-field';
 import CityField from './fields/city-field';
-import Component from './component/component';
 import CollectionField from './fields/collection-field';
+import Component from './component/component';
 import ComponentField from './fields/component-field';
 import ComponentForm from './form/component-form';
 import CompositeField from './fields/composite-field';
 import ConsoleLog from './actions/console-log';
 import ContactUs from './aggregate/contact-us';
+import Container from './container';
 import CountryField from './fields/country-field';
 import DateField from './fields/date-field';
 import Email from './actions/email';
@@ -110,8 +112,9 @@ const components = {
   Action,
   AddressField,
   AddressForm,
-  AuthenticatedContactUs,
+  Alert,
   App,
+  AuthenticatedContactUs,
   BooleanField,
   ButtonField,
   Card,
@@ -126,6 +129,7 @@ const components = {
   CompositeField,
   ConsoleLog,
   ContactUs,
+  Container,
   CountryField,
   DateField,
   Email,
