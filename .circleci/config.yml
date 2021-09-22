@@ -5,9 +5,7 @@ jobs:
     working_directory: ~/mson
 
     docker:
-      # TODO: restore after https://github.com/facebook/jest/issues/8069 has been resolved
-      # - image: circleci/node:stretch-browsers
-      - image: circleci/node:10-stretch-browsers
+      - image: circleci/node:stretch-browsers
 
     steps:
       - checkout
