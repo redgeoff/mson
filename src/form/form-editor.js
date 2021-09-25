@@ -30,6 +30,7 @@ export default class FormEditor extends Form {
           skipRead: true,
           includeExtraneous: true,
           forbidOrder: false,
+          forbidSort: true,
 
           formFactory: new Factory({
             product: () =>
