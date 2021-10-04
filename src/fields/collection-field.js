@@ -1168,7 +1168,7 @@ export default class CollectionField extends Field {
   async _saveForm(form) {
     const id = form.getField('id');
     const store = this.get('store');
-    const creating = id.isBlank();
+    const creating = form.get('new');
     let fieldForm = null;
 
     if (store) {
@@ -1178,7 +1178,7 @@ export default class CollectionField extends Field {
 
       let record = null;
 
-      if (form.get('new')) {
+      if (creating) {
         record = await store.createDoc({ form, reorder });
       } else {
         record = await store.updateDoc({ form, reorder });

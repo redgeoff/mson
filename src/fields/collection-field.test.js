@@ -420,6 +420,20 @@ const updateDocMock = () => async (props) => {
   };
 };
 
+const jack = {
+  firstName: 'Jack',
+  lastName: 'Johnson',
+  userId: 'myUserId',
+};
+
+const clickNew = (field) => {
+  // Simulate the user clicking the new button
+  field.set({
+    currentForm: null,
+    mode: CollectionField.MODES.CREATE,
+  });
+};
+
 it('should save', async () => {
   const field = createField();
 
@@ -444,17 +458,7 @@ it('should save', async () => {
   const createSpy = jest.spyOn(store, 'createDoc');
   const updateSpy = jest.spyOn(store, 'updateDoc');
 
-  const jack = {
-    firstName: 'Jack',
-    lastName: 'Johnson',
-    userId: 'myUserId',
-  };
-
-  // Simulate the user clicking the new button
-  field.set({
-    currentForm: null,
-    mode: CollectionField.MODES.CREATE,
-  });
+  clickNew(field);
 
   const form = field.get('form');
 
@@ -472,18 +476,26 @@ it('should save', async () => {
   await field.save();
   expect(updateSpy).toHaveBeenCalledWith({ form, reorder: false });
   expect(field.getValue()).toHaveLength(1);
+});
 
-  // Simulate the lack of a store
-  field.set({ store: null });
-  form.clearValues();
+it('should save without store', async () => {
+  const field = createField();
+
+  clickNew(field);
+
+  const form = field.get('form');
+
+  // Save
   form.setValues(jack);
   await field.save();
   expect(form.getValue('id')).not.toBeUndefined();
-  expect(field.getValue()).toHaveLength(2);
+  expect(field.getValue()).toHaveLength(1);
+
+  // Update
   form.setValues({ lastName: 'Ryan' });
   await field.save();
   expect(form.getValue('lastName')).toEqual('Ryan');
-  expect(field.getValue()).toHaveLength(2);
+  expect(field.getValue()).toHaveLength(1);
 });
 
 it('should archive', async () => {
