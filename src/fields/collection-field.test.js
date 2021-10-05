@@ -442,13 +442,6 @@ it('should save', async () => {
       id: 'myId',
     }),
     updateDoc: updateDocMock,
-    // upsertDoc: async (props) => {
-    //   if (props.form.getValue('id')) {
-    //     return store.updateDoc(props);
-    //   } else {
-    //     return store.createDoc(props);
-    //   }
-    // },
     on: () => {},
     removeAllListeners: () => {},
   };
@@ -498,13 +491,62 @@ it('should save without store', async () => {
   expect(field.getValue()).toHaveLength(1);
 });
 
+it('should save and then update', async () => {
+  const field = createField();
+
+  const store = {
+    createDoc: async () => ({
+      id: 'myId',
+    }),
+    updateDoc: updateDocMock,
+    on: () => {},
+    removeAllListeners: () => {},
+  };
+
+  field.set({ store });
+
+  const createSpy = jest.spyOn(store, 'createDoc');
+  const updateSpy = jest.spyOn(store, 'updateDoc');
+
+  clickNew(field);
+
+  const form = field.get('form');
+
+  form.setValues(jack);
+
+  // Create
+  await field.save();
+  expect(createSpy).toHaveBeenCalledWith({ form, reorder: false });
+  expect(form.getValue('id')).toEqual('myId');
+  expect(field.getValue()).toHaveLength(1);
+
+  // Simulate the UI selecting the target form
+  let formToUpdate = null;
+  for (const f of field.getForms()) {
+    formToUpdate = f;
+    break;
+  }
+
+  // Simulate clicking edit on form
+  field.set({
+    currentForm: formToUpdate,
+    mode: CollectionField.MODES.UPDATE,
+  });
+
+  // Update
+  formToUpdate.setValues({ lastName: 'Ryan' });
+  await field.save();
+  expect(updateSpy).toHaveBeenCalledWith({ form, reorder: false });
+  expect(field.getValue()).toHaveLength(1);
+  expect(field.getValue()[0].lastName).toEqual('Ryan');
+});
+
 it('should archive', async () => {
   const field = createField();
 
   const archivedAt = new DateField({ now: true });
 
   const store = {
-    // upsertDoc: updateDocMock,
     updateDoc: updateDocMock,
     archiveDoc: async () => ({
       archivedAt: archivedAt.getValue(),
@@ -563,7 +605,6 @@ it('should restore', async () => {
   const archivedAt = new Date();
 
   const store = {
-    // upsertDoc: updateDocMock,
     updateDoc: updateDocMock,
     restoreDoc: async () => {},
     on: () => {},
