@@ -1039,7 +1039,7 @@ export default class CollectionField extends Field {
   }
 
   _setMaxColumns(maxColumns) {
-    // 12 (the number of grids) must be divisble by maxColumns. And, we require a power of 2 so that
+    // 12 (the number of grids) must be divisible by maxColumns. And, we require a power of 2 so that
     // we can shrink the screen and not have gaps in our grid, i.e. each layer is an even multiple
     // of the previous.
     const allowed = [1, 2, 4, 6, 12];
@@ -1168,7 +1168,7 @@ export default class CollectionField extends Field {
   async _saveForm(form) {
     const id = form.getField('id');
     const store = this.get('store');
-    const creating = id.isBlank();
+    const creating = form.get('new');
     let fieldForm = null;
 
     if (store) {
@@ -1178,7 +1178,7 @@ export default class CollectionField extends Field {
 
       let record = null;
 
-      if (form.get('new')) {
+      if (creating) {
         record = await store.createDoc({ form, reorder });
       } else {
         record = await store.updateDoc({ form, reorder });
@@ -1191,7 +1191,7 @@ export default class CollectionField extends Field {
         order: record.order,
         userId: record.userId,
       });
-    } else if (creating) {
+    } else if (id.isBlank()) {
       // TODO: use the id from this._docs.set instead of this dummy id
       id.setValue(utils.uuid());
     }
