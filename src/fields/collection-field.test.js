@@ -449,7 +449,6 @@ it('should save', async () => {
   field.set({ store });
 
   const createSpy = jest.spyOn(store, 'createDoc');
-  const updateSpy = jest.spyOn(store, 'updateDoc');
 
   clickNew(field);
 
@@ -462,12 +461,6 @@ it('should save', async () => {
   expect(createSpy).toHaveBeenCalledWith({ form, reorder: false });
   expect(form.getValue('id')).toEqual('myId');
   expect(form.getValue('userId')).toEqual('myUserId');
-  expect(field.getValue()).toHaveLength(1);
-
-  // Update
-  form.setValues({ lastName: 'Ryan' });
-  await field.save();
-  expect(updateSpy).toHaveBeenCalledWith({ form, reorder: false });
   expect(field.getValue()).toHaveLength(1);
 });
 
