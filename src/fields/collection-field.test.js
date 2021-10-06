@@ -534,7 +534,7 @@ it('should save and then update', async () => {
   });
 
   // Update
-  formToUpdate.setValues({ lastName: 'Ryan' });
+  form.setValues({ lastName: 'Ryan' });
   await field.save();
   expect(updateSpy).toHaveBeenCalledWith({ form, reorder: false });
   expect(field.getValue()).toHaveLength(1);
