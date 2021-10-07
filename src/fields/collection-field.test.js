@@ -420,6 +420,20 @@ const updateDocMock = () => async (props) => {
   };
 };
 
+const jack = {
+  firstName: 'Jack',
+  lastName: 'Johnson',
+  userId: 'myUserId',
+};
+
+const clickNew = (field) => {
+  // Simulate the user clicking the new button
+  field.set({
+    currentForm: null,
+    mode: CollectionField.MODES.CREATE,
+  });
+};
+
 it('should save', async () => {
   const field = createField();
 
@@ -428,13 +442,6 @@ it('should save', async () => {
       id: 'myId',
     }),
     updateDoc: updateDocMock,
-    // upsertDoc: async (props) => {
-    //   if (props.form.getValue('id')) {
-    //     return store.updateDoc(props);
-    //   } else {
-    //     return store.createDoc(props);
-    //   }
-    // },
     on: () => {},
     removeAllListeners: () => {},
   };
@@ -442,19 +449,8 @@ it('should save', async () => {
   field.set({ store });
 
   const createSpy = jest.spyOn(store, 'createDoc');
-  const updateSpy = jest.spyOn(store, 'updateDoc');
 
-  const jack = {
-    firstName: 'Jack',
-    lastName: 'Johnson',
-    userId: 'myUserId',
-  };
-
-  // Simulate the user clicking the new button
-  field.set({
-    currentForm: null,
-    mode: CollectionField.MODES.CREATE,
-  });
+  clickNew(field);
 
   const form = field.get('form');
 
@@ -466,24 +462,76 @@ it('should save', async () => {
   expect(form.getValue('id')).toEqual('myId');
   expect(form.getValue('userId')).toEqual('myUserId');
   expect(field.getValue()).toHaveLength(1);
+});
+
+it('should save without store', async () => {
+  const field = createField();
+
+  clickNew(field);
+
+  const form = field.get('form');
+
+  // Save
+  form.setValues(jack);
+  await field.save();
+  expect(form.getValue('id')).not.toBeUndefined();
+  expect(field.getValue()).toHaveLength(1);
+
+  // Update
+  form.setValues({ lastName: 'Ryan' });
+  await field.save();
+  expect(form.getValue('lastName')).toEqual('Ryan');
+  expect(field.getValue()).toHaveLength(1);
+});
+
+it('should save and then update', async () => {
+  const field = createField();
+
+  const store = {
+    createDoc: async () => ({
+      id: 'myId',
+    }),
+    updateDoc: updateDocMock,
+    on: () => {},
+    removeAllListeners: () => {},
+  };
+
+  field.set({ store });
+
+  const createSpy = jest.spyOn(store, 'createDoc');
+  const updateSpy = jest.spyOn(store, 'updateDoc');
+
+  clickNew(field);
+
+  const form = field.get('form');
+
+  form.setValues(jack);
+
+  // Create
+  await field.save();
+  expect(createSpy).toHaveBeenCalledWith({ form, reorder: false });
+  expect(form.getValue('id')).toEqual('myId');
+  expect(field.getValue()).toHaveLength(1);
+
+  // Simulate the UI selecting the target form
+  let formToUpdate = null;
+  for (const f of field.getForms()) {
+    formToUpdate = f;
+    break;
+  }
+
+  // Simulate clicking edit on form
+  field.set({
+    currentForm: formToUpdate,
+    mode: CollectionField.MODES.UPDATE,
+  });
 
   // Update
   form.setValues({ lastName: 'Ryan' });
   await field.save();
   expect(updateSpy).toHaveBeenCalledWith({ form, reorder: false });
   expect(field.getValue()).toHaveLength(1);
-
-  // Simulate the lack of a store
-  field.set({ store: null });
-  form.clearValues();
-  form.setValues(jack);
-  await field.save();
-  expect(form.getValue('id')).not.toBeUndefined();
-  expect(field.getValue()).toHaveLength(2);
-  form.setValues({ lastName: 'Ryan' });
-  await field.save();
-  expect(form.getValue('lastName')).toEqual('Ryan');
-  expect(field.getValue()).toHaveLength(2);
+  expect(field.getValue()[0].lastName).toEqual('Ryan');
 });
 
 it('should archive', async () => {
@@ -492,7 +540,6 @@ it('should archive', async () => {
   const archivedAt = new DateField({ now: true });
 
   const store = {
-    // upsertDoc: updateDocMock,
     updateDoc: updateDocMock,
     archiveDoc: async () => ({
       archivedAt: archivedAt.getValue(),
@@ -551,7 +598,6 @@ it('should restore', async () => {
   const archivedAt = new Date();
 
   const store = {
-    // upsertDoc: updateDocMock,
     updateDoc: updateDocMock,
     restoreDoc: async () => {},
     on: () => {},
