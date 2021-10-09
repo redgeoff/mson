@@ -53,7 +53,7 @@ it('should set store', () => {
   expect(removeAllListenersSpy2).toHaveBeenCalledTimes(1);
 });
 
-it('should listen to store changes', async () => {
+const prepareToListenToStore = async () => {
   const store = new MemoryStore();
   const formFactory = new Factory({
     product: () => {
@@ -95,6 +95,13 @@ it('should listen to store changes', async () => {
       order: 2,
     },
   };
+
+  return { field, upsertFormSpy, removeFormSpy, value, value2 };
+};
+
+it('should listen to store changes', async () => {
+  const { field, upsertFormSpy, removeFormSpy, value, value2 } =
+    await prepareToListenToStore();
 
   // Ignore other events
   await field._handleStoreChangeFactory()('otherEvent', null);
