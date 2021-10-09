@@ -164,7 +164,7 @@ it('should listen to store changes', async () => {
 });
 
 it('should handle undefined and null archivedAt', async () => {
-  const { field, upsertFormSpy, removeFormSpy, value, value2 } =
+  const { field, upsertFormSpy, removeFormSpy, value } =
     await prepareToListenToStore();
 
   // Create
