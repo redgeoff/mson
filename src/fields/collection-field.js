@@ -363,6 +363,8 @@ export default class CollectionField extends Field {
       // the typeof check to ensure that an empty RecordList doesn't bomb out when
       // newStore='{{store}}'?
       if (newStore && typeof newStore !== 'string') {
+        // Listen to changes to the store so that we can do things like display real time changes
+        // made by other users
         newStore.on('$change', this._handleStoreChangeFactory());
       }
 
