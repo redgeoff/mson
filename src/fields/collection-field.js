@@ -320,10 +320,13 @@ export default class CollectionField extends Field {
       switch (name) {
         case 'createDoc':
         case 'updateDoc':
-          // Does the form exist and the archivedAt is changing?
+          // Does the form exist and the archivedAt is changing? Note: archivedAt may be undefined
+          // if the form is new, or null if the form has been updated. Therefore, we use the !!
+          // operator when comparing the values as we are ultimately checking for a truthy or falsy
+          // value.
           if (
             this._forms.has(vv.id) &&
-            vv.archivedAt !== this._forms.get(vv.id).getValue('archivedAt')
+            !!vv.archivedAt !== !!this._forms.get(vv.id).getValue('archivedAt')
           ) {
             return this.removeForm(vv.id, muteChange);
           } else if (!!vv.archivedAt === this.get('showArchived')) {
