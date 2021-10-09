@@ -53,7 +53,7 @@ it('should set store', () => {
   expect(removeAllListenersSpy2).toHaveBeenCalledTimes(1);
 });
 
-it('should listen to store changes', async () => {
+const prepareToListenToStore = async () => {
   const store = new MemoryStore();
   const formFactory = new Factory({
     product: () => {
@@ -96,6 +96,27 @@ it('should listen to store changes', async () => {
     },
   };
 
+  return { field, upsertFormSpy, removeFormSpy, value, value2 };
+};
+
+const toListenSpyValue = (value) => ({
+  values: {
+    ...value.value.fieldValues,
+    id: value.value.id,
+    archivedAt: value.value.archivedAt,
+    userId: value.value.userId,
+    order: value.value.order,
+  },
+  muteChange: false,
+  cursor: value.value.cursor,
+});
+
+it('should listen to store changes', async () => {
+  const { field, upsertFormSpy, removeFormSpy, value, value2 } =
+    await prepareToListenToStore();
+
+  const muteChange = false;
+
   // Ignore other events
   await field._handleStoreChangeFactory()('otherEvent', null);
   expect(upsertFormSpy).toHaveBeenCalledTimes(0);
@@ -108,50 +129,18 @@ it('should listen to store changes', async () => {
   expect(removeFormSpy).toHaveBeenCalledTimes(0);
   field.set({ showArchived: false });
 
-  const muteChange = false;
-
   // Create
   await field._handleStoreChangeFactory()('createDoc', value);
-  expect(upsertFormSpy).toHaveBeenCalledWith({
-    values: {
-      ...value.value.fieldValues,
-      id: value.value.id,
-      archivedAt: value.value.archivedAt,
-      userId: value.value.userId,
-      order: value.value.order,
-    },
-    muteChange,
-    cursor: value.value.cursor,
-  });
+  expect(upsertFormSpy).toHaveBeenCalledWith(toListenSpyValue(value));
 
   // Create and insert before the first value
   await field._handleStoreChangeFactory()('createDoc', value2);
-  expect(upsertFormSpy).toHaveBeenCalledWith({
-    values: {
-      ...value2.value.fieldValues,
-      id: value2.value.id,
-      archivedAt: value2.value.archivedAt,
-      userId: value2.value.userId,
-      order: value2.value.order,
-    },
-    muteChange,
-    cursor: value2.value.cursor,
-  });
+  expect(upsertFormSpy).toHaveBeenCalledWith(toListenSpyValue(value2));
 
   // Update and move
   value.value.order = 2.1;
   await field._handleStoreChangeFactory()('updateDoc', value);
-  expect(upsertFormSpy).toHaveBeenCalledWith({
-    values: {
-      ...value.value.fieldValues,
-      id: value.value.id,
-      archivedAt: value.value.archivedAt,
-      userId: value.value.userId,
-      order: value.value.order,
-    },
-    muteChange,
-    cursor: value.value.cursor,
-  });
+  expect(upsertFormSpy).toHaveBeenCalledWith(toListenSpyValue(value));
 
   // Update leads to delete as archivedAt changing
   value.value.archivedAt = new Date();
@@ -172,6 +161,22 @@ it('should listen to store changes', async () => {
   // Delete
   await field._handleStoreChangeFactory()('deleteDoc', value);
   expect(removeFormSpy).toHaveBeenCalledWith(value.value.id, muteChange);
+});
+
+it('should handle undefined and null archivedAt', async () => {
+  const { field, upsertFormSpy, removeFormSpy, value } =
+    await prepareToListenToStore();
+
+  // Create
+  value.value.archivedAt = undefined; // Simulate new item
+  await field._handleStoreChangeFactory()('createDoc', value);
+  expect(upsertFormSpy).toHaveBeenCalledWith(toListenSpyValue(value));
+
+  // Update archivedAt from undefined to null
+  value.value.archivedAt = null; // Simulate edited item
+  await field._handleStoreChangeFactory()('updateDoc', value);
+  expect(upsertFormSpy).toHaveBeenCalledWith(toListenSpyValue(value));
+  expect(removeFormSpy).toHaveBeenCalledTimes(0);
 });
 
 it('should create and update', async () => {
