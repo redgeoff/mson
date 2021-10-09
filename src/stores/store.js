@@ -167,7 +167,7 @@ export default class Store extends UIComponent {
   }
 
   _now() {
-    // We use a DateField to avoid Firestore's automatic conversion of Date's to Firebase style
+    // We use a DateField to avoid Firestore's automatic conversion of Dates to Firebase style
     // timestamps.
     const date = new DateField({ now: true });
     return date.getValue();

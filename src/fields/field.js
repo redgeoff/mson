@@ -252,7 +252,9 @@ export default class Field extends UIComponent {
   }
 
   clearValue() {
-    this.setValue(null);
+    // Set to undefined and not null as undefined is the initial value of a field
+    //    this.setValue(null);
+    this.setValue(undefined);
   }
 
   getValue() {
