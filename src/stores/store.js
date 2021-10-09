@@ -178,7 +178,8 @@ export default class Store extends UIComponent {
 
     return {
       id: id ? id : utils.uuid(),
-      archivedAt: null, // Needed by the UI as a default
+      // Should not be done as then first edit to item resulting in it being deleted as null != undefined
+      //      archivedAt: null, // Needed by the UI as a default
       createdAt,
       updatedAt: createdAt,
       userId: userId ? userId : null,
