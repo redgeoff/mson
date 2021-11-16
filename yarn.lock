@@ -8872,9 +8872,9 @@ min-indent@^1.0.0:
   integrity sha512-I9jwMn07Sy/IwOj3zVkVik2JTvgpaykDZEigL6Rx6N9LbMywwUSMtxET+7lVoDLLd3O3IXwJwvuuns8UB/HeAg==
 
 mingo@^4.1.4:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/mingo/-/mingo-4.2.0.tgz#d365695c9d50940a48b2181250e54e9d8dbfdf31"
-  integrity sha512-8T0t42TDlJdEKlcVHUKkWf8usLbi+8ZIMTqSxf7sBIubsgytzNf/jaPLSnf87btrF96fw6i/KW8L/HqFSBsEYg==
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/mingo/-/mingo-4.4.1.tgz#76ce40f9b7a909d704320cdb0ad2444155a74c12"
+  integrity sha512-aig/3anjeJ8VcXLqDQmB/iO8Z8BVzln2BeWcyeI5NtOiLMAQ5xX00QHX9piy8OBAC9pSDYWErY8MHoh8nlCHig==
 
 mini-css-extract-plugin@0.11.3:
   version "0.11.3"
