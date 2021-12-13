@@ -11,18 +11,21 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - dependencies-v3-{{ checksum "package.json" }}
-          - dependencies-v3-
+          - dependencies-v4-{{ checksum "package.json" }}
+          - dependencies-v4-
       - run: yarn install
       - save_cache:
           paths:
             - node_modules
-          key: dependencies-v3-{{ checksum "package.json" }}
+          key: dependencies-v4-{{ checksum "package.json" }}
 
       - run: yarn test
 
+
       # Check bundle size
-      - run: yarn bundle && ./scripts/bundle-size.sh
+      # TODO: remove NODE_OPTIONS after https://stackoverflow.com/a/69699772/2831606 has been fixed
+      - run: export NODE_OPTIONS=--openssl-legacy-provider && yarn bundle && ./scripts/bundle-size.sh
+      # - run: yarn bundle && ./scripts/bundle-size.sh
 
       # Sanity check compilation as compilation uses custom babel settings
       - run: yarn compile
