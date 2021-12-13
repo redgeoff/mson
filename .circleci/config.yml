@@ -21,11 +21,11 @@ jobs:
 
       - run: yarn test
 
-      # TODO: remove after https://stackoverflow.com/a/69699772/2831606 has been fixed
-      - run: export NODE_OPTIONS=--openssl-legacy-provider
 
       # Check bundle size
-      - run: yarn bundle && ./scripts/bundle-size.sh
+      # TODO: remove NODE_OPTIONS after https://stackoverflow.com/a/69699772/2831606 has been fixed
+      - run: export NODE_OPTIONS=--openssl-legacy-provider && yarn bundle && ./scripts/bundle-size.sh
+      # - run: yarn bundle && ./scripts/bundle-size.sh
 
       # Sanity check compilation as compilation uses custom babel settings
       - run: yarn compile
