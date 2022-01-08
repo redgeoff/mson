@@ -783,3 +783,31 @@ it('should register components with index name', async () => {
   compiler.registerComponents(components);
   expect(compiler.exists('app.FooIt')).toEqual(true);
 });
+
+it('should not allow prototype pollution', async () => {
+  // Ensure that no user specified names, e.g. `__proto__`, can result in hijacking
+  // Object.prototype. To accomplish this, the compiler does not instantiate any names starting with
+  // an underscore. We use `__proto` instead of `__proto__` as use of __proto__ will result in the
+  // code bombing out in another way.
+
+  const definition = {
+    component: 'Component',
+  };
+
+  const Component = compiler.compile({
+    component: 'Component',
+    schema: {
+      component: 'Form',
+      fields: [
+        {
+          name: '__proto',
+          component: 'Field',
+        },
+      ],
+    },
+  });
+
+  const component = new Component({ name: 'foo', __proto: definition });
+
+  expect(component.get('__proto')).toEqual(definition);
+});

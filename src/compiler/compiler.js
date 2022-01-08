@@ -217,7 +217,11 @@ export class Compiler {
     // Descend all the way down the tree and then start instantiating on the way up
     each(props, (prop, name) => {
       if (typeof prop === 'object' && prop !== null) {
-        props[name] = this._instantiate(prop);
+        // Prevent prototype pollution by prohibiting any names that begin with an underscore, e.g.
+        // `__proto__`: https://github.com/redgeoff/mson/security/code-scanning/2
+        if (typeof name !== 'string' || !name.startsWith('_')) {
+          props[name] = this._instantiate(prop);
+        }
       }
     });
 
