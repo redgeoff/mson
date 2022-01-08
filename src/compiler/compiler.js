@@ -9,7 +9,6 @@
 import components from '../components';
 import PropFiller from './prop-filler';
 import registrar from './registrar';
-import each from 'lodash/each';
 import { cloneDeep } from '../utils/deep-clone';
 import MissingComponentError from './missing-component-error';
 
@@ -215,11 +214,12 @@ export class Compiler {
     }
 
     // Descend all the way down the tree and then start instantiating on the way up
-    each(props, (prop, name) => {
+    for (const name in props) {
+      const prop = props[name];
       if (typeof prop === 'object' && prop !== null) {
         props[name] = this._instantiate(prop);
       }
-    });
+    }
 
     // Does the object need to be instantiated?
     if (props.component) {
