@@ -711,9 +711,12 @@ export default class Form extends UIComponent {
   }
 
   _validateWithValidators() {
-    if (this._validators && this._validators.length > 0) {
+    if (
+      this._getProperty('validators') &&
+      this._getProperty('validators').length > 0
+    ) {
       const validator = new Validator(this._toValidatorProps());
-      const errors = validator.validate(this._validators);
+      const errors = validator.validate(this._getProperty('validators'));
       if (errors.length !== 0) {
         errors.forEach((error) => {
           this.getField(error.field).setErr(error.error);
@@ -744,7 +747,7 @@ export default class Form extends UIComponent {
 
     // TODO: should we also support functional validators? Probably as more powerful when working
     // just with JS. Other option is to extend form and define new validate().
-    // this._validators.forEach(validator => validator(this));
+    // this._getProperty('validators').forEach(validator => validator(this));
     this._validateWithValidators();
 
     if (this._hasTypeError || this._extraErrors.length > 0) {
@@ -755,7 +758,7 @@ export default class Form extends UIComponent {
   }
 
   addValidator(validator) {
-    this._validators.push(validator);
+    this._getProperty('validators').push(validator);
   }
 
   setTouched(touched) {
