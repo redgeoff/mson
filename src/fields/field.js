@@ -272,18 +272,18 @@ export default class Field extends UIComponent {
     return this;
   }
 
-  // TODO: also support _validators being function like at form layer?
+  // TODO: also support validators being function like at form layer?
   validate() {
     if (!this.get('ignoreErrs')) {
-      if (this._required && this.isBlank()) {
+      if (this._getProperty('required') && this.isBlank()) {
         this.setErr('required');
       } else if (
         !this.isBlank() &&
-        this._validators &&
-        this._validators.length > 0
+        this._getProperty('validators') &&
+        this._getProperty('validators').length > 0
       ) {
         const validator = new Validator(this._toValidatorProps());
-        const errors = validator.validate(this._validators);
+        const errors = validator.validate(this._getProperty('validators'));
         if (errors.length !== 0) {
           this.setErr(errors[0]);
         }
