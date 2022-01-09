@@ -93,12 +93,12 @@ it('should remove fields when clearing', () => {
   const car = createCarField();
 
   car.clearValue();
-  expect(numNonHiddenFields(car._fields)).toEqual(1);
+  expect(numNonHiddenFields(car._getProperty('fields'))).toEqual(1);
 
   car.setValue([2, 5, 9, 10]);
 
   car.clearValue();
-  expect(numNonHiddenFields(car._fields)).toEqual(1);
+  expect(numNonHiddenFields(car._getProperty('fields'))).toEqual(1);
 });
 
 it('should get display value', () => {
