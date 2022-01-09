@@ -145,7 +145,7 @@ export default class ChainedSelectField extends ListField {
     // Still on first field?
     if (index === null) {
       // Clear the first field as this will then adjust the subsequent fields
-      this._fields.first().clearValue();
+      this._getProperty('fields').first().clearValue();
     }
   }
 
@@ -182,7 +182,7 @@ export default class ChainedSelectField extends ListField {
     const clonedField = super.clone();
 
     // Clear the fields as the listeners now have the wrong references to the fields, etc...
-    clonedField._fields.clear();
+    clonedField._getProperty('fields').clear();
 
     // Create the first field
     clonedField._setOptions(this.get('options'));

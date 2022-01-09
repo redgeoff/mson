@@ -37,8 +37,8 @@ it('should set when items removed', () => {
   colors.setValue(['red', 'green', 'blue', 'green']);
   expect(colors.getValue()).toEqual(['red', 'green', 'blue', 'green']);
 
-  colors._removeField(colors._fields.get(0));
-  colors._removeField(colors._fields.get(2));
+  colors._removeField(colors._getProperty('fields').get(0));
+  colors._removeField(colors._getProperty('fields').get(2));
   expect(colors.getValue()).toEqual(['green', 'green']);
 
   colors.setValue(['red', 'green', 'blue', 'green']);
@@ -65,14 +65,16 @@ it('should not create more than max size fields', () => {
   const colors = createColors({ maxSize: 2 });
   colors._getField(0).setValue('red');
   colors._getField(1).setValue('green');
-  expect(colors._fields.length()).toEqual(2);
+  expect(colors._getProperty('fields').length()).toEqual(2);
 });
 
 it('should clone', () => {
   // Clone when no values and make sure a new field is created
   const colors = createColors();
   const clonedColors = colors.clone();
-  expect(clonedColors._fields.first()).not.toEqual(colors._fields.first());
+  expect(clonedColors._getProperty('fields').first()).not.toEqual(
+    colors._getProperty('fields').first()
+  );
 
   // Make sure value is copied after the new fields have been created
   const myColors = ['red', 'green'];
@@ -96,5 +98,5 @@ it('should set ensureInList', () => {
 
 it('should not remove the last field', () => {
   const field = createColors({ value: ['red'] });
-  expect(field._shouldRemoveField(field._fields.last()));
+  expect(field._shouldRemoveField(field._getProperty('fields').last()));
 });

@@ -89,7 +89,7 @@ export default class ChainedSelectListField extends ListField {
     const clonedField = super.clone();
 
     // Clear the fields as the listeners now have the wrong references to the fields, etc...
-    clonedField._fields.clear();
+    clonedField._getProperty('fields').clear();
 
     // Create the first field
     clonedField._setOptions(this.get('options'));

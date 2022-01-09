@@ -134,8 +134,10 @@ it('should clone', () => {
   form.addField(
     new TextField({ name: 'suffix', label: 'Suffix', required: true })
   );
-  expect(form._fields.length()).toEqual(testUtils.defaultFields.length + 4);
-  expect(clonedForm._fields.length()).toEqual(
+  expect(form._getProperty('fields').length()).toEqual(
+    testUtils.defaultFields.length + 4
+  );
+  expect(clonedForm._getProperty('fields').length()).toEqual(
     testUtils.defaultFields.length + 3
   );
 
@@ -481,17 +483,23 @@ it('should merge access', () => {
 it('should handle showArchived', () => {
   const form = new Form();
 
-  expect(form._fields.first().get('showArchived')).toBeUndefined();
+  expect(
+    form._getProperty('fields').first().get('showArchived')
+  ).toBeUndefined();
   form._handleShowArchivedFactory()(true);
-  expect(form._fields.first().get('showArchived')).toEqual(true);
+  expect(form._getProperty('fields').first().get('showArchived')).toEqual(true);
 });
 
 it('should handle searchString', () => {
   const form = new Form();
 
-  expect(form._fields.first().get('searchString')).toBeUndefined();
+  expect(
+    form._getProperty('fields').first().get('searchString')
+  ).toBeUndefined();
   form._handleSearchStringFactory()('foo');
-  expect(form._fields.first().get('searchString')).toEqual('foo');
+  expect(form._getProperty('fields').first().get('searchString')).toEqual(
+    'foo'
+  );
 });
 
 it('should handle scroll', () => {

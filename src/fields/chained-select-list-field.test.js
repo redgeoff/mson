@@ -59,7 +59,7 @@ it('should remove fields when clearing', () => {
   const cars = createCarsField();
 
   cars.clearValue();
-  expect(cars._fields.length()).toEqual(1);
+  expect(cars._getProperty('fields').length()).toEqual(1);
 
   cars.setValue([
     [2, 5, 9, 10],
@@ -67,28 +67,28 @@ it('should remove fields when clearing', () => {
   ]);
 
   cars.clearValue();
-  expect(cars._fields.length()).toEqual(1);
+  expect(cars._getProperty('fields').length()).toEqual(1);
 });
 
 it('should add field when option selected', () => {
   const cars = createCarsField();
 
   cars._getField(0).setValue([2]);
-  expect(cars._fields.length()).toEqual(2);
+  expect(cars._getProperty('fields').length()).toEqual(2);
 
   cars.clearValue();
 
   // Simulate user selecting 1st option -- this exposed a bug at one point
   cars._getField(0)._getField(0).setValue(2);
 
-  expect(cars._fields.length()).toEqual(2);
+  expect(cars._getProperty('fields').length()).toEqual(2);
 });
 
 it('should not create more than max size fields', () => {
   const cars = createCarsField({ maxSize: 2 });
   cars._getField(0).setValue([2, 5, 9, 10]);
   cars._getField(1).setValue([1, 3, 6]);
-  expect(cars._fields.length()).toEqual(2);
+  expect(cars._getProperty('fields').length()).toEqual(2);
 });
 
 it('should not add a field when a field is deleted and not reached max size', () => {
@@ -97,9 +97,9 @@ it('should not add a field when a field is deleted and not reached max size', ()
     [2, 5, 9, 10],
     [1, 3, 6],
   ]);
-  expect(cars._fields.length()).toEqual(3);
+  expect(cars._getProperty('fields').length()).toEqual(3);
   cars._getField(0).emit('delete');
-  expect(cars._fields.length()).toEqual(2);
+  expect(cars._getProperty('fields').length()).toEqual(2);
 });
 
 it('should add a field when a field is deleted and reached max size', () => {
@@ -108,9 +108,9 @@ it('should add a field when a field is deleted and reached max size', () => {
     [2, 5, 9, 10],
     [1, 3, 6],
   ]);
-  expect(cars._fields.length()).toEqual(2);
+  expect(cars._getProperty('fields').length()).toEqual(2);
   cars._getField(0).emit('delete');
-  expect(cars._fields.length()).toEqual(2);
+  expect(cars._getProperty('fields').length()).toEqual(2);
 
   // TODO: also test when delete last item
 });
@@ -134,7 +134,9 @@ it('should clone', () => {
   // Clone when no values and make sure a new field is created
   const cars = createCarsField();
   const clonedCars = cars.clone();
-  expect(clonedCars._fields.first()).not.toEqual(cars._fields.first());
+  expect(clonedCars._getProperty('fields').first()).not.toEqual(
+    cars._getProperty('fields').first()
+  );
 
   // Make sure value is copied after the new fields have been created
   const myCars = [

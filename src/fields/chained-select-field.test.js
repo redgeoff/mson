@@ -93,12 +93,12 @@ it('should remove fields when clearing', () => {
   const car = createCarField();
 
   car.clearValue();
-  expect(numNonHiddenFields(car._fields)).toEqual(1);
+  expect(numNonHiddenFields(car._getProperty('fields'))).toEqual(1);
 
   car.setValue([2, 5, 9, 10]);
 
   car.clearValue();
-  expect(numNonHiddenFields(car._fields)).toEqual(1);
+  expect(numNonHiddenFields(car._getProperty('fields'))).toEqual(1);
 });
 
 it('should get display value', () => {
@@ -113,7 +113,9 @@ it('should clone', () => {
   // Clone when no values and make sure a new field is created
   const car = createCarField();
   const clonedCar = car.clone();
-  expect(clonedCar._fields.first()).not.toEqual(car._fields.first());
+  expect(clonedCar._getProperty('fields').first()).not.toEqual(
+    car._getProperty('fields').first()
+  );
 
   // Make sure value is copied after the new fields have been created
   const myCar = [2, 5, 9, 10];
