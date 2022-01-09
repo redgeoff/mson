@@ -96,11 +96,11 @@ export default class ListField extends CompositeField {
   }
 
   _isLastFieldBlank() {
-    return this._fields.last().isBlank();
+    return this._getProperty('fields').last().isBlank();
   }
 
   _removeField(field) {
-    if (this._fields.length() === 1) {
+    if (this._getProperty('fields').length() === 1) {
       // There is only 1 field so just clear the value
       field.clearValue();
     } else {
@@ -127,7 +127,7 @@ export default class ListField extends CompositeField {
   }
 
   _hasField(name) {
-    return this._fields.has(name);
+    return this._getProperty('fields').has(name);
   }
 
   _clearFieldIfExists(name) {
@@ -141,11 +141,11 @@ export default class ListField extends CompositeField {
   }
 
   _getField(name) {
-    return this._fields.get(name);
+    return this._getProperty('fields').get(name);
   }
 
   _removeFieldByName(name) {
-    return this._fields.delete(name);
+    return this._getProperty('fields').delete(name);
   }
 
   _onFieldCreated(field /*, onDelete */) {
@@ -216,17 +216,17 @@ export default class ListField extends CompositeField {
   }
 
   _isLastField(field) {
-    return field.get('name') === this._fields.lastKey();
+    return field.get('name') === this._getProperty('fields').lastKey();
   }
 
   _cleanUpNextFields(afterName) {
     const nextName =
       afterName === null
-        ? this._fields.firstKey()
-        : this._fields.nextKey(afterName);
+        ? this._getProperty('fields').firstKey()
+        : this._getProperty('fields').nextKey(afterName);
     if (nextName !== null) {
       let first = true;
-      for (let field of this._fields.values(nextName)) {
+      for (let field of this._getProperty('fields').values(nextName)) {
         if (first || !this._shouldRemoveField(field)) {
           field.clearValue();
           first = false;
@@ -257,7 +257,7 @@ export default class ListField extends CompositeField {
     let name = null;
 
     if (!this._hasTypeError) {
-      const fields = this._fields.values();
+      const fields = this._getProperty('fields').values();
       let values = null;
 
       if (Array.isArray(value)) {
@@ -311,7 +311,7 @@ export default class ListField extends CompositeField {
     } else {
       // We only want to proceed to validate the fields after we know there is no type error as type
       // errors can result in field errors and we want to report the root issue.
-      for (const field of this._fields.values()) {
+      for (const field of this._getProperty('fields').values()) {
         field.validate();
 
         if (field.hasErr()) {
@@ -396,7 +396,7 @@ export default class ListField extends CompositeField {
   }
 
   _clearFields() {
-    this._fields.clear();
+    this._getProperty('fields').clear();
     this._nextFieldName = 0;
   }
 

@@ -113,7 +113,9 @@ it('should clone', () => {
   // Clone when no values and make sure a new field is created
   const car = createCarField();
   const clonedCar = car.clone();
-  expect(clonedCar._fields.first()).not.toEqual(car._fields.first());
+  expect(clonedCar._getProperty('fields').first()).not.toEqual(
+    car._getProperty('fields').first()
+  );
 
   // Make sure value is copied after the new fields have been created
   const myCar = [2, 5, 9, 10];

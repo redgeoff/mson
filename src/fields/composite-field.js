@@ -93,7 +93,7 @@ export default class CompositeField extends Field {
       name = field.get('name');
     }
 
-    this._fields.set(name, field);
+    this._getProperty('fields').set(name, field);
 
     this.emitChangeToField(field);
 
@@ -189,17 +189,17 @@ export default class CompositeField extends Field {
   }
 
   getField(name) {
-    return this._fields.get(name);
+    return this._getProperty('fields').get(name);
   }
 
   _getFieldIfExists(name) {
-    if (this._fields.has(name)) {
+    if (this._getProperty('fields').has(name)) {
       return this.getField(name);
     }
   }
 
   has(name) {
-    return super.has(name) || this._fields.has(name);
+    return super.has(name) || this._getProperty('fields').has(name);
   }
 
   getOne(name) {
@@ -208,11 +208,15 @@ export default class CompositeField extends Field {
   }
 
   eachField(onField) {
-    this._fields.each((field, name, last) => onField(field, name, last));
+    this._getProperty('fields').each((field, name, last) =>
+      onField(field, name, last)
+    );
   }
 
   mapFields(onField) {
-    return this._fields.map((field, name, last) => onField(field, name, last));
+    return this._getProperty('fields').map((field, name, last) =>
+      onField(field, name, last)
+    );
   }
 
   clearErr() {

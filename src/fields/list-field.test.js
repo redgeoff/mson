@@ -182,14 +182,14 @@ it('form should emit canSubmit when field deleted', async () => {
   form.set({ pristine: true });
 
   const canSubmit = testUtils.once(form, 'canSubmit');
-  emails._fields.last().emit('delete');
+  emails._getProperty('fields').last().emit('delete');
   await canSubmit;
 });
 
 it('should clear when deleting last field', () => {
   const field = new TextListField();
   field.setValue(['one']);
-  const firstField = field._fields.first();
+  const firstField = field._getProperty('fields').first();
   field._removeField(firstField);
   expect(firstField.getValue()).toBeNull();
 });
