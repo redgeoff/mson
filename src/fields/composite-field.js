@@ -11,7 +11,7 @@ export default class CompositeField extends Field {
     // don't change even when fields are deleted. With arrays, the keys change when we slice the
     // array. We cannot use just a basic object as our fields must preseve order. We cannot use a
     // Map as we need to be able to iterate through the fields beginning with any given field.
-    this._fields = new Mapa();
+    this._setProperty('fields', new Mapa());
 
     super.create(props);
 
