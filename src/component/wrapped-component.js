@@ -56,8 +56,16 @@ export default class WrappedComponent extends BaseComponent {
 
     names.forEach((name) => {
       // Skip system function names
+      //
+      // TODO: should _setProperty really be in this list?
       if (
-        ['caller', 'callee', 'arguments', 'constructor'].indexOf(name) === -1 &&
+        [
+          'caller',
+          'callee',
+          'arguments',
+          'constructor',
+          '_setProperty',
+        ].indexOf(name) === -1 &&
         name.indexOf('__') === -1
       ) {
         const property = this._componentToWrap[name];

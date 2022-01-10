@@ -197,7 +197,7 @@ export default class Form extends UIComponent {
     this._componentFillerProps = new ComponentFillerProps();
     this._fields = new Mapa();
     this._defaultFields = new Mapa();
-    this._validators = [];
+    this._setProperty('validators', []);
     this._clearExtraErrors();
 
     if (!props || !props.omitDefaultFields) {
@@ -416,7 +416,7 @@ export default class Form extends UIComponent {
     );
 
     if (props.validators !== undefined) {
-      this._validators = [];
+      this._setProperty('validators', []);
       props.validators.forEach((validator) => {
         this.addValidator(validator);
       });
