@@ -195,7 +195,7 @@ export default class Form extends UIComponent {
     super.create(props);
 
     this._componentFillerProps = new ComponentFillerProps();
-    this._fields = new Mapa();
+    this._setProperty('fields', new Mapa());
     this._defaultFields = new Mapa();
     this._setProperty('validators', []);
     this._clearExtraErrors();
