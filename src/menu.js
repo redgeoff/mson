@@ -116,7 +116,7 @@ export default class Menu extends UIComponent {
   }
 
   _indexByPath() {
-    this._items.forEach((item) => this._indexItemByPath(item));
+    this._getProperty('items').forEach((item) => this._indexItemByPath(item));
   }
 
   _indexParentByPath(item, parentItem) {
@@ -129,7 +129,7 @@ export default class Menu extends UIComponent {
   }
 
   _indexParentsByPath() {
-    this._items.forEach((item) => this._indexParentByPath(item));
+    this._getProperty('items').forEach((item) => this._indexParentByPath(item));
   }
 
   set(props) {
@@ -185,6 +185,6 @@ export default class Menu extends UIComponent {
   }
 
   getFirstItem() {
-    return this._items[0];
+    return this._getProperty('items')[0];
   }
 }
