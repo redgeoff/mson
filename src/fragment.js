@@ -5,17 +5,17 @@ export default class Fragment extends UIComponent {
   className = 'Fragment';
 
   setNamedItems(items) {
-    this._items.clear();
+    this._getProperty('items').clear();
     items.forEach((item, index) => {
       item.set({ parent: this });
       const key = item.get('name') ? item.get('name') : index;
-      this._items.set(key, item);
+      this._getProperty('items').set(key, item);
     });
   }
 
   create(props) {
     // Use a Mapa so that we can reference the items by name, e.g. `items.myComponentName`
-    this._items = new Mapa();
+    this._setProperty('items', new Mapa());
 
     super.create(props);
 
