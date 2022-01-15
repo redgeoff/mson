@@ -61,7 +61,8 @@ export default class CompositeField extends Field {
   _setParentValue(field, value) {
     // Clone the value as we don't want to modify this._value directly as we want set to be able
     // to detect if the value is changing.
-    const clonedValue = !this._value ? {} : clone(this._value);
+    const thisValue = this._getProperty('value');
+    const clonedValue = !thisValue ? {} : clone(thisValue);
     if (value === null) {
       delete clonedValue[field.get('name')];
     } else {

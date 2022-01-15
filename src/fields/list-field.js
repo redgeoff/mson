@@ -207,8 +207,9 @@ export default class ListField extends CompositeField {
     // list each time as the user may have cleared an item.
     //
     // this.setValue(this._getValue());
-    this._value = this._getValue();
-    this.emitChange('value', this._value);
+    const thisValue = this._getValue();
+    this._setProperty('value', thisValue);
+    this.emitChange('value', thisValue);
   }
 
   _listenForChangesToField(field) {
