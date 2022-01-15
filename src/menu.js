@@ -1,6 +1,5 @@
 import UIComponent from './ui-component';
 import each from 'lodash/each';
-import querystring from 'querystring';
 
 // e.g. [
 //   {
@@ -171,7 +170,11 @@ export default class Menu extends UIComponent {
   }
 
   toRoute({ parameters, queryString, hash }) {
-    const query = querystring.parse(queryString);
+    const query = {};
+    const params = new URLSearchParams(queryString);
+    for (const pair of params.entries()) {
+      query[pair[0]] = pair[1];
+    }
 
     return {
       parameters,
