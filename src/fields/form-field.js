@@ -79,9 +79,9 @@ export default class FormField extends Field {
     }
 
     // Was the form set? It may not have been set yet
-    if (this._form) {
+    if (this._getProperty('form')) {
       // Set properties on form
-      this._setOn(this._form, clonedProps, [
+      this._setOn(this._getProperty('form'), clonedProps, [
         'value',
         'dirty',
         'disabled',
@@ -95,7 +95,7 @@ export default class FormField extends Field {
   }
 
   getOne(name) {
-    let value = this._getFrom(this._form, name, [
+    let value = this._getFrom(this._getProperty('form'), name, [
       'dirty',
       'disabled',
       'editable',
