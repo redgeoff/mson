@@ -526,7 +526,7 @@ export default class Form extends UIComponent {
 
     field.on('value', (fieldValue) => {
       // We use _setProperty() as if we used set() then we would trigger an infinite loop
-      const value = this._value ? this._value : {};
+      const value = this._getProperty('value') || {};
       value[field.get('name')] = fieldValue;
       this._setProperty('value', value); // Doesn't trigger event
       this.emitChange('value', value);
