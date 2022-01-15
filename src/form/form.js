@@ -379,7 +379,7 @@ export default class Form extends UIComponent {
 
   _setAccess(access) {
     // Merge access recursively
-    this._set('access', merge(this._access, access));
+    this._set('access', merge(this._getProperty('access'), access));
   }
 
   _emitChangeToFields(change) {
