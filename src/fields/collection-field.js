@@ -938,7 +938,7 @@ export default class CollectionField extends Field {
   _emitEndEvents() {
     const form = this.get('form');
     const values = form.getValues();
-    switch (this._mode) {
+    switch (this._getProperty('mode')) {
       case CollectionField.MODES.CREATE:
         form.emitChange('endCreate', values);
         break;
@@ -1016,7 +1016,7 @@ export default class CollectionField extends Field {
 
   _setMode(mode) {
     // Has a previous mode?
-    if (this._mode) {
+    if (this._getProperty('mode')) {
       this._emitEndEvents();
     } else {
       // The dialog is being opened
@@ -1078,7 +1078,7 @@ export default class CollectionField extends Field {
       this._setCurrentForm(props.currentForm);
     }
 
-    if (props.mode !== undefined && props.mode !== this._mode) {
+    if (props.mode !== undefined && props.mode !== this._getProperty('mode')) {
       this._setMode(props.mode);
     }
 
@@ -1102,7 +1102,7 @@ export default class CollectionField extends Field {
       return this._getValue();
     }
 
-    if (name === 'form' && !this._form) {
+    if (name === 'form' && !this._getProperty('form')) {
       // We have to generate a form immediately so that we have a place holder for the UI. After we
       // receive didLoad, we'll regenerate the form so that we'll also have the loaded data.
       // Generating the form on demand allows us to instantiate a factory where the product is a
