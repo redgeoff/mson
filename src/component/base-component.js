@@ -15,8 +15,6 @@ const getNextKey = () => {
 // NOTE:
 // - Get and set designed so that easy to add functionality later on set and get, including via
 //   event listeners
-// - The props are placed directly on this object as opposed to onto say a "_props" field. This has
-//   the advantage of making it less verbose to access, e.g. comp._foo instead of comp._props.foo.
 // - We attempted to require all access to all props via get() and set(), but this can cause
 //   infinite recursion, e.g. when a get() calls itself either directly or via some inherited logic.
 export default class BaseComponent extends events.EventEmitter {
@@ -132,6 +130,8 @@ export default class BaseComponent extends events.EventEmitter {
 
     this._setDebugId();
 
+    this._props = {};
+
     this._listenerEvents = {};
     this._subEvents = {};
 
@@ -190,7 +190,7 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   _setProperty(name, value) {
-    this['_' + name] = value;
+    this._props[name] = value;
   }
 
   _setPropertyAndEmitChange(name, value) {
@@ -208,7 +208,7 @@ export default class BaseComponent extends events.EventEmitter {
     // Is the value changing? Prevent emitting when the value doesn't change. Note: a previous
     // design treated undefined and null values as equals, but this had to be changed as otherwise
     // we have no construct for detecting when properties are omitted from a MSON definition.
-    if (this['_' + name] !== value) {
+    if (this._props[name] !== value) {
       this._setPropertyAndEmitChange(name, value);
     }
   }
@@ -634,7 +634,7 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   _getProperty(name) {
-    return this['_' + name];
+    return this._props[name];
   }
 
   _getIfDefined(name) {
