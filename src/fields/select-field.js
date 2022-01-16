@@ -60,7 +60,7 @@ export default class SelectField extends MultipleValueField {
   getOne(name) {
     // We consider the blank string to be a null value. We have to use isValueBlank() to prevent
     // infinite recursion.
-    if (name === 'value' && this.isValueBlank(this._value)) {
+    if (name === 'value' && this.isValueBlank(this._getProperty('value'))) {
       return null;
     }
 
@@ -72,8 +72,8 @@ export default class SelectField extends MultipleValueField {
   getOptionLabel(value) {
     let label = null;
 
-    if (this._options) {
-      this._options.forEach((option) => {
+    if (this._getProperty('options')) {
+      this._getProperty('options').forEach((option) => {
         if (option.value === value) {
           label = option.label;
         }
