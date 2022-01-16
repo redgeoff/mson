@@ -19,6 +19,34 @@ export default class WrappedComponent extends BaseComponent {
     };
   }
 
+  constructor(props) {
+    super(props);
+
+    if (props && props.name !== undefined) {
+      // Set the className via the props so that we can support a condensed notation like the following:
+      //
+      //   class CondensedNotationComponent extends Component {
+      //     constructor(props) {
+      //       super({
+      //         name: 'app.CondensedNotationComponent',
+      //         ...props,
+      //       });
+      //     }
+      //   }
+      //
+      // instead of:
+      //
+      //   class LegacyNotationComponent extends Component {
+      //     className = 'app.LegacyNotationComponent';
+      //     create(props) {
+      //       super.create(props);
+      //       this.set({ docLevel: 'basic' });
+      //     }
+      //   }
+      this.className = props.name;
+    }
+  }
+
   create(props) {
     super.create(props);
 
