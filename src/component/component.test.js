@@ -36,6 +36,26 @@ it('should support legacy component notation', () => {
   shouldSupportComponentNotations(component, 'app.LegacyNotationComponent');
 });
 
+class CondensedExtendedLegacyNotationComponent extends LegacyNotationComponent {
+  constructor(props) {
+    super({
+      name: 'app.CondensedExtendedLegacyNotationComponent',
+      docLevel: 'basic',
+      ...props,
+    });
+  }
+}
+
+it('should support condensed extended legacy component notation', () => {
+  const component = new CondensedExtendedLegacyNotationComponent({
+    isStore: true,
+  });
+  shouldSupportComponentNotations(
+    component,
+    'app.CondensedExtendedLegacyNotationComponent'
+  );
+});
+
 // Condensed notation where everything is in a single create() call
 class CondensedNotationComponent extends Component {
   constructor(props) {
