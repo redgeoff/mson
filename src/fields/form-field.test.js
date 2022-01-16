@@ -40,8 +40,8 @@ it('should set and pass through properties', async () => {
   };
 
   const field = createField();
-  const setSpy = jest.spyOn(field._form, 'set');
-  const getSpy = jest.spyOn(field._form, 'get');
+  const setSpy = jest.spyOn(field.get('form'), 'set');
+  const getSpy = jest.spyOn(field.get('form'), 'get');
 
   each(properties, (value, prop) => {
     const props = { [prop]: value };
