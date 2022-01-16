@@ -52,7 +52,7 @@
     "bundle": "webpack",
     "touch": "find src -exec touch {} \\;",
     "analyze-bundle": "webpack --json > ./dist/stats.json && webpack-bundle-analyzer ./dist/stats.json",
-    "prepublishOnly": "export NODE_OPTIONS=--openssl-legacy-provider && yarn compile && yarn bundle",
+    "prepublishOnly": "cross-env NODE_OPTIONS=--openssl-legacy-provider && yarn compile && yarn bundle",
     "semantic-release": "semantic-release",
     "prepare": "git config core.hooksPath ./git-hooks"
   },
