@@ -527,13 +527,11 @@ import { TextField } from 'mson/lib/fields';
 import moment from 'moment';
 
 class MyComponent extends Component {
-  // className is needed as JS minification strips the constructor name
-  className = 'MyComponent';
+  constructor(props) {
+    super({
+      // name is needed as JS minification strips the constructor name
+      name: 'MyComponent',
 
-  create(props) {
-    super.create(props);
-
-    this.set({
       // Define a currentDay property
       schema: new Form(
         fields: [
@@ -544,7 +542,9 @@ class MyComponent extends Component {
       ),
 
       // Default currentDay
-      currentDay: moment().format('dddd')
+      currentDay: moment().format('dddd'),
+
+      ...props
     });
   }
 }
@@ -561,12 +561,9 @@ import Form from 'mson/lib/form';
 import { TextField } from 'mson/lib/fields';
 
 class MyAction extends Action {
-  className = 'MyAction';
-
-  create(props) {
-    super.create(props);
-
-    this.set({
+  constructor(props) {
+    super({
+      name: 'MyAction',
       schema: new Form(
         fields: [
           new TextField({
@@ -574,7 +571,7 @@ class MyAction extends Action {
           })
         ]
       )
-    });
+    })
   }
 
   async act(props) {
@@ -625,12 +622,11 @@ import Form from 'mson/lib/form';
 import { TextField, Email } from 'mson/lib/fields';
 
 class MyAccount extends Form {
-  // className is needed as JS minification strips the constructor name
-  className = 'MyAccount';
+  constructor(props) {
+    super({
+      // name is needed as JS minification strips the constructor name
+      name: 'MyAccount',
 
-  create(props) {
-    super.create(props);
-    this.set({
       fields: [
         new TextField({
           name: 'firstName',
