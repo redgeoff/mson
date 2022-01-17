@@ -533,13 +533,13 @@ class MyComponent extends Component {
       name: 'MyComponent',
 
       // Define a currentDay property
-      schema: new Form(
+      schema: new Form({
         fields: [
           new TextField({
             name: 'currentDay'
           })
         ]
-      ),
+      }),
 
       // Default currentDay
       currentDay: moment().format('dddd'),
@@ -564,13 +564,13 @@ class MyAction extends Action {
   constructor(props) {
     super({
       name: 'MyAction',
-      schema: new Form(
+      schema: new Form({
         fields: [
           new TextField({
             name: 'foo'
           })
         ]
-      )
+      })
     })
   }
 
