@@ -40,7 +40,7 @@ it('should support legacy component notation', () => {
 class CondensedNotationComponent extends Component {
   constructor(props) {
     super({
-      name: 'app.CondensedNotationComponent',
+      className: 'app.CondensedNotationComponent',
       docLevel: 'basic',
       ...props,
     });
@@ -54,7 +54,7 @@ it('should support condensed component notation', () => {
 
 const createFunctionalNotationComponent = (props) =>
   new Component({
-    name: 'app.FunctionalNotationComponent',
+    className: 'app.FunctionalNotationComponent',
     docLevel: 'basic',
     ...props,
   });

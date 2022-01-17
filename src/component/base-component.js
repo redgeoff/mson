@@ -18,8 +18,6 @@ const getNextKey = () => {
 // - We attempted to require all access to all props via get() and set(), but this can cause
 //   infinite recursion, e.g. when a get() calls itself either directly or via some inherited logic.
 export default class BaseComponent extends events.EventEmitter {
-  className = 'Component';
-
   _getBaseComponentSchema() {
     return {
       component: 'Form',
@@ -36,6 +34,15 @@ export default class BaseComponent extends events.EventEmitter {
           docLevel: 'basic',
           help: 'A unique variable name',
           // Not required as a lot of components don't need to be named
+          // required: true
+        },
+        {
+          name: 'className',
+          component: 'TextField',
+          label: 'ClassName',
+          docLevel: 'basic',
+          help: 'The name of the class',
+          // TODO: should this be required
           // required: true
         },
         {
@@ -122,8 +129,38 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
+  _setClassNameFromProps(props) {
+    if (props && props.className !== undefined) {
+      // Set the className via the props so that we can support a condensed notation like the following:
+      //
+      //   class CondensedNotationComponent extends Component {
+      //     constructor(props) {
+      //       super({
+      //         className: 'app.CondensedNotationComponent',
+      //         ...props,
+      //       });
+      //     }
+      //   }
+      //
+      // instead of:
+      //
+      //   class LegacyNotationComponent extends Component {
+      //     className = 'app.LegacyNotationComponent';
+      //     create(props) {
+      //       super.create(props);
+      //       this.set({ docLevel: 'basic' });
+      //     }
+      //   }
+      this.className = props.className;
+    } else {
+      this.className = 'Component';
+    }
+  }
+
   constructor(props) {
     super(props);
+
+    this._setClassNameFromProps(props);
 
     // For mocking
     this._registrar = registrar;
