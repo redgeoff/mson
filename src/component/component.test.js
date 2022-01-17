@@ -36,26 +36,29 @@ it('should support legacy component notation', () => {
   shouldSupportComponentNotations(component, 'app.LegacyNotationComponent');
 });
 
-class CondensedExtendedLegacyNotationComponent extends LegacyNotationComponent {
-  constructor(props) {
-    super({
-      name: 'app.CondensedExtendedLegacyNotationComponent',
-      ...props,
-    });
-  }
-}
+// As per https://github.com/redgeoff/mson/pull/570#issuecomment-1014153789, it is not possible to
+// use the condensed notation when extending a component that uses the legacy notation.
+//
+// class CondensedExtendedLegacyNotationComponent extends LegacyNotationComponent {
+//   constructor(props) {
+//     super({
+//       name: 'app.CondensedExtendedLegacyNotationComponent',
+//       ...props,
+//     });
+//   }
+// }
+//
+// it('should support condensed extended legacy component notation', () => {
+//   const component = new CondensedExtendedLegacyNotationComponent({
+//     isStore: true,
+//   });
+//   shouldSupportComponentNotations(
+//     component,
+//     'app.CondensedExtendedLegacyNotationComponent'
+//   );
+// });
 
-it('should support condensed extended legacy component notation', () => {
-  const component = new CondensedExtendedLegacyNotationComponent({
-    isStore: true,
-  });
-  shouldSupportComponentNotations(
-    component,
-    'app.CondensedExtendedLegacyNotationComponent'
-  );
-});
-
-// Condensed notation where everything is in a single constructor() call
+// Condensed notation where everything is in a single call to super()
 class CondensedNotationComponent extends Component {
   constructor(props) {
     super({
