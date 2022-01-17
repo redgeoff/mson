@@ -78,6 +78,7 @@ it('should support condensed component notation', () => {
 });
 
 class ExtendedCondensedNotationComponent extends CondensedNotationComponent {
+  // TODO: could this be moved to set if we introduce className as a property?
   className = 'app.ExtendedCondensedNotationComponent';
 
   // NOTE: we need to call this.set() after super.create() so that we don't overwrite the schema set
@@ -121,15 +122,19 @@ it('should support extended condensed component notation', () => {
   expect(component.get('artist')).toEqual('Gipsy Kings');
 });
 
-const createFunctionalNotationComponent = (props) =>
-  new Component({
-    name: 'app.FunctionalNotationComponent',
+const createFunctionalNotationComponent = (props) => {
+  const component = new Component();
+  component.className = 'app.FunctionalNotationComponent';
+  component.set({
+    // name: 'app.FunctionalNotationComponent', // className instead?
     schema: new Form({
       fields: [songField],
     }),
     docLevel: 'basic',
     ...props,
   });
+  return component;
+};
 
 it('should support functional component notation', () => {
   const component = createFunctionalNotationComponent({
@@ -137,4 +142,31 @@ it('should support functional component notation', () => {
     song: 'Bamboleo',
   });
   shouldSupportComponentNotations(component, 'app.FunctionalNotationComponent');
+});
+
+// TODO: make component.set() return component so that can chain?
+const createExtendedFunctionalNotationComponent = (props) => {
+  const component = createFunctionalNotationComponent();
+  component.className = 'app.ExtendedFunctionalNotationComponent';
+  component.set({
+    // name: 'app.ExtendedFunctionalNotationComponent',
+    schema: new Form({
+      fields: [artistField],
+    }),
+    ...props,
+  });
+  return component;
+};
+
+it('should support extended functional component notation', () => {
+  const component = createExtendedFunctionalNotationComponent({
+    isStore: true,
+    song: 'Bamboleo',
+    artist: 'Gipsy Kings',
+  });
+  shouldSupportComponentNotations(
+    component,
+    'app.ExtendedFunctionalNotationComponent'
+  );
+  expect(component.get('artist')).toEqual('Gipsy Kings');
 });
