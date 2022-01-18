@@ -676,6 +676,10 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
+  setClassName(className) {
+    this.className = className;
+  }
+
   getClassName() {
     // Note: we cannot use Class.prototype.name as this is overwritten by minifiers like UglifyJS.
     //
