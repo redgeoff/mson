@@ -149,6 +149,19 @@ const createFunctionalNotationComponent = (props) => {
   return component;
 };
 
+// TODO: Consider a terser notation? We could create component.extend(), which would call
+// setClassName(), set(), and return the component:
+//
+//   const createFunctionalNotationComponent = (props) =>
+//     new Component().extend(
+//       className: 'app.FunctionalNotationComponent',
+//       schema: new Form({
+//         fields: [songField],
+//       }),
+//       docLevel: 'basic',
+//       ...props,
+//     });
+
 it('should support functional component notation', () => {
   const component = createFunctionalNotationComponent({
     isStore: true,
@@ -157,8 +170,6 @@ it('should support functional component notation', () => {
   shouldSupportComponentNotations(component, 'app.FunctionalNotationComponent');
 });
 
-// TODO: make component.set() return component so that can chain? The difficulty is that many
-// components extend set() and all these instances would have to be modified to support chaining.
 const createExtendedFunctionalNotationComponent = (props) => {
   const component = createFunctionalNotationComponent();
   component.setClassName('app.ExtendedFunctionalNotationComponent');
