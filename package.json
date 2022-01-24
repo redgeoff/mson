@@ -18,12 +18,15 @@
   "devDependencies": {
     "@types/jest": "^27.4.0",
     "@types/node": "^17.0.10",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
     "commitizen": "^4.2.3",
     "copyfiles": "^2.4.1",
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.7.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jest": "^26.0.0",
     "jest": "^27.4.7",
     "lint-staged": "^12.1.6",
     "prettier": "^2.2.1",
@@ -41,7 +44,7 @@
     ]
   },
   "scripts": {
-    "lint": "eslint --max-warnings=0 src",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=0 src",
     "just-test": "jest --env=jsdom --maxWorkers=3 --testPathPattern='^((?!performance).)*test.js$'",
     "just-test:debug": "npm run just-test --inspect-brk --runInBand --no-cache",
     "test:performance": "jest --env=jsdom --maxWorkers=1 --testPathPattern='performance.test.js$'",
