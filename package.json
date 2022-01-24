@@ -6,7 +6,6 @@
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/runtime": "^7.12.5",
     "country-telephone-data": "^0.6.3",
     "date-fns": "^2.15.0",
     "events": "^3.2.0",
@@ -17,21 +16,22 @@
     "vanilla-text-mask": "^5.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.10",
-    "@babel/core": "^7.12.10",
-    "@babel/plugin-proposal-class-properties": "^7.12.1",
-    "@babel/plugin-transform-classes": "^7.12.1",
-    "@babel/plugin-transform-runtime": "^7.12.10",
-    "@babel/preset-env": "^7.12.11",
-    "babel-loader": "8.1.0",
+    "@types/jest": "^27.4.0",
+    "@types/node": "^17.0.10",
     "commitizen": "^4.2.3",
     "copyfiles": "^2.4.1",
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^8.7.0",
+    "eslint-config-prettier": "^8.3.0",
+    "jest": "^27.4.7",
     "lint-staged": "^12.1.6",
     "prettier": "^2.2.1",
-    "react-scripts": "^4.0.1",
     "semantic-release": "^19.0.2",
+    "source-map-loader": "^3.0.1",
+    "ts-jest": "^27.1.3",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.5",
     "webpack-bundle-analyzer": "^4.4.0",
     "webpack-cli": "^4.4.0"
   },
@@ -42,9 +42,9 @@
   },
   "scripts": {
     "lint": "eslint --max-warnings=0 src",
-    "just-test": "react-scripts test --env=jsdom --maxWorkers=3 --testPathPattern='^((?!performance).)*test.js$'",
+    "just-test": "jest --env=jsdom --maxWorkers=3 --testPathPattern='^((?!performance).)*test.js$'",
     "just-test:debug": "npm run just-test --inspect-brk --runInBand --no-cache",
-    "test:performance": "react-scripts test --env=jsdom --maxWorkers=1 --testPathPattern='performance.test.js$'",
+    "test:performance": "jest --env=jsdom --maxWorkers=1 --testPathPattern='performance.test.js$'",
     "test:coverage": "npm run just-test -- --coverage",
     "test": "npm run lint && CI=true npm run test:coverage && CI=true npm run test:performance",
     "copy-json": "copyfiles -u 1 src/**/*.json lib",
@@ -55,19 +55,6 @@
     "prepublishOnly": "cross-env NODE_OPTIONS=--openssl-legacy-provider && yarn compile && yarn bundle",
     "semantic-release": "semantic-release",
     "prepare": "git config core.hooksPath ./git-hooks"
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx}"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 100,
-        "functions": 100,
-        "lines": 100,
-        "statements": 100
-      }
-    }
   },
   "repository": {
     "type": "git",

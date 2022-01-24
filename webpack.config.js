@@ -1,24 +1,19 @@
-const path = require('path');
-
 module.exports = {
-  mode: 'production',
-  entry: {
-    mson: './src/index.js',
-  },
+  entry: "./src/index.js",
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js',
-    library: '[name]',
+    filename: "./dist/bundle.js",
   },
+
+  devtool: "source-map",
+
+  resolve: {
+    extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
+  },
+
   module: {
     rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-        },
-      },
+      { test: /\.tsx?$/, loader: "ts-loader" },
+      { test: /\.js$/, loader: "source-map-loader" },
     ],
-  },
+  }
 };
