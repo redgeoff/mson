@@ -52,7 +52,7 @@
     "test:coverage": "npm run just-test -- --coverage",
     "test": "npm run lint && CI=true npm run test:coverage && CI=true npm run test:performance",
     "copy-json": "copyfiles -u 1 src/**/*.json lib",
-    "compile": "cross-env NODE_ENV=production tsc && npm run copy-json",
+    "compile": "tsc && npm run copy-json",
     "bundle": "webpack",
     "touch": "find src -exec touch {} \\;",
     "analyze-bundle": "webpack --json > ./dist/stats.json && webpack-bundle-analyzer ./dist/stats.json",
