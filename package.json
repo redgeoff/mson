@@ -48,7 +48,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=0 src",
     "just-test": "jest --env=jsdom --maxWorkers=3 --testPathPattern='^((?!performance).)*test.js$'",
     "just-test:watch": "npm run just-test -- --watch",
-    "just-test:debug": "npm run just-test --inspect-brk --runInBand --no-cache",
+    "just-test:debug": "npm run just-test:watch --inspect-brk --runInBand --no-cache",
     "test:performance": "jest --env=jsdom --maxWorkers=1 --testPathPattern='performance.test.js$'",
     "test:coverage": "npm run just-test -- --coverage",
     "test": "npm run lint && npm run test:coverage && npm run test:performance",
