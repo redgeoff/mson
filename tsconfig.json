@@ -6,7 +6,8 @@
     "strict": true,
     "esModuleInterop": true,
     "declaration": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "module": "commonjs"
   },
   "include": ["./src/**/*"],
   "exclude": [
