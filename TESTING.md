@@ -16,7 +16,7 @@ You can then view the code coverage at `coverage/lcov-report/index.html`
 
 Run the tests interactively:
 
-    $ yarn just-test
+    $ yarn just-test:watch
 
 ## Analyzing the Bundle
 
