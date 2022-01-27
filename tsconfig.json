@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "outDir": "./lib",
+    "allowJs": true,
+    "target": "es6",
+    "strict": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "moduleResolution": "node",
+    "module": "commonjs"
+  },
+  "include": ["./src/**/*"],
+  "exclude": [
+    "src/**/*.test.ts",
+    "src/**/*.test.js"
+  ]
+}

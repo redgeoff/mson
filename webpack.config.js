@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 const path = require('path');
 
 module.exports = {
@@ -5,20 +6,23 @@ module.exports = {
   entry: {
     mson: './src/index.js',
   },
+
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
     library: '[name]',
   },
+
+  devtool: "source-map",
+
+  resolve: {
+    extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
+  },
+
   module: {
     rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-        },
-      },
+      { test: /\.tsx?$/, loader: "ts-loader" },
+      { test: /\.js$/, loader: "source-map-loader" },
     ],
-  },
+  }
 };
