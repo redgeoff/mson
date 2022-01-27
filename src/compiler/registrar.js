@@ -7,5 +7,10 @@
 // without compiling it as we cannot properly configure babel plugins. (I tried using
 // react-app-rewired, but that didn't work)
 
-const registrar = {};
+const registrar = { client: null };
+
+export const setClient = (client) => (register.client = client);
+
+export const getClient = () => register.client;
+
 export default registrar;
