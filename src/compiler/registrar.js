@@ -8,9 +8,4 @@
 // react-app-rewired, but that didn't work)
 
 const registrar = {};
-
-export const setClient = (client) => (registrar.client = client);
-
-export const getClient = () => registrar.client;
-
 export default registrar;
