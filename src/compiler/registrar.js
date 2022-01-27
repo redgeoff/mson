@@ -9,8 +9,8 @@
 
 const registrar = { client: null };
 
-export const setClient = (client) => (register.client = client);
+export const setClient = (client) => (registrar.client = client);
 
-export const getClient = () => register.client;
+export const getClient = () => registrar.client;
 
 export default registrar;
