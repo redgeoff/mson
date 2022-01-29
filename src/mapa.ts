@@ -10,7 +10,7 @@
 
 import events from 'events';
 
-type Key = string | undefined | null;
+export type Key = string | number | undefined | null;
 
 type FullEntry<V> = [Key, V];
 
@@ -22,22 +22,19 @@ type ValueGenerator<V> = Generator<V, void>;
 
 type FullEntryGenerator<V> = Generator<FullEntry<V>, void>;
 
-type OnValue<V> = (value?: V, key?: Key, last?: boolean) => boolean | void;
+export type OnValue<V, U> = (
+  value?: V,
+  key?: Key,
+  last?: boolean
+) => boolean | U | void;
 
-type MapOnValue<V, U> = (value?: V, key?: Key, last?: boolean) => U;
+export type MapOnValue<V, U> = (value?: V, key?: Key, last?: boolean) => U;
 
-class Item<V> {
+export interface Item<V> {
   key: Key;
   prevKey: Key;
   nextKey: Key;
   value: V;
-
-  constructor(key: Key, prevKey: Key, nextKey: Key, value: V) {
-    this.key = key;
-    this.prevKey = prevKey;
-    this.nextKey = nextKey;
-    this.value = value;
-  }
 }
 
 // We use an object instead of a Map as an object can be cloned with deepClone, but a Map cannot.
@@ -149,7 +146,7 @@ export default class Mapa<V> extends events.EventEmitter {
     }
 
     // Create item that links backwards to the previous item
-    const item = new Item(key, prevKey, beforeKey, value);
+    const item = { key, prevKey, nextKey: beforeKey, value };
 
     // Add the new item
     this._setItem(key, item);
@@ -195,7 +192,7 @@ export default class Mapa<V> extends events.EventEmitter {
     }
 
     // Create item that links backwards to the previous item
-    const item = new Item(key, afterKey, nextKey, value);
+    const item = { key, prevKey: afterKey, nextKey, value };
 
     // Add the new item
     this._setItem(key, item);
@@ -299,7 +296,7 @@ export default class Mapa<V> extends events.EventEmitter {
     this.emit('$change', name, clonedItem);
   }
 
-  set(key: Key, value: V, beforeKey: Key, afterKey: Key) {
+  set(key: Key, value: V, beforeKey?: Key, afterKey?: Key) {
     let item = null;
     if (this._nullOrUndefined(key)) {
       this._throwKeyFalsyError();
@@ -374,7 +371,7 @@ export default class Mapa<V> extends events.EventEmitter {
     }
   }
 
-  forEach(onValue: OnValue<V>) {
+  forEach<U>(onValue: OnValue<V, U>) {
     for (const entry of this.entries()) {
       const last = entry[0] === this._lastKey;
       const again = onValue(entry[1], entry[0], last);
@@ -387,7 +384,7 @@ export default class Mapa<V> extends events.EventEmitter {
   }
 
   // Alias for forEach
-  each(onValue: OnValue<V>) {
+  each<U>(onValue: OnValue<V, U>) {
     this.forEach(onValue);
   }
 
