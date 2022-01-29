@@ -46,10 +46,10 @@
   },
   "scripts": {
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=0 src",
-    "just-test": "jest --env=jsdom --maxWorkers=3 --testPathPattern='^((?!performance).)*test.js$'",
+    "just-test": "jest --env=jsdom --maxWorkers=3 --testPathPattern='^((?!performance).)*test.(j|t)s$'",
     "just-test:watch": "yarn just-test --watch",
     "just-test:debug": "yarn just-test:watch --inspect-brk --runInBand --no-cache",
-    "test:performance": "jest --env=jsdom --maxWorkers=1 --testPathPattern='performance.test.js$'",
+    "test:performance": "jest --env=jsdom --maxWorkers=1 --testPathPattern='performance.test.(j|t)s$'",
     "test:coverage": "yarn just-test --coverage",
     "test": "yarn lint && yarn test:coverage && yarn test:performance",
     "copy-json": "copyfiles -u 1 src/**/*.json lib",
