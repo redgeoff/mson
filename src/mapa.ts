@@ -81,7 +81,7 @@ export default class Mapa<V> extends events.EventEmitter {
   }
 
   protected _throwKeyFalsyError() {
-    throw new Error(`key cannot be null or undefined`);
+    throw new Error('key cannot be null or undefined');
   }
 
   protected _setItem(key: Key, item: Item<V>) {

@@ -7,6 +7,16 @@ class TestMapa extends Mapa {
   getItem(key) {
     return this._getItem(key);
   }
+
+  // Needed so that we can satisfy TypeScript and maintain 100% test coverage
+  setItem(key, value) {
+    this._setItem(key, value);
+  }
+
+  // Needed so that we can satisfy TypeScript and maintain 100% test coverage
+  deleteItem(key) {
+    this._deleteItem(key);
+  }
 }
 
 const createMapa = () => {
@@ -950,4 +960,18 @@ it('should throw if both beforeKey and afterKey are defined', () => {
   expect(() => m.set('a', 1, null, 'c')).toThrow(err);
   expect(() => m.set('a', 1, 'b', null)).toThrow(err);
   expect(() => m.set('a', 1, null, null)).toThrow(err);
+});
+
+const keyFalsyError = 'key cannot be null or undefined';
+
+it('setItem should throw when undefined or null', () => {
+  const m = new TestMapa();
+  expect(() => m.setItem(undefined, 1)).toThrow(keyFalsyError);
+  expect(() => m.setItem(null, 1)).toThrow(keyFalsyError);
+});
+
+it('deleteItem should throw when undefined or null', () => {
+  const m = new TestMapa();
+  expect(() => m.deleteItem(undefined)).toThrow(keyFalsyError);
+  expect(() => m.deleteItem(null)).toThrow(keyFalsyError);
 });
