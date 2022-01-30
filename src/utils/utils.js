@@ -6,15 +6,29 @@ export class Utils {
     this._global = global;
   }
 
+  _reduce(collection, callback, accumulator) {
+    if (Array.isArray(collection)) {
+      return collection.reduce(callback, accumulator);
+    } else {
+      return Object.entries(collection).reduce((previousValue, [key, item]) => {
+        return callback(previousValue, item, key);
+      }, accumulator);
+    }
+  }
+
   async sequential(items, onItem) {
     const values = [];
-    await items.reduce(async (promise, item, key) => {
-      await promise;
-      const value = await onItem(item, key);
-      if (value !== undefined) {
-        values.push(value);
-      }
-    }, Promise.resolve());
+    await this._reduce(
+      items,
+      async (promise, item, key) => {
+        await promise;
+        const value = await onItem(item, key);
+        if (value !== undefined) {
+          values.push(value);
+        }
+      },
+      Promise.resolve()
+    );
     return values;
   }
 
