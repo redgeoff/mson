@@ -2,7 +2,7 @@
 
 import Store from './store';
 import utils from '../utils/utils';
-import uberUtils from '../uber-utils';
+import uberUtils from '../utils/uber-utils';
 import registrar from '../compiler/registrar';
 import reorder, { Reorder } from './reorder';
 
