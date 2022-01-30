@@ -2,7 +2,7 @@
 // of resources
 
 import CompositeField from './composite-field';
-import utils from '../utils';
+import utils from '../utils/utils';
 
 export default class ListField extends CompositeField {
   className = 'ListField';

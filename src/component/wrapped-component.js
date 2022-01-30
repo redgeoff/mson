@@ -1,5 +1,5 @@
 import BaseComponent from './base-component';
-import utils from '../utils';
+import utils from '../utils/utils';
 
 // Used to create a component that can be dynamically defined on demand. WrappedComponent
 // essentially exposes componentToWrap, which means that mutating the wrapped component mutates

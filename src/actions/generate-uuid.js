@@ -1,5 +1,5 @@
 import Action from './action';
-import utils from '../utils';
+import utils from '../utils/utils';
 
 export default class GenerateUUID extends Action {
   className = 'GenerateUUID';

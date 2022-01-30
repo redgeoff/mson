@@ -1,6 +1,6 @@
 import events from 'events';
 import registrar from '../compiler/registrar';
-import utils from '../utils';
+import utils from '../utils/utils';
 import { cloneDeepWith } from '../utils/deep-clone';
 import Mapa from '../mapa';
 import PropertyNotDefinedError from './property-not-defined-error';

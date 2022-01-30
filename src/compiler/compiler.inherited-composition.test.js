@@ -1,7 +1,7 @@
 // NOTE: the tests in this file must maintain parity with component.inherited-composition.test.js
 
 import testUtils from '../test-utils';
-import utils from '../utils';
+import utils from '../utils/utils';
 import compiler from './compiler';
 
 const firstName = utils.uuid();

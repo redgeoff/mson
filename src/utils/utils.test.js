@@ -1,5 +1,5 @@
 import utils, { Utils } from './utils';
-import testUtils from './test-utils';
+import testUtils from '../test-utils';
 
 it('should execute promises sequentially', async () => {
   let sleeps = [1000, 100, 10];

@@ -3,7 +3,7 @@ import globals from '../globals';
 import CollectionMapa from './collection-mapa';
 import InfiniteLoader from '../infinite-loader';
 import Component from '../component';
-import utils from '../utils';
+import utils from '../utils/utils';
 
 // Note: We no longer instantiate a default store for the CollectionField as having a store
 // introduces extra complexity that is not always needed. For example, when using the

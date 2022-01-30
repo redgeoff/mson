@@ -1,5 +1,5 @@
 import Field from './field';
-import utils from '../utils';
+import utils from '../utils/utils';
 
 export default class ComponentField extends Field {
   className = 'ComponentField';

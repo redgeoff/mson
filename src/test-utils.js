@@ -2,7 +2,7 @@
 
 import compiler from './compiler';
 import Form from './form';
-import utils from './utils';
+import utils from './utils/utils';
 import Component from './component/component';
 
 // Throw action errors as we should not receive them in our test environment. Note: we cannot toggle

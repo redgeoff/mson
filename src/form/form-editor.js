@@ -2,7 +2,7 @@ import Form from './form';
 import CollectionField from '../fields/collection-field';
 import Factory from '../component/factory';
 import FieldEditorForm from './field-editor-form';
-import utils from '../utils';
+import utils from '../utils/utils';
 
 export default class FormEditor extends Form {
   className = 'FormEditor';

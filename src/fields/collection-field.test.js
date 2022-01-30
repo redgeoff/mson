@@ -3,7 +3,7 @@ import TextField from './text-field';
 import DateField from './date-field';
 import Form from '../form';
 import testUtils from '../test-utils';
-import utils from '../utils';
+import utils from '../utils/utils';
 import compiler from '../compiler';
 import Emit from '../actions/emit';
 import Factory from '../component/factory';
