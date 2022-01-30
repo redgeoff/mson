@@ -2,7 +2,6 @@ import events from 'events';
 import registrar from '../compiler/registrar';
 import utils from '../utils';
 import each from 'lodash/each';
-import difference from 'lodash/difference';
 import { cloneDeepWith } from '../utils/deep-clone';
 import Mapa from '../mapa';
 import PropertyNotDefinedError from './property-not-defined-error';
@@ -744,7 +743,7 @@ export default class BaseComponent extends events.EventEmitter {
       excludeProps = excludeProps.concat(excludePropsByDefault);
     }
 
-    const names = difference(this._propNames, excludeProps);
+    const names = utils.difference(this._propNames, excludeProps);
 
     // Note: using JSON stringify+parse may be slightly faster than cloneDeep, but cloneDeep can
     // handle circular references.

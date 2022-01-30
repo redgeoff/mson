@@ -159,6 +159,15 @@ export class Utils {
   //   synchronizer = synchronizer.then(() => promise);
   //   return promise;
   // }
+
+  // Credit: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_difference
+  difference(a, b) {
+    if (b === undefined) {
+      return a;
+    } else {
+      return [a, b].reduce((a, b) => a.filter((c) => !b.includes(c)));
+    }
+  }
 }
 
 export default new Utils();
