@@ -2,7 +2,6 @@ import CollectionField from './collection-field';
 import TextField from './text-field';
 import DateField from './date-field';
 import Form from '../form';
-import each from 'lodash/each';
 import testUtils from '../test-utils';
 import utils from '../utils';
 import compiler from '../compiler';
@@ -165,7 +164,7 @@ it('should set properties for nested forms', () => {
   const field = createField();
   const setSpy = jest.spyOn(field, '_setForAllForms');
 
-  each(properties, (value, prop) => {
+  Object.entries(properties).forEach(([prop, value]) => {
     const props = { [prop]: value };
     field.set(props);
 

@@ -4,7 +4,6 @@ import CollectionMapa from './collection-mapa';
 import InfiniteLoader from '../infinite-loader';
 import Component from '../component';
 import utils from '../utils';
-import each from 'lodash/each';
 
 // Note: We no longer instantiate a default store for the CollectionField as having a store
 // introduces extra complexity that is not always needed. For example, when using the
@@ -723,7 +722,7 @@ export default class CollectionField extends Field {
 
       // Make sure the corresponding fields exist in the form. This is done so that extraneous data
       // in the store, e.g. because a field has since been deleted, is just ignored.
-      each(node.fieldValues, (value, name) => {
+      Object.entries(node.fieldValues).forEach(([name, value]) => {
         if (value && (this.get('includeExtraneous') || form.hasField(name))) {
           values[name] = value;
         }
