@@ -3,7 +3,6 @@
 import compiler from './compiler';
 import Form from './form';
 import utils from './utils';
-import each from 'lodash/each';
 import Component from './component/component';
 
 // Throw action errors as we should not receive them in our test environment. Note: we cannot toggle
@@ -222,9 +221,11 @@ class TestUtils {
     expActs.forEach((expAct, i) => {
       const act = acts[i];
       const actualProps = {};
-      each(expAct.props, (value, name) => {
-        actualProps[name] = act.props[name];
-      });
+      if (expAct.props !== undefined) {
+        Object.keys(expAct.props).forEach((name) => {
+          actualProps[name] = act.props[name];
+        });
+      }
       const actualAct = { name: act.name };
       if (expAct.props !== undefined) {
         actualAct.props = actualProps;

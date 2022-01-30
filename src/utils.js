@@ -1,5 +1,4 @@
 import reduce from 'lodash/reduce';
-import each from 'lodash/each';
 import { v4 as uuidv4 } from 'uuid';
 export class Utils {
   constructor() {
@@ -61,7 +60,7 @@ export class Utils {
 
   getAllFunctionNames(obj) {
     const methods = [];
-    each(obj, (property, name) => {
+    Object.entries(obj).forEach(([name, property]) => {
       if (typeof property === 'function') {
         methods.push(name);
       }
