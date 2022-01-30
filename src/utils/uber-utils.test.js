@@ -1,7 +1,7 @@
 import { UberUtils } from './uber-utils';
-import Form from './form';
-import { TextField } from './fields';
-import testUtils from './utils/test-utils';
+import Form from '../form';
+import { TextField } from '../fields';
+import testUtils from './test-utils';
 
 const result = {};
 const promiseFactory = async () => result;

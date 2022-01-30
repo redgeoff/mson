@@ -1,4 +1,4 @@
-import globals from './globals';
+import globals from '../globals';
 
 // Utils that are above the component layer
 export class UberUtils {
