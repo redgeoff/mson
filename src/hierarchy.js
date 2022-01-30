@@ -1,4 +1,4 @@
-import each from 'lodash/each';
+import utils from './utils';
 
 //   { "id": 1, "parentId": null, "obj": "Germany" },
 //   { "id": 2, "parentId": null, "obj": "USA" },
@@ -57,7 +57,7 @@ export default class Hierarchy {
   eachByParent(parentId, onItem) {
     // Use each() so that we can return false to exit loop prematurely
     parentId = this._toParentId(parentId);
-    each(this._itemsByParent[parentId], onItem);
+    utils.each(this._itemsByParent[parentId], onItem);
   }
 
   mapByParent(parentId, onItem) {

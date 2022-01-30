@@ -1,4 +1,3 @@
-import each from 'lodash/each';
 import { cloneDeep } from '../utils/deep-clone';
 import { filter } from '../compiler/query';
 import PropFiller from '../compiler/prop-filler';
@@ -16,7 +15,7 @@ export default class Validator {
 
   // Performs in place fill to prepare for query
   _fillWhere(where) {
-    each(where, (node, name) => {
+    Object.entries(where).forEach(([name, node]) => {
       // Leaf node?
       if (typeof node === 'string') {
         where[name] = this._fillProps(node);

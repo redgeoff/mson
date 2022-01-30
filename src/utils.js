@@ -1,5 +1,4 @@
 import reduce from 'lodash/reduce';
-import each from 'lodash/each';
 import { v4 as uuidv4 } from 'uuid';
 export class Utils {
   constructor() {
@@ -61,7 +60,7 @@ export class Utils {
 
   getAllFunctionNames(obj) {
     const methods = [];
-    each(obj, (property, name) => {
+    Object.entries(obj).forEach(([name, property]) => {
       if (typeof property === 'function') {
         methods.push(name);
       }
@@ -166,6 +165,19 @@ export class Utils {
       return a;
     } else {
       return [a, b].reduce((a, b) => a.filter((c) => !b.includes(c)));
+    }
+  }
+
+  // Note: only use this if you need to exit the loop prematurely by having onItem() return false.
+  // Otherwise, just use Object.entries(), Object.keys(), or Object.values().
+  each(obj, onItem) {
+    const entries = Object.entries(obj);
+    for (let i = 0; i < entries.length; i++) {
+      const [key, value] = entries[i];
+      const again = onItem(value, key);
+      if (again === false) {
+        break;
+      }
     }
   }
 }

@@ -1,6 +1,5 @@
 import UIComponent from '../ui-component';
 import merge from 'lodash/merge';
-import each from 'lodash/each';
 import Validator from '../component/validator';
 import Mapa from '../mapa';
 import IdField from '../fields/id-field';
@@ -672,7 +671,7 @@ export default class Form extends UIComponent {
       if (values === null) {
         this.clearValues();
       } else {
-        each(values, (value, name) => {
+        Object.entries(values).forEach(([name, value]) => {
           // Not a nested field? Nested fields in the values aren't supported, but we need to ignore
           // them as they are valid in component definitions
           if (name.indexOf('.') === -1) {

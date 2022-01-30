@@ -1,4 +1,3 @@
-import each from 'lodash/each';
 import get from 'lodash/get';
 import clone from 'lodash/clone';
 import Roles from './roles';
@@ -30,7 +29,7 @@ export default class AccessControl {
 
     let has = false;
 
-    each(access, (role) => {
+    access.forEach((role) => {
       if (
         indexedRoles[role] ||
         (isOwner && (role === Roles.ID_OWNER || role === Roles.OWNER))
@@ -111,7 +110,7 @@ export default class AccessControl {
 
   canAccess(operation, access, indexedRoles, fieldValues, isOwner) {
     const errors = [];
-    each(fieldValues, (value, name) => {
+    Object.keys(fieldValues).forEach((name) => {
       if (
         !this._canAccessField(operation, access, indexedRoles, name, isOwner)
       ) {
@@ -130,7 +129,7 @@ export default class AccessControl {
     canDowngrade
   ) {
     const fields = {};
-    each(fieldValues, (value, name) => {
+    Object.keys(fieldValues).forEach((name) => {
       const canAccess = this._canAccessField(
         operation,
         access,
@@ -149,7 +148,7 @@ export default class AccessControl {
   valuesCanAccess(operation, access, indexedRoles, fieldValues, isOwner) {
     // Clone so that we don't modify original data
     fieldValues = clone(fieldValues);
-    each(fieldValues, (value, name) => {
+    Object.keys(fieldValues).forEach((name) => {
       if (
         !this._canAccessField(operation, access, indexedRoles, name, isOwner)
       ) {
