@@ -1,5 +1,5 @@
 import Action from './action';
-import each from 'lodash/each';
+import utils from '../utils';
 
 export default class RedirectByRole extends Action {
   className = 'RedirectByRole';
@@ -25,7 +25,7 @@ export default class RedirectByRole extends Action {
 
   async act() {
     const routes = this.get('routes');
-    each(routes, (route) => {
+    utils.each(routes, (route) => {
       if (!route.roles || this._registrar.client.user.hasRole(route.roles)) {
         this._globals.redirect(route.path);
         return false; // exit loop
