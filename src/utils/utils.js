@@ -1,5 +1,5 @@
-import reduce from 'lodash/reduce';
 import { v4 as uuidv4 } from 'uuid';
+
 export class Utils {
   constructor() {
     // For mocking
@@ -8,17 +8,13 @@ export class Utils {
 
   async sequential(items, onItem) {
     const values = [];
-    await reduce(
-      items,
-      async (promise, item, key) => {
-        await promise;
-        const value = await onItem(item, key);
-        if (value !== undefined) {
-          values.push(value);
-        }
-      },
-      Promise.resolve()
-    );
+    await items.reduce(async (promise, item, key) => {
+      await promise;
+      const value = await onItem(item, key);
+      if (value !== undefined) {
+        values.push(value);
+      }
+    }, Promise.resolve());
     return values;
   }
 
