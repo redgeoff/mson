@@ -1,5 +1,5 @@
 import BooleanField from './boolean-field';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 
 it('should validate', () => {
   const field = new BooleanField();

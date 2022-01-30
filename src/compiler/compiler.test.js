@@ -3,7 +3,7 @@ import register from './register';
 import components from '../components';
 import optionalComponents from '../optional-components';
 import globals from '../globals';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 import Action from '../actions/action';
 import Form from '../form';
 

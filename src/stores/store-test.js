@@ -1,6 +1,6 @@
 import Form from '../form';
 import { TextField } from '../fields';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 import { Reorder } from './reorder';
 
 export const createForm = (props) => {

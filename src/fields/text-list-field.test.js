@@ -1,5 +1,5 @@
 import TextListField from './text-list-field';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 
 it('should support invalid reg exp', () => {
   const field = new TextListField();

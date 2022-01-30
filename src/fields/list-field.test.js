@@ -1,7 +1,7 @@
 import ListField from './list-field';
 import TextField from './text-field';
 import TextListField from './text-list-field';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 import { EmailField } from '../fields';
 import Form from '../form';
 import Factory from '../component/factory';

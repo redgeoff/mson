@@ -1,9 +1,9 @@
 // TODO: move to ../test and rename to just utils.js
 
-import compiler from './compiler';
-import Form from './form';
-import utils from './utils/utils';
-import Component from './component/component';
+import compiler from '../compiler';
+import Form from '../form';
+import utils from './utils';
+import Component from '../component/component';
 
 // Throw action errors as we should not receive them in our test environment. Note: we cannot toggle
 // this option in a globalSetup as the scope in a globalSetup is not shared with the tests.

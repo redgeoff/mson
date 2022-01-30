@@ -1,7 +1,7 @@
 import RecordStore from './record-store';
 import Form from '../form';
 import { TextField } from '../fields';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 import { shouldCRUD, shouldGetAll, shouldMove } from './store-test';
 import RecordMock from './record-mock';
 import { Reorder } from './reorder';

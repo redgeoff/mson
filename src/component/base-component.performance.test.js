@@ -1,5 +1,5 @@
 import BaseComponent from './base-component';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 
 const NUM_COMPONENTS = 300;
 

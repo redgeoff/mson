@@ -3,7 +3,7 @@
 import Form from '../form';
 import { TextField } from '../fields';
 import WrappedComponent from './wrapped-component';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 
 // Uses inheritance
 class FirstNameForm extends Form {

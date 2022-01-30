@@ -1,6 +1,6 @@
 import Card from './card';
 import Form from './form';
-import testUtils from './test-utils';
+import testUtils from './utils/test-utils';
 
 it('should bubble up load events', async () => {
   const form = new Form();

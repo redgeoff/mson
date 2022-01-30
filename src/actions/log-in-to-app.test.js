@@ -1,6 +1,6 @@
 import LogInToApp from './log-in-to-app';
 import compiler from '../compiler';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 
 it('should log in to app', async () => {
   const form = compiler.newComponent({

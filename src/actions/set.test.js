@@ -1,7 +1,7 @@
 import Set from './set';
 import Form from '../form';
 import ButtonField from '../fields/button-field';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 import compiler from '../compiler';
 import Factory from '../component/factory';
 

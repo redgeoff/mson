@@ -1,6 +1,6 @@
 import compiler from '../compiler';
 import MemoryStore from '../stores/memory-store';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 
 let acts;
 let editor;

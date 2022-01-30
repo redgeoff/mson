@@ -1,5 +1,5 @@
 import NumberField from './number-field';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 
 it('should validate format', () => {
   const field = new NumberField();

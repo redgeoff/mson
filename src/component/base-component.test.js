@@ -1,6 +1,6 @@
 import BaseComponent from './base-component';
 import Action from '../actions/action';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 import Form from '../form';
 import TextField from '../fields/text-field';
 import compiler from '../compiler';

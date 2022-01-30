@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 import WrappedComponent from './wrapped-component';
 import TextField from '../fields/text-field';
 import Form from '../form';

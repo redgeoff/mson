@@ -1,6 +1,6 @@
 // TODO: should we care if strings pass for say IntegerField, FloatField, etc...?
 
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 import Form from './form';
 import TextField from '../fields/text-field';
 import CollectionField from '../fields/collection-field';

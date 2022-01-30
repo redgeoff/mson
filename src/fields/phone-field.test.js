@@ -1,6 +1,6 @@
 import PhoneField from './phone-field';
 import fieldTester from './field-tester';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 
 fieldTester.shouldAll({ Field: PhoneField, exampleValue: '(646) 123-4567' });
 
