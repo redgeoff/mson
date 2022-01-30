@@ -1,5 +1,5 @@
 import UIComponent from './ui-component';
-import each from 'lodash/each';
+import utils from './utils';
 
 // e.g. [
 //   {
@@ -147,7 +147,7 @@ export default class Menu extends UIComponent {
     let itemFound = null;
     let params = {};
 
-    each(this._itemsByPath, (item) => {
+    utils.each(this._itemsByPath, (item) => {
       if (item.path) {
         const match = path.match(item.regExpPath);
         if (match) {
