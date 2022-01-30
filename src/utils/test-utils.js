@@ -123,35 +123,6 @@ class TestUtils {
     }
   }
 
-  // TODO: I don't think async testing with jest is working properly
-  // (https://facebook.github.io/jest/docs/en/expect.html#rejects). When it does, refactor out this
-  // helper fn
-  async expectToThrow(promiseFactory, errorNameOrError, errorMessage) {
-    let err = {
-      name: 'NoError',
-    };
-
-    try {
-      await promiseFactory();
-    } catch (_err) {
-      err = _err;
-    }
-
-    if (errorNameOrError) {
-      if (typeof errorNameOrError === 'string') {
-        expect(err.name).toEqual(errorNameOrError);
-      } else {
-        expect(err).toEqual(errorNameOrError);
-      }
-    }
-
-    if (errorMessage) {
-      expect(err.message).toEqual(errorMessage);
-    }
-
-    return err;
-  }
-
   async sleepToEnsureDifferentTimestamps() {
     // Sleep for 2 milliseconds as timestamps can be the same with 1 millisecond
     return this.timeout(2);

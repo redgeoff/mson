@@ -64,11 +64,11 @@ it('should log in to app', async () => {
     },
   };
 
-  await testUtils.expectToThrow(() => {
+  await expect(() => {
     return logInToApp.act({
       component: form,
     });
-  }, err);
+  }).rejects.toThrow(err);
   expect(form.getErrs()).toEqual([
     { field: 'password', error: 'invalid email or password' },
   ]);
