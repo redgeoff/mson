@@ -7,7 +7,7 @@ import {
   createDoc,
   updateDoc,
 } from './store-test';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 import { Reorder } from './reorder';
 
 it('should CRUD', () =>

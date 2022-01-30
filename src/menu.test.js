@@ -1,5 +1,5 @@
 import Menu from './menu';
-import testUtils from './test-utils';
+import testUtils from './utils/test-utils';
 
 const expectItemToEqual = (item1, item2) => {
   expect(item1.path).toEqual(item2.path);

@@ -1,5 +1,5 @@
 import App from './app';
-import testUtils from './test-utils';
+import testUtils from './utils/test-utils';
 
 it('should emit logged out', async () => {
   const app = new App();

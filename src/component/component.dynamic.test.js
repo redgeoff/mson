@@ -1,6 +1,6 @@
 // NOTE: the tests in this file must maintain parity with compiler.dynamic.test.js
 
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 import Form from '../form';
 import { TextField } from '../fields';
 import WrappedComponent from './wrapped-component';

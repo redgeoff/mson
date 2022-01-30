@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 import Factory from './factory';
 import Form from '../form';
 import TextField from '../fields/text-field';

@@ -2,7 +2,7 @@ import TextField from './text-field';
 import fieldTester from './field-tester';
 import Form from '../form';
 import compiler from '../compiler';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 
 fieldTester.shouldAll({ Field: TextField, exampleValue: 'foo' });
 

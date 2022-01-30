@@ -1,5 +1,5 @@
 import DateField from './date-field';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 
 it('should convert dates to epoch time', () => {
   const date = new DateField();

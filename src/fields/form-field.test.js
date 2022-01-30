@@ -1,7 +1,7 @@
 import FormField from './form-field';
 import Form from '../form';
 import TextField from './text-field';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 
 const createField = () => {
   return new FormField({

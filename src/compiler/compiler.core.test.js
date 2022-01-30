@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 import { Compiler } from './compiler';
 import components from '../components';
 

@@ -1,6 +1,6 @@
 import SelectField from './select-field';
 import fieldTester from './field-tester';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 
 const colors = [
   { value: 'red', label: 'Red' },

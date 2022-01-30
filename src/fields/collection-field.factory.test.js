@@ -3,7 +3,7 @@ import SelectField from './select-field';
 import Form from '../form';
 import Factory from '../component/factory';
 import Set from '../actions/set';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 import compiler from '../compiler';
 
 it('should set properties in nested form', async () => {

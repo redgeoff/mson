@@ -2,7 +2,7 @@ import CompositeField from './composite-field';
 import TextField from './text-field';
 import compiler from '../compiler';
 import fieldTester from './field-tester';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 import BooleanField from './boolean-field';
 
 const createField = () => {

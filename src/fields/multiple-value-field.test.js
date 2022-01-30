@@ -1,5 +1,5 @@
 import MultipleValueField from './multiple-value-field';
-import testUtils from '../test-utils';
+import testUtils from '../utils/test-utils';
 
 it('should validate max size', () => {
   const field = new MultipleValueField({

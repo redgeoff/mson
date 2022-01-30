@@ -1,4 +1,4 @@
-import testUtils from './test-utils';
+import testUtils from './utils/test-utils';
 import { Access } from './access';
 import Form from './form';
 import { TextField } from './fields';
