@@ -73,16 +73,15 @@ it('should request', async () => {
     throw err;
   };
   const form = new Form();
-  await testUtils.expectToThrow(
-    () => store._request({ form, promiseFactory: container.promiseFactory }),
-    err
-  );
+  await expect(() =>
+    store._request({ form, promiseFactory: container.promiseFactory })
+  ).rejects.toThrow(err);
   expect(setFormErrorsFromAPIErrorSpy).toHaveBeenCalledWith(err, form);
   expect(displayError).toHaveBeenCalledTimes(0);
 
   // Error and no form defined
   setFormErrorsFromAPIErrorSpy.mockReset();
-  await testUtils.expectToThrow(() => store._request(container), err);
+  await expect(() => store._request(container)).rejects.toThrow(err);
   expect(setFormErrorsFromAPIErrorSpy).toHaveBeenCalledTimes(0);
   expect(displayError).toHaveBeenCalledWith(err.toString());
 });
@@ -360,7 +359,7 @@ it('should upsert and get', async () => {
   store._registrar.client.record.get = () => {
     throw err;
   };
-  testUtils.expectToThrow(() => store.upsertDoc({ form }), err);
+  expect(() => store.upsertDoc({ form })).rejects.toThrow(err);
 });
 
 it('should CRUD', () => shouldCRUD(RecordStoreMock));

@@ -61,10 +61,9 @@ it('should tryAndSetFormErrorsIfAPIError', async () => {
   ).toEqual(result);
   expect(setFormErrorsFromAPIErrorSpy).toHaveBeenCalledTimes(0);
 
-  await testUtils.expectToThrow(
-    () => uberUtils.tryAndSetFormErrorsIfAPIError(promiseErrorFactory, form),
-    err
-  );
+  await expect(() =>
+    uberUtils.tryAndSetFormErrorsIfAPIError(promiseErrorFactory, form)
+  ).rejects.toThrow(err);
   expect(setFormErrorsFromAPIErrorSpy).toHaveBeenCalledWith(err, form);
 });
 
@@ -80,9 +79,8 @@ it('should tryAndDisplayErrorIfAPIError', async () => {
   );
   expect(displayErrorSpy).toHaveBeenCalledTimes(0);
 
-  await testUtils.expectToThrow(
-    () => uberUtils.tryAndDisplayErrorIfAPIError(promiseErrorFactory),
-    err
-  );
+  await expect(() =>
+    uberUtils.tryAndDisplayErrorIfAPIError(promiseErrorFactory)
+  ).rejects.toThrow(err);
   expect(displayErrorSpy).toHaveBeenCalledWith(err.toString());
 });
