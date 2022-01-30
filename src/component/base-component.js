@@ -1,7 +1,6 @@
 import events from 'events';
 import registrar from '../compiler/registrar';
 import utils from '../utils';
-import each from 'lodash/each';
 import { cloneDeepWith } from '../utils/deep-clone';
 import Mapa from '../mapa';
 import PropertyNotDefinedError from './property-not-defined-error';
@@ -328,7 +327,9 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   _setProps(props) {
-    each(props, (value, name) => this._setIfDefined(name, value));
+    Object.entries(props).forEach(([name, value]) =>
+      this._setIfDefined(name, value)
+    );
   }
 
   _setName(name) {
@@ -344,7 +345,7 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   _setDefaults(props, values) {
-    each(values, (value, name) => {
+    Object.entries(values).forEach(([name, value]) => {
       if (props[name] === undefined) {
         this._set(name, value);
       }
