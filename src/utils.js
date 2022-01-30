@@ -168,6 +168,19 @@ export class Utils {
       return [a, b].reduce((a, b) => a.filter((c) => !b.includes(c)));
     }
   }
+
+  // Note: only use this if you need to exit the loop prematurely by having onItem() return false.
+  // Otherwise, just use Object.entries(), Object.keys(), or Object.values().
+  each(obj, onItem) {
+    const entries = Object.entries(obj);
+    for (let i = 0; i < entries.length; i++) {
+      const [key, value] = entries[i];
+      const again = onItem(value, key);
+      if (again === false) {
+        break;
+      }
+    }
+  }
 }
 
 export default new Utils();
