@@ -1,7 +1,7 @@
 // TODO: make changes real time with subscriptions
 
 import Store from './store';
-import utils from '../utils';
+import utils from '../utils/utils';
 import uberUtils from '../uber-utils';
 import registrar from '../compiler/registrar';
 import reorder, { Reorder } from './reorder';

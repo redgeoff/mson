@@ -1,5 +1,5 @@
 import TextField from './text-field';
-import utils from '../utils';
+import utils from '../utils/utils';
 
 export default class RegExpField extends TextField {
   set(props) {

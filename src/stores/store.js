@@ -33,7 +33,7 @@
 
 import UIComponent from '../ui-component';
 import access from '../access';
-import utils from '../utils';
+import utils from '../utils/utils';
 import uberUtils from '../uber-utils';
 import DateField from '../fields/date-field';
 import { Reorder } from './reorder';

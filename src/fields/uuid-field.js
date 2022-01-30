@@ -1,5 +1,5 @@
 import IdField from './id-field';
-import utils from '../utils';
+import utils from '../utils/utils';
 
 export default class UUIDField extends IdField {
   className = 'UUIDField';

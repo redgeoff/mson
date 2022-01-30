@@ -1,5 +1,5 @@
 import UIComponent from './ui-component';
-import utils from './utils';
+import utils from './utils/utils';
 
 // e.g. [
 //   {

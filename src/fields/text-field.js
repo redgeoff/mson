@@ -1,5 +1,5 @@
 import Field from './field';
-import utils from '../utils';
+import utils from '../utils/utils';
 import { conformToMask } from 'vanilla-text-mask';
 import map from 'lodash/map';
 
