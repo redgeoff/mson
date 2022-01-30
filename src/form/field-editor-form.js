@@ -1,6 +1,5 @@
 import Form from './form';
 import SelectField from '../fields/select-field';
-import each from 'lodash/each';
 
 export default class FieldEditorForm extends Form {
   className = 'FieldEditorForm';
@@ -87,7 +86,7 @@ export default class FieldEditorForm extends Form {
       this._copySchemaFields(schema);
 
       // Preserve any applicable values from the previous component
-      each(values, (value, name) => {
+      Object.entries(values).forEach(([name, value]) => {
         if (this.hasField(name)) {
           this.getField(name).setValue(value);
         }
