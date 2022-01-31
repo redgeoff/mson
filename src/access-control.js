@@ -1,6 +1,7 @@
 import get from 'lodash/get';
 import clone from 'lodash/clone';
 import Roles from './roles';
+import utils from './utils/utils';
 
 // e.g.
 // access: {
@@ -110,7 +111,9 @@ export default class AccessControl {
 
   canAccess(operation, access, indexedRoles, fieldValues, isOwner) {
     const errors = [];
-    Object.keys(fieldValues).forEach((name) => {
+    // Note: we use `utils.each`, instead of `Object.keys(fieldValues)` as fieldValues can be
+    // undefined when called by mson-server
+    utils.each(fieldValues, (value, name) => {
       if (
         !this._canAccessField(operation, access, indexedRoles, name, isOwner)
       ) {

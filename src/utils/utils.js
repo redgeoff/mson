@@ -178,15 +178,18 @@ export class Utils {
     }
   }
 
-  // Note: only use this if you need to exit the loop prematurely by having onItem() return false.
-  // Otherwise, just use Object.entries(), Object.keys(), or Object.values().
+  // Note: only use this if you need to exit the loop prematurely by having onItem() return false;
+  // or if obj may be falsy. Otherwise, just use Object.entries(), Object.keys(), or
+  // Object.values().
   each(obj, onItem) {
-    const entries = Object.entries(obj);
-    for (let i = 0; i < entries.length; i++) {
-      const [key, value] = entries[i];
-      const again = onItem(value, key);
-      if (again === false) {
-        break;
+    if (obj !== undefined && obj !== null) {
+      const entries = Object.entries(obj);
+      for (let i = 0; i < entries.length; i++) {
+        const [key, value] = entries[i];
+        const again = onItem(value, key);
+        if (again === false) {
+          break;
+        }
       }
     }
   }
