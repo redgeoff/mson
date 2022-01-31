@@ -134,3 +134,64 @@ it('get should handle falsy object', () => {
 it('should merge arrays', () => {
   expect(utils.merge({ c: ['a'] }, { c: ['b'] })).toEqual({ c: ['a', 'b'] });
 });
+
+it('should orderBy', () => {
+  const fred48 = { user: 'fred', age: 48 };
+  const barney34 = { user: 'barney', age: 34 };
+  const fred40 = { user: 'fred', age: 40 };
+  const barney36 = { user: 'barney', age: 36 };
+  var users = [fred48, barney34, fred40, barney36];
+  const clonedUsers = utils.clone(users);
+
+  expect(utils.orderBy(users, ['user'])).toEqual([
+    barney34,
+    barney36,
+    fred48,
+    fred40,
+  ]);
+
+  expect(utils.orderBy(users, ['user'], ['asc'])).toEqual([
+    barney34,
+    barney36,
+    fred48,
+    fred40,
+  ]);
+
+  expect(utils.orderBy(users, ['user'], ['desc'])).toEqual([
+    fred48,
+    fred40,
+    barney34,
+    barney36,
+  ]);
+
+  expect(utils.orderBy(users, ['user', 'age'])).toEqual([
+    barney34,
+    barney36,
+    fred40,
+    fred48,
+  ]);
+
+  expect(utils.orderBy(users, ['age'])).toEqual([
+    barney34,
+    barney36,
+    fred40,
+    fred48,
+  ]);
+
+  expect(utils.orderBy(users, ['user', 'age'], ['asc', 'desc'])).toEqual([
+    barney36,
+    barney34,
+    fred48,
+    fred40,
+  ]);
+
+  expect(utils.orderBy(users, ['user', 'age'], ['desc', 'asc'])).toEqual([
+    fred40,
+    fred48,
+    barney34,
+    barney36,
+  ]);
+
+  // Ensure original users are not mutated
+  expect(users).toEqual(clonedUsers);
+});

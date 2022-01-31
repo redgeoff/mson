@@ -227,6 +227,25 @@ export class Utils {
   clone(obj) {
     return JSON.parse(JSON.stringify(obj));
   }
+
+  // Credit: https://stackoverflow.com/a/30446887/2831606
+  _orderBySorter(iteratees, orders) {
+    return (a, b) =>
+      iteratees
+        .map((i, j) => {
+          const o = orders?.[j];
+          const dir = o === 'desc' ? -1 : 1;
+          const aI = this.get(a, i);
+          const bI = this.get(b, i);
+          return aI > bI ? dir : aI < bI ? -dir : 0;
+        })
+        .reduce((p, n) => (p ? p : n), 0);
+  }
+
+  orderBy(items, iteratees, orders) {
+    // Use concat to copy the array so that we don't mutate the original
+    return items.concat().sort(this._orderBySorter(iteratees, orders));
+  }
 }
 
 export default new Utils();
