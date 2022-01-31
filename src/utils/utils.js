@@ -32,15 +32,31 @@ export class Utils {
     return values;
   }
 
-  // // A recursive merge that also concats arrays
-  // merge(object, sources) {
-  //   const mergeCustomizer = (objValue, srcValue) => {
-  //     if (_.isArray(objValue)) {
-  //       return objValue.concat(srcValue);
-  //     }
-  //   };
-  //   return _.mergeWith(object, sources, mergeCustomizer);
-  // }
+  _isObject(item) {
+    return item && typeof item === 'object' && !Array.isArray(item);
+  }
+
+  // Credit: https://stackoverflow.com/a/48218209/2831606
+  merge(...objects) {
+    return objects.reduce((prev, obj) => {
+      if (obj !== undefined) {
+        Object.keys(obj).forEach((key) => {
+          const pVal = prev[key];
+          const oVal = obj[key];
+
+          if (Array.isArray(pVal) && Array.isArray(oVal)) {
+            prev[key] = pVal.concat(...oVal);
+          } else if (this._isObject(pVal) && this._isObject(oVal)) {
+            prev[key] = this.merge(pVal, oVal);
+          } else {
+            prev[key] = oVal;
+          }
+        });
+      }
+
+      return prev;
+    }, {});
+  }
 
   inBrowser() {
     return !!this._global.window;

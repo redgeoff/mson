@@ -130,3 +130,7 @@ it('each should handle falsy values', () => {
 it('get should handle falsy object', () => {
   expect(utils.get(null, 'nope')).toEqual(undefined);
 });
+
+it('should merge arrays', () => {
+  expect(utils.merge({ c: ['a'] }, { c: ['b'] })).toEqual({ c: ['a', 'b'] });
+});
