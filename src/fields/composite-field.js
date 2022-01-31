@@ -1,7 +1,7 @@
 import Field from './field';
 import Mapa from '../mapa';
-import clone from 'lodash/clone';
 import isEmpty from 'lodash/isEmpty';
+import utils from '../utils/utils';
 
 export default class CompositeField extends Field {
   className = 'CompositeField';
@@ -62,7 +62,7 @@ export default class CompositeField extends Field {
     // Clone the value as we don't want to modify this._value directly as we want set to be able
     // to detect if the value is changing.
     const thisValue = this._getProperty('value');
-    const clonedValue = !thisValue ? {} : clone(thisValue);
+    const clonedValue = !thisValue ? {} : utils.clone(thisValue);
     if (value === null) {
       delete clonedValue[field.get('name')];
     } else {

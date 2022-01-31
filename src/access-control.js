@@ -1,4 +1,3 @@
-import clone from 'lodash/clone';
 import Roles from './roles';
 import utils from './utils/utils';
 
@@ -149,7 +148,7 @@ export default class AccessControl {
 
   valuesCanAccess(operation, access, indexedRoles, fieldValues, isOwner) {
     // Clone so that we don't modify original data
-    fieldValues = clone(fieldValues);
+    fieldValues = utils.clone(fieldValues);
     Object.keys(fieldValues).forEach((name) => {
       if (
         !this._canAccessField(operation, access, indexedRoles, name, isOwner)

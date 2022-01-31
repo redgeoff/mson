@@ -207,6 +207,10 @@ export class Utils {
     const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/);
     return result === undefined || result === obj ? defaultValue : result;
   }
+
+  clone(obj) {
+    return JSON.parse(JSON.stringify(obj));
+  }
 }
 
 export default new Utils();
