@@ -1,7 +1,7 @@
 import globals from '../globals';
 import registrar from '../compiler/registrar';
 import queryToProps from '../component/query-to-props';
-import get from 'lodash/get';
+import utils from '../utils/utils';
 
 export class Getter {
   constructor({ action, component, args, globals, self }) {
@@ -55,7 +55,7 @@ export class Getter {
         return item.get(childName);
       } else {
         // Item is an object
-        return get(item, childName);
+        return utils.get(item, childName);
       }
     } else {
       return item;

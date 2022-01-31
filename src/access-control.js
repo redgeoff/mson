@@ -1,4 +1,3 @@
-import get from 'lodash/get';
 import clone from 'lodash/clone';
 import Roles from './roles';
 import utils from './utils/utils';
@@ -44,7 +43,7 @@ export default class AccessControl {
   }
 
   hasFormAccess(operation, access, indexedRoles, isOwner) {
-    const formAccess = get(access, ['form', operation]);
+    const formAccess = access?.form?.[operation];
     if (formAccess !== undefined) {
       return this._hasAccess(formAccess, indexedRoles, isOwner);
     } else {
@@ -55,7 +54,7 @@ export default class AccessControl {
 
   _canAccessFieldForOp(operation, access, indexedRoles, fieldName, isOwner) {
     // Priority given to field layer access if it exists
-    const fieldAccess = get(access, ['fields', fieldName, operation]);
+    const fieldAccess = access?.fields?.[fieldName]?.[operation];
     if (fieldAccess !== undefined) {
       return this._hasAccess(fieldAccess, indexedRoles, isOwner);
     }
