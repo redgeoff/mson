@@ -2,7 +2,7 @@ import queryToProps, {
   queryToPropNames,
   throwIfNotPropertyNotDefinedError,
 } from './query-to-props';
-import get from 'lodash/get';
+import utils from '../utils/utils';
 import PropertyNotDefinedError from './property-not-defined-error';
 
 class MockComponent {
@@ -11,7 +11,7 @@ class MockComponent {
   }
 
   get(name) {
-    return get(this._props, name);
+    return utils.get(this._props, name);
   }
 }
 

@@ -1,5 +1,5 @@
 import Action from './action';
-import get from 'lodash/get';
+import utils from '../utils/utils';
 import clone from 'lodash/clone';
 import map from 'lodash/map';
 import PropFiller from '../compiler/prop-filler';
@@ -30,7 +30,7 @@ export default class Iterator extends Action {
   }
 
   _getProp(props, path) {
-    return get(props, path);
+    return utils.get(props, path);
   }
 
   async act(props) {
