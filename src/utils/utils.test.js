@@ -116,3 +116,13 @@ it('should convert to RegExp', () => {
   expect(utils.isRegExpString('/[1-9]AB/')).toEqual(true);
   expect(utils.isRegExpString('(')).toEqual(false);
 });
+
+it('each should handle falsy values', () => {
+  const onItem = jest.fn();
+
+  utils.each(null, onItem);
+  expect(onItem).toHaveBeenCalledTimes(0);
+
+  utils.each(undefined, onItem);
+  expect(onItem).toHaveBeenCalledTimes(0);
+});

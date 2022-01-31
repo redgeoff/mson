@@ -2,6 +2,7 @@ import { cloneDeep } from '../utils/deep-clone';
 import { filter } from '../compiler/query';
 import PropFiller from '../compiler/prop-filler';
 import queryToProps from '../component/query-to-props';
+import utils from '../utils/utils';
 
 export default class Validator {
   constructor(props) {
@@ -15,7 +16,9 @@ export default class Validator {
 
   // Performs in place fill to prepare for query
   _fillWhere(where) {
-    Object.entries(where).forEach(([name, node]) => {
+    // Note: we use `utils.each`, instead of `Object.entries(where)` as where can be
+    // undefined when called by mson-server
+    utils.each(where, (node, name) => {
       // Leaf node?
       if (typeof node === 'string') {
         where[name] = this._fillProps(node);
