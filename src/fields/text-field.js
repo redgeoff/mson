@@ -1,7 +1,6 @@
 import Field from './field';
 import utils from '../utils/utils';
 import { conformToMask } from 'vanilla-text-mask';
-import map from 'lodash/map';
 
 export default class TextField extends Field {
   className = 'TextField';
@@ -128,7 +127,7 @@ export default class TextField extends Field {
   }
 
   _stringToArrayMask(mask) {
-    return map(mask, (item) => (item === '.' ? /./ : item));
+    return Object.values(mask).map((item) => (item === '.' ? /./ : item));
   }
 
   _formatMask(mask) {
