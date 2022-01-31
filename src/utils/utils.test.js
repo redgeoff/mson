@@ -126,3 +126,7 @@ it('each should handle falsy values', () => {
   utils.each(undefined, onItem);
   expect(onItem).toHaveBeenCalledTimes(0);
 });
+
+it('get should handle falsy object', () => {
+  expect(utils.get(null, 'nope')).toEqual(undefined);
+});
