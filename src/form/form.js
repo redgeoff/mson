@@ -1,5 +1,4 @@
 import UIComponent from '../ui-component';
-import merge from 'lodash/merge';
 import Validator from '../component/validator';
 import Mapa from '../mapa';
 import IdField from '../fields/id-field';
@@ -11,6 +10,7 @@ import ComponentField from '../fields/component-field';
 import FormField from '../fields/form-field';
 import FormErr from './form-err';
 import ExtendedField from '../fields/extended-field';
+import utils from '../utils/utils';
 
 export default class Form extends UIComponent {
   className = 'Form';
@@ -378,7 +378,7 @@ export default class Form extends UIComponent {
 
   _setAccess(access) {
     // Merge access recursively
-    this._set('access', merge(this._getProperty('access'), access));
+    this._set('access', utils.merge(this._getProperty('access'), access));
   }
 
   _emitChangeToFields(change) {
