@@ -1,5 +1,4 @@
 import TextFieldHiddenSchema from './text-field-hidden-schema';
-import map from 'lodash/map';
 import countryTelephoneData from 'country-telephone-data';
 
 const EMPTY_MASK = [/./, /./, /./, /./];
@@ -8,7 +7,11 @@ export default class PhoneField extends TextFieldHiddenSchema {
   className = 'PhoneField';
 
   _stringToArrayMask(mask) {
-    return map(mask, (item) => (item === '.' ? /\d/ : item));
+    if (mask === undefined) {
+      return [];
+    } else {
+      return Object.values(mask).map((item) => (item === '.' ? /\d/ : item));
+    }
   }
 
   static getCountriesByCode() {

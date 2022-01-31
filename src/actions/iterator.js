@@ -1,6 +1,5 @@
 import Action from './action';
 import utils from '../utils/utils';
-import map from 'lodash/map';
 import PropFiller from '../compiler/prop-filler';
 
 export default class Iterator extends Action {
@@ -36,7 +35,7 @@ export default class Iterator extends Action {
     const iterator = this._getProp(props, this.get('iterator'));
     const clonedProps = utils.clone(props);
     const filler = new PropFiller(props);
-    return map(iterator, (item) => {
+    return Object.values(iterator).map((item) => {
       // Inject item
       clonedProps.item = item;
       filler.setProps(clonedProps);
