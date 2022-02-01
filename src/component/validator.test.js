@@ -1,5 +1,5 @@
 import Validator from './validator';
-import get from 'lodash/get';
+import utils from '../utils/utils';
 
 it('should fill props', () => {
   let validator = new Validator({
@@ -83,7 +83,7 @@ class ArrayGetter {
   }
 
   get(name) {
-    return get(this.props, name);
+    return utils.get(this.props, name);
   }
 }
 

@@ -1,4 +1,3 @@
-import forEach from 'lodash/forEach';
 import PropertyNotDefinedError from './property-not-defined-error';
 import utils from '../utils/utils';
 
@@ -7,7 +6,7 @@ export const queryToPropNames = (query, names, parentName) => {
     if (Array.isArray(query)) {
       query.forEach((item) => queryToPropNames(item, names, parentName));
     } else {
-      forEach(query, (item, name) => {
+      Object.entries(query).forEach(([name, item]) => {
         let itemParentName = parentName;
 
         // Not operator? TODO: actually check operators so that we support variables that begin with
@@ -50,7 +49,7 @@ const queryToProps = (query, component) => {
 
   queryToPropNames(query, names);
 
-  forEach(names, (value, name) => {
+  Object.keys(names).forEach((name) => {
     try {
       utils.set(props, name, component.get(name));
     } catch (err) {
