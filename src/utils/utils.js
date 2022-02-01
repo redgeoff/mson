@@ -276,6 +276,14 @@ export class Utils {
   isEqual(value, other) {
     return JSON.stringify(value) === JSON.stringify(other);
   }
+
+  // Credit: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_isempty
+  isEmpty(obj) {
+    return (
+      [Object, Array].includes((obj || {}).constructor) &&
+      !Object.entries(obj || {}).length
+    );
+  }
 }
 
 export default new Utils();
