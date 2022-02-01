@@ -195,3 +195,34 @@ it('should orderBy', () => {
   // Ensure original users are not mutated
   expect(users).toEqual(clonedUsers);
 });
+
+it('should set', () => {
+  const a = {};
+  const a1 = utils.set(a, 'foo', 'bar');
+  expect(a).toEqual({ foo: 'bar' });
+  expect(a1).toEqual({ foo: 'bar' });
+
+  const b = [];
+  utils.set(b, 0, 'bar');
+  expect(b).toEqual(['bar']);
+
+  const c = null;
+  utils.set(c, 'foo', 'bar');
+  expect(c).toEqual(null);
+
+  const d = { foo: { bar: 1 } };
+  utils.set(d, 'foo.bar', 2);
+  expect(d).toEqual({ foo: { bar: 2 } });
+
+  const e = {};
+  utils.set(e, 'foo.bar', 'yar');
+  expect(e).toEqual({ foo: { bar: 'yar' } });
+
+  const f = {};
+  utils.set(f, null, 'yar');
+  expect(f).toEqual({ null: 'yar' });
+
+  const g = {};
+  utils.set(g, undefined, 'yar');
+  expect(g).toEqual({ undefined: 'yar' });
+});

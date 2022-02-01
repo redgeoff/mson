@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-
 export class Utils {
   constructor() {
     // For mocking
@@ -245,6 +244,33 @@ export class Utils {
   orderBy(items, iteratees, orders) {
     // Use concat to copy the array so that we don't mutate the original
     return items.concat().sort(this._orderBySorter(iteratees, orders));
+  }
+
+  set(obj, path, value) {
+    if (obj === null || obj === undefined) {
+      return obj;
+    }
+
+    const keys = path ? path.split('.') : [path];
+    let curObj = obj;
+
+    // Loop for all keys, except the last one
+    for (let i = 0; i < keys.length - 1; i++) {
+      const key = keys[i];
+
+      // The key is not present in the object so create a placeholder object
+      if (curObj[key] === undefined) {
+        curObj[key] = {};
+      }
+
+      // Point to latest key
+      curObj = curObj[key];
+    }
+
+    // Set the value for the last key
+    curObj[keys[keys.length - 1]] = value;
+
+    return obj;
   }
 }
 
