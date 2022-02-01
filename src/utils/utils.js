@@ -272,6 +272,10 @@ export class Utils {
 
     return obj;
   }
+
+  isEqual(value, other) {
+    return JSON.stringify(value) === JSON.stringify(other);
+  }
 }
 
 export default new Utils();

@@ -1,5 +1,5 @@
 import { cloneDeep } from './utils/deep-clone';
-import isEqual from 'lodash/isEqual';
+import utils from './utils/utils';
 
 // TODO: improve the loading when scrolling up so that the user can "jump" to previous pages.
 // Currently, when we scroll up the pages are loaded in reverse order, which means that it can take
@@ -226,7 +226,7 @@ export default class InfiniteLoader {
     }
 
     // Props changing? Debounce duplicates
-    if (!isEqual(props, this._lastGetAllProps)) {
+    if (!utils.isEqual(props, this._lastGetAllProps)) {
       this._onSetIsLoading(true);
       this._lastGetAllProps = cloneDeep(props);
       const records = await this._onGetAll(props);
