@@ -1,9 +1,9 @@
 import Store from './store';
 import StoreMapa from './store-mapa';
 import { cloneDeep, cloneDeepWith } from '../utils/deep-clone';
-import orderBy from 'lodash/orderBy';
 import { filter } from '../compiler/query';
 import { Reorder } from './reorder';
+import utils from '../utils/utils';
 
 export default class MemoryStore extends Store {
   className = 'MemoryStore';
@@ -96,7 +96,7 @@ export default class MemoryStore extends Store {
         names.push('node.' + order[0]);
         orders.push(order[1].toLowerCase());
       });
-      docs.edges = orderBy(docs.edges, names, orders);
+      docs.edges = utils.orderBy(docs.edges, names, orders);
     }
 
     return docs;
