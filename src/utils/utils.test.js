@@ -226,3 +226,10 @@ it('should set', () => {
   utils.set(g, undefined, 'yar');
   expect(g).toEqual({ undefined: 'yar' });
 });
+
+it('isEmpty should identify empty objects', () => {
+  expect(utils.isEmpty({})).toEqual(true);
+  expect(utils.isEmpty([])).toEqual(true);
+  expect(utils.isEmpty(null)).toEqual(true);
+  expect(utils.isEmpty(undefined)).toEqual(true);
+});

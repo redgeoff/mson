@@ -1,6 +1,5 @@
 import Field from './field';
 import Mapa from '../mapa';
-import isEmpty from 'lodash/isEmpty';
 import utils from '../utils/utils';
 
 export default class CompositeField extends Field {
@@ -68,7 +67,7 @@ export default class CompositeField extends Field {
     } else {
       clonedValue[field.get('name')] = value;
     }
-    this.setValue(isEmpty(clonedValue) ? null : clonedValue);
+    this.setValue(utils.isEmpty(clonedValue) ? null : clonedValue);
   }
 
   _listenForChangesToField(field) {
@@ -118,7 +117,7 @@ export default class CompositeField extends Field {
       propsToSet = props;
     }
 
-    if (!isEmpty(propsToSet)) {
+    if (!utils.isEmpty(propsToSet)) {
       this.eachField((field) => field.set(propsToSet));
     }
   }
