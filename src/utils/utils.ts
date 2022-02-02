@@ -28,7 +28,7 @@ export type OnItem<T, U> = (
 ) => boolean | U | void;
 
 export class Utils {
-  private _global;
+  protected _global;
 
   constructor() {
     // For mocking
@@ -137,7 +137,7 @@ export class Utils {
     return names;
   }
 
-  combineWheres(...wheres: RawObject[]) {
+  combineWheres(...wheres: (RawObject | null)[]) {
     const and: RawObject[] = [];
 
     wheres.forEach((where) => {
@@ -242,7 +242,7 @@ export class Utils {
   // Note: only use this if you need to exit the loop prematurely by having onItem() return false;
   // or if obj may be falsy. Otherwise, just use Object.entries(), Object.keys(), or
   // Object.values().
-  each<T, U>(obj: object, onItem: OnItem<T, U>) {
+  each<T, U>(obj: object | undefined | null, onItem: OnItem<T, U>) {
     if (obj !== undefined && obj !== null) {
       const entries = Object.entries(obj);
       for (let i = 0; i < entries.length; i++) {
@@ -276,7 +276,7 @@ export class Utils {
   }
 
   // Source: https://stackoverflow.com/a/30446887/2831606
-  _orderBySorter<T>(iteratees: string[], orders: string[]) {
+  _orderBySorter<T>(iteratees: string[], orders?: string[]) {
     return (a: T, b: T) =>
       iteratees
         .map((i, j) => {
@@ -289,17 +289,17 @@ export class Utils {
         .reduce((p, n) => (p ? p : n), 0);
   }
 
-  orderBy<T>(items: T[], iteratees: string[], orders: string[]) {
+  orderBy<T>(items: T[], iteratees: string[], orders?: string[]) {
     // Use concat to copy the array so that we don't mutate the original
     return items.concat().sort(this._orderBySorter(iteratees, orders));
   }
 
-  set<T>(obj: object, path: string, value: T) {
+  set<T>(obj: object | null | undefined, path: string | number, value: T) {
     if (obj === null || obj === undefined) {
       return obj;
     }
 
-    const keys = path ? path.split('.') : [path];
+    const keys = path && typeof path === 'string' ? path.split('.') : [path];
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let curObj: any = obj;
