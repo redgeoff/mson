@@ -1,22 +1,60 @@
 import { v4 as uuidv4 } from 'uuid';
+import { EventEmitter } from 'events';
+
+type ReduceIterator<T, TResult, TList> = (
+  prev: TResult,
+  curr: T,
+  index: number | string,
+  list?: TList
+) => TResult;
+
+type SequentialIterator<T, TResult> = (
+  curr: T,
+  index: number | string
+) => TResult;
+
+// Source: mingo
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Record<K extends keyof any, T> = {
+  [P in K]: T;
+};
+type AnyVal = unknown;
+type RawObject = Record<string, AnyVal>;
+
+export type OnItem<T, U> = (
+  value?: T,
+  key?: string | number,
+  last?: boolean
+) => boolean | U | void;
+
 export class Utils {
+  private _global;
+
   constructor() {
     // For mocking
     this._global = global;
   }
 
-  _reduce(collection, callback, accumulator) {
+  _reduce<T, TResult>(
+    collection: T[],
+    callback: ReduceIterator<T, TResult, T[]>,
+    accumulator: TResult
+  ) {
     if (Array.isArray(collection)) {
       return collection.reduce(callback, accumulator);
     } else {
-      return Object.entries(collection).reduce((previousValue, [key, item]) => {
-        return callback(previousValue, item, key);
-      }, accumulator);
+      return Object.entries<T>(collection).reduce(
+        (previousValue, [key, item]) => callback(previousValue, item, key),
+        accumulator
+      );
     }
   }
 
-  async sequential(items, onItem) {
-    const values = [];
+  async sequential<T, TResult>(
+    items: T[],
+    onItem: SequentialIterator<T, TResult>
+  ) {
+    const values: Awaited<TResult>[] = [];
     await this._reduce(
       items,
       async (promise, item, key) => {
@@ -31,13 +69,14 @@ export class Utils {
     return values;
   }
 
-  _isObject(item) {
+  _isObject(item: object) {
     return item && typeof item === 'object' && !Array.isArray(item);
   }
 
-  // Credit: https://stackoverflow.com/a/48218209/2831606
-  merge(...objects) {
-    return objects.reduce((prev, obj) => {
+  // Source: https://stackoverflow.com/a/48218209/2831606
+  merge(...objects: object[]) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return objects.reduce((prev: any, obj: any) => {
       if (obj !== undefined) {
         Object.keys(obj).forEach((key) => {
           const pVal = prev[key];
@@ -62,40 +101,44 @@ export class Utils {
   }
 
   // Source: https://stackoverflow.com/a/40577337/2831606
-  getAllMethodNames(obj) {
-    const methods = [];
+  getAllMethodNames(obj: object) {
+    const names: (string | symbol)[] = [];
+
+    let o: object | null = obj;
 
     // Note: this silly function is needed to prevent eslint from complaining about "Function
     // declared in a loop contains unsafe references to variable(s)"
-    const fun = (obj) => {
-      return (k) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const fun = (o: any) => {
+      return (k: string | symbol) => {
         // Prevent considering things like symbols
-        if (typeof obj[k] === 'function') {
-          methods.push(k);
+        if (typeof o[k] === 'function') {
+          names.push(k);
         }
       };
     };
 
-    while ((obj = Reflect.getPrototypeOf(obj))) {
-      const keys = Reflect.ownKeys(obj);
-      keys.forEach(fun(obj));
+    while ((o = Reflect.getPrototypeOf(o))) {
+      const keys = Reflect.ownKeys(o);
+      keys.forEach(fun(o));
     }
-    return methods;
+    return names;
   }
 
-  getAllFunctionNames(obj) {
-    const methods = [];
+  getAllFunctionNames(obj: object) {
+    const names: (string | symbol)[] = [];
+
     Object.entries(obj).forEach(([name, property]) => {
       if (typeof property === 'function') {
-        methods.push(name);
+        names.push(name);
       }
     });
 
-    return methods;
+    return names;
   }
 
-  combineWheres(...wheres) {
-    const and = [];
+  combineWheres(...wheres: RawObject[]) {
+    const and: RawObject[] = [];
 
     wheres.forEach((where) => {
       if (where) {
@@ -112,7 +155,7 @@ export class Utils {
     }
   }
 
-  toWhereFromSearchString(attributes, string) {
+  toWhereFromSearchString(attributes: string[], string: string) {
     const trimmed = string.trim();
 
     // Empty?
@@ -122,10 +165,10 @@ export class Utils {
 
     const words = trimmed.split(/ +/);
 
-    const ands = [];
+    const ands: RawObject[] = [];
 
     words.forEach((word) => {
-      const ors = [];
+      const ors: RawObject[] = [];
       attributes.forEach((attr) => {
         ors.push({
           [attr]: {
@@ -148,32 +191,35 @@ export class Utils {
     return uuidv4();
   }
 
-  once(emitter, evnt) {
+  once(emitter: EventEmitter, evnt: string | symbol) {
     return new Promise(function (resolve) {
-      emitter.once(evnt, function () {
-        resolve(arguments);
+      emitter.once(evnt, function (...args) {
+        resolve(args);
       });
     });
   }
 
-  isRegExpString(string) {
+  isRegExpString(string: string) {
     return new RegExp('^/(.*)/(.*)$').test(string);
   }
 
-  stringToRegExp(string) {
+  stringToRegExp(string: string) {
     // JSON doesn't support RegExp types so convert string representations to RegExp, including
     // flags
     const match = string.match(new RegExp('^/(.*)/(.*)$'));
+    if (match === null) {
+      throw new Error('string must in the form "/.*/.*"');
+    }
     return new RegExp(match[1], match[2]);
   }
 
-  toRegExp(item) {
+  toRegExp(item: RegExp | string) {
     return item instanceof RegExp ? item : this.stringToRegExp(item);
   }
 
-  toSingular(plural) {
+  toSingular(plural: string) {
     // Automatically calculate singular label by removing last 's'
-    return plural.substr(0, plural.length - 1);
+    return plural.substring(0, plural.length - 1);
   }
 
   // synchronize(synchronizer, promiseFactory) {
@@ -184,8 +230,8 @@ export class Utils {
   //   return promise;
   // }
 
-  // Credit: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_difference
-  difference(a, b) {
+  // Source: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_difference
+  difference<T>(a: T[], b: T[]) {
     if (b === undefined) {
       return a;
     } else {
@@ -196,7 +242,7 @@ export class Utils {
   // Note: only use this if you need to exit the loop prematurely by having onItem() return false;
   // or if obj may be falsy. Otherwise, just use Object.entries(), Object.keys(), or
   // Object.values().
-  each(obj, onItem) {
+  each<T, U>(obj: object, onItem: OnItem<T, U>) {
     if (obj !== undefined && obj !== null) {
       const entries = Object.entries(obj);
       for (let i = 0; i < entries.length; i++) {
@@ -210,26 +256,28 @@ export class Utils {
   }
 
   // Source: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_get
-  get(obj, path, defaultValue = undefined) {
-    const travel = (regexp) =>
+  get<T>(obj: T, path: string, defaultValue = undefined) {
+    const travel = (regExp: RegExp) =>
       String.prototype.split
-        .call(path, regexp)
+        .call(path, regExp)
         .filter(Boolean)
         .reduce(
-          (res, key) => (res !== null && res !== undefined ? res[key] : res),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (res: any, key) =>
+            res !== null && res !== undefined ? res[key] : res,
           obj
         );
     const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/);
     return result === undefined || result === obj ? defaultValue : result;
   }
 
-  clone(obj) {
+  clone(obj: object) {
     return JSON.parse(JSON.stringify(obj));
   }
 
-  // Credit: https://stackoverflow.com/a/30446887/2831606
-  _orderBySorter(iteratees, orders) {
-    return (a, b) =>
+  // Source: https://stackoverflow.com/a/30446887/2831606
+  _orderBySorter<T>(iteratees: string[], orders: string[]) {
+    return (a: T, b: T) =>
       iteratees
         .map((i, j) => {
           const o = orders?.[j];
@@ -241,18 +289,20 @@ export class Utils {
         .reduce((p, n) => (p ? p : n), 0);
   }
 
-  orderBy(items, iteratees, orders) {
+  orderBy<T>(items: T[], iteratees: string[], orders: string[]) {
     // Use concat to copy the array so that we don't mutate the original
     return items.concat().sort(this._orderBySorter(iteratees, orders));
   }
 
-  set(obj, path, value) {
+  set<T>(obj: object, path: string, value: T) {
     if (obj === null || obj === undefined) {
       return obj;
     }
 
     const keys = path ? path.split('.') : [path];
-    let curObj = obj;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let curObj: any = obj;
 
     // Loop for all keys, except the last one
     for (let i = 0; i < keys.length - 1; i++) {
@@ -273,12 +323,13 @@ export class Utils {
     return obj;
   }
 
-  isEqual(value, other) {
+  isEqual(value: object, other: object) {
     return JSON.stringify(value) === JSON.stringify(other);
   }
 
-  // Credit: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_isempty
-  isEmpty(obj) {
+  // Source: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_isempty
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  isEmpty(obj: any) {
     return (
       [Object, Array].includes((obj || {}).constructor) &&
       !Object.entries(obj || {}).length
