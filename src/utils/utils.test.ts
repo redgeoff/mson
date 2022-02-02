@@ -2,12 +2,12 @@ import utils, { Utils } from './utils';
 import testUtils from '../utils/test-utils';
 
 it('should execute promises sequentially', async () => {
-  let sleeps = [1000, 100, 10];
-  let observed = [];
+  const sleeps = [1000, 100, 10];
+  const observed: number[] = [];
 
   let i = 0;
 
-  const snooze = async (ms) => {
+  const snooze = async (ms: number) => {
     await testUtils.timeout(ms);
     observed.push(ms);
     return i++ === 1 ? undefined : ms;
@@ -76,15 +76,20 @@ it('should create where from search string', () => {
 });
 
 it('should detect if in browser', () => {
-  const utils = new Utils();
+  class TestUtils extends Utils {
+    setGlobal(global: typeof globalThis) {
+      this._global = global;
+    }
+  }
 
-  utils._global = {
+  const utils = new TestUtils();
+  utils.setGlobal({
     window: true,
-  };
+  } as unknown as typeof globalThis);
 
   expect(utils.inBrowser()).toEqual(true);
 
-  delete utils._global.window;
+  utils.setGlobal({} as unknown as typeof globalThis);
   expect(utils.inBrowser()).toEqual(false);
 });
 
@@ -140,7 +145,7 @@ it('should orderBy', () => {
   const barney34 = { user: 'barney', age: 34 };
   const fred40 = { user: 'fred', age: 40 };
   const barney36 = { user: 'barney', age: 36 };
-  var users = [fred48, barney34, fred40, barney36];
+  const users = [fred48, barney34, fred40, barney36];
   const clonedUsers = utils.clone(users);
 
   expect(utils.orderBy(users, ['user'])).toEqual([
@@ -202,7 +207,7 @@ it('should set', () => {
   expect(a).toEqual({ foo: 'bar' });
   expect(a1).toEqual({ foo: 'bar' });
 
-  const b = [];
+  const b: string[] = [];
   utils.set(b, 0, 'bar');
   expect(b).toEqual(['bar']);
 
@@ -217,14 +222,6 @@ it('should set', () => {
   const e = {};
   utils.set(e, 'foo.bar', 'yar');
   expect(e).toEqual({ foo: { bar: 'yar' } });
-
-  const f = {};
-  utils.set(f, null, 'yar');
-  expect(f).toEqual({ null: 'yar' });
-
-  const g = {};
-  utils.set(g, undefined, 'yar');
-  expect(g).toEqual({ undefined: 'yar' });
 });
 
 it('isEmpty should identify empty objects', () => {

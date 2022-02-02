@@ -37,13 +37,13 @@ class TestUtils {
 
   // TODO: refactor to use await/async
   waitFor(poll, maxSleep, sleepMs) {
-    var totalSleep = 0;
+    let totalSleep = 0;
 
     maxSleep = maxSleep ? maxSleep : 5000;
     sleepMs = sleepMs ? sleepMs : 100;
 
     return new Promise(function (resolve, reject) {
-      var waitFor = function () {
+      let waitFor = function () {
         // Wrap in promise so that waitMore doesn't have to be a promise
         return Promise.resolve()
           .then(function () {

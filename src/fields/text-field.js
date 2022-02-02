@@ -170,7 +170,7 @@ export default class TextField extends Field {
   }
 
   _conformToMask(value, mask) {
-    var conformed = conformToMask(value, mask, {
+    let conformed = conformToMask(value, mask, {
       guide: false,
     });
     return conformed.conformedValue;
