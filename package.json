@@ -9,7 +9,7 @@
     "country-telephone-data": "^0.6.3",
     "date-fns": "^2.15.0",
     "events": "^3.2.0",
-    "mingo": "^5.0.0",
+    "mingo": "^6.0.1",
     "text-mask-addons": "^3.8.0",
     "uuid": "^8.3.2",
     "vanilla-text-mask": "^5.1.1"
