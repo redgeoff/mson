@@ -233,3 +233,9 @@ it('isEmpty should identify empty objects', () => {
   expect(utils.isEmpty(null)).toEqual(true);
   expect(utils.isEmpty(undefined)).toEqual(true);
 });
+
+it('stringToRegExp should convert to reg exp', () => {
+  expect(utils.stringToRegExp('/[A-Z]/i')).toEqual(RegExp('[A-Z]', 'i'));
+  expect(utils.stringToRegExp('/\\w/')).toEqual(RegExp('\\w'));
+  expect(() => utils.stringToRegExp('a')).toThrow('string must in the form');
+});
