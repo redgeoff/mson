@@ -1,4 +1,10 @@
-import BaseComponent from './base-component';
+import BaseComponent, {
+  Value,
+  BaseProps,
+  PropName,
+  Layer,
+  ComponentType,
+} from './base-component';
 import Action from '../actions/action';
 import testUtils from '../utils/test-utils';
 import Form from '../form';
@@ -8,12 +14,20 @@ import Set from '../actions/set';
 import Emit from '../actions/emit';
 import MemoryStore from '../stores/memory-store';
 import { PersonFullNameField } from '../fields';
+import { RegistrarType } from '../compiler/registrar';
 
-class Song extends BaseComponent {
-  create(props) {
+interface SongProps extends BaseProps {
+  song?: string;
+  artist?: string;
+  store?: ComponentType;
+}
+class Song extends BaseComponent<SongProps> {
+  nameSpy: Value;
+
+  create(props: SongProps) {
     super.create(props);
 
-    this._nameSpy = this.get('name');
+    this.nameSpy = this.get('name');
 
     this.set({
       schema: {
@@ -27,24 +41,76 @@ class Song extends BaseComponent {
             name: 'artist',
             component: 'TextField',
           },
+          {
+            name: 'store',
+            component: 'Field',
+          },
         ],
       },
     });
   }
+
+  setRegistrar(registrar: RegistrarType) {
+    this._registrar = registrar;
+  }
+
+  onDetachedActionErr(err: Error) {
+    this._onDetachedActionErr(err);
+  }
+
+  localLayer: Layer = null;
+
+  protected _getLayer() {
+    if (this.localLayer === undefined) {
+      return super._getLayer();
+    } else {
+      return this.localLayer;
+    }
+  }
+
+  cloneSlow() {
+    return this._cloneSlow();
+  }
+
+  _listenToSubEvent(event: PropName) {
+    super._listenToSubEvent(event);
+  }
+
+  listenIfNewSubEvent(event: PropName) {
+    this._listenIfNewSubEvent(event);
+  }
+
+  _shouldThrowActionErrors() {
+    return super._shouldThrowActionErrors();
+  }
+
+  _onActionErr(err: Error) {
+    super._onActionErr(err);
+  }
+
+  _runListenersAndEmitError(event: PropName, value: Value) {
+    return super._runListenersAndEmitError(event, value);
+  }
+}
+
+// TODO: Move to action.ts
+interface ActionProps extends BaseProps {
+  event: PropName;
 }
 
 class SongAction extends Action {
-  acts = [];
+  acts: { event: PropName }[] = [];
+  throwErr: Error | undefined = undefined;
 
-  async act(props) {
+  async act(props: ActionProps) {
     // Wait until next tick
     await testUtils.timeout();
     this.acts.push({
       event: props.event,
     });
 
-    if (this._throwErr) {
-      throw this._throwErr;
+    if (this.throwErr) {
+      throw this.throwErr;
     }
 
     return 'play';
@@ -58,6 +124,7 @@ it('should get', () => {
   expect(song.get('song')).toEqual("It Don't Mean a Thing");
   expect(song.get(['song'])).toEqual({ song: "It Don't Mean a Thing" });
   expect(song.get(['song', 'artist'])).toEqual(obj);
+  expect(song.get().artist).toEqual(obj.artist);
   const values = song.get();
   expect(values.song).toEqual(obj.song);
   expect(values.artist).toEqual(obj.artist);
@@ -65,7 +132,7 @@ it('should get', () => {
 
 it('should set name before creating', () => {
   const song = new Song({ name: 'Thriller' });
-  expect(song._nameSpy).toEqual('Thriller');
+  expect(song.nameSpy).toEqual('Thriller');
 });
 
 it('should execute listeners', async () => {
@@ -141,7 +208,7 @@ it('should run listeners when there are none', async () => {
 
 it('should emit errors for detached actions', async () => {
   const action = new SongAction({ detached: true });
-  action._throwErr = new Error();
+  action.throwErr = new Error();
 
   const song = new Song({
     listeners: [
@@ -156,21 +223,22 @@ it('should emit errors for detached actions', async () => {
 
   await song.runListeners('artist');
 
-  const results = await errThrown;
-  expect(results[0]).toEqual(action._throwErr);
+  const results = (await errThrown) as Error[];
+  expect(results[0]).toEqual(action.throwErr);
 });
 
 it('should log errors when action is detached', () => {
   const song = new Song();
-  song._registrar = {
+  const registrar = {
     log: {
       error: () => {},
     },
   };
-  const logSpy = jest.spyOn(song._registrar.log, 'error');
+  song.setRegistrar(registrar);
+  const logSpy = jest.spyOn(registrar.log, 'error');
   const err = new Error();
 
-  song._onDetachedActionErr(err);
+  song.onDetachedActionErr(err);
   expect(logSpy).toHaveBeenCalledWith(err);
 });
 
@@ -292,7 +360,7 @@ it('should filter listeners based on layer', async () => {
   });
 
   // Simulate no layer
-  song._getLayer = () => null;
+  song.localLayer = null;
 
   await song.runListeners('song');
   expect(action1.acts).toHaveLength(1);
@@ -304,7 +372,7 @@ it('should filter listeners based on layer', async () => {
   action3.acts = [];
 
   // Simulate frontEnd layer
-  song._getLayer = () => 'frontEnd';
+  song.localLayer = 'frontEnd';
 
   await song.runListeners('song');
   expect(action1.acts).toHaveLength(0);
@@ -322,7 +390,7 @@ it('should set layer', () => {
 
 it('set should throw error if props is not an object', () => {
   const song = new Song();
-  expect(() => song.set('foo')).toThrow();
+  expect(() => song.set('foo' as BaseProps)).toThrow();
 });
 
 it('should set unique keys', () => {
@@ -362,9 +430,9 @@ it('should clone', () => {
 });
 
 it('cloneSlow should shallow clone parent', () => {
-  const parent = new BaseComponent();
-  const component = new BaseComponent({ parent });
-  const clonedComponent = component._cloneSlow();
+  const parent = new Song();
+  const component = new Song({ parent });
+  const clonedComponent = component.cloneSlow();
   expect(clonedComponent.get('parent')).toEqual(parent);
 });
 
@@ -433,13 +501,19 @@ it('should set with dot notation', () => {
   );
 });
 
+class TestForm extends Form {
+  getSubProperty(name: PropName, end?: number) {
+    return this._getSubProperty(name, end);
+  }
+}
+
 it('should get with dot notation', () => {
   const fullName = {
     firstName: 'Tom',
     lastName: 'Petty',
   };
 
-  const form = new Form({
+  const form = new TestForm({
     schema: {
       component: 'Form',
       fields: [
@@ -487,16 +561,16 @@ it('should get with dot notation', () => {
   expect(form.get('person.fullName')).toEqual(fullName);
   expect(form.get('person.fullName.firstName')).toEqual(fullName.firstName);
 
-  expect(() => form._getSubProperty('person.missing', 2)).toThrow(
+  expect(() => form.getSubProperty('person.missing', 2)).toThrow(
     'person.missing not found'
   );
 });
 
 it('set should throw if property not defined', () => {
   const component = new BaseComponent();
-  expect(() => component.set({ undefinedProperty: 'foo' })).toThrow(
-    'Component: undefinedProperty not defined'
-  );
+  expect(() =>
+    component.set({ undefinedProperty: 'foo' } as BaseProps)
+  ).toThrow('Component: undefinedProperty not defined');
 });
 
 it('get should throw if property not defined', () => {
@@ -582,34 +656,21 @@ it('should listen to sub events on property', async () => {
 });
 
 it('should not duplicate sub event listeners', () => {
-  const component = new BaseComponent({
-    schema: {
-      component: 'Form',
-      fields: [
-        {
-          name: 'store',
-          component: 'Field',
-        },
-      ],
-    },
-    store: new MemoryStore(),
-  });
+  const component = new Song({ store: new MemoryStore() });
   const listenToSubEventSpy = jest.spyOn(component, '_listenToSubEvent');
 
-  component._listenIfNewSubEvent('store.updateDoc');
+  component.listenIfNewSubEvent('store.updateDoc');
   expect(listenToSubEventSpy).toHaveBeenCalledWith('store.updateDoc');
 
-  component._listenIfNewSubEvent('store.updateDoc');
+  component.listenIfNewSubEvent('store.updateDoc');
   expect(listenToSubEventSpy).toHaveBeenCalledTimes(1);
 });
 
 it('should emit error when running listeners', async () => {
-  const component = new BaseComponent();
+  const component = new Song();
 
   // Sanity check for the test coverage
-  expect(component._shouldThrowActionErrors()).toEqual(
-    BaseComponent._throwActionErrors
-  );
+  component._shouldThrowActionErrors();
 
   // Mock so that our test ignores the value of BaseComponent._throwActionErrors
   jest
@@ -624,7 +685,9 @@ it('should emit error when running listeners', async () => {
 
   const onActionErrSpy = jest.spyOn(component, '_onActionErr');
 
-  await expect(component._runListenersAndEmitError()).rejects.toThrowError(err);
+  await expect(() =>
+    component._runListenersAndEmitError('foo', 'bar')
+  ).rejects.toThrowError(err);
   expect(onActionErrSpy).toHaveBeenCalledWith(err);
 
   // Now expect not to throw
@@ -632,7 +695,7 @@ it('should emit error when running listeners', async () => {
     .spyOn(component, '_shouldThrowActionErrors')
     .mockImplementation(() => false);
   onActionErrSpy.mockReset();
-  await component._runListenersAndEmitError();
+  await component._runListenersAndEmitError('foo', 'bar');
   expect(onActionErrSpy).toHaveBeenCalledWith(err);
 });
 
