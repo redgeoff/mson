@@ -124,7 +124,6 @@ it('should convert to RegExp', () => {
 
 it('difference should subtract arrays', () => {
   expect(utils.difference(['a', 'b'], ['a'])).toEqual(['b']);
-  expect(utils.difference(['a'], Object.keys({}))).toEqual(['a']);
 });
 
 it('each should handle falsy values', () => {
