@@ -1,6 +1,6 @@
 export default class PropertyNotDefinedError extends Error {
-  constructor(...params) {
-    super(...params);
+  constructor(message?: string) {
+    super(message);
     this.name = 'PropertyNotDefinedError';
   }
 }
