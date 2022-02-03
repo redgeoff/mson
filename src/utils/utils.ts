@@ -232,11 +232,7 @@ export class Utils {
 
   // Source: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_difference
   difference<T>(a: T[], b: T[]) {
-    if (b === undefined) {
-      return a;
-    } else {
-      return [a, b].reduce((a, b) => a.filter((c) => !b.includes(c)));
-    }
+    return [a, b].reduce((a, b) => a.filter((c) => !b.includes(c)));
   }
 
   // Note: only use this if you need to exit the loop prematurely by having onItem() return false;

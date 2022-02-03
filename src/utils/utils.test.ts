@@ -122,6 +122,10 @@ it('should convert to RegExp', () => {
   expect(utils.isRegExpString('(')).toEqual(false);
 });
 
+it('difference should subtract arrays', () => {
+  expect(utils.difference(['a', 'b'], ['a'])).toEqual(['b']);
+});
+
 it('each should handle falsy values', () => {
   const onItem = jest.fn();
 
