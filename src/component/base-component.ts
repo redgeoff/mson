@@ -1,9 +1,63 @@
-import events from 'events';
+import { EventEmitter } from 'events';
 import registrar from '../compiler/registrar';
 import utils from '../utils/utils';
 import { cloneDeepWith } from '../utils/deep-clone';
 import Mapa from '../mapa';
 import PropertyNotDefinedError from './property-not-defined-error';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Value = any;
+
+type PropCollection = {
+  [key: string]: Value;
+};
+
+type IndexedNames = {
+  [key: string]: boolean;
+};
+
+enum DocLevel {
+  'basic',
+  'advanced',
+}
+
+// TODO: need to properly define
+type ListenerType = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+type ComponentType = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+type FieldType = ComponentType;
+type FormType = ComponentType;
+type ActionType = ComponentType;
+type Context = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+type Compiler = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+type Registrar = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+type Log = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+type UncompiledComponentType = object;
+
+interface Props {
+  name?: string;
+  listeners?: ListenerType[];
+  schema?: FormType;
+  isStore?: boolean;
+  backEndOnly?: boolean;
+  parent?: ComponentType;
+  muteCreate?: boolean;
+  disableSubEvents?: boolean;
+  docLevel?: DocLevel;
+  didCreate?: boolean;
+}
+
+type PropName = string;
+
+enum Layers {
+  'backEnd',
+  'frontEnd',
+}
+
+type Layer = Layers | null;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ActionArguments = any;
 
 let nextKey = 0;
 const getNextKey = () => {
@@ -15,10 +69,23 @@ const getNextKey = () => {
 //   event listeners
 // - We attempted to require all access to all props via get() and set(), but this can cause
 //   infinite recursion, e.g. when a get() calls itself either directly or via some inherited logic.
-export default class BaseComponent extends events.EventEmitter {
+export default class BaseComponent extends EventEmitter {
   className = 'Component';
 
-  _getBaseComponentSchema() {
+  private _emittedCreate;
+  private _debugId!: number;
+  private _registrar;
+  private _props: PropCollection;
+  private _listenerEvents: IndexedNames;
+  private _subEvents: IndexedNames;
+  private _isLoaded;
+  private _resolveAfterCreate;
+  private _resolveAfterLoad;
+  private _propNames;
+  private _indexedPropNames: IndexedNames;
+  private _key!: number;
+
+  private _getBaseComponentSchema() {
     return {
       component: 'Form',
       fields: [
@@ -87,7 +154,7 @@ export default class BaseComponent extends events.EventEmitter {
     };
   }
 
-  _emitCreate() {
+  private _emitCreate() {
     // Due to a race condition, we may attempt to fire a duplicate 'create' event whenever we wrap a
     // component. Currently, the BaseComponent constructor fires 'create', which due to a race
     // condition, can be emitted on either the wrapping component or wrapped component. TODO: is
@@ -103,12 +170,12 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
-  _setDebugId() {
+  private _setDebugId() {
     // Used to identify instances when debugging
     this._debugId = Math.random();
   }
 
-  _emitCreateIfNotMuted() {
+  private _emitCreateIfNotMuted() {
     if (!this.get('muteCreate')) {
       // Execute on next tick so that there is time for any wrapping components to finish the
       // wrapping. This also gives the caller a chance to listen for the create event before it is
@@ -120,8 +187,8 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
-  constructor(props) {
-    super(props);
+  constructor(props?: Props) {
+    super();
 
     // For mocking
     this._registrar = registrar;
@@ -149,11 +216,13 @@ export default class BaseComponent extends events.EventEmitter {
 
     // We have to set the name before we create the component as the name is needed to create the
     // component, e.g. to create sub fields using the name as a prefix.
-    if (props && props.name !== undefined) {
+    if (props?.name !== undefined) {
       // Use setProperty so we don'trigger any events before creation
       this._setProperty('name', props.name);
     }
 
+    // If props is undefined, use an empty object so that derived create() and set() don't have to
+    // worry about undefined values
     this.create(props === undefined ? {} : props);
     this.set(props === undefined ? {} : props);
 
@@ -162,13 +231,13 @@ export default class BaseComponent extends events.EventEmitter {
     this._setKey();
   }
 
-  _setKey() {
+  private _setKey() {
     // Used to create a separate namespace/keyspace for components so that we can do things like
     // trigger a UI update in frameworks like React.
     this._key = getNextKey();
   }
 
-  create(props) {
+  create(props: Props) {
     // TODO: would it be better if the schema was loaded dynamically and on demand instead of
     // whenever the component is created? In some ways we already have this the schema exists as
     // simple objects until it instantiated. The problem with a lazy setting of the schema is how we
@@ -182,16 +251,16 @@ export default class BaseComponent extends events.EventEmitter {
     });
   }
 
-  emitChange(name, value) {
+  emitChange(name: PropName, value?: Value) {
     this.emit(name, value);
     this.emit('$change', name, value);
   }
 
-  _setProperty(name, value) {
+  protected _setProperty(name: PropName, value: Value) {
     this._props[name] = value;
   }
 
-  _setPropertyAndEmitChange(name, value) {
+  private _setPropertyAndEmitChange(name: PropName, value: Value) {
     // if (this._onWillSet) {
     //   this._onWillSet(name, value);
     // }
@@ -202,7 +271,7 @@ export default class BaseComponent extends events.EventEmitter {
     // }
   }
 
-  _setIfDifferent(name, value) {
+  private _setIfDifferent(name: PropName, value: Value) {
     // Is the value changing? Prevent emitting when the value doesn't change. Note: a previous
     // design treated undefined and null values as equals, but this had to be changed as otherwise
     // we have no construct for detecting when properties are omitted from a MSON definition.
@@ -211,29 +280,25 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
-  _push(name, value) {
-    let values = this._getProperty(name);
-    if (!Array.isArray(values)) {
-      values = [];
-    }
-    values.push(value);
-    this._set(name, values);
+  private _push(name: PropName, value: Value) {
+    const values = this._getProperty(name);
+    const arrayValues = Array.isArray(values) ? values : [];
+    arrayValues.push(value);
+    this._set(name, arrayValues);
   }
 
-  _concat(name, newValues) {
-    let values = this._getProperty(name);
-    if (!Array.isArray(values)) {
-      values = [];
-    }
-    values = values.concat(newValues);
-    this._set(name, values);
+  private _concat(name: PropName, newValues: Value[]) {
+    const values = this._getProperty(name);
+    let arrayValues = Array.isArray(values) ? values : [];
+    arrayValues = arrayValues.concat(newValues);
+    this._set(name, arrayValues);
   }
 
-  has(name) {
+  has(name: PropName) {
     return this._indexedPropNames[name] !== undefined;
   }
 
-  _throwIfNotDefined(name) {
+  private _throwIfNotDefined(name: PropName) {
     if (!this.has(name)) {
       throw new PropertyNotDefinedError(
         this.getClassName() + ': ' + name + ' not defined'
@@ -241,22 +306,25 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
-  _setIfPropDefined(name, value) {
+  private _setIfPropDefined(name: PropName, value: Value) {
     this._throwIfNotDefined(name);
     this._setIfDifferent(name, value);
   }
 
-  _throwPropertyNotFound(propertyNames) {
+  private _throwPropertyNotFound(propertyNames: PropName[]) {
     throw new PropertyNotDefinedError(propertyNames.join('.') + ' not found');
   }
 
-  isComponent(property) {
+  isComponent(property: Value) {
     return property instanceof BaseComponent || property instanceof Mapa;
   }
 
-  _getSubProperty(name, end) {
+  private _getSubProperty(
+    name: PropName,
+    end?: number
+  ): { property: Value; names: PropName[] } {
     const names = name.split('.');
-    let property = this;
+    let property: Value = this;
 
     if (end === undefined) {
       end = names.length;
@@ -290,7 +358,7 @@ export default class BaseComponent extends events.EventEmitter {
     };
   }
 
-  _set(name, value) {
+  private _set(name: PropName, value: Value) {
     // Most of the time, name will not be in dot notation so we want to do the quickest possible
     // check
     const hasDot = this._hasDot(name);
@@ -320,31 +388,31 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
-  _setIfDefined(name, value) {
+  protected _setIfDefined(name: PropName, value: Value) {
     if (value !== undefined) {
       this._set(name, value);
     }
   }
 
-  _setProps(props) {
+  private _setProps(props: PropCollection) {
     Object.entries(props).forEach(([name, value]) =>
       this._setIfDefined(name, value)
     );
   }
 
-  _setName(name) {
+  private _setName(name: PropName) {
     this._set('name', name);
   }
 
-  _setParent(parent) {
+  private _setParent(parent: ComponentType) {
     this._set('parent', parent);
   }
 
-  _setIsStore(isStore) {
+  private _setIsStore(isStore: boolean) {
     this._set('isStore', isStore);
   }
 
-  _setDefaults(props, values) {
+  protected _setDefaults(props: PropCollection, values: PropCollection) {
     Object.entries(values).forEach(([name, value]) => {
       if (props[name] === undefined) {
         this._set(name, value);
@@ -352,40 +420,40 @@ export default class BaseComponent extends events.EventEmitter {
     });
   }
 
-  _emitDidCreate() {
+  private _emitDidCreate() {
     this.set({ didCreate: true });
   }
 
-  _emitDidLoad() {
+  protected _emitDidLoad() {
     this.emitChange('didLoad');
     this._isLoaded = true;
   }
 
   // Note: the layer attribute cannot reside in Globals as Globals depends on component
-  static _layer = null;
+  private static _layer: Layer = null;
 
   static getLayer() {
-    return this.constructor._layer;
+    return BaseComponent._layer;
   }
 
-  static setLayer(layer) {
-    this.constructor._layer = layer;
+  static setLayer(layer: Layer) {
+    BaseComponent._layer = layer;
   }
 
   // For mocking
-  _getLayer() {
-    return this.constructor.getLayer();
+  protected _getLayer() {
+    return BaseComponent.getLayer();
   }
 
-  _hasListenerForEvent(event) {
+  private _hasListenerForEvent(event: PropName) {
     return !!this._listenerEvents[event];
   }
 
-  _hasDot(event) {
+  private _hasDot(event: PropName) {
     return event.indexOf('.') !== -1;
   }
 
-  _listenToSubEvent(event) {
+  protected _listenToSubEvent(event: PropName) {
     // Register sub event so that we don't have duplicate listeners
     this._subEvents[event] = true;
 
@@ -399,17 +467,17 @@ export default class BaseComponent extends events.EventEmitter {
     // take care of the response so that we can reuse the same logic for all listeners. TODO: when
     // is this listener destroyed? Do we need a destroy() function in each component that can
     // release this?
-    property.on(subEvent, (value) => this.emitChange(event, value));
+    property.on(subEvent, (value: Value) => this.emitChange(event, value));
   }
 
-  _listenIfNewSubEvent(event) {
+  protected _listenIfNewSubEvent(event: PropName) {
     // Check on _subEvents is done here to avoid race conditions
     if (this._subEvents[event] === undefined && !this.get('disableSubEvents')) {
       this._listenToSubEvent(event);
     }
   }
 
-  _listenIfSubEvent(event) {
+  private _listenIfSubEvent(event: PropName) {
     // New sub event?
     if (this._hasDot(event)) {
       // We wait until the create event has fired so that we can be sure that the initial properties
@@ -421,7 +489,7 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
-  _setListeners(listeners) {
+  private _setListeners(listeners: ListenerType[]) {
     // Listeners are concatentated that they can accumulate through the layers of inheritance. TODO:
     // do we need a construct to clear all previous listeners for an event?
     this._concat('listeners', listeners);
@@ -431,7 +499,7 @@ export default class BaseComponent extends events.EventEmitter {
         ? listener.event
         : [listener.event];
 
-      events.forEach((event) => {
+      events.forEach((event: PropName) => {
         this._listenIfSubEvent(event);
 
         // Register the event so that we can do a quick lookup later
@@ -440,7 +508,7 @@ export default class BaseComponent extends events.EventEmitter {
     });
   }
 
-  _emitAfterListenerEvents(event) {
+  private _emitAfterListenerEvents(event: PropName) {
     // Emit event after all actions for the following events so that we can guarantee that data has
     // been loaded.
     switch (event) {
@@ -455,7 +523,12 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
-  async _runAction(listener, action, event, args, context) {
+  private async _runAction(
+    action: ActionType,
+    event: PropName,
+    args: ActionArguments,
+    context: Context
+  ) {
     const layer = action.get('layer');
     if (!this._getLayer() || !layer || layer === this._getLayer()) {
       return action.run({
@@ -467,23 +540,25 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
-  _onActionErr(err) {
+  protected _onActionErr(err: Error) {
     // Provide a way to intercept errors from detached actions
     this.emitChange('actionErr', err);
   }
 
-  _onDetachedActionErr(err) {
-    if (this._registrar.log) {
-      this._registrar.log.error(err);
+  protected _onDetachedActionErr(err: Error) {
+    // TODO: refactor out introduce `Component.setDetachedActionErrListener()` instead
+    const log: Log = (this._registrar as Registrar).log;
+    if (log) {
+      log.error(err);
     }
 
     this._onActionErr(err);
   }
 
-  async runListeners(event, output, context) {
+  async runListeners(event: PropName, output: Value, context?: Context) {
     const listeners = this.get('listeners');
     if (listeners) {
-      for (let i in listeners) {
+      for (const i in listeners) {
         const listener = listeners[i];
 
         const events = Array.isArray(listener.event)
@@ -495,13 +570,7 @@ export default class BaseComponent extends events.EventEmitter {
           for (const i in listener.actions) {
             const action = listener.actions[i];
 
-            const runAction = this._runAction(
-              listener,
-              action,
-              event,
-              output,
-              context
-            );
+            const runAction = this._runAction(action, event, output, context);
 
             if (action.get('detached')) {
               // We don't wait for detached actions, but we want to log any errors
@@ -522,23 +591,23 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
-  static _throwActionErrors = false;
+  private static _throwActionErrors = false;
 
-  static setThrowActionErrors(throwErrs) {
-    this.constructor._throwActionErrors = throwErrs;
+  static setThrowActionErrors(throwErrs: boolean) {
+    BaseComponent._throwActionErrors = throwErrs;
   }
 
   // Provides a way of mocking for tests
-  _shouldThrowActionErrors() {
-    return this.constructor._throwActionErrors;
+  protected _shouldThrowActionErrors() {
+    return BaseComponent._throwActionErrors;
   }
 
-  async _runListenersAndEmitError(event, value) {
+  async _runListenersAndEmitError(event: PropName, value: Value) {
     try {
       await this.runListeners(event, value);
     } catch (err) {
       // Report error via the actionErr event
-      this._onActionErr(err);
+      this._onActionErr(err as Error);
 
       // Note: previous implementations used to throw the err here so that it was clear that
       // something went wrong even if the user is not listening to the action error. This however,
@@ -551,7 +620,7 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
-  _listenToAllChanges() {
+  private _listenToAllChanges() {
     this.on('$change', async (event, value) => {
       if (this._listenerEvents[event]) {
         await this._runListenersAndEmitError(event, value);
@@ -559,7 +628,7 @@ export default class BaseComponent extends events.EventEmitter {
     });
   }
 
-  _pushProp(name) {
+  private _pushProp(name: PropName) {
     // Is the prop missing? The prop may already exist if we are overloading the type in a dervied
     // component
     if (!this.has(name)) {
@@ -568,16 +637,18 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
-  _setSchema(schema) {
+  private _setSchema(schema: UncompiledComponentType | FormType) {
     // Schemas are pushed so that they can accumulate through the layers of inheritance
     this._push('schema', schema);
 
     // Push props so that we have a fast way of identifying the props for this component
     if (schema.fields) {
       // Uncompiled?
-      schema.fields.forEach((field) => this._pushProp(field.name));
+      schema.fields.forEach((field: { name: PropName }) =>
+        this._pushProp(field.name)
+      );
     } else if (schema.eachField) {
-      schema.eachField((field) => {
+      schema.eachField((field: FieldType) => {
         if (!schema.isDefaultField(field.get('name'))) {
           this._pushProp(field.get('name'));
         }
@@ -585,11 +656,11 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
-  _setMuteEvents(muteCreate) {
+  private _setMuteEvents(muteCreate: boolean) {
     this._set('muteCreate', muteCreate);
   }
 
-  set(props) {
+  set(props: Props) {
     if (typeof props !== 'object') {
       throw new Error('props must be an object');
     }
@@ -633,16 +704,16 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
-  _getProperty(name) {
+  protected _getProperty(name: PropName) {
     return this._props[name];
   }
 
-  _getIfDefined(name) {
+  private _getIfDefined(name: PropName) {
     this._throwIfNotDefined(name);
     return this._getProperty(name);
   }
 
-  _get(name) {
+  private _get(name: PropName) {
     if (this._hasDot(name)) {
       // Using dot notation
       const { property } = this._getSubProperty(name);
@@ -653,11 +724,11 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
-  getOne(name) {
+  getOne(name: PropName) {
     return this._get(name);
   }
 
-  get(names) {
+  get(names: PropName[] | PropName) {
     if (!names) {
       // Get a list of all the property names
       names = this._propNames;
@@ -665,7 +736,7 @@ export default class BaseComponent extends events.EventEmitter {
 
     if (Array.isArray(names)) {
       // Get multiple props
-      let values = {};
+      const values: PropCollection = {};
       names.forEach((name) => {
         values[name] = this.getOne(name);
       });
@@ -676,7 +747,7 @@ export default class BaseComponent extends events.EventEmitter {
     }
   }
 
-  setClassName(className) {
+  setClassName(className: string) {
     this.className = className;
   }
 
@@ -700,8 +771,8 @@ export default class BaseComponent extends events.EventEmitter {
     return parent.getClassName();
   }
 
-  _cloneDeep(obj) {
-    return cloneDeepWith(obj, (item, index, obj, stack) => {
+  private _cloneDeep(object: object) {
+    return cloneDeepWith(object, (item, index /*, object, stack */) => {
       if (index === '_parent' || index === 'parent') {
         // We don't clone any parent data as this data is circular. This check greatly speeds up
         // cloning as otherwise cloneDeepWith has to auto detect circular references, which can be
@@ -712,7 +783,7 @@ export default class BaseComponent extends events.EventEmitter {
     });
   }
 
-  _cloneSlow() {
+  protected _cloneSlow() {
     const clonedComponent = this._cloneDeep(this);
 
     clonedComponent._setDebugId();
@@ -730,18 +801,27 @@ export default class BaseComponent extends events.EventEmitter {
     return clonedComponent;
   }
 
-  _cloneFast({ defaultProps, excludeProps }) {
+  protected _cloneFast({
+    defaultProps,
+    excludeProps,
+  }: {
+    defaultProps?: Props;
+    excludeProps?: PropName[];
+  }) {
+    // TODO: refactor to define compiler interface used by registrar and compiler
+    const compiler: Compiler = (this._registrar as Registrar).compiler;
+
     // _cloneFast is almost 10 times faster than _cloneSlow. It is far faster to instantiate a new
     // component, deep clone some props and then set the props on the new component.
-    const Component = this._registrar.compiler.getCompiledComponent(
-      this.getClassName()
-    );
+    const Component = compiler.getCompiledComponent(this.getClassName());
     const clonedComponent = new Component(defaultProps);
 
     const excludePropsByDefault = ['parent'];
 
     if (excludeProps) {
       excludeProps = excludeProps.concat(excludePropsByDefault);
+    } else {
+      excludeProps = [];
     }
 
     const names = utils.difference(this._propNames, excludeProps);
@@ -756,14 +836,20 @@ export default class BaseComponent extends events.EventEmitter {
     return clonedComponent;
   }
 
-  _canCloneFast() {
-    return (
-      this._registrar.compiler &&
-      this._registrar.compiler.exists(this.getClassName())
-    );
+  protected _canCloneFast() {
+    // TODO: refactor to define compiler interface used by registrar and compiler
+    const compiler: Compiler = (this._registrar as Registrar).compiler;
+
+    return compiler?.exists(this.getClassName());
   }
 
-  _clone({ defaultProps, excludeProps } = {}) {
+  protected _clone({
+    defaultProps,
+    excludeProps,
+  }: {
+    defaultProps?: Props;
+    excludeProps?: PropName[];
+  } = {}) {
     if (this._canCloneFast()) {
       return this._cloneFast({ defaultProps, excludeProps });
     } else {
@@ -794,9 +880,9 @@ export default class BaseComponent extends events.EventEmitter {
     this.emitChange('unload');
   }
 
-  _bubbleUpEvents(component, events) {
+  protected _bubbleUpEvents(component: ComponentType, events: PropName[]) {
     events.forEach((event) => {
-      component.on(event, (value) => {
+      component.on(event, (value: Value) => {
         this.emitChange(event, value);
       });
     });
@@ -807,7 +893,11 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   // Set properties on another component. Useful for nested components
-  _setOn(component, props, propNames) {
+  protected _setOn(
+    component: ComponentType,
+    props: PropCollection,
+    propNames: PropName[]
+  ) {
     propNames.forEach((name) => {
       if (props[name] !== undefined) {
         component.set({ [name]: props[name] });
@@ -816,15 +906,19 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   // Get properties from another component. Useful for nested components
-  _getFrom(component, name, propNames) {
+  protected _getFrom(
+    component: ComponentType,
+    name: PropName,
+    propNames: PropName[]
+  ) {
     if (propNames.indexOf(name) !== -1) {
       return component.get(name);
     }
   }
 
-  buildSchemaForm(form, compiler) {
+  buildSchemaForm(form: FormType, compiler: Compiler) {
     const schemas = this.get('schema');
-    schemas.forEach((schema) => {
+    schemas.forEach((schema: UncompiledComponentType | FormType) => {
       if (!compiler.isCompiled(schema)) {
         schema = compiler.newComponent(schema);
       }
@@ -836,8 +930,8 @@ export default class BaseComponent extends events.EventEmitter {
     return getNextKey();
   }
 
-  static toUniqueId(key) {
-    return 'mson-' + key;
+  static toUniqueId(key: string | number) {
+    return `mson-${key}`;
   }
 
   static getNextUniqueId() {
@@ -846,7 +940,7 @@ export default class BaseComponent extends events.EventEmitter {
   }
 
   getUniqueId() {
-    return this.constructor.toUniqueId(this._key);
+    return BaseComponent.toUniqueId(this._key);
   }
 
   isLoaded() {
@@ -865,7 +959,7 @@ export default class BaseComponent extends events.EventEmitter {
     this.removeAllListeners();
   }
 
-  getHiddenFieldDefinitions(names) {
+  getHiddenFieldDefinitions(names: PropName[]) {
     return names.map((name) => ({
       name,
       component: 'Field',
