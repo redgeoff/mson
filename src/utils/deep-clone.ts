@@ -6,18 +6,39 @@
 //   but:
 //     cloneDeep({ foo: undefined }) = {}
 
-const isClass = (object) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type CloneObject = any;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Stack = any;
+
+type Key = number | string | undefined;
+
+type DeepCloneWithCustomizer = (
+  value: CloneObject,
+  key: Key,
+  object: CloneObject,
+  stack: Stack
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+) => any;
+
+const isClass = (object: CloneObject) => {
   return object.constructor && object.constructor.name !== 'Object';
 };
 
-const deepCloneWithInner = (object, onNode, key, stack) => {
+function deepCloneWithInner(
+  object: CloneObject,
+  onNode: DeepCloneWithCustomizer | undefined,
+  key: Key,
+  stack: Stack
+) {
   if (stack.indexOf(object) !== -1) {
     // Bail if we find a circular reference
     return object;
   }
 
   let doClone = true;
-  let clonedVal = object;
+  let clonedVal: CloneObject = object;
 
   if (onNode) {
     const { performDefaultClone, clonedObject } = onNode(
@@ -54,7 +75,7 @@ const deepCloneWithInner = (object, onNode, key, stack) => {
         clonedVal = {};
       }
 
-      for (let key in object) {
+      for (const key in object) {
         clonedVal[key] = deepCloneWithInner(object[key], onNode, key, stack);
       }
       stack.pop();
@@ -62,16 +83,21 @@ const deepCloneWithInner = (object, onNode, key, stack) => {
   }
 
   return clonedVal;
-};
+}
 
-export const deepCloneWith = (object, onNode) =>
-  deepCloneWithInner(object, onNode, undefined, []);
+export const deepCloneWith = (
+  object: CloneObject,
+  onNode: DeepCloneWithCustomizer
+) => deepCloneWithInner(object, onNode, undefined, []);
 
-export const deepClone = (object) =>
+export const deepClone = (object: CloneObject) =>
   deepCloneWithInner(object, undefined, undefined, []);
 
 // Drop-in replacement for Lodash's cloneDeepWith()
-export const cloneDeepWith = (object, customizer) =>
+export const cloneDeepWith = (
+  object: CloneObject,
+  customizer: DeepCloneWithCustomizer
+) =>
   deepCloneWith(object, (value, key, object, stack) => {
     const clonedObject = customizer(value, key, object, stack);
     if (clonedObject === undefined) {
@@ -87,4 +113,4 @@ export const cloneDeepWith = (object, customizer) =>
   });
 
 // Drop-in replacement for Lodash's cloneDeep()
-export const cloneDeep = (object) => deepClone(object);
+export const cloneDeep = (object: CloneObject) => deepClone(object);
