@@ -3,6 +3,7 @@ import {
   deepClone,
   cloneDeepWith,
   cloneDeep,
+  Key,
 } from './deep-clone';
 
 it('should deep clone primitive types', () => {
@@ -64,9 +65,9 @@ it('should clone classes', () => {
 
 it('should clone classes with nested data', () => {
   class MyClass {
-    items = [];
+    items: string[] = [];
 
-    add(item) {
+    add(item: string) {
       this.items.push(item);
     }
   }
@@ -102,7 +103,8 @@ it('should deep clone nested null and undefined', () => {
 });
 
 it('should deep clone when circular references', () => {
-  const object = { foo: ['bar'] };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const object: any = { foo: ['bar'] };
   object.fizz = object;
   const clonedObject = deepClone(object);
   expect(clonedObject).toEqual({
@@ -129,7 +131,7 @@ it('should deep clone with complex object', () => {
 });
 
 it('should deep clone with conditional onNode', () => {
-  const onNode = (object, key) => {
+  const onNode = (object: object, key: Key) => {
     if (key === 'foo') {
       // Don't actually clone
       return {
@@ -157,7 +159,7 @@ it('should deep clone with conditional onNode', () => {
 });
 
 it('should clone deep with conditional customizer', () => {
-  const customizer = (object, key) => {
+  const customizer = (object: object, key: Key) => {
     if (key === 'foo') {
       // Don't actually clone
       return object;
