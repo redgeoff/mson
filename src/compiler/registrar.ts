@@ -7,5 +7,10 @@
 // without compiling it as we cannot properly configure babel plugins. (I tried using
 // react-app-rewired, but that didn't work)
 
-const registrar = {};
+// TODO: need to properly define
+export type CompilerType = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+export type RegistrarType = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+// export type LogType = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+const registrar: RegistrarType = {};
 export default registrar;

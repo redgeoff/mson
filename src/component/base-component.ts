@@ -1,12 +1,12 @@
 import { EventEmitter } from 'events';
-import registrar from '../compiler/registrar';
+import registrar, { CompilerType } from '../compiler/registrar';
 import utils from '../utils/utils';
 import { cloneDeepWith } from '../utils/deep-clone';
 import Mapa from '../mapa';
 import PropertyNotDefinedError from './property-not-defined-error';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Value = any;
+export type Value = any;
 
 type PropCollection = {
   [key: string]: Value;
@@ -23,18 +23,15 @@ enum DocLevel {
 
 // TODO: need to properly define
 type ListenerType = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-type ComponentType = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+export type ComponentType = any; // eslint-disable-line @typescript-eslint/no-explicit-any
 type FieldType = ComponentType;
 type FormType = ComponentType;
 type ActionType = ComponentType;
-type Context = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-type Compiler = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-type Registrar = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-type Log = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+type ContextType = any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 type UncompiledComponentType = object;
 
-interface Props {
+export interface BaseProps {
   name?: string;
   listeners?: ListenerType[];
   schema?: FormType;
@@ -47,14 +44,14 @@ interface Props {
   didCreate?: boolean;
 }
 
-type PropName = string;
+export type PropName = string;
 
 enum Layers {
   'backEnd',
   'frontEnd',
 }
 
-type Layer = Layers | null;
+export type Layer = keyof typeof Layers | null;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ActionArguments = any;
@@ -69,12 +66,14 @@ const getNextKey = () => {
 //   event listeners
 // - We attempted to require all access to all props via get() and set(), but this can cause
 //   infinite recursion, e.g. when a get() calls itself either directly or via some inherited logic.
-export default class BaseComponent extends EventEmitter {
+export default class BaseComponent<
+  Props extends BaseProps
+> extends EventEmitter {
   className = 'Component';
 
   private _emittedCreate;
   private _debugId!: number;
-  private _registrar;
+  protected _registrar;
   private _props: PropCollection;
   private _listenerEvents: IndexedNames;
   private _subEvents: IndexedNames;
@@ -223,8 +222,8 @@ export default class BaseComponent extends EventEmitter {
 
     // If props is undefined, use an empty object so that derived create() and set() don't have to
     // worry about undefined values
-    this.create(props === undefined ? {} : props);
-    this.set(props === undefined ? {} : props);
+    this.create(props === undefined ? ({} as Props) : props);
+    this.set(props === undefined ? ({} as Props) : props);
 
     this._emitCreateIfNotMuted();
 
@@ -244,7 +243,7 @@ export default class BaseComponent extends EventEmitter {
     // would allow schemas to be defined via MSON.
     this.set({
       schema: this._getBaseComponentSchema(),
-    });
+    } as Props);
 
     this._setDefaults(props, {
       docLevel: 'advanced',
@@ -319,7 +318,7 @@ export default class BaseComponent extends EventEmitter {
     return property instanceof BaseComponent || property instanceof Mapa;
   }
 
-  private _getSubProperty(
+  protected _getSubProperty(
     name: PropName,
     end?: number
   ): { property: Value; names: PropName[] } {
@@ -421,7 +420,7 @@ export default class BaseComponent extends EventEmitter {
   }
 
   private _emitDidCreate() {
-    this.set({ didCreate: true });
+    this.set({ didCreate: true } as Props);
   }
 
   protected _emitDidLoad() {
@@ -508,7 +507,7 @@ export default class BaseComponent extends EventEmitter {
     });
   }
 
-  private _emitAfterListenerEvents(event: PropName) {
+  private _emitAfterListenerEvents(event?: PropName) {
     // Emit event after all actions for the following events so that we can guarantee that data has
     // been loaded.
     switch (event) {
@@ -525,9 +524,9 @@ export default class BaseComponent extends EventEmitter {
 
   private async _runAction(
     action: ActionType,
-    event: PropName,
-    args: ActionArguments,
-    context: Context
+    event?: PropName,
+    args?: ActionArguments,
+    context?: ContextType
   ) {
     const layer = action.get('layer');
     if (!this._getLayer() || !layer || layer === this._getLayer()) {
@@ -546,8 +545,7 @@ export default class BaseComponent extends EventEmitter {
   }
 
   protected _onDetachedActionErr(err: Error) {
-    // TODO: refactor out introduce `Component.setDetachedActionErrListener()` instead
-    const log: Log = (this._registrar as Registrar).log;
+    const log = this._registrar.log;
     if (log) {
       log.error(err);
     }
@@ -555,7 +553,7 @@ export default class BaseComponent extends EventEmitter {
     this._onActionErr(err);
   }
 
-  async runListeners(event: PropName, output: Value, context?: Context) {
+  async runListeners(event?: PropName, output?: Value, context?: ContextType) {
     const listeners = this.get('listeners');
     if (listeners) {
       for (const i in listeners) {
@@ -602,7 +600,7 @@ export default class BaseComponent extends EventEmitter {
     return BaseComponent._throwActionErrors;
   }
 
-  async _runListenersAndEmitError(event: PropName, value: Value) {
+  protected async _runListenersAndEmitError(event: PropName, value: Value) {
     try {
       await this.runListeners(event, value);
     } catch (err) {
@@ -728,7 +726,14 @@ export default class BaseComponent extends EventEmitter {
     return this._get(name);
   }
 
-  get(names: PropName[] | PropName) {
+  get(names?: PropName[]): Props;
+
+  // TODO: how to return specific type? Something like the following?
+  // `get(names: keyof Props): Pick<Props, keyof Props>;`
+  // Issue is that we still need to allow for dot notation, e.g. get('foo.bar')
+  get(names: PropName): Value;
+
+  get(names?: PropName[] | PropName) {
     if (!names) {
       // Get a list of all the property names
       names = this._propNames;
@@ -808,8 +813,7 @@ export default class BaseComponent extends EventEmitter {
     defaultProps?: Props;
     excludeProps?: PropName[];
   }) {
-    // TODO: refactor to define compiler interface used by registrar and compiler
-    const compiler: Compiler = (this._registrar as Registrar).compiler;
+    const compiler = this._registrar.compiler;
 
     // _cloneFast is almost 10 times faster than _cloneSlow. It is far faster to instantiate a new
     // component, deep clone some props and then set the props on the new component.
@@ -837,9 +841,7 @@ export default class BaseComponent extends EventEmitter {
   }
 
   protected _canCloneFast() {
-    // TODO: refactor to define compiler interface used by registrar and compiler
-    const compiler: Compiler = (this._registrar as Registrar).compiler;
-
+    const compiler = this._registrar.compiler;
     return compiler?.exists(this.getClassName());
   }
 
@@ -916,7 +918,7 @@ export default class BaseComponent extends EventEmitter {
     }
   }
 
-  buildSchemaForm(form: FormType, compiler: Compiler) {
+  buildSchemaForm(form: FormType, compiler: CompilerType) {
     const schemas = this.get('schema');
     schemas.forEach((schema: UncompiledComponentType | FormType) => {
       if (!compiler.isCompiled(schema)) {
