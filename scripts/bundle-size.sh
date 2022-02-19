@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-maxBytes=298000
+maxBytes=305000
 bundleSize=$(wc -c < dist/mson.js)
 
 if [ ${bundleSize} -gt ${maxBytes} ]; then
