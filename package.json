@@ -11,7 +11,7 @@
     "events": "^3.2.0",
     "mingo": "^6.0.4",
     "text-mask-addons": "^3.8.0",
-    "uuid": "^8.3.2",
+    "uuid": "^9.0.0",
     "vanilla-text-mask": "^5.1.1"
   },
   "devDependencies": {
