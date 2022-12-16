@@ -4778,9 +4778,9 @@ min-indent@^1.0.0:
   integrity sha512-I9jwMn07Sy/IwOj3zVkVik2JTvgpaykDZEigL6Rx6N9LbMywwUSMtxET+7lVoDLLd3O3IXwJwvuuns8UB/HeAg==
 
 mingo@^6.0.4:
-  version "6.0.6"
-  resolved "https://registry.yarnpkg.com/mingo/-/mingo-6.0.6.tgz#86a6da131b1b75584c302dda7275a8d6dedb8195"
-  integrity sha512-zhzgwMCow/bcAWQM48gepV1Ph5PT8l/5Gr4HpaM7DRHlOLJTS7L0eCsOa69GO/ZbW4QfxoVFzx959mFjChBsIA==
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/mingo/-/mingo-6.2.0.tgz#52965f2c550203bc02183c20255262aab45af051"
+  integrity sha512-M5uhzRiQv7xxyQ7B/SyDKZkSzj0a9yqhc2tI2UzVLo+ZuoT5K1hhSj6hG3itOLlufkv7c1r2YM16Xxc4JYAXTA==
 
 minimatch@^3.0.3, minimatch@^3.0.4, minimatch@^3.1.1, minimatch@^3.1.2:
   version "3.1.2"
