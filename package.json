@@ -11,13 +11,13 @@
     "events": "^3.2.0",
     "mingo": "^6.0.4",
     "text-mask-addons": "^3.8.0",
-    "uuid": "^8.3.2",
+    "uuid": "^9.0.0",
     "vanilla-text-mask": "^5.1.1"
   },
   "devDependencies": {
     "@types/jest": "^27.4.0",
     "@types/node": "^18.0.0",
-    "@types/uuid": "^8.3.4",
+    "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "commitizen": "^4.2.3",
