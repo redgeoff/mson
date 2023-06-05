@@ -30,7 +30,7 @@
     "jest": "^27.4.7",
     "lint-staged": "^13.0.0",
     "prettier": "^2.2.1",
-    "semantic-release": "^19.0.2",
+    "semantic-release": "^21.0.3",
     "source-map-loader": "^4.0.0",
     "ts-jest": "^28.0.7",
     "ts-loader": "^9.2.6",
